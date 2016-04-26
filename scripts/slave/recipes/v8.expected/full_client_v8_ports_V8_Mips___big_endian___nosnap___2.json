@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--no_shallow",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -63,6 +64,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
@@ -80,6 +82,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -87,8 +90,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[CWD]/v8/out/Release"
+      "[SLAVE_BUILD]/v8/out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -120,13 +124,14 @@
       "--build-number",
       "571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/run-tests.py",
+      "[SLAVE_BUILD]/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -147,7 +152,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CWD]/v8",
+    "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -170,7 +175,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/run-tests.py",
+      "[SLAVE_BUILD]/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -192,7 +197,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CWD]/v8",
+    "cwd": "[SLAVE_BUILD]/v8",
     "name": "SimdJs - all",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",

@@ -6,7 +6,6 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'depot_tools/gclient',
-  'depot_tools/infra_paths',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -58,16 +57,16 @@ def Linux32_steps(api):
       'DEPOT_TOOLS_UPDATE': '0',
       'GYP_DEFINES':
       'branding=Chrome buildtype=Official component=static_library'}
-  api.python("gclient runhooks wrapper", api.infra_paths['build'].join("scripts",
+  api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
   # chromedriver compile.py step
-  api.python("compile", api.infra_paths['build'].join("scripts", "slave",
+  api.python("compile", api.path["build"].join("scripts", "slave",
     "compile.py"), args=['--target', 'Release',
       'chromium_builder_chromedriver'])
   # annotated_steps step
-  api.python("annotated_steps", api.infra_paths['build'].join("scripts", "slave",
+  api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
     args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":'+\
@@ -121,16 +120,16 @@ def Mac_10_6_steps(api):
   # gclient runhooks wrapper step
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
       'DEPOT_TOOLS_UPDATE': '0', 'GYP_DEFINES': ' component=static_library'}
-  api.python("gclient runhooks wrapper", api.infra_paths['build'].join("scripts",
+  api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
   # chromedriver compile.py step
-  api.python("compile", api.infra_paths['build'].join("scripts", "slave",
+  api.python("compile", api.path["build"].join("scripts", "slave",
     "compile.py"), args=['--target', 'Release', '--', '-project',
       '../build/all.xcodeproj', '-target', 'chromium_builder_chromedriver'])
   # annotated_steps step
-  api.python("annotated_steps", api.infra_paths['build'].join("scripts", "slave",
+  api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
     args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"c'+\
@@ -143,7 +142,7 @@ def Mac_10_6_steps(api):
 def Win7_steps(api):
   # update scripts step; implicitly run by recipe engine.
   # taskkill step
-  api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+  api.python("taskkill", api.path["build"].join("scripts", "slave",
     "kill_processes.py"))
   # bot_update step
   src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -185,16 +184,16 @@ def Win7_steps(api):
   # gclient runhooks wrapper step
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
       'DEPOT_TOOLS_UPDATE': '0','GYP_DEFINES': ' component=static_library'}
-  api.python("gclient runhooks wrapper", api.infra_paths['build'].join("scripts",
+  api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
   # chromedriver compile.py step
-  api.step("compile", ["python_slave", api.infra_paths['build'].join("scripts",
+  api.step("compile", ["python_slave", api.path["build"].join("scripts",
     "slave", "compile.py"), '--solution', 'all.sln', '--project',
     'chromium_builder_chromedriver', '--target', 'Release'])
   # annotated_steps step
-  api.step("annotated_steps", ["python_slave", api.infra_paths['build'].join("scripts",
+  api.step("annotated_steps", ["python_slave", api.path["build"].join("scripts",
     "slave", "chromium", "chromedriver_buildbot_run.py"),
     '--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\
@@ -247,16 +246,16 @@ def Linux_steps(api):
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
       'DEPOT_TOOLS_UPDATE': '0', 'GYP_DEFINES':
       'branding=Chrome buildtype=Official component=static_library'}
-  api.python("gclient runhooks wrapper", api.infra_paths['build'].join("scripts",
+  api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
   # chromedriver compile.py step
-  api.python("compile", api.infra_paths['build'].join("scripts", "slave",
+  api.python("compile", api.path["build"].join("scripts", "slave",
     "compile.py"), args=['--target', 'Release',
       'chromium_builder_chromedriver'])
   # annotated_steps step
-  api.python("annotated_steps", api.infra_paths['build'].join("scripts", "slave",
+  api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
     args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\

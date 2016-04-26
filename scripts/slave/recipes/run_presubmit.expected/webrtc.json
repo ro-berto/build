@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",
@@ -30,6 +30,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -73,7 +74,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "commit git patch"
   },
   {
@@ -91,7 +92,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--commit",
       "--verbose",
       "--verbose",
@@ -104,6 +105,7 @@
       "--upstream",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

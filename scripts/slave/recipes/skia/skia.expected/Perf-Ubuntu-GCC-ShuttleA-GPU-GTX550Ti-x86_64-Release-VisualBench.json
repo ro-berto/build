@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git clean"
   },
   {
@@ -45,8 +45,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -67,6 +68,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -87,11 +89,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/skia/tools/buildbot_spec.py",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -133,12 +135,12 @@
       "make",
       "visualbench"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_PATH": "[HOME]/src",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_dump_stats=1 skia_use_sdl=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
     },
     "name": "build visualbench"
   },
@@ -147,9 +149,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/tmp",
+      "[SLAVE_BUILD]/tmp",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -169,9 +172,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/tmp/SKP_VERSION",
+      "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -179,9 +183,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/skia/SKP_VERSION",
+      "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -189,9 +194,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/tmp/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -199,9 +205,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/skia/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SK_IMAGE_VERSION"
   },
   {
@@ -209,8 +216,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[CWD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data"
+      "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -228,9 +236,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data",
+      "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -253,25 +262,25 @@
       "--format=%at",
       "-s"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git show",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "catchsegv",
-      "[CWD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/Release/visualbench",
+      "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/Release/visualbench",
       "--undefok",
       "-i",
-      "[CWD]/skia/resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--skps",
-      "[CWD]/playback/skps",
+      "[SLAVE_BUILD]/playback/skps",
       "--images",
-      "[CWD]/images/dm",
+      "[SLAVE_BUILD]/images/dm",
       "--nocpu",
       "--dummy-flags",
       "--outResultsFile",
-      "[CWD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data/nanobench_164710_1408633190.json",
+      "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data/nanobench_164710_1408633190.json",
       "--properties",
       "gitHash",
       "164710",
@@ -293,10 +302,11 @@
       "os",
       "Ubuntu"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_dump_stats=1 skia_use_sdl=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
     },
     "name": "visualbench"
   },
@@ -305,9 +315,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data",
+      "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs perf_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -329,17 +340,17 @@
       "RECIPE_MODULE[build::skia]/resources/upload_bench_results.py",
       "Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench",
       "5",
-      "[CWD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data",
+      "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data",
       "164710",
-      "[ROOT]/b/depot_tools/third_party/gsutil/gsutil"
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_dump_stats=1 skia_use_sdl=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
     },
     "name": "Upload visualbench Results"
   },

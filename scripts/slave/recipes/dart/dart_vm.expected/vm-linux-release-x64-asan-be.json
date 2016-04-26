@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
       "--root",
       "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -53,6 +54,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -62,22 +64,22 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/task_kill.py",
+      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "taskkill before building"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/build.py",
+      "[SLAVE_BUILD]/sdk/tools/build.py",
       "-mrelease",
       "--arch=x64",
       "runtime"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "env": {
       "ASAN_OPTIONS": "handle_segv=0:detect_stack_use_after_return=1",
       "CXX": "third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC"
@@ -88,7 +90,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/test.py",
+      "[SLAVE_BUILD]/sdk/tools/test.py",
       "-mrelease",
       "--arch=x64",
       "--progress=line",
@@ -102,14 +104,14 @@
       "--timeout=240",
       "--exclude-suite=pkg"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "vm tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/test.py",
+      "[SLAVE_BUILD]/sdk/tools/test.py",
       "-mrelease",
       "--arch=x64",
       "--progress=line",
@@ -124,17 +126,17 @@
       "--exclude-suite=pkg",
       "--checked"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "checked vm tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/task_kill.py",
+      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "taskkill after testing"
   },
   {

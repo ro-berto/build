@@ -1,6 +1,7 @@
 [
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Disabled: see http://crbug.com/595702",
     "~followup_annotations": [
       "@@@STEP_WARNINGS@@@"

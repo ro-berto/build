@@ -6,8 +6,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -26,6 +27,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -52,6 +54,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CPPFLAGS": "-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -62,7 +65,7 @@
     "cmd": [
       "build/gyp_chromium"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "CPPFLAGS": "-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1",
       "GYP_GENERATORS": "ninja"
@@ -76,18 +79,18 @@
       "out/Release",
       "chrome"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Build Chrome"
   },
   {
     "cmd": [
       "python",
-      "[ROOT]/b/build/scripts/slave/skia/recreate_skps.py",
-      "[CWD]/src",
-      "[CWD]/src/out/Release/chrome",
+      "[BUILD]/scripts/slave/skia/recreate_skps.py",
+      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]/src/out/Release/chrome",
       "--dry-run"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "Recreate SKPs"
   },
   {

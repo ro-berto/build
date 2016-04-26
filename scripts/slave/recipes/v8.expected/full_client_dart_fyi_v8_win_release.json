@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -19,13 +20,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]\\b\\build\\slave\\cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -34,6 +35,7 @@
       "--output_manifest",
       "--with_branch_heads"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -72,6 +74,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32 v8_enable_disassembler=1 v8_target_arch=ia32",
@@ -90,6 +93,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -107,13 +111,14 @@
       "--target",
       "Release",
       "--src-dir",
-      "[CWD]\\v8",
+      "[SLAVE_BUILD]\\v8",
       "--goma-cache-dir",
-      "[ROOT]\\b\\build\\slave\\goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -139,6 +144,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"4.2\", \"buildername\": \"v8-win-release\", \"buildnumber\": 571, \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   },
   {

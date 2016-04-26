@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/skia/tools/buildbot_spec.py",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -50,9 +50,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/tmp/SKP_VERSION",
+      "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -60,9 +61,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/tmp/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -73,24 +75,25 @@
       "--track-origins=yes",
       "--error-exitcode=1",
       "--num-callers=40",
-      "--suppressions=[CWD]/skia/tools/valgrind.supp",
-      "[CWD]/out/Release/nanobench",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/out/Release/nanobench",
       "--undefok",
       "-i",
-      "[CWD]/skia/resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--skps",
-      "[CWD]/skps",
+      "[SLAVE_BUILD]/skps",
       "--images",
-      "[CWD]/images/dm",
+      "[SLAVE_BUILD]/images/dm",
       "--nocpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
-      "PATH": "[CWD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[CWD]/out"
+      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "nanobench"
   },
@@ -102,26 +105,27 @@
       "--track-origins=yes",
       "--error-exitcode=1",
       "--num-callers=40",
-      "--suppressions=[CWD]/skia/tools/valgrind.supp",
-      "[CWD]/out/Release/nanobench",
+      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
+      "[SLAVE_BUILD]/out/Release/nanobench",
       "--undefok",
       "-i",
-      "[CWD]/skia/resources",
+      "[SLAVE_BUILD]/skia/resources",
       "--skps",
-      "[CWD]/skps",
+      "[SLAVE_BUILD]/skps",
       "--images",
-      "[CWD]/images/dm",
+      "[SLAVE_BUILD]/images/dm",
       "--nocpu",
       "--dummy-flags",
       "--abandonGpuContext",
       "--nocpu"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
-      "PATH": "[CWD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[CWD]/out"
+      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "nanobench --abandonGpuContext"
   },

@@ -4,7 +4,6 @@
 
 DEPS = [
   'depot_tools/bot_update',
-  'depot_tools/infra_paths',
   'file',
   'depot_tools/gclient',
   'depot_tools/git',
@@ -61,7 +60,7 @@ def PushRef(api, repo, ref, hsh):
 
   # Upload log for debugging.
   ref_log_file_name = ref.replace('/', '_') + '.log'
-  ref_log_path = api.infra_paths['slave_build'].join(ref_log_file_name)
+  ref_log_path = api.path['slave_build'].join(ref_log_file_name)
   log = []
   if api.path.exists(ref_log_path):
     log.append(api.file.read(
@@ -79,14 +78,14 @@ def ReadTimeStamp(api, name):
   return int(float(
       api.file.read(
           name,
-          api.infra_paths['slave_build'].join('timestamp.txt'),
+          api.path['slave_build'].join('timestamp.txt'),
       ).strip()))
 
 
 def WriteTimeStamp(api, name, timestamp):
   api.file.write(
       name,
-      api.infra_paths['slave_build'].join('timestamp.txt'),
+      api.path['slave_build'].join('timestamp.txt'),
       str(timestamp),
   )
 
@@ -105,8 +104,8 @@ def AgeLimitBailout(api, new_date, old_date):
 def GetLKGR(api):
   step_result = api.python(
       'get new lkgr',
-      api.infra_paths['build'].join('scripts', 'tools', 'runit.py'),
-      [api.infra_paths['build'].join('scripts', 'tools', 'pycurl.py'),
+      api.path['build'].join('scripts', 'tools', 'runit.py'),
+      [api.path['build'].join('scripts', 'tools', 'pycurl.py'),
        '%s/lkgr' % STATUS_URL],
       stdout=api.raw_io.output(),
   )
@@ -123,7 +122,7 @@ def ClusterfuzzHasIssues(api):
       'check clusterfuzz',
       api.path['checkout'].join(
           'tools', 'release', 'check_clusterfuzz.py'),
-      ['--key-file', api.infra_paths['slave_build'].join('.cf_key'),
+      ['--key-file', api.path['slave_build'].join('.cf_key'),
        '--results-file', api.json.output(add_json_log=False)],
       # Note: Output is suppressed for security reasons.
       stdout=api.raw_io.output('out'),
@@ -228,7 +227,7 @@ def GenTests(api):
         ) +
         api.time.seed(int(float(new_date))) +
         api.time.step(2) +
-        api.infra_paths.exists(api.infra_paths['slave_build'].join(
+        api.path.exists(api.path['slave_build'].join(
             LKGR_REF.replace('/', '_') + '.log'))
     )
 

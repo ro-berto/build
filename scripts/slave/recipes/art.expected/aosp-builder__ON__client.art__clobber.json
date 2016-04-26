@@ -1,20 +1,22 @@
 [
   {
     "cmd": [
-      "[ROOT]/b/depot_tools/repo",
+      "[DEPOT_TOOLS]/repo",
       "init",
       "-u",
       "https://android.googlesource.com/platform/manifest",
       "-b",
       "master"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
     "cmd": [
-      "[ROOT]/b/depot_tools/repo",
+      "[DEPOT_TOOLS]/repo",
       "sync"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
@@ -22,8 +24,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[CWD]/out"
+      "[SLAVE_BUILD]/out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree clobber",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -42,6 +45,7 @@
       "-j8",
       "out/host/linux-x86/bin/dex2oats"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ART_BUILD_HOST_STATIC": "true",
       "ART_USE_OPTIMIZING_COMPILER": "true",

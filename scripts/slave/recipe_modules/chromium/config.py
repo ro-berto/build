@@ -29,7 +29,7 @@ def check(val, potentials):
 # Schema for config items in this module.
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                TARGET_PLATFORM, TARGET_ARCH, TARGET_BITS,
-               BUILD_CONFIG, TARGET_CROS_BOARD, BUILD_PATH, **_kwargs):
+               BUILD_CONFIG, TARGET_CROS_BOARD, **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
     compile_py = ConfigGroup(
@@ -109,8 +109,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     TARGET_ARCH = Static(check(TARGET_ARCH, TARGET_ARCHS)),
     TARGET_BITS = Static(check(TARGET_BITS, HOST_TARGET_BITS)),
     TARGET_CROS_BOARD = Static(TARGET_CROS_BOARD),
-
-    BUILD_PATH = Static(BUILD_PATH),
 
     gn_args = List(basestring),
 
@@ -313,7 +311,7 @@ def goma(c):
 
   c.gyp_env.GYP_DEFINES['use_goma'] = 1
 
-  goma_dir = c.BUILD_PATH.join('goma')
+  goma_dir = Path('[BUILD]', 'goma')
   c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
   c.compile_py.goma_dir = goma_dir
 

@@ -6,7 +6,6 @@ DEPS = [
   'chromium',
   'chromium_android',
   'depot_tools/gclient',
-  'depot_tools/infra_paths',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -37,7 +36,7 @@ def RunSteps(api):
   build_products_dir = \
       api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
   api.python('dartium_test',
-                   api.infra_paths['slave_build'].join('src', 'dart', 'tools',
+                   api.path['slave_build'].join('src', 'dart', 'tools',
                                                 'bots', 'dartium_android.py'),
                    args=['--build-products-dir', build_products_dir])
 

@@ -1,7 +1,6 @@
 DEPS = [
   'archive',
   'depot_tools/bot_update',
-  'depot_tools/infra_paths',
   'chromium',
   'commit_position',
   'file',

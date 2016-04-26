@@ -12,7 +12,6 @@ DEPS = [
     'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/infra_paths',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -141,7 +140,7 @@ def RunSteps(api):
         scripts_compile_targets, [api.chromium_tests.steps.generate_script],
         bot_update_step)
 
-  api.path['checkout'] = api.infra_paths['slave_build'].join('src')
+  api.path['checkout'] = api.path['slave_build'].join('src')
   api.chromium_android.clean_local_files()
 
   api.chromium_android.download_build(bucket=builder['bucket'],

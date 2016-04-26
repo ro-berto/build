@@ -11,19 +11,20 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'https://chromium.googlesource.com/chromium/blink.git'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/chrome-devtools-frontend', 'url': 'https://chromium.googlesource.com/chromium/tools/chrome-devtools-frontend'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/gsd_generate_index', 'url': 'https://chromium.googlesource.com/chromium/tools/gsd_generate_index'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/perf', 'url': 'https://chromium.googlesource.com/chromium/tools/perf'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/command_wrapper/bin', 'url': 'https://chromium.googlesource.com/chromium/tools/command_wrapper/bin'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/depot_tools', 'url': 'https://chromium.googlesource.com/chromium/tools/depot_tools'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/chromium-jobqueue', 'url': 'https://chromium.googlesource.com/chromium/tools/chromium-jobqueue'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/chromium-shortener', 'url': 'https://chromium.googlesource.com/chromium/tools/chromium-shortener'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/deps2git', 'url': 'https://chromium.googlesource.com/chromium/tools/deps2git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'infra', 'url': 'https://chromium.googlesource.com/infra/infra'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'https://chromium.googlesource.com/chromium/blink.git'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/chrome-devtools-frontend', 'url': 'https://chromium.googlesource.com/chromium/tools/chrome-devtools-frontend'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/gsd_generate_index', 'url': 'https://chromium.googlesource.com/chromium/tools/gsd_generate_index'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/perf', 'url': 'https://chromium.googlesource.com/chromium/tools/perf'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/command_wrapper/bin', 'url': 'https://chromium.googlesource.com/chromium/tools/command_wrapper/bin'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/depot_tools', 'url': 'https://chromium.googlesource.com/chromium/tools/depot_tools'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/chromium-jobqueue', 'url': 'https://chromium.googlesource.com/chromium/tools/chromium-jobqueue'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/chromium-shortener', 'url': 'https://chromium.googlesource.com/chromium/tools/chromium-shortener'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/deps2git', 'url': 'https://chromium.googlesource.com/chromium/tools/deps2git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'infra', 'url': 'https://chromium.googlesource.com/infra/infra'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -100,8 +101,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[CWD]/src/third_party/llvm-build"
+      "[SLAVE_BUILD]/src/third_party/llvm-build"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree llvm-build",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -121,28 +123,29 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[ROOT]/b/build/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
   {
     "cmd": [
-      "[CWD]/src/buildtools/linux64/gn",
+      "[SLAVE_BUILD]/src/buildtools/linux64/gn",
       "gen",
-      "[CWD]/src/out/Debug",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--args=is_clang=true is_component_build=true is_debug=true goma_dir=\"/b/build/goma\" symbol_level=1 target_cpu=\"x64\" use_goma=true target_os=\"chromeos\" use_ozone=true"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "generate build files for chromeos"
   },
   {
     "cmd": [
       "ninja",
       "-C",
-      "[CWD]/src/out/Debug",
+      "[SLAVE_BUILD]/src/out/Debug",
       "All",
       "-t",
       "compdb",
@@ -151,6 +154,7 @@
       "objc",
       "objcxx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "generate compilation database for chromeos",
     "stdout": "/path/to/tmp/"
   },
@@ -161,10 +165,11 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -191,9 +196,9 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-args",
       "-k 0",
       "--build-tool",
@@ -205,10 +210,11 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]/b/build/goma",
+      "[BUILD]/goma",
       "--",
       "All"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -222,25 +228,26 @@
     "cmd": [
       "cp",
       "some compilation data",
-      "[CWD]/src/out/Debug/compile_commands.json"
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "copy compilation database"
   },
   {
     "cmd": [
-      "[CWD]/src/buildtools/linux64/gn",
+      "[SLAVE_BUILD]/src/buildtools/linux64/gn",
       "gen",
-      "[CWD]/src/out/Debug",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--args=is_clang=true is_component_build=true is_debug=true goma_dir=\"/b/build/goma\" symbol_level=1 target_cpu=\"x64\" use_goma=true"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "generate build files for linux"
   },
   {
     "cmd": [
       "ninja",
       "-C",
-      "[CWD]/src/out/Debug",
+      "[SLAVE_BUILD]/src/out/Debug",
       "All",
       "-t",
       "compdb",
@@ -249,6 +256,7 @@
       "objc",
       "objcxx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "generate compilation database for linux",
     "stdout": "/path/to/tmp/"
   },
@@ -256,14 +264,15 @@
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/slave/chromium/filter_compilations.py",
+      "[BUILD]/scripts/slave/chromium/filter_compilations.py",
       "--compdb-input",
-      "[CWD]/src/out/Debug/compile_commands.json",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
       "--compdb-filter",
       "some compilation data",
       "--compdb-output",
-      "[CWD]/src/out/Debug/compile_commands.json"
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Filter out duplicate compilation units"
   },
   {
@@ -274,18 +283,19 @@
       "--tools",
       "translation_unit"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "compile translation_unit clang tool"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/clang/scripts/run_tool.py",
-      "[CWD]/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
-      "[CWD]/src/out/Debug",
+      "[SLAVE_BUILD]/src/tools/clang/scripts/run_tool.py",
+      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "run translation_unit clang tool",
     "~followup_annotations": [
       "step returned non-zero exit code: 2",
@@ -297,12 +307,13 @@
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/slave/chromium/package_index.py",
+      "[BUILD]/scripts/slave/chromium/package_index.py",
       "--path-to-compdb",
-      "[CWD]/src/out/Debug/compile_commands.json",
+      "[SLAVE_BUILD]/src/out/Debug/compile_commands.json",
       "--path-to-archive-output",
-      "[CWD]/src/out/Debug/index_pack_chromeos.zip"
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "create index pack"
   },
   {
@@ -311,12 +322,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[CWD]/src/out/Debug/index_pack_chromeos.zip",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos.zip",
       "gs://chrome-codesearch/prod/index_pack_chromeos_170242.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload index pack",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_chromeos_170242.zip@@@"
@@ -326,7 +338,7 @@
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/slave/archive_source_codesearch.py",
+      "[BUILD]/scripts/slave/archive_source_codesearch.py",
       "src",
       "build",
       "infra",
@@ -334,6 +346,7 @@
       "-f",
       "chromium_src_chromeos.tar.bz2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive source"
   },
   {
@@ -342,12 +355,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[CWD]/chromium_src_chromeos.tar.bz2",
+      "[SLAVE_BUILD]/chromium_src_chromeos.tar.bz2",
       "gs://chrome-codesearch/prod/chromium_src_chromeos_170242.tar.bz2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload source tarball",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_src_chromeos_170242.tar.bz2@@@"

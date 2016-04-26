@@ -4,9 +4,10 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[CWD]\\src\\out\\Release",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "listdir build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -29,18 +30,19 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::archive]\\resources\\zip_archive.py",
-      "[TMP]\\chrome_staging_tmp_1",
+      "[TMP_BASE]\\chrome_staging_tmp_1",
       "chrome-asan-win32-release-refs_heads_B1-123456",
       "[\"chrome\", \"icu.dat\"]",
-      "[CWD]\\src\\out\\Release"
+      "[SLAVE_BUILD]\\src\\out\\Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "zipping"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[ROOT]\\b\\depot_tools\\gsutil.py",
+      "[DEPOT_TOOLS]\\gsutil.py",
       "--",
       "-h",
       "x-goog-meta-Cr-Commit-Position:refs/heads/B1@{#123456}",
@@ -51,9 +53,10 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP]\\chrome_staging_tmp_1\\chrome-asan-win32-release-refs_heads_B1-123456.zip",
+      "[TMP_BASE]\\chrome_staging_tmp_1\\chrome-asan-win32-release-refs_heads_B1-123456.zip",
       "gs://chromium/win32-release-subdir/chrome-asan-win32-release-refs_heads_B1-123456.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium/win32-release-subdir/chrome-asan-win32-release-refs_heads_B1-123456.zip@@@"
@@ -64,8 +67,9 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP]\\chrome_staging_tmp_1\\chrome-asan-win32-release-refs_heads_B1-123456.zip"
+      "[TMP_BASE]\\chrome_staging_tmp_1\\chrome-asan-win32-release-refs_heads_B1-123456.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "chrome-asan-win32-release-refs_heads_B1-123456.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

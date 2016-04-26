@@ -12,7 +12,6 @@ import json
 DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
-  'depot_tools/infra_paths',
   'depot_tools/tryserver',
   'file',
   'gsutil',
@@ -119,9 +118,9 @@ def isolate_recipes(api):
   # This directory tends to be missing for some reason.
   api.file.makedirs(
       'third_party_infra',
-      api.infra_paths['build'].join('third_party', 'infra'),
+      api.path['build'].join('third_party', 'infra'),
       infra_step=True)
-  skia_recipes_dir = api.infra_paths['build'].join(
+  skia_recipes_dir = api.path['build'].join(
       'scripts', 'slave', 'recipes', 'skia')
   api.skia_swarming.create_isolated_gen_json(
       skia_recipes_dir.join('swarm_recipe.isolate'),
@@ -163,12 +162,12 @@ def trigger_task(api, task_name, builder, builder_spec, got_revision,
   for k, v in properties.iteritems():
     extra_args.append('%s=%s' % (k, v))
 
-  isolate_base_dir = api.infra_paths['slave_build']
+  isolate_base_dir = api.path['slave_build']
   dimensions = swarm_dimensions(builder_spec)
   isolate_blacklist = ['.git', 'out', '*.pyc']
   isolate_vars = {
-    'BUILD': api.infra_paths['build'],
-    'WORKDIR': api.infra_paths['slave_build'],
+    'BUILD': api.path['build'],
+    'WORKDIR': api.path['slave_build'],
   }
 
   isolate_file = '%s_skia.isolate' % task_name
@@ -217,7 +216,7 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
   compile_builder_spec = builder_spec
   if builder_name != api.properties['buildername']:
     compile_builder_spec = api.skia.get_builder_spec(
-        api.infra_paths['slave_build'].join('skia'), builder_name)
+        api.path['slave_build'].join('skia'), builder_name)
   # Windows bots require a toolchain.
   extra_hashes = extra_isolate_hashes[:]
   if 'Win' in builder_name:
@@ -293,7 +292,7 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
 
   # Upload the results.
   if upload_perf_results:
-    perf_data_dir = api.infra_paths['slave_build'].join(
+    perf_data_dir = api.path['slave_build'].join(
         'perfdata', api.properties['buildername'], 'data')
     git_timestamp = api.git.get_timestamp(test_data='1408633190',
                                           infra_step=True)
@@ -307,7 +306,7 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
     api.file.copy('perf_results', src_results_file, dst_results_file,
                   infra_step=True)
 
-    gsutil_path = api.infra_paths['depot_tools'].join(
+    gsutil_path = api.path['depot_tools'].join(
         'third_party', 'gsutil', 'gsutil')
     upload_args = [api.properties['buildername'], api.properties['buildnumber'],
                    perf_data_dir, got_revision, gsutil_path]
@@ -349,7 +348,7 @@ def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot,
 
   # Upload the results.
   if upload_dm_results:
-    dm_dir = api.infra_paths['slave_build'].join('dm')
+    dm_dir = api.path['slave_build'].join('dm')
     dm_src = task.task_output_dir.join('0', 'dm')
     api.file.rmtree('dm_dir', dm_dir, infra_step=True)
     api.file.copytree('dm_dir', dm_src, dm_dir, infra_step=True)
@@ -364,7 +363,7 @@ def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot,
           api.properties['buildername'],
           api.properties['buildnumber'],
           api.properties['issue'] if is_trybot else '',
-          api.infra_paths['slave_build'].join('skia', 'common', 'py', 'utils'),
+          api.path['slave_build'].join('skia', 'common', 'py', 'utils'),
         ],
         cwd=api.path['checkout'],
         env=api.skia.gsutil_env('chromium-skia-gm.boto'),
@@ -411,7 +410,7 @@ def upload_coverage_results(api, task, got_revision, is_trybot):
   api.file.remove('old nanobench JSON', src_nano_file)
 
   # Upload nanobench JSON data.
-  gsutil_path = api.infra_paths['depot_tools'].join(
+  gsutil_path = api.path['depot_tools'].join(
       'third_party', 'gsutil', 'gsutil')
   upload_args = [api.properties['buildername'], api.properties['buildnumber'],
                  results_dir, got_revision, gsutil_path]
@@ -475,11 +474,11 @@ def RunSteps(api):
   if compile_hash:
     extra_hashes.append(compile_hash)
 
-  api.skia.download_skps(api.infra_paths['slave_build'].join('tmp'),
-                         api.infra_paths['slave_build'].join('skps'),
+  api.skia.download_skps(api.path['slave_build'].join('tmp'),
+                         api.path['slave_build'].join('skps'),
                          False)
-  api.skia.download_images(api.infra_paths['slave_build'].join('tmp'),
-                           api.infra_paths['slave_build'].join('images'),
+  api.skia.download_images(api.path['slave_build'].join('tmp'),
+                           api.path['slave_build'].join('images'),
                            False)
 
   test_task = None
@@ -509,9 +508,9 @@ def test_for_bot(api, builder, mastername, slavename, testname=None):
                    slavename=slavename,
                    buildnumber=5,
                    revision='abc123') +
-    api.infra_paths.exists(
-        api.infra_paths['slave_build'].join('skia'),
-        api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
   if 'Trybot' in builder:
@@ -546,8 +545,8 @@ def GenTests(api):
   slave = 'skiabot-linux-test-000'
   test = test_for_bot(api, builder, master, slave, 'No_downloaded_SKP_VERSION')
   test += api.step_data('Get downloaded SKP_VERSION', retcode=1)
-  test += api.infra_paths.exists(
-      api.infra_paths['slave_build'].join('skia'),
-      api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+  test += api.path.exists(
+      api.path['slave_build'].join('skia'),
+      api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
   )
   yield test

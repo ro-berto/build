@@ -7,15 +7,16 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[CWD]/cipd",
+      "[SLAVE_BUILD]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "install cipd",
     "~followup_annotations": [
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"fake_slave_build/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -29,17 +30,18 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[CWD]/cipd",
+      "[SLAVE_BUILD]/cipd",
       "--json-output",
       "/path/to/tmp/json",
       "--version",
       "deadbeaf"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "install cipd (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"fake_slave_build/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -47,15 +49,16 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "ensure",
       "--root",
-      "[CWD]/packages",
+      "[SLAVE_BUILD]/packages",
       "--list",
       "public/package/linux-amd64 7f751b2237df2fdf3c1405be00590fefffbaea2d",
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_installed",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -71,7 +74,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "search",
       "public/package/linux-amd64",
       "--tag",
@@ -79,6 +82,7 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cipd search public/package/linux-amd64 git_revision:40-chars-long-hash",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -94,7 +98,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "describe",
       "public/package/linux-amd64",
       "--version",
@@ -102,6 +106,7 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cipd describe public/package/linux-amd64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -143,10 +148,10 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "ensure",
       "--root",
-      "[CWD]/packages",
+      "[SLAVE_BUILD]/packages",
       "--list",
       "private/package/linux-amd64 latest\npublic/package/linux-amd64 7f751b2237df2fdf3c1405be00590fefffbaea2d",
       "--json-output",
@@ -154,6 +159,7 @@
       "--service-account-json",
       "fake-credentials.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_installed (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -173,7 +179,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "search",
       "private/package/linux-amd64",
       "--tag",
@@ -183,6 +189,7 @@
       "--service-account-json",
       "fake-credentials.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cipd search private/package/linux-amd64 key:value",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -198,7 +205,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "describe",
       "private/package/linux-amd64",
       "--version",
@@ -208,6 +215,7 @@
       "--service-account-json",
       "fake-credentials.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cipd describe private/package/linux-amd64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -244,7 +252,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "pkg-build",
       "--in",
       "fake-input-dir",
@@ -255,6 +263,7 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "build fake-package",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -268,7 +277,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "pkg-build",
       "--in",
       "fake-input-dir",
@@ -281,6 +290,7 @@
       "--install-mode",
       "copy"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "build fake-package (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -294,7 +304,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "pkg-register",
       "fake-package-path",
       "--json-output",
@@ -310,6 +320,7 @@
       "--tag",
       "fake_tag_2:fake_value_2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "register infra/fake-package",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -323,7 +334,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "set-tag",
       "fake-package",
       "--version",
@@ -337,6 +348,7 @@
       "--tag",
       "more:value"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cipd set-tag fake-package",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -353,7 +365,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "set-ref",
       "fake-package",
       "--version",
@@ -367,6 +379,7 @@
       "--ref",
       "some"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cipd set-ref fake-package",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -383,7 +396,7 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "search",
       "fake-package/linux-amd64",
       "--tag",
@@ -393,6 +406,7 @@
       "--service-account-json",
       "fake-credentials.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cipd search fake-package/linux-amd64 dead:beaf",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

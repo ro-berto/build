@@ -7,7 +7,6 @@
 
 
 DEPS = [
-  'depot_tools/infra_paths',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -111,9 +110,9 @@ def GenTests(api):
                          slavename=slavename,
                          buildnumber=5,
                          revision='abc123') +
-          api.infra_paths.exists(
-              api.infra_paths['slave_build'].join('skia'),
-              api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+          api.path.exists(
+              api.path['slave_build'].join('skia'),
+              api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
           )
         )
         if 'Android' in builder:
@@ -136,8 +135,8 @@ def GenTests(api):
         if 'Win' in builder and 'Swarming' not in builder:
           test += api.platform('win', 64)
           if builder == 'Build-Win-MSVC-x86-Debug-VS2015':
-            test += api.infra_paths.exists(
-                api.infra_paths['slave_build'].join('skia', 'infra', 'bots',
+            test += api.path.exists(
+                api.path['slave_build'].join('skia', 'infra', 'bots',
                                              'win_toolchain_hash.json'))
             test += api.step_data('Get downloaded WIN_TOOLCHAIN_HASH',
                                   retcode=1)
@@ -183,9 +182,9 @@ def GenTests(api):
     api.step_data('read SK_IMAGE_VERSION',
                   stdout=api.raw_io.output('42')) +
     api.step_data('get uninteresting hashes', retcode=1) +
-    api.infra_paths.exists(
-        api.infra_paths['slave_build'].join('skia'),
-        api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
 
@@ -208,9 +207,9 @@ def GenTests(api):
     api.step_data(
         'exists skps',
         stdout=api.raw_io.output('')) +
-    api.infra_paths.exists(
-        api.infra_paths['slave_build'].join('skia'),
-        api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
 
@@ -232,9 +231,9 @@ def GenTests(api):
     api.step_data(
         'exists skps',
         stdout=api.raw_io.output('')) +
-    api.infra_paths.exists(
-        api.infra_paths['slave_build'].join('skia'),
-        api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
 
@@ -257,9 +256,9 @@ def GenTests(api):
     api.step_data(
         'exists skia_images',
         stdout=api.raw_io.output('')) +
-    api.infra_paths.exists(
-        api.infra_paths['slave_build'].join('skia'),
-        api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
 
@@ -281,9 +280,9 @@ def GenTests(api):
     api.step_data(
         'exists skia_images',
         stdout=api.raw_io.output('')) +
-    api.infra_paths.exists(
-        api.infra_paths['slave_build'].join('skia'),
-        api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
 
@@ -298,9 +297,9 @@ def GenTests(api):
                    buildnumber=6,
                    revision='abc123') +
     api.step_data('Get downloaded SKP_VERSION', retcode=1) +
-    api.infra_paths.exists(
-        api.infra_paths['slave_build'].join('skia'),
-        api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
 
@@ -312,8 +311,8 @@ def GenTests(api):
                    buildnumber=6,
                    revision='abc123') +
     api.step_data('Get downloaded SK_IMAGE_VERSION', retcode=1) +
-    api.infra_paths.exists(
-        api.infra_paths['slave_build'].join('skia'),
-        api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )

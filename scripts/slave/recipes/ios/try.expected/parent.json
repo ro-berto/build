@@ -5,6 +5,7 @@
       "--json-file",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "host and tools info",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />OS X 1.2.3, Xcode 6.7.8 (5D342509a)@@@",
@@ -33,13 +34,13 @@
       "--slave",
       "fake-vm",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src-internal', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/src-internal'}]\ntarget_os = ['ios']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src-internal', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/src-internal'}]\ntarget_os = ['ios']",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--patch_url",
       "patch url",
       "--rietveld_server",
@@ -51,6 +52,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -127,9 +129,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/src/ios/build/bots/tryserver.fake/ios.json",
+      "[SLAVE_BUILD]/src/ios/build/bots/tryserver.fake/ios.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -150,9 +153,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/src/ios/build/bots/tryserver.fake/parent.json",
+      "[SLAVE_BUILD]/src/ios/build/bots/tryserver.fake/parent.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read parent build config (parent)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -175,6 +179,7 @@
       "-e",
       "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"triggered by\": \"parent\", \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "finalize build config"
   },
   {
@@ -185,6 +190,7 @@
       "--version",
       "fake xcode version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find xcode",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -198,6 +204,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",
@@ -216,27 +223,28 @@
       "-configuration",
       "Debug",
       "-project",
-      "[CWD]/src/build/all.xcodeproj",
+      "[SLAVE_BUILD]/src/build/all.xcodeproj",
       "-sdk",
       "iphonesimulator8.0"
     ],
-    "cwd": "[CWD]/src/xcodebuild",
+    "cwd": "[SLAVE_BUILD]/src/xcodebuild",
     "name": "compile (with patch)"
   },
   {
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[CWD]/src/xcodebuild/Debug-iphonesimulator/fake tests.app",
+      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[CWD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
       "--platform",
       "fake device",
       "--version",
       "8.1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "fake tests (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

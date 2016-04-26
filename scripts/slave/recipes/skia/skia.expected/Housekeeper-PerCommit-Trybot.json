@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git clean"
   },
   {
@@ -45,8 +45,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -56,10 +57,11 @@
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/slave/gclient_safe_revert.py",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
       ".",
-      "[ROOT]/b/depot_tools/gclient"
+      "[DEPOT_TOOLS]/gclient"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient revert"
   },
   {
@@ -77,6 +79,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -97,9 +100,9 @@
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/depot_tools/apply_issue.py",
+      "[DEPOT_TOOLS]/apply_issue.py",
       "-r",
-      "[CWD]/skia",
+      "[SLAVE_BUILD]/skia",
       "-i",
       "500",
       "-p",
@@ -108,6 +111,7 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "apply_issue",
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 500@https://codereview.chromium.org/500@@@"
@@ -117,11 +121,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/skia/tools/buildbot_spec.py",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Housekeeper-PerCommit-Trybot"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -156,12 +160,12 @@
       "make",
       "most"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_PATH": "[HOME]/src",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Housekeeper-PerCommit-Trybot"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit-Trybot"
     },
     "name": "build most"
   },

@@ -1,20 +1,22 @@
 [
   {
     "cmd": [
-      "[ROOT]/b/depot_tools/repo",
+      "[DEPOT_TOOLS]/repo",
       "init",
       "-u",
       "https://android.googlesource.com/platform/manifest",
       "-b",
       "master"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
     "cmd": [
-      "[ROOT]/b/depot_tools/repo",
+      "[DEPOT_TOOLS]/repo",
       "sync"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
@@ -23,6 +25,7 @@
       "-j8",
       "out/host/linux-x86/bin/dex2oats"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ART_BUILD_HOST_STATIC": "true",
       "ART_USE_OPTIMIZING_COMPILER": "true",

@@ -6,8 +6,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -28,6 +29,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -48,11 +50,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/skia/tools/buildbot_spec.py",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Housekeeper-PerCommit"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -87,25 +89,25 @@
       "make",
       "most"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_PATH": "[HOME]/src",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Housekeeper-PerCommit"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit"
     },
     "name": "build most"
   },
   {
     "cmd": [
       "python",
-      "[CWD]/skia/platform_tools/android/tests/run_all.py"
+      "[SLAVE_BUILD]/skia/platform_tools/android/tests/run_all.py"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Housekeeper-PerCommit"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit"
     },
     "name": "android platform self-tests"
   },
@@ -113,13 +115,13 @@
     "cmd": [
       "python",
       "RECIPE_MODULE[build::skia]/resources/generate_and_upload_doxygen.py",
-      "[ROOT]/b/depot_tools/third_party/gsutil/gsutil"
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Housekeeper-PerCommit"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit"
     },
     "name": "generate and upload doxygen"
   },
@@ -131,7 +133,7 @@
       "--format=%at",
       "-s"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git show",
     "stdout": "/path/to/tmp/"
   },
@@ -140,19 +142,19 @@
       "python",
       "RECIPE_MODULE[build::skia]/resources/run_binary_size_analysis.py",
       "--library",
-      "[CWD]/skia/out/Housekeeper-PerCommit/Release/lib/libskia.so",
+      "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit/Release/lib/libskia.so",
       "--githash",
       "164710",
       "--commit_ts",
       "1408633190",
       "--gsutil_path",
-      "[ROOT]/b/depot_tools/third_party/gsutil/gsutil"
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Housekeeper-PerCommit"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit"
     },
     "name": "generate and upload binary size data"
   },

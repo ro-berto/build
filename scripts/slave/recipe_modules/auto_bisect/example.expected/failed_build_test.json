@@ -6,7 +6,7 @@
       "refs/heads/master",
       "refs/remotes/origin/master"
     ],
-    "cwd": "[TMP]/fake_checkout_tmp_1",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "git update-ref"
   },
   {
@@ -15,11 +15,12 @@
       "checkout",
       "master"
     ],
-    "cwd": "[TMP]/fake_checkout_tmp_1",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "git checkout"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -45,6 +46,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range"
   },
   {
@@ -58,6 +60,7 @@
       "--attempts",
       "3"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314017}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -79,6 +82,7 @@
       "--attempts",
       "3"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314015}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -98,6 +102,7 @@
       "--commit",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -117,6 +122,7 @@
       "--commit",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.fetch file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -129,6 +135,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Expanding revision range"
   },
   {
@@ -140,6 +147,7 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "https://chromium.googlesource.com/chromium/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Expanding revision range.for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -154,11 +162,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -183,7 +192,7 @@
       "--diff",
       "/dev/null"
     ],
-    "cwd": "[TMP]/fake_checkout_tmp_1",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Requesting build for a6298e4afedbf2cd461755ea6f45b0ad64222222 via git try."
   },
   {
@@ -192,15 +201,17 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (2)"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Triggering test job for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "trigger_specs": [
       {
@@ -230,12 +241,13 @@
       "--position",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
-    "cwd": "[TMP]/fake_checkout_tmp_1",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@a6298e4afe"
   },
   {
@@ -244,11 +256,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@a6298e4afe.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -265,6 +278,7 @@
       "--outfile",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@a6298e4afe.fetch builder state",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -279,6 +293,7 @@
       "--outfile",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@a6298e4afe.fetch build details",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -291,12 +306,13 @@
       "--position",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[TMP]/fake_checkout_tmp_1",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@00316c9ddf"
   },
   {
@@ -305,11 +321,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "ls",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@00316c9ddf.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -321,11 +338,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cat",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@00316c9ddf.gsutil Get test results for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

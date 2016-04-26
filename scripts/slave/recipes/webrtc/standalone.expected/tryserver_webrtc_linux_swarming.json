@@ -11,13 +11,13 @@
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--issue",
       "666666",
       "--patchset",
@@ -30,6 +30,7 @@
       "src@12345",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -66,8 +67,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[CWD]/src/out"
+      "[SLAVE_BUILD]/src/out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -79,6 +81,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -87,9 +90,10 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CWD]/src/out/Debug",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -99,9 +103,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[ROOT]/b/build/goma' rtc_use_264=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]/goma' rtc_use_264=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -110,9 +115,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -134,9 +140,9 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -146,12 +152,13 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]/b/build/goma",
+      "[BUILD]/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "All"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -167,11 +174,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
       "--build-dir",
-      "[CWD]/src/out/Debug",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--src-dir",
-      "[CWD]/src"
+      "[SLAVE_BUILD]/src"
     ],
-    "cwd": "[CWD]",
+    "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
   },
   {
@@ -179,27 +186,28 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[CWD]/src/tools/swarming_client",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[CWD]/src/out/Debug/audio_decoder_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/common_audio_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/common_video_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/modules_tests.isolated.gen.json",
-      "[CWD]/src/out/Debug/modules_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/peerconnection_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/rtc_media_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/rtc_pc_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/rtc_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/system_wrappers_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/test_support_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/tools_unittests.isolated.gen.json",
-      "[CWD]/src/out/Debug/video_engine_tests.isolated.gen.json",
-      "[CWD]/src/out/Debug/voice_engine_unittests.isolated.gen.json"
+      "[SLAVE_BUILD]/src/out/Debug/audio_decoder_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/common_audio_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/common_video_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/modules_tests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/modules_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/peerconnection_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/rtc_media_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/rtc_pc_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/rtc_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/system_wrappers_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/test_support_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/tools_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/video_engine_tests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Debug/voice_engine_unittests.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -226,7 +234,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -285,6 +293,7 @@
       "--idempotent",
       "[dummy hash for audio_decoder_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] audio_decoder_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -305,7 +314,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -364,6 +373,7 @@
       "--idempotent",
       "[dummy hash for common_audio_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] common_audio_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -384,7 +394,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -443,6 +453,7 @@
       "--idempotent",
       "[dummy hash for common_video_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] common_video_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -463,7 +474,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -522,6 +533,7 @@
       "--idempotent",
       "[dummy hash for modules_tests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] modules_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -542,7 +554,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -601,6 +613,7 @@
       "--idempotent",
       "[dummy hash for modules_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] modules_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -621,7 +634,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -680,6 +693,7 @@
       "--idempotent",
       "[dummy hash for peerconnection_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] peerconnection_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -700,7 +714,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -759,6 +773,7 @@
       "--idempotent",
       "[dummy hash for rtc_media_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] rtc_media_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -779,7 +794,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -838,6 +853,7 @@
       "--idempotent",
       "[dummy hash for rtc_pc_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] rtc_pc_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -858,7 +874,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -917,6 +933,7 @@
       "--idempotent",
       "[dummy hash for rtc_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] rtc_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -937,7 +954,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -996,6 +1013,7 @@
       "--idempotent",
       "[dummy hash for system_wrappers_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] system_wrappers_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1016,7 +1034,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1075,6 +1093,7 @@
       "--idempotent",
       "[dummy hash for test_support_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] test_support_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1095,7 +1114,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1154,6 +1173,7 @@
       "--idempotent",
       "[dummy hash for tools_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] tools_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1174,7 +1194,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1233,6 +1253,7 @@
       "--idempotent",
       "[dummy hash for video_engine_tests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] video_engine_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1253,7 +1274,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1312,6 +1333,7 @@
       "--idempotent",
       "[dummy hash for voice_engine_unittests]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] voice_engine_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1350,13 +1372,14 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_nonparallel_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_nonparallel_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1368,6 +1391,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "audio_decoder_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1416,7 +1440,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1428,6 +1452,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "common_audio_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1476,7 +1501,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1488,6 +1513,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "common_video_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1536,7 +1562,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1548,6 +1574,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "modules_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1596,7 +1623,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1608,6 +1635,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1656,7 +1684,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1668,6 +1696,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "peerconnection_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1716,7 +1745,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1728,6 +1757,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_media_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1776,7 +1806,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1788,6 +1818,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_pc_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1836,7 +1867,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1848,6 +1879,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1896,7 +1928,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1908,6 +1940,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "system_wrappers_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1956,7 +1989,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1968,6 +2001,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "test_support_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2016,7 +2050,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2028,6 +2062,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tools_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2076,7 +2111,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2088,6 +2123,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2136,7 +2172,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2148,6 +2184,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",

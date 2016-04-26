@@ -11,13 +11,13 @@
       "--slave",
       "test_slave",
       "--spec",
-      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]",
       "--root",
       "pdfium",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[ROOT]\\b\\build\\slave\\cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -53,6 +54,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "pdf_enable_v8=1 pdf_enable_xfa=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -63,63 +65,64 @@
     "cmd": [
       "ninja",
       "-C",
-      "[CWD]\\pdfium\\out\\Debug"
+      "[SLAVE_BUILD]\\pdfium\\out\\Debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile with ninja"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
+      "[SLAVE_BUILD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
       "--test",
       "pdfium_unittests"
     ],
-    "cwd": "[CWD]\\pdfium",
+    "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
+      "[SLAVE_BUILD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
       "--test",
       "pdfium_embeddertests"
     ],
-    "cwd": "[CWD]\\pdfium",
+    "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "embeddertests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
+      "[SLAVE_BUILD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
       "--test",
       "pdfium_javascript"
     ],
-    "cwd": "[CWD]\\pdfium",
+    "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "javascript tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
+      "[SLAVE_BUILD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
       "--test",
       "pdfium_pixel"
     ],
-    "cwd": "[CWD]\\pdfium",
+    "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "pixel tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
+      "[SLAVE_BUILD]\\pdfium\\tools\\drmemory\\scripts\\pdfium_tests.py",
       "--test",
       "pdfium_corpus"
     ],
-    "cwd": "[CWD]\\pdfium",
+    "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "corpus tests"
   },
   {

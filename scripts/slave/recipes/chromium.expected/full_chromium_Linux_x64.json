@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -98,6 +99,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -108,16 +110,17 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[CWD]/cipd",
+      "[SLAVE_BUILD]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"fake_slave_build/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -125,10 +128,10 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "ensure",
       "--root",
-      "[ROOT]/b/build/slave/cache/cipd/goma",
+      "[CACHE]/cipd/goma",
       "--list",
       "infra_internal/goma/client/linux-amd64 release",
       "--json-output",
@@ -136,6 +139,7 @@
       "--service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -157,10 +161,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[ROOT]/b/build/slave/cache/cipd/goma' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -169,17 +174,18 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/testing/scripts/get_compile_targets.py",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[CWD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"buildername\": \"Linux x64\", \"buildnumber\": 571, \"mastername\": \"chromium\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -191,12 +197,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/src/testing/buildbot/chromium.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CWD]/src/testing/buildbot/chromium.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -210,24 +217,26 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/mb/mb.py",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium",
       "-b",
       "Linux x64",
       "--config-file",
-      "[CWD]/src/tools/mb/mb_config.pyl",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[ROOT]/b/build/slave/cache/cipd/goma",
+      "[CACHE]/cipd/goma",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files"
   },
   {
@@ -245,9 +254,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--build-data-dir",
@@ -259,13 +268,14 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]/b/build/slave/cache/cipd/goma",
+      "[CACHE]/cipd/goma",
       "--ninja-ensure-up-to-date",
       "--clobber",
       "--",
       "All",
       "chromium_builder_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -283,12 +293,13 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"gclient_env\": {\"GYP_DEFINES\": \"component=static_library gomadir='[ROOT]/b/build/slave/cache/cipd/goma' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\"}",
+      "{\"gclient_env\": {\"GYP_DEFINES\": \"component=static_library gomadir='[CACHE]/cipd/goma' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\"}",
       "--build-properties",
       "{\"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"}",
       "--mode",
       "dev"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_build"
   },
   {

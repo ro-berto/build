@@ -6,7 +6,6 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/infra_paths',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -21,7 +20,7 @@ def Windows_Tests__DrMemory__steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+    api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -53,7 +52,7 @@ def Windows_Tests__DrMemory__steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': ' component=static_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -61,7 +60,7 @@ def Windows_Tests__DrMemory__steps(api):
     # extract build step
     api.python(
         "extract build",
-        api.infra_paths['build'].join("scripts", "slave", "extract_build.py"),
+        api.path["build"].join("scripts", "slave", "extract_build.py"),
         args=["--target", "Release", "--build-archive-url", build_properties[
             "parent_build_archive_url"], '--build-properties=%s' %
               api.json.dumps(build_properties,
@@ -70,7 +69,7 @@ def Windows_Tests__DrMemory__steps(api):
       # runtest step
       api.python(
           "memory test: webkit",
-          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
+          api.path["build"].join("scripts", "slave", "runtest.py"),
           args=
           ['--run-shell-script', '--target', 'Release',
             "--build-properties=%s" %
@@ -88,7 +87,7 @@ def Windows_Tests__DrMemory__steps(api):
       # runtest step
       api.python(
           "memory test: webkit",
-          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
+          api.path["build"].join("scripts", "slave", "runtest.py"),
           args=
           ['--run-shell-script', '--target', 'Release',
             "--build-properties=%s" %
@@ -110,7 +109,7 @@ def Windows_Browser__DrMemory_light___1__steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+    api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -142,7 +141,7 @@ def Windows_Browser__DrMemory_light___1__steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': ' component=static_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -150,7 +149,7 @@ def Windows_Browser__DrMemory_light___1__steps(api):
     # extract build step
     api.python(
         "extract build",
-        api.infra_paths['build'].join("scripts", "slave", "extract_build.py"),
+        api.path["build"].join("scripts", "slave", "extract_build.py"),
         args=["--target", "Release", "--build-archive-url", build_properties[
             "parent_build_archive_url"], '--build-properties=%s' %
               api.json.dumps(build_properties,
@@ -158,7 +157,7 @@ def Windows_Browser__DrMemory_light___1__steps(api):
     # runtest step
     api.python(
         "memory test: browser_tests",
-        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
+        api.path["build"].join("scripts", "slave", "runtest.py"),
         args=
         ['--run-shell-script', '--target', 'Release', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -180,7 +179,7 @@ def Windows_Builder__DrMemory__steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+    api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -212,7 +211,7 @@ def Windows_Builder__DrMemory__steps(api):
            'GYP_DEFINES': 'build_for_tool=drmemory component=shared_library',
            'LANDMINES_VERBOSE': '1'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -223,12 +222,12 @@ def Windows_Builder__DrMemory__steps(api):
     if "clobber" in api.properties:
         args.append("--clobber")
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # zip_build step
     step_result = api.python(
         "zip build",
-        api.infra_paths['build'].join("scripts", "slave", "zip_build.py"),
+        api.path["build"].join("scripts", "slave", "zip_build.py"),
         args=
         ["--json-urls", api.json.output(),
          "--target", "Release", '--build-url',
@@ -369,7 +368,7 @@ def Windows_Browser__DrMemory_light___2__steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+    api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -401,7 +400,7 @@ def Windows_Browser__DrMemory_light___2__steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': ' component=static_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -409,7 +408,7 @@ def Windows_Browser__DrMemory_light___2__steps(api):
     # extract build step
     api.python(
         "extract build",
-        api.infra_paths['build'].join("scripts", "slave", "extract_build.py"),
+        api.path["build"].join("scripts", "slave", "extract_build.py"),
         args=["--target", "Release", "--build-archive-url", build_properties[
             "parent_build_archive_url"], '--build-properties=%s' %
               api.json.dumps(build_properties,
@@ -417,7 +416,7 @@ def Windows_Browser__DrMemory_light___2__steps(api):
     # runtest step
     api.python(
         "memory test: browser_tests",
-        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
+        api.path["build"].join("scripts", "slave", "runtest.py"),
         args=
         ['--run-shell-script', '--target', 'Release', "--build-properties=%s" %
          api.json.dumps(build_properties,

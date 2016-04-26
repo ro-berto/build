@@ -9,7 +9,6 @@ DEPS = [
   'ct',
   'file',
   'depot_tools/gclient',
-  'depot_tools/infra_paths',
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -102,7 +101,7 @@ def RunSteps(api):
   # Ensure swarming_client is compatible with what recipes expect.
   api.swarming.check_client_version()
   # Setup Go isolate binary.
-  chromium_checkout = api.infra_paths['slave_build'].join('src')
+  chromium_checkout = api.path['slave_build'].join('src')
   api.skia_swarming.setup_go_isolate(chromium_checkout.join('tools', 'luci-go'))
 
   # Apply issue to the Skia checkout if this is a trybot run.
@@ -128,7 +127,7 @@ def RunSteps(api):
     # Download SKPs.
     api.ct.download_skps(
         ct_page_type, slave_num, skps_chromium_build,
-        api.infra_paths['slave_build'].join('skps'))
+        api.path['slave_build'].join('skps'))
 
     # Create this slave's isolated.gen.json file to use for batcharchiving.
     isolate_dir = chromium_checkout.join('chrome')
@@ -218,9 +217,9 @@ def GenTests(api):
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     ) +
-    api.infra_paths.exists(
-        api.infra_paths['slave_build'].join('skia'),
-        api.infra_paths['slave_build'].join('src')
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('src')
     )
   )
 

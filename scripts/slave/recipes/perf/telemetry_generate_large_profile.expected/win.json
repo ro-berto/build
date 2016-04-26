@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]\\b\\build\\slave\\cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -113,18 +114,20 @@
       "--build-number",
       "571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Download and Extract Binary"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\src\\tools\\perf\\generate_profile",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\generate_profile",
       "--browser=exact",
-      "--browser-executable=[CWD]\\src\\out\\Release\\chrome.exe",
+      "--browser-executable=[SLAVE_BUILD]\\src\\out\\Release\\chrome.exe",
       "--profile-type-to-generate=large_profile",
-      "--output-dir=[TMP]\\large-profile_tmp_1"
+      "--output-dir=[TMP_BASE]\\large-profile_tmp_1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Generate Large Profile"
   },
   {
@@ -133,8 +136,9 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Zip Large Profile",
-    "stdin": "{\"entries\": [{\"path\": \"[TMP]\\\\large-profile_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP]\\\\zipped-profile_tmp_2\\\\large_profile.zip\", \"root\": \"[TMP]\\\\large-profile_tmp_1\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\large-profile_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zipped-profile_tmp_2\\\\large_profile.zip\", \"root\": \"[TMP_BASE]\\\\large-profile_tmp_1\"}"
   },
   {
     "cmd": [
@@ -142,12 +146,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]\\resources\\gsutil_wrapper.py",
       "--",
-      "[ROOT]\\b\\depot_tools\\gsutil.py",
+      "[DEPOT_TOOLS]\\gsutil.py",
       "----",
       "cp",
-      "[TMP]\\zipped-profile_tmp_2\\large_profile.zip",
+      "[TMP_BASE]\\zipped-profile_tmp_2\\large_profile.zip",
       "gs://chrome-partner-telemetry/large_profile/win"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-partner-telemetry/large_profile/win@@@"
@@ -158,8 +163,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP]\\large-profile_tmp_1"
+      "[TMP_BASE]\\large-profile_tmp_1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree Remove profile directory.",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -177,8 +183,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP]\\zipped-profile_tmp_2"
+      "[TMP_BASE]\\zipped-profile_tmp_2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree Remove zipped profile directory.",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

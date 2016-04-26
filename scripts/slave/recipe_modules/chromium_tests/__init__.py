@@ -3,7 +3,6 @@ DEPS = [
   'amp',
   'archive',
   'depot_tools/bot_update',
-  'depot_tools/infra_paths',
   'chromium',
   'chromium_android',
   'commit_position',

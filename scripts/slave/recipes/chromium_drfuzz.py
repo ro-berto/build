@@ -8,7 +8,6 @@ from recipe_engine.types import freeze
 DEPS = [
   'archive',
   'depot_tools/bot_update',
-  'depot_tools/infra_paths',
   'chromium',
   'file',
   'recipe_engine/json',
@@ -52,7 +51,7 @@ def gn_refs(api, step_name, args):
   Returns: the list of matched targets.
   """
   step_result = api.python(step_name,
-          api.infra_paths['depot_tools'].join('gn.py'),
+          api.path['depot_tools'].join('gn.py'),
           ['--root=%s' % str(api.path['checkout']),
            'refs',
            str(api.chromium.output_dir),
@@ -93,8 +92,7 @@ def RunSteps(api):
   api.chromium.compile(targets=targets)
 
   api.archive.clusterfuzz_archive(
-          build_dir=api.infra_paths['slave_build'].join(
-              'src', 'out', 'Release'),
+          build_dir=api.path['slave_build'].join('src', 'out', 'Release'),
           update_properties=checkout_results.json.output['properties'],
           gs_bucket=bot_config['upload_bucket'],
           archive_prefix='drfuzz',

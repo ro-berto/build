@@ -4,8 +4,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::disk]/resources/statvfs.py",
-      "[CWD]"
+      "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "usage1",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -23,8 +24,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::disk]/resources/statvfs.py",
-      "[CWD]"
+      "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "usage2",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [

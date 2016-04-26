@@ -65,7 +65,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     slave_info = android_devices.SLAVE_INFO.get(
         self._skia_api.slave_name,
         android_devices.SLAVE_INFO['default'])
-    self.android_bin = self._skia_api.m.infra_paths['slave_build'].join(
+    self.android_bin = self._skia_api.m.path['slave_build'].join(
         'skia', 'platform_tools', 'android', 'bin')
     self._android_sdk_root = slave_info.android_sdk_root
     self.serial = slave_info.serial

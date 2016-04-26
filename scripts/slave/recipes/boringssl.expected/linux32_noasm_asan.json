@@ -11,13 +11,13 @@
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
       "--root",
       "boringssl",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -53,6 +54,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -63,8 +65,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[CWD]/boringssl/build"
+      "[SLAVE_BUILD]/boringssl/build"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree clean",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -82,9 +85,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/boringssl/build",
+      "[SLAVE_BUILD]/boringssl/build",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs mkdir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -103,47 +107,48 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/boringssl/util/bot/go/env.py",
-      "[CWD]/boringssl/util/bot/cmake-linux64/bin/cmake",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[SLAVE_BUILD]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
       "-DCMAKE_ASM_FLAGS=-m32 -msse2",
-      "-DCMAKE_CXX_COMPILER=[CWD]/boringssl/util/bot/llvm-build/bin/clang++",
+      "-DCMAKE_CXX_COMPILER=[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/clang++",
       "-DCMAKE_CXX_FLAGS=-m32 -msse2 -fsanitize=address",
-      "-DCMAKE_C_COMPILER=[CWD]/boringssl/util/bot/llvm-build/bin/clang",
+      "-DCMAKE_C_COMPILER=[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/clang",
       "-DCMAKE_C_FLAGS=-m32 -msse2 -fsanitize=address",
       "-DCMAKE_SYSTEM_NAME=Linux",
       "-DCMAKE_SYSTEM_PROCESSOR=x86",
       "-DOPENSSL_NO_ASM=1",
-      "[CWD]/boringssl"
+      "[SLAVE_BUILD]/boringssl"
     ],
-    "cwd": "[CWD]/boringssl/build",
+    "cwd": "[SLAVE_BUILD]/boringssl/build",
     "name": "cmake"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/boringssl/util/bot/go/env.py",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
       "ninja",
       "-C",
-      "[CWD]/boringssl/build"
+      "[SLAVE_BUILD]/boringssl/build"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ninja"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/boringssl/util/bot/go/env.py",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
       "go",
       "run",
       "util/all_tests.go",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CWD]/boringssl",
+    "cwd": "[SLAVE_BUILD]/boringssl",
     "env": {
-      "ASAN_SYMBOLIZER_PATH": "[CWD]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
+      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
     },
     "name": "unit tests",
     "~followup_annotations": [
@@ -193,16 +198,16 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/boringssl/util/bot/go/env.py",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
       "go",
       "test",
       "-pipe",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CWD]/boringssl/ssl/test/runner",
+    "cwd": "[SLAVE_BUILD]/boringssl/ssl/test/runner",
     "env": {
-      "ASAN_SYMBOLIZER_PATH": "[CWD]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
+      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
     },
     "name": "ssl tests",
     "~followup_annotations": [

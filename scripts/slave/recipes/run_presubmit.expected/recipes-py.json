@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'infra', 'url': 'https://chromium.googlesource.com/infra/infra.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'infra', 'url': 'https://chromium.googlesource.com/infra/infra.git'}]",
       "--root",
       "infra/recipes-py",
       "--revision_mapping_file",
       "{\"infra/recipes-py\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",
@@ -32,6 +32,7 @@
       "infra/recipes-py@HEAD",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -76,7 +77,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CWD]/infra/recipes-py",
+    "cwd": "[SLAVE_BUILD]/infra/recipes-py",
     "name": "commit git patch"
   },
   {
@@ -86,6 +87,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -106,7 +108,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[CWD]/infra/recipes-py",
+      "[SLAVE_BUILD]/infra/recipes-py",
       "--commit",
       "--verbose",
       "--verbose",
@@ -119,6 +121,7 @@
       "--upstream",
       "566be4c6bf5a619a0f53810d649ca87525be7d24"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

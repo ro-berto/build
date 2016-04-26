@@ -11,13 +11,13 @@
       "--slave",
       "TestSlave",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'dynamorio', 'url': 'https://github.com/DynamoRIO/dynamorio.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'dynamorio', 'url': 'https://github.com/DynamoRIO/dynamorio.git'}]",
       "--root",
       "dynamorio",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -51,9 +52,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/dynamorio",
+      "[SLAVE_BUILD]/dynamorio",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs makedirs",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -73,9 +75,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/dynamorio/build",
+      "[SLAVE_BUILD]/dynamorio/build",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs makedirs (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -96,7 +99,7 @@
       "..",
       "-DDEBUG=OFF"
     ],
-    "cwd": "[CWD]/dynamorio/build",
+    "cwd": "[SLAVE_BUILD]/dynamorio/build",
     "name": "Configure release DynamoRIO"
   },
   {
@@ -104,7 +107,7 @@
       "make",
       "-j5"
     ],
-    "cwd": "[CWD]/dynamorio/build",
+    "cwd": "[SLAVE_BUILD]/dynamorio/build",
     "name": "Compile release DynamoRIO"
   },
   {
@@ -115,14 +118,14 @@
       "-norun",
       "-v"
     ],
-    "cwd": "[CWD]/dynamorio/build",
+    "cwd": "[SLAVE_BUILD]/dynamorio/build",
     "name": "don't follow python"
   },
   {
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
@@ -130,7 +133,7 @@
       "--run-layout-test",
       "file:///home/chrome-bot/bb.html"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -140,14 +143,14 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/base_unittests",
       "--gtest_filter=-TraceEventTestFixture.TraceContinuousSampling"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -157,14 +160,14 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/browser_tests",
       "--gtest_filter=AutofillTest.BasicFormFill"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -174,13 +177,13 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/crypto_unittests"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -190,13 +193,13 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/ipc_tests"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -206,13 +209,13 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/media_unittests"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -222,14 +225,14 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/net_unittests",
       "--gtest_filter=-CertDatabaseNSSTest.ImportCACertHierarchy*"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -239,13 +242,13 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/printing_unittests"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -255,14 +258,14 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/remoting_unittests",
       "--gtest_filter=-VideoFrameCapturerTest.Capture:DesktopProcessTest.DeathTest"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -272,13 +275,13 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/sql_unittests"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -288,13 +291,13 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/unit_tests"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -304,13 +307,13 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "[CWD]/dynamorio/build/bin64/drrun",
+      "[SLAVE_BUILD]/dynamorio/build/bin64/drrun",
       "-stderr_mask",
       "12",
       "--",
       "../../linux-cr-builder/build/src/out/Release/url_unittests"
     ],
-    "cwd": "[CWD]/dynamorio",
+    "cwd": "[SLAVE_BUILD]/dynamorio",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },

@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -19,13 +20,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]\\b\\build\\slave\\cache_dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",
@@ -40,6 +41,7 @@
       "src/third_party/WebKit@HEAD",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -114,6 +116,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -124,16 +127,17 @@
       "--platform",
       "windows-386",
       "--dest-directory",
-      "[CWD]\\cipd",
+      "[SLAVE_BUILD]\\cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"fake_slave_build/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -141,10 +145,10 @@
   },
   {
     "cmd": [
-      "fake_slave_build/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "ensure",
       "--root",
-      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
+      "[CACHE]\\cipd\\goma",
       "--list",
       "infra_internal/goma/client/windows-amd64 release",
       "--json-output",
@@ -152,6 +156,7 @@
       "--service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -170,9 +175,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\src\\tools\\swarming_client\\swarming.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -186,10 +192,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[ROOT]\\b\\build\\slave\\cache\\cipd\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -198,17 +205,18 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"checkout\": \"[CWD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"buildername\": \"win_blink_dbg\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -220,12 +228,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]\\src\\testing\\buildbot\\chromium.webkit.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.webkit.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CWD]\\src\\testing\\buildbot\\chromium.webkit.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.webkit.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -244,7 +253,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[CWD]\\src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -258,9 +267,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing\\\\buildbot\\\\trybot_analyze_config.json'@@@",
@@ -283,6 +293,7 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
@@ -314,24 +325,26 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\src\\tools\\mb\\mb.py",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.blink",
       "-b",
       "win_blink_dbg",
       "--config-file",
-      "[CWD]\\src\\tools\\mb\\mb_config.pyl",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
+      "[CACHE]\\cipd\\goma",
       "//out/Debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files (with patch)"
   },
   {
@@ -349,9 +362,9 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[CWD]\\src",
+      "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
-      "[ROOT]\\b\\build\\slave\\goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -361,12 +374,13 @@
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
+      "[CACHE]\\cipd\\goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "blink_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -382,6 +396,7 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mark: before_tests"
   },
   {
@@ -400,13 +415,13 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "[ROOT]\\b\\build\\scripts\\slave\\chromium\\layout_test_wrapper.py",
+      "[BUILD]\\scripts\\slave\\chromium\\layout_test_wrapper.py",
       "--target",
       "Debug",
       "-o",
-      "[CWD]\\layout-test-results",
+      "[SLAVE_BUILD]\\layout-test-results",
       "--build-dir",
-      "[CWD]\\src\\out",
+      "[SLAVE_BUILD]\\src\\out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -418,6 +433,7 @@
       "--step-name",
       "webkit_tests (with patch)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 5",
@@ -429,11 +445,11 @@
     "cmd": [
       "python",
       "-u",
-      "[ROOT]\\b\\build\\scripts\\slave\\chromium\\archive_layout_test_results.py",
+      "[BUILD]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
       "--results-dir",
-      "[CWD]\\layout-test-results",
+      "[SLAVE_BUILD]\\layout-test-results",
       "--build-dir",
-      "[CWD]\\src\\out",
+      "[SLAVE_BUILD]\\src\\out",
       "--build-number",
       "571",
       "--builder-name",
@@ -441,6 +457,7 @@
       "--gs-bucket",
       "gs://chromium-layout-test-archives"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/win_blink_dbg/571/layout-test-results/results.html@@@",
@@ -453,6 +470,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill (2)"
   },
   {
@@ -467,13 +485,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]\\b\\build\\slave\\cache_dir",
+      "[GIT_CACHE]",
       "--rietveld_server",
       "https://codereview.chromium.org",
       "--output_json",
@@ -485,6 +503,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -552,10 +571,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[ROOT]\\b\\build\\slave\\cache\\cipd\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (without patch)"
@@ -564,18 +584,19 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\src\\tools\\mb\\mb.py",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.blink",
       "-b",
       "win_blink_dbg",
       "--config-file",
-      "[CWD]\\src\\tools\\mb\\mb_config.pyl",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
+      "[CACHE]\\cipd\\goma",
       "//out/Debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files (without patch)"
   },
   {
@@ -593,9 +614,9 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[CWD]\\src",
+      "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
-      "[ROOT]\\b\\build\\slave\\goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -605,12 +626,13 @@
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
+      "[CACHE]\\cipd\\goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "blink_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -636,13 +658,13 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "[ROOT]\\b\\build\\scripts\\slave\\chromium\\layout_test_wrapper.py",
+      "[BUILD]\\scripts\\slave\\chromium\\layout_test_wrapper.py",
       "--target",
       "Debug",
       "-o",
-      "[CWD]\\layout-test-results",
+      "[SLAVE_BUILD]\\layout-test-results",
       "--build-dir",
-      "[CWD]\\src\\out",
+      "[SLAVE_BUILD]\\src\\out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -658,6 +680,7 @@
       "--skipped",
       "always"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 5",
@@ -671,6 +694,7 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
@@ -685,6 +709,7 @@
       "--target",
       "Debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps"
   },
   {

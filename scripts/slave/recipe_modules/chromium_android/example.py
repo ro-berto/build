@@ -8,7 +8,6 @@ DEPS = [
     'adb',
     'chromium',
     'chromium_android',
-    'depot_tools/infra_paths',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -114,8 +113,8 @@ def RunSteps(api, buildername):
   api.chromium_android.c.asan_symbolize = True
 
   if config.get('adb_vendor_keys'):
-    # TODO(phajdan.jr): Remove infra_paths['build'] usage, http://crbug.com/437264 .
-    api.chromium.c.env.ADB_VENDOR_KEYS = api.infra_paths['build'].join(
+    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
+    api.chromium.c.env.ADB_VENDOR_KEYS = api.path['build'].join(
       'site_config', '.adb_key')
 
   api.chromium_android.init_and_sync(use_bot_update=False)

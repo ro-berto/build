@@ -5,7 +5,6 @@
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
-  'depot_tools/infra_paths',
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -30,12 +29,12 @@ def win_xp_dr_nightly_steps(api):
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # dynamorio win nightly suite step
   api.step("nightly suite",
-      [api.infra_paths['build'].join("scripts", "slave", "drmemory", "build_env.bat"),
+      [api.path["build"].join("scripts", "slave", "drmemory", "build_env.bat"),
         'ctest', '--timeout', '120', '-VV', '-S',
         'dynamorio/suite/runsuite.cmake,nightly;long;'+\
             'site=X64.WindowsXp.VS2010.BuildBot'],
       env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-        "bot_tools")}, cwd=api.infra_paths['slave_build'])
+        "bot_tools")}, cwd=api.path["slave_build"])
 
 
 def linux_dr_steps(api):
@@ -51,9 +50,9 @@ def linux_dr_steps(api):
   # pre-commit suite step
   api.step("pre-commit suite", ['ctest', '--timeout', '120', '-VV', '-S',
     api.path["checkout"].join("suite", "runsuite.cmake")],
-    cwd=api.infra_paths['slave_build'], ok_ret="all")
+    cwd=api.path["slave_build"], ok_ret="all")
   # upload dynamorio docs step
-  api.gsutil.upload(api.infra_paths['slave_build'].join("install", "docs", "html"),
+  api.gsutil.upload(api.path["slave_build"].join("install", "docs", "html"),
       "chromium-dynamorio", "dr_docs/", ["-r"], multithreaded=True)
 
 
@@ -74,11 +73,11 @@ def win_7_dr_steps(api):
     'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # build_env step
-  api.step("pre-commit suite", [api.infra_paths['build'].join("scripts", "slave",
+  api.step("pre-commit suite", [api.path["build"].join("scripts", "slave",
     "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
     api.path["checkout"].join("suite", "runsuite.cmake")],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.infra_paths['slave_build'])
+      "bot_tools")}, cwd=api.path["slave_build"])
 
 
 def linux_dr_package_steps(api):
@@ -121,11 +120,11 @@ def win_8_dr_steps(api):
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # build_env step
   api.step("pre-commit suite",
-      [api.infra_paths['build'].join("scripts", "slave", "drmemory", "build_env.bat"),
+      [api.path["build"].join("scripts", "slave", "drmemory", "build_env.bat"),
         'ctest', '--timeout', '120', '-VV', '-S',
         api.path["checkout"].join("suite", "runsuite.cmake")],
       env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-        "bot_tools")}, cwd=api.infra_paths['slave_build'])
+        "bot_tools")}, cwd=api.path["slave_build"])
 
 
 def win_xp_dr_steps(api):
@@ -145,11 +144,11 @@ def win_xp_dr_steps(api):
     'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # build_env step
-  api.step("pre-commit suite", [api.infra_paths['build'].join("scripts", "slave",
+  api.step("pre-commit suite", [api.path["build"].join("scripts", "slave",
     "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
     api.path["checkout"].join("suite", "runsuite.cmake")],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.infra_paths['slave_build'])
+      "bot_tools")}, cwd=api.path["slave_build"])
 
 
 def win_7_dr_nightly_steps(api):
@@ -169,12 +168,12 @@ def win_7_dr_nightly_steps(api):
     'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # dynamorio win nightly suite step
-  api.step("nightly suite", [api.infra_paths['build'].join("scripts", "slave",
+  api.step("nightly suite", [api.path["build"].join("scripts", "slave",
     "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
     'dynamorio/suite/runsuite.cmake,nightly;long;'+\
         'site=X64.Windows7.VS2010.BuildBot'],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.infra_paths['slave_build'])
+      "bot_tools")}, cwd=api.path["slave_build"])
 
 
 def win_8_dr_nightly_steps(api):
@@ -194,12 +193,12 @@ def win_8_dr_nightly_steps(api):
     'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # dynamorio win nightly suite step
-  api.step("nightly suite", [api.infra_paths['build'].join("scripts", "slave",
+  api.step("nightly suite", [api.path["build"].join("scripts", "slave",
     "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
     'dynamorio/suite/runsuite.cmake,nightly;long;'+\
         'site=X64.Windows8.VS2010.BuildBot'],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.infra_paths['slave_build'])
+      "bot_tools")}, cwd=api.path["slave_build"])
 
 
 def win_dr_package_steps(api):
@@ -220,7 +219,7 @@ def win_dr_package_steps(api):
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # get buildnumber step; no longer needed
   # Package DynamoRIO step
-  api.step("Package DynamoRIO", [api.infra_paths['build'].join("scripts", "slave",
+  api.step("Package DynamoRIO", [api.path["build"].join("scripts", "slave",
     "drmemory", "build_env.bat"), "ctest", "-VV", "-S",
     str(api.path["checkout"].join("make", "package.cmake")) + ",build=0x" +
     build_properties["got_revision"][:7]],

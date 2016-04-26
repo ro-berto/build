@@ -107,7 +107,7 @@ class PGOApi(recipe_api.RecipeApi):
 
     self.m.bot_update.ensure_checkout(force=True)
     if bot_config.get('patch_root'):
-      self.m.path['checkout'] = self.m.infra_paths['slave_build'].join(
+      self.m.path['checkout'] = self.m.path['slave_build'].join(
           bot_config.get('patch_root'))
 
     # First step: compilation of the instrumented build.

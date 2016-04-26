@@ -6,7 +6,6 @@
 
 
 DEPS = [
-  'depot_tools/infra_paths',
   'gatekeeper',
   'recipe_engine/path',
 ]
@@ -14,8 +13,8 @@ DEPS = [
 
 def RunSteps(api):
   api.gatekeeper(
-    api.infra_paths['build'].join('scripts', 'slave', 'gatekeeper.json'),
-    api.infra_paths['build'].join('scripts', 'slave', 'gatekeeper_trees.json'),
+    api.path['build'].join('scripts', 'slave', 'gatekeeper.json'),
+    api.path['build'].join('scripts', 'slave', 'gatekeeper_trees.json'),
   )
 
 

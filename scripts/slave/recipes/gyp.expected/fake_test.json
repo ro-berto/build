@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'gyp', 'url': 'https://chromium.googlesource.com/external/gyp.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'gyp', 'url': 'https://chromium.googlesource.com/external/gyp.git'}]",
       "--root",
       "gyp",
       "--revision_mapping_file",
       "{\"gyp\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -60,10 +61,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/gyp/gyptest.py",
+      "[SLAVE_BUILD]/gyp/gyptest.py",
       "-a"
     ],
-    "cwd": "[CWD]/gyp",
+    "cwd": "[SLAVE_BUILD]/gyp",
     "name": "run tests"
   },
   {

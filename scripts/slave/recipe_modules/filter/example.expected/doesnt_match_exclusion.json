@@ -4,9 +4,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/testing/buildbot/trybot_analyze_config.json",
+      "[SLAVE_BUILD]/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
@@ -27,14 +28,15 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/build/gyp_chromium",
+      "[SLAVE_BUILD]/build/gyp_chromium",
       "--analyzer",
       "{\"additional_compile_targets\": [], \"files\": [\"bar.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library gomadir='[ROOT]/b/build/goma' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "analyze",
     "~followup_annotations": [
@@ -52,6 +54,7 @@
       "echo",
       "Why hello, there."
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "hello"
   },
   {

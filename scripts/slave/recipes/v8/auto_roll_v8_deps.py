@@ -9,7 +9,6 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
-  'depot_tools/infra_paths',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -52,7 +51,7 @@ def GetDEPS(api, name, repo):
   step_result = api.gclient(
       'get %s deps' % name,
       ['revinfo', '--deps', 'all', '--spec', spec],
-      cwd=api.infra_paths['slave_build'],
+      cwd=api.path['slave_build'],
       stdout=api.raw_io.output(),
   )
 

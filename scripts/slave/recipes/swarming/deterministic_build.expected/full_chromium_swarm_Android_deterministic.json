@@ -4,8 +4,9 @@
       "python",
       "-u",
       "\nimport os, sys\n\nbuild_path = sys.argv[1]\nif os.path.exists(build_path):\n  for (path, dir, files) in os.walk(build_path):\n    for cur_file in files:\n      if cur_file.endswith('index.lock'):\n        path_to_file = os.path.join(path, cur_file)\n        print 'deleting %s' % path_to_file\n        os.remove(path_to_file)\n",
-      "[CWD]"
+      "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup index.lock",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -34,13 +35,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_src_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -48,6 +49,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -124,11 +126,12 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[CWD]/src/out/Release/debug_info_dumps",
-      "[CWD]/src/out/Release/test_logs",
-      "[CWD]/src/out/build_product.zip",
-      "[CWD]/src"
+      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Release/test_logs",
+      "[SLAVE_BUILD]/src/out/build_product.zip",
+      "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -153,11 +156,12 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[ROOT]/b/build/goma' target_arch=arm use_goma=1",
-      "PATH": "[CWD]/src/third_party/android_tools/sdk/platform-tools:[CWD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -176,9 +180,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -188,14 +192,15 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]/b/build/goma",
+      "[BUILD]/goma",
       "--clobber",
       "--",
       "all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CWD]/src/third_party/android_tools/sdk/platform-tools:[CWD]/src/build/android:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "First build",
     "~followup_annotations": [
@@ -209,11 +214,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
       "--build-dir",
-      "[CWD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Release",
       "--src-dir",
-      "[CWD]/src"
+      "[SLAVE_BUILD]/src"
     ],
-    "cwd": "[CWD]",
+    "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -225,10 +230,11 @@
       "python",
       "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[CWD]/src/out/Release",
-      "[CWD]/src/out/Release.1"
+      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Release.1"
     ],
-    "name": "Move [CWD]/src/out/Release to [CWD]/src/out/Release.1",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -247,11 +253,12 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[ROOT]/b/build/goma' target_arch=arm use_goma=1",
-      "PATH": "[CWD]/src/third_party/android_tools/sdk/platform-tools:[CWD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (2)"
   },
@@ -270,9 +277,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -282,14 +289,15 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]/b/build/goma",
+      "[BUILD]/goma",
       "--clobber",
       "--",
       "all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CWD]/src/third_party/android_tools/sdk/platform-tools:[CWD]/src/build/android:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "Second build",
     "~followup_annotations": [
@@ -303,11 +311,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
       "--build-dir",
-      "[CWD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Release",
       "--src-dir",
-      "[CWD]/src"
+      "[SLAVE_BUILD]/src"
     ],
-    "cwd": "[CWD]",
+    "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata (2)"
   },
   {
@@ -315,10 +323,11 @@
       "python",
       "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[CWD]/src/out/Release",
-      "[CWD]/src/out/Release.2"
+      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Release.2"
     ],
-    "name": "Move [CWD]/src/out/Release to [CWD]/src/out/Release.2",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -336,13 +345,13 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/compare_build_artifacts.py",
       "--first-build-dir",
-      "[CWD]/src/out/Release.1",
+      "[SLAVE_BUILD]/src/out/Release.1",
       "--second-build-dir",
-      "[CWD]/src/out/Release.2",
+      "[SLAVE_BUILD]/src/out/Release.2",
       "--target-platform",
       "android"
     ],
-    "cwd": "[CWD]",
+    "cwd": "[SLAVE_BUILD]",
     "name": "compare_build_artifacts"
   },
   {

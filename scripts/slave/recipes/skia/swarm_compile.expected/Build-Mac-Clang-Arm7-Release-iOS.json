@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/skia/tools/buildbot_spec.py",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Build-Mac-Clang-Arm7-Release-iOS"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -45,17 +45,17 @@
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/ios/bin/ios_ninja"
+      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_ninja"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "CC": "/usr/bin/clang",
       "CHROME_HEADLESS": "1",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=1",
-      "PATH": "[CWD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[CWD]/out"
+      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "build iOSShell"
   },
@@ -64,9 +64,10 @@
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', '*.dylib', 'skia_launcher', 'lib/*.so', 'iOSShell.app', 'iOSShell.ipa']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    print 'Copying build product %s to %s' % (f, dst)\n    shutil.move(f, dst)\n",
-      "[CWD]/out/Release",
+      "[SLAVE_BUILD]/out/Release",
       "[SWARM_OUT_DIR]/out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "copy build products",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",
@@ -98,9 +99,10 @@
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', '*.dylib', 'skia_launcher', 'lib/*.so', 'iOSShell.app', 'iOSShell.ipa']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    print 'Copying build product %s to %s' % (f, dst)\n    shutil.move(f, dst)\n",
-      "[CWD]/skia/xcodebuild/Release-iphoneos",
+      "[SLAVE_BUILD]/skia/xcodebuild/Release-iphoneos",
       "[SWARM_OUT_DIR]/xcodebuild/Release-iphoneos"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "copy build products (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",

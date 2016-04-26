@@ -7,7 +7,6 @@
 
 
 DEPS = [
-  'depot_tools/infra_paths',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -32,7 +31,7 @@ def RunSteps(api):
 
   # TODO(borenet): Detect static initializers?
 
-  gsutil_path = api.infra_paths['depot_tools'].join('third_party', 'gsutil',
+  gsutil_path = api.path['depot_tools'].join('third_party', 'gsutil',
                                              'gsutil')
   if not api.skia.is_trybot:
     api.skia.run(

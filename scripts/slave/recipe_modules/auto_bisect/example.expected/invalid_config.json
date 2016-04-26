@@ -6,7 +6,7 @@
       "refs/heads/master",
       "refs/remotes/origin/master"
     ],
-    "cwd": "[TMP]/fake_checkout_tmp_1",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "git update-ref"
   },
   {
@@ -15,11 +15,12 @@
       "checkout",
       "master"
     ],
-    "cwd": "[TMP]/fake_checkout_tmp_1",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "git checkout"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -50,6 +51,7 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Recipe failed. Reason: Invalid value 'not a valid revision' for \"good_revision\".",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",

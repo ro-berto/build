@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--no_shallow",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -62,12 +63,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
       "gs://chromium-v8/mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2",
-      "[CWD]"
+      "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil bootstrapping mips toolchain"
   },
   {
@@ -76,7 +78,7 @@
       "xf",
       "mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2"
     ],
-    "cwd": "[CWD]",
+    "cwd": "[SLAVE_BUILD]",
     "name": "unzipping"
   },
   {
@@ -86,16 +88,17 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "AR": "[CWD]/mips-2013.11/bin/mips-linux-gnu-ar",
-      "CC": "[CWD]/mips-2013.11/bin/mips-linux-gnu-gcc",
-      "CXX": "[CWD]/mips-2013.11/bin/mips-linux-gnu-g++",
+      "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
+      "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
+      "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-      "LINK": "[CWD]/mips-2013.11/bin/mips-linux-gnu-g++",
+      "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
-      "RANLIB": "[CWD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
+      "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
     },
     "name": "gclient runhooks"
   },
@@ -108,6 +111,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -125,13 +129,14 @@
       "--target",
       "Release",
       "--src-dir",
-      "[CWD]/v8",
+      "[SLAVE_BUILD]/v8",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "make",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -157,23 +162,25 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Mips - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
     "trigger_specs": [
       {
         "builder_name": "V8 Mips - big endian - nosnap - 1",
         "properties": {
           "parent_build_environment": {
-            "AR": "[CWD]/mips-2013.11/bin/mips-linux-gnu-ar",
-            "CC": "[CWD]/mips-2013.11/bin/mips-linux-gnu-gcc",
-            "CXX": "[CWD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
+            "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
+            "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
             "GYP_CROSSCOMPILE": "1",
             "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-            "LINK": "[CWD]/mips-2013.11/bin/mips-linux-gnu-g++",
-            "RANLIB": "[CWD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
+            "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -184,13 +191,13 @@
         "builder_name": "V8 Mips - big endian - nosnap - 2",
         "properties": {
           "parent_build_environment": {
-            "AR": "[CWD]/mips-2013.11/bin/mips-linux-gnu-ar",
-            "CC": "[CWD]/mips-2013.11/bin/mips-linux-gnu-gcc",
-            "CXX": "[CWD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
+            "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
+            "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
             "GYP_CROSSCOMPILE": "1",
             "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-            "LINK": "[CWD]/mips-2013.11/bin/mips-linux-gnu-g++",
-            "RANLIB": "[CWD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
+            "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",

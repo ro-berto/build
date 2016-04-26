@@ -6,7 +6,6 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/infra_paths',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -47,7 +46,7 @@ def ChromiumOS_Linux_Tests_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': ' component=shared_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -57,12 +56,12 @@ def ChromiumOS_Linux_Tests_steps(api):
     if "clobber" in api.properties:
         args.append("--clobber")
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # runtest step
     api.python(
         "sync_integration_tests",
-        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
+        api.path["build"].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -160,14 +159,14 @@ def Blink_Linux_LSan_ASan_steps(api):
            'GYP_DEFINES': 'asan=1 lsan=1 component=static_library',
            'LANDMINES_VERBOSE': '1'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # update_clang step; generic ShellCommand converted
     api.step("update_clang",
              ['python', 'src/tools/clang/scripts/update.py'],
              env={'LLVM_URL': 'http://llvm.org/svn/llvm-project'},
-             cwd=api.infra_paths['slave_build'])
+             cwd=api.path["slave_build"])
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
@@ -176,12 +175,12 @@ def Blink_Linux_LSan_ASan_steps(api):
     if "clobber" in api.properties:
         args.append("--clobber")
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # runtest step
     api.python(
         "webkit_tests",
-        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
+        api.path["build"].join("scripts", "slave", "runtest.py"),
         args=
         ['--run-python-script', '--target', 'Release', "--build-properties=%s"
          % api.json.dumps(build_properties,
@@ -194,7 +193,7 @@ def Blink_Linux_LSan_ASan_steps(api):
           '"GYP_GENERATORS":"ninja","LANDMINES_VERBOSE":"1"},'
           '"generate_gtest_json":true,"lsan":true,"time_out_ms":"48000",'
           '"webkit_dir":"third_party/WebKit/Source","webkit_test_options":'
-          '["--enable-sanitizer"]}'), '--no-xvfb', api.infra_paths['build'].join(
+          '["--enable-sanitizer"]}'), '--no-xvfb', api.path["build"].join(
               "scripts", "slave", "chromium", "layout_test_wrapper.py"),
          '--target', 'Release', '-o', '../../layout-test-results',
          '--build-number', api.properties["buildnumber"], '--builder-name',
@@ -278,7 +277,7 @@ def CFI_Linux_CF_steps(api):
            'GYP_DEFINES': ' component=static_library',
            'LLVM_DOWNLOAD_GOLD_PLUGIN': '1'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -286,14 +285,14 @@ def CFI_Linux_CF_steps(api):
     # compile.py step
     args = ['--target', 'Release', '--clobber', 'chromium_builder_asan']
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # ClusterFuzz Archive step
     # HACK(aneeshm): chromium_utils fails without this.
     build_properties["primary_repo"] = ""
     api.python(
         'ClusterFuzz Archive',
-        api.infra_paths['build'].join("scripts", "slave", "chromium",
+        api.path["build"].join("scripts", "slave", "chromium",
                                "cf_archive_build.py"),
         args=
         ['--target', 'Release', "--build-properties=%s" %
@@ -305,7 +304,7 @@ def CFI_Linux_CF_steps(api):
           '"GYP_DEFINES":" component=static_library","LANDMINES_VERBOSE":"1",'
           '"LLVM_DOWNLOAD_GOLD_PLUGIN":"1"},"gs_acl":"public-read",'
           '"gs_bucket":"gs://chromium-browser-cfi"}')],
-        cwd=api.infra_paths['slave_build'])
+        cwd=api.path["slave_build"])
 
 
 dispatch_directory = {

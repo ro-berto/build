@@ -8,16 +8,18 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/tools/runit.py",
-      "[ROOT]/b/build/scripts/tools/pycurl.py",
+      "[BUILD]/scripts/tools/runit.py",
+      "[BUILD]/scripts/tools/pycurl.py",
       "https://v8-roll.appspot.com/status"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "check roll status",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -35,6 +37,7 @@
       "--outfile",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "check active roll"
   },
   {
@@ -43,6 +46,7 @@
       "-u",
       "import time; time.sleep(20)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "wait for gnumbd",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(20)@@@",
@@ -61,13 +65,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'v8_branch': 'branches/bleeding_edge', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'v8_branch': 'branches/bleeding_edge', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -78,6 +82,7 @@
       "--no_shallow",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -154,9 +159,9 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/v8/tools/release/auto_roll.py",
+      "[SLAVE_BUILD]/src/v8/tools/release/auto_roll.py",
       "--chromium",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--author",
       "v8-autoroll@chromium.org",
       "--reviewer",
@@ -165,9 +170,9 @@
       "--json-output",
       "/path/to/tmp/json",
       "--work-dir",
-      "[CWD]/workdir"
+      "[SLAVE_BUILD]/workdir"
     ],
-    "cwd": "[CWD]/src/v8",
+    "cwd": "[SLAVE_BUILD]/src/v8",
     "name": "roll deps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -191,6 +196,7 @@
       "--counter",
       "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"success\", \"value\": 1}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "upload stats"
   },
   {

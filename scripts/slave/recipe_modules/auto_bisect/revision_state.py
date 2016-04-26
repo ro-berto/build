@@ -154,7 +154,7 @@ class RevisionState(object):
     if self.needs_patch:  # pragma: no cover
       return False
     api = self.bisector.api
-    cwd = api.m.infra_paths['slave_build'].join(
+    cwd = api.m.path['slave_build'].join(
         depot_config.DEPOT_DEPS_NAME[self.depot_name]['src'])
     name = 'Checking DEPS for ' + self.commit_hash
     step_result = api.m.git(
@@ -384,7 +384,7 @@ class RevisionState(object):
   def _write_deps_patch_file(self, build_name):
     """Saves the DEPS patch in a temp location and returns the file path."""
     api = self.bisector.api
-    file_name = str(api.m.path['tmp'].join(build_name + '.diff'))
+    file_name = str(api.m.path['tmp_base'].join(build_name + '.diff'))
     api.m.file.write('Saving diff patch for ' + self.commit_hash,
                      file_name, self.deps_patch + self.deps_sha_patch)
     return file_name

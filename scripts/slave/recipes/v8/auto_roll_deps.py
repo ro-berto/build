@@ -4,7 +4,6 @@
 
 DEPS = [
   'depot_tools/bot_update',
-  'depot_tools/infra_paths',
   'chromium',
   'depot_tools/gclient',
   'recipe_engine/json',
@@ -48,8 +47,8 @@ def RunSteps(api):
 
     step_result = api.python(
         'check roll status',
-        api.infra_paths['build'].join('scripts', 'tools', 'runit.py'),
-        [api.infra_paths['build'].join('scripts', 'tools', 'pycurl.py'),
+        api.path['build'].join('scripts', 'tools', 'runit.py'),
+        [api.path['build'].join('scripts', 'tools', 'pycurl.py'),
          'https://v8-roll.appspot.com/status'],
         stdout=api.raw_io.output(),
         step_test_data=lambda: api.raw_io.test_api.stream_output(
@@ -113,7 +112,7 @@ def RunSteps(api):
          'yangguo@chromium.org,vogelheim@chromium.org',
          '--roll',
          '--json-output', api.json.output(),
-         '--work-dir', api.infra_paths['slave_build'].join('workdir')],
+         '--work-dir', api.path['slave_build'].join('workdir')],
         cwd=api.path['checkout'].join('v8'),
         step_test_data=lambda: api.json.test_api.output(
             {'monitoring_state': 'success'}),

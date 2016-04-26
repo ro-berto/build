@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'depot_tools/infra_paths',
     'git_clone_bundler',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -32,7 +31,7 @@ def RunSteps(api):
   else:
     # Create a bundle.
     api.git_clone_bundler.create(
-        api.infra_paths['slave_build'].join('checkout'),
+        api.path['slave_build'].join('checkout'),
         'clone-dot-bundle-bucket',
         gs_subpath='checkout/repository')
 

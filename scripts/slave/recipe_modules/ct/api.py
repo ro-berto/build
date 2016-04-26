@@ -15,7 +15,7 @@ class CTApi(recipe_api.RecipeApi):
   @property
   def downloads_dir(self):
     """Path to where artifacts should be downloaded from Google Storage."""
-    return self.m.infra_paths['slave_build'].join('src', 'content', 'test', 'ct')
+    return self.m.path['slave_build'].join('src', 'content', 'test', 'ct')
 
   def checkout_dependencies(self):
     """Checks out all repositories required for CT to run."""

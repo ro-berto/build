@@ -10,7 +10,6 @@ import re
 
 
 DEPS = [
-  'depot_tools/infra_paths',
   'file',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -63,7 +62,7 @@ def git_checkout(api, url, dest, ref=None):
 
 
 def RunSteps(api):
-  go_dir = api.infra_paths['slave_build'].join('go')
+  go_dir = api.path['slave_build'].join('go')
   go_src = go_dir.join('src')
   api.file.makedirs('makedirs go/src', go_src)
   infra_dir = go_src.join(INFRA_GO)
@@ -126,8 +125,8 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('Infra-PerCommit') +
-      api.infra_paths.exists(
-          api.infra_paths['slave_build'].join('go', 'src', INFRA_GO, '.git')) +
+      api.path.exists(api.path['slave_build'].join('go', 'src', INFRA_GO,
+                                                   '.git')) +
       api.properties(slavename='skiabot-linux-infra-001')
   )
   yield (

@@ -5,10 +5,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[CWD]/swarming.client",
+      "[SLAVE_BUILD]/swarming.client",
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -19,7 +20,7 @@
       "origin",
       "stable"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git fetch (swarming_client)"
   },
   {
@@ -29,7 +30,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git checkout (swarming_client)"
   },
   {
@@ -38,7 +39,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -53,7 +54,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git clean (swarming_client)"
   },
   {
@@ -62,7 +63,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -73,16 +74,17 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "submodule update (swarming_client)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -95,6 +97,7 @@
       "-u",
       "RECIPE_MODULE[build::swarming_heartbeat]/resources/job_runs_fine.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "job_runs_fine.py"
   },
   {

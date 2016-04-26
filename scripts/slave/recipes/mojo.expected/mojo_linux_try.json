@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/mojo.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/mojo.git'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",
@@ -31,6 +31,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -59,6 +60,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -68,14 +70,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/mojo/tools/mojob.py",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "gn",
       "--release",
       "--dcheck_always_on"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
-      "GOMA_DIR": "[ROOT]/b/build/goma"
+      "GOMA_DIR": "[BUILD]/goma"
     },
     "name": "mojob gn"
   },
@@ -83,13 +85,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/mojo/tools/mojob.py",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "build",
       "--release",
       "--dcheck_always_on"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GOMA_DIR": "[ROOT]/b/build/goma"
+      "GOMA_DIR": "[BUILD]/goma"
     },
     "name": "mojob build"
   },
@@ -97,10 +100,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/mojo/tools/get_test_list.py",
+      "[SLAVE_BUILD]/src/mojo/tools/get_test_list.py",
       "{\"build_number\": 571, \"builder_name\": \"Mojo Linux Try\", \"dcheck_always_on\": true, \"is_debug\": false, \"master_name\": \"chromium.testing.master\", \"target_os\": \"linux\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"default\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get_test_list",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -118,7 +122,7 @@
     "cmd": [
       "world"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Hello"
   },
   {

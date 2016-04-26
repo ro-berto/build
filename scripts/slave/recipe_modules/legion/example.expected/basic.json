@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -100,7 +101,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/isolate.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/isolate.py",
       "archive",
       "--isolate",
       "controller_path.isolate",
@@ -112,13 +113,14 @@
       "cfg_name",
       "cfg_value"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive for controller_path.isolate"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/testing/legion/tools/legion.py",
+      "[SLAVE_BUILD]/src/testing/legion/tools/legion.py",
       "run",
       "--controller-isolated",
       "controller_path.isolated",
@@ -141,6 +143,7 @@
       "Task",
       "task_path.isolated"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Running test for Test Controller",
     "stdout": "/path/to/tmp/"
   },

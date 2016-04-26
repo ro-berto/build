@@ -8,6 +8,7 @@
       "--outfile",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get luci-config projects"
   },
   {
@@ -19,6 +20,7 @@
       "--outfile",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get project 'build' config 'recipes.cfg'"
   },
   {

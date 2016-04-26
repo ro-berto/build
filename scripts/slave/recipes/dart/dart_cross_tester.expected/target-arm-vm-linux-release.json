@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
       "--root",
       "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -50,9 +51,9 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/clean_output_directory.py"
+      "[SLAVE_BUILD]/sdk/tools/clean_output_directory.py"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "clobber"
   },
   {
@@ -62,6 +63,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -73,13 +75,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
       "gs://dart-cross-compiled-binaries/cross_build_arm_release_abcd1234efef5656.tar.bz2",
       "cross_build_arm_release_abcd1234efef5656.tar.bz2"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "gsutil download tarball"
   },
   {
@@ -88,14 +90,14 @@
       "-xjf",
       "cross_build_arm_release_abcd1234efef5656.tar.bz2"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "untar tarball"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/test.py",
+      "[SLAVE_BUILD]/sdk/tools/test.py",
       "--mode=release",
       "--arch=arm",
       "--progress=line",
@@ -106,14 +108,14 @@
       "--write-test-outcome-log",
       "--exclude-suite=pkg"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "vm tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/test.py",
+      "[SLAVE_BUILD]/sdk/tools/test.py",
       "--mode=release",
       "--arch=arm",
       "--progress=line",
@@ -126,7 +128,7 @@
       "--checked",
       "--append_logs"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "checked vm tests"
   },
   {
@@ -134,16 +136,16 @@
       "rm",
       "cross_build_arm_release_abcd1234efef5656.tar.bz2"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "delete tarball"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/clean_output_directory.py"
+      "[SLAVE_BUILD]/sdk/tools/clean_output_directory.py"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "clobber (2)"
   },
   {

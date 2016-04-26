@@ -6,7 +6,6 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/infra_paths',
     'file',
     'gsutil',
     'recipe_engine/path',
@@ -103,14 +102,14 @@ def win_vista_x64_drm_steps(api):
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
     api.step("unpack tools",
-             [api.infra_paths['slave_build'].join(
-                  'tools', 'buildbot', 'bot_tools', 'unpack.bat')],
+             [api.path["slave_build"].join('tools', 'buildbot', 'bot_tools',
+               'unpack.bat')],
              env={},
-             cwd=api.infra_paths[
-                 'slave_build'].join('tools', 'buildbot', 'bot_tools'))
+             cwd=api.path[
+                 "slave_build"].join('tools', 'buildbot', 'bot_tools'))
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
@@ -120,98 +119,98 @@ def win_vista_x64_drm_steps(api):
     api.step("Checkout TSan tests",
              ['svn', 'checkout', '--force',
               'http://data-race-test.googlecode.com/svn/trunk/',
-              api.infra_paths['slave_build'].join("tsan")])
+              api.path["slave_build"].join("tsan")])
     # Build TSan tests step
     api.step("Build TSan Tests",
              ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
-              '-C', api.infra_paths['slave_build'].join("tsan", "unittest")],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join(
-                      "tools", "buildbot", "bot_tools"),
+              '-C', api.path["slave_build"].join("tsan", "unittest")],
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
+                                                           "bot_tools"),
                   "CYGWIN": "nodosfilewarning"})
     # Dr. Memory TSan test step
     api.step(
         "dbg full TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "dbg light TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "rel full TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "rel light TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "dbg full nosyms TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Prepare to pack test results step; null converted
     # Pack test results step
     api.step("Pack test results",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                "build_env.bat"),'7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
               str(build_properties["buildnumber"]) + ".7z",
@@ -223,7 +222,7 @@ def win_vista_x64_drm_steps(api):
               'build_drmemory-dbg-64/Testing/Temporary',
               'build_drmemory-rel-64/logs',
               'build_drmemory-rel-64/Testing/Temporary', 'xmlresults'],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools")})
     # upload drmemory test logs step
     api.gsutil.upload("testlogs_r" + build_properties["got_revision"] + "_b" +
@@ -246,7 +245,7 @@ def mac_mavericks_x64_DR_steps(api):
     api.step("pre-commit suite",
              ['ctest', '--timeout', '120', '-VV', '-S', api.path[
                  "checkout"].join("suite", "runsuite.cmake")],
-             cwd=api.infra_paths['slave_build'],
+             cwd=api.path["slave_build"],
              ok_ret="all")
 
 
@@ -283,7 +282,7 @@ def linux_cr_builder_steps(api):
            'GYP_DEFINES': 'build_for_tool=drmemory component=shared_library',
            'LANDMINES_VERBOSE': '1'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -297,7 +296,7 @@ def linux_cr_builder_steps(api):
     if 'clobber' in api.properties:
         args.append("--clobber")
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
 
 
@@ -341,14 +340,14 @@ def win_xp_drm_steps(api):
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
     api.step("unpack tools",
-             [api.infra_paths['slave_build'].join('tools', 'buildbot', 'bot_tools',
+             [api.path["slave_build"].join('tools', 'buildbot', 'bot_tools',
                'unpack.bat')],
              env={},
-             cwd=api.infra_paths[
+             cwd=api.path[
                  "slave_build"].join('tools', 'buildbot', 'bot_tools'))
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
@@ -358,98 +357,98 @@ def win_xp_drm_steps(api):
     api.step("Checkout TSan tests",
              ['svn', 'checkout', '--force',
               'http://data-race-test.googlecode.com/svn/trunk/',
-              api.infra_paths['slave_build'].join("tsan")])
+              api.path["slave_build"].join("tsan")])
     # Build TSan tests step
     api.step("Build TSan Tests",
              ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
-              '-C', api.infra_paths['slave_build'].join("tsan", "unittest")],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+              '-C', api.path["slave_build"].join("tsan", "unittest")],
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools"),
                   "CYGWIN": "nodosfilewarning"})
     # Dr. Memory TSan test step
     api.step(
         "dbg full TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "dbg light TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "rel full TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "rel light TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "dbg full nosyms TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Prepare to pack test results step; null converted
     # Pack test results step
     api.step("Pack test results",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                "build_env.bat"), '7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
               str(build_properties["buildnumber"]) + ".7z",
@@ -461,7 +460,7 @@ def win_xp_drm_steps(api):
               'build_drmemory-dbg-64/Testing/Temporary',
               'build_drmemory-rel-64/logs',
               'build_drmemory-rel-64/Testing/Temporary', 'xmlresults'],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools")})
     # upload drmemory test logs step
     api.gsutil.upload("testlogs_r" + build_properties["got_revision"] + "_b" +
@@ -519,8 +518,8 @@ def linux_cr_steps(api):
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
     # Make the build directory step
-    api.file.makedirs("makedirs", api.infra_paths['slave_build'].join("dynamorio"))
-    api.file.makedirs("makedirs", api.infra_paths['slave_build'].join("dynamorio",
+    api.file.makedirs("makedirs", api.path["slave_build"].join("dynamorio"))
+    api.file.makedirs("makedirs", api.path["slave_build"].join("dynamorio",
       "build"))
     # Configure release DynamoRIO step; generic ShellCommand converted
     api.step("Configure release DynamoRIO",
@@ -528,19 +527,19 @@ def linux_cr_steps(api):
                  'cmake', '..', '-DDEBUG=OFF'
              ],
              env={},
-             cwd=api.infra_paths['slave_build'].join('dynamorio', 'build'))
+             cwd=api.path["slave_build"].join('dynamorio', 'build'))
     # Compile release DynamoRIO step; generic ShellCommand converted
     api.step("Compile release DynamoRIO",
              [
                  'make', '-j5'
              ],
              env={},
-             cwd=api.infra_paths['slave_build'].join('dynamorio', 'build'))
+             cwd=api.path["slave_build"].join('dynamorio', 'build'))
     # don't follow python step; generic ShellCommand converted
     api.step("don't follow python",
              ['bin64/drconfig', '-reg', 'python', '-norun', '-v'],
              env={},
-             cwd=api.infra_paths['slave_build'].join('dynamorio', 'build'))
+             cwd=api.path["slave_build"].join('dynamorio', 'build'))
     # drmemory test step
     api.step("content_shell",
              ['xvfb-run', '-a',
@@ -653,7 +652,7 @@ def win8_cr_builder_steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+    api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -684,7 +683,7 @@ def win8_cr_builder_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'build_for_tool=drmemory component=shared_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -694,7 +693,7 @@ def win8_cr_builder_steps(api):
             'chromium_builder_dbg_drmemory_win', '--target', 'Debug']
     if 'clobber' in api.properties:
         args.append("--clobber")
-    api.step("compile", ["python_slave", api.infra_paths['build'].join(
+    api.step("compile", ["python_slave", api.path["build"].join(
         "scripts", "slave", "compile.py")] + args)
 
 
@@ -704,14 +703,14 @@ def win8_cr_steps(api):
     api.gsutil.download("chromium-drmemory-builds",
                         "drmemory-windows-latest-sfx.exe",
                         "drm-sfx.exe",
-                        cwd=api.infra_paths['slave_build'])
+                        cwd=api.path["slave_build"])
     # Unpack the build step; generic ShellCommand converted
     api.step("Unpack the build",
              [
                  'drm-sfx', '-ounpacked', '-y'
              ],
              env={},
-             cwd=api.infra_paths['slave_build'])
+             cwd=api.path["slave_build"])
     # Dr. Memory get revision step
     step_result = api.step("Get the revision number",
                            [
@@ -726,70 +725,70 @@ def win8_cr_steps(api):
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'url', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'printing' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'printing' tests",
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'printing', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'media' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'media' tests",
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'media', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'sql' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'sql' tests",
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'sql', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'crypto_unittests' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'crypto_unittests' tests",
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'crypto_unittests', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'remoting' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'remoting' tests",
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'remoting', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'ipc_tests' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'ipc_tests' tests",
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'ipc_tests', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'base_unittests' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'base_unittests' tests",
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'base_unittests', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'net' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'net' tests",
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'net', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'unit' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'unit' tests",
       ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'unit', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
 
 
 def win7_cr_steps(api):
@@ -798,14 +797,14 @@ def win7_cr_steps(api):
     api.gsutil.download("chromium-drmemory-builds",
                         "drmemory-windows-latest-sfx.exe",
                         "drm-sfx.exe",
-                        cwd=api.infra_paths['slave_build'])
+                        cwd=api.path["slave_build"])
     # Unpack the build step; generic ShellCommand converted
     api.step("Unpack the build",
              [
                  'drm-sfx', '-ounpacked', '-y'
              ],
              env={},
-             cwd=api.infra_paths['slave_build'])
+             cwd=api.path["slave_build"])
     # Dr. Memory get revision step
     step_result = api.step("Get the revision number",
                            [
@@ -820,70 +819,70 @@ def win7_cr_steps(api):
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'url', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'printing' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'printing' tests",
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'printing', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'media' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'media' tests",
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'media', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'sql' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'sql' tests",
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'sql', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'crypto_unittests' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'crypto_unittests' tests",
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'crypto_unittests', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'remoting' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'remoting' tests",
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'remoting', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'ipc_tests' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'ipc_tests' tests",
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'ipc_tests', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'base_unittests' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'base_unittests' tests",
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'base_unittests', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'net' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'net' tests",
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'net', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
     # Chromium 'unit' tests step; generic ShellCommand converted
     api.step(
       "Chromium 'unit' tests",
       ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind\\chrome_tests.bat',
        '-t', 'unit', '--tool', 'drmemory_light', '--keep_logs'],
       env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
-      cwd=api.infra_paths['slave_build'])
+      cwd=api.path["slave_build"])
 
 
 def win_8_x64_drm_steps(api):
@@ -904,14 +903,14 @@ def win_8_x64_drm_steps(api):
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
     api.step("unpack tools",
-             [api.infra_paths['slave_build'].join('tools', 'buildbot', 'bot_tools',
+             [api.path["slave_build"].join('tools', 'buildbot', 'bot_tools',
                'unpack.bat')],
              env={},
-             cwd=api.infra_paths[
+             cwd=api.path[
                  "slave_build"].join('tools', 'buildbot', 'bot_tools'))
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
@@ -921,98 +920,98 @@ def win_8_x64_drm_steps(api):
     api.step("Checkout TSan tests",
              ['svn', 'checkout', '--force',
               'http://data-race-test.googlecode.com/svn/trunk/',
-              api.infra_paths['slave_build'].join("tsan")])
+              api.path["slave_build"].join("tsan")])
     # Build TSan tests step
     api.step("Build TSan Tests",
              ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
-              '-C', api.infra_paths['slave_build'].join("tsan", "unittest")],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+              '-C', api.path["slave_build"].join("tsan", "unittest")],
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools"),
                   "CYGWIN": "nodosfilewarning"})
     # Dr. Memory TSan test step
     api.step(
         "dbg full TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "dbg light TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "rel full TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "rel light TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "dbg full nosyms TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Prepare to pack test results step; null converted
     # Pack test results step
     api.step("Pack test results",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                "build_env.bat"), '7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
               str(build_properties["buildnumber"]) + ".7z",
@@ -1024,7 +1023,7 @@ def win_8_x64_drm_steps(api):
               'build_drmemory-dbg-64/Testing/Temporary',
               'build_drmemory-rel-64/logs',
               'build_drmemory-rel-64/Testing/Temporary', 'xmlresults'],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools")})
     # upload drmemory test logs step
     api.gsutil.upload("testlogs_r" + build_properties["got_revision"] + "_b" +
@@ -1038,7 +1037,7 @@ def win7_cr_builder_steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+    api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -1069,7 +1068,7 @@ def win7_cr_builder_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'build_for_tool=drmemory component=shared_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -1079,7 +1078,7 @@ def win7_cr_builder_steps(api):
             'chromium_builder_dbg_drmemory_win', '--target', 'Debug']
     if 'clobber' in api.properties:
         args.append("--clobber")
-    api.step("compile", ["python_slave", api.infra_paths['build'].join(
+    api.step("compile", ["python_slave", api.path["build"].join(
         "scripts", "slave", "compile.py")] + args)
 
 
@@ -1101,14 +1100,14 @@ def win_7_x64_drm_steps(api):
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
     api.step("unpack tools",
-             [api.infra_paths['slave_build'].join('tools', 'buildbot', 'bot_tools',
+             [api.path["slave_build"].join('tools', 'buildbot', 'bot_tools',
                'unpack.bat')],
              env={},
-             cwd=api.infra_paths[
+             cwd=api.path[
                  "slave_build"].join('tools', 'buildbot', 'bot_tools'))
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
@@ -1118,98 +1117,98 @@ def win_7_x64_drm_steps(api):
     api.step("Checkout TSan tests",
              ['svn', 'checkout', '--force',
               'http://data-race-test.googlecode.com/svn/trunk/',
-              api.infra_paths['slave_build'].join("tsan")])
+              api.path["slave_build"].join("tsan")])
     # Build TSan tests step
     api.step("Build TSan Tests",
              ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
-              '-C', api.infra_paths['slave_build'].join("tsan", "unittest")],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+              '-C', api.path["slave_build"].join("tsan", "unittest")],
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools"),
                   "CYGWIN": "nodosfilewarning"})
     # Dr. Memory TSan test step
     api.step(
         "dbg full TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "dbg light TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "rel full TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "rel light TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Dr. Memory TSan test step
     api.step(
         "dbg full nosyms TSan tests",
-        [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+        [api.path["build"].join("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
          '-suppress', api.path["checkout"].join(
              "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.infra_paths['slave_build'].join("tsan", 'unittest', 'bin',
+         api.path["slave_build"].join("tsan", 'unittest', 'bin',
                                       'racecheck_unittest-windows-x86-O0.exe'),
          '--gtest_filter='
          '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
          '-147'],
-        env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+        env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                       "bot_tools")})
     # Prepare to pack test results step; null converted
     # Pack test results step
     api.step("Pack test results",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                "build_env.bat"), '7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
               str(build_properties["buildnumber"]) + ".7z",
@@ -1221,7 +1220,7 @@ def win_7_x64_drm_steps(api):
               'build_drmemory-dbg-64/Testing/Temporary',
               'build_drmemory-rel-64/logs',
               'build_drmemory-rel-64/Testing/Temporary', 'xmlresults'],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools")})
     # upload drmemory test logs step
     api.gsutil.upload("testlogs_r" + build_properties["got_revision"] + "_b" +
@@ -1274,51 +1273,51 @@ def win_builder_steps(api):
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
     api.step("unpack tools",
-             [api.infra_paths['slave_build'].join('tools', 'buildbot', 'bot_tools',
+             [api.path["slave_build"].join('tools', 'buildbot', 'bot_tools',
                'unpack.bat')],
              env={},
-             cwd=api.infra_paths[
+             cwd=api.path[
                  "slave_build"].join('tools', 'buildbot', 'bot_tools'))
     # get buildnumber step; no longer needed
     # Package dynamorio step
     api.step("Package Dr. Memory",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '-VV', '-S',
               str(api.path["checkout"].join("package.cmake")) + ",build=0x" +
               build_properties["got_revision"][:7] + ";drmem_only"],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools")},
-             cwd=api.infra_paths['slave_build'])
+             cwd=api.path["slave_build"])
     # Find package basename step
     step_result = api.step("Find package basename",
                            ["cmd.exe", "/C", "dir", "/B",
                             "DrMemory-Windows-*0x" + build_properties[
                                 "got_revision"][:7] + ".zip"],
                            stdout=api.raw_io.output(),
-                           cwd=api.infra_paths['slave_build'])
+                           cwd=api.path["slave_build"])
     basename = step_result.stdout[:-4]
     # Delete prior sfx archive step
     api.file.remove("Delete prior sfx archive",
-        api.infra_paths['slave_build'].join(basename + "-sfx.exe"),
+        api.path["slave_build"].join(basename + "-sfx.exe"),
         ok_ret=(0,1))
     # Create sfx archive step
     api.step("create sfx archive",
-             [api.infra_paths['build'].join("scripts", "slave", "drmemory",
+             [api.path["build"].join("scripts", "slave", "drmemory",
                                      "build_env.bat"), "7z", "a", "-sfx",
               basename + "-sfx.exe",
               "build_drmemory-debug-32\\_CPack_Packages\\Windows\\ZIP\\" +
               basename + "\\*"],
-             cwd=api.infra_paths['slave_build'],
-             env={"BOTTOOLS": api.infra_paths['slave_build'].join("tools", "buildbot",
+             cwd=api.path["slave_build"],
+             env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools")})
     # upload latest build step
     api.file.copy("copy locally",
-        api.infra_paths['slave_build'].join(basename + "-sfx.exe"),
-        api.infra_paths['slave_build'].join("drmemory-windows-latest-sfx.exe"))
+        api.path["slave_build"].join(basename + "-sfx.exe"),
+        api.path["slave_build"].join("drmemory-windows-latest-sfx.exe"))
     api.gsutil.upload("drmemory-windows-latest-sfx.exe",
                       "chromium-drmemory-builds",
                       "",
-                      cwd=api.infra_paths['slave_build'])
+                      cwd=api.path["slave_build"])
     # upload drmemory build step
     api.gsutil.upload("DrMemory-Windows-*" + build_properties["got_revision"][
                       :7] + ".zip", "chromium-drmemory-builds", "builds/")

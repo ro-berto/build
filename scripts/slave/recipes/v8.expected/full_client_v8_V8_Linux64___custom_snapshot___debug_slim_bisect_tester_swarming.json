@@ -5,10 +5,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[CWD]/swarming.client",
+      "[SLAVE_BUILD]/swarming.client",
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -19,7 +20,7 @@
       "origin",
       "[dummy swarming client hash]"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git fetch (swarming_client)"
   },
   {
@@ -29,7 +30,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git checkout (swarming_client)"
   },
   {
@@ -38,7 +39,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -53,7 +54,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git clean (swarming_client)"
   },
   {
@@ -62,7 +63,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -73,7 +74,7 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[CWD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "submodule update (swarming_client)",
     "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@got_revision@\"20123\"@@@"
@@ -83,9 +84,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -96,7 +98,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -171,6 +173,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Mjsunit on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -194,9 +197,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/swarming.client",
+      "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -209,6 +212,7 @@
       "1",
       "Mjsunit/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Mjsunit",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
@@ -275,6 +279,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect"
   },
   {
@@ -286,6 +291,7 @@
       "--outfile",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.Fetch changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -319,6 +325,7 @@
       "--log-limit",
       "100"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.Get change range",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -352,11 +359,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "ls",
       "gs://chromium-v8/v8-linux64-custom-snapshot-dbg/full-build-linux_a1.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.gsutil check build a1",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -369,11 +377,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "ls",
       "gs://chromium-v8/v8-linux64-custom-snapshot-dbg/full-build-linux_a2.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.gsutil check build a2",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -382,6 +391,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0"
   },
   {
@@ -390,12 +400,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
       "gs://chromium-v8/v8-linux64-custom-snapshot-dbg/full-build-linux_a0.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.gsutil download isolated json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -409,7 +420,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -485,6 +496,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.[trigger] Retry on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -509,9 +521,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/swarming.client",
+      "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -524,6 +536,7 @@
       "1",
       "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -545,6 +558,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Available range",
     "~followup_annotations": [
       "@@@STEP_LINK@a1@https://chromium.googlesource.com/v8/v8/+/a1@@@",
@@ -553,6 +567,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1"
   },
   {
@@ -561,12 +576,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
       "gs://chromium-v8/v8-linux64-custom-snapshot-dbg/full-build-linux_a1.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1.gsutil download isolated json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -580,7 +596,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -656,6 +672,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1.[trigger] Retry on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -680,9 +697,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/swarming.client",
+      "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -695,6 +712,7 @@
       "1",
       "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -716,6 +734,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Suspecting multiple commits",
     "~followup_annotations": [
       "@@@STEP_LINK@a2@https://chromium.googlesource.com/v8/v8/+/a2@@@",

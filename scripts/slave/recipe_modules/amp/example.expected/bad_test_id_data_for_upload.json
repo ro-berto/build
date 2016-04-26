@@ -5,12 +5,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
       "gs://chrome-amp-keys/main_pool/api_key",
-      "[ROOT]/b/build/site_config/.amp_main_pool_key"
+      "[BUILD]/site_config/.amp_main_pool_key"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download amp api key"
   },
   {
@@ -19,19 +20,20 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
       "gs://chrome-amp-keys/main_pool/api_secret",
-      "[ROOT]/b/build/site_config/.amp_main_pool_secret"
+      "[BUILD]/site_config/.amp_main_pool_secret"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download amp api secret"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/build/android/test_runner.py",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
       "example_gtest_suite",
@@ -39,9 +41,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "127.0.0.1",
       "--api-port",
@@ -58,8 +60,9 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[CWD]/src/out/Debug"
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
     "name": "[trigger] example_gtest_suite",
     "~followup_annotations": [
@@ -85,15 +88,16 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json"
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_gtest_suite"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/build/android/test_runner.py",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--apk-under-test",
       "ApkUnderTest.apk",
@@ -111,9 +115,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "127.0.0.1",
       "--api-port",
@@ -130,8 +134,9 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[CWD]/src/out/Debug"
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
     "name": "[trigger] example_instrumentation_suite",
     "~followup_annotations": [
@@ -157,15 +162,16 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json"
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_instrumentation_suite"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/build/android/test_runner.py",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "uirobot",
       "--minutes",
       "5",
@@ -175,9 +181,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "127.0.0.1",
       "--api-port",
@@ -194,8 +200,9 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[CWD]/src/out/Debug"
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
     "name": "[trigger] example_uirobot_suite",
     "~followup_annotations": [
@@ -221,8 +228,9 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json"
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_uirobot_suite"
   },
   {
@@ -230,9 +238,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -251,7 +260,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/build/android/test_runner.py",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
       "example_gtest_suite",
@@ -259,9 +268,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "127.0.0.1",
       "--api-port",
@@ -271,13 +280,14 @@
       "--device-type",
       "Android",
       "--collect",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP]/amp_results_tmp_2/T35TRUN1D/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[CWD]/src/out/Debug"
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
     "name": "[collect] example_gtest_suite",
     "~followup_annotations": [
@@ -289,9 +299,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load example_gtest_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -304,8 +315,9 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_gtest_suite",
-    "stdin": "{\"output\": \"[TMP]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
   {
     "cmd": [
@@ -313,12 +325,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[TMP]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_example_gtest_suite_T35TRUN1D.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_gtest_suite_T35TRUN1D.txt@@@"
@@ -329,9 +342,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load example_instrumentation_suite",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -350,7 +364,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/build/android/test_runner.py",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--apk-under-test",
       "ApkUnderTest.apk",
@@ -360,9 +374,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "127.0.0.1",
       "--api-port",
@@ -372,13 +386,14 @@
       "--device-type",
       "Android",
       "--collect",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP]/amp_results_tmp_2/T35TRUN1D/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[CWD]/src/out/Debug"
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
     "name": "[collect] example_instrumentation_suite",
     "~followup_annotations": [
@@ -390,9 +405,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load example_instrumentation_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -409,8 +425,9 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_instrumentation_suite",
-    "stdin": "{\"output\": \"[TMP]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
   {
     "cmd": [
@@ -418,12 +435,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[TMP]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_example_instrumentation_suite_T35TRUN1D.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_instrumentation_suite",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_instrumentation_suite_T35TRUN1D.txt@@@"
@@ -434,9 +452,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -455,7 +474,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/build/android/test_runner.py",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "uirobot",
       "--minutes",
       "5",
@@ -463,9 +482,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[ROOT]/b/build/site_config/.amp_main_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "127.0.0.1",
       "--api-port",
@@ -475,13 +494,14 @@
       "--device-type",
       "Android",
       "--collect",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP]/amp_results_tmp_2/T35TRUN1D/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[CWD]/src/out/Debug"
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
     "name": "[collect] example_uirobot_suite",
     "~followup_annotations": [
@@ -493,9 +513,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load example_uirobot_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -512,8 +533,9 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_uirobot_suite",
-    "stdin": "{\"output\": \"[TMP]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
   {
     "cmd": [
@@ -521,12 +543,13 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[TMP]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_example_uirobot_suite_T35TRUN1D.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_uirobot_suite_T35TRUN1D.txt@@@"

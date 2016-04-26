@@ -1,5 +1,4 @@
 DEPS = [
-  'depot_tools/infra_paths',
   'file',
   'recipe_engine/json',
   'recipe_engine/path',

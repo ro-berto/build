@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/mojo.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/mojo.git'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",
@@ -31,6 +31,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -59,6 +60,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -68,15 +70,15 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/mojo/tools/mojob.py",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "gn",
       "--debug",
       "--android",
       "--dcheck_always_on"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
-      "GOMA_DIR": "[ROOT]/b/build/goma"
+      "GOMA_DIR": "[BUILD]/goma"
     },
     "name": "mojob gn"
   },
@@ -84,14 +86,15 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/mojo/tools/mojob.py",
+      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
       "build",
       "--debug",
       "--android",
       "--dcheck_always_on"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GOMA_DIR": "[ROOT]/b/build/goma"
+      "GOMA_DIR": "[BUILD]/goma"
     },
     "name": "mojob build"
   },
@@ -99,13 +102,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/build/android/buildbot/bb_device_status_check.py",
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
       "/path/to/tmp/json",
       "--restart-usb",
       "--known-devices-file",
-      "[ROOT]/b/build/site_config/.known_devices"
+      "[BUILD]/site_config/.known_devices"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "device_status_check",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

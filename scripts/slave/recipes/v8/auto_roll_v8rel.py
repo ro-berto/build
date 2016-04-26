@@ -4,7 +4,6 @@
 
 DEPS = [
   'depot_tools/bot_update',
-  'depot_tools/infra_paths',
   'chromium',
   'depot_tools/gclient',
   'depot_tools/git',
@@ -24,15 +23,15 @@ def RunSteps(api):
       force=True, no_shallow=True, with_branch_heads=True)
   api.step(
       'V8Releases',
-      [api.infra_paths['slave_build'].join(
+      [api.path['slave_build'].join(
            'v8', 'tools', 'release', 'releases.py'),
        '-c', api.path['checkout'],
-       '--json', api.infra_paths['slave_build'].join('v8-releases-update.json'),
+       '--json', api.path['slave_build'].join('v8-releases-update.json'),
        '--branch', 'recent',
-       '--work-dir', api.infra_paths['slave_build'].join('workdir')],
-      cwd=api.infra_paths['slave_build'].join('v8'),
+       '--work-dir', api.path['slave_build'].join('workdir')],
+      cwd=api.path['slave_build'].join('v8'),
     )
-  api.gsutil.upload(api.infra_paths['slave_build'].join('v8-releases-update.json'),
+  api.gsutil.upload(api.path['slave_build'].join('v8-releases-update.json'),
                     'chromium-v8-auto-roll',
                     api.path.join('v8rel', 'v8-releases-update.json'))
 

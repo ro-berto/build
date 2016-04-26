@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git clean"
   },
   {
@@ -45,8 +45,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -67,6 +68,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -87,11 +89,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/skia/tools/buildbot_spec.py",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -131,33 +133,33 @@
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/chromeos/bin/chromeos_make",
+      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
       "-d",
       "link",
       "dm"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "build dm"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/chromeos/bin/chromeos_make",
+      "[SLAVE_BUILD]/skia/platform_tools/chromeos/bin/chromeos_make",
       "-d",
       "link",
       "nanobench"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "build nanobench"
   },
@@ -171,10 +173,11 @@
       "-rf",
       "/usr/local/skiabot/bin"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rmdir bin"
   },
@@ -188,23 +191,25 @@
       "-p",
       "/usr/local/skiabot/bin"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "mkdir bin"
   },
   {
     "cmd": [
       "RECIPE_MODULE[build::skia]/resources/scp_dir_contents.sh",
-      "[CWD]/skia/resources",
+      "[SLAVE_BUILD]/skia/resources",
       "root@192.168.1.123:/usr/local/skiabot/skia_resources"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp resources"
   },
@@ -213,9 +218,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/tmp",
+      "[SLAVE_BUILD]/tmp",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -235,9 +241,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/tmp/SKP_VERSION",
+      "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -245,9 +252,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/skia/SKP_VERSION",
+      "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -259,10 +267,11 @@
       "cat",
       "/usr/local/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
@@ -277,10 +286,11 @@
       "-f",
       "/usr/local/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rm SKP_VERSION"
   },
@@ -294,10 +304,11 @@
       "-rf",
       "/usr/local/skiabot/skia_skp/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rmdir skps"
   },
@@ -311,23 +322,25 @@
       "-p",
       "/usr/local/skiabot/skia_skp/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "mkdir skps"
   },
   {
     "cmd": [
       "RECIPE_MODULE[build::skia]/resources/scp_dir_contents.sh",
-      "[CWD]/playback/skps",
+      "[SLAVE_BUILD]/playback/skps",
       "root@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp skps"
   },
@@ -336,13 +349,14 @@
       "scp",
       "-P",
       "22",
-      "[CWD]/tmp/SKP_VERSION",
+      "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "root@192.168.1.123:/usr/local/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp SKP_VERSION"
   },
@@ -351,9 +365,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/tmp/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -361,9 +376,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/skia/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SK_IMAGE_VERSION"
   },
   {
@@ -375,10 +391,11 @@
       "cat",
       "/usr/local/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "read SK_IMAGE_VERSION",
     "stdout": "/path/to/tmp/"
@@ -393,10 +410,11 @@
       "-f",
       "/usr/local/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rm SK_IMAGE_VERSION"
   },
@@ -410,10 +428,11 @@
       "-rf",
       "/usr/local/skiabot/skia_images"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rmdir skia_images"
   },
@@ -427,23 +446,25 @@
       "-p",
       "/usr/local/skiabot/skia_images"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "mkdir skia_images"
   },
   {
     "cmd": [
       "RECIPE_MODULE[build::skia]/resources/scp_dir_contents.sh",
-      "[CWD]/images",
+      "[SLAVE_BUILD]/images",
       "root@192.168.1.123:/usr/local/skiabot/skia_images"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp images"
   },
@@ -452,13 +473,14 @@
       "scp",
       "-P",
       "22",
-      "[CWD]/tmp/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "root@192.168.1.123:/usr/local/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp SK_IMAGE_VERSION"
   },
@@ -467,8 +489,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[CWD]/dm"
+      "[SLAVE_BUILD]/dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -486,9 +509,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/dm",
+      "[SLAVE_BUILD]/dm",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -513,10 +537,11 @@
       "-rf",
       "/usr/local/skiabot/skia_dm_out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rmdir skia_dm_out"
   },
@@ -530,10 +555,11 @@
       "-p",
       "/usr/local/skiabot/skia_dm_out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "mkdir skia_dm_out"
   },
@@ -542,13 +568,13 @@
       "python",
       "-u",
       "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
-      "[CWD]/tmp/uninteresting_hashes.txt"
+      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "get uninteresting hashes",
     "~followup_annotations": [
@@ -590,13 +616,14 @@
       "scp",
       "-P",
       "22",
-      "[CWD]/tmp/uninteresting_hashes.txt",
+      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
       "root@192.168.1.123:/usr/local/skiabot/skia_tmp_dir/uninteresting_hashes.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp uninteresting_hashes.txt"
   },
@@ -605,13 +632,14 @@
       "scp",
       "-P",
       "22",
-      "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug/config/chromeos-link/Debug/dm",
+      "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug/config/chromeos-link/Debug/dm",
       "root@192.168.1.123:/usr/local/skiabot/bin/dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp dm"
   },
@@ -661,10 +689,11 @@
       "--nogpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "dm"
   },
@@ -672,12 +701,13 @@
     "cmd": [
       "RECIPE_MODULE[build::skia]/resources/scp_dir_contents.sh",
       "root@192.168.1.123:/usr/local/skiabot/skia_dm_out",
-      "[CWD]/dm"
+      "[SLAVE_BUILD]/dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp skia_dm_out"
   },
@@ -686,20 +716,20 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::skia]/resources/upload_dm_results.py",
-      "[CWD]/dm",
+      "[SLAVE_BUILD]/dm",
       "164710",
       "Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug",
       "5",
       "",
-      "[CWD]/skia/common/py/utils"
+      "[SLAVE_BUILD]/skia/common/py/utils"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "Upload DM Results"
   },
@@ -708,13 +738,14 @@
       "scp",
       "-P",
       "22",
-      "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug/config/chromeos-link/Debug/nanobench",
+      "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug/config/chromeos-link/Debug/nanobench",
       "root@192.168.1.123:/usr/local/skiabot/bin/nanobench"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp nanobench"
   },
@@ -735,10 +766,11 @@
       "--nogpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "nanobench"
   },

@@ -19,6 +19,7 @@
       "--chrome-revision",
       "2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [example-test-type]"
   },
   {

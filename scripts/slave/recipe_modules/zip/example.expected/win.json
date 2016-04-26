@@ -2,15 +2,17 @@
   {
     "cmd": [
       "touch",
-      "[TMP]\\zip-example_tmp_1\\a"
+      "[TMP_BASE]\\zip-example_tmp_1\\a"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "touch a"
   },
   {
     "cmd": [
       "touch",
-      "[TMP]\\zip-example_tmp_1\\b"
+      "[TMP_BASE]\\zip-example_tmp_1\\b"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "touch b"
   },
   {
@@ -18,9 +20,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[TMP]\\zip-example_tmp_1\\sub\\dir",
+      "[TMP_BASE]\\zip-example_tmp_1\\sub\\dir",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs mkdirs",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -38,8 +41,9 @@
   {
     "cmd": [
       "touch",
-      "[TMP]\\zip-example_tmp_1\\sub\\dir\\c"
+      "[TMP_BASE]\\zip-example_tmp_1\\sub\\dir\\c"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "touch c"
   },
   {
@@ -48,8 +52,9 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[TMP]\\\\zip-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP]\\\\zip-example_tmp_1\\\\output.zip\", \"root\": \"[TMP]\\\\zip-example_tmp_1\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\"}"
   },
   {
     "cmd": [
@@ -57,14 +62,16 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "zipping more",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[TMP]\\\\zip-example_tmp_1\\\\a\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[TMP]\\\\zip-example_tmp_1\\\\b\", \"type\": \"file\"}, {\"path\": \"[TMP]\\\\zip-example_tmp_1\\\\sub\", \"type\": \"dir\"}], \"output\": \"[TMP]\\\\zip-example_tmp_1\\\\more.zip\", \"root\": \"[TMP]\\\\zip-example_tmp_1\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\a\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\b\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\sub\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\more.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\"}"
   },
   {
     "cmd": [
       "echo",
-      "[TMP]\\zip-example_tmp_1\\more.zip"
+      "[TMP_BASE]\\zip-example_tmp_1\\more.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "report"
   },
   {
@@ -73,14 +80,15 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\unzip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "unzipping",
-    "stdin": "{\"output\": \"[TMP]\\\\zip-example_tmp_1\\\\output\", \"zip_file\": \"[TMP]\\\\zip-example_tmp_1\\\\output.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output\", \"zip_file\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\"}"
   },
   {
     "cmd": [
       "find"
     ],
-    "cwd": "[TMP]\\zip-example_tmp_1\\output",
+    "cwd": "[TMP_BASE]\\zip-example_tmp_1\\output",
     "name": "listing"
   },
   {
@@ -88,8 +96,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP]\\zip-example_tmp_1"
+      "[TMP_BASE]\\zip-example_tmp_1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree cleanup",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

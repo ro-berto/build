@@ -5,7 +5,6 @@
 # TODO: remove redundant DEPS.
 DEPS = [
   'file',
-  'depot_tools/infra_paths',
   'recipe_engine/path',
   'recipe_engine/properties',
   'repo',
@@ -56,15 +55,15 @@ def full_checkout(api):
 def clobber(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
-    api.file.rmtree('clobber', api.infra_paths['slave_build'].join('out'))
+    api.file.rmtree('clobber', api.path['slave_build'].join('out'))
 
 def setup_host_x86(api, debug, bitness, concurrent_collector=False):
   with api.step.defer_results():
     checkout(api)
     clobber(api)
 
-    build_top_dir = api.infra_paths['slave_build']
-    art_tools = api.infra_paths['slave_build'].join('art', 'tools')
+    build_top_dir = api.path['slave_build']
+    art_tools = api.path['slave_build'].join('art', 'tools')
     env = { 'TARGET_PRODUCT': 'sdk',
             'TARGET_BUILD_VARIANT': 'eng',
             'TARGET_BUILD_TYPE': 'release',
@@ -134,8 +133,8 @@ def setup_target(api,
     debug,
     device,
     concurrent_collector=False):
-  build_top_dir = api.infra_paths['slave_build']
-  art_tools = api.infra_paths['slave_build'].join('art', 'tools')
+  build_top_dir = api.path['slave_build']
+  art_tools = api.path['slave_build'].join('art', 'tools')
   android_root = '/data/local/tmp/system'
 
   env = {'TARGET_BUILD_VARIANT': 'eng',

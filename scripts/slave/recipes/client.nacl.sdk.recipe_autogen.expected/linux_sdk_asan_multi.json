@@ -11,13 +11,13 @@
       "--slave",
       "TestSlave",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'svn://svn.chromium.org/%s', 'llvm_url': 'svn://svn.chromium.org/llvm-project', 'nacl_trunk': 'svn://svn.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn.chromium.org/blink/trunk'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src-internal', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/src-internal'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'svn://svn.chromium.org/%s', 'llvm_url': 'svn://svn.chromium.org/llvm-project', 'nacl_trunk': 'svn://svn.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn.chromium.org/blink/trunk'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src-internal', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/src-internal'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -84,8 +85,9 @@
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/slave/runhooks_wrapper.py"
+      "[BUILD]/scripts/slave/runhooks_wrapper.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
@@ -103,19 +105,21 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/slave/compile.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
       "--clobber",
       "--compiler=goma",
       "chromium_builder_nacl_sdk"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -123,10 +127,11 @@
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/slave/chromium/nacl_sdk_buildbot_run.py",
+      "[BUILD]/scripts/slave/chromium/nacl_sdk_buildbot_run.py",
       "--build-properties={\"buildername\":\"linux-sdk-asan-multi\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"client.nacl.sdk\",\"recipe\":\"client.nacl.sdk.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
       "--factory-properties={\"annotated_script\":\"nacl_sdk_buildbot_run.py\",\"blink_config\":\"chromium\",\"gclient_env\":{\"CHROMIUM_GYP_SYNTAX_CHECK\":\"1\",\"DEPOT_TOOLS_UPDATE\":\"0\",\"GYP_DEFINES\":\"fastbuild=1 component=static_library\",\"LANDMINES_VERBOSE\":\"1\"},\"no_gclient_branch\":true,\"nuke_and_pave\":false}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "annotated_steps"
   },
   {

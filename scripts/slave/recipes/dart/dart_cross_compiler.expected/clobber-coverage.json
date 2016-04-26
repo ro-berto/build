@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
       "--root",
       "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -50,9 +51,9 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/clean_output_directory.py"
+      "[SLAVE_BUILD]/sdk/tools/clean_output_directory.py"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "clobber"
   },
   {
@@ -62,6 +63,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -71,12 +73,12 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/sdk/tools/build.py",
+      "[SLAVE_BUILD]/sdk/tools/build.py",
       "-mrelease",
       "--arch=x64",
       "runtime"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "build dart"
   },
   {
@@ -90,7 +92,7 @@
       "--exclude=**/*analyzer*",
       "out/"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "create tarball"
   },
   {
@@ -99,7 +101,7 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
       "-a",
@@ -107,11 +109,12 @@
       "cross_build_x64_release_abcd1234efef5656.tar.bz2",
       "gs://dart-cross-compiled-binaries/cross_build_x64_release_abcd1234efef5656.tar.bz2"
     ],
-    "cwd": "[CWD]/sdk",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "gsutil upoad tarball"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
     "trigger_specs": [
       {

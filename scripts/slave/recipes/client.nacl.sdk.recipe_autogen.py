@@ -6,7 +6,6 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/infra_paths',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -70,7 +69,7 @@ def linux_sdk_multi_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -79,12 +78,12 @@ def linux_sdk_multi_steps(api):
     args = ['--target', 'Release', '--clobber', '--compiler=goma',
             'chromium_builder_nacl_sdk']
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # annotated_steps step
     api.python(
         "annotated_steps",
-        api.infra_paths['build'].join("scripts", "slave", "chromium",
+        api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
         args=
         ['--build-properties=%s' % api.json.dumps(build_properties,
@@ -155,7 +154,7 @@ def mac_sdk_multi_steps(api):
            'GYP_DEFINES': 'fastbuild=1 component=static_library',
            'LANDMINES_VERBOSE': '1'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -164,12 +163,12 @@ def mac_sdk_multi_steps(api):
     args = ['--target', 'Release', '--clobber', '--build-tool=ninja',
             '--compiler=goma-clang', '--', 'chromium_builder_nacl_sdk']
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # annotated_steps step
     api.python(
         "annotated_steps",
-        api.infra_paths['build'].join("scripts", "slave", "chromium",
+        api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
         args=
         ['--build-properties=%s' % api.json.dumps(build_properties,
@@ -189,7 +188,7 @@ def windows_sdk_multi_steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+    api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -243,7 +242,7 @@ def windows_sdk_multi_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -252,12 +251,12 @@ def windows_sdk_multi_steps(api):
     args = ['--solution', 'all.sln', '--project', 'chromium_builder_nacl_sdk',
             '--target', 'Release', '--clobber', '--compiler=goma']
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # annotated_steps step
     api.python(
         "annotated_steps",
-        api.infra_paths['build'].join("scripts", "slave", "chromium",
+        api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
         args=
         ['--build-properties=%s' % api.json.dumps(build_properties,
@@ -301,7 +300,7 @@ def linux_sdk_multirel_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -310,12 +309,12 @@ def linux_sdk_multirel_steps(api):
     args = ['--target', 'Release', '--clobber', '--compiler=goma',
             'chromium_builder_tests']
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # annotated_steps step
     api.python(
         "annotated_steps",
-        api.infra_paths['build'].join("scripts", "slave", "chromium",
+        api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
         args=
         ['--build-properties=%s' % api.json.dumps(build_properties,
@@ -335,7 +334,7 @@ def windows_sdk_multirel_steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+    api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -363,7 +362,7 @@ def windows_sdk_multirel_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -372,12 +371,12 @@ def windows_sdk_multirel_steps(api):
     args = ['--solution', 'all.sln', '--project', 'chromium_builder_tests',
             '--target', 'Release', '--clobber', '--compiler=goma']
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # annotated_steps step
     api.python(
         "annotated_steps",
-        api.infra_paths['build'].join("scripts", "slave", "chromium",
+        api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
         args=
         ['--build-properties=%s' % api.json.dumps(build_properties,
@@ -422,7 +421,7 @@ def mac_sdk_multirel_steps(api):
            'GYP_DEFINES': 'fastbuild=1 component=static_library',
            'CHROMIUM_GYP_SYNTAX_CHECK': '1'}
     api.python("gclient runhooks wrapper",
-               api.infra_paths['build'].join("scripts", "slave",
+               api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -431,12 +430,12 @@ def mac_sdk_multirel_steps(api):
     args = ['--target', 'Release', '--clobber', '--build-tool=ninja',
             '--compiler=goma-clang', '--', 'chromium_builder_tests']
     api.python("compile",
-               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
+               api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # annotated_steps step
     api.python(
         "annotated_steps",
-        api.infra_paths['build'].join("scripts", "slave", "chromium",
+        api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
         args=
         ['--build-properties=%s' % api.json.dumps(build_properties,

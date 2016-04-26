@@ -11,13 +11,13 @@
       "--slave",
       "TestSlave",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/webports.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/webports.git'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -63,6 +64,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -71,9 +73,9 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[CWD]/src/build_tools/buildbot_selector.sh"
+      "[SLAVE_BUILD]/src/build_tools/buildbot_selector.sh"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "BUILDBOT_BUILDERNAME": "linux-glibc-0",
       "BUILDBOT_GOT_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",

@@ -14,7 +14,7 @@
       "r1",
       "--name-only"
     ],
-    "cwd": "[TMP]\\fake_checkout_tmp_1\\third_party/pdfium",
+    "cwd": "[TMP_BASE]\\fake_checkout_tmp_1\\third_party/pdfium",
     "name": "git diff to analyze commit",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

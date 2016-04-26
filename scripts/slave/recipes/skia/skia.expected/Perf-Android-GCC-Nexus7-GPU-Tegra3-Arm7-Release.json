@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git clean"
   },
   {
@@ -45,8 +45,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -67,6 +68,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -87,11 +89,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/skia/tools/buildbot_spec.py",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -135,10 +137,11 @@
       "-u",
       "import json\nimport subprocess\nimport sys\n\nccache = None\ntry:\n  ccache = subprocess.check_output(['which', 'ccache']).rstrip()\nexcept:\n  pass\nprint json.dumps({'ccache': ccache})\n"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "has ccache?",
     "stdout": "/path/to/tmp/json",
@@ -162,52 +165,54 @@
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/android_ninja",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "nanobench",
       "-d",
       "arm_v7_neon",
       "--gcc"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "build nanobench"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_device",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device",
       "-s",
       "015d210a13480604"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "wait for device (1)"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_charge",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge",
       "-s",
       "015d210a13480604"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "wait for charge (1)"
   },
@@ -220,10 +225,11 @@
       "echo",
       "$EXTERNAL_STORAGE"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "get EXTERNAL_STORAGE dir",
     "stdout": "/path/to/tmp/"
@@ -235,10 +241,11 @@
       "015d210a13480604",
       "root"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "adb root"
   },
@@ -247,59 +254,63 @@
       "sleep",
       "10"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "wait"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_device",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device",
       "-s",
       "015d210a13480604"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "wait for device (2)"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_charge",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge",
       "-s",
       "015d210a13480604"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "wait for charge (2)"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/android_kill_skia",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "--verbose",
       "-s",
       "015d210a13480604"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "kill skia"
   },
@@ -311,10 +322,11 @@
       "shell",
       "stop"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "stop shell"
   },
@@ -327,29 +339,31 @@
       "dumpsys",
       "batteryproperties"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "starting battery stats"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/adb_push_if_needed",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "--verbose",
       "-s",
       "015d210a13480604",
-      "[CWD]/skia/resources",
+      "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "push resources"
   },
@@ -358,9 +372,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/tmp",
+      "[SLAVE_BUILD]/tmp",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -380,9 +395,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/tmp/SKP_VERSION",
+      "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -390,9 +406,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/skia/SKP_VERSION",
+      "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -404,10 +421,11 @@
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
@@ -417,9 +435,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/tmp/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -427,9 +446,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]/skia/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SK_IMAGE_VERSION"
   },
   {
@@ -441,10 +461,11 @@
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "read SK_IMAGE_VERSION",
     "stdout": "/path/to/tmp/"
@@ -459,10 +480,11 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "rmdir skia_perf"
   },
@@ -482,10 +504,11 @@
       "FILE_EXISTS;",
       "fi"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "exists skia_perf",
     "stdout": "/path/to/tmp/"
@@ -500,10 +523,11 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "mkdir skia_perf"
   },
@@ -515,13 +539,13 @@
       "--format=%at",
       "-s"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "git show",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/android_run_skia",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
       "--verbose",
       "--logcat",
       "-d",
@@ -561,13 +585,14 @@
       "os",
       "Android"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "nanobench"
   },
@@ -576,9 +601,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data",
+      "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs perf_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -595,20 +621,21 @@
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/adb_pull_if_needed",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "--verbose",
       "-s",
       "015d210a13480604",
       "/storage/emulated/legacy/skiabot/skia_perf",
-      "[CWD]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data"
+      "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "pull skia_perf"
   },
@@ -619,17 +646,17 @@
       "RECIPE_MODULE[build::skia]/resources/upload_bench_results.py",
       "Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release",
       "5",
-      "[CWD]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data",
+      "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data",
       "164710",
-      "[ROOT]/b/depot_tools/third_party/gsutil/gsutil"
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "Upload nanobench Results"
   },
@@ -642,10 +669,11 @@
       "dumpsys",
       "batteryproperties"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "final battery stats"
   },
@@ -656,10 +684,11 @@
       "015d210a13480604",
       "reboot"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "reboot"
   },
@@ -668,42 +697,45 @@
       "sleep",
       "10"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "wait for reboot"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_device",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device",
       "-s",
       "015d210a13480604"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "wait for device (3)"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_charge",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge",
       "-s",
       "015d210a13480604"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     },
     "name": "wait for charge (3)"
   },

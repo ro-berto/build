@@ -4,8 +4,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\npath = sys.argv[1]\nif os.path.exists(path):\n  for p in (os.path.join(path, x) for x in os.listdir(path)):\n    if os.path.isdir(p):\n      chromium_utils.RemoveDirectory(p)\n    else:\n      os.unlink(p)\n",
-      "[CWD]"
+      "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmcontents everything",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -34,13 +35,13 @@
       "--slave",
       "fake-m1",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]\ntarget_os = ['android']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_engine_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -48,6 +49,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -86,6 +88,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -93,11 +96,12 @@
   },
   {
     "cmd": [
-      "[CWD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/sky/tools/gn",
       "--debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gn --debug"
   },
@@ -105,11 +109,12 @@
     "cmd": [
       "ninja",
       "-C",
-      "[CWD]/src/out/Debug",
+      "[SLAVE_BUILD]/src/out/Debug",
       "generate_dart_ui"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "build Debug generate_dart_ui"
   },
@@ -118,19 +123,20 @@
       "/bin/sh",
       "travis/analyze.sh"
     ],
-    "cwd": "[CWD]/src",
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "analyze dart_ui"
   },
   {
     "cmd": [
-      "[CWD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/sky/tools/gn",
       "--release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gn --release"
   },
@@ -138,10 +144,11 @@
     "cmd": [
       "ninja",
       "-C",
-      "[CWD]/src/out/Release"
+      "[SLAVE_BUILD]/src/out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "build Release"
   },
@@ -151,11 +158,12 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip darwin-x64 Artifacts",
-    "stdin": "{\"entries\": [{\"archive_name\": \"sky_snapshot\", \"path\": \"[CWD]/src/out/Release/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP]/tmp_tmp_1/artifacts.zip\", \"root\": \"[CWD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"sky_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/Release/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -163,14 +171,15 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[TMP]/tmp_tmp_1/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_1/artifacts.zip",
       "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/darwin-x64/artifacts.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload darwin-x64/artifacts.zip",
     "~followup_annotations": [
@@ -182,10 +191,11 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP]/tmp_tmp_1"
+      "[TMP_BASE]/tmp_tmp_1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "rmtree temp dir",
     "~followup_annotations": [
@@ -201,13 +211,14 @@
   },
   {
     "cmd": [
-      "[CWD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/sky/tools/gn",
       "--release",
       "--ios",
       "--simulator"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gn --release --ios --simulator"
   },
@@ -215,21 +226,23 @@
     "cmd": [
       "ninja",
       "-C",
-      "[CWD]/src/out/ios_sim_Release"
+      "[SLAVE_BUILD]/src/out/ios_sim_Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "build ios_sim_Release"
   },
   {
     "cmd": [
-      "[CWD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/sky/tools/gn",
       "--release",
       "--ios"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gn --release --ios"
   },
@@ -237,22 +250,24 @@
     "cmd": [
       "ninja",
       "-C",
-      "[CWD]/src/out/ios_Release"
+      "[SLAVE_BUILD]/src/out/ios_Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "build ios_Release"
   },
   {
     "cmd": [
-      "[CWD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/sky/tools/gn",
       "--release",
       "--ios",
       "--ios-force-armv7"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gn --release --ios --ios-force-armv7"
   },
@@ -260,10 +275,11 @@
     "cmd": [
       "ninja",
       "-C",
-      "[CWD]/src/out/ios_Release_armv7"
+      "[SLAVE_BUILD]/src/out/ios_Release_armv7"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "build ios_Release_armv7"
   },
@@ -272,10 +288,11 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[CWD]/src/out/FlutterXcode"
+      "[SLAVE_BUILD]/src/out/FlutterXcode"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "rmtree deployment directory",
     "~followup_annotations": [
@@ -294,12 +311,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[CWD]/src/out/ios_Release/Flutter",
-      "[CWD]/src/out/FlutterXcode",
+      "[SLAVE_BUILD]/src/out/ios_Release/Flutter",
+      "[SLAVE_BUILD]/src/out/FlutterXcode",
       "0"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "copy sim"
   },
@@ -308,12 +326,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[CWD]/src/out/ios_sim_Release/Flutter/Tools/iphonesimulator",
-      "[CWD]/src/out/FlutterXcode/Tools/iphonesimulator",
+      "[SLAVE_BUILD]/src/out/ios_sim_Release/Flutter/Tools/iphonesimulator",
+      "[SLAVE_BUILD]/src/out/FlutterXcode/Tools/iphonesimulator",
       "0"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "copy simulator tools"
   },
@@ -323,11 +342,12 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "make FlutterXcode.zip",
-    "stdin": "{\"entries\": [{\"path\": \"[CWD]/src/out/FlutterXcode\", \"type\": \"dir\"}], \"output\": \"[CWD]/src/out/FlutterXcode.zip\", \"root\": \"[CWD]/src/out/FlutterXcode\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/FlutterXcode\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/src/out/FlutterXcode.zip\", \"root\": \"[SLAVE_BUILD]/src/out/FlutterXcode\"}"
   },
   {
     "cmd": [
@@ -335,11 +355,12 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip ios Artifacts",
-    "stdin": "{\"entries\": [{\"archive_name\": \"FlutterXcode.zip\", \"path\": \"[CWD]/src/out/FlutterXcode.zip\", \"type\": \"file\"}], \"output\": \"[TMP]/tmp_tmp_2/artifacts.zip\", \"root\": \"[CWD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"FlutterXcode.zip\", \"path\": \"[SLAVE_BUILD]/src/out/FlutterXcode.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -347,14 +368,15 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[ROOT]/b/depot_tools/gsutil.py",
+      "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[TMP]/tmp_tmp_2/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_2/artifacts.zip",
       "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios/artifacts.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload ios/artifacts.zip",
     "~followup_annotations": [
@@ -366,10 +388,11 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP]/tmp_tmp_2"
+      "[TMP_BASE]/tmp_tmp_2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[CWD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "rmtree temp dir (2)",
     "~followup_annotations": [

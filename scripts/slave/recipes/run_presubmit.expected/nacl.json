@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'native_client', 'url': 'https://chromium.googlesource.com/native_client/src/native_client.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'native_client', 'url': 'https://chromium.googlesource.com/native_client/src/native_client.git'}]",
       "--root",
       "native_client",
       "--revision_mapping_file",
       "{\"native_client\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",
@@ -30,6 +30,7 @@
       "native_client@HEAD",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -73,7 +74,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CWD]/native_client",
+    "cwd": "[SLAVE_BUILD]/native_client",
     "name": "commit git patch"
   },
   {
@@ -91,7 +92,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[CWD]/native_client",
+      "[SLAVE_BUILD]/native_client",
       "--commit",
       "--verbose",
       "--verbose",
@@ -104,6 +105,7 @@
       "--upstream",
       "a95eb4c044a154d692a53fdfa564ee8de7aeea5b"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

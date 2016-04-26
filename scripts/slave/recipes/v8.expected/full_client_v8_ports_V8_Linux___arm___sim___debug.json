@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--no_shallow",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -68,9 +69,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -84,9 +86,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[ROOT]/b/build/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=arm",
+      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -101,6 +104,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -110,10 +114,11 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[CWD]/v8",
+      "[SLAVE_BUILD]/v8",
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -140,9 +145,9 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[CWD]/v8",
+      "[SLAVE_BUILD]/v8",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -152,9 +157,10 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]/b/build/goma",
+      "[BUILD]/goma",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -169,20 +175,21 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[CWD]/v8/out/Debug/bot_default.isolated.gen.json",
-      "[CWD]/v8/out/Debug/ignition.isolated.gen.json",
-      "[CWD]/v8/out/Debug/mjsunit.isolated.gen.json",
-      "[CWD]/v8/out/Debug/mozilla.isolated.gen.json",
-      "[CWD]/v8/out/Debug/simdjs.isolated.gen.json",
-      "[CWD]/v8/out/Debug/test262.isolated.gen.json"
+      "[SLAVE_BUILD]/v8/out/Debug/bot_default.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Debug/ignition.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Debug/mjsunit.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Debug/mozilla.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Debug/simdjs.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Debug/test262.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -200,7 +207,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -274,6 +281,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -300,7 +308,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -375,6 +383,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 - no variants on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -395,7 +404,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -469,6 +478,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Mozilla on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -489,7 +499,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -564,6 +574,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] SimdJs - all on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -584,7 +595,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -659,6 +670,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Ignition - turbofan on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -679,7 +691,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -754,6 +766,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Mjsunit - sp frame access on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -774,7 +787,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -850,6 +863,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 - ignition - turbofan on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -870,7 +884,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -946,6 +960,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Check - armv8-a on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -972,7 +987,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1049,6 +1064,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 - no variants - armv8-a on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1069,7 +1085,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1145,6 +1161,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Mozilla - armv8-a on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1165,7 +1182,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1242,6 +1259,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] SimdJs - all - armv8-a on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1262,7 +1280,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1336,6 +1354,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Check - novfp3 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1362,7 +1381,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1438,6 +1457,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 - no variants - novfp3 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1458,7 +1478,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1532,6 +1552,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Mozilla - novfp3 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1552,7 +1573,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1627,6 +1648,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] SimdJs - all - novfp3 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1650,9 +1672,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1665,6 +1687,7 @@
       "2",
       "Check/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1690,9 +1713,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1705,6 +1728,7 @@
       "1",
       "Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1730,9 +1754,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1745,6 +1769,7 @@
       "1",
       "Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Mozilla",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1770,9 +1795,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1785,6 +1810,7 @@
       "1",
       "SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1810,9 +1836,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1825,6 +1851,7 @@
       "1",
       "Ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Ignition - turbofan",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1850,9 +1877,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1865,6 +1892,7 @@
       "1",
       "Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1890,9 +1918,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1905,6 +1933,7 @@
       "1",
       "Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - ignition - turbofan",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1930,9 +1959,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1945,6 +1974,7 @@
       "2",
       "Check - armv8-a/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Check - armv8-a",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1970,9 +2000,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1985,6 +2015,7 @@
       "1",
       "Test262 - no variants - armv8-a/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - no variants - armv8-a",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2010,9 +2041,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -2025,6 +2056,7 @@
       "1",
       "Mozilla - armv8-a/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Mozilla - armv8-a",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2050,9 +2082,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -2065,6 +2097,7 @@
       "1",
       "SimdJs - all - armv8-a/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all - armv8-a",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2090,9 +2123,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -2105,6 +2138,7 @@
       "2",
       "Check - novfp3/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Check - novfp3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2130,9 +2164,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -2145,6 +2179,7 @@
       "1",
       "Test262 - no variants - novfp3/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - no variants - novfp3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2170,9 +2205,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -2185,6 +2220,7 @@
       "1",
       "Mozilla - novfp3/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Mozilla - novfp3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2210,9 +2246,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[CWD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -2225,6 +2261,7 @@
       "1",
       "SimdJs - all - novfp3/Ubuntu-12.04/[dummy has/V8 Linux - arm - sim - debug/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all - novfp3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",

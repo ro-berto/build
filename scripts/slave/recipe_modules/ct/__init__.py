@@ -4,7 +4,6 @@
 
 DEPS = [
   'depot_tools/bot_update',
-  'depot_tools/infra_paths',
   'chromium',
   'file',
   'depot_tools/gclient',

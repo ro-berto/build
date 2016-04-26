@@ -11,13 +11,13 @@
       "--slave",
       "windows_slave",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'catapult', 'url': 'https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'catapult', 'url': 'https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git'}]",
       "--root",
       "catapult",
       "--revision_mapping_file",
       "{\"catapult\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,6 +25,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -63,6 +64,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -80,6 +82,7 @@
       "--format",
       "text"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Fetch SDK downloader"
   },
   {
@@ -89,6 +92,7 @@
       "\"<simulated contents of get_appengine.py>\"",
       "--dest=."
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Run SDK downloader",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@\"<simulated contents of get_appengine.py>\"@@@",
@@ -99,17 +103,17 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/catapult/catapult_build/build_steps.py",
+      "[SLAVE_BUILD]/catapult/catapult_build/build_steps.py",
       "--api-path-checkout",
-      "[CWD]/catapult",
+      "[SLAVE_BUILD]/catapult",
       "--app-engine-sdk-pythonpath",
-      "%(PYTHONPATH)s:[CWD]/google_appengine",
+      "%(PYTHONPATH)s:[SLAVE_BUILD]/google_appengine",
       "--platform",
       "linux",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CWD]/catapult",
+    "cwd": "[SLAVE_BUILD]/catapult",
     "name": "gen step(build_steps.py)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",

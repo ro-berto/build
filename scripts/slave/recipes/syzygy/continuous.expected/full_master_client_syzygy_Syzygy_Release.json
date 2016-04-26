@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -19,13 +20,13 @@
       "--slave",
       "vm331-m3",
       "--spec",
-      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/syzygy/internal.DEPS.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/syzygy/internal.DEPS.git'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]\\b\\build\\slave\\cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -33,6 +34,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -72,6 +74,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
@@ -95,15 +98,16 @@
       "--target",
       "Release",
       "--src-dir",
-      "[CWD]\\src",
+      "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
-      "[ROOT]\\b\\build\\slave\\goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--ninja-ensure-up-to-date",
       "--",
       "build_all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -115,9 +119,10 @@
       "-u",
       "\nimport sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
       "metrics.csv",
-      "[CWD]\\src\\out\\Release"
+      "[SLAVE_BUILD]\\src\\out\\Release"
     ],
-    "name": "rmwildcard metrics.csv in [CWD]\\src\\out\\Release",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\out\\Release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
@@ -132,9 +137,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]\\src\\syzygy\\unittests.gypi",
+      "[SLAVE_BUILD]\\src\\syzygy\\unittests.gypi",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read_unittests_gypi"
   },
   {
@@ -153,11 +159,12 @@
       "--builder-name=Syzygy Release",
       "--slave-name=vm331-m3",
       "--build-number=571",
-      "[CWD]\\src\\out\\Release\\bar_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\bar_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bar_unittests"
   },
   {
@@ -176,11 +183,12 @@
       "--builder-name=Syzygy Release",
       "--slave-name=vm331-m3",
       "--build-number=571",
-      "[CWD]\\src\\out\\Release\\baz_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\baz_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "baz_unittests"
   },
   {
@@ -199,11 +207,12 @@
       "--builder-name=Syzygy Release",
       "--slave-name=vm331-m3",
       "--build-number=571",
-      "[CWD]\\src\\out\\Release\\foo_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\foo_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "foo_unittests"
   },
   {
@@ -213,9 +222,10 @@
       "-t",
       "-a",
       "public-read",
-      "[CWD]\\src\\out\\Release\\metrics.csv",
+      "[SLAVE_BUILD]\\src\\out\\Release\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/release.csv"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_metrics",
     "~followup_annotations": [
       "@@@STEP_LINK@archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/release.csv/@@@"
@@ -225,26 +235,28 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\src\\syzygy\\internal\\build\\randomize_chrome.py",
+      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\randomize_chrome.py",
       "--build-dir",
-      "[CWD]\\src\\out",
+      "[SLAVE_BUILD]\\src\\out",
       "--target",
       "Release",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "randomly_reorder_chrome"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\src\\syzygy\\internal\\build\\benchmark_chrome.py",
+      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\benchmark_chrome.py",
       "--build-dir",
-      "[CWD]\\src\\out",
+      "[SLAVE_BUILD]\\src\\out",
       "--target",
       "Release",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "benchmark_chrome"
   },
   {

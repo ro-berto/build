@@ -7,7 +7,7 @@
       "r1",
       "--name-only"
     ],
-    "cwd": "[TMP]/fake_checkout_tmp_1",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "git diff to analyze commit",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

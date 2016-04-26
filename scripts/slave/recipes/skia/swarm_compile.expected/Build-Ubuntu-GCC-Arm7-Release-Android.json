@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/skia/tools/buildbot_spec.py",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Build-Ubuntu-GCC-Arm7-Release-Android"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -48,12 +48,13 @@
       "-u",
       "import json\nimport subprocess\nimport sys\n\nccache = None\ntry:\n  ccache = subprocess.check_output(['which', 'ccache']).rstrip()\nexcept:\n  pass\nprint json.dumps({'ccache': ccache})\n"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
-      "PATH": "[CWD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[CWD]/out"
+      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "has ccache?",
     "stdout": "/path/to/tmp/json",
@@ -77,43 +78,43 @@
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/android_ninja",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "dm",
       "-d",
       "arm_v7_neon",
       "--gcc"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
-      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/out"
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "build dm"
   },
   {
     "cmd": [
-      "[CWD]/skia/platform_tools/android/bin/android_ninja",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "nanobench",
       "-d",
       "arm_v7_neon",
       "--gcc"
     ],
-    "cwd": "[CWD]/skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
-      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CWD]/out"
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "build nanobench"
   },
@@ -122,9 +123,10 @@
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', '*.dylib', 'skia_launcher', 'lib/*.so', 'iOSShell.app', 'iOSShell.ipa']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    print 'Copying build product %s to %s' % (f, dst)\n    shutil.move(f, dst)\n",
-      "[CWD]/out/Release",
+      "[SLAVE_BUILD]/out/Release",
       "[SWARM_OUT_DIR]/out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "copy build products",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",

@@ -4,11 +4,12 @@
       "python",
       "-u",
       "\nimport os, sys, shutil\nroot = sys.argv[1]\nnuke_dirs = sys.argv[2:]\nfor fname in os.listdir(root):\n  path = os.path.join(root, fname)\n  if os.path.isfile(path):\n    os.unlink(path)\n  elif fname in nuke_dirs:\n    shutil.rmtree(path)\n",
-      "[CWD]",
+      "[SLAVE_BUILD]",
       "libs",
       "obj",
       "armeabi-v7a"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean_build",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -30,10 +31,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[CWD]/android_tools",
+      "[SLAVE_BUILD]/android_tools",
       "--url",
       "https://chromium.googlesource.com/android_tools"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup"
   },
   {
@@ -45,7 +47,7 @@
       "master",
       "--recurse-submodules"
     ],
-    "cwd": "[CWD]/android_tools",
+    "cwd": "[SLAVE_BUILD]/android_tools",
     "name": "git fetch"
   },
   {
@@ -55,7 +57,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[CWD]/android_tools",
+    "cwd": "[SLAVE_BUILD]/android_tools",
     "name": "git checkout"
   },
   {
@@ -64,7 +66,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[CWD]/android_tools",
+    "cwd": "[SLAVE_BUILD]/android_tools",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -79,7 +81,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[CWD]/android_tools",
+    "cwd": "[SLAVE_BUILD]/android_tools",
     "name": "git clean"
   },
   {
@@ -88,7 +90,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[CWD]/android_tools",
+    "cwd": "[SLAVE_BUILD]/android_tools",
     "name": "submodule sync"
   },
   {
@@ -99,7 +101,7 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[CWD]/android_tools",
+    "cwd": "[SLAVE_BUILD]/android_tools",
     "name": "submodule update"
   },
   {
@@ -108,10 +110,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[CWD]/libvpx",
+      "[SLAVE_BUILD]/libvpx",
       "--url",
       "https://chromium.googlesource.com/webm/libvpx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (2)"
   },
   {
@@ -123,7 +126,7 @@
       "master",
       "--recurse-submodules"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "git fetch (2)"
   },
   {
@@ -133,7 +136,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "git checkout (2)"
   },
   {
@@ -142,7 +145,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "read revision (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -157,7 +160,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "git clean (2)"
   },
   {
@@ -166,7 +169,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "submodule sync (2)"
   },
   {
@@ -177,7 +180,7 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "submodule update (2)"
   },
   {
@@ -185,7 +188,7 @@
       "git",
       "number"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "git number",
     "stdout": "/path/to/tmp/"
   },
@@ -205,22 +208,24 @@
       "--enable-vp9-decoder",
       "--enable-encode-perf-tests",
       "--disable-realtime-only",
-      "--sdk-path=[CWD]/android_tools/ndk",
+      "--sdk-path=[SLAVE_BUILD]/android_tools/ndk",
       "--target=armv7-android-gcc"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "configure"
   },
   {
     "cmd": [
-      "[CWD]/android_tools/ndk/ndk-build",
-      "APP_BUILD_SCRIPT=[CWD]/libvpx/test/android/Android.mk",
+      "[SLAVE_BUILD]/android_tools/ndk/ndk-build",
+      "APP_BUILD_SCRIPT=[SLAVE_BUILD]/libvpx/test/android/Android.mk",
       "APP_ABI=armeabi-v7a",
       "APP_PLATFORM=android-14",
       "APP_OPTIM=release",
       "APP_STL=gnustl_static"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "NDK_PROJECT_PATH": "[CWD]"
+      "NDK_PROJECT_PATH": "[SLAVE_BUILD]"
     },
     "name": "ndk-build"
   },
@@ -228,34 +233,37 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/libvpx/test/android/get_files.py",
+      "[SLAVE_BUILD]/libvpx/test/android/get_files.py",
       "-i",
-      "[CWD]/libvpx/test/test-data.sha1",
+      "[SLAVE_BUILD]/libvpx/test/test-data.sha1",
       "-o",
-      "[CWD]/test_data",
+      "[SLAVE_BUILD]/test_data",
       "-u",
       "http://downloads.webmproject.org/test_data/libvpx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get_files"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/slave/android/transfer_files.py",
-      "[CWD]/android_tools/sdk/platform-tools/adb",
+      "[BUILD]/scripts/slave/android/transfer_files.py",
+      "[SLAVE_BUILD]/android_tools/sdk/platform-tools/adb",
       "/data/local/tmp",
-      "[CWD]/test_data"
+      "[SLAVE_BUILD]/test_data"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "transfer_files"
   },
   {
     "cmd": [
-      "[CWD]/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/android_tools/sdk/platform-tools/adb",
       "push",
-      "[CWD]/libs/armeabi-v7a",
+      "[SLAVE_BUILD]/libs/armeabi-v7a",
       "/data/local/tmp"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "push_so"
   },
   {
@@ -264,13 +272,14 @@
       "-u",
       "\nimport sys, subprocess, time\nout = open(sys.argv[1], \"w\")\np = subprocess.Popen(sys.argv[2:], stdout=out)\nwhile p.poll() is None:\n    print \"Still working\"\n    time.sleep(60)\nprint \"done\"\nsys.exit(p.returncode)\n",
       "/path/to/tmp/",
-      "[CWD]/android_tools/sdk/platform-tools/adb",
+      "[SLAVE_BUILD]/android_tools/sdk/platform-tools/adb",
       "shell",
       "LD_LIBRARY_PATH=/data/local/tmp",
       "LIBVPX_TEST_DATA_PATH=/data/local/tmp",
       "/data/local/tmp/vpx_test",
       "--gtest_filter=-*Large*"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "adb_wrap",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -289,10 +298,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/libvpx/test/android/scrape_gtest_log.py",
+      "[SLAVE_BUILD]/libvpx/test/android/scrape_gtest_log.py",
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scrape_logs",
     "stdin": "This is text with json inside normally",
     "~followup_annotations": [
@@ -327,6 +337,7 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "perf dashboard post",
     "stdin": "{\"data\": [{\"bot\": \"libvpx-bot\", \"buildername\": \"Nexus 5 Builder\", \"buildnumber\": \"75\", \"master\": \"client.libvpx\", \"masterid\": \"client.libvpx\", \"revision\": \"42\", \"test\": \"libvpx/decode/perf_test/nexus_5/vp90-2-bbb_426x240_tile_1x1_180kbps.webm_1\", \"units\": \"fps\", \"value\": 609.82868}, {\"bot\": \"libvpx-bot\", \"buildername\": \"Nexus 5 Builder\", \"buildnumber\": \"75\", \"master\": \"client.libvpx\", \"masterid\": \"client.libvpx\", \"revision\": \"42\", \"test\": \"libvpx/encode/perf_test/fps/nexus_5/vp90-2-bbb_640x360_tile_1x2_337kbps.webm_5\", \"units\": \"fps\", \"value\": 317.976883}, {\"bot\": \"libvpx-bot\", \"buildername\": \"Nexus 5 Builder\", \"buildnumber\": \"75\", \"master\": \"client.libvpx\", \"masterid\": \"client.libvpx\", \"revision\": \"42\", \"test\": \"libvpx/encode/perf_test/minPsnr/nexus_5/vp90-2-bbb_640x360_tile_1x2_337kbps.webm_5\", \"units\": \"dB\", \"value\": 43.5}], \"url\": \"https://chromeperf.appspot.com/add_point\"}"
   },

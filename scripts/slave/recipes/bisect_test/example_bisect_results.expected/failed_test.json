@@ -6,7 +6,7 @@
       "refs/heads/master",
       "refs/remotes/origin/master"
     ],
-    "cwd": "[TMP]/bogus_tmp_1",
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
     "name": "git update-ref"
   },
   {
@@ -15,11 +15,12 @@
       "checkout",
       "master"
     ],
-    "cwd": "[TMP]/bogus_tmp_1",
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
     "name": "git checkout"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -43,6 +44,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range"
   },
   {
@@ -56,6 +58,7 @@
       "--attempts",
       "3"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314017}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -77,6 +80,7 @@
       "--attempts",
       "3"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314015}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -96,6 +100,7 @@
       "--commit",
       "deadbeef"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.fetch file deadbeef:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -115,6 +120,7 @@
       "--commit",
       "c001c0de"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.fetch file c001c0de:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -131,6 +137,7 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Post bisect results",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"deadbeef\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": null, \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders//builds/\", \"change\": null, \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"c001c0de\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [], \"score\": 0, \"status\": \"failed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": [\"This is a demo warning\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",

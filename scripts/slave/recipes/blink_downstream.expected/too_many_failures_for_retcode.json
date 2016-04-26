@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_cr_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -27,6 +27,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -106,9 +107,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library gomadir='[ROOT]/b/build/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -128,9 +130,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -140,10 +142,11 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]/b/build/goma",
+      "[BUILD]/goma",
       "--",
       "blink_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -171,6 +174,7 @@
       "--build-number=571",
       "webkit_unit_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_unit_tests"
   },
   {
@@ -190,13 +194,13 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "[ROOT]/b/build/scripts/slave/chromium/layout_test_wrapper.py",
+      "[BUILD]/scripts/slave/chromium/layout_test_wrapper.py",
       "--target",
       "Release",
       "-o",
-      "[CWD]/layout-test-results",
+      "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",
-      "[CWD]/src/out",
+      "[SLAVE_BUILD]/src/out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -209,8 +213,9 @@
       "webkit_tests (with patch)",
       "--no-pixel-tests",
       "--additional-expectations",
-      "[CWD]/src/v8/tools/blink_tests/TestExpectations"
+      "[SLAVE_BUILD]/src/v8/tools/blink_tests/TestExpectations"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 101",
@@ -222,11 +227,11 @@
     "cmd": [
       "python",
       "-u",
-      "[ROOT]/b/build/scripts/slave/chromium/archive_layout_test_results.py",
+      "[BUILD]/scripts/slave/chromium/archive_layout_test_results.py",
       "--results-dir",
-      "[CWD]/layout-test-results",
+      "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",
-      "[CWD]/src/out",
+      "[SLAVE_BUILD]/src/out",
       "--build-number",
       "571",
       "--builder-name",
@@ -234,6 +239,7 @@
       "--gs-bucket",
       "gs://chromium-layout-test-archives"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_64/571/layout-test-results/results.html@@@",
@@ -252,13 +258,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_cr_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_revision\"}",
       "--git-cache-dir",
-      "[ROOT]/b/build/slave/cache_dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -266,6 +272,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -332,9 +339,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library gomadir='[ROOT]/b/build/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (2)"
@@ -354,9 +362,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -366,10 +374,11 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]/b/build/goma",
+      "[BUILD]/goma",
       "--",
       "blink_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -396,13 +405,13 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "[ROOT]/b/build/scripts/slave/chromium/layout_test_wrapper.py",
+      "[BUILD]/scripts/slave/chromium/layout_test_wrapper.py",
       "--target",
       "Release",
       "-o",
-      "[CWD]/layout-test-results",
+      "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",
-      "[CWD]/src/out",
+      "[SLAVE_BUILD]/src/out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -415,12 +424,13 @@
       "webkit_tests (without patch)",
       "--no-pixel-tests",
       "--additional-expectations",
-      "[CWD]/src/v8/tools/blink_tests/TestExpectations",
+      "[SLAVE_BUILD]/src/v8/tools/blink_tests/TestExpectations",
       "--test-list",
       "bad/failing78.html\nbad/failing46.html\nbad/failing101.html\nbad/failing37.html\nbad/failing70.html\nbad/failing17.html\nbad/failing82.html\nbad/failing120.html\nbad/failing73.html\nbad/failing112.html\nbad/failing114.html\nbad/failing99.html\nbad/failing27.html\nbad/failing108.html\nbad/failing76.html\nbad/failing50.html\nbad/failing23.html\nbad/failing104.html\nbad/failing93.html\nbad/failing67.html\nbad/failing124.html\nbad/failing53.html\nbad/failing69.html\nbad/failing117.html\nbad/failing34.html\nbad/failing51.html\nbad/failing80.html\nbad/failing20.html\nbad/failing107.html\nbad/failing56.html\nbad/failing68.html\nbad/failing71.html\nbad/failing77.html\nbad/failing39.html\nbad/failing92.html\nbad/failing90.html\nbad/failing89.html\nbad/failing122.html\nbad/failing105.html\ntricky/totally-maybe-not-awesome.html\nbad/failing36.html\nbad/failing44.html\nbad/failing21.html\nbad/failing85.html\nbad/failing42.html\nbad/failing55.html\nbad/failing9.html\nbad/failing15.html\nbad/failing65.html\nbad/failing118.html\nbad/failing95.html\nbad/failing45.html\nbad/failing66.html\nbad/failing26.html\nbad/failing35.html\nbad/failing74.html\nbad/failing109.html\nbad/failing97.html\nbad/failing58.html\nbad/totally-bad-probably.html\nbad/failing11.html\nbad/failing111.html\nbad/failing86.html\nbad/failing30.html\nbad/failing54.html\nbad/failing38.html\nbad/failing13.html\nbad/failing63.html\nbad/failing116.html\nbad/failing41.html\nbad/failing18.html\nbad/failing84.html\nbad/failing2.html\nbad/failing28.html\nbad/failing33.html\nbad/failing106.html\nbad/failing48.html\nbad/failing0.html\nbad/failing4.html\nbad/failing64.html\nbad/failing47.html\nbad/failing121.html\nbad/failing25.html\nbad/failing8.html\nbad/failing100.html\nbad/failing102.html\nbad/failing123.html\nbad/failing88.html\nbad/failing61.html\nbad/failing79.html\nbad/failing43.html\nbad/failing57.html\nbad/failing16.html\nbad/failing96.html\nbad/failing94.html\nbad/failing119.html\nbad/failing113.html\nbad/failing72.html\nbad/failing1.html\nbad/failing103.html\nbad/failing110.html\nbad/failing32.html\nbad/failing12.html\nbad/failing10.html\nbad/failing40.html\nbad/failing5.html\nbad/failing75.html\nbad/failing98.html\nbad/failing115.html\nbad/failing49.html\nbad/failing6.html\nbad/failing19.html\nbad/failing87.html\nbad/failing59.html\nbad/failing22.html\nbad/failing24.html\nbad/failing3.html\nbad/failing91.html\nbad/failing60.html\nbad/failing81.html\nbad/failing83.html\nbad/failing62.html\nbad/failing52.html\nbad/failing29.html\nbad/failing31.html\nbad/failing7.html\nbad/failing14.html",
       "--skipped",
       "always"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@"
@@ -432,6 +442,7 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

@@ -6,7 +6,6 @@ from recipe_engine.types import freeze
 
 DEPS = [
   'depot_tools/bot_update',
-  'depot_tools/infra_paths',
   'chromium',
   'commit_position',
   'file',
@@ -167,7 +166,7 @@ def RunSteps(api):
   if platform == 'chromeos':
     result = GenerateCompilationDatabase(api, debug_path, targets, 'linux')
     api.python('Filter out duplicate compilation units',
-               api.infra_paths['build'].join('scripts', 'slave', 'chromium',
+               api.path['build'].join('scripts', 'slave', 'chromium',
                                       'filter_compilations.py'),
                ['--compdb-input', debug_path.join('compile_commands.json'),
                 '--compdb-filter', api.raw_io.input(data=result.stdout),
@@ -204,7 +203,7 @@ def RunSteps(api):
   index_pack_name_with_revision = 'index_pack_%s_%s.zip' % (
       platform, commit_position)
   api.python('create index pack',
-             api.infra_paths['build'].join('scripts', 'slave', 'chromium',
+             api.path['build'].join('scripts', 'slave', 'chromium',
                                     'package_index.py'),
              ['--path-to-compdb', debug_path.join('compile_commands.json'),
               '--path-to-archive-output', debug_path.join(index_pack_name)])
@@ -222,7 +221,7 @@ def RunSteps(api):
   tarball_name_with_revision = 'chromium_src_%s_%s.tar.bz2' % (
       platform,commit_position)
   api.python('archive source',
-             api.infra_paths['build'].join('scripts','slave',
+             api.path['build'].join('scripts','slave',
                                     'archive_source_codesearch.py'),
              ['src', 'build', 'infra', 'tools', '-f',
               tarball_name])
@@ -230,7 +229,7 @@ def RunSteps(api):
   # Upload the source code.
   api.gsutil.upload(
       name='upload source tarball',
-      source=api.infra_paths['slave_build'].join(tarball_name),
+      source=api.path['slave_build'].join(tarball_name),
       bucket=BUCKET_NAME,
       dest='%s/%s' % (environment, tarball_name_with_revision)
   )

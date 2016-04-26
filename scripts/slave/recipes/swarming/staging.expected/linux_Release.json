@@ -8,6 +8,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -17,8 +18,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'swarming_revision': '', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'swarming_revision': '', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -41,6 +43,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -81,9 +84,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -97,9 +101,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library gomadir='[ROOT]/b/build/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -110,9 +115,10 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CWD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -130,9 +136,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[CWD]/src",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
-      "[ROOT]/b/build/slave/goma_cache",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -142,10 +148,11 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[ROOT]/b/build/goma",
+      "[BUILD]/goma",
       "--",
       "chromium_swarm_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -161,11 +168,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
       "--build-dir",
-      "[CWD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Release",
       "--src-dir",
-      "[CWD]/src"
+      "[SLAVE_BUILD]/src"
     ],
-    "cwd": "[CWD]",
+    "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
   },
   {
@@ -174,8 +181,9 @@
       "-u",
       "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
       "/path/to/tmp/",
-      "[CWD]/src/out/Release/*.isolated.gen.json"
+      "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated targets"
   },
   {
@@ -183,16 +191,17 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[CWD]/src/tools/swarming_client",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
       "--verbose",
-      "[CWD]/src/out/Release/dummy_target_1.isolated.gen.json",
-      "[CWD]/src/out/Release/dummy_target_2.isolated.gen.json"
+      "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "SWARMING_PROFILE": "1"
     },
@@ -210,7 +219,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -268,6 +277,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] dummy_target_1 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -294,7 +304,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -352,6 +362,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] dummy_target_2 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -383,9 +394,9 @@
       "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
-      "[CWD]/src/tools/swarming_client",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -399,6 +410,7 @@
       "2",
       "dummy_target_1/Ubuntu/[dummy has/TestBuilder/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dummy_target_1 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
@@ -424,6 +436,7 @@
       "--chrome-revision",
       "0"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [dummy_target_1]"
   },
   {
@@ -435,9 +448,9 @@
       "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
-      "[CWD]/src/tools/swarming_client",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP]",
+      "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -451,6 +464,7 @@
       "2",
       "dummy_target_2/Ubuntu/[dummy has/TestBuilder/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dummy_target_2 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
@@ -476,6 +490,7 @@
       "--chrome-revision",
       "0"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [dummy_target_2]"
   },
   {

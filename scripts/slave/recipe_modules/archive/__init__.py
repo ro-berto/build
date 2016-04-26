@@ -4,7 +4,6 @@
 
 DEPS = [
   'commit_position',
-  'depot_tools/infra_paths',
   'file',
   'gsutil',
   'recipe_engine/json',

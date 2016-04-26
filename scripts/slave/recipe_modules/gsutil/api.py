@@ -28,7 +28,7 @@ class GSUtilApi(recipe_api.RecipeApi):
       name = (t for t in cmd if not t.startswith('-')).next()
     full_name = 'gsutil ' + name
 
-    gsutil_path = self.m.infra_paths['depot_tools'].join('gsutil.py')
+    gsutil_path = self.m.path['depot_tools'].join('gsutil.py')
     cmd_prefix = []
 
     if use_retry_wrapper:
@@ -152,7 +152,7 @@ class GSUtilApi(recipe_api.RecipeApi):
     return self.m.python(name,
                          gsutil_download_path,
                          args,
-                         cwd=self.m.infra_paths['slave_build'])
+                         cwd=self.m.path['slave_build'])
 
   def _generate_metadata_args(self, metadata):
     result = []

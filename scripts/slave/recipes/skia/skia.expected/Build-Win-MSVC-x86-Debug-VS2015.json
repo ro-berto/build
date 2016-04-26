@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[CWD]\\skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git.bat",
       "fetch"
     ],
-    "cwd": "[CWD]\\skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[CWD]\\skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[CWD]\\skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "name": "git clean"
   },
   {
@@ -45,8 +45,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -67,6 +68,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -87,11 +89,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\skia\\tools\\buildbot_spec.py",
+      "[SLAVE_BUILD]\\skia\\tools\\buildbot_spec.py",
       "/path/to/tmp/json",
       "Build-Win-MSVC-x86-Debug-VS2015"
     ],
-    "cwd": "[CWD]\\skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -130,9 +132,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]\\skia\\infra\\bots\\win_toolchain_hash.json",
+      "[SLAVE_BUILD]\\skia\\infra\\bots\\win_toolchain_hash.json",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Read win_toolchain_hash.json"
   },
   {
@@ -140,9 +143,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CWD]\\tmp",
+      "[SLAVE_BUILD]\\tmp",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -162,9 +166,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CWD]\\tmp\\WIN_TOOLCHAIN_HASH",
+      "[SLAVE_BUILD]\\tmp\\WIN_TOOLCHAIN_HASH",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded WIN_TOOLCHAIN_HASH",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -176,8 +181,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[CWD]\\win"
+      "[SLAVE_BUILD]\\win"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree win",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -203,12 +209,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]\\resources\\git_setup.py",
       "--path",
-      "[CWD]\\swarming.client",
+      "[SLAVE_BUILD]\\swarming.client",
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git",
       "--git_cmd_path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -219,7 +226,7 @@
       "origin",
       "master"
     ],
-    "cwd": "[CWD]\\swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "git fetch (swarming_client)"
   },
   {
@@ -229,7 +236,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[CWD]\\swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "git checkout (swarming_client)"
   },
   {
@@ -238,7 +245,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[CWD]\\swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -253,7 +260,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[CWD]\\swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "git clean (swarming_client)"
   },
   {
@@ -262,7 +269,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[CWD]\\swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -273,16 +280,17 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[CWD]\\swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "submodule update (swarming_client)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\swarming.client\\swarming.py",
+      "[SLAVE_BUILD]\\swarming.client\\swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -293,29 +301,31 @@
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\swarming.client\\isolateserver.py",
+      "[SLAVE_BUILD]\\swarming.client\\isolateserver.py",
       "download",
       "-I",
       "https://isolateserver.appspot.com",
       "-s",
       "38380d77eec9164e5818ae45e2915a6f22d60e85",
       "-t",
-      "[CWD]\\win",
+      "[SLAVE_BUILD]\\win",
       "--cache",
       "[HOME]\\.isolate_cache"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Download Win Toolchain"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CWD]\\skia\\infra\\bots\\bootstrap_win_toolchain_json.py",
+      "[SLAVE_BUILD]\\skia\\infra\\bots\\bootstrap_win_toolchain_json.py",
       "--win_toolchain_json",
-      "[CWD]\\win\\src\\build\\win_toolchain.json",
+      "[SLAVE_BUILD]\\win\\src\\build\\win_toolchain.json",
       "--depot_tools_parent_dir",
-      "[CWD]\\win"
+      "[SLAVE_BUILD]\\win"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bootstrap Win Toolchain"
   },
   {
@@ -324,8 +334,9 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "38380d77eec9164e5818ae45e2915a6f22d60e85",
-      "[CWD]\\tmp\\WIN_TOOLCHAIN_HASH"
+      "[SLAVE_BUILD]\\tmp\\WIN_TOOLCHAIN_HASH"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "write WIN_TOOLCHAIN_HASH"
   },
   {
@@ -334,14 +345,14 @@
       "make.py",
       "most"
     ],
-    "cwd": "[CWD]\\skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "env": {
       "BUILDTYPE": "Debug",
-      "CHROME_PATH": "[CWD]\\win\\src",
+      "CHROME_PATH": "[SLAVE_BUILD]\\win\\src",
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
       "GYP_MSVS_VERSION": "2015",
-      "PATH": "[CWD]\\win\\depot_tools;%(PATH)s",
-      "SKIA_OUT": "[CWD]\\skia\\out\\Build-Win-MSVC-x86-Debug-VS2015"
+      "PATH": "[SLAVE_BUILD]\\win\\depot_tools;%(PATH)s",
+      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Build-Win-MSVC-x86-Debug-VS2015"
     },
     "name": "build most"
   },

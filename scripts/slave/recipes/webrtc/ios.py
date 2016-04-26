@@ -5,7 +5,6 @@
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
-  'depot_tools/infra_paths',
   'ios',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -19,7 +18,7 @@ def RunSteps(api):
 
   api.ios.host_info()
   api.bot_update.ensure_checkout()
-  api.path['checkout'] = api.infra_paths['slave_build'].join('src')
+  api.path['checkout'] = api.path['slave_build'].join('src')
 
   build_config_dir = api.path['checkout'].join(
       'webrtc',

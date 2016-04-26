@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport os, sys, shutil\nroot = sys.argv[1]\nnuke_dirs = sys.argv[2:]\nfor fname in os.listdir(root):\n  path = os.path.join(root, fname)\n  if os.path.isfile(path):\n    os.unlink(path)\n  elif fname in nuke_dirs:\n    shutil.rmtree(path)\n",
-      "[CWD]",
+      "[SLAVE_BUILD]",
       "libs",
       "obj",
       "vp8",
@@ -15,6 +15,7 @@
       "vpx_scale",
       "third_party"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean_build",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -36,10 +37,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[CWD]/libvpx",
+      "[SLAVE_BUILD]/libvpx",
       "--url",
       "https://chromium.googlesource.com/webm/libvpx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup"
   },
   {
@@ -51,7 +53,7 @@
       "master",
       "--recurse-submodules"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "git fetch"
   },
   {
@@ -61,7 +63,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "git checkout"
   },
   {
@@ -70,7 +72,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -85,7 +87,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "git clean"
   },
   {
@@ -94,7 +96,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "submodule sync"
   },
   {
@@ -105,13 +107,14 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[CWD]/libvpx",
+    "cwd": "[SLAVE_BUILD]/libvpx",
     "name": "submodule update"
   },
   {
     "cmd": [
       "./libvpx/configure"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "configure"
   },
   {
@@ -120,6 +123,7 @@
       "test",
       "-j8"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "run tests"
   },
   {

@@ -6,7 +6,6 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'depot_tools/gclient',
-  'depot_tools/infra_paths',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -19,7 +18,7 @@ def Win7_Audio_steps(api):
   # svnkill step; not necessary in recipes
   # update scripts step; implicitly run by recipe engine.
   # taskkill step
-  api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
+  api.python("taskkill", api.path["build"].join("scripts", "slave",
     "kill_processes.py"))
   # bot_update step
   src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -59,7 +58,7 @@ def Win7_Audio_steps(api):
       'DEPOT_TOOLS_UPDATE': '0',
       'GYP_DEFINES': 'fastbuild=1 component=static_library'}
   api.python("gclient runhooks wrapper",
-      api.infra_paths['build'].join("scripts", "slave", "runhooks_wrapper.py"),
+      api.path["build"].join("scripts", "slave", "runhooks_wrapper.py"),
       env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
@@ -70,10 +69,10 @@ def Win7_Audio_steps(api):
   if 'clobber' in api.properties:
     args.append("--clobber")
   api.step("compile", ["python_slave",
-    api.infra_paths['build'].join("scripts", "slave", "compile.py")] + args)
+    api.path["build"].join("scripts", "slave", "compile.py")] + args)
   # runtest step
   api.step("content_unittests",
-      ["python_slave", api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
+      ["python_slave", api.path["build"].join("scripts", "slave", "runtest.py"),
        '--target', 'Release',
        "--build-properties=%s" % api.json.dumps(build_properties,
          separators=(',', ':')),
@@ -88,7 +87,7 @@ def Win7_Audio_steps(api):
        '--gtest_print_time'])
   # runtest step
   api.step("media_unittests",
-      ["python_slave", api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
+      ["python_slave", api.path["build"].join("scripts", "slave", "runtest.py"),
        '--target', 'Release',
        "--build-properties=%s" % api.json.dumps(build_properties,
          separators=(',', ':')),
@@ -145,7 +144,7 @@ def Linux_Audio_steps(api):
       'DEPOT_TOOLS_UPDATE': '0',
       'GYP_DEFINES': ' component=static_library'}
   api.python("gclient runhooks wrapper",
-      api.infra_paths['build'].join("scripts", "slave", "runhooks_wrapper.py"),
+      api.path["build"].join("scripts", "slave", "runhooks_wrapper.py"),
       env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
@@ -156,10 +155,10 @@ def Linux_Audio_steps(api):
   if 'clobber' in api.properties:
     args.append("--clobber")
   api.python("compile",
-      api.infra_paths['build'].join("scripts", "slave", "compile.py"), args=args)
+      api.path["build"].join("scripts", "slave", "compile.py"), args=args)
   # runtest step
   api.python("content_unittests",
-      api.infra_paths['build'].join("scripts", "slave","runtest.py"),
+      api.path["build"].join("scripts", "slave","runtest.py"),
       args=['--target', 'Release',
         "--build-properties=%s" % api.json.dumps(build_properties,
           separators=(',', ':')),
@@ -174,7 +173,7 @@ def Linux_Audio_steps(api):
         '--gtest_print_time'])
   # runtest step
   api.python("media_unittests",
-      api.infra_paths['build'].join("scripts", "slave","runtest.py"),
+      api.path["build"].join("scripts", "slave","runtest.py"),
       args=['--target', 'Release',
         "--build-properties=%s" % api.json.dumps(build_properties,
           separators=(',', ':')),

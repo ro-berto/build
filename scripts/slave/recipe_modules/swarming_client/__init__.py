@@ -4,7 +4,6 @@
 
 DEPS = [
   'depot_tools/git',
-  'depot_tools/infra_paths',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',

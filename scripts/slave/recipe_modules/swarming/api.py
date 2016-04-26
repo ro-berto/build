@@ -637,7 +637,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       'python',
       self.resource('collect_gtest_task.py'),
       '--swarming-client-dir', self.m.swarming_client.path,
-      '--temp-root-dir', self.m.path['tmp'],
+      '--temp-root-dir', self.m.path['tmp_base'],
     ]
 
     # Where to put combined summary to, consumed by recipes. Also emit

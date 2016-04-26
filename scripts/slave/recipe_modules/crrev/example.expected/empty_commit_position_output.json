@@ -10,6 +10,7 @@
       "--attempts",
       "3"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "crrev get commit position for abcdeabcde0123456789abcdeabcde0123456789",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
