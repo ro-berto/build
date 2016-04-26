@@ -83,8 +83,8 @@ class DefaultFlavorUtils(object):
 
   def maybe_download_win_toolchain(self):
     """Download the Win toolchain if necessary."""
-    toolchain_hash_file = self._skia_api.skia_dir.join(
-        'infra', 'bots', 'win_toolchain_hash.json')
+    toolchain_hash_file = self._skia_api.infrabots_dir.join(
+        'win_toolchain_hash.json')
     if (self._skia_api.m.path.exists(toolchain_hash_file) and
         self._skia_api.builder_cfg.get('extra_config') == 'VS2015'):
       # Find the desired toolchain version.
@@ -155,7 +155,7 @@ class DefaultFlavorUtils(object):
     """Path to a checkout of Chrome on this machine."""
     if self._chrome_path is None:
       if self._skia_api.running_in_swarming:
-        self._chrome_path = self._skia_api.slave_dir.join('src')
+        self._chrome_path = self._skia_api.checkout_root.join('src')
         return self._chrome_path
 
       if self._skia_api.m.platform.is_win:

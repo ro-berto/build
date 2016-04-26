@@ -56,7 +56,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -73,7 +74,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -91,7 +93,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "get EXTERNAL_STORAGE dir",
@@ -109,7 +112,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -127,7 +131,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "starting battery stats"
@@ -146,7 +151,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -175,7 +181,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "read SKP_VERSION",
@@ -204,7 +211,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "read SK_IMAGE_VERSION",
@@ -269,7 +277,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "rmdir skia_dm"
@@ -293,7 +302,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "exists skia_dm",
@@ -312,7 +322,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "mkdir skia_dm"
@@ -352,7 +363,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "get uninteresting hashes",
@@ -402,7 +414,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "push uninteresting_hashes.txt"
@@ -463,7 +476,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -483,7 +497,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -501,7 +516,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "final battery stats"
@@ -516,7 +532,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "reboot"
@@ -531,7 +548,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "wait for reboot"
@@ -547,7 +565,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -564,7 +583,8 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },

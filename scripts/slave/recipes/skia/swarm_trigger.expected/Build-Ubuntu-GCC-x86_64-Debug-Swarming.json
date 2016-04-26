@@ -436,7 +436,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
+      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated",
       "[dummy hash for isolate_recipes]"
     ],
@@ -448,6 +448,8 @@
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1]) as f:@@@",
       "@@@STEP_LOG_LINE@python.inline@  isolated = json.load(f)@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not isolated.get('includes'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'] = []@@@",
       "@@@STEP_LOG_LINE@python.inline@for h in sys.argv[2:]:@@@",
       "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(h)@@@",
       "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",

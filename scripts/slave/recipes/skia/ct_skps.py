@@ -87,7 +87,7 @@ def RunSteps(api):
   src.revision = 'origin/master'  # Always checkout Chromium at ToT.
 
   for repo in (skia, src):
-    api.skia.update_repo(repo)
+    api.skia.update_repo(api.path['slave_build'], repo)
 
   update_step = api.gclient.checkout(gclient_config=gclient_cfg)
   skia_hash = update_step.presentation.properties['got_revision']
