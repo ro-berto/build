@@ -158,21 +158,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Reading MB config",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Builder MB-ready@MB is enabled for this builder at this revision.@@@",
-      "@@@STEP_LOG_END@Builder MB-ready@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],

@@ -102,38 +102,6 @@ class BotConfig(object):
       bot_db._add_master_dict_and_test_spec(
           mastername, freeze(master_dict), freeze(test_spec))
 
-  def should_force_legacy_compiling(self, chromium_tests_api):
-    """Determines if a given chromium revision needs to be built with gyp.
-
-    This is done by checking the contents of tools/mb/mb_config.pyl at the rev.
-
-    Returns:
-      True if the revision occurred before the changeover from GYP to MP.
-    """
-    try:
-      config_pyl = chromium_tests_api.m.file.read(
-          'Reading MB config',
-          chromium_tests_api.m.path['checkout'].join(*MB_CONFIG_FILENAME),
-          test_data=('{\'masters\': {'
-                     '\'tryserver.chromium.perf\': {'
-                     '\'linux_perf_bisect_builder\':'
-                     '\'gyp_something_something\'}}}'))
-      config = ast.literal_eval(config_pyl or '{}')
-      for bot_id in self._bot_ids:
-        _ = config['masters'][bot_id['mastername']][bot_id['buildername']]
-      result_text = 'MB is enabled for this builder at this revision.'
-      log_name = 'Builder MB-ready'
-      p = chromium_tests_api.m.step.active_result.presentation
-      p.logs[log_name] = [result_text]
-      return False
-    except (chromium_tests_api.m.step.StepFailure, KeyError):
-      result_text = 'MB is not enabled for this builder at this revision.'
-      log_name = 'Builder NOT MB-ready'
-      p = chromium_tests_api.m.step.active_result.presentation
-      p.logs[log_name] = [result_text]
-      p.status = chromium_tests_api.m.step.WARNING
-      return True
-
   def get_tests(self, bot_db):
     tests = []
     for bot_id in self._bot_ids:

@@ -206,14 +206,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'goma' in self.m.chromium.c.compile_py.compiler):
       self.m.chromium.ensure_goma()
 
-    # TODO(robertocn): Remove this hack by the end of Q1/2016.
-    if (bot_config.matches_any_bot_id(
-            lambda bot_id: bot_id['mastername'] == 'tryserver.chromium.perf' and
-                           bot_id['buildername'].endswith('builder'))
-        and bot_config.get('bot_type') == 'builder'):
-      if bot_config.should_force_legacy_compiling(self):
-        self.m.chromium.c.project_generator.tool = 'gyp'
-
     self.set_up_swarming(bot_config)
     self.runhooks(update_step)
 
