@@ -29,6 +29,12 @@ TEST_BUILDERS = {
     'skiabot-linux-swarm-012': [
       'Build-Ubuntu-GCC-x86_64-Release-Valgrind',
     ],
+    'skiabot-linux-swarm-014': [
+      'Build-Ubuntu-GCC-x86_64-Release-CMake',
+    ],
+    'skiabot-linux-swarm-015': [
+      'Build-Mac-Clang-x86_64-Release-CMake',
+    ],
   },
 }
 

@@ -49,6 +49,7 @@ BUILD_PRODUCTS_ISOLATE_WHITELIST = [
   'nanobench.exe',
   '*.so',
   '*.dll',
+  '*.dylib',
   'skia_launcher',
   'lib/*.so',
   'iOSShell.app',
