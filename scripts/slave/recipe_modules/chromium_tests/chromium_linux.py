@@ -165,14 +165,6 @@ SPEC = {
         steps.GTestTest(
             'sandbox_linux_unittests',
             override_compile_targets=['sandbox_linux_unittests_deps']),
-        steps.AndroidJunitTest('base_junit_tests'),
-        steps.AndroidJunitTest('chrome_junit_tests'),
-        steps.AndroidJunitTest('components_invalidation_impl_junit_tests'),
-        steps.AndroidJunitTest('components_policy_junit_tests'),
-        steps.AndroidJunitTest('content_junit_tests'),
-        steps.AndroidJunitTest('junit_unit_tests'),
-        steps.AndroidJunitTest('net_junit_tests'),
-        steps.AndroidJunitTest('ui_junit_tests'),
       ],
       'testing': {
         'platform': 'linux',
@@ -252,15 +244,7 @@ SPEC = {
       'parent_buildername': 'Android Builder (dbg)',
       'android_config': 'main_builder',
       'root_devices': True,
-      'tests': [
-        steps.AndroidJunitTest('base_junit_tests'),
-        steps.AndroidJunitTest('chrome_junit_tests'),
-        steps.AndroidJunitTest('components_junit_tests'),
-        steps.AndroidJunitTest('content_junit_tests'),
-        steps.AndroidJunitTest('junit_unit_tests'),
-        steps.AndroidJunitTest('net_junit_tests'),
-        steps.AndroidJunitTest('ui_junit_tests'),
-      ],
+      'tests': [],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,
@@ -309,15 +293,7 @@ SPEC = {
       'parent_buildername': 'Android Builder',
       'android_config': 'main_builder',
       'root_devices': True,
-      'tests': [
-        steps.AndroidJunitTest('base_junit_tests'),
-        steps.AndroidJunitTest('chrome_junit_tests'),
-        steps.AndroidJunitTest('components_junit_tests'),
-        steps.AndroidJunitTest('content_junit_tests'),
-        steps.AndroidJunitTest('junit_unit_tests'),
-        steps.AndroidJunitTest('net_junit_tests'),
-        steps.AndroidJunitTest('ui_junit_tests'),
-      ],
+      'tests': [],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,

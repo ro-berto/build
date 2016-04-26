@@ -499,55 +499,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "base_junit_tests",
-      "--verbose",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "LLVM_FORCE_HEAD_REVISION": "YES",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "base_junit_tests",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
-      "--input-gtest-json",
-      "/path/to/tmp/json",
-      "--master-name",
-      "chromium.fyi",
-      "--builder-name",
-      "ClangToTAndroidASan tester",
-      "--build-number",
-      "571",
-      "--test-type",
-      "base_junit_tests",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Upload to test-results [base_junit_tests]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_components_browsertests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
@@ -704,7 +655,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['base_junit_tests']",
-    "status_code": 1
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

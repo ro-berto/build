@@ -1500,8 +1500,11 @@ SPEC = {
       'parent_buildername': 'ClangToTAndroidASan',
       'android_config': 'clang_asan_tot_release_builder',
       'root_devices': True,
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_junit_test,
+      ],
       'tests': [
-        steps.AndroidJunitTest('base_junit_tests'),
         steps.GTestTest(
             'components_browsertests',
             android_isolate_path='components/components_browsertests.isolate',
