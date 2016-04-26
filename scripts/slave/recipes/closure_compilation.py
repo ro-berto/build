@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.types import freeze
+
 DEPS = [
   'depot_tools/bot_update',
   'chromium',
@@ -11,6 +13,20 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/step',
 ]
+
+
+MASTERS = freeze({
+  'chromium.fyi': {
+    'buildername': 'Closure Compilation Linux',
+    'slavename': 'vm999-m1',
+    'testname': 'closure_compilation_fyi',
+  },
+  'tryserver.chromium.linux': {
+    'buildername': 'closure_compilation',
+    'slavename': 'slave836-c4',
+    'testname': 'closure_compilation_try',
+  },
+})
 
 
 def RunSteps(api):
@@ -45,10 +61,12 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('main') +
-    api.properties.generic(
-      mastername='chromium.fyi',
-      buildername='Closure Compilation Linux',
+  for mastername, config in MASTERS.iteritems():
+    yield (
+      api.test(config['testname']) +
+      api.properties.generic(
+          buildername=config['buildername'],
+          mastername=mastername,
+          slavename=config['slavename'],
+      )
     )
-  )
