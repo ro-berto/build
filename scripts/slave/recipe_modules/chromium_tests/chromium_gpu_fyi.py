@@ -758,6 +758,11 @@ SPEC = {
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_isolated_script,
+        steps.generate_script,
+      ],
       'testing': {
         'platform': 'linux',
       },
