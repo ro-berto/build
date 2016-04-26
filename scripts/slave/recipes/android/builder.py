@@ -220,7 +220,9 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   if bot_config.get('triggers'):
     api.trigger(*[{'bucket': b['mastername'],
                    'builder_name': b['buildername'],
-                   'properties': {'revision': api.properties['revision']}
+                   'properties': {
+                      'revision': api.properties['revision'],
+                      'parent_revision': api.properties['revision']}
                    } for b in bot_config['triggers']])
 
 def RunSteps(api, mastername, buildername, revision):
