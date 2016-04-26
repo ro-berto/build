@@ -29,9 +29,10 @@ GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
 Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
-Ignition = TestStepConfig('ignition')
+IgnitionTurbofan = TestStepConfig('ignition_turbofan')
 MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
-MjsunitIgnition_2 = TestStepConfig('mjsunit_ignition', shards=2)
+MjsunitIgnitionTurbofan_2 = TestStepConfig(
+    'mjsunit_ignition_turbofan', shards=2)
 Mozilla = TestStepConfig('mozilla')
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
@@ -39,8 +40,9 @@ SimdJs = TestStepConfig('simdjs')
 SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
 Test262_2 = TestStepConfig('test262', shards=2)
-Test262Ignition = TestStepConfig('test262_ignition')
-Test262Ignition_2 = TestStepConfig('test262_ignition', shards=2)
+Test262IgnitionTurbofan = TestStepConfig('test262_ignition_turbofan')
+Test262IgnitionTurbofan_2 = TestStepConfig(
+    'test262_ignition_turbofan', shards=2)
 Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
 Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
@@ -159,9 +161,9 @@ BUILDERS = {
           SimdJs,
           Test262Variants_2,
           Mozilla,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
           GCMole,
         ] + with_test_args(
             'isolates',
@@ -213,9 +215,9 @@ BUILDERS = {
           Test262Variants_3,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
         ] + with_test_args(
             'isolates',
             ['--isolates'],
@@ -404,9 +406,9 @@ BUILDERS = {
           Test262Variants_2,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -446,9 +448,9 @@ BUILDERS = {
           Test262Variants_3,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
           SimpleLeak,
         ],
         'testing': {'platform': 'linux'},
@@ -562,7 +564,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, Ignition],
+        'tests': [V8Testing, Test262, Mozilla, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -584,7 +586,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Ignition],
+        'tests': [V8Testing_2, IgnitionTurbofan],
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -599,7 +601,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, Ignition],
+        'tests': [V8Testing_2, Test262, Mozilla, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -621,7 +623,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
-        'tests': [V8Testing, SimdJs, Test262, Mozilla, Ignition],
+        'tests': [V8Testing, SimdJs, Test262, Mozilla, IgnitionTurbofan],
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - debug': {
@@ -639,7 +641,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
-        'tests': [V8Testing_2, SimdJs, Test262, Mozilla, Ignition],
+        'tests': [V8Testing_2, SimdJs, Test262, Mozilla, IgnitionTurbofan],
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - clang': {
@@ -664,7 +666,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing, Test262, Mozilla, SimdJs, IgnitionTurbofan],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -679,7 +681,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing, Test262, Mozilla, SimdJs, IgnitionTurbofan],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -694,7 +696,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing, Test262, Mozilla, SimdJs, IgnitionTurbofan],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -709,7 +711,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing, Test262, Mozilla, SimdJs, IgnitionTurbofan],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -762,7 +764,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
-        'tests': [Mjsunit_3, Webkit, MjsunitIgnition_2],
+        'tests': [Mjsunit_3, Webkit, MjsunitIgnitionTurbofan_2],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress': {
@@ -815,7 +817,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing_2, Test262, Ignition],
+        'tests': [V8Testing_2, Test262, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux64 ASAN no inline - release builder',
@@ -946,7 +948,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing, Test262_2, Ignition],
+        'tests': [V8Testing, Test262_2, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - MSAN': {
@@ -968,7 +970,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing, Test262_2, Ignition],
+        'tests': [V8Testing, Test262_2, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - cfi': {
@@ -989,7 +991,7 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1001,7 +1003,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_4, Ignition],
+        'tests': [V8Testing_4, IgnitionTurbofan],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -1141,8 +1143,8 @@ BUILDERS = {
           Benchmarks,
           OptimizeForSize,
           SimdJs,
-          Ignition,
-          Test262Ignition,
+          IgnitionTurbofan,
+          Test262IgnitionTurbofan,
         ],
         'enable_swarming': True,
         'swarming_properties': {
@@ -1215,9 +1217,9 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
@@ -1242,9 +1244,9 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
@@ -1286,9 +1288,9 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1305,9 +1307,9 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1534,9 +1536,9 @@ BUILDERS = {
           Mozilla,
           Benchmarks,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
           GCMole,
         ],
         'testing': {'platform': 'linux'},
@@ -1586,8 +1588,8 @@ BUILDERS = {
         'tests': [
           V8Testing,
           Test262Variants_2,
-          Test262Ignition,
-          Ignition,
+          Test262IgnitionTurbofan,
+          IgnitionTurbofan,
           Mozilla,
           Benchmarks,
           SimdJs,
@@ -1622,9 +1624,9 @@ BUILDERS = {
           Mozilla,
           Benchmarks,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1714,9 +1716,9 @@ BUILDERS = {
           OptimizeForSize,
           Test262Variants_2,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition,
+          Test262IgnitionTurbofan,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1794,7 +1796,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [Mjsunit_3, Webkit, MjsunitIgnition_2],
+        'tests': [Mjsunit_3, Webkit, MjsunitIgnitionTurbofan_2],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel_ng': {
@@ -1832,7 +1834,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux64_asan_rel_ng',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262_2, Ignition],
+        'tests': [V8Testing_2, Test262_2, IgnitionTurbofan],
         # TODO(machenbach): Run with exhaustive variants as soon as bot runs
         # on swarming.
         'variants': V8NoExhaustiveVariants(),
@@ -1861,7 +1863,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing_2, Test262_2, Ignition],
+        'tests': [V8Testing_2, Test262_2, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_tsan_rel': {
@@ -1881,7 +1883,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing_2, Test262_2, Ignition],
+        'tests': [V8Testing_2, Test262_2, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_sanitizer_coverage_rel': {
@@ -1910,9 +1912,9 @@ BUILDERS = {
           OptimizeForSize,
           Test262Variants_6,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition_2,
+          Test262IgnitionTurbofan_2,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1932,7 +1934,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing_2, Ignition, Mozilla],
+        'tests': [V8Testing_2, IgnitionTurbofan, Mozilla],
         'testing': {'platform': 'win'},
       },
       'v8_win_compile_dbg': {
@@ -1981,7 +1983,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing, Ignition],
+        'tests': [V8Testing, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
       },
       'v8_win_nosnap_shared_rel_ng': {
@@ -2023,7 +2025,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing_2, Ignition],
+        'tests': [V8Testing_2, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_rel_ng': {
@@ -2059,7 +2061,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing, SimdJs, Ignition],
+        'tests': [V8Testing, SimdJs, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_dbg': {
@@ -2077,7 +2079,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
-        'tests': [V8Testing_2, SimdJs, Ignition, Mozilla],
+        'tests': [V8Testing_2, SimdJs, IgnitionTurbofan, Mozilla],
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel_ng': {
@@ -2106,7 +2108,7 @@ BUILDERS = {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing, Test262, Mozilla, SimdJs, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
       },
       'v8_mac_dbg': {
@@ -2117,7 +2119,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs, IgnitionTurbofan],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -2132,7 +2134,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing, Test262, Mozilla, SimdJs, IgnitionTurbofan],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -2147,7 +2149,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs, IgnitionTurbofan],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -2219,9 +2221,9 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition_2,
+          Test262IgnitionTurbofan_2,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2238,9 +2240,9 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition_2,
+          Test262IgnitionTurbofan_2,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2296,9 +2298,9 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition_2,
+          Test262IgnitionTurbofan_2,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2315,9 +2317,9 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
-          Ignition,
+          IgnitionTurbofan,
           MjsunitSPFrameAccess,
-          Test262Ignition_2,
+          Test262IgnitionTurbofan_2,
         ],
         'testing': {'platform': 'linux'},
       },

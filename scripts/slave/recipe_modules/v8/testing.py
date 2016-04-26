@@ -94,21 +94,21 @@ TEST_CONFIGS = freeze({
     'tool': 'run-gcmole',
     'isolated_target': 'run-gcmole',
   },
-  'ignition': {
-    'name': 'Ignition',
+  'ignition_turbofan': {
+    'name': 'Ignition - turbofan',
     'tests': ['ignition'],
-    'test_args': ['--ignition'],
-    'variants': V8Variant('ignition'),
+    'test_args': ['--ignition-turbofan'],
+    'variants': V8Variant('ignition_turbofan'),
   },
   'mjsunit': {
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
   },
-  'mjsunit_ignition': {
-    'name': 'Mjsunit - ignition',
+  'mjsunit_ignition_turbofan': {
+    'name': 'Mjsunit - ignition - turbofan',
     'tests': ['mjsunit'],
-    'test_args': ['--ignition'],
-    'variants': V8Variant('ignition'),
+    'test_args': ['--ignition-turbofan'],
+    'variants': V8Variant('ignition_turbofan'),
   },
   'mjsunit_sp_frame_access': {
     'name': 'Mjsunit - sp frame access',
@@ -142,11 +142,11 @@ TEST_CONFIGS = freeze({
     'test_args': ['--download-data'],
     'variants': V8Variant('default'),
   },
-  'test262_ignition': {
-    'name': 'Test262 - ignition',
+  'test262_ignition_turbofan': {
+    'name': 'Test262 - ignition - turbofan',
     'tests': ['test262'],
-    'test_args': ['--ignition', '--download-data'],
-    'variants': V8Variant('ignition'),
+    'test_args': ['--ignition-turbofan', '--download-data'],
+    'variants': V8Variant('ignition_turbofan'),
   },
   'test262_variants': {
     'name': 'Test262',
