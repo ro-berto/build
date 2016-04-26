@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_deps': {'v8/third_party/llvm/projects/compiler-rt': 'https://chromium.googlesource.com/external/llvm.org/compiler-rt.git'}, 'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_deps': {'v8/third_party/llvm/projects/compiler-rt': 'https://chromium.googlesource.com/external/llvm.org/compiler-rt.git'}, 'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--rietveld_server",
       "https://codereview.chromium.org",
       "--output_json",
@@ -27,7 +27,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -76,7 +75,6 @@
       "--outfile",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Download patch"
   },
   {
@@ -85,10 +83,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/calculate_patch_base.py",
       "some patch",
-      "[SLAVE_BUILD]/v8",
+      "[CWD]/v8",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Calculate patch base"
   },
   {
@@ -103,13 +100,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_deps': {'v8/third_party/llvm/projects/compiler-rt': 'https://chromium.googlesource.com/external/llvm.org/compiler-rt.git'}, 'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_deps': {'v8/third_party/llvm/projects/compiler-rt': 'https://chromium.googlesource.com/external/llvm.org/compiler-rt.git'}, 'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--issue",
       "12853011",
       "--patchset",
@@ -123,7 +120,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -167,10 +163,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -184,10 +179,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "asan=1 clang=1 coverage=1 dcheck_always_on=0 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 sanitizer_coverage=bb target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
+      "GYP_DEFINES": "asan=1 clang=1 coverage=1 dcheck_always_on=0 fastbuild=1 gomadir='[ROOT]/b/build/goma' lsan=1 sanitizer_coverage=bb target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -202,7 +196,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -212,11 +205,10 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[CWD]/v8",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -243,9 +235,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[CWD]/v8",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]/b/build/slave/goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -255,12 +247,11 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[ROOT]/b/build/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -275,21 +266,20 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/ignition.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/mjsunit.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/optimize_for_size.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
+      "[CWD]/v8/out/Release/bot_default.isolated.gen.json",
+      "[CWD]/v8/out/Release/ignition.isolated.gen.json",
+      "[CWD]/v8/out/Release/mjsunit.isolated.gen.json",
+      "[CWD]/v8/out/Release/optimize_for_size.isolated.gen.json",
+      "[CWD]/v8/out/Release/simdjs.isolated.gen.json",
+      "[CWD]/v8/out/Release/test262.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -307,7 +297,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -390,7 +380,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Check on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -423,7 +412,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -507,7 +496,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] OptimizeForSize on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -528,7 +516,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -612,7 +600,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -663,7 +650,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -747,7 +734,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] SimdJs - all on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -768,7 +754,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -852,7 +838,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Ignition - turbofan on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -873,7 +858,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -957,7 +942,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Mjsunit - sp frame access on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -978,7 +962,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1063,7 +1047,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 - ignition - turbofan on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1090,12 +1073,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CWD]/v8/tools/sanitizers/sancov_formatter.py",
       "all",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json"
+      "[TMP]/coverage_output_tmp_1/data.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Initialize coverage data"
   },
   {
@@ -1105,15 +1087,15 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP]/coverage_output_tmp_1",
       "--sancov-merger",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
+      "[CWD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
       "collect",
       "--swarming",
@@ -1124,7 +1106,6 @@
       "3",
       "Check/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1147,31 +1128,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CWD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1183,15 +1162,15 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP]/coverage_output_tmp_1",
       "--sancov-merger",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
+      "[CWD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
       "collect",
       "--swarming",
@@ -1202,7 +1181,6 @@
       "1",
       "OptimizeForSize/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "OptimizeForSize",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1225,31 +1203,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CWD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (2)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1261,15 +1237,15 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP]/coverage_output_tmp_1",
       "--sancov-merger",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
+      "[CWD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
       "collect",
       "--swarming",
@@ -1280,7 +1256,6 @@
       "6",
       "Test262/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Test262",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1303,31 +1278,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CWD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (3)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1339,15 +1312,15 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP]/coverage_output_tmp_1",
       "--sancov-merger",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
+      "[CWD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
       "collect",
       "--swarming",
@@ -1358,7 +1331,6 @@
       "1",
       "SimdJs - all/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1381,31 +1353,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CWD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (4)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1417,15 +1387,15 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP]/coverage_output_tmp_1",
       "--sancov-merger",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
+      "[CWD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
       "collect",
       "--swarming",
@@ -1436,7 +1406,6 @@
       "1",
       "Ignition - turbofan/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Ignition - turbofan",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1459,31 +1428,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CWD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (5)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (5)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1495,15 +1462,15 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP]/coverage_output_tmp_1",
       "--sancov-merger",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
+      "[CWD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
       "collect",
       "--swarming",
@@ -1514,7 +1481,6 @@
       "1",
       "Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1537,31 +1503,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CWD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (6)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (6)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1573,15 +1537,15 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP]/coverage_output_tmp_1",
       "--sancov-merger",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
+      "[CWD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
       "collect",
       "--swarming",
@@ -1592,7 +1556,6 @@
       "2",
       "Test262 - ignition - turbofan/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - ignition - turbofan",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1615,31 +1578,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CWD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (7)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (7)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP]/coverage_output_tmp_1/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1650,13 +1611,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "gs://chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64/data.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64/data.json@@@"
@@ -1666,14 +1626,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CWD]/v8/tools/sanitizers/sancov_formatter.py",
       "split",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP]/coverage_output_tmp_1/data.json",
       "--output-dir",
-      "[TMP_BASE]/coverage_data_tmp_2"
+      "[TMP]/coverage_data_tmp_2"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Split coverage data"
   },
   {
@@ -1682,17 +1641,16 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "-m",
       "cp",
       "-a",
       "public-read",
       "-R",
-      "[TMP_BASE]/coverage_data_tmp_2/*",
+      "[TMP]/coverage_data_tmp_2/*",
       "gs://chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil coverage data"
   },
   {

@@ -10,6 +10,7 @@ from recipe_engine.types import freeze
 DEPS = [
   'chromium',
   'depot_tools/gclient',
+  'depot_tools/infra_paths',
   'file',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -35,14 +36,14 @@ BUILDERS = freeze({
 def _build_and_test(api, suffix=''):
   api.step(
     'configure node.js%s' % suffix,
-    [api.path['slave_build'].join('node.js', 'configure')],
-    cwd=api.path['slave_build'].join('node.js'),
+    [api.infra_paths['slave_build'].join('node.js', 'configure')],
+    cwd=api.infra_paths['slave_build'].join('node.js'),
   )
 
   api.step(
     'build and test node.js%s' % suffix,
     ['make', '-j8', 'test'],
-    cwd=api.path['slave_build'].join('node.js'),
+    cwd=api.infra_paths['slave_build'].join('node.js'),
   )
 
 
@@ -60,20 +61,20 @@ def RunSteps(api):
     pass
 
   # Copy the checked-out v8.
-  api.file.rmtree('v8', api.path['slave_build'].join('node.js', 'deps', 'v8'))
+  api.file.rmtree('v8', api.infra_paths['slave_build'].join('node.js', 'deps', 'v8'))
   api.python(
       name='copy v8 tree',
       script=api.v8.resource('copy_v8.py'),
       args=[
         # Source.
-        api.path['slave_build'].join('v8'),
+        api.infra_paths['slave_build'].join('v8'),
         # Destination.
-        api.path['slave_build'].join('node.js', 'deps', 'v8'),
+        api.infra_paths['slave_build'].join('node.js', 'deps', 'v8'),
         # Paths to ignore.
         '.git',
-        api.path['slave_build'].join('v8', 'buildtools'),
-        api.path['slave_build'].join('v8', 'out'),
-        api.path['slave_build'].join('v8', 'third_party'),
+        api.infra_paths['slave_build'].join('v8', 'buildtools'),
+        api.infra_paths['slave_build'].join('v8', 'out'),
+        api.infra_paths['slave_build'].join('v8', 'third_party'),
       ],
   )
 

@@ -157,7 +157,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.master_name = self.m.properties['mastername']
     self.slave_name = self.m.properties['slavename']
 
-    self.slave_dir = self.m.path['slave_build']
+    self.slave_dir = self.m.infra_paths['slave_build']
     self.skia_dir = self.slave_dir.join('skia')
     self.infrabots_dir = self.skia_dir.join('infra', 'bots')
 
@@ -197,7 +197,7 @@ class SkiaApi(recipe_api.RecipeApi):
     else:
       self.out_dir = self.m.path['checkout'].join('out', self.builder_name)
       self.local_skp_dir = self.slave_dir.join('playback', 'skps')
-    self.tmp_dir = self.m.path['slave_build'].join('tmp')
+    self.tmp_dir = self.m.infra_paths['slave_build'].join('tmp')
 
     self.gsutil_env_chromium_skia_gm = self.gsutil_env(BOTO_CHROMIUM_SKIA_GM)
 
@@ -257,7 +257,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def update_repo(self, repo):
     """Update an existing repo. This is safe to call without gen_steps."""
-    repo_path = self.m.path['slave_build'].join(repo.name)
+    repo_path = self.m.infra_paths['slave_build'].join(repo.name)
     if self.m.path.exists(repo_path):
       if self.m.platform.is_win:
         git = 'git.bat'
@@ -285,7 +285,7 @@ class SkiaApi(recipe_api.RecipeApi):
     if self.running_in_swarming:
       # We should've obtained the Skia checkout through isolates, so we don't
       # need to perform the checkout ourselves.
-      self.m.path['checkout'] = self.m.path['slave_build'].join('skia')
+      self.m.path['checkout'] = self.m.infra_paths['slave_build'].join('skia')
       self.got_revision = self.m.properties['revision']
       return
 
@@ -712,7 +712,7 @@ print json.dumps({'ccache': ccache})
               self.builder_name,
               self.m.properties['buildnumber'],
               self.m.properties['issue'] if self.is_trybot else '',
-              self.m.path['slave_build'].join('skia', 'common', 'py', 'utils'),
+              self.m.infra_paths['slave_build'].join('skia', 'common', 'py', 'utils'),
           ],
           cwd=self.m.path['checkout'],
           env=self.gsutil_env_chromium_skia_gm,
@@ -817,7 +817,7 @@ print json.dumps({'ccache': ccache})
         # out dir, so we don't need to upload.
         return
 
-      gsutil_path = self.m.path['depot_tools'].join(
+      gsutil_path = self.m.infra_paths['depot_tools'].join(
           'third_party', 'gsutil', 'gsutil')
       upload_args = [self.builder_name, self.m.properties['buildnumber'],
                      self.perf_data_dir, self.got_revision, gsutil_path]

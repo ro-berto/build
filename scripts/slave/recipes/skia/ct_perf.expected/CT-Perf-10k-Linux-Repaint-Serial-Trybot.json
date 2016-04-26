@@ -13,7 +13,6 @@
       "--benchmark",
       "repaint"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Cluster Telemetry repaint run"
   },
   {

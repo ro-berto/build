@@ -4,6 +4,7 @@
 
 DEPS = [
   'chromium',
+  'depot_tools/infra_paths',
   'isolate',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -32,13 +33,13 @@ def RunSteps(api):
   # Generates code coverage for find_isolated_tests corner cases.
   # TODO(vadimsh): This step doesn't actually make any sense when the recipe
   # is running for real via run_recipe.py.
-  api.isolate.find_isolated_tests(api.path['build'], expected_targets)
+  api.isolate.find_isolated_tests(api.infra_paths['build'], expected_targets)
 
   # Code coverage for 'isolate_tests'. 'isolated_test' doesn't support discovery
   # of isolated targets in build directory, so skip if 'expected_targets' is
   # None.
   if expected_targets is not None:
-    api.isolate.isolate_tests(api.path['build'], expected_targets)
+    api.isolate.isolate_tests(api.infra_paths['build'], expected_targets)
 
 
 def GenTests(api):

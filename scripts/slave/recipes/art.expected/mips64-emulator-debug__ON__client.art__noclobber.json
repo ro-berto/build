@@ -1,34 +1,31 @@
 [
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "init",
       "-u",
       "https://android.googlesource.com/platform/manifest",
       "-b",
       "master-art"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/buildbot-build.sh",
+      "[CWD]/art/tools/buildbot-build.sh",
       "-j8",
       "--target"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/mips64r6",
+      "ANDROID_BUILD_TOP": "[CWD]",
+      "ANDROID_PRODUCT_OUT": "[CWD]/out/target/product/mips64r6",
       "ANDROID_SERIAL": "emulator-5554",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -40,10 +37,10 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[CWD]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "PATH": "[CWD]/out/host/linux-x86/bin:%(PATH)s",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "mips64r6",

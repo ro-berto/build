@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -20,13 +19,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]\\b\\build\\slave\\cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -113,7 +111,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -131,12 +128,10 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -147,17 +142,16 @@
       "--platform",
       "windows-386",
       "--dest-directory",
-      "[SLAVE_BUILD]\\cipd",
+      "[CWD]\\cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"fake_slave_build/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -165,10 +159,10 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\cipd\\cipd",
+      "fake_slave_build/cipd",
       "ensure",
       "--root",
-      "[CACHE]\\cipd\\goma",
+      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
       "--list",
       "infra_internal/goma/client/windows-amd64 release",
       "--json-output",
@@ -176,7 +170,6 @@
       "--service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -195,19 +188,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "[CWD]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.lkgr",
       "-b",
       "Win SyzyASAN LKGR",
       "--config-file",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "[CWD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\cipd\\goma",
+      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files"
   },
   {
@@ -225,20 +217,19 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]\\b\\build\\slave\\goma_cache",
       "--build-tool",
       "ninja",
       "--build-data-dir",
       "[ROOT]\\build_data_dir",
       "--goma-dir",
-      "[CACHE]\\cipd\\goma",
+      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
       "--clobber",
       "--",
       "chromium_builder_asan"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -249,10 +240,9 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "listdir build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -273,19 +263,18 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::archive]\\resources\\zip_archive.py",
-      "[TMP_BASE]\\chrome_staging_tmp_1",
+      "[TMP]\\chrome_staging_tmp_1",
       "asan-win32-release-170242",
       "[\"file 1\", \"file 2\"]",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[CWD]\\src\\out\\Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "zipping"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gsutil.py",
+      "[ROOT]\\b\\depot_tools\\gsutil.py",
       "--",
       "-h",
       "x-goog-meta-Cr-Commit-Position:refs/heads/master@{#170242}",
@@ -296,10 +285,9 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip",
+      "[TMP]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip",
       "gs://chromium-browser-syzyasan/win32-release/asan-win32-release-170242.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-syzyasan/win32-release/asan-win32-release-170242.zip@@@"
@@ -310,9 +298,8 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip"
+      "[TMP]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "asan-win32-release-170242.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

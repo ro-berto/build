@@ -8,6 +8,7 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/git',
+    'depot_tools/infra_paths',
     'depot_tools/tryserver',
     'file',
     'gitiles',

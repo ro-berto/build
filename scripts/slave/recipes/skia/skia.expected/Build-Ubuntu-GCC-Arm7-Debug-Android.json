@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git clean"
   },
   {
@@ -45,9 +45,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -68,7 +67,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -89,11 +87,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[CWD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Build-Ubuntu-GCC-Arm7-Debug-Android"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -134,11 +132,10 @@
       "-u",
       "import json\nimport subprocess\nimport sys\n\nccache = None\ntry:\n  ccache = subprocess.check_output(['which', 'ccache']).rstrip()\nexcept:\n  pass\nprint json.dumps({'ccache': ccache})\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android"
+      "SKIA_OUT": "[CWD]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android"
     },
     "name": "has ccache?",
     "stdout": "/path/to/tmp/json",
@@ -162,20 +159,20 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
+      "[CWD]/skia/platform_tools/android/bin/android_ninja",
       "most",
       "-d",
       "arm_v7_neon",
       "--gcc"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android"
+      "SKIA_OUT": "[CWD]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android"
     },
     "name": "build most"
   },

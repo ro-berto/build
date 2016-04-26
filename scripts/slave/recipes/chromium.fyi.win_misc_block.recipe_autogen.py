@@ -6,6 +6,7 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
+    'depot_tools/infra_paths',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -19,7 +20,7 @@ def Chromium_Win_x64_Clobber_steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.path["build"].join("scripts", "slave",
+    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -51,7 +52,7 @@ def Chromium_Win_x64_Clobber_steps(api):
            'GYP_DEFINES': 'target_arch=x64 component=static_library',
            'LANDMINES_VERBOSE': '1'}
     api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
+               api.infra_paths['build'].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -60,13 +61,13 @@ def Chromium_Win_x64_Clobber_steps(api):
     args = ['--solution', 'out.sln', '--target', 'Release_x64', '--clobber',
             '--build-tool=ninja', '--', 'chromium_builder_tests']
     api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
+               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
                args=args)
     with api.step.defer_results():
       # runtest step
       api.python(
           "interactive_ui_tests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -80,7 +81,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "base_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -94,7 +95,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "cacheinvalidation_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -108,7 +109,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "cc_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -122,7 +123,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "chromedriver_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -136,7 +137,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "components_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -150,7 +151,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "courgette_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -164,7 +165,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "crypto_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -178,7 +179,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "gcm_unit_tests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -192,7 +193,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "gpu_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -206,7 +207,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "url_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -220,7 +221,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "jingle_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -234,7 +235,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "media_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -248,7 +249,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "net_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -262,7 +263,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "ppapi_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -276,7 +277,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "printing_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -290,7 +291,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "remoting_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -304,7 +305,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "sbox_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -318,7 +319,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "sbox_integration_tests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -332,7 +333,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "sbox_validation_tests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -346,7 +347,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "ipc_tests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -360,7 +361,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "sync_unit_tests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -374,7 +375,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "unit_tests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -388,7 +389,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "skia_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -402,7 +403,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "sql_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -416,7 +417,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "ui_base_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -430,7 +431,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "content_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -444,7 +445,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "views_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -458,7 +459,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "browser_tests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -472,7 +473,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "content_browsertests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -486,7 +487,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "installer_util_unittests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -500,7 +501,7 @@ def Chromium_Win_x64_Clobber_steps(api):
       # runtest step
       api.python(
           "sync_integration_tests",
-          api.path["build"].join("scripts", "slave", "runtest.py"),
+          api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
           args=
           ['--target', 'Release_x64', "--build-properties=%s" %
            api.json.dumps(build_properties,
@@ -514,12 +515,12 @@ def Chromium_Win_x64_Clobber_steps(api):
            '--gtest_print_time'])
       # nacl_integration step
       api.python("nacl_integration",
-                 api.path["slave_build"].join('src', 'chrome', 'test',
-                                              'nacl_test_injection',
-                                              'buildbot_nacl_integration.py'),
+                 api.infra_paths['slave_build'].join(
+                     'src', 'chrome', 'test', 'nacl_test_injection',
+                     'buildbot_nacl_integration.py'),
                  args=['--mode', 'Release_x64'],
                  env={},
-                 cwd=api.path["slave_build"])
+                 cwd=api.infra_paths['slave_build'])
 
 
 def Windows_8_App_Certification_steps(api):
@@ -527,7 +528,7 @@ def Windows_8_App_Certification_steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.path["build"].join("scripts", "slave",
+    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -558,7 +559,7 @@ def Windows_8_App_Certification_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': ' component=static_library'}
     api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
+               api.infra_paths['build'].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -568,7 +569,7 @@ def Windows_8_App_Certification_steps(api):
     if "clobber" in api.properties:
         args.append("--clobber")
     api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
+               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
                args=args)
 
 

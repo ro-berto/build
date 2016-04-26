@@ -6,6 +6,7 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
+    'depot_tools/infra_paths',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -20,7 +21,7 @@ def Vista_Tests__dbg__1__steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.path["build"].join("scripts", "slave",
+    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -52,7 +53,7 @@ def Vista_Tests__dbg__1__steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': ' component=shared_library'}
     api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
+               api.infra_paths['build'].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -60,7 +61,7 @@ def Vista_Tests__dbg__1__steps(api):
     # extract build step
     api.python(
         "extract build",
-        api.path["build"].join("scripts", "slave", "extract_build.py"),
+        api.infra_paths['build'].join("scripts", "slave", "extract_build.py"),
         args=["--target", "Debug", "--build-archive-url", build_properties[
             "parent_build_archive_url"], '--build-properties=%s' %
               api.json.dumps(build_properties,
@@ -68,7 +69,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "base_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -83,7 +84,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "cacheinvalidation_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -98,7 +99,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "chrome_elf_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -113,7 +114,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "components_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -128,7 +129,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "courgette_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -143,7 +144,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "crypto_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -158,7 +159,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "extensions_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -173,7 +174,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "gcm_unit_tests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -188,7 +189,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "google_apis_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -203,7 +204,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "gpu_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -218,7 +219,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "url_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -233,7 +234,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "jingle_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -248,7 +249,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "device_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -263,7 +264,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "media_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -278,7 +279,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "net_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -293,7 +294,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "ppapi_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -308,7 +309,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "printing_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -323,7 +324,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "remoting_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -338,7 +339,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "sbox_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -353,7 +354,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "sbox_integration_tests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -368,7 +369,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "sbox_validation_tests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -383,7 +384,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "ipc_tests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -398,7 +399,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "sync_unit_tests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -413,7 +414,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "unit_tests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -428,7 +429,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "skia_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -443,7 +444,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "sql_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -458,7 +459,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "ui_base_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -473,7 +474,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "content_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -488,7 +489,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "views_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -503,7 +504,7 @@ def Vista_Tests__dbg__1__steps(api):
     # runtest step
     api.python(
         "installer_util_unittests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -517,7 +518,7 @@ def Vista_Tests__dbg__1__steps(api):
          'installer_util_unittests.exe', '--gtest_print_time'])
     # process dumps step
     api.python("process dumps",
-               api.path["build"].join("scripts", "slave", "process_dumps.py"),
+               api.infra_paths['build'].join("scripts", "slave", "process_dumps.py"),
                args=["--target", "Debug"])
 
 
@@ -526,7 +527,7 @@ def Chromium_Builder__dbg__steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.path["build"].join("scripts", "slave",
+    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -558,7 +559,7 @@ def Chromium_Builder__dbg__steps(api):
            'GYP_DEFINES': 'fastbuild=1 component=shared_library',
            'GYP_MSVS_VERSION': '2015'}
     api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
+               api.infra_paths['build'].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -569,12 +570,12 @@ def Chromium_Builder__dbg__steps(api):
     if "clobber" in api.properties:
         args.append("--clobber")
     api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
+               api.infra_paths['build'].join("scripts", "slave", "compile.py"),
                args=args)
     # zip_build step
     step_result = api.python(
         "zip build",
-        api.path["build"].join("scripts", "slave", "zip_build.py"),
+        api.infra_paths['build'].join("scripts", "slave", "zip_build.py"),
         args=
         ["--json-urls", api.json.output(), "--target", "Debug", '--build-url',
          'gs://chromium-build-transfer/Chromium FYI Builder (dbg)',
@@ -676,7 +677,7 @@ def Vista_Tests__dbg__2__steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.path["build"].join("scripts", "slave",
+    api.python("taskkill", api.infra_paths['build'].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config(GIT_MODE=True)
@@ -708,7 +709,7 @@ def Vista_Tests__dbg__2__steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': ' component=shared_library'}
     api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
+               api.infra_paths['build'].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -716,7 +717,7 @@ def Vista_Tests__dbg__2__steps(api):
     # extract build step
     api.python(
         "extract build",
-        api.path["build"].join("scripts", "slave", "extract_build.py"),
+        api.infra_paths['build'].join("scripts", "slave", "extract_build.py"),
         args=["--target", "Debug", "--build-archive-url", build_properties[
             "parent_build_archive_url"], '--build-properties=%s' %
               api.json.dumps(build_properties,
@@ -724,7 +725,7 @@ def Vista_Tests__dbg__2__steps(api):
     # runtest step
     api.python(
         "browser_tests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -739,7 +740,7 @@ def Vista_Tests__dbg__2__steps(api):
     # runtest step
     api.python(
         "content_browsertests",
-        api.path["build"].join("scripts", "slave", "runtest.py"),
+        api.infra_paths['build'].join("scripts", "slave", "runtest.py"),
         args=
         ['--target', 'Debug', "--build-properties=%s" %
          api.json.dumps(build_properties,
@@ -753,7 +754,7 @@ def Vista_Tests__dbg__2__steps(api):
          'content_browsertests.exe', '--gtest_print_time'])
     # process dumps step
     api.python("process dumps",
-               api.path["build"].join("scripts", "slave", "process_dumps.py"),
+               api.infra_paths['build'].join("scripts", "slave", "process_dumps.py"),
                args=["--target", "Debug"])
 
 

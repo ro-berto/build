@@ -11,13 +11,13 @@
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--issue",
       "666666",
       "--patchset",
@@ -30,7 +30,6 @@
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -67,9 +66,8 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[SLAVE_BUILD]/src/out"
+      "[CWD]/src/out"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -81,7 +79,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -91,11 +88,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]/goma' rtc_use_264=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[ROOT]/b/build/goma' rtc_use_264=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -104,13 +100,12 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
+      "[ROOT]/b/depot_tools/gn.py",
+      "--root=[CWD]/src",
       "gen",
       "//out/Debug",
-      "--args=ffmpeg_branding=\"Chrome\" rtc_use_h264=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[BUILD]/goma\""
+      "--args=ffmpeg_branding=\"Chrome\" rtc_use_h264=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[ROOT]/b/build/goma\""
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gn"
   },
   {
@@ -128,9 +123,9 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[CWD]/src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]/b/build/slave/goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -140,13 +135,12 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[ROOT]/b/build/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "all"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

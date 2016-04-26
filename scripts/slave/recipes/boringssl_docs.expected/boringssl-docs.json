@@ -11,13 +11,13 @@
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
       "--root",
       "boringssl",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -54,7 +53,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -64,14 +62,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[CWD]/boringssl/util/bot/go/env.py",
       "go",
       "run",
       "doc.go",
       "-out",
-      "[TMP_BASE]/boringssl-docs_tmp_1"
+      "[TMP]/boringssl-docs_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl/util",
+    "cwd": "[CWD]/boringssl/util",
     "name": "generate"
   },
   {
@@ -80,16 +78,15 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "-m",
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/boringssl-docs_tmp_1/**",
+      "[TMP]/boringssl-docs_tmp_1/**",
       "gs://chromium-boringssl-docs/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil cp"
   },
   {

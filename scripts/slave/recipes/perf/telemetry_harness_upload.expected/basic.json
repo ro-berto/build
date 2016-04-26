@@ -11,20 +11,19 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -98,10 +97,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/tools/telemetry/build/generate_telemetry_harness.sh",
-      "[TMP_BASE]/telemetry-harness_tmp_1/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
+      "[CWD]/src/tools/telemetry/build/generate_telemetry_harness.sh",
+      "[TMP]/telemetry-harness_tmp_1/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "create harness archive"
   },
   {
@@ -110,13 +108,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/telemetry-harness_tmp_1/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip",
+      "[TMP]/telemetry-harness_tmp_1/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip",
       "gs://chromium-telemetry/snapshots/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@Telemetry rf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9@https://storage.cloud.google.com/chromium-telemetry/snapshots/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip@@@"
@@ -128,13 +125,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "cp",
       "gs://chromium-telemetry/snapshots/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip",
       "gs://chromium-telemetry/snapshots/telemetry.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil copy",
     "~followup_annotations": [
       "@@@STEP_LINK@Telemetry latest@https://storage.cloud.google.com/chromium-telemetry/snapshots/telemetry.zip@@@"
@@ -145,9 +141,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP_BASE]/telemetry-harness_tmp_1"
+      "[TMP]/telemetry-harness_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree remove harness temp directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

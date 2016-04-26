@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -20,13 +19,13 @@
       "--slave",
       "vm331-m3",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/syzygy/internal.DEPS.git'}]",
+      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/syzygy/internal.DEPS.git'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]\\b\\build\\slave\\cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -74,7 +72,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
@@ -87,27 +84,25 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\build\\get_syzygy_binaries.py",
+      "[CWD]\\src\\syzygy\\build\\get_syzygy_binaries.py",
       "--output-dir",
-      "[SLAVE_BUILD]\\src\\syzygy\\binaries",
+      "[CWD]\\src\\syzygy\\binaries",
       "--revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--overwrite",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "download_binaries"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\smoke_test.py",
+      "[CWD]\\src\\syzygy\\internal\\build\\smoke_test.py",
       "--verbose",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\build"
+      "[CWD]\\src\\build"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "smoke_test"
   },
   {

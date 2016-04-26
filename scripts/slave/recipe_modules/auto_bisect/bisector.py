@@ -345,7 +345,7 @@ class Bisector(object):
     patched_contents = re.sub(deps_item_regexp, new_commit_hash,
                               original_contents)
 
-    cwd = self.api.m.path['slave_build'].join(
+    cwd = self.api.m.infra_paths['slave_build'].join(
         depot_config.DEPOT_DEPS_NAME[base_revision.depot_name]['src'])
     deps_file = 'DEPS'
     # This is to support backward compatibility on android-chrome because

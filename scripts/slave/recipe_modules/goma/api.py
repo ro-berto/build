@@ -18,11 +18,11 @@ class GomaApi(recipe_api.RecipeApi):
     # deprecated? switch to use ensure_goma with canary=True.
     # for git checkout, should use @refs/heads/master to use head.
     head = 'refs/heads/master'
-    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
+    # TODO(phajdan.jr): Remove infra_paths['build'] usage, http://crbug.com/437264 .
     self.m.gclient('update goma canary',
                    ['sync', '--verbose', '--force',
                     '--revision', 'build/goma@%s' % head],
-                   cwd=self.m.path['build'])
+                   cwd=self.m.infra_paths['build'])
 
   def ensure_goma(self):
     with self.m.step.nest('ensure_goma'):
@@ -36,7 +36,7 @@ class GomaApi(recipe_api.RecipeApi):
         # For Windows there's only 64-bit goma client.
         if self.m.platform.is_win:
           goma_package = goma_package.replace('386', 'amd64')
-        goma_dir = self.m.path['cache'].join('cipd', 'goma')
+        goma_dir = self.m.infra_paths['cache'].join('cipd', 'goma')
         self.m.cipd.ensure(goma_dir, {goma_package: 'release'})
         return goma_dir
       except self.m.step.StepFailure:  # pragma: no cover

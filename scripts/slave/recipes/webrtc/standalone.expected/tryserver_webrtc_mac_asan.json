@@ -5,7 +5,6 @@
       "--json-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "host and tools info",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />OS X 1.2.3, Xcode 6.7.8 (5D342509a)@@@",
@@ -34,13 +33,13 @@
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--issue",
       "666666",
       "--patchset",
@@ -53,7 +52,6 @@
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -90,9 +88,8 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[SLAVE_BUILD]/src/out"
+      "[CWD]/src/out"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -104,7 +101,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -114,10 +110,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=0 ffmpeg_branding=Chrome gomadir='[BUILD]/goma' lsan=1 rtc_use_264=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=0 ffmpeg_branding=Chrome gomadir='[ROOT]/b/build/goma' lsan=1 rtc_use_264=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -129,11 +124,10 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[CWD]/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -160,9 +154,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[CWD]/src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]/b/build/slave/goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -172,13 +166,12 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[ROOT]/b/build/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "All"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -207,11 +200,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/audio_decoder_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/audio_decoder_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "audio_decoder_unittests"
   },
   {
@@ -233,11 +225,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/common_audio_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/common_audio_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "common_audio_unittests"
   },
   {
@@ -259,11 +250,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/common_video_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/common_video_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "common_video_unittests"
   },
   {
@@ -285,11 +275,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/modules_tests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/modules_tests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "modules_tests"
   },
   {
@@ -311,11 +300,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/modules_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/modules_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests"
   },
   {
@@ -337,11 +325,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/peerconnection_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/peerconnection_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "peerconnection_unittests"
   },
   {
@@ -363,11 +350,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/rtc_media_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/rtc_media_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_media_unittests"
   },
   {
@@ -389,11 +375,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/rtc_pc_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/rtc_pc_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_pc_unittests"
   },
   {
@@ -415,11 +400,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/rtc_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/rtc_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_unittests"
   },
   {
@@ -441,11 +425,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/system_wrappers_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/system_wrappers_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "system_wrappers_unittests"
   },
   {
@@ -467,11 +450,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/test_support_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/test_support_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test_support_unittests"
   },
   {
@@ -493,11 +475,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/tools_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/tools_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "tools_unittests"
   },
   {
@@ -519,11 +500,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/video_engine_tests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/video_engine_tests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_tests"
   },
   {
@@ -545,11 +525,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/voice_engine_unittests",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/voice_engine_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests"
   },
   {
@@ -571,11 +550,10 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
+      "[CWD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[CWD]/src/out/Release/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_peerconnection_objc_test"
   },
   {
@@ -600,7 +578,6 @@
       "--enable-asan",
       "webrtc_nonparallel_tests"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_nonparallel_tests"
   },
   {

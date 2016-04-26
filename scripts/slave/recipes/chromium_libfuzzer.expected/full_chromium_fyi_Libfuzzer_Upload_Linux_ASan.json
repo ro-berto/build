@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -104,11 +103,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[ROOT]/b/build/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -117,33 +115,31 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[CWD]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fyi",
       "-b",
       "Libfuzzer Upload Linux ASan",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[CWD]/src/tools/mb/mb_config.pyl",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
+      "[ROOT]/b/depot_tools/gn.py",
+      "--root=[CWD]/src",
       "refs",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[CWD]/src/out/Release",
       "--all",
       "--type=executable",
       "--as=output",
       "//testing/libfuzzer:libfuzzer_main"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "calculate all_fuzzers",
     "stdout": "/path/to/tmp/"
   },
@@ -151,16 +147,15 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
+      "[ROOT]/b/depot_tools/gn.py",
+      "--root=[CWD]/src",
       "refs",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[CWD]/src/out/Release",
       "--all",
       "--type=executable",
       "--as=output",
       "//testing/libfuzzer:no_clusterfuzz"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "calculate no_clusterfuzz",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -182,11 +177,10 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[CWD]/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -213,9 +207,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[CWD]/src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]/b/build/slave/goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -225,12 +219,11 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[ROOT]/b/build/goma",
       "--",
       "target2",
       "target3"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -245,10 +238,9 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[CWD]/src/out/Release",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "listdir build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -269,19 +261,18 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
-      "[TMP_BASE]/chrome_staging_tmp_1",
+      "[TMP]/chrome_staging_tmp_1",
       "libfuzzer-linux-release-170242",
       "[\"file 1\", \"file 2\"]",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[CWD]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "zipping"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "--",
       "-h",
       "x-goog-meta-Cr-Commit-Position:refs/heads/master@{#170242}",
@@ -292,10 +283,9 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/chrome_staging_tmp_1/libfuzzer-linux-release-170242.zip",
+      "[TMP]/chrome_staging_tmp_1/libfuzzer-linux-release-170242.zip",
       "gs://chromium-browser-libfuzzer/linux-release-asan/libfuzzer-linux-release-170242.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux-release-asan/libfuzzer-linux-release-170242.zip@@@"
@@ -306,9 +296,8 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/chrome_staging_tmp_1/libfuzzer-linux-release-170242.zip"
+      "[TMP]/chrome_staging_tmp_1/libfuzzer-linux-release-170242.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "libfuzzer-linux-release-170242.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

@@ -467,7 +467,7 @@ class V8SwarmingTest(V8Test):
     # Shim script's own arguments.
     args = [
       '--swarming-client-dir', self.api.swarming_client.path,
-      '--temp-root-dir', self.api.path['tmp_base'],
+      '--temp-root-dir', self.api.path['tmp'],
       '--merged-test-output', json_output,
     ] + coverage_context.get_swarming_collect_args()
 

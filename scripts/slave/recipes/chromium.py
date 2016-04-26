@@ -7,6 +7,7 @@ DEPS = [
   'amp',
   'bisect_tester',
   'depot_tools/bot_update',
+  'depot_tools/infra_paths',
   'chromium',
   'chromium_android',
   'chromium_tests',

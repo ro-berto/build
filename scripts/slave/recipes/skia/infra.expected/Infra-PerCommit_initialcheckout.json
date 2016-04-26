@@ -4,10 +4,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/go/src",
+      "[CWD]/go/src",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs makedirs go/src",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -27,9 +26,8 @@
       "git",
       "clone",
       "https://skia.googlesource.com/buildbot",
-      "[SLAVE_BUILD]/go/src/go.skia.org/infra"
+      "[CWD]/go/src/go.skia.org/infra"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git clone"
   },
   {
@@ -38,7 +36,7 @@
       "fetch",
       "origin"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "name": "git fetch"
   },
   {
@@ -48,7 +46,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "name": "git clean"
   },
   {
@@ -58,7 +56,7 @@
       "--hard",
       "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "name": "git reset"
   },
   {
@@ -68,11 +66,11 @@
       "-u",
       "./..."
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go",
-      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+      "GOPATH": "[CWD]/go",
+      "PATH": "[CWD]/go/bin:%(PATH)s"
     },
     "name": "update_deps"
   },
@@ -81,9 +79,8 @@
       "git",
       "clone",
       "https://skia.googlesource.com/buildbot",
-      "[SLAVE_BUILD]/go/src/go.skia.org/infra"
+      "[CWD]/go/src/go.skia.org/infra"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git clone (2)"
   },
   {
@@ -92,7 +89,7 @@
       "fetch",
       "origin"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "name": "git fetch (2)"
   },
   {
@@ -102,7 +99,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "name": "git clean (2)"
   },
   {
@@ -112,7 +109,7 @@
       "--hard",
       "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "name": "git reset (2)"
   },
   {
@@ -121,7 +118,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "name": "git rev-parse",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -134,11 +131,11 @@
       "get",
       "golang.org/x/tools/cmd/goimports"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go",
-      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+      "GOPATH": "[CWD]/go",
+      "PATH": "[CWD]/go/bin:%(PATH)s"
     },
     "name": "install goimports"
   },
@@ -148,11 +145,11 @@
       "get",
       "github.com/kisielk/errcheck"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go",
-      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+      "GOPATH": "[CWD]/go",
+      "PATH": "[CWD]/go/bin:%(PATH)s"
     },
     "name": "install errcheck"
   },
@@ -160,11 +157,11 @@
     "cmd": [
       "./setup_test_db"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra/go/database",
+    "cwd": "[CWD]/go/src/go.skia.org/infra/go/database",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go",
-      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+      "GOPATH": "[CWD]/go",
+      "PATH": "[CWD]/go/bin:%(PATH)s"
     },
     "name": "setup database"
   },
@@ -174,12 +171,12 @@
       "-u",
       "run_unittests"
     ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "cwd": "[CWD]/go/src/go.skia.org/infra",
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go",
+      "GOPATH": "[CWD]/go",
       "KARMA_PORT": "15001",
-      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+      "PATH": "[CWD]/go/bin:%(PATH)s"
     },
     "name": "run_unittests"
   },

@@ -7,6 +7,7 @@ import contextlib
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/infra_paths',
   'file',
   'gsutil',
   'recipe_engine/path',
@@ -232,7 +233,7 @@ def GetCheckout(api):
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
-    api.file.rmcontents('everything', api.path['slave_build'])
+    api.file.rmcontents('everything', api.infra_paths['slave_build'])
 
   GetCheckout(api)
 

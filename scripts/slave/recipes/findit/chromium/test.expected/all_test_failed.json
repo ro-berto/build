@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -20,20 +19,19 @@
       "--slave",
       "build1-a1",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]\\b\\build\\slave\\cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@r1",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -107,7 +105,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -118,17 +115,16 @@
       "--platform",
       "windows-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]\\cipd",
+      "[CWD]\\cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"fake_slave_build/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -136,10 +132,10 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\cipd\\cipd",
+      "fake_slave_build/cipd",
       "ensure",
       "--root",
-      "[CACHE]\\cipd\\goma",
+      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
       "--list",
       "infra_internal/goma/client/windows-amd64 release",
       "--json-output",
@@ -147,7 +143,6 @@
       "--service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -166,10 +161,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[CWD]\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -183,11 +177,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\cipd\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[ROOT]\\b\\build\\slave\\cache\\cipd\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -196,7 +189,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[CWD]\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -204,11 +197,10 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[CWD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -220,13 +212,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
+      "[CWD]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [CWD]\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -245,7 +236,7 @@
       "--format=%H",
       "r0..r1"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[CWD]\\src",
     "name": "git commits in range",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -255,7 +246,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1"
   },
   {
@@ -264,7 +254,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.taskkill",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -282,20 +271,19 @@
       "--slave",
       "build1-a1",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]\\b\\build\\slave\\cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@r1",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -370,7 +358,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -384,17 +371,16 @@
       "--platform",
       "windows-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]\\cipd",
+      "[CWD]\\cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"fake_slave_build/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -402,10 +388,10 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\cipd\\cipd",
+      "fake_slave_build/cipd",
       "ensure",
       "--root",
-      "[CACHE]\\cipd\\goma",
+      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
       "--list",
       "infra_internal/goma/client/windows-amd64 release",
       "--json-output",
@@ -413,7 +399,6 @@
       "--service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -435,11 +420,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\cipd\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[ROOT]\\b\\build\\slave\\cache\\cipd\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r1.gclient runhooks",
@@ -451,7 +435,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[CWD]\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -459,11 +443,10 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[CWD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -476,14 +459,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
+      "[CWD]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.read test spec",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [CWD]\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (1)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -508,7 +490,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.cleanup_temp",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -520,10 +501,9 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--clean-isolated-files"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.clean isolated files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -533,21 +513,20 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "[CWD]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.win",
       "-b",
       "Win Builder",
       "--config-file",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "[CWD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\cipd\\goma",
+      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -570,9 +549,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]\\b\\build\\slave\\goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -582,13 +561,12 @@
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
-      "[CACHE]\\cipd\\goma",
+      "[ROOT]\\b\\build\\slave\\cache\\cipd\\goma",
       "--ninja-ensure-up-to-date",
       "--",
       "gl_tests",
       "gl_tests_run"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -605,11 +583,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src"
+      "[CWD]\\src"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[CWD]",
     "name": "test r1.remove_build_metadata",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -620,16 +598,15 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "[CWD]\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Release\\gl_tests.isolated.gen.json"
+      "[CWD]\\src\\out\\Release\\gl_tests.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -643,7 +620,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[CWD]\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -703,7 +680,6 @@
       "--gtest_filter=Test.One:Test.Two:Test.Three",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.[trigger] gl_tests (r1) on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -730,9 +706,9 @@
       "python",
       "RECIPE_MODULE[build::swarming]\\resources\\collect_gtest_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "[CWD]\\src\\tools\\swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -745,7 +721,6 @@
       "1",
       "gl_tests (r1)/Windows-7-SP1/[dummy has/win_chromium_variable/1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.gl_tests (r1) on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -774,7 +749,6 @@
       "--chrome-revision",
       "170242"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.Upload to test-results [test r1.gl_tests (r1) on Windows-7-SP1]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -788,7 +762,6 @@
       "--target",
       "Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.process_dumps",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -800,7 +773,6 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@report@{@@@",

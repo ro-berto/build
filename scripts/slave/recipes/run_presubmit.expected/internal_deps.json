@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'build_internal/internal.DEPS', 'url': 'https://chrome-internal.googlesource.com/chrome/tools/build/internal.DEPS.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'build_internal/internal.DEPS', 'url': 'https://chrome-internal.googlesource.com/chrome/tools/build/internal.DEPS.git'}]",
       "--root",
       "build_internal/internal.DEPS",
       "--revision_mapping_file",
       "{\"build_internal/internal.DEPS\": \"got_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--issue",
       "12853011",
       "--patchset",
@@ -30,7 +30,6 @@
       "build_internal/internal.DEPS@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -74,7 +73,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[SLAVE_BUILD]/build_internal/internal.DEPS",
+    "cwd": "[CWD]/build_internal/internal.DEPS",
     "name": "commit git patch"
   },
   {
@@ -92,7 +91,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[SLAVE_BUILD]/build_internal/internal.DEPS",
+      "[CWD]/build_internal/internal.DEPS",
       "--commit",
       "--verbose",
       "--verbose",
@@ -105,7 +104,6 @@
       "--upstream",
       "1b75002339580a63385c6a9f2745f9a816f7865d"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

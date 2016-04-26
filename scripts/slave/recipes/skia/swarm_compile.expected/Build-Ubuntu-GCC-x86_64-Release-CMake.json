@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[CWD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Build-Ubuntu-GCC-x86_64-Release-CMake"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -43,15 +43,15 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/cmake/cmake_build"
+      "[CWD]/skia/cmake/cmake_build"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "cmake_build"
   },
@@ -60,10 +60,9 @@
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', '*.dylib', 'skia_launcher', 'lib/*.so', 'iOSShell.app', 'iOSShell.ipa']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    print 'Copying build product %s to %s' % (f, dst)\n    shutil.move(f, dst)\n",
-      "[SLAVE_BUILD]/out/Release",
+      "[CWD]/out/Release",
       "[SWARM_OUT_DIR]/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "copy build products",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",

@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/WebAssembly/waterfall.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/WebAssembly/waterfall.git'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_waterfall_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -62,9 +61,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/src/build.py"
+      "[CWD]/src/src/build.py"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[CWD]/src",
     "env": {
       "BUILDBOT_BUILDERNAME": "linux",
       "BUILDBOT_GOT_WATERFALL_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",

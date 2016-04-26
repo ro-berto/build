@@ -4,10 +4,9 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[CWD]/src/out/Release",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "listdir build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -27,19 +26,18 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
-      "[TMP_BASE]/chrome_staging_tmp_1",
+      "[TMP]/chrome_staging_tmp_1",
       "chrome-asan-linux-release-refs_heads_B1-123456",
       "[\"chrome\"]",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[CWD]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "zipping"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "--",
       "-h",
       "x-goog-meta-Cr-Commit-Position:refs/heads/B1@{#123456}",
@@ -48,10 +46,9 @@
       "-h",
       "x-goog-meta-Cr-Git-Commit:5e3250aadda2b170692f8e762d43b7e8deadbeef",
       "cp",
-      "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip",
+      "[TMP]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip",
       "gs://chromium/linux-release/chrome-asan-linux-release-refs_heads_B1-123456.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium/linux-release/chrome-asan-linux-release-refs_heads_B1-123456.zip@@@"
@@ -62,9 +59,8 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip"
+      "[TMP]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "chrome-asan-linux-release-refs_heads_B1-123456.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

@@ -1,22 +1,20 @@
 [
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "init",
       "-u",
       "https://android.googlesource.com/platform/manifest",
       "-b",
       "master-art"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
@@ -24,9 +22,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/out"
+      "[CWD]/out"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree clobber",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -41,13 +38,12 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/buildbot-build.sh",
+      "[CWD]/art/tools/buildbot-build.sh",
       "-j8",
       "--host"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_BUILD_TOP": "[CWD]",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_FULL": "false",
       "ART_TEST_INTERPRETER": "true",
@@ -57,10 +53,10 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "ART_USE_READ_BARRIER": "true",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[CWD]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "PATH": "[CWD]/out/host/linux-x86/bin:%(PATH)s",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -73,9 +69,8 @@
       "-j8",
       "test-art-host-gtest64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_BUILD_TOP": "[CWD]",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_FULL": "false",
       "ART_TEST_INTERPRETER": "true",
@@ -85,10 +80,10 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "ART_USE_READ_BARRIER": "true",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[CWD]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "PATH": "[CWD]/out/host/linux-x86/bin:%(PATH)s",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -102,9 +97,8 @@
       "test-art-host-run-test-optimizing",
       "dist"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_BUILD_TOP": "[CWD]",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_FULL": "false",
       "ART_TEST_INTERPRETER": "true",
@@ -115,10 +109,10 @@
       "ART_TEST_RUN_TEST_DEBUGGABLE": "true",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "ART_USE_READ_BARRIER": "true",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[CWD]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "PATH": "[CWD]/out/host/linux-x86/bin:%(PATH)s",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -132,9 +126,8 @@
       "test-art-host-run-test-interpreter",
       "dist"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_BUILD_TOP": "[CWD]",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_FULL": "false",
       "ART_TEST_INTERPRETER": "true",
@@ -144,10 +137,10 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "ART_USE_READ_BARRIER": "true",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[CWD]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "PATH": "[CWD]/out/host/linux-x86/bin:%(PATH)s",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -161,9 +154,8 @@
       "test-art-host-run-test-jit",
       "dist"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_BUILD_TOP": "[CWD]",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_FULL": "false",
       "ART_TEST_INTERPRETER": "true",
@@ -173,10 +165,10 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "ART_USE_READ_BARRIER": "true",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[CWD]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "PATH": "[CWD]/out/host/linux-x86/bin:%(PATH)s",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -185,14 +177,13 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/run-libcore-tests.sh",
+      "[CWD]/art/tools/run-libcore-tests.sh",
       "--mode=host",
       "--variant=X64",
       "--debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_BUILD_TOP": "[CWD]",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_FULL": "false",
       "ART_TEST_INTERPRETER": "true",
@@ -202,10 +193,10 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "ART_USE_READ_BARRIER": "true",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[CWD]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "PATH": "[CWD]/out/host/linux-x86/bin:%(PATH)s",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -214,14 +205,13 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/run-jdwp-tests.sh",
+      "[CWD]/art/tools/run-jdwp-tests.sh",
       "--mode=host",
       "--variant=X64",
       "--debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_BUILD_TOP": "[CWD]",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_FULL": "false",
       "ART_TEST_INTERPRETER": "true",
@@ -231,10 +221,10 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "ART_USE_READ_BARRIER": "true",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[CWD]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "PATH": "[CWD]/out/host/linux-x86/bin:%(PATH)s",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"

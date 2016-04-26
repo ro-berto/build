@@ -11,13 +11,13 @@
       "--slave",
       "TestSlave",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'dynamorio', 'url': 'https://github.com/DynamoRIO/dynamorio.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'dynamorio', 'url': 'https://github.com/DynamoRIO/dynamorio.git'}]",
       "--root",
       "dynamorio",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -52,9 +51,8 @@
       "ctest",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]/dynamorio/make/package.cmake,build=0x1234567"
+      "[CWD]/dynamorio/make/package.cmake,build=0x1234567"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Package DynamoRIO"
   },
   {
@@ -63,13 +61,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "cp",
       "DynamoRIO-Linux-*1234567.tar.gz",
       "gs://chromium-dynamorio/builds/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-dynamorio/builds/@@@"

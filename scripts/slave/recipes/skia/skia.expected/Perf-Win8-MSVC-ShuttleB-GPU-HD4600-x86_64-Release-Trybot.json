@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[CWD]\\skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git.bat",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[CWD]\\skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[CWD]\\skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[CWD]\\skia",
     "name": "git clean"
   },
   {
@@ -45,9 +45,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -57,11 +56,10 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\gclient_safe_revert.py",
+      "[ROOT]\\b\\build\\scripts\\slave\\gclient_safe_revert.py",
       ".",
-      "[DEPOT_TOOLS]\\gclient.bat"
+      "[ROOT]\\b\\depot_tools\\gclient.bat"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gclient revert"
   },
   {
@@ -79,7 +77,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -100,9 +97,9 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\apply_issue.py",
+      "[ROOT]\\b\\depot_tools\\apply_issue.py",
       "-r",
-      "[SLAVE_BUILD]\\skia",
+      "[CWD]\\skia",
       "-i",
       "500",
       "-p",
@@ -111,7 +108,6 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "apply_issue",
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 500@https://codereview.chromium.org/500@@@"
@@ -121,11 +117,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\skia\\tools\\buildbot_spec.py",
+      "[CWD]\\skia\\tools\\buildbot_spec.py",
       "/path/to/tmp/json",
       "Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[CWD]\\skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -167,12 +163,12 @@
       "make.py",
       "nanobench"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[CWD]\\skia",
     "env": {
       "BUILDTYPE": "Release_x64",
       "CHROME_PATH": "[HOME]\\src",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
+      "SKIA_OUT": "[CWD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
     },
     "name": "build nanobench"
   },
@@ -181,10 +177,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]\\tmp",
+      "[CWD]\\tmp",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -204,10 +199,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\tmp\\SKP_VERSION",
+      "[CWD]\\tmp\\SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -215,10 +209,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\skia\\SKP_VERSION",
+      "[CWD]\\skia\\SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -226,10 +219,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\tmp\\SK_IMAGE_VERSION",
+      "[CWD]\\tmp\\SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -237,10 +229,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\skia\\SK_IMAGE_VERSION",
+      "[CWD]\\skia\\SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SK_IMAGE_VERSION"
   },
   {
@@ -248,9 +239,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data"
+      "[CWD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -268,10 +258,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
+      "[CWD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -301,24 +290,24 @@
       "--format=%at",
       "-s"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[CWD]\\skia",
     "name": "git show",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\Release_x64\\nanobench",
+      "[CWD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\Release_x64\\nanobench",
       "--undefok",
       "-i",
-      "[SLAVE_BUILD]\\skia\\resources",
+      "[CWD]\\skia\\resources",
       "--skps",
-      "[SLAVE_BUILD]\\playback\\skps",
+      "[CWD]\\playback\\skps",
       "--images",
-      "[SLAVE_BUILD]\\images\\dm",
+      "[CWD]\\images\\dm",
       "--nocpu",
       "--dummy-flags",
       "--outResultsFile",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data\\nanobench_164710_1408633190.json",
+      "[CWD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data\\nanobench_164710_1408633190.json",
       "--properties",
       "gitHash",
       "164710",
@@ -342,11 +331,10 @@
       "os",
       "Win8"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release_x64",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
+      "SKIA_OUT": "[CWD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
     },
     "name": "nanobench"
   },
@@ -355,10 +343,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
+      "[CWD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs perf_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -380,18 +367,18 @@
       "RECIPE_MODULE[build::skia]\\resources\\upload_bench_results.py",
       "Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot",
       "5",
-      "[SLAVE_BUILD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
+      "[CWD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
       "164710",
-      "[DEPOT_TOOLS]\\third_party\\gsutil\\gsutil",
+      "[ROOT]\\b\\depot_tools\\third_party\\gsutil\\gsutil",
       "500"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[CWD]\\skia",
     "env": {
       "AWS_CREDENTIAL_FILE": "[HOME]\\chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]\\chromium-skia-gm.boto",
       "BUILDTYPE": "Release_x64",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
+      "SKIA_OUT": "[CWD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
     },
     "name": "Upload nanobench Results"
   },

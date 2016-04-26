@@ -6,6 +6,7 @@ import contextlib
 
 DEPS = [
   'depot_tools/git',
+  'depot_tools/infra_paths',
   'file',
   'gsutil',
   'recipe_engine/json',
@@ -150,7 +151,7 @@ def RunFindXcode(api, step_name, target_version=None):
   if target_version is not None:
     args.extend(['--version', target_version])
 
-  result = api.python(step_name, api.path['build'].join('scripts', 'slave',
+  result = api.python(step_name, api.infra_paths['build'].join('scripts', 'slave',
     'ios', 'find_xcode.py'), args)
 
   return result.json.output
@@ -173,7 +174,7 @@ def SetupXcode(api):
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
-    api.file.rmcontents('everything', api.path['slave_build'])
+    api.file.rmcontents('everything', api.infra_paths['slave_build'])
 
   git_hash = api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
@@ -188,7 +189,7 @@ def RunSteps(api):
   # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
   # a regexp in flutter_tools analyze.dart which is in turn a hack around:
   # https://github.com/dart-lang/sdk/issues/25722
-  pub_cache = api.path['slave_build'].join('.pub-cache')
+  pub_cache = api.infra_paths['slave_build'].join('.pub-cache')
   env = {
     'PATH': api.path.pathsep.join((str(flutter_bin), str(dart_bin),
         '%(PATH)s')),

@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -20,13 +19,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]\\b\\build\\slave\\cache_dir",
       "--issue",
       "12853011",
       "--patchset",
@@ -40,7 +39,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -84,10 +82,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\v8\\tools\\swarming_client\\swarming.py",
+      "[CWD]\\v8\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -101,10 +98,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "chromium_win_pch=0 dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
+      "GYP_DEFINES": "chromium_win_pch=0 dcheck_always_on=1 fastbuild=1 gomadir='[ROOT]\\b\\build\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -119,7 +115,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -137,9 +132,9 @@
       "--target",
       "Release_x64",
       "--src-dir",
-      "[SLAVE_BUILD]\\v8",
+      "[CWD]\\v8",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]\\b\\build\\slave\\goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -149,14 +144,13 @@
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]\\goma",
+      "[ROOT]\\b\\build\\goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--arch",
       "x64",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -171,18 +165,17 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[SLAVE_BUILD]\\v8\\tools\\swarming_client",
+      "[CWD]\\v8\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]\\v8\\out\\Release_x64\\bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]\\v8\\out\\Release_x64\\ignition.isolated.gen.json",
-      "[SLAVE_BUILD]\\v8\\out\\Release_x64\\simdjs.isolated.gen.json"
+      "[CWD]\\v8\\out\\Release_x64\\bot_default.isolated.gen.json",
+      "[CWD]\\v8\\out\\Release_x64\\ignition.isolated.gen.json",
+      "[CWD]\\v8\\out\\Release_x64\\simdjs.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -195,7 +188,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
     "trigger_specs": [
       {

@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -69,10 +68,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -86,10 +84,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
+      "GYP_DEFINES": "clang=1 gomadir='[ROOT]/b/build/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -104,7 +101,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -114,11 +110,10 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[CWD]/v8",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -145,9 +140,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[CWD]/v8",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]/b/build/slave/goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -157,10 +152,9 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[ROOT]/b/build/goma",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -175,16 +169,15 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json"
+      "[CWD]/v8/out/Release/bot_default.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -197,7 +190,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -271,7 +264,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -295,9 +287,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -310,7 +302,6 @@
       "1",
       "Check/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 19<br/>@@@",
@@ -842,7 +833,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect"
   },
   {
@@ -854,7 +844,6 @@
       "--outfile",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.Fetch changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -888,7 +877,6 @@
       "--log-limit",
       "100"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.Get change range",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -918,7 +906,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0"
   },
   {
@@ -933,13 +920,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -947,7 +934,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -991,10 +977,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
+      "GYP_DEFINES": "clang=1 gomadir='[ROOT]/b/build/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1010,11 +995,10 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[CWD]/v8",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1042,9 +1026,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[CWD]/v8",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]/b/build/slave/goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -1054,11 +1038,10 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[ROOT]/b/build/goma",
       "--",
       "All"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1074,16 +1057,15 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json"
+      "[CWD]/v8/out/Release/bot_default.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1097,7 +1079,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1172,7 +1154,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.[trigger] Retry on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1197,9 +1178,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1212,7 +1193,6 @@
       "1",
       "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1234,7 +1214,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Available range",
     "~followup_annotations": [
       "@@@STEP_LINK@a1@https://chromium.googlesource.com/v8/v8/+/a1@@@",
@@ -1244,7 +1223,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a2"
   },
   {
@@ -1259,13 +1237,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -1273,7 +1251,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1317,10 +1294,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
+      "GYP_DEFINES": "clang=1 gomadir='[ROOT]/b/build/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1336,11 +1312,10 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[CWD]/v8",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1368,9 +1343,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[CWD]/v8",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]/b/build/slave/goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -1380,11 +1355,10 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[ROOT]/b/build/goma",
       "--",
       "All"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1400,16 +1374,15 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json"
+      "[CWD]/v8/out/Release/bot_default.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a2.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1423,7 +1396,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[CWD]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1498,7 +1471,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a2.[trigger] Retry on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1523,9 +1495,9 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[CWD]/v8/tools/swarming_client",
       "--temp-root-dir",
-      "[TMP_BASE]",
+      "[TMP]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
@@ -1538,7 +1510,6 @@
       "1",
       "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a2.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1560,7 +1531,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Suspecting a3",
     "~followup_annotations": [
       "@@@STEP_LINK@a3@https://chromium.googlesource.com/v8/v8/+/a3@@@"

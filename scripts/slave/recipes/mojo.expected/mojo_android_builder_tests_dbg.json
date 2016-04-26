@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/mojo.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/mojo.git'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -54,7 +53,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -64,14 +62,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "[CWD]/src/mojo/tools/mojob.py",
       "gn",
       "--debug",
       "--android"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[CWD]/src",
     "env": {
-      "GOMA_DIR": "[BUILD]/goma"
+      "GOMA_DIR": "[ROOT]/b/build/goma"
     },
     "name": "mojob gn"
   },
@@ -79,14 +77,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "[CWD]/src/mojo/tools/mojob.py",
       "build",
       "--debug",
       "--android"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GOMA_DIR": "[BUILD]/goma"
+      "GOMA_DIR": "[ROOT]/b/build/goma"
     },
     "name": "mojob build"
   },
@@ -94,14 +91,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
+      "[CWD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
       "/path/to/tmp/json",
       "--restart-usb",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[ROOT]/b/build/site_config/.known_devices"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "device_status_check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -135,20 +131,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/provision_devices.py"
+      "[CWD]/src/build/android/provision_devices.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "provision_device"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/get_test_list.py",
+      "[CWD]/src/mojo/tools/get_test_list.py",
       "{\"build_number\": 571, \"builder_name\": \"Mojo Android Builder Tests (dbg)\", \"dcheck_always_on\": false, \"is_debug\": true, \"master_name\": \"chromium.testing.master\", \"target_os\": \"android\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"default\"]}",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get_test_list",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -166,7 +160,7 @@
     "cmd": [
       "world"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[CWD]/src",
     "name": "Hello"
   },
   {

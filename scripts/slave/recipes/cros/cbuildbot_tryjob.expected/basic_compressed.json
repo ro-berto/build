@@ -11,13 +11,13 @@
       "--slave",
       "test",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}]",
       "--root",
       "chromite",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -53,7 +52,7 @@
       "checkout",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD]/chromite",
+    "cwd": "[CWD]/chromite",
     "name": "checkout chromite branch [master]"
   },
   {
@@ -61,7 +60,7 @@
       "git",
       "pull"
     ],
-    "cwd": "[SLAVE_BUILD]/chromite",
+    "cwd": "[CWD]/chromite",
     "name": "sync chromite branch [master]"
   },
   {
@@ -69,10 +68,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/chromite/cbuildbot/config_dump.json",
+      "[CWD]/chromite/cbuildbot/config_dump.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "read chromite config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@config@{@@@",
@@ -87,7 +85,7 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD]/chromite/bin/cbuildbot",
+      "[CWD]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--timeout",
@@ -96,7 +94,7 @@
       "--remote-version=4",
       "x86-generic-full"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[CWD]",
     "name": "cbuildbot [x86-generic-full]"
   },
   {

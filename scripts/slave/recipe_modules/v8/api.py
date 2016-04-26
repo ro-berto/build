@@ -282,15 +282,15 @@ class V8Api(recipe_api.RecipeApi):
     return build_environment
 
   def setup_mips_toolchain(self):
-    mips_dir = self.m.path['slave_build'].join(MIPS_DIR, 'bin')
+    mips_dir = self.m.infra_paths['slave_build'].join(MIPS_DIR, 'bin')
     if not self.m.path.exists(mips_dir):
       self.m.gsutil.download_url(
           'gs://chromium-v8/%s' % MIPS_TOOLCHAIN,
-          self.m.path['slave_build'],
+          self.m.infra_paths['slave_build'],
           name='bootstrapping mips toolchain')
       self.m.step('unzipping',
                ['tar', 'xf', MIPS_TOOLCHAIN],
-               cwd=self.m.path['slave_build'])
+               cwd=self.m.infra_paths['slave_build'])
 
     self.c.gyp_env.CC = self.m.path.join(mips_dir, 'mips-linux-gnu-gcc')
     self.c.gyp_env.CXX = self.m.path.join(mips_dir, 'mips-linux-gnu-g++')
@@ -373,16 +373,16 @@ class V8Api(recipe_api.RecipeApi):
   def dr_compile(self):
     self.m.file.makedirs(
       'Create Build Dir',
-      self.m.path['slave_build'].join('dynamorio', 'build'))
+      self.m.infra_paths['slave_build'].join('dynamorio', 'build'))
     self.m.step(
       'Configure Release x64 DynamoRIO',
       ['cmake', '..', '-DDEBUG=OFF'],
-      cwd=self.m.path['slave_build'].join('dynamorio', 'build'),
+      cwd=self.m.infra_paths['slave_build'].join('dynamorio', 'build'),
     )
     self.m.step(
       'Compile Release x64 DynamoRIO',
       ['make', '-j5'],
-      cwd=self.m.path['slave_build'].join('dynamorio', 'build'),
+      cwd=self.m.infra_paths['slave_build'].join('dynamorio', 'build'),
     )
 
   @property
@@ -911,7 +911,7 @@ class V8Api(recipe_api.RecipeApi):
     full_args = self._with_extra_flags(full_args)
 
     if self.run_dynamorio:
-      drrun = self.m.path['slave_build'].join(
+      drrun = self.m.infra_paths['slave_build'].join(
           'dynamorio', 'build', 'bin64', 'drrun')
       full_args += [
         '--command_prefix',

@@ -6,6 +6,7 @@ from recipe_engine.types import freeze
 
 DEPS = [
     'depot_tools/git',
+    'depot_tools/infra_paths',
     'recipe_engine/json',
     'recipe_engine/path',
     'perf_dashboard',
@@ -43,7 +44,7 @@ PROPERTIES = {
 
 def RunSteps(api, libvpx_git_url, buildername):
   # Paths and other constants
-  build_root = api.path['slave_build']
+  build_root = api.infra_paths['slave_build']
 
   # Android tools DEPS
   android_tools_root = build_root.join('android_tools')
@@ -107,7 +108,7 @@ def RunSteps(api, libvpx_git_url, buildername):
 
   api.python(
       'transfer_files',
-      api.path['build'].join('scripts', 'slave', 'android',
+      api.infra_paths['build'].join('scripts', 'slave', 'android',
                              'transfer_files.py'),
       args=[adb, DEVICE_ROOT, test_data])
 

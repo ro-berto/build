@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
+  'depot_tools/infra_paths',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -20,7 +21,7 @@ def RunSteps(api):
 
   step_result = api.python(
         'check roll status',
-        api.path['build'].join('scripts', 'tools', 'pycurl.py'),
+        api.infra_paths['build'].join('scripts', 'tools', 'pycurl.py'),
         args=['https://webrtc-roll-cr-rev-status.appspot.com/status'],
         stdout=api.raw_io.output(),
         step_test_data=lambda: api.raw_io.test_api.stream_output(

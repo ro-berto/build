@@ -162,7 +162,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         'Preparing for Bisection',
         script=self.m.path['checkout'].join(
             'tools', 'prepare-bisect-perf-regression.py'),
-        args=['-w', self.m.path['slave_build']])
+        args=['-w', self.m.infra_paths['slave_build']])
     args = []
 
     kwargs['allow_subannotations'] = True
@@ -178,14 +178,14 @@ class AutoBisectApi(recipe_api.RecipeApi):
       args = args + ['--path_to_config', kwargs.pop('path_to_config')]
     if self.m.chromium.c.TARGET_PLATFORM != 'android':
       # TODO(phajdan.jr): update for swarming, http://crbug.com/585401 .
-      args += ['--path_to_goma', self.m.path['build'].join('goma')]
+      args += ['--path_to_goma', self.m.infra_paths['build'].join('goma')]
     args += [
         '--build-properties',
         self.m.json.dumps(dict(self.m.properties.legacy())),
     ]
     self.m.chromium.runtest(
         self.m.path['checkout'].join('tools', 'run-bisect-perf-regression.py'),
-        ['-w', self.m.path['slave_build']] + args,
+        ['-w', self.m.infra_paths['slave_build']] + args,
         name='Running Bisection',
         xvfb=True, **kwargs)
 

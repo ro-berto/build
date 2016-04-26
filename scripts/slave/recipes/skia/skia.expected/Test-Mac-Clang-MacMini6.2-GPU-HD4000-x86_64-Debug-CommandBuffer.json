@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git clean"
   },
   {
@@ -45,9 +45,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['llvm']"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -70,7 +69,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -97,7 +95,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -107,11 +104,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[CWD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -156,14 +153,14 @@
       "make",
       "dm"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
       "CC": "/usr/bin/clang",
       "CHROME_PATH": "[HOME]/src",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
+      "SKIA_OUT": "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "build dm"
   },
@@ -171,22 +168,21 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/build_command_buffer.py",
+      "[CWD]/skia/tools/build_command_buffer.py",
       "--chrome-dir",
-      "[SLAVE_BUILD]",
+      "[CWD]",
       "--output-dir",
-      "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug",
+      "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug",
       "--chrome-build-type",
       "Debug",
       "--no-sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
+      "SKIA_OUT": "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "build command_buffer"
   },
@@ -195,14 +191,14 @@
       "make",
       "nanobench"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
       "CC": "/usr/bin/clang",
       "CHROME_PATH": "[HOME]/src",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
+      "SKIA_OUT": "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "build nanobench"
   },
@@ -211,10 +207,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/tmp",
+      "[CWD]/tmp",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -234,10 +229,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION",
+      "[CWD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -245,10 +239,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/SKP_VERSION",
+      "[CWD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -256,10 +249,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
+      "[CWD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -267,10 +259,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
+      "[CWD]/skia/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SK_IMAGE_VERSION"
   },
   {
@@ -278,9 +269,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/dm"
+      "[CWD]/dm"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -298,10 +288,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/dm",
+      "[CWD]/dm",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -321,15 +310,15 @@
       "python",
       "-u",
       "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
-      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
+      "[CWD]/tmp/uninteresting_hashes.txt"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
+      "SKIA_OUT": "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "get uninteresting hashes",
     "~followup_annotations": [
@@ -369,14 +358,14 @@
   {
     "cmd": [
       "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug/dm",
+      "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug/dm",
       "--undefok",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
+      "[CWD]/skia/resources",
       "--skps",
-      "[SLAVE_BUILD]/playback/skps",
+      "[CWD]/playback/skps",
       "--images",
-      "[SLAVE_BUILD]/images/dm",
+      "[CWD]/images/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -405,19 +394,18 @@
       "os",
       "Mac",
       "--uninterestingHashesFile",
-      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
+      "[CWD]/tmp/uninteresting_hashes.txt",
       "--writePath",
-      "[SLAVE_BUILD]/dm",
+      "[CWD]/dm",
       "--nocpu",
       "--dummy-flags"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
+      "SKIA_OUT": "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "dm"
   },
@@ -426,14 +414,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::skia]/resources/upload_dm_results.py",
-      "[SLAVE_BUILD]/dm",
+      "[CWD]/dm",
       "164710",
       "Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer",
       "5",
       "",
-      "[SLAVE_BUILD]/skia/common/py/utils"
+      "[CWD]/skia/common/py/utils"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
@@ -441,31 +429,30 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
+      "SKIA_OUT": "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "Upload DM Results"
   },
   {
     "cmd": [
       "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug/nanobench",
+      "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug/nanobench",
       "--undefok",
       "-i",
-      "[SLAVE_BUILD]/skia/resources",
+      "[CWD]/skia/resources",
       "--skps",
-      "[SLAVE_BUILD]/playback/skps",
+      "[CWD]/playback/skps",
       "--images",
-      "[SLAVE_BUILD]/images/dm",
+      "[CWD]/images/dm",
       "--nocpu",
       "--dummy-flags"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
+      "SKIA_OUT": "[CWD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "nanobench"
   },

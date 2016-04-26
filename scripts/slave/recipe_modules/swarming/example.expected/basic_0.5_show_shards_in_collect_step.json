@@ -5,11 +5,10 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[SLAVE_BUILD]/swarming.client",
+      "[CWD]/swarming.client",
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -20,7 +19,7 @@
       "origin",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[CWD]/swarming.client",
     "name": "git fetch (swarming_client)"
   },
   {
@@ -30,7 +29,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[CWD]/swarming.client",
     "name": "git checkout (swarming_client)"
   },
   {
@@ -39,7 +38,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[CWD]/swarming.client",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -54,7 +53,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[CWD]/swarming.client",
     "name": "git clean (swarming_client)"
   },
   {
@@ -63,7 +62,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[CWD]/swarming.client",
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -74,17 +73,16 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[CWD]/swarming.client",
     "name": "submodule update (swarming_client)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[CWD]/swarming.client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -95,12 +93,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/isolate.py",
+      "[CWD]/swarming.client/isolate.py",
       "archive",
       "--isolate",
-      "[SLAVE_BUILD]/swarming.client/example/payload/hello_world.isolate",
+      "[CWD]/swarming.client/example/payload/hello_world.isolate",
       "--isolated",
-      "[TMP_BASE]/hello_isolated_world_tmp_1/hello_world.isolated",
+      "[TMP]/hello_isolated_world_tmp_1/hello_world.isolated",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
       "--config-variable",
@@ -108,7 +106,6 @@
       "win",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for win",
     "stdout": "/path/to/tmp/"
   },
@@ -116,12 +113,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/isolate.py",
+      "[CWD]/swarming.client/isolate.py",
       "archive",
       "--isolate",
-      "[SLAVE_BUILD]/swarming.client/example/payload/hello_world.isolate",
+      "[CWD]/swarming.client/example/payload/hello_world.isolate",
       "--isolated",
-      "[TMP_BASE]/hello_isolated_world_tmp_1/hello_world.isolated",
+      "[TMP]/hello_isolated_world_tmp_1/hello_world.isolated",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
       "--config-variable",
@@ -129,7 +126,6 @@
       "linux",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for linux",
     "stdout": "/path/to/tmp/"
   },
@@ -137,12 +133,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/isolate.py",
+      "[CWD]/swarming.client/isolate.py",
       "archive",
       "--isolate",
-      "[SLAVE_BUILD]/swarming.client/example/payload/hello_world.isolate",
+      "[CWD]/swarming.client/example/payload/hello_world.isolate",
       "--isolated",
-      "[TMP_BASE]/hello_isolated_world_tmp_1/hello_world.isolated",
+      "[TMP]/hello_isolated_world_tmp_1/hello_world.isolated",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
       "--config-variable",
@@ -150,7 +146,6 @@
       "mac",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for mac",
     "stdout": "/path/to/tmp/"
   },
@@ -158,7 +153,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[CWD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -210,7 +205,6 @@
       "joe",
       "hash_for_win"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] hello_world on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -231,7 +225,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[CWD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -283,7 +277,6 @@
       "joe",
       "hash_for_linux"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] hello_world on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -310,7 +303,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[CWD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -362,7 +355,6 @@
       "joe",
       "hash_for_mac"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] hello_world on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -384,14 +376,13 @@
       "echo",
       "running something locally"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "local step"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[CWD]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -403,9 +394,8 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
+      "[TMP]/hello_isolated_world_tmp_1/task_output_dir"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -455,7 +445,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[CWD]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -467,9 +457,8 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
+      "[TMP]/hello_isolated_world_tmp_1/task_output_dir"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "hello_world on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -554,7 +543,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[CWD]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -566,9 +555,8 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
+      "[TMP]/hello_isolated_world_tmp_1/task_output_dir"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "hello_world on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -619,9 +607,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP_BASE]/hello_isolated_world_tmp_1"
+      "[TMP]/hello_isolated_world_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree remove temp dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

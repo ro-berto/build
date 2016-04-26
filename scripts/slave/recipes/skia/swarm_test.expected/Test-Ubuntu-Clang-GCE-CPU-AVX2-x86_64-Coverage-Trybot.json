@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[CWD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -51,10 +51,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION",
+      "[CWD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -62,26 +61,25 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
+      "[CWD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/tools/llvm_coverage_build",
+      "[CWD]/skia/tools/llvm_coverage_build",
       "dm"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "BUILDTYPE": "Coverage",
       "CC": "/usr/bin/clang-3.6",
       "CHROME_HEADLESS": "1",
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "build dm"
   },
@@ -90,9 +88,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/out/coverage_results"
+      "[CWD]/out/coverage_results"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PYTHONPATH": "build/scripts"
     },
@@ -113,10 +110,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/out/coverage_results",
+      "[CWD]/out/coverage_results",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs coverage_results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -134,15 +130,15 @@
   {
     "cmd": [
       "python",
-      "[SLAVE_BUILD]/skia/tools/llvm_coverage_run.py",
+      "[CWD]/skia/tools/llvm_coverage_run.py",
       "dm",
       "--undefok",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
+      "[CWD]/skia/resources",
       "--skps",
-      "[SLAVE_BUILD]/skps",
+      "[CWD]/skps",
       "--images",
-      "[SLAVE_BUILD]/images/dm",
+      "[CWD]/images/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -175,30 +171,30 @@
       "--nogpu",
       "--dummy-flags",
       "--outResultsFile",
-      "[SLAVE_BUILD]/out/coverage_results/abc123.cov"
+      "[CWD]/out/coverage_results/abc123.cov"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "BUILDTYPE": "Coverage",
       "CC": "/usr/bin/clang-3.6",
       "CHROME_HEADLESS": "1",
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "dm"
   },
   {
     "cmd": [
       "python",
-      "[SLAVE_BUILD]/skia/tools/parse_llvm_coverage.py",
+      "[CWD]/skia/tools/parse_llvm_coverage.py",
       "--report",
-      "[SLAVE_BUILD]/out/coverage_results/abc123.cov",
+      "[CWD]/out/coverage_results/abc123.cov",
       "--nanobench",
-      "[SLAVE_BUILD]/out/coverage_results/nanobench_abc123.json",
+      "[CWD]/out/coverage_results/nanobench_abc123.json",
       "--linebyline",
-      "[SLAVE_BUILD]/out/coverage_results/coverage_by_line_abc123.json",
+      "[CWD]/out/coverage_results/coverage_by_line_abc123.json",
       "--key",
       "arch",
       "x86_64",
@@ -228,15 +224,15 @@
       "patchset",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "BUILDTYPE": "Coverage",
       "CC": "/usr/bin/clang-3.6",
       "CHROME_HEADLESS": "1",
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "Generate Coverage Data"
   },
@@ -245,10 +241,9 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/out/coverage_results",
+      "[CWD]/out/coverage_results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "listdir results_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -269,10 +264,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/out/coverage_results/file 1",
+      "[CWD]/out/coverage_results/file 1",
       "[SWARM_OUT_DIR]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Copy to swarming out"
   },
   {
@@ -280,10 +274,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/out/coverage_results/file 2",
+      "[CWD]/out/coverage_results/file 2",
       "[SWARM_OUT_DIR]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Copy to swarming out (2)"
   },
   {

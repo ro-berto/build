@@ -8,6 +8,7 @@ from recipe_engine.types import freeze
 
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/infra_paths',
   'chromium',
   'chromium_android',
   'chromium_tests',

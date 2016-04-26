@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[CWD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -47,35 +47,33 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
+      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "wait for device (1)"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
+      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "wait for charge (1)"
   },
@@ -86,13 +84,12 @@
       "echo",
       "$EXTERNAL_STORAGE"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "get EXTERNAL_STORAGE dir",
     "stdout": "/path/to/tmp/"
@@ -102,13 +99,12 @@
       "/b/android-sdk-linux/platform-tools/adb",
       "root"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "adb root"
   },
@@ -117,65 +113,61 @@
       "sleep",
       "10"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "wait"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
+      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "wait for device (2)"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
+      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "wait for charge (2)"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
+      "[CWD]/skia/platform_tools/android/bin/android_kill_skia",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "kill skia"
   },
@@ -185,13 +177,12 @@
       "shell",
       "stop"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "stop shell"
   },
@@ -202,33 +193,31 @@
       "dumpsys",
       "batteryproperties"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "starting battery stats"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
+      "[CWD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "--verbose",
-      "[SLAVE_BUILD]/skia/resources",
+      "[CWD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "push resources"
   },
@@ -237,10 +226,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION",
+      "[CWD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -250,13 +238,12 @@
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
@@ -266,10 +253,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
+      "[CWD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -279,13 +265,12 @@
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "read SK_IMAGE_VERSION",
     "stdout": "/path/to/tmp/"
@@ -298,13 +283,12 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "rmdir skia_perf"
   },
@@ -322,13 +306,12 @@
       "FILE_EXISTS;",
       "fi"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "exists skia_perf",
     "stdout": "/path/to/tmp/"
@@ -341,19 +324,18 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "mkdir skia_perf"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "[CWD]/skia/platform_tools/android/bin/android_run_skia",
       "--verbose",
       "--logcat",
       "-d",
@@ -391,16 +373,15 @@
       "os",
       "Android"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "nanobench"
   },
@@ -412,7 +393,6 @@
       "[SWARM_OUT_DIR]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs perf_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -429,21 +409,20 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
+      "[CWD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "--verbose",
       "/storage/emulated/legacy/skiabot/skia_perf",
       "[SWARM_OUT_DIR]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "pull skia_perf"
   },
@@ -454,13 +433,12 @@
       "dumpsys",
       "batteryproperties"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "final battery stats"
   },
@@ -469,13 +447,12 @@
       "/b/android-sdk-linux/platform-tools/adb",
       "reboot"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "reboot"
   },
@@ -484,47 +461,44 @@
       "sleep",
       "10"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "wait for reboot"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
+      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "wait for device (3)"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
+      "[CWD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "wait for charge (3)"
   },

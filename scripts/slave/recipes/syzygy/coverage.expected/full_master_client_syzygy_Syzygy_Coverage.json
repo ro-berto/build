@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -20,13 +19,13 @@
       "--slave",
       "vm331-m3",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/syzygy/internal.DEPS.git'}]",
+      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/syzygy/internal.DEPS.git'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]\\b\\build\\slave\\cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -74,7 +72,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
@@ -98,16 +95,15 @@
       "--target",
       "Coverage",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]\\b\\build\\slave\\goma_cache",
       "--build-tool",
       "ninja",
       "--ninja-ensure-up-to-date",
       "--",
       "build_all"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -117,13 +113,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\build\\generate_coverage.py",
+      "[CWD]\\src\\syzygy\\build\\generate_coverage.py",
       "--verbose",
       "--syzygy",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Coverage"
+      "[CWD]\\src\\out\\Coverage"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "capture_unittest_coverage"
   },
   {
@@ -132,10 +127,9 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
       "--public-read",
-      "[SLAVE_BUILD]\\src\\out\\Coverage\\cov",
+      "[CWD]\\src\\out\\Coverage\\cov",
       "gs://syzygy-archive/builds/coverage/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive_coverage",
     "~followup_annotations": [
       "@@@STEP_LINK@coverage_report@https://syzygy-archive.commondatastorage.googleapis.com/builds/coverage/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/index.html@@@"

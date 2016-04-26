@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'depot_tools/infra_paths',
   'file',
   'isolate',
   'recipe_engine/json',

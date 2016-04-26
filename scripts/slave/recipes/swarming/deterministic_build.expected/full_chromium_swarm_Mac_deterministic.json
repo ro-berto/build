@@ -8,7 +8,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -23,13 +22,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -37,7 +36,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -116,10 +114,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[ROOT]/b/build/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -131,11 +128,10 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[CWD]/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -162,9 +158,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[CWD]/src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]/b/build/slave/goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -174,12 +170,11 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[ROOT]/b/build/goma",
       "--clobber",
       "--",
       "all"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -195,11 +190,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[CWD]/src/out/Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src"
+      "[CWD]/src"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[CWD]",
     "name": "remove_build_metadata",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -212,9 +207,8 @@
       "-u",
       "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
       "/path/to/tmp/",
-      "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
+      "[CWD]/src/out/Release/*.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated targets"
   },
   {
@@ -222,16 +216,15 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "[CWD]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
+      "[CWD]/src/out/Release/dummy_target_1.isolated.gen.json",
+      "[CWD]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -247,11 +240,10 @@
       "python",
       "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[SLAVE_BUILD]/src/out/Release",
-      "[SLAVE_BUILD]/src/out/Release.1"
+      "[CWD]/src/out/Release",
+      "[CWD]/src/out/Release.1"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.1",
+    "name": "Move [CWD]/src/out/Release to [CWD]/src/out/Release.1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -270,10 +262,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[ROOT]/b/build/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (2)"
@@ -285,11 +276,10 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[CWD]/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -316,9 +306,9 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[CWD]/src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]/b/build/slave/goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -328,12 +318,11 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[ROOT]/b/build/goma",
       "--clobber",
       "--",
       "all"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -349,11 +338,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[CWD]/src/out/Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src"
+      "[CWD]/src"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[CWD]",
     "name": "remove_build_metadata (2)"
   },
   {
@@ -362,9 +351,8 @@
       "-u",
       "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
       "/path/to/tmp/",
-      "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
+      "[CWD]/src/out/Release/*.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated targets (2)"
   },
   {
@@ -372,16 +360,15 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "[CWD]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
+      "[CWD]/src/out/Release/dummy_target_1.isolated.gen.json",
+      "[CWD]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -397,11 +384,10 @@
       "python",
       "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[SLAVE_BUILD]/src/out/Release",
-      "[SLAVE_BUILD]/src/out/Release.2"
+      "[CWD]/src/out/Release",
+      "[CWD]/src/out/Release.2"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.2",
+    "name": "Move [CWD]/src/out/Release to [CWD]/src/out/Release.2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -419,13 +405,13 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/compare_build_artifacts.py",
       "--first-build-dir",
-      "[SLAVE_BUILD]/src/out/Release.1",
+      "[CWD]/src/out/Release.1",
       "--second-build-dir",
-      "[SLAVE_BUILD]/src/out/Release.2",
+      "[CWD]/src/out/Release.2",
       "--target-platform",
       "mac"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[CWD]",
     "name": "compare_build_artifacts"
   },
   {

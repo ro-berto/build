@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
       "--root",
       "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -54,7 +53,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -64,29 +62,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "[CWD]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "taskkill before building"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/build.py",
+      "[CWD]/sdk/tools/build.py",
       "-mrelease",
       "--arch=ia32",
       "dart2js_bot"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "build dart"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[CWD]/sdk/tools/test.py",
       "--mode=release",
       "--compiler=none",
       "--runtime=vm",
@@ -105,14 +103,14 @@
       "dart2js",
       "try"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "dart2js unit tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[CWD]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
       "--compiler=dart2js",
@@ -133,14 +131,14 @@
       "--shard=3",
       "--append_logs"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "dart2js jsshell tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[CWD]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
       "--compiler=dart2js",
@@ -163,14 +161,14 @@
       "dart2js_extra",
       "dart2js_native"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "dart2js jsshell extra tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[CWD]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
       "--compiler=dart2js",
@@ -192,17 +190,17 @@
       "--append_logs",
       "try"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "dart2js jsshell try tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "[CWD]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "taskkill after testing"
   },
   {
@@ -210,7 +208,7 @@
       "cat",
       ".debug.log"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "debug log"
   },
   {

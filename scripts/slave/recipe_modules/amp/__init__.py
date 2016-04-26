@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_android',
+    'depot_tools/infra_paths',
     'file',
     'gsutil',
     'recipe_engine/json',

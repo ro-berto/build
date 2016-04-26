@@ -4,6 +4,7 @@
 
 DEPS = [
   'archive',
+  'depot_tools/infra_paths',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -19,7 +20,7 @@ TEST_COMMIT_POSITON_COMPONENT='refs/heads/master@{#234}'
 
 def RunSteps(api):
   api.archive.clusterfuzz_archive(
-      build_dir=api.path['slave_build'].join('src', 'out', 'Release'),
+      build_dir=api.infra_paths['slave_build'].join('src', 'out', 'Release'),
       update_properties=api.properties.get('update_properties'),
       gs_bucket='chromium',
       gs_acl=api.properties.get('gs_acl', ''),

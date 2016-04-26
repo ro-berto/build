@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[CWD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -50,10 +50,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION",
+      "[CWD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -61,10 +60,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
+      "[CWD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -75,15 +73,15 @@
       "--track-origins=yes",
       "--error-exitcode=1",
       "--num-callers=40",
-      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
-      "[SLAVE_BUILD]/out/Release/dm",
+      "--suppressions=[CWD]/skia/tools/valgrind.supp",
+      "[CWD]/out/Release/dm",
       "--undefok",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
+      "[CWD]/skia/resources",
       "--skps",
-      "[SLAVE_BUILD]/skps",
+      "[CWD]/skps",
       "--images",
-      "[SLAVE_BUILD]/images/dm",
+      "[CWD]/images/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -114,13 +112,12 @@
       "--nocpu",
       "--dummy-flags"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "dm"
   },
@@ -132,15 +129,15 @@
       "--track-origins=yes",
       "--error-exitcode=1",
       "--num-callers=40",
-      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
-      "[SLAVE_BUILD]/out/Release/dm",
+      "--suppressions=[CWD]/skia/tools/valgrind.supp",
+      "[CWD]/out/Release/dm",
       "--undefok",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
+      "[CWD]/skia/resources",
       "--skps",
-      "[SLAVE_BUILD]/skps",
+      "[CWD]/skps",
       "--images",
-      "[SLAVE_BUILD]/images/dm",
+      "[CWD]/images/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -172,13 +169,12 @@
       "--dummy-flags",
       "--abandonGpuContext"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "dm --abandonGpuContext"
   },
@@ -190,15 +186,15 @@
       "--track-origins=yes",
       "--error-exitcode=1",
       "--num-callers=40",
-      "--suppressions=[SLAVE_BUILD]/skia/tools/valgrind.supp",
-      "[SLAVE_BUILD]/out/Release/dm",
+      "--suppressions=[CWD]/skia/tools/valgrind.supp",
+      "[CWD]/out/Release/dm",
       "--undefok",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
+      "[CWD]/skia/resources",
       "--skps",
-      "[SLAVE_BUILD]/skps",
+      "[CWD]/skps",
       "--images",
-      "[SLAVE_BUILD]/images/dm",
+      "[CWD]/images/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -230,13 +226,12 @@
       "--dummy-flags",
       "--preAbandonGpuContext"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
-      "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "PATH": "[CWD]/depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]/out"
     },
     "name": "dm --preAbandonGpuContext"
   },

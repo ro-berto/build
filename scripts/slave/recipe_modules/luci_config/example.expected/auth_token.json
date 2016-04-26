@@ -10,7 +10,6 @@
       "--headers-json",
       "{\"Authorization\": \"Bearer ya2930948320948203480=\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get luci-config projects"
   },
   {
@@ -24,7 +23,6 @@
       "--headers-json",
       "{\"Authorization\": \"Bearer ya2930948320948203480=\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get project 'build' config 'recipes.cfg'"
   },
   {

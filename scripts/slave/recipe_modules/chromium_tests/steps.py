@@ -580,7 +580,7 @@ class DynamicPerfTests(Test):
 
   def _run_sharded(self, api, tests):
     known_devices_file = (
-        api.path['build'].join(
+        api.infra_paths['build'].join(
             'site_config', self._known_devices_file) if self._known_devices_file
         else None)
     api.chromium_android.run_sharded_perf_tests(
@@ -1678,7 +1678,7 @@ class BlinkTest(Test):
     return True
 
   def run(self, api, suffix, test_filter=None):
-    results_dir = api.path['slave_build'].join('layout-test-results')
+    results_dir = api.infra_paths['slave_build'].join('layout-test-results')
 
     step_name = self._step_name(suffix)
     args = [
@@ -1702,7 +1702,7 @@ class BlinkTest(Test):
 
     try:
       step_result = api.chromium.runtest(
-          api.path['build'].join('scripts', 'slave', 'chromium',
+          api.infra_paths['build'].join('scripts', 'slave', 'chromium',
                                  'layout_test_wrapper.py'),
           args, name=step_name,
           # TODO(phajdan.jr): Clean up the runtest.py mess.
@@ -1734,7 +1734,7 @@ class BlinkTest(Test):
         buildername = api.properties['buildername']
         buildnumber = api.properties['buildnumber']
 
-        archive_layout_test_results = api.path['build'].join(
+        archive_layout_test_results = api.infra_paths['build'].join(
             'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
 
         archive_layout_test_args = [

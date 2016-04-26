@@ -4,6 +4,7 @@
 
 DEPS = [
   'chromium',
+  'depot_tools/infra_paths',
   'filter',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -18,7 +19,7 @@ def RunSteps(api):
   additional_compile_targets = api.m.properties.get(
       'additional_compile_targets')
 
-  api.path['checkout'] = api.path['slave_build']
+  api.path['checkout'] = api.infra_paths['slave_build']
   api.chromium.set_config('chromium')
   api.filter.does_patch_require_compile(
       affected_files=list(api.m.properties.get('affected_files', ['foo.cc'])),

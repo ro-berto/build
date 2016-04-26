@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
       "--root",
       "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -54,7 +53,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -64,12 +62,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/build.py",
+      "[CWD]/sdk/tools/build.py",
       "-mrelease",
       "--arch=arm",
       "runtime"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "build dart"
   },
   {
@@ -83,7 +81,7 @@
       "--exclude=**/*analyzer*",
       "out/"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "create tarball"
   },
   {
@@ -92,7 +90,7 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "cp",
       "-a",
@@ -100,12 +98,11 @@
       "cross_build_arm_release_abcd1234efef5656.tar.bz2",
       "gs://dart-cross-compiled-binaries/cross_build_arm_release_abcd1234efef5656.tar.bz2"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[CWD]/sdk",
     "name": "gsutil upoad tarball"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
     "trigger_specs": [
       {

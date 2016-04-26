@@ -7,6 +7,7 @@ DEPS = [
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/infra_paths',
   'file',
   'gsutil',
   'ios',
@@ -41,7 +42,7 @@ def RunSteps(api):
   api.step('build', [build_script], cwd=api.path['checkout'])
 
   output_dir = api.path['checkout'].join('out_ios_framework')
-  zip_out = api.path['slave_build'].join('webrtc_ios_api_framework.zip')
+  zip_out = api.infra_paths['slave_build'].join('webrtc_ios_api_framework.zip')
   api.zip.directory('zip', output_dir, zip_out)
 
   api.gsutil.upload(

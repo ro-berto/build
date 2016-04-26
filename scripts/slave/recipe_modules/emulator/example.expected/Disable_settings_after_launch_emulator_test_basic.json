@@ -11,20 +11,19 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -103,11 +102,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[ROOT]/b/build/goma' target_arch=ia32 use_goma=1",
+      "PATH": "[CWD]/src/third_party/android_tools/sdk/platform-tools:[CWD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -115,18 +113,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/install_emulator_deps.py",
+      "[CWD]/src/build/android/install_emulator_deps.py",
       "--api-level",
       "23"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] installing emulator deps"
   },
   {
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
-      "[SLAVE_BUILD]/src/build/android/avd.py",
+      "[CWD]/src/build/android/avd.py",
       "run",
       "--abi",
       "x86",
@@ -141,38 +138,35 @@
       "--sdcard-size",
       "512M"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] spawn 1 emulator (abi x86, api_level 23)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/avd.py",
+      "[CWD]/src/build/android/avd.py",
       "wait",
       "-n",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] wait for 1 emulators to complete booting"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "[CWD]/src/build/android/provision_devices.py",
       "-t",
       "Debug",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[CWD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "--emulators"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[CWD]/src/third_party/android_tools/sdk/platform-tools:[CWD]/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
   },
@@ -180,16 +174,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_sample_test",
+      "[CWD]/src/out/Debug/bin/run_sample_test",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[CWD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=sample_isolate_file"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[CWD]/src/third_party/android_tools/sdk/platform-tools:[CWD]/src/build/android:%(PATH)s"
     },
     "name": "sample_test"
   },
@@ -197,20 +190,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/avd.py",
+      "[CWD]/src/build/android/avd.py",
       "kill"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] killing all emulators"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/avd.py",
+      "[CWD]/src/build/android/avd.py",
       "delete"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] deleting all temp avds after running"
   },
   {

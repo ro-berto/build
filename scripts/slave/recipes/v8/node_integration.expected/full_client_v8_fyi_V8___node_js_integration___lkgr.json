@@ -11,13 +11,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'node.js', 'url': 'https://chromium.googlesource.com/external/github.com/v8/node'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'node.js', 'url': 'https://chromium.googlesource.com/external/github.com/v8/node'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
       "{\"node.js\": \"got_node_js_revision\", \"v8\": \"got_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -27,7 +27,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -77,14 +76,13 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/node.js/configure"
+      "[CWD]/node.js/configure"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[CWD]/node.js",
     "name": "configure node.js - baseline"
   },
   {
@@ -93,7 +91,7 @@
       "-j8",
       "test"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[CWD]/node.js",
     "name": "build and test node.js - baseline"
   },
   {
@@ -101,9 +99,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/node.js/deps/v8"
+      "[CWD]/node.js/deps/v8"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree v8",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -121,21 +118,20 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/copy_v8.py",
-      "[SLAVE_BUILD]/v8",
-      "[SLAVE_BUILD]/node.js/deps/v8",
+      "[CWD]/v8",
+      "[CWD]/node.js/deps/v8",
       ".git",
-      "[SLAVE_BUILD]/v8/buildtools",
-      "[SLAVE_BUILD]/v8/out",
-      "[SLAVE_BUILD]/v8/third_party"
+      "[CWD]/v8/buildtools",
+      "[CWD]/v8/out",
+      "[CWD]/v8/third_party"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "copy v8 tree"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/node.js/configure"
+      "[CWD]/node.js/configure"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[CWD]/node.js",
     "name": "configure node.js"
   },
   {
@@ -144,7 +140,7 @@
       "-j8",
       "test"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[CWD]/node.js",
     "name": "build and test node.js"
   },
   {

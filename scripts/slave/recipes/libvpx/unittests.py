@@ -4,6 +4,7 @@
 
 DEPS = [
     'depot_tools/git',
+    'depot_tools/infra_paths',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -18,7 +19,7 @@ CONFIGURE_PATH_REL = './libvpx/configure'
 
 def RunSteps(api):
   # Paths and other constants
-  build_root = api.path['slave_build']
+  build_root = api.infra_paths['slave_build']
 
   # libvpx paths
   libvpx_git_url = api.properties['libvpx_git_url']

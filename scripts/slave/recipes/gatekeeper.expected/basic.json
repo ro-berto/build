@@ -4,10 +4,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILD]/scripts/slave/gatekeeper_trees.json",
+      "[ROOT]/b/build/scripts/slave/gatekeeper_trees.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "reading gatekeeper_trees.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -39,9 +38,8 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "-v",
       "--json",
-      "[BUILD]/scripts/slave/gatekeeper.json"
+      "[ROOT]/b/build/scripts/slave/gatekeeper.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: chromium"
   },
   {
@@ -51,7 +49,7 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "-v",
       "--json",
-      "[BUILD]/scripts/slave/gatekeeper.json",
+      "[ROOT]/b/build/scripts/slave/gatekeeper.json",
       "--status-url",
       "https://blink-status.appspot.com",
       "--sheriff-url",
@@ -73,7 +71,6 @@
       "gatekeeper@google.com",
       "https://build.chromium.org/p/chromium.webkit"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: blink"
   },
   {

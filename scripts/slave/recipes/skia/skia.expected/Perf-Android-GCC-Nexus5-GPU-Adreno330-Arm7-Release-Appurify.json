@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git clean"
   },
   {
@@ -45,9 +45,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -68,7 +67,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -89,11 +87,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[CWD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -137,10 +135,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/tmp",
+      "[CWD]/tmp",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -160,10 +157,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION",
+      "[CWD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -171,10 +167,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/SKP_VERSION",
+      "[CWD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -182,10 +177,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
+      "[CWD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -193,10 +187,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
+      "[CWD]/skia/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SK_IMAGE_VERSION"
   },
   {
@@ -207,7 +200,7 @@
       "--format=%at",
       "-s"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "name": "git show",
     "stdout": "/path/to/tmp/"
   },
@@ -217,11 +210,10 @@
       "-u",
       "import json\nimport subprocess\nimport sys\n\nccache = None\ntry:\n  ccache = subprocess.check_output(['which', 'ccache']).rstrip()\nexcept:\n  pass\nprint json.dumps({'ccache': ccache})\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
+      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "has ccache?",
     "stdout": "/path/to/tmp/json",
@@ -248,9 +240,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk"
+      "[CWD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree apk",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -268,10 +259,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk",
+      "[CWD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs apk",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -291,9 +281,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/src/main/assets"
+      "[CWD]/skia/platform_tools/android/apps/visualbench/src/main/assets"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree assets",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -311,10 +300,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/src/main/assets",
+      "[CWD]/skia/platform_tools/android/apps/visualbench/src/main/assets",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs assets",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -335,19 +323,18 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "--undefok -i /sdcard/resources --skps /sdcard/skps --images /sdcard/images/dm --nocpu --dummy-flags --outResultsFile /sdcard/skia_results/nanobench_164710_1408633190.json --properties gitHash 164710 build_number 5 --key arch Arm7 compiler GCC cpu_or_gpu GPU cpu_or_gpu_value Adreno330 extra_config Appurify model Nexus5 os Android",
-      "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/src/main/assets/nanobench_flags.txt"
+      "[CWD]/skia/platform_tools/android/apps/visualbench/src/main/assets/nanobench_flags.txt"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "write nanobench_flags.txt"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
+      "[CWD]/skia/platform_tools/android/bin/android_ninja",
       "VisualBenchTest_APK",
       "-d",
       "arm_v7_neon"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_MAKE_CCACHE": "/usr/bin/ccache",
@@ -355,7 +342,7 @@
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
+      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "build VisualBenchTest_APK"
   },
@@ -366,17 +353,16 @@
       "--device",
       "Nexus5",
       "--apk",
-      "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk/visualbench-arm-release.apk",
+      "[CWD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk/visualbench-arm-release.apk",
       "--test-apk",
-      "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk/visualbench-arm-debug-androidTest-unaligned.apk",
+      "[CWD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk/visualbench-arm-debug-androidTest-unaligned.apk",
       "--result-dir",
-      "[SLAVE_BUILD]/tmp",
+      "[CWD]/tmp",
       "--skp-dir",
-      "[SLAVE_BUILD]/playback/skps",
+      "[CWD]/playback/skps",
       "--resource-dir",
-      "[SLAVE_BUILD]/skia/resources"
+      "[CWD]/skia/resources"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_MAKE_CCACHE": "/usr/bin/ccache",
@@ -387,7 +373,7 @@
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
+      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "nanobench"
   },
@@ -395,15 +381,14 @@
     "cmd": [
       "unzip",
       "-o",
-      "[SLAVE_BUILD]/tmp/results.zip",
+      "[CWD]/tmp/results.zip",
       "-d",
-      "[SLAVE_BUILD]/tmp"
+      "[CWD]/tmp"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
+      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "unzip_results"
   },
@@ -412,10 +397,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data",
+      "[CWD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs perf_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -435,9 +419,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data"
+      "[CWD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -455,11 +438,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/tmp/appurify_results/artifacts_directory/sdcard-skia_results",
-      "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data",
+      "[CWD]/tmp/appurify_results/artifacts_directory/sdcard-skia_results",
+      "[CWD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data",
       "0"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "copy dir"
   },
   {
@@ -469,17 +451,17 @@
       "RECIPE_MODULE[build::skia]/resources/upload_bench_results.py",
       "Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify",
       "5",
-      "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data",
+      "[CWD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data",
       "164710",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil"
+      "[ROOT]/b/depot_tools/third_party/gsutil/gsutil"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[CWD]/skia",
     "env": {
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
+      "SKIA_OUT": "[CWD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "Upload nanobench Results"
   },

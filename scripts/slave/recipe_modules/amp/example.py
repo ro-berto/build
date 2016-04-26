@@ -1,6 +1,7 @@
 
 DEPS = [
   'amp',
+  'depot_tools/infra_paths',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -102,7 +103,7 @@ def RunSteps(api, buildername):
   api.amp.set_config('main_pool')
 
   builder = BUILDERS[buildername]
-  api.path['checkout'] = api.path['slave_build'].join('src')
+  api.path['checkout'] = api.infra_paths['slave_build'].join('src')
 
   gtest_test_id = api.amp.trigger_test_suite(
       'example_gtest_suite', 'gtest',

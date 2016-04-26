@@ -119,7 +119,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(sivachandra): Manufacture gclient spec such that it contains "src"
     # solution + repo_name solution. Then checkout will be automatically
     # correctly set by gclient.checkout
-    self.m.path['checkout'] = self.m.path['slave_build'].join('src')
+    self.m.path['checkout'] = self.m.infra_paths['slave_build'].join('src')
 
     self.clean_local_files()
 
@@ -170,7 +170,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def git_number(self, **kwargs):
     return self.m.step(
         'git_number',
-        [self.m.path['depot_tools'].join('git_number.py')],
+        [self.m.infra_paths['depot_tools'].join('git_number.py')],
         stdout = self.m.raw_io.output(),
         step_test_data=(
           lambda:
@@ -261,7 +261,7 @@ class AndroidApi(recipe_api.RecipeApi):
         # We send None as the path so that zip_build.py gets it from factory
         # properties.
         build_url=None,
-        src_dir=self.m.path['slave_build'].join('src'),
+        src_dir=self.m.infra_paths['slave_build'].join('src'),
         exclude_files='lib.target,gen,android_webview,jingle_unittests')
 
   def create_adb_symlink(self):
@@ -327,8 +327,8 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.out_path.join('bad_devices.json')
 
   def device_status_check(self, restart_usb=False, **kwargs):
-    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
-    devices_path = self.m.path['build'].join('site_config', '.known_devices')
+    # TODO(phajdan.jr): Remove infra_paths['build'] usage, http://crbug.com/437264 .
+    devices_path = self.m.infra_paths['build'].join('site_config', '.known_devices')
     args = [
         '--json-output', self.m.json.output(),
         '--blacklist-file', self.blacklist_file,
@@ -893,7 +893,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step('prepare bisect perf regression',
         [self.m.path['checkout'].join('tools',
                                       'prepare-bisect-perf-regression.py'),
-         '-w', self.m.path['slave_build']])
+         '-w', self.m.infra_paths['slave_build']])
 
     args = []
     if extra_src:
@@ -903,7 +903,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step('run bisect perf regression',
         [self.m.path['checkout'].join('tools',
                                       'run-bisect-perf-regression.py'),
-         '-w', self.m.path['slave_build']] + args, **kwargs)
+         '-w', self.m.infra_paths['slave_build']] + args, **kwargs)
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
                      gtest_filter=None, tool=None, flakiness_dashboard=None,

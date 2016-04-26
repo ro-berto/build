@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
+  'depot_tools/infra_paths',
   'depot_tools/presubmit',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -40,7 +41,7 @@ def _RunStepsInternal(api):
     upstream = bot_update_step.json.output['properties'].get(
         '%s_git' % got_revision_property) or ''
 
-  abs_root = api.path['slave_build'].join(relative_root)
+  abs_root = api.infra_paths['slave_build'].join(relative_root)
   # TODO(hinoka): Extract email/name from issue?
   api.git('-c', 'user.email=commit-bot@chromium.org',
           '-c', 'user.name=The Commit Bot',
@@ -61,10 +62,10 @@ def _RunStepsInternal(api):
     if codereview_auth:
       presubmit_args.extend([
           '--rietveld_email_file',
-          api.path['build'].join('site_config', '.rietveld_client_email')])
+          api.infra_paths['build'].join('site_config', '.rietveld_client_email')])
       presubmit_args.extend([
           '--rietveld_private_key_file',
-          api.path['build'].join('site_config', '.rietveld_secret_key')])
+          api.infra_paths['build'].join('site_config', '.rietveld_secret_key')])
     else:
       presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
   elif patch_storage == 'gerrit':

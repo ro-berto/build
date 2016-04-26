@@ -7,6 +7,7 @@
 
 
 DEPS = [
+  'depot_tools/infra_paths',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -68,9 +69,9 @@ def GenTests(api):
                          buildnumber=5,
                          revision='abc123',
                          swarm_out_dir='[SWARM_OUT_DIR]') +
-          api.path.exists(
-              api.path['slave_build'].join('skia'),
-              api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+          api.infra_paths.exists(
+              api.infra_paths['slave_build'].join('skia'),
+              api.infra_paths['slave_build'].join('tmp', 'uninteresting_hashes.txt')
           )
         )
         if ('Android' in builder and

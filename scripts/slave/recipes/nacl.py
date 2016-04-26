@@ -5,6 +5,7 @@
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/infra_paths',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -47,7 +48,7 @@ def _AnnotatedStepsSteps(api, got_revision):
       'BUILDBOT_BUILDERNAME': api.properties['buildername'],
       'BUILDBOT_REVISION': api.properties['revision'],
       'BUILDBOT_GOT_REVISION': got_revision,
-      'RUNTEST': api.path['build'].join('scripts', 'slave', 'runtest.py'),
+      'RUNTEST': api.infra_paths['build'].join('scripts', 'slave', 'runtest.py'),
       'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
   }
   # Set up env for the triggered builders.

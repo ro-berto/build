@@ -6,6 +6,7 @@ DEPS = [
   'chromium',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/infra_paths',
   'gitiles',
   'recipe_engine/generator_script',
   'recipe_engine/path',
@@ -36,7 +37,7 @@ def _FetchAppEngineSDKSteps(api):
       # which includes retrying requests.
       branch='fd119c547fd4e56eeab77d138b0426022ae1d159')
   api.python.inline('Run SDK downloader', script_content, args=['--dest=.'])
-  return api.path['slave_build'].join('google_appengine')
+  return api.infra_paths['slave_build'].join('google_appengine')
 
 
 def _RemoteSteps(api, app_engine_sdk_path):

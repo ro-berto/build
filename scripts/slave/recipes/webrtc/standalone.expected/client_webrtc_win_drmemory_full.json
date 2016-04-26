@@ -11,20 +11,19 @@
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
+      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]\\b\\build\\slave\\cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -61,9 +60,8 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_files.py",
-      "[SLAVE_BUILD]\\src\\out"
+      "[CWD]\\src\\out"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -75,7 +73,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -85,10 +82,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "build_for_tool=drmemory chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' rtc_use_264=1 target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "build_for_tool=drmemory chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[ROOT]\\b\\build\\goma' rtc_use_264=1 target_arch=ia32 use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -108,9 +104,9 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]\\b\\build\\slave\\goma_cache",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -120,11 +116,10 @@
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]\\goma",
+      "[ROOT]\\b\\build\\goma",
       "--",
       "All"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -156,13 +151,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "audio_decoder_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "audio_decoder_unittests"
   },
   {
@@ -187,13 +181,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "common_audio_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "common_audio_unittests"
   },
   {
@@ -218,13 +211,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "common_video_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "common_video_unittests"
   },
   {
@@ -249,13 +241,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "modules_tests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "modules_tests"
   },
   {
@@ -280,13 +271,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "modules_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests"
   },
   {
@@ -311,13 +301,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "peerconnection_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "peerconnection_unittests"
   },
   {
@@ -342,13 +331,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "rtc_media_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_media_unittests"
   },
   {
@@ -373,13 +361,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "rtc_pc_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_pc_unittests"
   },
   {
@@ -404,13 +391,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "rtc_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_unittests"
   },
   {
@@ -435,13 +421,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "system_wrappers_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "system_wrappers_unittests"
   },
   {
@@ -466,13 +451,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "test_support_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test_support_unittests"
   },
   {
@@ -497,13 +481,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "tools_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "tools_unittests"
   },
   {
@@ -528,13 +511,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "video_engine_tests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_tests"
   },
   {
@@ -559,13 +541,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "voice_engine_unittests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests"
   },
   {
@@ -590,13 +571,12 @@
       "--pass-build-dir",
       "--pass-target",
       "--run-shell-script",
-      "[SLAVE_BUILD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
+      "[CWD]\\src\\tools\\valgrind-webrtc\\webrtc_tests.bat",
       "--test",
       "webrtc_nonparallel_tests",
       "--tool",
       "drmemory_full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_nonparallel_tests"
   },
   {

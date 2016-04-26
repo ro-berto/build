@@ -50,6 +50,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         else self.m.platform.bits),
 
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release'),
+
+      'BUILD_PATH': self.m.infra_paths['build'],
     }
 
   def get_env(self):
@@ -162,7 +164,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       '--ninja-path', self.m.depot_tools.ninja_path,
       '--target', target or self.c.build_config_fs,
       '--src-dir', self.m.path['checkout'],
-      '--goma-cache-dir', self.m.path['goma_cache'],
+      '--goma-cache-dir', self.m.infra_paths['goma_cache'],
     ]
     if self.c.compile_py.build_args:
       args += ['--build-args', self.c.compile_py.build_args]
@@ -529,7 +531,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     self.m.python(
         name='gn',
-        script=self.m.path['depot_tools'].join('gn.py'),
+        script=self.m.infra_paths['depot_tools'].join('gn.py'),
         args=[
             '--root=%s' % str(self.m.path['checkout']),
             'gen',
@@ -564,7 +566,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         goma_dir = self.c.compile_py.goma_dir
       if not goma_dir:  # pragma: no cover
         # TODO(phajdan.jr): remove fallback when we always use cipd for goma.
-        goma_dir = self.m.path['build'].join('goma')
+        goma_dir = self.m.infra_paths['build'].join('goma')
       args += ['--goma-dir', goma_dir]
 
     if isolated_targets:

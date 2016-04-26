@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -20,13 +19,13 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = '[ROOT]\\\\b\\\\build\\\\slave\\\\cache_dir'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]\\b\\build\\slave\\cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -113,12 +111,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=1 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
       "GYP_MSVS_VERSION": "2015",
-      "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[CWD]\\src\\out\\Release;%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient Runhooks: Instrumentation phase."
   },
@@ -128,10 +125,9 @@
       "-u",
       "\nimport sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
       "*.pg[cd]",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[CWD]\\src\\out\\Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmwildcard *.pg[cd] in [SLAVE_BUILD]\\src\\out\\Release",
+    "name": "rmwildcard *.pg[cd] in [CWD]\\src\\out\\Release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
@@ -156,19 +152,18 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]\\b\\build\\slave\\goma_cache",
       "--build-tool",
       "ninja",
       "--clobber",
       "--",
       "chrome"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s"
+      "PATH": "[CWD]\\src\\out\\Release;%(PATH)s"
     },
     "name": "Compile: Instrumentation phase."
   },
@@ -178,17 +173,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "page_cycler.morejs"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: page_cycler.morejs"
   },
   {
@@ -197,17 +191,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibstyleprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibstyleprototype"
   },
   {
@@ -216,17 +209,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibeventprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibeventprototype"
   },
   {
@@ -235,17 +227,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "speedometer"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: speedometer"
   },
   {
@@ -254,17 +245,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "smoothness.top_25_smooth"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: smoothness.top_25_smooth"
   },
   {
@@ -273,17 +263,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "octane"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: octane"
   },
   {
@@ -292,17 +281,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.svg"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.svg"
   },
   {
@@ -311,17 +299,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibtraverseprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibtraverseprototype"
   },
   {
@@ -330,17 +317,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "blink_style.top_25"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_style.top_25"
   },
   {
@@ -349,17 +335,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.domcoreattr"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.domcoreattr"
   },
   {
@@ -368,17 +353,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.dom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.dom"
   },
   {
@@ -387,17 +371,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibattrprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibattrprototype"
   },
   {
@@ -406,17 +389,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "sunspider"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: sunspider",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -429,17 +411,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "media.mse_cases"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: media.mse_cases"
   },
   {
@@ -448,17 +429,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "v8.infinite_scroll"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: v8.infinite_scroll"
   },
   {
@@ -467,17 +447,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.events"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.events"
   },
   {
@@ -486,17 +465,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.domcoretraverse"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.domcoretraverse"
   },
   {
@@ -505,17 +483,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.domcoremodify"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.domcoremodify"
   },
   {
@@ -524,17 +501,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.cssqueryjquery"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.cssqueryjquery"
   },
   {
@@ -543,17 +519,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "indexeddb_perf"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: indexeddb_perf"
   },
   {
@@ -562,17 +537,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.canvas"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.canvas"
   },
   {
@@ -581,17 +555,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.domcorequery"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.domcorequery"
   },
   {
@@ -600,17 +573,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.bindings"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.bindings"
   },
   {
@@ -619,17 +591,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibtraversejquery"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
   },
   {
@@ -638,17 +609,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibmodifyprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibmodifyprototype"
   },
   {
@@ -657,17 +627,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.css"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.css"
   },
   {
@@ -676,17 +645,16 @@
       "-u",
       "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
       "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--browser-type",
       "release",
       "--target-bits",
       "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[CWD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.paint"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.paint"
   },
   {
@@ -696,7 +664,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=2 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
@@ -720,15 +687,14 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[CWD]\\src",
       "--goma-cache-dir",
-      "[GOMA_CACHE]",
+      "[ROOT]\\b\\build\\slave\\goma_cache",
       "--build-tool",
       "ninja",
       "--",
       "chrome"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

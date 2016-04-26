@@ -8,18 +8,16 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/runit.py",
-      "[BUILD]/scripts/tools/pycurl.py",
+      "[ROOT]/b/build/scripts/tools/runit.py",
+      "[ROOT]/b/build/scripts/tools/pycurl.py",
       "https://v8-roll.appspot.com/status"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "check roll status",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -37,7 +35,6 @@
       "--outfile",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "check active roll"
   },
   {
@@ -47,7 +44,6 @@
       "-i",
       "123456"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "send issue to CQ",
     "~followup_annotations": [
       "@@@STEP_TEXT@Stale roll found. Resubmitted to CQ.@@@"
@@ -68,7 +64,6 @@
       "--counter",
       "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"stale_roll\", \"value\": 1}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "upload stats"
   },
   {

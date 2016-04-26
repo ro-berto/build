@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "-h",
       "Cache-Control:no-cache",
@@ -16,10 +16,9 @@
       "-h",
       "x-custom-field:custom-value",
       "cp",
-      "[SLAVE_BUILD]/boom",
+      "[CWD]/boom",
       "gs://chromium-recipe-test/some/random/path/to/boom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-recipe-test/some/random/path/to/boom@@@"
@@ -31,13 +30,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "cp",
       "gs://chromium-recipe-test/some/random/path/**",
       "gs://chromium-recipe-test/staging"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil cp"
   },
   {
@@ -46,7 +44,7 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "--force-version",
       "3.25",
       "----",
@@ -54,7 +52,6 @@
       "gs://chromium-recipe-test/some/random/path/**",
       "gs://chromium-recipe-test/staging"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil cp (2)"
   },
   {
@@ -63,13 +60,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "cp",
       "gs://chromium-recipe-test/some/random/path/to/boom",
-      "[SLAVE_BUILD]/boom"
+      "[CWD]/boom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil gsutil download url"
   },
   {
@@ -78,13 +74,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "cp",
       "gs://chromium-recipe-test/staging/to/boom",
-      "[SLAVE_BUILD]/erang"
+      "[CWD]/erang"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download"
   },
   {
@@ -93,13 +88,12 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "signurl",
       "path/to/key",
       "gs://chromium-recipe-test/some/random/path/to/boom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil signed url"
   },
   {
@@ -108,12 +102,11 @@
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[ROOT]/b/depot_tools/gsutil.py",
       "----",
       "rm",
       "gs://chromium-recipe-test/staging/to/boom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil remove"
   },
   {
@@ -131,7 +124,7 @@
       "--timeout",
       "600"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[CWD]",
     "name": "Download GS file with polling"
   },
   {

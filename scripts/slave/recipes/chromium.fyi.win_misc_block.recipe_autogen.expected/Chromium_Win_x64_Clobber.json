@@ -3,9 +3,8 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/kill_processes.py"
+      "[ROOT]/b/build/scripts/slave/kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -20,13 +19,13 @@
       "--slave",
       "TestSlave",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'http://%s.googlecode.com/svn', 'llvm_url': 'http://llvm.org/svn/llvm-project', 'nacl_trunk': 'http://src.chromium.org/native_client/trunk', 'sourceforge_url': 'https://svn.code.sf.net/p/%(repo)s/code', 'webkit_trunk': 'http://src.chromium.org/blink/trunk'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'http://%s.googlecode.com/svn', 'llvm_url': 'http://llvm.org/svn/llvm-project', 'nacl_trunk': 'http://src.chromium.org/native_client/trunk', 'sourceforge_url': 'https://svn.code.sf.net/p/%(repo)s/code', 'webkit_trunk': 'http://src.chromium.org/blink/trunk'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -94,9 +92,8 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runhooks_wrapper.py"
+      "[ROOT]/b/build/scripts/slave/runhooks_wrapper.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
@@ -115,14 +112,13 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[ROOT]/b/build/scripts/slave/compile.py",
       "--solution",
       "out.sln",
       "--target",
@@ -132,14 +128,13 @@
       "--",
       "chromium_builder_tests"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -150,14 +145,13 @@
       "interactive_ui_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "interactive_ui_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -168,14 +162,13 @@
       "base_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -186,14 +179,13 @@
       "cacheinvalidation_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cacheinvalidation_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -204,14 +196,13 @@
       "cc_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cc_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -222,14 +213,13 @@
       "chromedriver_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "chromedriver_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -240,14 +230,13 @@
       "components_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "components_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -258,14 +247,13 @@
       "courgette_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "courgette_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -276,14 +264,13 @@
       "crypto_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "crypto_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -294,14 +281,13 @@
       "gcm_unit_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gcm_unit_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -313,14 +299,13 @@
       "--gmock_verbose=error",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -331,14 +316,13 @@
       "url_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "url_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -349,14 +333,13 @@
       "jingle_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "jingle_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -367,14 +350,13 @@
       "media_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "media_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -385,14 +367,13 @@
       "net_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "net_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -403,14 +384,13 @@
       "ppapi_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ppapi_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -421,14 +401,13 @@
       "printing_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "printing_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -439,14 +418,13 @@
       "remoting_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "remoting_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -457,14 +435,13 @@
       "sbox_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sbox_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -475,14 +452,13 @@
       "sbox_integration_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sbox_integration_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -493,14 +469,13 @@
       "sbox_validation_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sbox_validation_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -511,14 +486,13 @@
       "ipc_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ipc_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -529,14 +503,13 @@
       "sync_unit_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sync_unit_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -547,14 +520,13 @@
       "unit_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "unit_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -565,14 +537,13 @@
       "skia_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "skia_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -583,14 +554,13 @@
       "sql_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sql_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -601,14 +571,13 @@
       "ui_base_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ui_base_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -619,14 +588,13 @@
       "content_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -637,14 +605,13 @@
       "views_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "views_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -656,14 +623,13 @@
       "--lib=browser_tests",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -674,14 +640,13 @@
       "content_browsertests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "content_browsertests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -692,14 +657,13 @@
       "installer_util_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "installer_util_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[ROOT]/b/build/scripts/slave/runtest.py",
       "--target",
       "Release_x64",
       "--build-properties={\"buildername\":\"Chromium Win x64 Clobber\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"recipe\":\"chromium.fyi.win_misc_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
@@ -711,18 +675,17 @@
       "--ui-test-action-max-timeout=120000",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sync_integration_tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/chrome/test/nacl_test_injection/buildbot_nacl_integration.py",
+      "[CWD]/src/chrome/test/nacl_test_injection/buildbot_nacl_integration.py",
       "--mode",
       "Release_x64"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[CWD]",
     "name": "nacl_integration"
   },
   {

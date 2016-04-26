@@ -6,9 +6,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]"
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -28,7 +27,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -52,7 +50,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git checkout"
   },
   {
@@ -62,7 +60,7 @@
       "-D",
       "work"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git branch"
   },
   {
@@ -71,7 +69,7 @@
       "clean",
       "-ffd"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git clean"
   },
   {
@@ -80,7 +78,7 @@
       "show",
       "refs/remotes/branch-heads/3.4:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "Check latest version file",
     "stdout": "/path/to/tmp/"
   },
@@ -90,7 +88,7 @@
       "show",
       "refs/remotes/branch-heads/3.4~1:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "Check previous version file",
     "stdout": "/path/to/tmp/"
   },
@@ -102,7 +100,7 @@
       "--upstream",
       "refs/remotes/branch-heads/3.4"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git new-branch"
   },
   {
@@ -111,9 +109,8 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "\n#define V8_MAJOR_VERSION 3\n#define V8_MINOR_VERSION 4\n#define V8_BUILD_NUMBER 3\n#define V8_PATCH_LEVEL 3\n",
-      "[SLAVE_BUILD]/v8/include/v8-version.h"
+      "[CWD]/v8/include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Increment version"
   },
   {
@@ -123,7 +120,7 @@
       "-am",
       "Version 3.4.3.3"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git commit"
   },
   {
@@ -134,7 +131,7 @@
       "-f",
       "--bypass-hooks"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git cl"
   },
   {
@@ -142,7 +139,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git fetch"
   },
   {
@@ -151,7 +148,7 @@
       "show",
       "refs/remotes/branch-heads/3.4:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "Check committed version file",
     "stdout": "/path/to/tmp/"
   },
@@ -161,7 +158,6 @@
       "-u",
       "import time; time.sleep(5)"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Wait for commit",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(5)@@@",
@@ -173,7 +169,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git fetch (2)"
   },
   {
@@ -182,7 +178,7 @@
       "show",
       "refs/remotes/branch-heads/3.4:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "Check committed version file (2)",
     "stdout": "/path/to/tmp/"
   },
@@ -192,7 +188,6 @@
       "-u",
       "import time; time.sleep(10)"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Wait for commit (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(10)@@@",
@@ -204,7 +199,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git fetch (3)"
   },
   {
@@ -213,7 +208,7 @@
       "show",
       "refs/remotes/branch-heads/3.4:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "Check committed version file (3)",
     "stdout": "/path/to/tmp/"
   },
@@ -223,7 +218,6 @@
       "-u",
       "import time; time.sleep(15)"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Wait for commit (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(15)@@@",
@@ -235,7 +229,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git fetch (4)"
   },
   {
@@ -244,7 +238,7 @@
       "show",
       "refs/remotes/branch-heads/3.4:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "Check committed version file (4)",
     "stdout": "/path/to/tmp/"
   },
@@ -254,7 +248,6 @@
       "-u",
       "import time; time.sleep(20)"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Wait for commit (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(20)@@@",
@@ -266,7 +259,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git fetch (5)"
   },
   {
@@ -275,13 +268,12 @@
       "show",
       "refs/remotes/branch-heads/3.4:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "Check committed version file (5)",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for commit timed out",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"
@@ -295,7 +287,7 @@
       "--format=%H",
       "refs/remotes/branch-heads/3.4"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git log",
     "stdout": "/path/to/tmp/"
   },
@@ -305,7 +297,7 @@
       "show",
       "74882b7a8e55268d1658f83efefa1c2585cee723:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "Check head version file",
     "stdout": "/path/to/tmp/"
   },
@@ -316,7 +308,7 @@
       "--tags",
       "74882b7a8e55268d1658f83efefa1c2585cee723"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git describe",
     "stdout": "/path/to/tmp/"
   },
@@ -327,7 +319,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "refs/heads/3.4-lkgr"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[CWD]/v8",
     "name": "git ls-remote 3.4-lkgr",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -340,7 +332,6 @@
       "echo",
       "There is no new lkgr."
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "log"
   },
   {

@@ -6,9 +6,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'crashpad', 'url': 'https://chromium.googlesource.com/crashpad/crashpad.git'}]"
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'crashpad', 'url': 'https://chromium.googlesource.com/crashpad/crashpad.git'}]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -27,7 +26,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -48,9 +46,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/crashpad/out"
+      "[CWD]/crashpad/out"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree out",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -70,7 +67,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -80,28 +76,25 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/crashpad/out/Release"
+      "[CWD]/crashpad/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "compile with ninja"
   },
   {
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/crashpad/out/Release_x64"
+      "[CWD]/crashpad/out/Release_x64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "compile with ninja (2)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/crashpad/build/run_tests.py",
+      "[CWD]/crashpad/build/run_tests.py",
       "Release_x64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "run tests"
   },
   {

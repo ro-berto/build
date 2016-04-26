@@ -1,29 +1,27 @@
 [
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "init",
       "-u",
       "http://manifest_url"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "init",
       "-u",
       "http://manifest_url/manifest",
       "-b",
       "branch"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init (2)"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "forall",
       "-c",
       "git",
@@ -31,12 +29,11 @@
       "--hard",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo forall git reset"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "forall",
       "-c",
       "git",
@@ -44,12 +41,11 @@
       "-f",
       "-d"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo forall git clean"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "forall",
       "-c",
       "git",
@@ -58,23 +54,20 @@
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo forall git clean (2)"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "[ROOT]/b/depot_tools/repo",
       "list"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo list",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -86,7 +79,6 @@
       "echo",
       "[('src/foo', 'foo'), ('src/bar', 'bar')]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo list echo"
   },
   {

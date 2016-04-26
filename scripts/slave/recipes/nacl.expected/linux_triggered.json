@@ -11,13 +11,13 @@
       "--slave",
       "TestSlave",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'native_client', 'url': 'https://chromium.googlesource.com/native_client/src/native_client.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'native_client', 'url': 'https://chromium.googlesource.com/native_client/src/native_client.git'}]",
       "--root",
       "native_client",
       "--revision_mapping_file",
       "{\"native_client\": \"got_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -64,7 +63,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -75,9 +73,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/native_client/buildbot/buildbot_selector.py"
+      "[CWD]/native_client/buildbot/buildbot_selector.py"
     ],
-    "cwd": "[SLAVE_BUILD]/native_client",
+    "cwd": "[CWD]/native_client",
     "env": {
       "BUILDBOT_BUILDERNAME": "oneiric_32-newlib-arm_hw-pnacl-panda-dbg",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
@@ -87,7 +85,7 @@
       "BUILDBOT_TRIGGERED_BY_BUILDERNAME": "precise_64-newlib-arm_qemu-pnacl-dbg",
       "BUILDBOT_TRIGGERED_BY_BUILDNUMBER": "1",
       "BUILDBOT_TRIGGERED_BY_SLAVENAME": "TestSlave",
-      "RUNTEST": "[BUILD]/scripts/slave/runtest.py"
+      "RUNTEST": "[ROOT]/b/build/scripts/slave/runtest.py"
     },
     "name": "annotated steps"
   },

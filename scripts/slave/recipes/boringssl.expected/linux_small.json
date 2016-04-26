@@ -11,13 +11,13 @@
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
       "--root",
       "boringssl",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -54,7 +53,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -65,9 +63,8 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/boringssl/build"
+      "[CWD]/boringssl/build"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree clean",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -85,10 +82,9 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/boringssl/build",
+      "[CWD]/boringssl/build",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs mkdir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -107,40 +103,39 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
-      "[SLAVE_BUILD]/boringssl/util/bot/cmake-linux64/bin/cmake",
+      "[CWD]/boringssl/util/bot/go/env.py",
+      "[CWD]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
       "-DCMAKE_CXX_FLAGS=-DOPENSSL_SMALL=1",
       "-DCMAKE_C_FLAGS=-DOPENSSL_SMALL=1",
-      "[SLAVE_BUILD]/boringssl"
+      "[CWD]/boringssl"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl/build",
+    "cwd": "[CWD]/boringssl/build",
     "name": "cmake"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[CWD]/boringssl/util/bot/go/env.py",
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/boringssl/build"
+      "[CWD]/boringssl/build"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ninja"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[CWD]/boringssl/util/bot/go/env.py",
       "go",
       "run",
       "util/all_tests.go",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl",
+    "cwd": "[CWD]/boringssl",
     "name": "unit tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
@@ -189,14 +184,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[CWD]/boringssl/util/bot/go/env.py",
       "go",
       "test",
       "-pipe",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl/ssl/test/runner",
+    "cwd": "[CWD]/boringssl/ssl/test/runner",
     "name": "ssl tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",

@@ -6,7 +6,7 @@
       "--position",
       "01234567890abcdef01234567890abcdef01234567"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "cwd": "[TMP]/fake_checkout_tmp_1",
     "name": "resolving hash 01234567890abcdef01234567890abcdef01234567",
     "stdout": "/path/to/tmp/"
   },
@@ -15,7 +15,6 @@
       "/bin/echo",
       "refs/heads/master"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test branch parse"
   },
   {
@@ -23,7 +22,6 @@
       "/bin/echo",
       "12345"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test revision parse"
   },
   {
@@ -31,7 +29,6 @@
       "/bin/echo",
       "refs/heads/master@{#12345}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test construction"
   },
   {

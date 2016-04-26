@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\skia\\tools\\buildbot_spec.py",
+      "[CWD]\\skia\\tools\\buildbot_spec.py",
       "/path/to/tmp/json",
       "Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[CWD]\\skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -48,10 +48,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\tmp\\SKP_VERSION",
+      "[CWD]\\tmp\\SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -59,10 +58,9 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\tmp\\SK_IMAGE_VERSION",
+      "[CWD]\\tmp\\SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -72,7 +70,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SWARM_OUT_DIR]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PYTHONPATH": "build\\scripts"
     },
@@ -96,7 +93,6 @@
       "[SWARM_OUT_DIR]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -113,14 +109,14 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\out\\Release_x64\\nanobench",
+      "[CWD]\\out\\Release_x64\\nanobench",
       "--undefok",
       "-i",
-      "[SLAVE_BUILD]\\skia\\resources",
+      "[CWD]\\skia\\resources",
       "--skps",
-      "[SLAVE_BUILD]\\skps",
+      "[CWD]\\skps",
       "--images",
-      "[SLAVE_BUILD]\\images\\dm",
+      "[CWD]\\images\\dm",
       "--nocpu",
       "--dummy-flags",
       "--outResultsFile",
@@ -148,13 +144,12 @@
       "os",
       "Win8"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release_x64",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "PATH": "[SLAVE_BUILD]\\depot_tools:%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]\\out"
+      "PATH": "[CWD]\\depot_tools:%(PATH)s",
+      "SKIA_OUT": "[CWD]\\out"
     },
     "name": "nanobench"
   },
@@ -166,7 +161,6 @@
       "[SWARM_OUT_DIR]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs perf_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -187,7 +181,6 @@
       "-u",
       "import psutil\nfor p in psutil.process_iter():\n  try:\n    if p.name == 'mspdbsrv.exe':\n      p.kill()\n  except psutil._error.AccessDenied:\n    pass\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import psutil@@@",

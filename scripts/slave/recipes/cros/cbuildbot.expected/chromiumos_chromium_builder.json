@@ -11,13 +11,13 @@
       "--slave",
       "test",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}]",
+      "cache_dir = '[ROOT]/b/build/slave/cache_dir'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}]",
       "--root",
       "chromite",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[ROOT]/b/build/slave/cache_dir",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -50,7 +49,7 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD]/chromite/bin/cbuildbot",
+      "[CWD]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/shared_external",
       "--buildbot",
@@ -62,7 +61,7 @@
       "b8819267417da248aa4fe829c5fcf0965e17b0c3",
       "x86-generic-tot-chrome-pfq-informational"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[CWD]",
     "name": "cbuildbot [x86-generic-tot-chrome-pfq-informational]"
   },
   {

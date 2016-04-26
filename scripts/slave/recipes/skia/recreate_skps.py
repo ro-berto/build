@@ -11,6 +11,7 @@ from common.skia import global_constants
 
 DEPS = [
   'depot_tools/gclient',
+  'depot_tools/infra_paths',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -52,7 +53,7 @@ def RunSteps(api, buildername):
            cwd=api.path['checkout'])
 
   # Capture the SKPs.
-  cmd = ['python', api.path['build'].join('scripts', 'slave', 'skia',
+  cmd = ['python', api.infra_paths['build'].join('scripts', 'slave', 'skia',
                                           'recreate_skps.py'),
          api.path['checkout'],
          api.path['checkout'].join('out', 'Release', 'chrome')]
@@ -60,7 +61,7 @@ def RunSteps(api, buildername):
     cmd.append('--dry-run')
   api.step('Recreate SKPs',
            cmd=cmd,
-           cwd=api.path['slave_build'].join('skia'),
+           cwd=api.infra_paths['slave_build'].join('skia'),
   )
 
 def GenTests(api):

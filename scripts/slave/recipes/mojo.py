@@ -5,6 +5,7 @@
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/infra_paths',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -43,7 +44,7 @@ def _BuildSteps(api, buildername, is_debug, is_official):
     # Disable Goma on Windows as it makes the build much slower (> 1 hour vs
     # 15 minutes). Try renabling once we have trybots and the cache would be
     # warm.
-    goma_dir = api.path['build'].join('goma')
+    goma_dir = api.infra_paths['build'].join('goma')
   env = {}
 
   if is_debug:
@@ -67,7 +68,7 @@ def _BuildSteps(api, buildername, is_debug, is_official):
 
 
 def _DeviceCheckStep(api):
-  devices_path = api.m.path['build'].join('site_config', '.known_devices')
+  devices_path = api.m.infra_paths['build'].join('site_config', '.known_devices')
   args = [
       '--json-output', api.json.output(),
       '--restart-usb',
