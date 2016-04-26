@@ -197,7 +197,7 @@ def checkout_steps(api):
   skia.managed = False
   skia.url = 'https://skia.googlesource.com/skia.git'
   skia.revision = api.properties.get('revision') or 'origin/master'
-  api.skia.update_repo(api.path['slave_build'], skia)
+  api.skia.update_repo(skia)
 
   # Run 'gclient sync'.
   gclient_cfg.got_revision_mapping['skia'] = 'got_revision'

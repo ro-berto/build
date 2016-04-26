@@ -27,14 +27,14 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
     }[self._skia_api.builder_cfg['extra_config']]
 
   def compile(self, target):
-    cmd = [self._skia_api.skia_dir.join('tools', 'xsan_build'),
+    cmd = [self._skia_api.m.path['checkout'].join('tools', 'xsan_build'),
            self._sanitizer, target]
     self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
-                       cwd=self._skia_api.skia_dir)
+                       cwd=self._skia_api.m.path['checkout'])
 
   def step(self, name, cmd, env=None, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
-    skia_dir = self._skia_api.skia_dir
+    skia_dir = self._skia_api.m.path['checkout']
     lsan_suppressions = skia_dir.join('tools', 'lsan.supp')
     tsan_suppressions = skia_dir.join('tools', 'tsan.supp')
     ubsan_suppressions = skia_dir.join('tools', 'ubsan.supp')

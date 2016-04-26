@@ -9,7 +9,6 @@ import re
 import sys
 
 from recipe_engine import recipe_api
-from recipe_engine import config_types
 
 # TODO(luqui): Make this recipe stop depending on common so we can make it
 # independent of build/.
@@ -149,12 +148,6 @@ class SkiaApi(recipe_api.RecipeApi):
       fake_spec)
     return builder_spec
 
-  def make_path(self, *path):
-    """Return a Path object for the given path."""
-    key  = 'custom_%s' % '_'.join(path)
-    self.m.path.c.base_paths[key] = tuple(path)
-    return self.m.path[key]
-
   def setup(self, running_in_swarming=False):
     """Prepare the bot to run."""
     # Setup
@@ -165,30 +158,14 @@ class SkiaApi(recipe_api.RecipeApi):
     self.slave_name = self.m.properties['slavename']
 
     self.slave_dir = self.m.path['slave_build']
-    self.checkout_root = self.slave_dir
-    self.default_env = {}
-    self.is_compile_bot = self.builder_name.startswith('Build-')
+    self.skia_dir = self.slave_dir.join('skia')
+    self.infrabots_dir = self.skia_dir.join('infra', 'bots')
 
+    self.default_env = {}
     if running_in_swarming:
       self.default_env['CHROME_HEADLESS'] = '1'
-      # The 'build' and 'depot_tools' directories are provided through isolate
-      # and aren't in the expected location, so we need to override them.
-      self.m.path.c.base_paths['depot_tools'] = (
-          self.m.path.c.base_paths['slave_build'] + ('depot_tools',))
-      self.default_env['PATH'] = '%s:%%(PATH)s' % self.m.path['depot_tools']
-      self.m.path.c.base_paths['build'] = (
-          self.m.path.c.base_paths['slave_build'] + ('build',))
-      self.default_env['PYTHONPATH'] = self.m.path['build'].join('scripts')
-
-      # Compile bots keep a persistent checkout.
-      if self.is_compile_bot:
-        if 'Win' in self.builder_name:
-          self.checkout_root = self.make_path('C:', 'b', 'cache')
-        else:
-          self.checkout_root = self.make_path('/', 'b', 'cache')
-
-    self.skia_dir = self.checkout_root.join('skia')
-    self.infrabots_dir = self.skia_dir.join('infra', 'bots')
+      depot_tools = self.slave_dir.join('depot_tools')
+      self.default_env['PATH'] = '%s:%%(PATH)s' % depot_tools
 
     # We run through this recipe in one of two ways:
     # 1. Normal bot: run all of the steps.
@@ -213,13 +190,12 @@ class SkiaApi(recipe_api.RecipeApi):
     # Set some important variables.
     self.resource_dir = self.skia_dir.join('resources')
     self.images_dir = self.slave_dir.join('images')
-    self.out_dir = self.skia_dir.join('out', self.builder_name)
     if self.running_in_swarming:
       self.swarming_out_dir = self.m.properties['swarm_out_dir']
+      self.out_dir = self.slave_dir.join('out')
       self.local_skp_dir = self.slave_dir.join('skps')
-      if not self.is_compile_bot:
-        self.out_dir = self.slave_dir.join('out')
     else:
+      self.out_dir = self.m.path['checkout'].join('out', self.builder_name)
       self.local_skp_dir = self.slave_dir.join('playback', 'skps')
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
 
@@ -279,9 +255,9 @@ class SkiaApi(recipe_api.RecipeApi):
       self._already_ran[fn.__name__] = True
       fn(*args, **kwargs)
 
-  def update_repo(self, parent_dir, repo):
+  def update_repo(self, repo):
     """Update an existing repo. This is safe to call without gen_steps."""
-    repo_path = parent_dir.join(repo.name)
+    repo_path = self.m.path['slave_build'].join(repo.name)
     if self.m.path.exists(repo_path):
       if self.m.platform.is_win:
         git = 'git.bat'
@@ -306,30 +282,21 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
-    cfg_kwargs = {}
     if self.running_in_swarming:
-      if not self.is_compile_bot:
-        # We should've obtained the Skia checkout through isolates, so we don't
-        # need to perform the checkout ourselves.
-        self.m.path['checkout'] = self.skia_dir
-        self.got_revision = self.m.properties['revision']
-        return
-
-      # The gclient cache gets deleted by Swarming, so don't use it.
-      cfg_kwargs['CACHE_DIR'] = None
-
-    # Create the checkout path if necessary.
-    if not self.m.path.exists(self.checkout_root):
-      self.m.file.makedirs('checkout_path', self.checkout_root, infra_step=True)
+      # We should've obtained the Skia checkout through isolates, so we don't
+      # need to perform the checkout ourselves.
+      self.m.path['checkout'] = self.m.path['slave_build'].join('skia')
+      self.got_revision = self.m.properties['revision']
+      return
 
     # Initial cleanup.
-    gclient_cfg = self.m.gclient.make_config(**cfg_kwargs)
+    gclient_cfg = self.m.gclient.make_config()
     skia = gclient_cfg.solutions.add()
     skia.name = 'skia'
     skia.managed = False
     skia.url = global_constants.SKIA_REPO
     skia.revision = self.m.properties.get('revision') or 'origin/master'
-    self.update_repo(self.checkout_root, skia)
+    self.update_repo(skia)
 
     if self._need_chromium_checkout:
       chromium = gclient_cfg.solutions.add()
@@ -337,17 +304,12 @@ class SkiaApi(recipe_api.RecipeApi):
       chromium.managed = False
       chromium.url = 'https://chromium.googlesource.com/chromium/src.git'
       chromium.revision = 'origin/lkgr'
-      self.update_repo(self.checkout_root, chromium)
+      self.update_repo(chromium)
 
     # Run 'gclient sync'.
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
     gclient_cfg.target_os.add('llvm')
-    checkout_kwargs = {}
-    if self.running_in_swarming:
-      checkout_kwargs['env'] = self.default_env
-    update_step = self.m.gclient.checkout(gclient_config=gclient_cfg,
-                                          cwd=self.checkout_root,
-                                          **checkout_kwargs)
+    update_step = self.m.gclient.checkout(gclient_config=gclient_cfg)
 
     self.got_revision = update_step.presentation.properties['got_revision']
     self.m.tryserver.maybe_apply_issue()

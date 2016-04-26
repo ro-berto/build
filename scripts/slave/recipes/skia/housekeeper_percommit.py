@@ -64,8 +64,7 @@ def GenTests(api):
     api.test(buildername) +
     api.properties(buildername=buildername,
                    mastername=mastername,
-                   slavename=slavename) +
-    api.path.exists(api.path['slave_build'])
+                   slavename=slavename)
   )
 
   buildername = 'Housekeeper-PerCommit-Trybot'
@@ -74,6 +73,5 @@ def GenTests(api):
     api.properties(buildername=buildername,
                    mastername=mastername,
                    slavename=slavename,
-                   issue=500) +
-    api.path.exists(api.path['slave_build'])
+                   issue=500)
   )

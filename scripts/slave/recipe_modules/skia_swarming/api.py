@@ -161,8 +161,6 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       import sys
       with open(sys.argv[1]) as f:
         isolated = json.load(f)
-      if not isolated.get('includes'):
-        isolated['includes'] = []
       for h in sys.argv[2:]:
         isolated['includes'].append(h)
       with open(sys.argv[1], 'w') as f:
