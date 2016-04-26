@@ -1475,23 +1475,6 @@ class AndroidTest(Test):
   def name(self):
     return self._name
 
-  def _get_failing_tests(self, step_result):
-    """Parses test results and returns a list of failed tests.
-
-    Args:
-      step_result: Result returned from the test.
-
-    Returns:
-      None if results are invalid, a list of failures otherwise (may be empty).
-    """
-    try:
-      gtest_results = step_result.test_utils.gtest_results
-      if 'UNRELIABLE_RESULTS' in gtest_results.raw.get('global_tags', []):
-        return None  # pragma: no cover
-      return gtest_results.failures
-    except AttributeError:  # pragma: no cover
-      return None
-
   def run_tests(self, api, suffix, json_results_file):
     """Runs the Android test suite and outputs the json results to a file.
 
@@ -1504,28 +1487,27 @@ class AndroidTest(Test):
 
   def run(self, api, suffix, test_filter=None):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
+    json_results_file = api.test_utils.gtest_results(add_json_log=False)
     try:
-      json_results_file = api.test_utils.gtest_results(add_json_log=False)
       self.run_tests(api, suffix, json_results_file)
     finally:
       step_result = api.step.active_result
-      failures = self._get_failing_tests(step_result)
+      self._test_runs[suffix] = {'valid': False}
+      if (hasattr(step_result, 'test_utils') and
+          hasattr(step_result.test_utils, 'gtest_results')):
+        gtest_results = step_result.test_utils.gtest_results
 
-      if failures is None:
-        self._test_runs[suffix] = {'valid': False}  # pragma: no cover
-      else:
+        failures = gtest_results.failures
         self._test_runs[suffix] = {'valid': True, 'failures': failures}
+        step_result.presentation.step_text += (
+            api.test_utils.format_step_text([['failures:', failures]]))
 
-        step_result.presentation.step_text += api.test_utils.format_step_text([
-          ['failures:', failures]
-        ])
-
-      api.test_results.upload(
-          json_results_file,
-          test_type=self.name,
-          chrome_revision=api.bot_update.last_returned_properties.get(
-              'got_revision_cp', 'x@{#0}'),
-          test_results_server='test-results.appspot.com')
+        api.test_results.upload(
+            api.json.input(gtest_results.raw),
+            test_type=self.name,
+            chrome_revision=api.bot_update.last_returned_properties.get(
+                'got_revision_cp', 'x@{#0}'),
+            test_results_server='test-results.appspot.com')
 
   def compile_targets(self, _):
     return self._compile_targets
