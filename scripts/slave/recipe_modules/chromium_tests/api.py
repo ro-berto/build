@@ -457,7 +457,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.chromium.c.project_generator.tool == 'mb':
       mb_mastername = mb_mastername or self.m.properties['mastername']
       mb_buildername = mb_buildername or self.m.properties['buildername']
-      self.m.chromium.run_mb(mb_mastername, mb_buildername,
+      use_goma = (self.m.chromium.c.compile_py.compiler and
+                  'goma' in self.m.chromium.c.compile_py.compiler)
+      self.m.chromium.run_mb(mb_mastername, mb_buildername, use_goma=use_goma,
                              isolated_targets=isolated_targets,
                              name='generate_build_files%s' % name_suffix)
 
