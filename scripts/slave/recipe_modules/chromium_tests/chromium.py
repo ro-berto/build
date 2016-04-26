@@ -121,6 +121,7 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'isolation_mode_noop',
+        'mb',
         'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
