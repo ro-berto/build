@@ -153,6 +153,7 @@ SPEC = {
     },
     'Linux V8 API Stability': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['v8_canary', 'with_branch_heads'],
       'chromium_config_kwargs': {
@@ -253,6 +254,7 @@ SPEC = {
     },
     'MD Top Chrome Linux material': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -490,6 +492,7 @@ SPEC = {
     },
     'Browser Side Navigation Linux': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -514,7 +517,7 @@ SPEC = {
     },
     'ChromePracticeFullTester': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1191,7 +1194,7 @@ SPEC = {
     },
     'Chromium Linux Goma Canary': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary'],
+      'chromium_apply_config': ['goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1206,7 +1209,7 @@ SPEC = {
     },
     'Chromium Linux Goma Canary (clobber)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'clobber'],
+      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1221,7 +1224,7 @@ SPEC = {
     },
     'Chromium Linux32 Goma Canary (clobber)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'clobber'],
+      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1236,7 +1239,7 @@ SPEC = {
     },
     'Chromium Linux Precise Goma LinkTest': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'goma_linktest'],
+      'chromium_apply_config': ['goma_canary', 'goma_linktest', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
