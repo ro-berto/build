@@ -582,9 +582,16 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # This runs with no env being passed along, so we get a clean environment
     # without any GYP_DEFINES being present to cause confusion.
-    self.m.python(name=name or 'generate_build_files',
-                  script=self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
-                  args=args)
+    kwargs = {
+      'name': name or 'generate_build_files',
+      'script': self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
+      'args': args,
+    }
+    if self.c.TARGET_CROS_BOARD:
+      # Wrap 'runhooks' through 'cros chrome-sdk'
+      kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
+
+    self.m.python(**kwargs)
 
     # Comes after self.m.python so the log appears in the correct step result.
     result = self.m.step.active_result
