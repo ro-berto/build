@@ -131,10 +131,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if bot_config.get_master_setting('src_side_runtest_py'):
       self.m.chromium.c.runtest_py.src_side = True
 
-    # TODO(ukai): switch to ensure_goma in chromium/api.py
-    if bot_config.get('goma_canary'):
-      self.m.goma.update_goma_canary()
-
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
     if bot_config.get('set_component_rev'):
@@ -204,7 +200,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if (self.m.chromium.c.compile_py.compiler and
         'goma' in self.m.chromium.c.compile_py.compiler):
-      self.m.chromium.ensure_goma()
+      self.m.chromium.ensure_goma(canary=bot_config.get('goma_canary', False))
 
     self.set_up_swarming(bot_config)
     self.runhooks(update_step)

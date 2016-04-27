@@ -13,18 +13,7 @@ class GomaApi(recipe_api.RecipeApi):
       return 'C:\\creds\\service_accounts\\service-account-goma-client.json'
     return '/creds/service_accounts/service-account-goma-client.json'
 
-  def update_goma_canary(self):
-    """Returns a step for updating goma canary."""
-    # deprecated? switch to use ensure_goma with canary=True.
-    # for git checkout, should use @refs/heads/master to use head.
-    head = 'refs/heads/master'
-    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
-    self.m.gclient('update goma canary',
-                   ['sync', '--verbose', '--force',
-                    '--revision', 'build/goma@%s' % head],
-                   cwd=self.m.path['build'])
-
-  def ensure_goma(self):
+  def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):
       try:
         self.m.cipd.set_service_account_credentials(
@@ -36,8 +25,11 @@ class GomaApi(recipe_api.RecipeApi):
         # For Windows there's only 64-bit goma client.
         if self.m.platform.is_win:
           goma_package = goma_package.replace('386', 'amd64')
+        ref='release'
+        if canary:
+          ref='candidate'
         goma_dir = self.m.path['cache'].join('cipd', 'goma')
-        self.m.cipd.ensure(goma_dir, {goma_package: 'release'})
+        self.m.cipd.ensure(goma_dir, {goma_package: ref})
         return goma_dir
       except self.m.step.StepFailure:  # pragma: no cover
         # TODO(phajdan.jr): make failures fatal after experiment.

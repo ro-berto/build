@@ -466,8 +466,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     wrapper += ['--']
     return wrapper
 
-  def ensure_goma(self):
-    goma_dir = self.m.goma.ensure_goma()
+  def ensure_goma(self, canary=False):
+    goma_dir = self.m.goma.ensure_goma(canary=canary)
     if goma_dir:
       # TODO(phajdan.jr): goma_dir should always be non-empty.
       self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
