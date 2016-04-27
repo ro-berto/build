@@ -9,7 +9,6 @@ import default_flavor
 class CMakeFlavorUtils(default_flavor.DefaultFlavorUtils):
   def compile(self, target):
     """Build Skia with CMake.  Ignores `target`."""
-    cmake_build = self._skia_api.m.path['slave_build'].join(
-        'skia', 'cmake', 'cmake_build')
+    cmake_build = self._skia_api.skia_dir.join('cmake', 'cmake_build')
     self._skia_api.run(self._skia_api.m.step, 'cmake_build', cmd=[cmake_build],
                        cwd=self._skia_api.m.path['checkout'])

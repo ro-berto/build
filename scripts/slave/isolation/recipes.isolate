@@ -30,6 +30,7 @@
       '../cleanup_temp.py',
       '../compile.py',
       '../crash_utils.py',
+      '../gclient_safe_revert.py',
       '../gsutil',
       '../gsutil.bat',
       '../gtest/',

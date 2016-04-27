@@ -150,7 +150,8 @@ def GenTests(api):
                    mastername='client.skia',
                    slavename='skiabot-linux-tester-000',
                    buildnumber=6) +
-    api.step_data('dm', retcode=1)
+    api.step_data('dm', retcode=1) +
+    api.path.exists(api.path['slave_build'])
   )
 
   yield (
@@ -160,7 +161,8 @@ def GenTests(api):
                    slavename='skiabot-linux-compile-000') +
     api.step_data(
                 'has ccache?',
-                stdout=api.json.output({'ccache':'/usr/bin/ccache'}))
+                stdout=api.json.output({'ccache':'/usr/bin/ccache'})) +
+    api.path.exists(api.path['slave_build'])
   )
 
   builder = 'Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug'
