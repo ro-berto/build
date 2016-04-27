@@ -81,7 +81,7 @@
     "Android MIPS Builder (dbg)": {
       "recipe": "chromium",
       "scheduler": "android_commits",
-      "slave_pools": ["builders"],
+      "slave_pools": ["mips_builder"],
       "category": "2Builders",
       "slavebuilddir": "android_build",
     },
@@ -213,7 +213,6 @@
           "slave37-c1",
           "slave38-c1",
           "slave39-c1",
-          "slave75-c1",
         ],
     },
     "cronet_arm64": {
@@ -275,14 +274,6 @@
       },
       "slaves": ["build42-b1"],
     },
-    "marshmallow_64": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": "64",
-      },
-      "slaves": ["build38-b1"],
-    },
     "lollipop_consumer": {
       "slave_data": {
         "os": "linux",
@@ -315,6 +306,14 @@
       },
       "slaves": ["build43-b1"],
     },
+    "marshmallow_64": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": "64",
+      },
+      "slaves": ["build38-b1"],
+    },
     "marshmallow_tablet": {
       "slave_data": {
         "os": "linux",
@@ -322,6 +321,16 @@
         "bits": "64",
       },
       "slaves": ["build44-b1"],
+    },
+    "mips_builder": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": [
+        "slave75-c1",
+      ],
     },
     "webview_cts": {
       "slave_data": {
