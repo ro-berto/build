@@ -66,12 +66,6 @@ def RunSteps(api):
 
   ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
 
-  # Optimize 10k DM runs by not sharding to 100 swarming bots. Shard to
-  # only 1, sharding to more than that ends up taking more time due to overhead.
-  if ct_page_type == '10k' and skia_tool == 'dm':
-    ct_num_slaves = 1
-    ct_page_type = 'All'
-
   # Checkout Skia and Chromium.
   gclient_cfg = api.gclient.make_config()
 
