@@ -202,7 +202,8 @@ def RunSteps(api):
     if api.platform.is_mac:
       SetupXcode(api)
 
-    # Must be first to download dependencies for later steps.
+    # Disable analytics on the bots and download dependencies for later steps.
+    api.step('flutter config', ['flutter', 'config', '--no-analytics'])
     api.step('flutter doctor', ['flutter', 'doctor'])
     api.step('update packages', ['flutter', 'update-packages'])
     AnalyzeFlutter(api)

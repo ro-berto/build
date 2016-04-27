@@ -55,7 +55,7 @@ def UploadArtifacts(api, platform, file_paths):
 
     pkg.zip('Zip %s Artifacts' % platform)
     api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
-        name='upload %s' % remote_name)
+        name='upload "%s"' % remote_name)
 
 
 def UploadDartPackage(api, package_name):

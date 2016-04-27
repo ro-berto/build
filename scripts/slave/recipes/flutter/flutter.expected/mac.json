@@ -154,6 +154,19 @@
   {
     "cmd": [
       "flutter",
+      "config",
+      "--no-analytics"
+    ],
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter config"
+  },
+  {
+    "cmd": [
+      "flutter",
       "doctor"
     ],
     "env": {
