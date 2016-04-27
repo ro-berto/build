@@ -645,7 +645,7 @@
       "--skps",
       "skiabot/skia_skp/skps",
       "--images",
-      "skiabot/skia_images/dm",
+      "skiabot/skia_images/nanobench",
       "--nocpu",
       "--dummy-flags"
     ],

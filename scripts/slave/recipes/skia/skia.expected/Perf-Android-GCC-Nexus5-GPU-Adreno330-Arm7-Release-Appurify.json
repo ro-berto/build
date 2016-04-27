@@ -324,7 +324,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "--undefok -i /sdcard/resources --skps /sdcard/skps --images /sdcard/images/dm --nocpu --dummy-flags --outResultsFile /sdcard/skia_results/nanobench_164710_1408633190.json --properties gitHash 164710 build_number 5 --key arch Arm7 compiler GCC cpu_or_gpu GPU cpu_or_gpu_value Adreno330 extra_config Appurify model Nexus5 os Android",
+      "--undefok -i /sdcard/resources --skps /sdcard/skps --images /sdcard/images/nanobench --nocpu --dummy-flags --outResultsFile /sdcard/skia_results/nanobench_164710_1408633190.json --properties gitHash 164710 build_number 5 --key arch Arm7 compiler GCC cpu_or_gpu GPU cpu_or_gpu_value Adreno330 extra_config Appurify model Nexus5 os Android",
       "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/src/main/assets/nanobench_flags.txt"
     ],
     "name": "write nanobench_flags.txt"

@@ -807,7 +807,7 @@ print json.dumps({'ccache': ccache})
         '-i',       self.device_dirs.resource_dir,
         '--skps',   self.device_dirs.skp_dir,
         '--images', self.flavor.device_path_join(
-            self.device_dirs.images_dir, 'dm'),  # Using DM images for now.
+            self.device_dirs.images_dir, 'nanobench'),
     ]
 
     skip_flag = None

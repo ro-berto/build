@@ -539,7 +539,7 @@
       "--skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps",
       "--images",
-      "/storage/emulated/legacy/skiabot/skia_images/dm",
+      "/storage/emulated/legacy/skiabot/skia_images/nanobench",
       "--nocpu",
       "--dummy-flags",
       "--outResultsFile",

@@ -81,7 +81,7 @@
       "--skps",
       "[SLAVE_BUILD]/skps",
       "--images",
-      "[SLAVE_BUILD]/images/dm",
+      "[SLAVE_BUILD]/images/nanobench",
       "--nocpu",
       "--dummy-flags"
     ],
@@ -111,7 +111,7 @@
       "--skps",
       "[SLAVE_BUILD]/skps",
       "--images",
-      "[SLAVE_BUILD]/images/dm",
+      "[SLAVE_BUILD]/images/nanobench",
       "--nocpu",
       "--dummy-flags",
       "--abandonGpuContext",

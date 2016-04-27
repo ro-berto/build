@@ -733,7 +733,7 @@
       "--skps",
       "/usr/local/skiabot/skia_skp/skps",
       "--images",
-      "/usr/local/skiabot/skia_images/dm",
+      "/usr/local/skiabot/skia_images/nanobench",
       "--nogpu",
       "--dummy-flags"
     ],
