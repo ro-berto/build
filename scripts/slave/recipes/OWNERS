@@ -31,3 +31,5 @@ per-file chromium_trybot.py=tandrii@chromium.org
 per-file catapult.py=sullivan@chromium.org
 per-file catapult_cron.py=sullivan@chromium.org
 per-file ct_top1k_perf.py=rmistry@chromium.org
+per-file client.fletch.recipe_autogen.py=whesse@chromium.org
+per-file client.fletch.recipe_autogen.py=aneeshm@chromium.org
