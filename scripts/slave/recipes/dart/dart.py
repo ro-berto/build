@@ -17,14 +17,22 @@ DEPS = [
 ]
 
 def RunSteps(api):
+  buildername = api.properties.get('buildername')
+
   api.gclient.set_config('dart')
+
+  if 'vm-precomp-android' in buildername:
+    api.gclient.apply_config('android')
+
   api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
 
+  extra_build_args = api.properties.get('build_args', [])
   mode = api.properties.get('mode', 'release')
   target_arch = api.properties.get('target_arch', 'x64')
   build_targets = api.properties.get('build_targets', ['runtime', 'create_sdk'])
   build_args = ['-m%s' % mode, '--arch=%s' % target_arch]
+  build_args.extend(extra_build_args)
   build_args.extend(build_targets)
   api.python('build dart',
              api.path['checkout'].join('tools', 'build.py'),
@@ -52,3 +60,15 @@ def GenTests(api):
    yield (
       api.test('linux64') + api.platform('linux', 64) +
       api.properties.generic(mastername='client.dart.FYI'))
+   yield (
+      api.test('test-coverage') + api.platform('linux', 64) +
+      api.properties.generic(mastername='client.dart.FYI',
+                             buildername='vm-precomp-android-release',
+                             target_arch='arm',
+                             build_args=['--os=android'],
+                             build_targets=['runtime_precompiled'],
+                             test_args=[
+                                 '-cprecompiler',
+                                 '-rdart_precompiled',
+                                 '--exclude-suite=pkg',
+                                 '--system=android']))
