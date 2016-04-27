@@ -54,8 +54,13 @@ def RunSteps(api):
   # Figure out which tool to use.
   if 'DM' in buildername:
     skia_tool = 'dm'
+    build_target = 'dm'
   elif 'BENCH' in buildername:
     skia_tool = 'nanobench'
+    build_target = 'nanobench'
+  elif 'IMG_DECODE' in buildername:
+    skia_tool = 'get_images_from_skps'
+    build_target = 'tools'
   else:
     raise Exception('Do not recognise the buildername %s.' % buildername)
 
@@ -108,8 +113,8 @@ def RunSteps(api):
   api.tryserver.maybe_apply_issue()
 
   # Build the tool.
-  api.step('build %s' % skia_tool,
-           ['make', skia_tool, 'BUILDTYPE=%s' % configuration],
+  api.step('build %s' % build_target,
+           ['make', build_target, 'BUILDTYPE=%s' % configuration],
            cwd=api.path['checkout'])
 
   skps_chromium_build = api.properties.get(
@@ -210,6 +215,16 @@ def GenTests(api):
   )
 
   yield(
+    api.test('CT_IMG_DECODE_10k_SKPs') +
+    api.properties(
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_IMG_DECODE_'
+                    '10k_SKPs',
+        ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
+    )
+  )
+
+  yield(
     api.test('CT_BENCH_10k_SKPs') +
     api.properties(
         buildername=
@@ -284,5 +299,15 @@ def GenTests(api):
         rietveld='codereview.chromium.org',
         issue=1499623002,
         patchset=1,
+    )
+  )
+
+  yield(
+    api.test('CT_IMG_DECODE_10k_SKPs_Trybot') +
+    api.properties(
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_IMG_DECODE_'
+                    '10k_SKPs_Trybot',
+        ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
     )
   )
