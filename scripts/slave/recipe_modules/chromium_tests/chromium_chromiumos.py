@@ -227,7 +227,7 @@ SPEC = {
 for board in ('x86-generic', 'amd64-generic', 'daisy'):
   SPEC['builders']['ChromiumOS %s Compile' % (board,)] = {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromeos', 'mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['chromeos', 'ninja_confirm_noop'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
