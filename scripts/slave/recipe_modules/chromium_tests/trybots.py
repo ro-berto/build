@@ -364,10 +364,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Site Isolation Linux',
       }),
-      'linux_chromium_practice_rel_ng': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'ChromiumPracticeFullTester',
-      }),
       # Optional GPU bots.
       'linux_optional_gpu_tests_rel': {
         'bot_ids': [

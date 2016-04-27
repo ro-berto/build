@@ -55,8 +55,9 @@ class BotConfig(object):
 
       # The official builders specify the test spec using a test_spec property in
       # the bot_config instead of reading it from a file.
-      if 'test_spec' in bot_config:
+      if 'test_spec' in bot_config: # pragma: no cover
         return { self._bot_ids[0]['buildername']: bot_config['test_spec'] }
+
 
     test_spec_file = self.get('testing', {}).get(
         'test_spec_file', '%s.json' % mastername)
