@@ -600,7 +600,7 @@
       "--additional-apk",
       "Additional.apk",
       "--isolate-file-path",
-      "android_webview/android_webview_test_apk.isolate",
+      "android_webview/android_webview_test_data.isolate",
       "--release",
       "--official-build"
     ],

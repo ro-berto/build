@@ -181,7 +181,7 @@ def RunSteps(api, buildername):
       name='AndroidWebViewTest',
       apk_under_test=api.chromium_android.apk_path('AndroidWebView.apk'),
       test_apk=api.chromium_android.apk_path('AndroidWebViewTest.apk'),
-      isolate_file_path='android_webview/android_webview_test_apk.isolate',
+      isolate_file_path='android_webview/android_webview_test_data.isolate',
       flakiness_dashboard='test-results.appspot.com',
       annotation='SmallTest',
       except_annotation='FlakyTest',

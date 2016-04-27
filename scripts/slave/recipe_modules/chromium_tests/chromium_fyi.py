@@ -1891,7 +1891,7 @@ SPEC = {
             test_apk='AndroidWebViewTest',
             apk_under_test='AndroidWebView',
             android_isolate_path=
-                'android_webview/android_webview_test_apk.isolate',
+                'android_webview/android_webview_test_data.isolate',
             compile_target='android_webview_test_apk',
             device_name=['Nexus 5'], device_os=['4.4.2']),
       ],
