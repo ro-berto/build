@@ -43,7 +43,7 @@ def RunSteps(api):
       abort_on_failure=False)
 
   cmd = ['python', api.skia.resource('run_binary_size_analysis.py'),
-         '--library', api.skia.out_dir.join('Release', 'lib', 'libskia.so'),
+         '--library', api.skia.skia_out.join('Release', 'lib', 'libskia.so'),
          '--githash', api.skia.got_revision,
          '--commit_ts', api.skia.m.git.get_timestamp(test_data='1408633190'),
          '--gsutil_path', gsutil_path]

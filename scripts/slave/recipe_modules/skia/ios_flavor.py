@@ -40,6 +40,12 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._skia_api.run(self._skia_api.m.step, 'build iOSShell', cmd=cmd,
                        cwd=self._skia_api.m.path['checkout'])
 
+  @property
+  def out_dir(self):
+    """Flavor-specific out directory."""
+    return self._skia_api.skia_dir.join(
+        'xcodebuild', '%s-iphoneos' % self._skia_api.configuration)
+
   def device_path_join(self, *args):
     """Like os.path.join(), but for paths on a connected iOS device."""
     return '/'.join(args)

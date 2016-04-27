@@ -213,12 +213,12 @@ class SkiaApi(recipe_api.RecipeApi):
     # Set some important variables.
     self.resource_dir = self.skia_dir.join('resources')
     self.images_dir = self.slave_dir.join('images')
-    self.out_dir = self.skia_dir.join('out', self.builder_name)
+    self.skia_out = self.skia_dir.join('out', self.builder_name)
     if self.running_in_swarming:
       self.swarming_out_dir = self.m.properties['swarm_out_dir']
       self.local_skp_dir = self.slave_dir.join('skps')
       if not self.is_compile_bot:
-        self.out_dir = self.slave_dir.join('out')
+        self.skia_out = self.slave_dir.join('out')
     else:
       self.local_skp_dir = self.slave_dir.join('playback', 'skps')
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
@@ -229,7 +229,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self._ccache = None
     self._checked_for_ccache = False
     self.configuration = self.builder_spec['configuration']
-    self.default_env.update({'SKIA_OUT': self.out_dir,
+    self.default_env.update({'SKIA_OUT': self.skia_out,
                              'BUILDTYPE': self.configuration})
     self.default_env.update(self.builder_spec['env'])
     self.build_targets = [str(t) for t in self.builder_spec['build_targets']]
@@ -391,15 +391,8 @@ for pattern in build_products_whitelist:
         self.flavor.compile(target)
       if self.running_in_swarming:
         self.copy_build_products(
-            self.m.path.join(self.out_dir, self.configuration),
+            self.flavor.out_dir,
             self.m.path.join(self.swarming_out_dir, 'out', self.configuration))
-        if ('iOS' in self.builder_cfg.get('os', '') or
-            'iOS' in self.builder_cfg.get('extra_config', '')):
-          xcode_out = self.m.path.join(
-              'xcodebuild', '%s-iphoneos' % self.configuration)
-          self.copy_build_products(
-              self.m.path.join(self.skia_dir, xcode_out),
-              self.m.path.join(self.swarming_out_dir, xcode_out))
     finally:
       if self.running_in_swarming and 'Win' in self.builder_cfg['os']:
         self.m.python.inline(

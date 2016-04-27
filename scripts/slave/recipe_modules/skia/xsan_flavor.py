@@ -45,8 +45,7 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
     env['TSAN_OPTIONS'] = 'suppressions=%s' % tsan_suppressions
     env['UBSAN_OPTIONS'] = 'suppressions=%s' % ubsan_suppressions
 
-    path_to_app = self._skia_api.out_dir.join(
-        self._skia_api.configuration, cmd[0])
+    path_to_app = self.out_dir.join(cmd[0])
     new_cmd = [path_to_app]
     new_cmd.extend(cmd[1:])
     return self._skia_api.run(self._skia_api.m.step, name, cmd=new_cmd, env=env,

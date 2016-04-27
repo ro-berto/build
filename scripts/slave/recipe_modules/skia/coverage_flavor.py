@@ -38,7 +38,7 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
       if current is not None:
         current.append(cmd[i])
 
-    results_dir = self._skia_api.out_dir.join('coverage_results')
+    results_dir = self._skia_api.skia_out.join('coverage_results')
     self.create_clean_host_dir(results_dir)
 
     # Run DM under coverage.

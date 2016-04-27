@@ -19,9 +19,7 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
 
   def step(self, name, cmd, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
-    local_path = self._skia_api.out_dir.join(
-      'config', 'chromeos-%s' % self.board,
-      self._skia_api.configuration, cmd[0])
+    local_path = self.out_dir.join(cmd[0])
     remote_path = self.device_path_join(self.device_bin_dir, cmd[0])
     self.copy_file_to_device(local_path, remote_path)
     super(ChromeOSFlavorUtils, self).step(name=name,
@@ -38,6 +36,13 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
            target]
     self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
                        cwd=skia_dir, env=env)
+
+  @property
+  def out_dir(self):
+    """Flavor-specific out directory."""
+    return self._skia_api.skia_out.join(
+        'config', 'chromeos-%s' % self.board,
+        self._skia_api.configuration)
 
   def install(self):
     """Run any device-specific installation steps."""

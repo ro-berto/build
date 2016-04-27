@@ -69,7 +69,7 @@ class DefaultFlavorUtils(object):
 
   def step(self, name, cmd, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
-    path_to_app = self._skia_api.out_dir.join(
+    path_to_app = self._skia_api.skia_out.join(
         self._skia_api.configuration, cmd[0])
     if (self._skia_api.m.platform.is_linux and
         'x86_64' in self._skia_api.builder_name and
@@ -188,8 +188,7 @@ class DefaultFlavorUtils(object):
         self._skia_api.m.python, 'build command_buffer',
         script=script,
         args=['--chrome-dir', self._skia_api.slave_dir,
-              '--output-dir', self._skia_api.out_dir.join(
-                  self._skia_api.configuration),
+              '--output-dir', self.out_dir,
               '--chrome-build-type', self._skia_api.configuration,
               '--no-sync'])
 
@@ -215,6 +214,11 @@ class DefaultFlavorUtils(object):
                        env=env, cwd=self._skia_api.m.path['checkout'])
     if 'CommandBuffer' in self._skia_api.builder_name:
       self._skia_api._run_once(self.build_command_buffer)
+
+  @property
+  def out_dir(self):
+    """Flavor-specific out directory."""
+    return self._skia_api.skia_out.join(self._skia_api.configuration)
 
   def device_path_join(self, *args):
     """Like os.path.join(), but for paths on a connected device."""
