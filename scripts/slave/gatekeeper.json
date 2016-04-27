@@ -231,6 +231,11 @@
     "https://build.chromium.org/p/chromium.infra": [
       {
         "builders": {
+          "infra-continuous-wily-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
           "infra-continuous-trusty-64": {
             "categories": [
               "infra_tree_closer"
