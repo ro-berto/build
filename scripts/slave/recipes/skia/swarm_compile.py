@@ -75,3 +75,22 @@ def GenTests(api):
                                  rietveld='https://codereview.chromium.org')
 
         yield test
+
+  mastername = 'client.skia.compile'
+  slavename = 'skiabot-win-compile-000'
+  buildername = 'Build-Win-MSVC-x86-Debug-VS2015'
+  yield (
+      api.test('win_cleanup_after_failed_compile') +
+      api.properties(buildername=buildername,
+                     mastername=mastername,
+                     slavename=slavename,
+                     buildnumber=5,
+                     revision='abc123',
+                     swarm_out_dir='[SWARM_OUT_DIR]') +
+      api.path.exists(
+          api.path['slave_build'].join('skia'),
+          api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+      ) +
+      api.platform('win', 64) +
+      api.step_data('build most', retcode=1)
+  )

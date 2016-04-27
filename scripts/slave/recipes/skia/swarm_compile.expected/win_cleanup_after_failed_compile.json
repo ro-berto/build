@@ -1,0 +1,174 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[CUSTOM_C:\\_B_CACHE]",
+      "511"
+    ],
+    "name": "makedirs checkout_path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+    ],
+    "cwd": "[CUSTOM_C:\\_B_CACHE]",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]",
+      "PYTHONPATH": "[BUILD]\\scripts"
+    },
+    "name": "gclient setup"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "sync",
+      "--nohooks",
+      "--force",
+      "--verbose",
+      "--delete_unversioned_trees",
+      "--revision",
+      "skia@abc123",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CUSTOM_C:\\_B_CACHE]",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools];RECIPE_PACKAGE_REPO[depot_tools]",
+      "PYTHONPATH": "[BUILD]\\scripts"
+    },
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"skia/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 164710@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@164710@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CUSTOM_C:\\_B_CACHE]\\skia\\tools\\buildbot_spec.py",
+      "/path/to/tmp/json",
+      "Build-Win-MSVC-x86-Debug-VS2015"
+    ],
+    "cwd": "[CUSTOM_C:\\_B_CACHE]\\skia",
+    "name": "exec buildbot_spec.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"most\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"MSVC\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"VS2015\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Win\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_arch\": \"x86\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CUSTOM_C:\\_B_CACHE]\\skia\\infra\\bots\\bootstrap_win_toolchain_json.py",
+      "--win_toolchain_json",
+      "[SLAVE_BUILD]\\src\\build\\win_toolchain.json",
+      "--depot_tools_parent_dir",
+      "[SLAVE_BUILD]"
+    ],
+    "name": "bootstrap win toolchain"
+  },
+  {
+    "cmd": [
+      "python",
+      "make.py",
+      "most"
+    ],
+    "cwd": "[CUSTOM_C:\\_B_CACHE]\\skia",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CHROME_HEADLESS": "1",
+      "CHROME_PATH": "[SLAVE_BUILD]\\src",
+      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools];RECIPE_PACKAGE_REPO[depot_tools]",
+      "PYTHONPATH": "[BUILD]\\scripts",
+      "SKIA_OUT": "[CUSTOM_C:\\_B_CACHE]\\skia\\out\\Build-Win-MSVC-x86-Debug-VS2015"
+    },
+    "name": "build most",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import psutil\nfor p in psutil.process_iter():\n  try:\n    if p.name == 'mspdbsrv.exe':\n      p.kill()\n  except psutil._error.AccessDenied:\n    pass\n"
+    ],
+    "name": "cleanup",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@import psutil@@@",
+      "@@@STEP_LOG_LINE@python.inline@for p in psutil.process_iter():@@@",
+      "@@@STEP_LOG_LINE@python.inline@  try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if p.name == 'mspdbsrv.exe':@@@",
+      "@@@STEP_LOG_LINE@python.inline@      p.kill()@@@",
+      "@@@STEP_LOG_LINE@python.inline@  except psutil._error.AccessDenied:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    pass@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Step('build most') failed with return_code 1",
+    "status_code": 1
+  }
+]

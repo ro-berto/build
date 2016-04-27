@@ -386,19 +386,33 @@ for pattern in build_products_whitelist:
 
   def compile_steps(self, clobber=False):
     """Run the steps to build Skia."""
-    for target in self.build_targets:
-      self.flavor.compile(target)
-    if self.running_in_swarming:
-      self.copy_build_products(
-          self.m.path.join(self.out_dir, self.configuration),
-          self.m.path.join(self.swarming_out_dir, 'out', self.configuration))
-      if ('iOS' in self.builder_cfg.get('os', '') or
-          'iOS' in self.builder_cfg.get('extra_config', '')):
-        xcode_out = self.m.path.join(
-            'xcodebuild', '%s-iphoneos' % self.configuration)
+    try:
+      for target in self.build_targets:
+        self.flavor.compile(target)
+      if self.running_in_swarming:
         self.copy_build_products(
-            self.m.path.join(self.skia_dir, xcode_out),
-            self.m.path.join(self.swarming_out_dir, xcode_out))
+            self.m.path.join(self.out_dir, self.configuration),
+            self.m.path.join(self.swarming_out_dir, 'out', self.configuration))
+        if ('iOS' in self.builder_cfg.get('os', '') or
+            'iOS' in self.builder_cfg.get('extra_config', '')):
+          xcode_out = self.m.path.join(
+              'xcodebuild', '%s-iphoneos' % self.configuration)
+          self.copy_build_products(
+              self.m.path.join(self.skia_dir, xcode_out),
+              self.m.path.join(self.swarming_out_dir, xcode_out))
+    finally:
+      if self.running_in_swarming and 'Win' in self.builder_cfg['os']:
+        self.m.python.inline(
+            name='cleanup',
+            program='''import psutil
+for p in psutil.process_iter():
+  try:
+    if p.name == 'mspdbsrv.exe':
+      p.kill()
+  except psutil._error.AccessDenied:
+    pass
+''',
+            infra_step=True)
 
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""
@@ -872,19 +886,6 @@ print json.dumps({'ccache': ccache})
 
   def cleanup_steps(self):
     """Run any cleanup steps."""
-    if self.running_in_swarming and 'Win' in self.builder_cfg['os']:
-      self.m.python.inline(
-          name='cleanup',
-          program='''import psutil
-for p in psutil.process_iter():
-  try:
-    if p.name == 'mspdbsrv.exe':
-      p.kill()
-  except psutil._error.AccessDenied:
-    pass
-''',
-          infra_step=True)
-
     self.flavor.cleanup_steps()
 
   def _KeyParams(self):
