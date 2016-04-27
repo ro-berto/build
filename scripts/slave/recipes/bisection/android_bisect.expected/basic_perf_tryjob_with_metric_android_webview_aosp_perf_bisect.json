@@ -451,6 +451,9 @@
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "generate_build_files (with patch)"
   },
   {
@@ -707,6 +710,9 @@
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "generate_build_files Without Patch"
   },
   {

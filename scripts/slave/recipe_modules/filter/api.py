@@ -157,23 +157,24 @@ class FilterApi(recipe_api.RecipeApi):
         'test_targets': [],
     }
 
-    kwargs.setdefault('env', {})
+    if use_mb:
+      # Ensure that mb runs in a clean environment to avoid
+      # picking up any GYP_DEFINES accidentally.
+      kwargs['env'] = {}
+    else:
+      kwargs.setdefault('env', {})
 
     # If building for CrOS, execute through the "chrome_sdk" wrapper. This will
     # override GYP environment variables, so we'll refrain from defining them
     # to avoid confusing output.
     if cros_board:
       kwargs['wrapper'] = self.m.chromium.get_cros_chrome_sdk_wrapper()
-    else:
+    elif not use_mb:
       kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
     kwargs['env']['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
         self.m.goma.service_account_json_path
 
     if use_mb:
-      if 'env' in kwargs:
-        # Ensure that mb runs in a clean environment to avoid
-        # picking up any GYP_DEFINES accidentally.
-        del kwargs['env']
       mb_mastername = mb_mastername or self.m.properties['mastername']
       mb_buildername = mb_buildername or self.m.properties['buildername']
       step_result = self.m.python(

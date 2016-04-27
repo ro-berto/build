@@ -580,12 +580,15 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     args += [build_dir]
 
-    # This runs with no env being passed along, so we get a clean environment
-    # without any GYP_DEFINES being present to cause confusion.
+    # This runs with an almost-bare env being passed along, so we get a clean
+    # environment without any GYP_DEFINES being present to cause confusion.
     kwargs = {
       'name': name or 'generate_build_files',
       'script': self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
       'args': args,
+      'env': {
+        'GOMA_SERVICE_ACCOUNT_JSON_FILE': self.m.goma.service_account_json_path,
+      }
     }
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
