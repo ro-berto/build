@@ -155,7 +155,7 @@ class DefaultFlavorUtils(object):
     """Path to a checkout of Chrome on this machine."""
     if self._chrome_path is None:
       if self._skia_api.running_in_swarming:
-        self._chrome_path = self._skia_api.checkout_root.join('src')
+        self._chrome_path = self._skia_api.slave_dir.join('src')
         return self._chrome_path
 
       if self._skia_api.m.platform.is_win:
