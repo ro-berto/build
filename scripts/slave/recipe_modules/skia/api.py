@@ -764,7 +764,7 @@ print json.dumps({'ccache': ccache})
               self.builder_name,
               self.m.properties['buildnumber'],
               self.m.properties['issue'] if self.is_trybot else '',
-              self.m.path['slave_build'].join('skia', 'common', 'py', 'utils'),
+              self.skia_dir.join('common', 'py', 'utils'),
           ],
           cwd=self.m.path['checkout'],
           env=self.gsutil_env_chromium_skia_gm,

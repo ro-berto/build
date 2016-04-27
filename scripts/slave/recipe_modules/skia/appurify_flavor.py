@@ -19,8 +19,8 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
     slave_info = android_devices.SLAVE_INFO.get(
         self._skia_api.slave_name,
         android_devices.SLAVE_INFO['default'])
-    self.android_tools = self._skia_api.m.path['slave_build'].join(
-        'skia', 'platform_tools', 'android')
+    self.android_tools = self._skia_api.skia_dir.join(
+        'platform_tools', 'android')
     self.android_bin = self.android_tools.join('bin')
     self.apk_dir = self.android_tools.join('apps', 'visualbench', 'build',
                                            'outputs', 'apk')

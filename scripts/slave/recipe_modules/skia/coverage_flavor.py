@@ -17,8 +17,7 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
   def step(self, name, cmd, **kwargs):
     """Run the given step through coverage."""
     compile_target = 'dm'
-    build_cmd = [self._skia_api.m.path['slave_build'].join(
-                     'skia', 'tools', 'llvm_coverage_build'),
+    build_cmd = [self._skia_api.skia_dir.join('tools', 'llvm_coverage_build'),
                  compile_target]
     self._skia_api.run(self._skia_api.m.step,
                        'build %s' % compile_target,
@@ -47,8 +46,7 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
     report_file = results_dir.join(report_file_basename)
     args = [
         'python',
-        self._skia_api.m.path['slave_build'].join('skia', 'tools',
-                                                  'llvm_coverage_run.py'),
+        self._skia_api.skia_dir.join('tools', 'llvm_coverage_run.py'),
     ] + cmd + ['--outResultsFile', report_file]
     self._skia_api.run(self._skia_api.m.step, name=name, cmd=args,
                        cwd=self._skia_api.m.path['checkout'], **kwargs)
@@ -61,8 +59,7 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
     line_by_line = results_dir.join(line_by_line_basename)
     args = [
         'python',
-        self._skia_api.m.path['slave_build'].join('skia', 'tools',
-                                                  'parse_llvm_coverage.py'),
+        self._skia_api.skia_dir.join('tools', 'parse_llvm_coverage.py'),
         '--report', report_file, '--nanobench', nanobench_json,
         '--linebyline', line_by_line]
     args.extend(key)

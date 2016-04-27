@@ -118,7 +118,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_ninja"
+      "[CUSTOM_/_B_CACHE]/skia/platform_tools/ios/bin/ios_ninja"
     ],
     "cwd": "[CUSTOM_/_B_CACHE]/skia",
     "env": {

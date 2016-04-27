@@ -17,8 +17,8 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
     if self._skia_api.running_in_swarming:
       self.default_env['XCODEBUILD'] = (
           self._skia_api.slave_dir.join('xcodebuild'))
-    self.ios_bin = self._skia_api.m.path['slave_build'].join(
-        'skia', 'platform_tools', 'ios', 'bin')
+    self.ios_bin = self._skia_api.skia_dir.join(
+        'platform_tools', 'ios', 'bin')
 
   def step(self, name, cmd, **kwargs):
     args = [self.ios_bin.join('ios_run_skia')]

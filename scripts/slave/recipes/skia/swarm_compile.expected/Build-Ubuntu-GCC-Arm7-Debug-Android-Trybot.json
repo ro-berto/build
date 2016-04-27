@@ -187,7 +187,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
+      "[CUSTOM_/_B_CACHE]/skia/platform_tools/android/bin/android_ninja",
       "dm",
       "-d",
       "arm_v7_neon",
@@ -209,7 +209,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
+      "[CUSTOM_/_B_CACHE]/skia/platform_tools/android/bin/android_ninja",
       "nanobench",
       "-d",
       "arm_v7_neon",

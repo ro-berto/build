@@ -12,8 +12,8 @@ import default_flavor
 class ValgrindFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, *args, **kwargs):
     super(ValgrindFlavorUtils, self).__init__(*args, **kwargs)
-    self._suppressions_file = self._skia_api.m.path['slave_build'].join(
-        'skia', 'tools', 'valgrind.supp')
+    self._suppressions_file = self._skia_api.skia_dir.join(
+        'tools', 'valgrind.supp')
 
   def step(self, name, cmd, **kwargs):
     new_cmd = ['valgrind', '--gen-suppressions=all', '--leak-check=full',
