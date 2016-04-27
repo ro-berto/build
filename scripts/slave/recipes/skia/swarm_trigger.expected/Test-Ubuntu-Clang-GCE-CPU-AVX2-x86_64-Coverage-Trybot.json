@@ -47,7 +47,6 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -61,7 +60,6 @@
       ".",
       "[DEPOT_TOOLS]/gclient"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gclient revert"
   },
   {
@@ -79,7 +77,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -111,7 +108,6 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "apply_issue",
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 500@https://codereview.chromium.org/500@@@"
@@ -174,7 +170,6 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -249,7 +244,6 @@
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -267,7 +261,6 @@
       "-d",
       "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/linux64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "download luci-go linux"
   },
   {
@@ -281,7 +274,6 @@
       "-d",
       "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/mac64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "download luci-go mac"
   },
   {
@@ -295,7 +287,6 @@
       "-d",
       "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/win64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "download luci-go win"
   },
   {
@@ -305,7 +296,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/luci-go"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree Go binary dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -327,7 +317,6 @@
       "[SLAVE_BUILD]/luci-go",
       "0"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Copy Go binary"
   },
   {
@@ -338,7 +327,6 @@
       "[BUILD]/third_party/infra",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs third_party_infra",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -361,7 +349,6 @@
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs swarming tmp dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -384,7 +371,6 @@
       "{\n    \"args\": [\n        \"--isolate\", \n        \"[BUILD]/scripts/slave/recipes/skia/swarm_recipe.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-isolate_recipes.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\"\n    ], \n    \"dir\": \"[BUILD]/scripts/slave/recipes/skia\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Write isolate_recipes.isolated.gen.json"
   },
   {
@@ -401,7 +387,6 @@
       "--verbose",
       "[SLAVE_BUILD]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -419,7 +404,6 @@
       "[SLAVE_BUILD]/tmp",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -442,7 +426,6 @@
       "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -453,7 +436,6 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -464,7 +446,6 @@
       "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -475,7 +456,6 @@
       "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SK_IMAGE_VERSION"
   },
   {
@@ -486,7 +466,6 @@
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs swarming tmp dir (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -509,7 +488,6 @@
       "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/coverage_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Ubuntu\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Write test_skia.isolated.gen.json"
   },
   {
@@ -526,7 +504,6 @@
       "--verbose",
       "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -544,7 +521,6 @@
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated",
       "[dummy hash for isolate_recipes]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "add_isolated_input",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -569,7 +545,6 @@
       "https://isolateserver.appspot.com",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "upload new .isolated file for test_skia",
     "stdout": "/path/to/tmp/"
   },
@@ -640,7 +615,6 @@
       "issue=500",
       "revision=164710"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] test_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -664,7 +638,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree results_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -695,7 +668,6 @@
       "--task-output-dir",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -764,7 +736,6 @@
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/164710.cov",
       "gs://skia-infra/coverage-raw-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/164710.cov"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
@@ -782,7 +753,6 @@
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/nanobench_164710.json",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/nanobench_164710_1408633190.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "nanobench JSON"
   },
   {
@@ -792,7 +762,6 @@
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/nanobench_164710.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "old nanobench JSON",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -829,7 +798,6 @@
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_164710.json",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_164710_1408633190.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Line-by-line coverage JSON"
   },
   {
@@ -839,7 +807,6 @@
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_164710.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "old line-by-line coverage JSON",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -861,7 +828,6 @@
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_164710_1408633190.json",
       "gs://skia-infra/coverage-json-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/coverage_by_line_164710_1408633190.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null

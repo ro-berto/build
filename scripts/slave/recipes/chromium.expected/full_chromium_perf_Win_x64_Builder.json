@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -108,7 +106,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -123,7 +120,6 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -148,7 +144,6 @@
       "--service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -170,7 +165,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -188,7 +182,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -207,7 +200,6 @@
       "[CACHE]\\cipd\\goma",
       "//out/Release_x64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -251,7 +243,6 @@
       "chrome",
       "chromium_builder_perf"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -281,12 +272,10 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win x64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
     "trigger_specs": [
       {
@@ -313,7 +302,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (2)",
     "trigger_specs": [
       {
@@ -340,7 +328,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (3)",
     "trigger_specs": [
       {
@@ -367,7 +354,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (4)",
     "trigger_specs": [
       {
@@ -394,7 +380,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (5)",
     "trigger_specs": [
       {
@@ -421,7 +406,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (6)",
     "trigger_specs": [
       {
@@ -448,7 +432,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (7)",
     "trigger_specs": [
       {
@@ -475,7 +458,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (8)",
     "trigger_specs": [
       {
@@ -502,7 +484,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (9)",
     "trigger_specs": [
       {
@@ -529,7 +510,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (10)",
     "trigger_specs": [
       {
@@ -556,7 +536,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (11)",
     "trigger_specs": [
       {
@@ -583,7 +562,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (12)",
     "trigger_specs": [
       {
@@ -610,7 +588,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (13)",
     "trigger_specs": [
       {
@@ -637,7 +614,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (14)",
     "trigger_specs": [
       {
@@ -664,7 +640,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (15)",
     "trigger_specs": [
       {
@@ -691,7 +666,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (16)",
     "trigger_specs": [
       {
@@ -718,7 +692,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (17)",
     "trigger_specs": [
       {
@@ -745,7 +718,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (18)",
     "trigger_specs": [
       {
@@ -772,7 +744,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (19)",
     "trigger_specs": [
       {
@@ -799,7 +770,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (20)",
     "trigger_specs": [
       {
@@ -826,7 +796,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (21)",
     "trigger_specs": [
       {
@@ -853,7 +822,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (22)",
     "trigger_specs": [
       {
@@ -880,7 +848,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (23)",
     "trigger_specs": [
       {
@@ -907,7 +874,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (24)",
     "trigger_specs": [
       {
@@ -934,7 +900,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (25)",
     "trigger_specs": [
       {
@@ -961,7 +926,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (26)",
     "trigger_specs": [
       {
@@ -988,7 +952,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (27)",
     "trigger_specs": [
       {
@@ -1015,7 +978,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (28)",
     "trigger_specs": [
       {
@@ -1042,7 +1004,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (29)",
     "trigger_specs": [
       {
@@ -1069,7 +1030,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (30)",
     "trigger_specs": [
       {
@@ -1096,7 +1056,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (31)",
     "trigger_specs": [
       {
@@ -1123,7 +1082,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (32)",
     "trigger_specs": [
       {
@@ -1150,7 +1108,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (33)",
     "trigger_specs": [
       {
@@ -1177,7 +1134,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (34)",
     "trigger_specs": [
       {
@@ -1204,7 +1160,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "trigger (35)",
     "trigger_specs": [
       {
@@ -1253,7 +1208,6 @@
       "--platform",
       "win"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sizes"
   },
   {
@@ -1264,7 +1218,6 @@
       "--target",
       "Release_x64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps"
   },
   {

@@ -27,7 +27,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -76,7 +75,6 @@
       "--outfile",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Download patch"
   },
   {
@@ -88,7 +86,6 @@
       "[SLAVE_BUILD]/v8",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Calculate patch base"
   },
   {
@@ -123,7 +120,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -170,7 +166,6 @@
       "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -184,7 +179,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "asan=1 clang=1 coverage=1 dcheck_always_on=0 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 sanitizer_coverage=bb target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
@@ -202,7 +196,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -216,7 +209,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -260,7 +252,6 @@
       "--goma-disable-local-fallback",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -289,7 +280,6 @@
       "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -390,7 +380,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Check on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -507,7 +496,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] OptimizeForSize on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -612,7 +600,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -747,7 +734,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] SimdJs - all on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -852,7 +838,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Ignition - turbofan on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -957,7 +942,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Mjsunit - sp frame access on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1063,7 +1047,6 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 - ignition - turbofan on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1095,7 +1078,6 @@
       "--json-output",
       "[TMP_BASE]/coverage_output_tmp_1/data.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Initialize coverage data"
   },
   {
@@ -1124,7 +1106,6 @@
       "3",
       "Check/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1156,7 +1137,6 @@
       "--coverage-dir",
       "[TMP_BASE]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data"
   },
   {
@@ -1165,7 +1145,6 @@
       "-u",
       "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1202,7 +1181,6 @@
       "1",
       "OptimizeForSize/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "OptimizeForSize",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1234,7 +1212,6 @@
       "--coverage-dir",
       "[TMP_BASE]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (2)"
   },
   {
@@ -1243,7 +1220,6 @@
       "-u",
       "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1280,7 +1256,6 @@
       "6",
       "Test262/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Test262",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1312,7 +1287,6 @@
       "--coverage-dir",
       "[TMP_BASE]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (3)"
   },
   {
@@ -1321,7 +1295,6 @@
       "-u",
       "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1358,7 +1331,6 @@
       "1",
       "SimdJs - all/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1390,7 +1362,6 @@
       "--coverage-dir",
       "[TMP_BASE]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (4)"
   },
   {
@@ -1399,7 +1370,6 @@
       "-u",
       "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1436,7 +1406,6 @@
       "1",
       "Ignition - turbofan/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Ignition - turbofan",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1468,7 +1437,6 @@
       "--coverage-dir",
       "[TMP_BASE]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (5)"
   },
   {
@@ -1477,7 +1445,6 @@
       "-u",
       "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (5)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1514,7 +1481,6 @@
       "1",
       "Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1546,7 +1512,6 @@
       "--coverage-dir",
       "[TMP_BASE]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (6)"
   },
   {
@@ -1555,7 +1520,6 @@
       "-u",
       "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (6)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1592,7 +1556,6 @@
       "2",
       "Test262 - ignition - turbofan/Ubuntu-14.04/[dummy has/v8_linux64_sanitizer_coverage_rel/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - ignition - turbofan",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1624,7 +1587,6 @@
       "--coverage-dir",
       "[TMP_BASE]/coverage_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Merge coverage data (7)"
   },
   {
@@ -1633,7 +1595,6 @@
       "-u",
       "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Purge sancov files (7)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1656,7 +1617,6 @@
       "[TMP_BASE]/coverage_output_tmp_1/data.json",
       "gs://chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64/data.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64/data.json@@@"
@@ -1673,7 +1633,6 @@
       "--output-dir",
       "[TMP_BASE]/coverage_data_tmp_2"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Split coverage data"
   },
   {
@@ -1692,7 +1651,6 @@
       "[TMP_BASE]/coverage_data_tmp_2/*",
       "gs://chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil coverage data"
   },
   {

@@ -5,7 +5,6 @@
       "-u",
       "[BUILD]/scripts/slave/kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -96,7 +94,6 @@
       "-u",
       "[BUILD]/scripts/slave/runhooks_wrapper.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
@@ -115,7 +112,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -132,7 +128,6 @@
       "--",
       "chromium_builder_tests"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -150,7 +145,6 @@
       "interactive_ui_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "interactive_ui_tests"
   },
   {
@@ -168,7 +162,6 @@
       "base_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests"
   },
   {
@@ -186,7 +179,6 @@
       "cacheinvalidation_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cacheinvalidation_unittests"
   },
   {
@@ -204,7 +196,6 @@
       "cc_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cc_unittests"
   },
   {
@@ -222,7 +213,6 @@
       "chromedriver_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "chromedriver_unittests"
   },
   {
@@ -240,7 +230,6 @@
       "components_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "components_unittests"
   },
   {
@@ -258,7 +247,6 @@
       "courgette_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "courgette_unittests"
   },
   {
@@ -276,7 +264,6 @@
       "crypto_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "crypto_unittests"
   },
   {
@@ -294,7 +281,6 @@
       "gcm_unit_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gcm_unit_tests"
   },
   {
@@ -313,7 +299,6 @@
       "--gmock_verbose=error",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_unittests"
   },
   {
@@ -331,7 +316,6 @@
       "url_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "url_unittests"
   },
   {
@@ -349,7 +333,6 @@
       "jingle_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "jingle_unittests"
   },
   {
@@ -367,7 +350,6 @@
       "media_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "media_unittests"
   },
   {
@@ -385,7 +367,6 @@
       "net_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "net_unittests"
   },
   {
@@ -403,7 +384,6 @@
       "ppapi_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ppapi_unittests"
   },
   {
@@ -421,7 +401,6 @@
       "printing_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "printing_unittests"
   },
   {
@@ -439,7 +418,6 @@
       "remoting_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "remoting_unittests"
   },
   {
@@ -457,7 +435,6 @@
       "sbox_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sbox_unittests"
   },
   {
@@ -475,7 +452,6 @@
       "sbox_integration_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sbox_integration_tests"
   },
   {
@@ -493,7 +469,6 @@
       "sbox_validation_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sbox_validation_tests"
   },
   {
@@ -511,7 +486,6 @@
       "ipc_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ipc_tests"
   },
   {
@@ -529,7 +503,6 @@
       "sync_unit_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sync_unit_tests"
   },
   {
@@ -547,7 +520,6 @@
       "unit_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "unit_tests"
   },
   {
@@ -565,7 +537,6 @@
       "skia_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "skia_unittests"
   },
   {
@@ -583,7 +554,6 @@
       "sql_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sql_unittests"
   },
   {
@@ -601,7 +571,6 @@
       "ui_base_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ui_base_unittests"
   },
   {
@@ -619,7 +588,6 @@
       "content_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
   },
   {
@@ -637,7 +605,6 @@
       "views_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "views_unittests"
   },
   {
@@ -656,7 +623,6 @@
       "--lib=browser_tests",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests"
   },
   {
@@ -674,7 +640,6 @@
       "content_browsertests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "content_browsertests"
   },
   {
@@ -692,7 +657,6 @@
       "installer_util_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "installer_util_unittests"
   },
   {
@@ -711,7 +675,6 @@
       "--ui-test-action-max-timeout=120000",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sync_integration_tests"
   },
   {

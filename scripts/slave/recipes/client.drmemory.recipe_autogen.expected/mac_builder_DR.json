@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -54,7 +53,6 @@
       "-S",
       "[SLAVE_BUILD]/dynamorio/make/package.cmake,build=0x1234567"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Package DynamoRIO"
   },
   {
@@ -69,7 +67,6 @@
       "DynamoRIO-MacOS-*1234567.tar.gz",
       "gs://chromium-dynamorio/builds/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-dynamorio/builds/@@@"

@@ -24,7 +24,6 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -103,7 +102,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1",
@@ -119,7 +117,6 @@
       "--api-level",
       "23"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] installing emulator deps"
   },
   {
@@ -141,7 +138,6 @@
       "--sdcard-size",
       "512M"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] spawn 1 emulator (abi x86, api_level 23)"
   },
   {
@@ -153,7 +149,6 @@
       "-n",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] wait for 1 emulators to complete booting"
   },
   {
@@ -169,7 +164,6 @@
       "/path/to/tmp/json",
       "--emulators"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -186,7 +180,6 @@
       "--verbose",
       "--isolate_file_path=sample_isolate_file"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -200,7 +193,6 @@
       "[SLAVE_BUILD]/src/build/android/avd.py",
       "kill"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] killing all emulators"
   },
   {
@@ -210,7 +202,6 @@
       "[SLAVE_BUILD]/src/build/android/avd.py",
       "delete"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[emulator] deleting all temp avds after running"
   },
   {

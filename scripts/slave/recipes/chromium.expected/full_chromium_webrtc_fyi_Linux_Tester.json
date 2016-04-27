@@ -29,7 +29,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -121,7 +120,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -136,7 +134,6 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -161,7 +158,6 @@
       "--service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -183,7 +179,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "component=static_library ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
@@ -206,7 +201,6 @@
       "--properties",
       "{\"buildername\": \"Linux Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -221,7 +215,6 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json@@@",
@@ -238,7 +231,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -248,7 +240,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -278,7 +269,6 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -311,7 +301,6 @@
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-bot-mode"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "content_browsertests"
   },
   {
@@ -346,7 +335,6 @@
       "--test-launcher-bot-mode",
       "--test-launcher-print-test-stdio=always"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests"
   },
   {
@@ -372,7 +360,6 @@
       "--build-number=571",
       "content_unittests"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
   },
   {
@@ -403,7 +390,6 @@
       "--test-launcher-jobs=1",
       "--test-launcher-print-test-stdio=always"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "media_unittests"
   },
   {
@@ -430,7 +416,6 @@
       "remoting_unittests",
       "--gtest_filter=Webrtc*"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "remoting_unittests"
   },
   {

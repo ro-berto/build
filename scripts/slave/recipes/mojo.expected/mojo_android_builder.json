@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -54,7 +53,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -84,7 +82,6 @@
       "--release",
       "--android"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_DIR": "[BUILD]/goma"
     },
@@ -97,7 +94,6 @@
       "[SLAVE_BUILD]/src/mojo/tools/upload_binaries.py",
       "--android"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "upload shell and app binaries"
   },
   {

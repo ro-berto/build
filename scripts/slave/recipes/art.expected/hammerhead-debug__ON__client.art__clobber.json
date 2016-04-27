@@ -8,7 +8,6 @@
       "-b",
       "master-art"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
@@ -16,7 +15,6 @@
       "[DEPOT_TOOLS]/repo",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
@@ -26,7 +24,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/out"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree clobber",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -45,7 +42,6 @@
       "-j8",
       "--target"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -75,7 +71,6 @@
     "cmd": [
       "[SLAVE_BUILD]/art/tools/setup-buildbot-device.sh"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -111,7 +106,6 @@
       "/data/art-test",
       "/data/nativetest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -142,7 +136,6 @@
       "make",
       "test-art-target-sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -174,7 +167,6 @@
       "-j4",
       "test-art-target-gtest32"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -209,7 +201,6 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -239,7 +230,6 @@
     "cmd": [
       "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -271,7 +261,6 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -304,7 +293,6 @@
       "test-art-target-run-test-optimizing",
       "dist"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -340,7 +328,6 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -370,7 +357,6 @@
     "cmd": [
       "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -402,7 +388,6 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -435,7 +420,6 @@
       "test-art-target-run-test-interpreter",
       "dist"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -470,7 +454,6 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -500,7 +483,6 @@
     "cmd": [
       "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -532,7 +514,6 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -565,7 +546,6 @@
       "test-art-target-run-test-jit",
       "dist"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -600,7 +580,6 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -630,7 +609,6 @@
     "cmd": [
       "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -662,7 +640,6 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -695,7 +672,6 @@
       "--variant=X32",
       "--debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -730,7 +706,6 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -760,7 +735,6 @@
     "cmd": [
       "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -792,7 +766,6 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -825,7 +798,6 @@
       "--variant=X32",
       "--debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -860,7 +832,6 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -890,7 +861,6 @@
     "cmd": [
       "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
@@ -922,7 +892,6 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",

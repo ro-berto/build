@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -99,7 +98,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -114,7 +112,6 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -139,7 +136,6 @@
       "--service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -161,7 +157,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
@@ -185,7 +180,6 @@
       "--properties",
       "{\"buildername\": \"Android Tests (amp split)\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"slavename\": \"build1-a1\", \"target_platform\": \"android\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -200,7 +194,6 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
@@ -217,7 +210,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -230,7 +222,6 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -255,7 +246,6 @@
       "[SLAVE_BUILD]/src",
       "src"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "tree truth steps"
   },
   {
@@ -265,7 +255,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -295,7 +284,6 @@
       "--build-number",
       "77457"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -306,7 +294,6 @@
       "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "List adb devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -323,7 +310,6 @@
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "014E1F310401C009"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Root devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -347,7 +333,6 @@
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "create adb symlink"
   },
   {
@@ -357,7 +342,6 @@
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -373,7 +357,6 @@
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -390,7 +373,6 @@
       "--known-devices-file",
       "[BUILD]/site_config/.known_devices"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -503,7 +485,6 @@
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -528,7 +509,6 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "spawn_device_monitor"
   },
   {
@@ -543,7 +523,6 @@
       "gs://chrome-amp-keys/commit_queue_pool/api_key",
       "[BUILD]/site_config/.amp_commit_queue_pool_key"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download amp api key"
   },
   {
@@ -558,7 +537,6 @@
       "gs://chrome-amp-keys/commit_queue_pool/api_secret",
       "[BUILD]/site_config/.amp_commit_queue_pool_secret"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download amp api secret"
   },
   {
@@ -593,7 +571,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -623,7 +600,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save android_webview_unittests"
   },
   {
@@ -660,7 +636,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -706,7 +681,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -736,7 +710,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save components_unittests"
   },
   {
@@ -771,7 +744,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -801,7 +773,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save events_unittests"
   },
   {
@@ -836,7 +807,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -866,7 +836,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save gl_tests"
   },
   {
@@ -901,7 +870,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -931,7 +899,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save ipc_tests"
   },
   {
@@ -968,7 +935,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -998,7 +964,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save sql_unittests"
   },
   {
@@ -1035,7 +1000,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -1065,7 +1029,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save sync_unit_tests"
   },
   {
@@ -1100,7 +1063,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -1130,7 +1092,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save ui_android_unittests"
   },
   {
@@ -1165,7 +1126,6 @@
       "--verbose",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -1195,7 +1155,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save ui_touch_selection_unittests"
   },
   {
@@ -1209,7 +1168,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -1237,7 +1195,6 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [AndroidWebViewTest]"
   },
   {
@@ -1251,7 +1208,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -1279,7 +1235,6 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [ContentShellTest]"
   },
   {
@@ -1293,7 +1248,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -1321,7 +1275,6 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [ChromePublicTest]"
   },
   {
@@ -1335,7 +1288,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromeSyncShellTest",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -1363,7 +1315,6 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [ChromeSyncShellTest]"
   },
   {
@@ -1378,7 +1329,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1397,7 +1347,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1416,7 +1365,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1435,7 +1383,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1454,7 +1401,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1473,7 +1419,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1495,7 +1440,6 @@
       "-t",
       "300"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1514,7 +1458,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1533,7 +1476,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1552,7 +1494,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -1572,7 +1513,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1605,7 +1545,6 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [junit_unit_tests]"
   },
   {
@@ -1621,7 +1560,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1654,7 +1592,6 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [chrome_junit_tests]"
   },
   {
@@ -1670,7 +1607,6 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1703,7 +1639,6 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [content_junit_tests]"
   },
   {
@@ -1714,7 +1649,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load android_webview_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1765,7 +1699,6 @@
       "/path/to/tmp/json",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -1782,7 +1715,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load components_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1835,7 +1767,6 @@
       "/path/to/tmp/json",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -1852,7 +1783,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load events_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1903,7 +1833,6 @@
       "/path/to/tmp/json",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -1920,7 +1849,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load gl_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1971,7 +1899,6 @@
       "/path/to/tmp/json",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -1988,7 +1915,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load ipc_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2039,7 +1965,6 @@
       "/path/to/tmp/json",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -2056,7 +1981,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load sql_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2109,7 +2033,6 @@
       "/path/to/tmp/json",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -2126,7 +2049,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load sync_unit_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2179,7 +2101,6 @@
       "/path/to/tmp/json",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -2196,7 +2117,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load ui_android_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2247,7 +2167,6 @@
       "/path/to/tmp/json",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -2264,7 +2183,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load ui_touch_selection_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2315,7 +2233,6 @@
       "/path/to/tmp/json",
       "--release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -2334,7 +2251,6 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "shutdown_device_monitor"
   },
   {
@@ -2346,7 +2262,6 @@
       "[SLAVE_BUILD]/src/out/Release/full_log",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "logcat_dump"
   },
   {
@@ -2365,7 +2280,6 @@
       "[SLAVE_BUILD]/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/Android Tests (amp split)/77457"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Tests (amp split)/77457@@@"
@@ -2379,7 +2293,6 @@
       "--more-info",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2394,7 +2307,6 @@
       "-s",
       "-w"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2409,7 +2321,6 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

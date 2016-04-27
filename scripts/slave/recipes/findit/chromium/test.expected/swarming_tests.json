@@ -24,7 +24,6 @@
       "src@r1",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -98,7 +97,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -113,7 +111,6 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -138,7 +135,6 @@
       "--service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -160,7 +156,6 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -174,7 +169,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -199,7 +193,6 @@
       "--properties",
       "{\"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -214,7 +207,6 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json@@@",
@@ -239,7 +231,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1"
   },
   {
@@ -267,7 +258,6 @@
       "src@r1",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -342,7 +332,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -360,7 +349,6 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -385,7 +373,6 @@
       "--service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -407,7 +394,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -435,7 +421,6 @@
       "--properties",
       "{\"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -451,7 +436,6 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.read test spec",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -480,7 +464,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.cleanup_temp",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -495,7 +478,6 @@
       "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.clean isolated files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -519,7 +501,6 @@
       "gl_tests\n",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -541,7 +522,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -587,7 +567,6 @@
       "gl_tests",
       "gl_tests_run"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -628,7 +607,6 @@
       "--verbose",
       "[SLAVE_BUILD]/src/out/Release/gl_tests.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -702,7 +680,6 @@
       "--gtest_filter=Test.One",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.[trigger] gl_tests (r1) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -744,7 +721,6 @@
       "1",
       "gl_tests (r1)/Mac-10.9/[dummy has/mac_chromium_variable/1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.gl_tests (r1) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -770,7 +746,6 @@
       "--chrome-revision",
       "170242"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test r1.Upload to test-results [test r1.gl_tests (r1) on Mac-10.9]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -782,7 +757,6 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@report@{@@@",

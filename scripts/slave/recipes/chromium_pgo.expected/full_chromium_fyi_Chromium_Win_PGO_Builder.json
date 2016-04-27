@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -113,7 +111,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=1 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
@@ -130,7 +127,6 @@
       "*.pg[cd]",
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmwildcard *.pg[cd] in [SLAVE_BUILD]\\src\\out\\Release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -165,7 +161,6 @@
       "--",
       "chrome"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s"
@@ -188,7 +183,6 @@
       "--benchmark",
       "page_cycler.morejs"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: page_cycler.morejs"
   },
   {
@@ -207,7 +201,6 @@
       "--benchmark",
       "dromaeo.jslibstyleprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibstyleprototype"
   },
   {
@@ -226,7 +219,6 @@
       "--benchmark",
       "dromaeo.jslibeventprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibeventprototype"
   },
   {
@@ -245,7 +237,6 @@
       "--benchmark",
       "speedometer"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: speedometer"
   },
   {
@@ -264,7 +255,6 @@
       "--benchmark",
       "smoothness.top_25_smooth"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: smoothness.top_25_smooth"
   },
   {
@@ -283,7 +273,6 @@
       "--benchmark",
       "octane"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: octane"
   },
   {
@@ -302,7 +291,6 @@
       "--benchmark",
       "blink_perf.svg"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.svg"
   },
   {
@@ -321,7 +309,6 @@
       "--benchmark",
       "dromaeo.jslibtraverseprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibtraverseprototype"
   },
   {
@@ -340,7 +327,6 @@
       "--benchmark",
       "blink_style.top_25"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_style.top_25"
   },
   {
@@ -359,7 +345,6 @@
       "--benchmark",
       "dromaeo.domcoreattr"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.domcoreattr"
   },
   {
@@ -378,7 +363,6 @@
       "--benchmark",
       "blink_perf.dom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.dom"
   },
   {
@@ -397,7 +381,6 @@
       "--benchmark",
       "dromaeo.jslibattrprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibattrprototype"
   },
   {
@@ -416,7 +399,6 @@
       "--benchmark",
       "sunspider"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: sunspider"
   },
   {
@@ -435,7 +417,6 @@
       "--benchmark",
       "media.mse_cases"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: media.mse_cases"
   },
   {
@@ -454,7 +435,6 @@
       "--benchmark",
       "v8.infinite_scroll"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: v8.infinite_scroll"
   },
   {
@@ -473,7 +453,6 @@
       "--benchmark",
       "blink_perf.events"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.events"
   },
   {
@@ -492,7 +471,6 @@
       "--benchmark",
       "dromaeo.domcoretraverse"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.domcoretraverse"
   },
   {
@@ -511,7 +489,6 @@
       "--benchmark",
       "dromaeo.domcoremodify"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.domcoremodify"
   },
   {
@@ -530,7 +507,6 @@
       "--benchmark",
       "dromaeo.cssqueryjquery"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.cssqueryjquery"
   },
   {
@@ -549,7 +525,6 @@
       "--benchmark",
       "indexeddb_perf"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: indexeddb_perf"
   },
   {
@@ -568,7 +543,6 @@
       "--benchmark",
       "blink_perf.canvas"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.canvas"
   },
   {
@@ -587,7 +561,6 @@
       "--benchmark",
       "dromaeo.domcorequery"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.domcorequery"
   },
   {
@@ -606,7 +579,6 @@
       "--benchmark",
       "blink_perf.bindings"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.bindings"
   },
   {
@@ -625,7 +597,6 @@
       "--benchmark",
       "dromaeo.jslibtraversejquery"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
   },
   {
@@ -644,7 +615,6 @@
       "--benchmark",
       "dromaeo.jslibmodifyprototype"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibmodifyprototype"
   },
   {
@@ -663,7 +633,6 @@
       "--benchmark",
       "blink_perf.css"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.css"
   },
   {
@@ -682,7 +651,6 @@
       "--benchmark",
       "blink_perf.paint"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: blink_perf.paint"
   },
   {
@@ -692,7 +660,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=2 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
@@ -724,7 +691,6 @@
       "--",
       "chrome"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -748,7 +714,6 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Win PGO Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"recipe\": \"chromium_pgo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   },
   {

@@ -47,7 +47,6 @@
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -68,7 +67,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -135,7 +133,6 @@
       "[SLAVE_BUILD]\\skia\\infra\\bots\\win_toolchain_hash.json",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Read win_toolchain_hash.json"
   },
   {
@@ -146,7 +143,6 @@
       "[SLAVE_BUILD]\\tmp",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -169,7 +165,6 @@
       "[SLAVE_BUILD]\\tmp\\WIN_TOOLCHAIN_HASH",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded WIN_TOOLCHAIN_HASH",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -183,7 +178,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\win"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree win",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -215,7 +209,6 @@
       "--git_cmd_path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -290,7 +283,6 @@
       "[SLAVE_BUILD]\\swarming.client\\swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -312,7 +304,6 @@
       "--cache",
       "[HOME]\\.isolate_cache"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Download Win Toolchain"
   },
   {
@@ -325,7 +316,6 @@
       "--depot_tools_parent_dir",
       "[SLAVE_BUILD]\\win"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bootstrap Win Toolchain"
   },
   {
@@ -336,7 +326,6 @@
       "38380d77eec9164e5818ae45e2915a6f22d60e85",
       "[SLAVE_BUILD]\\tmp\\WIN_TOOLCHAIN_HASH"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "write WIN_TOOLCHAIN_HASH"
   },
   {

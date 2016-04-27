@@ -9,7 +9,6 @@
       "obj",
       "armeabi-v7a"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "clean_build",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -35,7 +34,6 @@
       "--url",
       "https://chromium.googlesource.com/android_tools"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup"
   },
   {
@@ -114,7 +112,6 @@
       "--url",
       "https://chromium.googlesource.com/webm/libvpx"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (2)"
   },
   {
@@ -211,7 +208,6 @@
       "--sdk-path=[SLAVE_BUILD]/android_tools/ndk",
       "--target=armv7-android-gcc"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "configure"
   },
   {
@@ -223,7 +219,6 @@
       "APP_OPTIM=release",
       "APP_STL=gnustl_static"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "NDK_PROJECT_PATH": "[SLAVE_BUILD]"
     },
@@ -241,7 +236,6 @@
       "-u",
       "http://downloads.webmproject.org/test_data/libvpx"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get_files"
   },
   {
@@ -253,7 +247,6 @@
       "/data/local/tmp",
       "[SLAVE_BUILD]/test_data"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "transfer_files"
   },
   {
@@ -263,7 +256,6 @@
       "[SLAVE_BUILD]/libs/armeabi-v7a",
       "/data/local/tmp"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "push_so"
   },
   {
@@ -279,7 +271,6 @@
       "/data/local/tmp/vpx_test",
       "--gtest_filter=-*Large*"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "adb_wrap",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -302,7 +293,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "scrape_logs",
     "stdin": "This is text with json inside normally",
     "~followup_annotations": [
@@ -337,7 +327,6 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "perf dashboard post",
     "stdin": "{\"data\": [{\"bot\": \"libvpx-bot\", \"buildername\": \"Nexus 5 Builder\", \"buildnumber\": \"75\", \"master\": \"client.libvpx\", \"masterid\": \"client.libvpx\", \"revision\": \"42\", \"test\": \"libvpx/decode/perf_test/nexus_5/vp90-2-bbb_426x240_tile_1x1_180kbps.webm_1\", \"units\": \"fps\", \"value\": 609.82868}, {\"bot\": \"libvpx-bot\", \"buildername\": \"Nexus 5 Builder\", \"buildnumber\": \"75\", \"master\": \"client.libvpx\", \"masterid\": \"client.libvpx\", \"revision\": \"42\", \"test\": \"libvpx/encode/perf_test/fps/nexus_5/vp90-2-bbb_640x360_tile_1x2_337kbps.webm_5\", \"units\": \"fps\", \"value\": 317.976883}, {\"bot\": \"libvpx-bot\", \"buildername\": \"Nexus 5 Builder\", \"buildnumber\": \"75\", \"master\": \"client.libvpx\", \"masterid\": \"client.libvpx\", \"revision\": \"42\", \"test\": \"libvpx/encode/perf_test/minPsnr/nexus_5/vp90-2-bbb_640x360_tile_1x2_337kbps.webm_5\", \"units\": \"dB\", \"value\": 43.5}], \"url\": \"https://chromeperf.appspot.com/add_point\"}"
   },

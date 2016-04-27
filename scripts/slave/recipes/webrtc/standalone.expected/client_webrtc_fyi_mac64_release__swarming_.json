@@ -5,7 +5,6 @@
       "--json-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "host and tools info",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />OS X 1.2.3, Xcode 6.7.8 (5D342509a)@@@",
@@ -47,7 +46,6 @@
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -86,7 +84,6 @@
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -98,7 +95,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -110,7 +106,6 @@
       "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -120,7 +115,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[BUILD]/goma' rtc_use_264=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
@@ -135,7 +129,6 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -153,7 +146,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -196,7 +188,6 @@
       "--",
       "All"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -245,7 +236,6 @@
       "[SLAVE_BUILD]/src/out/Release/video_engine_tests.isolated.gen.json",
       "[SLAVE_BUILD]/src/out/Release/voice_engine_unittests.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -329,7 +319,6 @@
       "--idempotent",
       "[dummy hash for audio_decoder_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] audio_decoder_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -407,7 +396,6 @@
       "--idempotent",
       "[dummy hash for common_audio_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] common_audio_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -485,7 +473,6 @@
       "--idempotent",
       "[dummy hash for common_video_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] common_video_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -563,7 +550,6 @@
       "--idempotent",
       "[dummy hash for modules_tests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] modules_tests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -641,7 +627,6 @@
       "--idempotent",
       "[dummy hash for modules_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] modules_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -719,7 +704,6 @@
       "--idempotent",
       "[dummy hash for peerconnection_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] peerconnection_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -797,7 +781,6 @@
       "--idempotent",
       "[dummy hash for rtc_media_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] rtc_media_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -875,7 +858,6 @@
       "--idempotent",
       "[dummy hash for rtc_pc_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] rtc_pc_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -953,7 +935,6 @@
       "--idempotent",
       "[dummy hash for rtc_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] rtc_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1031,7 +1012,6 @@
       "--idempotent",
       "[dummy hash for system_wrappers_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] system_wrappers_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1109,7 +1089,6 @@
       "--idempotent",
       "[dummy hash for test_support_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] test_support_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1187,7 +1166,6 @@
       "--idempotent",
       "[dummy hash for tools_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] tools_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1265,7 +1243,6 @@
       "--idempotent",
       "[dummy hash for video_engine_tests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] video_engine_tests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1343,7 +1320,6 @@
       "--idempotent",
       "[dummy hash for voice_engine_unittests]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] voice_engine_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1382,7 +1358,6 @@
       "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_peerconnection_objc_test"
   },
   {
@@ -1409,7 +1384,6 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_nonparallel_tests"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_nonparallel_tests"
   },
   {
@@ -1428,7 +1402,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "audio_decoder_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1489,7 +1462,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "common_audio_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1550,7 +1522,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "common_video_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1611,7 +1582,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "modules_tests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1672,7 +1642,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1733,7 +1702,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "peerconnection_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1794,7 +1762,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_media_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1855,7 +1822,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_pc_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1916,7 +1882,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1977,7 +1942,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "system_wrappers_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2038,7 +2002,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test_support_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2099,7 +2062,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "tools_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2160,7 +2122,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_tests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2221,7 +2182,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",

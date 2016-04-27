@@ -9,7 +9,6 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -87,7 +86,6 @@
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -174,7 +172,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -272,7 +269,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Benchmarks on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -370,7 +366,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] SimdJs - all on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -409,7 +404,6 @@
       "1",
       "Check/Ubuntu-12.04/[dummy has/V8 Linux64 - debug - greedy allocator/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
@@ -496,7 +490,6 @@
       "1",
       "Benchmarks/Ubuntu-12.04/[dummy has/V8 Linux64 - debug - greedy allocator/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Benchmarks",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -537,7 +530,6 @@
       "1",
       "SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux64 - debug - greedy allocator/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -558,7 +550,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect"
   },
   {
@@ -570,7 +561,6 @@
       "--outfile",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.Fetch changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -604,7 +594,6 @@
       "--log-limit",
       "100"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.Get change range",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -643,7 +632,6 @@
       "ls",
       "gs://chromium-v8/v8-linux64-dbg/full-build-linux_a1.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.gsutil check build a1",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -661,7 +649,6 @@
       "ls",
       "gs://chromium-v8/v8-linux64-dbg/full-build-linux_a2.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect.gsutil check build a2",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -670,7 +657,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0"
   },
   {
@@ -685,7 +671,6 @@
       "gs://chromium-v8/v8-linux64-dbg/full-build-linux_a0.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.gsutil download isolated json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -776,7 +761,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.[trigger] Retry on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -816,7 +800,6 @@
       "1",
       "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - debug - greedy allocator/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -838,7 +821,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Available range",
     "~followup_annotations": [
       "@@@STEP_LINK@a1@https://chromium.googlesource.com/v8/v8/+/a1@@@",
@@ -847,7 +829,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1"
   },
   {
@@ -862,7 +843,6 @@
       "gs://chromium-v8/v8-linux64-dbg/full-build-linux_a1.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1.gsutil download isolated json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -953,7 +933,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1.[trigger] Retry on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -993,7 +972,6 @@
       "1",
       "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - debug - greedy allocator/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1015,7 +993,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Suspecting multiple commits",
     "~followup_annotations": [
       "@@@STEP_LINK@a2@https://chromium.googlesource.com/v8/v8/+/a2@@@",

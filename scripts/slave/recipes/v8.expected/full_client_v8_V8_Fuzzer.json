@@ -9,7 +9,6 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -87,7 +86,6 @@
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -158,7 +156,6 @@
       "out/Debug/d8",
       "${ISOLATED_OUTDIR}/fuzz-results-54321.tar.bz2"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Fuzz on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -193,7 +190,6 @@
       "--task-output-dir",
       "[TMP_BASE]/swarming_output_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Fuzz on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",

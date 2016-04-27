@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -103,7 +102,6 @@
       "-u",
       "[SLAVE_BUILD]/src/third_party/closure_compiler/run_tests.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "run_tests"
   },
   {
@@ -111,7 +109,6 @@
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "[SLAVE_BUILD]/src/third_party/closure_compiler/compiled_resources.gyp"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "generate_gyp_files"
   },
   {
@@ -136,7 +133,6 @@
       "ninja",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -147,7 +143,6 @@
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "[SLAVE_BUILD]/src/third_party/closure_compiler/compiled_resources2.gyp"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "generate_v2_gyp_files"
   },
   {
@@ -172,7 +167,6 @@
       "ninja",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

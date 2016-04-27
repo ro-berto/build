@@ -13,7 +13,6 @@
       "--benchmark",
       "rasterize_and_record_micro"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Cluster Telemetry rasterize_and_record_micro run"
   },
   {

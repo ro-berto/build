@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -54,7 +53,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -84,7 +82,6 @@
       "--debug",
       "--android"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_DIR": "[BUILD]/goma"
     },
@@ -101,7 +98,6 @@
       "--known-devices-file",
       "[BUILD]/site_config/.known_devices"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "device_status_check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -137,7 +133,6 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "provision_device"
   },
   {
@@ -148,7 +143,6 @@
       "{\"build_number\": 571, \"builder_name\": \"Mojo Android Builder Tests (dbg)\", \"dcheck_always_on\": false, \"is_debug\": true, \"master_name\": \"chromium.testing.master\", \"target_os\": \"android\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"default\"]}",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get_test_list",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",

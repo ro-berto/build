@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_MODULE[build::bisect_tester]/resources/put_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "saving url to temp file",
     "stdin": "http://build.chromium.org/p/tryserver.chromium.perf/json/builders/linux_perf_tester/builds/571",
     "stdout": "/path/to/tmp/"
@@ -22,7 +21,6 @@
       "/tmp/dummy1",
       "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil bisect-results/f7a7b4135624439cbd27fdd5133d74ec",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec@@@"
@@ -54,7 +52,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -128,7 +125,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -143,7 +139,6 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -168,7 +163,6 @@
       "--service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -190,7 +184,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
@@ -213,7 +206,6 @@
       "--properties",
       "{\"buildername\": \"linux_perf_tester\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -228,7 +220,6 @@
       "[SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json@@@",
@@ -245,7 +236,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -255,7 +245,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -285,7 +274,6 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -310,7 +298,6 @@
       "--browser=release",
       "page_cycler.intl_ar_fa_he"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Performance Test 1 of 2",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
@@ -340,7 +327,6 @@
       "--browser=release",
       "page_cycler.intl_ar_fa_he"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Performance Test 2 of 2",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
@@ -354,7 +340,6 @@
       "-u",
       "RECIPE_MODULE[build::bisect_tester]/resources/put_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "saving json to temp file",
     "stdin": "{\"output\": [], \"results\": {\"values\": [0, 0]}, \"retcodes\": [0, 0]}",
     "stdout": "/path/to/tmp/"
@@ -371,7 +356,6 @@
       "/tmp/dummy2",
       "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results@@@"

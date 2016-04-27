@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -113,7 +112,6 @@
       "cfg_name",
       "cfg_value"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for controller_path.isolate"
   },
   {
@@ -143,7 +141,6 @@
       "Task",
       "task_path.isolated"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Running test for Test Controller",
     "stdout": "/path/to/tmp/"
   },

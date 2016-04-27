@@ -8,7 +8,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -19,7 +18,6 @@
       "[BUILD]/scripts/tools/pycurl.py",
       "https://v8-roll.appspot.com/status"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "check roll status",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -37,7 +35,6 @@
       "--outfile",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "check active roll"
   },
   {
@@ -46,7 +43,6 @@
       "-u",
       "import time; time.sleep(20)"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "wait for gnumbd",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(20)@@@",
@@ -82,7 +78,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -196,7 +191,6 @@
       "--counter",
       "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"success\", \"value\": 1}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "upload stats"
   },
   {

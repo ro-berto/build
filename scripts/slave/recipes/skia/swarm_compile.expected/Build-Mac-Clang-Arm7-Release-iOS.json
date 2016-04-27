@@ -67,7 +67,6 @@
       "[SLAVE_BUILD]/out/Release",
       "[SWARM_OUT_DIR]/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "copy build products",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",
@@ -102,7 +101,6 @@
       "[SLAVE_BUILD]/skia/xcodebuild/Release-iphoneos",
       "[SWARM_OUT_DIR]/xcodebuild/Release-iphoneos"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "copy build products (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",

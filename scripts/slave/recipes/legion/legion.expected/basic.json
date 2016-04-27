@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -113,7 +112,6 @@
       "multi_machine",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for controller_test.isolate"
   },
   {
@@ -132,7 +130,6 @@
       "multi_machine",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for task_test.isolate"
   },
   {
@@ -159,7 +156,6 @@
       "task-hash",
       "[SLAVE_BUILD]/src/testing/legion/examples/hello_world/task_test.isolated"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Running test for hello_world_test",
     "stdout": "/path/to/tmp/"
   },
@@ -179,7 +175,6 @@
       "multi_machine",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for subprocess_test.isolate"
   },
   {
@@ -198,7 +193,6 @@
       "multi_machine",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for task.isolate"
   },
   {
@@ -225,7 +219,6 @@
       "task-hash",
       "[SLAVE_BUILD]/src/testing/legion/examples/subprocess/task.isolated"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Running test for subprocess_test",
     "stdout": "/path/to/tmp/"
   },
@@ -245,7 +238,6 @@
       "multi_machine",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for http_test.isolate"
   },
   {
@@ -264,7 +256,6 @@
       "multi_machine",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for http_client.isolate"
   },
   {
@@ -283,7 +274,6 @@
       "multi_machine",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for http_server.isolate"
   },
   {
@@ -313,7 +303,6 @@
       "http-server",
       "[SLAVE_BUILD]/src/testing/legion/examples/http_example/http_server.isolated"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Running test for http_test",
     "stdout": "/path/to/tmp/"
   },

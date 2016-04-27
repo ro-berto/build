@@ -6,7 +6,6 @@
       "\nimport os, sys\n\nbuild_path = sys.argv[1]\nif os.path.exists(build_path):\n  for (path, dir, files) in os.walk(build_path):\n    for cur_file in files:\n      if cur_file.endswith('index.lock'):\n        path_to_file = os.path.join(path, cur_file)\n        print 'deleting %s' % path_to_file\n        os.remove(path_to_file)\n",
       "[SLAVE_BUILD]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup index.lock",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -32,7 +31,6 @@
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -46,7 +44,6 @@
       ".",
       "[DEPOT_TOOLS]/gclient"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gclient revert"
   },
   {
@@ -64,7 +61,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -114,7 +110,6 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -139,7 +134,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
@@ -157,7 +151,6 @@
       "foo",
       "src/repo"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "tree truth steps"
   },
   {
@@ -168,7 +161,6 @@
       "[SLAVE_BUILD]/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get version"
   },
   {
@@ -185,7 +177,6 @@
       "gs://build-bucket/build_product.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download_build_product"
   },
   {
@@ -213,7 +204,6 @@
       "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "List adb devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -230,7 +220,6 @@
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "014E1F310401C009"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Root devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -252,7 +241,6 @@
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -268,7 +256,6 @@
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -285,7 +272,6 @@
       "--known-devices-file",
       "[BUILD]/site_config/.known_devices"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -398,7 +384,6 @@
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -415,7 +400,6 @@
       "--known-devices-file",
       "[BUILD]/site_config/.known_devices"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -530,7 +514,6 @@
       "--reboot-timeout",
       "1800"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -549,7 +532,6 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
@@ -584,7 +566,6 @@
       "--release",
       "--official-build"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
@@ -602,7 +583,6 @@
       "--gtest_filter=WebRtc*",
       "--tool=asan"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -615,7 +595,6 @@
       "-w",
       "[SLAVE_BUILD]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "prepare bisect perf regression"
   },
   {
@@ -628,7 +607,6 @@
       "--path_to_config",
       "test.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "run bisect perf regression"
   },
   {
@@ -643,7 +621,6 @@
       "gs://chromium-cts/android-cts-5.1_r5-linux_x86-arm.zip",
       "[TMP_BASE]/cts_tmp_1/android-cts-5.1_r5-linux_x86-arm.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Download CTS"
   },
   {
@@ -652,7 +629,6 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Extract CTS",
     "stdin": "{\"output\": \"[TMP_BASE]/cts_tmp_1/cts-extracted\", \"zip_file\": \"[TMP_BASE]/cts_tmp_1/android-cts-5.1_r5-linux_x86-arm.zip\"}"
   },
@@ -664,7 +640,6 @@
       "-p",
       "android.webkit"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:%(PATH)s"
     },
@@ -683,7 +658,6 @@
       "/path/to/testResult.xml",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Read test result and report failures",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>unexpected failures:<br/>android.webkit.cts.WebSettingsTest#unexpected failed methodname<br/>@@@",
@@ -697,7 +671,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]/cts_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree Delete CTS downloads",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

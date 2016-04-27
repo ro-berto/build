@@ -4,7 +4,6 @@
       "echo",
       "billy"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "climate": "rainy",
       "mood": "excellent"
@@ -16,7 +15,6 @@
       "echo",
       "sam"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "climate": "cloudy",
       "mood": "excellent"
@@ -28,7 +26,6 @@
       "echo",
       "testb"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "climate": "sunny",
       "mood": "excellent"

@@ -25,7 +25,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -64,7 +63,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=0 coverage=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1 v8_target_arch=x64",
@@ -82,7 +80,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -92,7 +89,6 @@
       "[SLAVE_BUILD]/v8/out/Release",
       "--zerocounters"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "lcov zero counters"
   },
   {
@@ -126,7 +122,6 @@
       "--clobber",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -186,7 +181,6 @@
       "--output-file",
       "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "lcov capture"
   },
   {
@@ -203,7 +197,6 @@
       "--output-file",
       "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "lcov remove"
   },
   {
@@ -213,7 +206,6 @@
       "[TMP_BASE]/gcov_coverage_html_tmp_2",
       "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "genhtml"
   },
   {
@@ -232,7 +224,6 @@
       "[TMP_BASE]/gcov_coverage_html_tmp_2",
       "gs://chromium-v8/linux64_gcov_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil coverage report",
     "~followup_annotations": [
       "@@@STEP_LINK@report@https://storage.googleapis.com/chromium-v8/linux64_gcov_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c/index.html@@@"

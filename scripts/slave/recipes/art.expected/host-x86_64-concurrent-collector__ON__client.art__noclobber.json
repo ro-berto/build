@@ -8,7 +8,6 @@
       "-b",
       "master-art"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
@@ -16,7 +15,6 @@
       "[DEPOT_TOOLS]/repo",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
@@ -25,7 +23,6 @@
       "-j8",
       "--host"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ART_HEAP_POISONING": "true",
@@ -53,7 +50,6 @@
       "-j8",
       "test-art-host-gtest64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ART_HEAP_POISONING": "true",
@@ -82,7 +78,6 @@
       "test-art-host-run-test-optimizing",
       "dist"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ART_HEAP_POISONING": "true",
@@ -112,7 +107,6 @@
       "test-art-host-run-test-interpreter",
       "dist"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ART_HEAP_POISONING": "true",
@@ -141,7 +135,6 @@
       "test-art-host-run-test-jit",
       "dist"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ART_HEAP_POISONING": "true",
@@ -170,7 +163,6 @@
       "--variant=X64",
       "--debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ART_HEAP_POISONING": "true",
@@ -199,7 +191,6 @@
       "--variant=X64",
       "--debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ART_HEAP_POISONING": "true",

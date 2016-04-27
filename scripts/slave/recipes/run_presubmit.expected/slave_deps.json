@@ -30,7 +30,6 @@
       "build_internal/slave.DEPS@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -105,7 +104,6 @@
       "--upstream",
       "a6b2a23900c876d4bcc03a18710abb26cb95996d"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

@@ -24,7 +24,6 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -98,7 +97,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
   },
   {
@@ -113,7 +111,6 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.install cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -138,7 +135,6 @@
       "--service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -160,7 +156,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
@@ -183,7 +178,6 @@
       "--properties",
       "{\"buildername\": \"linux_perf_bisector\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -198,7 +192,6 @@
       "[SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json@@@",
@@ -227,7 +220,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -253,7 +245,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range"
   },
   {
@@ -267,7 +258,6 @@
       "--attempts",
       "3"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306478}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -289,7 +279,6 @@
       "--attempts",
       "3"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306475}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -309,7 +298,6 @@
       "--commit",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.fetch file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -329,7 +317,6 @@
       "--commit",
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.fetch file e28dc0d49c331def2a3bbf3ddd0096eb51551155:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -342,7 +329,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Expanding revision range"
   },
   {
@@ -354,7 +340,6 @@
       "a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "https://chromium.googlesource.com/chromium/src"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Expanding revision range.for revisions e28dc0d49c331def2a3bbf3ddd0096eb51551155:a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -374,7 +359,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values"
   },
   {
@@ -388,7 +372,6 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -454,7 +437,6 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -525,7 +507,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@e28dc0d49c",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -542,7 +523,6 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -550,7 +530,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.Triggering test job for e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "trigger_specs": [
       {
@@ -582,7 +561,6 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -605,7 +583,6 @@
       "ls",
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -622,7 +599,6 @@
       "cat",
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil Get test results for build e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -645,7 +621,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@a6298e4afe",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -662,7 +637,6 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@a6298e4afe.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -670,7 +644,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@a6298e4afe.Triggering test job for a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "trigger_specs": [
       {
@@ -702,7 +675,6 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@a6298e4afe.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -725,7 +697,6 @@
       "ls",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@a6298e4afe.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -742,7 +713,6 @@
       "cat",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for chromium@a6298e4afe.gsutil Get test results for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -756,7 +726,6 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Recipe failed. Reason: Testing the \"good\" revision failed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -788,7 +757,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Debug Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, values=[], mean_value=None, std_dev=None)@@@",
@@ -808,7 +776,6 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Post bisect results",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisector/builds/571\", \"change\": null, \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 20.0, \"result\": \"bad\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 1.0, \"values\": [19, 20, 21]}], \"score\": 0, \"status\": \"failed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",

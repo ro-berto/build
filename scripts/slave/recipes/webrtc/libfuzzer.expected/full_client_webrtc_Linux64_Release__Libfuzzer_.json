@@ -24,7 +24,6 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -63,7 +62,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -82,7 +80,6 @@
       "//out/Release",
       "--args=ffmpeg_branding=\"Chrome\" rtc_use_h264=true use_libfuzzer=true is_asan=true is_debug=false target_cpu=\"x64\""
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gn"
   },
   {
@@ -98,7 +95,6 @@
       "--as=output",
       "//webrtc/test/fuzzers:webrtc_fuzzer_main"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "calculate targets",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -141,7 +137,6 @@
       "target2",
       "target3"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

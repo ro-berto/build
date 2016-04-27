@@ -15,7 +15,6 @@
       "/bin/echo",
       "refs/heads/master"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test branch parse"
   },
   {
@@ -23,7 +22,6 @@
       "/bin/echo",
       "12345"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test revision parse"
   },
   {
@@ -31,7 +29,6 @@
       "/bin/echo",
       "refs/heads/master@{#12345}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test construction"
   },
   {

@@ -30,7 +30,6 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -110,7 +109,6 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "mark: before_tests",
     "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@failure_hash@\"fed620386b0c58ac55d7fd7707794386f73ef90c\"@@@"

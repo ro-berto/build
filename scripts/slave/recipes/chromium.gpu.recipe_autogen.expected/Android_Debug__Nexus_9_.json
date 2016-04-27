@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -89,7 +88,6 @@
       ".",
       "[DEPOT_TOOLS]/gclient"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gclient revert"
   },
   {
@@ -101,7 +99,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -113,7 +110,6 @@
       "--build-properties={\"buildername\":\"Android Debug (Nexus 9)\",\"mastername\":\"chromium.gpu.fyi\",\"recipe\":\"chromium.gpu.recipe_autogen\",\"slavename\":\"TestSlave\"}",
       "--factory-properties={\"GYP_DEFINES\":\" component=shared_library\",\"android_bot_id\":\"gpu-builder-tests-dbg\",\"clobber\":false,\"gclient_env\":{},\"gclient_timeout\":3600,\"target\":\"Debug\",\"target_os\":\"android\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "slave_steps"
   },
   {

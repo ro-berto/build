@@ -49,7 +49,6 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
@@ -66,7 +65,6 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
@@ -86,7 +84,6 @@
       "echo",
       "$EXTERNAL_STORAGE"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -102,7 +99,6 @@
       "/b/android-sdk-linux/platform-tools/adb",
       "root"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -117,7 +113,6 @@
       "sleep",
       "10"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -131,7 +126,6 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
@@ -148,7 +142,6 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
@@ -166,7 +159,6 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
@@ -185,7 +177,6 @@
       "shell",
       "stop"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -202,7 +193,6 @@
       "dumpsys",
       "batteryproperties"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -219,7 +209,6 @@
       "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
@@ -240,7 +229,6 @@
       "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -250,7 +238,6 @@
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -269,7 +256,6 @@
       "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -279,7 +265,6 @@
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -298,7 +283,6 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -322,7 +306,6 @@
       "FILE_EXISTS;",
       "fi"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -341,7 +324,6 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_perf"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -391,7 +373,6 @@
       "os",
       "Android"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
@@ -412,7 +393,6 @@
       "[SWARM_OUT_DIR]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs perf_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -434,7 +414,6 @@
       "/storage/emulated/legacy/skiabot/skia_perf",
       "[SWARM_OUT_DIR]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
@@ -454,7 +433,6 @@
       "dumpsys",
       "batteryproperties"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -469,7 +447,6 @@
       "/b/android-sdk-linux/platform-tools/adb",
       "reboot"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -484,7 +461,6 @@
       "sleep",
       "10"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
@@ -498,7 +474,6 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
@@ -515,7 +490,6 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "/b/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/b/android-sdk-linux",

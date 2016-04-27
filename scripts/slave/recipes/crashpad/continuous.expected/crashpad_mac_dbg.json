@@ -8,7 +8,6 @@
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'crashpad', 'url': 'https://chromium.googlesource.com/crashpad/crashpad.git'}]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -27,7 +26,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -50,7 +48,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -62,7 +59,6 @@
       "-C",
       "[SLAVE_BUILD]/crashpad/out/Debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "compile with ninja"
   },
   {
@@ -72,7 +68,6 @@
       "[SLAVE_BUILD]/crashpad/build/run_tests.py",
       "Debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "run tests"
   },
   {

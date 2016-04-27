@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -74,7 +72,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
@@ -107,7 +104,6 @@
       "--",
       "build_all"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -121,7 +117,6 @@
       "metrics.csv",
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\out\\Release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -140,7 +135,6 @@
       "[SLAVE_BUILD]\\src\\syzygy\\unittests.gypi",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "read_unittests_gypi"
   },
   {
@@ -164,7 +158,6 @@
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "bar_unittests"
   },
   {
@@ -188,7 +181,6 @@
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "baz_unittests"
   },
   {
@@ -212,7 +204,6 @@
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "foo_unittests"
   },
   {
@@ -225,7 +216,6 @@
       "[SLAVE_BUILD]\\src\\out\\Release\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/release.csv"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive_metrics",
     "~followup_annotations": [
       "@@@STEP_LINK@archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/release.csv/@@@"

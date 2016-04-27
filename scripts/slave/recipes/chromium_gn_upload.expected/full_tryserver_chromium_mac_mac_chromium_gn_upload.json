@@ -31,7 +31,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -110,7 +109,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -135,7 +133,6 @@
       "[BUILD]/goma",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -152,7 +149,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -199,7 +195,6 @@
       "gn",
       "gn_unittests"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -214,7 +209,6 @@
       "[SLAVE_BUILD]/src/out/Release/gn",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gn version"
   },
   {
@@ -234,7 +228,6 @@
       "--build-number=571",
       "gn_unittests"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gn_unittests"
   },
   {
@@ -242,7 +235,6 @@
       "strip",
       "[SLAVE_BUILD]/src/out/Release/gn"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gn strip"
   },
   {
@@ -254,7 +246,6 @@
       "chromium-gn",
       "[SLAVE_BUILD]/src/out/Release/gn"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "upload"
   },
   {
@@ -265,7 +256,6 @@
       "[SLAVE_BUILD]/src/out/Release/gn.sha1",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gn sha1",
     "~followup_annotations": [
       "@@@STEP_TEXT@0123456789abcdeffedcba987654321012345678@@@"

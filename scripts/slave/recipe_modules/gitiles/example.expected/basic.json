@@ -11,7 +11,6 @@
       "--format",
       "json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "refs",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -40,7 +39,6 @@
       "--log-limit",
       "0"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gitiles log: HEAD",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />3 commits fetched@@@",
@@ -152,7 +150,6 @@
       "--log-start",
       "deadbeaf"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gitiles log: HEAD from deadbeaf",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />3 commits fetched@@@",
@@ -261,7 +258,6 @@
       "--log-limit",
       "0"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gitiles log: refs/heads/A",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />3 commits fetched@@@",
@@ -370,7 +366,6 @@
       "--log-limit",
       "0"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gitiles log: refs/tags/B",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />3 commits fetched@@@",
@@ -477,7 +472,6 @@
       "--format",
       "json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "commit log: 4015b57a143aec5156fd1444a017a32137a3fd0f",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -531,7 +525,6 @@
       "--format",
       "text"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "fetch master:OWNERS"
   },
   {

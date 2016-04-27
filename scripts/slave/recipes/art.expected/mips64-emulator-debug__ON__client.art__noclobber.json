@@ -8,7 +8,6 @@
       "-b",
       "master-art"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
@@ -16,7 +15,6 @@
       "[DEPOT_TOOLS]/repo",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
@@ -25,7 +23,6 @@
       "-j8",
       "--target"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/mips64r6",

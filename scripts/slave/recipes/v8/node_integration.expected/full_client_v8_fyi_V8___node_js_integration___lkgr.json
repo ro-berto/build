@@ -27,7 +27,6 @@
       "--no_shallow",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -77,7 +76,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -103,7 +101,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/node.js/deps/v8"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree v8",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -128,7 +125,6 @@
       "[SLAVE_BUILD]/v8/out",
       "[SLAVE_BUILD]/v8/third_party"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "copy v8 tree"
   },
   {

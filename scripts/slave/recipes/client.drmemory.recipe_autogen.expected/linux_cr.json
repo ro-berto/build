@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -55,7 +54,6 @@
       "[SLAVE_BUILD]/dynamorio",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs makedirs",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -78,7 +76,6 @@
       "[SLAVE_BUILD]/dynamorio/build",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs makedirs (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

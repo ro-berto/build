@@ -6,7 +6,6 @@
       "-u",
       "http://manifest_url"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
@@ -18,7 +17,6 @@
       "-b",
       "branch"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init (2)"
   },
   {
@@ -31,7 +29,6 @@
       "--hard",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo forall git reset"
   },
   {
@@ -44,7 +41,6 @@
       "-f",
       "-d"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo forall git clean"
   },
   {
@@ -58,7 +54,6 @@
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo forall git clean (2)"
   },
   {
@@ -66,7 +61,6 @@
       "[DEPOT_TOOLS]/repo",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
@@ -74,7 +68,6 @@
       "[DEPOT_TOOLS]/repo",
       "list"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo list",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -86,7 +79,6 @@
       "echo",
       "[('src/foo', 'foo'), ('src/bar', 'bar')]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo list echo"
   },
   {

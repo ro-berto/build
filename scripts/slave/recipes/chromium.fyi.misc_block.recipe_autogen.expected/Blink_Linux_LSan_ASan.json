@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -87,7 +86,6 @@
       "-u",
       "[BUILD]/scripts/slave/runhooks_wrapper.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
@@ -117,7 +115,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -132,7 +129,6 @@
       "--",
       "blink_tests"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -161,7 +157,6 @@
       "48000",
       "--options=--enable-sanitizer"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests"
   },
   {

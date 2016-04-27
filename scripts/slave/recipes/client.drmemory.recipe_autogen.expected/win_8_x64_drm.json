@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -64,7 +63,6 @@
       "-S",
       "[SLAVE_BUILD]/drmemory/tests/runsuite.cmake,drmemory_only;long;build=42"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Dr. Memory ctest"
   },
   {
@@ -75,7 +73,6 @@
       "http://data-race-test.googlecode.com/svn/trunk/",
       "[SLAVE_BUILD]/tsan"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Checkout TSan tests"
   },
   {
@@ -85,7 +82,6 @@
       "-C",
       "[SLAVE_BUILD]/tsan/unittest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools",
       "CYGWIN": "nodosfilewarning"
@@ -107,7 +103,6 @@
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
     },
@@ -129,7 +124,6 @@
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
     },
@@ -150,7 +144,6 @@
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
     },
@@ -172,7 +165,6 @@
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
     },
@@ -193,7 +185,6 @@
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
     },
@@ -216,7 +207,6 @@
       "build_drmemory-rel-64/Testing/Temporary",
       "xmlresults"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
     },
@@ -234,7 +224,6 @@
       "testlogs_r123456789abcdef_b42.7z",
       "gs://chromium-drmemory-builds/testlogs/from_win-8_x64-drm"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-drmemory-builds/testlogs/from_win-8_x64-drm@@@"

@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -113,7 +111,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -131,7 +128,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -148,7 +144,6 @@
       "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -180,7 +175,6 @@
       "--",
       "chromium_builder_asan"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -194,7 +188,6 @@
       "[SLAVE_BUILD]\\src\\out\\Release",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "listdir build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -220,7 +213,6 @@
       "[\"file 1\", \"file 2\"]",
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "zipping"
   },
   {
@@ -241,7 +233,6 @@
       "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip",
       "gs://chromium-browser-syzyasan/win32-release/asan-win32-release-170242.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-syzyasan/win32-release/asan-win32-release-170242.zip@@@"
@@ -254,7 +245,6 @@
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
       "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "asan-win32-release-170242.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

@@ -51,7 +51,6 @@
       "--depot_tools_parent_dir",
       "[SLAVE_BUILD]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "bootstrap win toolchain"
   },
   {
@@ -79,7 +78,6 @@
       "[SLAVE_BUILD]\\out\\Debug",
       "[SWARM_OUT_DIR]\\out\\Debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "copy build products",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",
@@ -112,7 +110,6 @@
       "-u",
       "import psutil\nfor p in psutil.process_iter():\n  try:\n    if p.name == 'mspdbsrv.exe':\n      p.kill()\n  except psutil._error.AccessDenied:\n    pass\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import psutil@@@",

@@ -5,7 +5,6 @@
       "-u",
       "[BUILD]/scripts/slave/kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -96,7 +94,6 @@
       "-u",
       "[BUILD]/scripts/slave/runhooks_wrapper.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
@@ -115,7 +112,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -129,7 +125,6 @@
       "abc",
       "--build-properties={\"buildername\":\"Win8 Tests (1)\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"parent_build_archive_url\":\"abc\",\"recipe\":\"chromium.fyi.win_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -147,7 +142,6 @@
       "base_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests"
   },
   {
@@ -165,7 +159,6 @@
       "cacheinvalidation_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cacheinvalidation_unittests"
   },
   {
@@ -183,7 +176,6 @@
       "chrome_elf_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "chrome_elf_unittests"
   },
   {
@@ -201,7 +193,6 @@
       "components_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "components_unittests"
   },
   {
@@ -219,7 +210,6 @@
       "courgette_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "courgette_unittests"
   },
   {
@@ -237,7 +227,6 @@
       "crypto_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "crypto_unittests"
   },
   {
@@ -255,7 +244,6 @@
       "extensions_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "extensions_unittests"
   },
   {
@@ -273,7 +261,6 @@
       "gcm_unit_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gcm_unit_tests"
   },
   {
@@ -291,7 +278,6 @@
       "google_apis_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "google_apis_unittests"
   },
   {
@@ -310,7 +296,6 @@
       "--gmock_verbose=error",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_unittests"
   },
   {
@@ -328,7 +313,6 @@
       "url_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "url_unittests"
   },
   {
@@ -346,7 +330,6 @@
       "jingle_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "jingle_unittests"
   },
   {
@@ -364,7 +347,6 @@
       "device_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "device_unittests"
   },
   {
@@ -382,7 +364,6 @@
       "media_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "media_unittests"
   },
   {
@@ -400,7 +381,6 @@
       "net_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "net_unittests"
   },
   {
@@ -418,7 +398,6 @@
       "ppapi_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ppapi_unittests"
   },
   {
@@ -436,7 +415,6 @@
       "printing_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "printing_unittests"
   },
   {
@@ -454,7 +432,6 @@
       "remoting_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "remoting_unittests"
   },
   {
@@ -472,7 +449,6 @@
       "sbox_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sbox_unittests"
   },
   {
@@ -490,7 +466,6 @@
       "sbox_integration_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sbox_integration_tests"
   },
   {
@@ -508,7 +483,6 @@
       "sbox_validation_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sbox_validation_tests"
   },
   {
@@ -526,7 +500,6 @@
       "ipc_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ipc_tests"
   },
   {
@@ -544,7 +517,6 @@
       "sync_unit_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sync_unit_tests"
   },
   {
@@ -562,7 +534,6 @@
       "unit_tests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "unit_tests"
   },
   {
@@ -580,7 +551,6 @@
       "skia_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "skia_unittests"
   },
   {
@@ -598,7 +568,6 @@
       "sql_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "sql_unittests"
   },
   {
@@ -616,7 +585,6 @@
       "ui_base_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ui_base_unittests"
   },
   {
@@ -634,7 +602,6 @@
       "content_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
   },
   {
@@ -652,7 +619,6 @@
       "views_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "views_unittests"
   },
   {
@@ -670,7 +636,6 @@
       "installer_util_unittests.exe",
       "--gtest_print_time"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "installer_util_unittests"
   },
   {
@@ -681,7 +646,6 @@
       "--target",
       "Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "process dumps"
   },
   {

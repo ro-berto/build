@@ -9,7 +9,6 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -87,7 +86,6 @@
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -96,7 +94,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Customized run with extra flags",
     "~followup_annotations": [
       "@@@STEP_TEXT@--trace_gc --turbo_stats@@@"
@@ -104,22 +101,18 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Mozilla - skipped"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Benchmarks - skipped"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all - skipped"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Ignition - turbofan - skipped"
   },
   {
@@ -209,7 +202,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -313,7 +305,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] OptimizeForSize on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -419,7 +410,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -529,7 +519,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Mjsunit - sp frame access on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -636,7 +625,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] Test262 - ignition - turbofan on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -722,7 +710,6 @@
       "--",
       "ia32"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] GCMole ia32 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -808,7 +795,6 @@
       "--",
       "x64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] GCMole x64 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -894,7 +880,6 @@
       "--",
       "arm"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] GCMole arm on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -980,7 +965,6 @@
       "--",
       "arm64"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] GCMole arm64 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1019,7 +1003,6 @@
       "1",
       "Check/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test filter@mjsunit/regression/*@@@",
@@ -1062,7 +1045,6 @@
       "1",
       "OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "OptimizeForSize",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test filter@mjsunit/regression/*@@@",
@@ -1105,7 +1087,6 @@
       "2",
       "Test262/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Test262",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test filter@test262/foo@@@",
@@ -1149,7 +1130,6 @@
       "1",
       "Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test filter@mjsunit/regression/*@@@",
@@ -1192,7 +1172,6 @@
       "1",
       "Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - ignition - turbofan",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test filter@test262/foo@@@",
@@ -1230,7 +1209,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "GCMole ia32 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1291,7 +1269,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "GCMole x64 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1352,7 +1329,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "GCMole arm on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1413,7 +1389,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "GCMole arm64 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1460,7 +1435,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "CQ integrity - used testfilter",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"
@@ -1468,7 +1442,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "CQ integrity - used extra flags",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"

@@ -54,7 +54,6 @@
       "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -65,7 +64,6 @@
       "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -92,7 +90,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/out/coverage_results"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PYTHONPATH": "build/scripts"
     },
@@ -116,7 +113,6 @@
       "[SLAVE_BUILD]/out/coverage_results",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs coverage_results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -248,7 +244,6 @@
       "[SLAVE_BUILD]/out/coverage_results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "listdir results_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -272,7 +267,6 @@
       "[SLAVE_BUILD]/out/coverage_results/file 1",
       "[SWARM_OUT_DIR]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Copy to swarming out"
   },
   {
@@ -283,7 +277,6 @@
       "[SLAVE_BUILD]/out/coverage_results/file 2",
       "[SWARM_OUT_DIR]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Copy to swarming out (2)"
   },
   {

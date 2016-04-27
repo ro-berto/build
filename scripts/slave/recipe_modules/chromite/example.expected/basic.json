@@ -8,7 +8,6 @@
       "--repo-url",
       "https://chromium.googlesource.com/external/repo.git"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo init"
   },
   {
@@ -16,7 +15,6 @@
       "[DEPOT_TOOLS]/repo",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "repo sync"
   },
   {
@@ -31,7 +29,6 @@
       "--board",
       "amd64-generic"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "setup board"
   },
   {
@@ -44,7 +41,6 @@
       "--board",
       "amd64-generic"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "build packages"
   },
   {
@@ -57,7 +53,6 @@
       "echo",
       "hello"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cros_sdk"
   },
   {
@@ -69,7 +64,6 @@
       "/here/there",
       "amd64-generic-full"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cbuildbot"
   },
   {
@@ -80,7 +74,6 @@
       "[SLAVE_BUILD]/chromite/cbuildbot/config_dump.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "read chromite config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@config@{@@@",

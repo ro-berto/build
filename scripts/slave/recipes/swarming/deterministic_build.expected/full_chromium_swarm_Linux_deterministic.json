@@ -8,7 +8,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -37,7 +36,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -116,7 +114,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
@@ -156,7 +153,6 @@
       "--",
       "all"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -191,7 +187,6 @@
       "/path/to/tmp/",
       "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated targets"
   },
   {
@@ -208,7 +203,6 @@
       "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
       "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -227,7 +221,6 @@
       "[SLAVE_BUILD]/src/out/Release",
       "[SLAVE_BUILD]/src/out/Release.1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -247,7 +240,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
@@ -287,7 +279,6 @@
       "--",
       "all"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -318,7 +309,6 @@
       "/path/to/tmp/",
       "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated targets (2)"
   },
   {
@@ -335,7 +325,6 @@
       "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
       "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -354,7 +343,6 @@
       "[SLAVE_BUILD]/src/out/Release",
       "[SLAVE_BUILD]/src/out/Release.2"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

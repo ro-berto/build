@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -54,7 +53,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -67,7 +65,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/boringssl/build"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree clean",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -88,7 +85,6 @@
       "[SLAVE_BUILD]/boringssl/build",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs mkdir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -125,7 +121,6 @@
       "-C",
       "[SLAVE_BUILD]/boringssl/build"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "ninja"
   },
   {

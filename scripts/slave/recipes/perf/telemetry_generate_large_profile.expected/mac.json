@@ -25,7 +25,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -114,7 +113,6 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Download and Extract Binary"
   },
   {
@@ -127,7 +125,6 @@
       "--profile-type-to-generate=large_profile",
       "--output-dir=[TMP_BASE]/large-profile_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Generate Large Profile"
   },
   {
@@ -136,7 +133,6 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Zip Large Profile",
     "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/large-profile_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/zipped-profile_tmp_2/large_profile.zip\", \"root\": \"[TMP_BASE]/large-profile_tmp_1\"}"
   },
@@ -152,7 +148,6 @@
       "[TMP_BASE]/zipped-profile_tmp_2/large_profile.zip",
       "gs://chrome-partner-telemetry/large_profile/mac"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-partner-telemetry/large_profile/mac@@@"
@@ -165,7 +160,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]/large-profile_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree Remove profile directory.",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -185,7 +179,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]/zipped-profile_tmp_2"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree Remove zipped profile directory.",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

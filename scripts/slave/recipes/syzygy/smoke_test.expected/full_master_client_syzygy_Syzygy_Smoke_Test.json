@@ -5,7 +5,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -74,7 +72,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
@@ -95,7 +92,6 @@
       "--overwrite",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "download_binaries"
   },
   {
@@ -107,7 +103,6 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\build"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "smoke_test"
   },
   {

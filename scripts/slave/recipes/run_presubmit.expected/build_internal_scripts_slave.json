@@ -30,7 +30,6 @@
       "build_internal/scripts/slave@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -113,7 +112,6 @@
       "--upstream",
       "3faf12c8131337a86e669cc1a1bd8d2dfe8cc86d"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": ""

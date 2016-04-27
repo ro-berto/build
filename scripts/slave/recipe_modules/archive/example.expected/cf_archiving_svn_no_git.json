@@ -7,7 +7,6 @@
       "[SLAVE_BUILD]/src/out/Release",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "listdir build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -32,7 +31,6 @@
       "[\"chrome\"]",
       "[SLAVE_BUILD]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "zipping"
   },
   {
@@ -49,7 +47,6 @@
       "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip",
       "gs://chromium/linux-release/chrome-asan-linux-release-refs_heads_B1-123456.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium/linux-release/chrome-asan-linux-release-refs_heads_B1-123456.zip@@@"
@@ -62,7 +59,6 @@
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
       "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "chrome-asan-linux-release-refs_heads_B1-123456.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

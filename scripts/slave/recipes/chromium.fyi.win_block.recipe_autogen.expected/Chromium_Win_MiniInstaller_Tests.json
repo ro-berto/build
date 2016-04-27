@@ -5,7 +5,6 @@
       "-u",
       "[BUILD]/scripts/slave/kill_processes.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -34,7 +33,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -96,7 +94,6 @@
       "-u",
       "[BUILD]/scripts/slave/runhooks_wrapper.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
@@ -115,7 +112,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -129,7 +125,6 @@
       "abc",
       "--build-properties={\"buildername\":\"Chromium Win MiniInstaller Tests\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.fyi\",\"parent_build_archive_url\":\"abc\",\"recipe\":\"chromium.fyi.win_block.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -140,7 +135,6 @@
       "--target",
       "Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test installer"
   },
   {
@@ -151,7 +145,6 @@
       "--target",
       "Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "process dumps"
   },
   {

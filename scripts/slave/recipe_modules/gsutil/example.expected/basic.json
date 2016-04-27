@@ -19,7 +19,6 @@
       "[SLAVE_BUILD]/boom",
       "gs://chromium-recipe-test/some/random/path/to/boom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-recipe-test/some/random/path/to/boom@@@"
@@ -37,7 +36,6 @@
       "gs://chromium-recipe-test/some/random/path/**",
       "gs://chromium-recipe-test/staging"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil cp"
   },
   {
@@ -54,7 +52,6 @@
       "gs://chromium-recipe-test/some/random/path/**",
       "gs://chromium-recipe-test/staging"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil cp (2)"
   },
   {
@@ -69,7 +66,6 @@
       "gs://chromium-recipe-test/some/random/path/to/boom",
       "[SLAVE_BUILD]/boom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil gsutil download url"
   },
   {
@@ -84,7 +80,6 @@
       "gs://chromium-recipe-test/staging/to/boom",
       "[SLAVE_BUILD]/erang"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download"
   },
   {
@@ -99,7 +94,6 @@
       "path/to/key",
       "gs://chromium-recipe-test/some/random/path/to/boom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil signed url"
   },
   {
@@ -113,7 +107,6 @@
       "rm",
       "gs://chromium-recipe-test/staging/to/boom"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil remove"
   },
   {

@@ -67,7 +67,6 @@
       "[SLAVE_BUILD]/out/Debug",
       "[SWARM_OUT_DIR]/out/Debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "copy build products",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",

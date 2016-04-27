@@ -11,7 +11,6 @@
       "gs://chrome-amp-keys/main_pool/api_key",
       "[BUILD]/site_config/.amp_main_pool_key"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download amp api key"
   },
   {
@@ -26,7 +25,6 @@
       "gs://chrome-amp-keys/main_pool/api_secret",
       "[BUILD]/site_config/.amp_main_pool_secret"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download amp api secret"
   },
   {
@@ -60,7 +58,6 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
@@ -90,7 +87,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_gtest_suite"
   },
   {
@@ -138,7 +134,6 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
@@ -168,7 +163,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_instrumentation_suite"
   },
   {
@@ -204,7 +198,6 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
@@ -234,7 +227,6 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_uirobot_suite"
   },
   {
@@ -245,7 +237,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -289,7 +280,6 @@
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
@@ -306,7 +296,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load example_gtest_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -323,7 +312,6 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_gtest_suite",
     "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
@@ -339,7 +327,6 @@
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_example_gtest_suite_T35TRUN1D.txt"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_gtest_suite_T35TRUN1D.txt@@@"
@@ -353,7 +340,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load example_instrumentation_suite",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -399,7 +385,6 @@
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
@@ -416,7 +401,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load example_instrumentation_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -433,7 +417,6 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_instrumentation_suite",
     "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
@@ -449,7 +432,6 @@
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_example_instrumentation_suite_T35TRUN1D.txt"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_instrumentation_suite",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_instrumentation_suite_T35TRUN1D.txt@@@"
@@ -463,7 +445,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -507,7 +488,6 @@
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
     },
@@ -524,7 +504,6 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load example_uirobot_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -541,7 +520,6 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_uirobot_suite",
     "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
@@ -557,7 +535,6 @@
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_example_uirobot_suite_T35TRUN1D.txt"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_uirobot_suite_T35TRUN1D.txt@@@"

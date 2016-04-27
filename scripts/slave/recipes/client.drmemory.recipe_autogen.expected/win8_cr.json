@@ -28,7 +28,6 @@
       "unpacked\\bin\\drmemory",
       "-version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Get the revision number",
     "stdout": "/path/to/tmp/"
   },

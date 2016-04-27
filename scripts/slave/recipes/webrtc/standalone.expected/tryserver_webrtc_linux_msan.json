@@ -30,7 +30,6 @@
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -69,7 +68,6 @@
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -81,7 +79,6 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -91,7 +88,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]/goma' msan=1 msan_track_origins=2 rtc_use_264=1 target_arch=x64 use_goma=1 use_prebuilt_instrumented_libraries=1",
@@ -110,7 +106,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -155,7 +150,6 @@
       "--",
       "All"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -189,7 +183,6 @@
       "[SLAVE_BUILD]/src/out/Release/audio_decoder_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "audio_decoder_unittests"
   },
   {
@@ -216,7 +209,6 @@
       "[SLAVE_BUILD]/src/out/Release/common_audio_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "common_audio_unittests"
   },
   {
@@ -243,7 +235,6 @@
       "[SLAVE_BUILD]/src/out/Release/common_video_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "common_video_unittests"
   },
   {
@@ -270,7 +261,6 @@
       "[SLAVE_BUILD]/src/out/Release/modules_tests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "modules_tests"
   },
   {
@@ -297,7 +287,6 @@
       "[SLAVE_BUILD]/src/out/Release/modules_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests"
   },
   {
@@ -324,7 +313,6 @@
       "[SLAVE_BUILD]/src/out/Release/peerconnection_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "peerconnection_unittests"
   },
   {
@@ -351,7 +339,6 @@
       "[SLAVE_BUILD]/src/out/Release/rtc_media_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_media_unittests"
   },
   {
@@ -378,7 +365,6 @@
       "[SLAVE_BUILD]/src/out/Release/rtc_pc_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_pc_unittests"
   },
   {
@@ -405,7 +391,6 @@
       "[SLAVE_BUILD]/src/out/Release/rtc_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_unittests"
   },
   {
@@ -432,7 +417,6 @@
       "[SLAVE_BUILD]/src/out/Release/system_wrappers_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "system_wrappers_unittests"
   },
   {
@@ -459,7 +443,6 @@
       "[SLAVE_BUILD]/src/out/Release/test_support_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "test_support_unittests"
   },
   {
@@ -486,7 +469,6 @@
       "[SLAVE_BUILD]/src/out/Release/tools_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "tools_unittests"
   },
   {
@@ -513,7 +495,6 @@
       "[SLAVE_BUILD]/src/out/Release/video_engine_tests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_tests"
   },
   {
@@ -540,7 +521,6 @@
       "[SLAVE_BUILD]/src/out/Release/voice_engine_unittests",
       "--"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests"
   },
   {
@@ -566,7 +546,6 @@
       "--enable-msan",
       "webrtc_nonparallel_tests"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_nonparallel_tests"
   },
   {

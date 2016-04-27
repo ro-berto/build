@@ -9,7 +9,6 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -84,7 +83,6 @@
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -108,7 +106,6 @@
       "win",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for win",
     "stdout": "/path/to/tmp/"
   },
@@ -129,7 +126,6 @@
       "linux",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for linux",
     "stdout": "/path/to/tmp/"
   },
@@ -150,7 +146,6 @@
       "mac",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "archive for mac",
     "stdout": "/path/to/tmp/"
   },
@@ -208,7 +203,6 @@
       "joe",
       "hash_for_win"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] hello_world on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -279,7 +273,6 @@
       "joe",
       "hash_for_linux"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] hello_world on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -356,7 +349,6 @@
       "joe",
       "hash_for_mac"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] hello_world on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -378,7 +370,6 @@
       "echo",
       "running something locally"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "local step"
   },
   {
@@ -400,7 +391,6 @@
       "--task-output-dir",
       "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -464,7 +454,6 @@
       "--task-output-dir",
       "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "hello_world on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -562,7 +551,6 @@
       "--task-output-dir",
       "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "hello_world on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -614,7 +602,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]/hello_isolated_world_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree remove temp dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

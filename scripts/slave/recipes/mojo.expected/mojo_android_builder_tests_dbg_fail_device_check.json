@@ -31,7 +31,6 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -60,7 +59,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -92,7 +90,6 @@
       "--android",
       "--dcheck_always_on"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_DIR": "[BUILD]/goma"
     },
@@ -109,7 +106,6 @@
       "--known-devices-file",
       "[BUILD]/site_config/.known_devices"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "device_status_check",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

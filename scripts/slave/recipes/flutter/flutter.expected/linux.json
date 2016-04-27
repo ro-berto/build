@@ -6,7 +6,6 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\npath = sys.argv[1]\nif os.path.exists(path):\n  for p in (os.path.join(path, x) for x in os.listdir(path)):\n    if os.path.isdir(p):\n      chromium_utils.RemoveDirectory(p)\n    else:\n      os.unlink(p)\n",
       "[SLAVE_BUILD]"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "rmcontents everything",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -33,7 +32,6 @@
       "--url",
       "https://chromium.googlesource.com/external/github.com/flutter/flutter"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "git setup"
   },
   {
@@ -107,7 +105,6 @@
     "cmd": [
       "[SLAVE_BUILD]/flutter/infra/download_android_tools.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "name": "download android tools"
   },
   {
@@ -115,7 +112,6 @@
       "flutter",
       "doctor"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
@@ -128,7 +124,6 @@
       "flutter",
       "update-packages"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
@@ -340,7 +335,6 @@
       "[SLAVE_BUILD]/flutter/examples/stocks/build/app.apk",
       "gs://flutter_infra/flutter/deadbeef/examples/Stocks.apk"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
@@ -377,7 +371,6 @@
       "[SLAVE_BUILD]/flutter/examples/material_gallery/build/app.apk",
       "gs://flutter_infra/flutter/deadbeef/examples/Gallery.apk"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
@@ -396,7 +389,6 @@
       "dartdoc",
       "0.9.4"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
@@ -432,7 +424,6 @@
       "[SLAVE_BUILD]/flutter/dev/docs/doc/api",
       "gs://docs.flutter.io/flutter"
     ],
-    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
