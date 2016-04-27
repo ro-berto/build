@@ -179,6 +179,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -277,15 +278,18 @@
       "--",
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "--analyzer",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "analyze",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "chromeos_amd64-generic_chromium_compile_only_ng",
+      "-v",
+      "//out/Release",
       "{\"additional_compile_targets\": [\"chromiumos_preflight\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",
