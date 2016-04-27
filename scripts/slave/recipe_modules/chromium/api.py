@@ -545,7 +545,12 @@ class ChromiumApi(recipe_api.RecipeApi):
                       self.m.path['checkout'].join('tools', 'mb',
                                                    'mb_config.pyl'))
     isolated_targets = isolated_targets or []
-    build_dir = build_dir or '//out/%s' % self.c.build_config_fs
+
+    out_dir = 'out'
+    if self.c.TARGET_CROS_BOARD:
+      out_dir += '_%s' % self.c.TARGET_CROS_BOARD
+
+    build_dir = build_dir or '//%s/%s' % (out_dir, self.c.build_config_fs)
 
     args=[
         'gen',

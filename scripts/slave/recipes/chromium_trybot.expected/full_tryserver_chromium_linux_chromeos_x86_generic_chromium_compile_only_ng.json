@@ -327,7 +327,7 @@
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "//out/Release"
+      "//out_x86-generic/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
