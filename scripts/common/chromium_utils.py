@@ -1059,27 +1059,13 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     proc = subprocess.Popen(command, stdout=sys.stdout, stderr=sys.stderr,
                             bufsize=0, **kwargs)
 
-    proc.wait()
-
-    assert proc.returncode is not None
-    return proc.returncode
-
   else:
-    if debug:
-      print threading.currentThread(),
-      print 'Calling subprocess.Popen piped together', sys.stdout
-
     if not (parser_func or filter_obj):
       filter_obj = RunCommandFilter()
 
     # Start the initial process.
-    proc = subprocess.Popen(
-      command,
-      stdout=subprocess.PIPE,
-      stderr=subprocess.STDOUT,
-      bufsize=0,
-      **kwargs)
-
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, bufsize=0, **kwargs)
     proc_handles = [proc]
 
     if pipes:
@@ -1150,8 +1136,6 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
       while log_event.wait(timeout):
         log_event.clear()
         if finished_event.is_set():
-          if debug:
-            print threading.currentThread(), "timeout_func finishing."
           return
 
       message = ('command timed out: %d seconds without output, attempting to '
@@ -1162,8 +1146,6 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
       if not finished_event.wait(timeout):
         message = ('command timed out: %d seconds elapsed' % timeout)
         kill_proc(proc_handles, message)
-      if debug:
-        print threading.currentThread(), "maxtimeout_func finishing."
 
     timeout_thread = None
     maxtimeout_thread = None
@@ -1187,66 +1169,35 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
       maxtimeout_thread.start()
 
     # Wait for the commands to terminate.
-    while True:
-      running = []
-      completed = []
+    for handle in proc_handles:
+      handle.wait()
 
-      for handle in proc_handles:
-        handle.poll()
-        if handle.returncode is None:
-          running.append(handle)
-        else:
-          completed.append(handle)
-
-      if debug:
-        print threading.currentThread(), "Processes",
-        print "Still running:", running, "Completed:", completed
-
-      if running:
-        time.sleep(1.0)
-        continue
-      else:
-        break
-
-    # Cause the timeout threads to finish
+    # Wake up timeout threads.
     finished_event.set()
     log_event.set()
 
-    # Wait for the other threads to complete (implies EOF reached on stdout/
+    if debug:
+      print 'before thread.join()'
+
+    # Wait for the reader thread to complete (implies EOF reached on stdout/
     # stderr pipes).
-    while True:
-      running = []
-      completed = []
+    thread.join()
 
-      for t in [thread, timeout_thread, maxtimeout_thread]:
-        if not t:
-          continue
-
-        if t.is_alive():
-          running.append(t)
-        else:
-          completed.append(t)
-
-      if debug:
-        print threading.currentThread(), "Threads",
-        print "Still running:", running, "Completed:", completed,
-        print "(all threads", threading.enumerate(), ")"
-
-      if running:
-        time.sleep(1.0)
-        continue
-      else:
-        break
+    if debug:
+      print 'after thread.join()'
 
     # Check whether any of the sub commands has failed.
     for handle in proc_handles:
-      assert handle.returncode is not None
       if handle.returncode:
         return handle.returncode
 
-    return proc.returncode
-
-  assert False, "Should never reach here."
+  if debug:
+    print 'before proc.wait()'
+  # Wait for the command to terminate.
+  proc.wait()
+  if debug:
+    print 'after proc.wait()'
+  return proc.returncode
 
 
 def GetStatusOutput(command, **kwargs):
