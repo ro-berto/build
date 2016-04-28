@@ -19,7 +19,7 @@ SPEC = {
 
 
 def _BaseSpec(bot_type, chromium_apply_config, disable_tests,
-              gclient_config, platform, target_bits):
+              gclient_config, platform, target_bits, tests):
   return {
     'bot_type': bot_type,
     'chromium_apply_config' : chromium_apply_config,
@@ -33,17 +33,29 @@ def _BaseSpec(bot_type, chromium_apply_config, disable_tests,
     'testing': {
       'platform': 'linux' if platform == 'android' else platform,
     },
+    'tests': tests,
   }
 
 
 def _BuildSpec(platform, target_bits):
+  if target_bits == 64:
+    perf_id = platform
+  else:
+    perf_id = '%s-%d' % (platform, target_bits)
+
+  if platform == 'android':
+    tests = []
+  else:
+    tests = [steps.SizesStep('https://chromeperf.appspot.com', perf_id)]
+
   spec = _BaseSpec(
       bot_type='builder',
       chromium_apply_config=['mb', 'chromium_perf', 'goma_hermetic_fallback'],
       disable_tests=True,
       gclient_config='chromium',
       platform=platform,
-      target_bits=target_bits)
+      target_bits=target_bits,
+      tests=tests)
 
   if platform == 'android':
     spec['chromium_apply_config'].append('android')
@@ -52,9 +64,6 @@ def _BuildSpec(platform, target_bits):
   else:
     spec['compile_targets'] = ['chromium_builder_perf']
     spec['gclient_apply_config'] = ['chrome_internal']
-
-  if platform == 'win':
-    spec['tests'] = { steps.SizesStep(results_url=None, perf_id=None) }
 
   return spec
 
@@ -68,16 +77,15 @@ def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
       disable_tests=platform == 'android',
       gclient_config='perf',
       platform=platform,
-      target_bits=target_bits)
+      target_bits=target_bits,
+      tests=[steps.DynamicPerfTests(
+        perf_id, platform, target_bits, max_battery_temp, num_device_shards,
+        num_host_shards, shard_index, known_devices_file)],
+  )
 
   spec['parent_buildername'] = parent_builder
   spec['perf-id'] = perf_id
   spec['results-url'] = 'https://chromeperf.appspot.com'
-  spec['tests'] = [
-    steps.DynamicPerfTests(perf_id, platform, target_bits, max_battery_temp,
-                           num_device_shards, num_host_shards, shard_index,
-                           known_devices_file),
-  ]
 
   if platform == 'android':
     spec['android_config'] = 'perf'
