@@ -751,6 +751,14 @@ def GenTests(api):
     api.platform.name('win')
   )
 
+  yield (
+    api.test('use_skia_patch_on_chromium_trybot') +
+    props(buildername='win_chromium_rel_ng',
+          mastername='tryserver.chromium.win',
+          patch_project='skia') +
+    api.platform.name('win')
+  )
+
   # Tests that we run nothing if analyze said we didn't have to run anything
   # and there were no source file changes.
   yield (
