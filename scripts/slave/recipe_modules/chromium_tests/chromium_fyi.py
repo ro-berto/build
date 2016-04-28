@@ -39,7 +39,7 @@ SPEC = {
     'Chromium Mac 10.10 MacViews': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['chromium_mac_mac_views'],
+      'chromium_apply_config': ['chromium_mac_mac_views', 'mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -55,6 +55,7 @@ SPEC = {
     },
     'Chromium Mac 10.11': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -70,6 +71,7 @@ SPEC = {
     },
     'Chromium Mac 10.11 Force Mac Toolchain': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1133,7 +1135,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary'],
+      'chromium_apply_config': ['goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1148,7 +1150,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary'],
+      'chromium_apply_config': ['goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -1163,7 +1165,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary (clobber)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'clobber'],
+      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1178,7 +1180,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary (dbg)(clobber)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'clobber'],
+      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
