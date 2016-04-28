@@ -65,7 +65,8 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 target_arch=x64 v8_target_arch=x64",
+      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1 v8_target_arch=x64",
+      "GYP_GENERATORS": "ninja,xcode-ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -122,15 +123,25 @@
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--build-tool",
-      "xcode",
+      "ninja",
       "--compiler",
-      "clang",
+      "goma-clang",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-service-account-json-file",
+      "/creds/service_accounts/service-account-goma-client.json",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "compile"
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "name": "$result",

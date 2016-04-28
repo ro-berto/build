@@ -719,7 +719,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - xcode': {
-        'chromium_apply_config': ['clang'],
+        'chromium_apply_config': ['v8_xcode_ninja', 'clang', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
