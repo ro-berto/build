@@ -347,6 +347,24 @@
     "name": "build most"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import psutil\nfor p in psutil.process_iter():\n  try:\n    if p.name == 'mspdbsrv.exe':\n      p.kill()\n  except psutil._error.AccessDenied:\n    pass\n"
+    ],
+    "name": "cleanup",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@import psutil@@@",
+      "@@@STEP_LOG_LINE@python.inline@for p in psutil.process_iter():@@@",
+      "@@@STEP_LOG_LINE@python.inline@  try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if p.name == 'mspdbsrv.exe':@@@",
+      "@@@STEP_LOG_LINE@python.inline@      p.kill()@@@",
+      "@@@STEP_LOG_LINE@python.inline@  except psutil._error.AccessDenied:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    pass@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

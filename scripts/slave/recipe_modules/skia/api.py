@@ -397,7 +397,7 @@ for pattern in build_products_whitelist:
             self.flavor.out_dir,
             self.m.path.join(self.swarming_out_dir, 'out', self.configuration))
     finally:
-      if self.running_in_swarming and 'Win' in self.builder_cfg['os']:
+      if 'Win' in self.builder_cfg.get('os', ''):
         self.m.python.inline(
             name='cleanup',
             program='''import psutil
