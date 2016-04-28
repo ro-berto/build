@@ -628,6 +628,8 @@
       "--perf-id=resource_size_builder",
       "--test-type=resource_sizes",
       "--step-name=resource_sizes",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=resource_size_builder",
       "--slave-name=tehslave",
       "--build-number=571",
@@ -636,6 +638,7 @@
       "[SLAVE_BUILD]/src/out/Release/apks/Chrome.apk",
       "--build_type",
       "Release",
+      "--chartjson",
       "--so-path",
       "[SLAVE_BUILD]/src/out/Release/chrome_apk/libs/armeabi-v7a/libchrome.so",
       "--so-with-symbols-path",
@@ -644,7 +647,11 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
-    "name": "resource_sizes"
+    "name": "resource_sizes",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [

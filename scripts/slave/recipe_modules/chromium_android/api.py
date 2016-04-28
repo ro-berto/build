@@ -190,8 +190,11 @@ class AndroidApi(recipe_api.RecipeApi):
         perf_dashboard_id=name,
         test_type=name)
 
-  def resource_sizes(self, apk_path, so_path=None, so_with_symbols_path=None):
+  def resource_sizes(self, apk_path, so_path=None, so_with_symbols_path=None,
+                     chartjson_file=False):
     args=[apk_path, '--build_type', self.m.chromium.c.BUILD_CONFIG]
+    if chartjson_file:
+      args.extend(['--chartjson'])
     if so_path:
       args.extend(['--so-path', so_path])
     if so_with_symbols_path:
@@ -205,7 +208,8 @@ class AndroidApi(recipe_api.RecipeApi):
         perf_id=self.m.properties['buildername'],
         perf_dashboard_id='resource_sizes',
         test_type='resource_sizes',
-        env={'CHROMIUM_OUTPUT_DIR': self.m.chromium.output_dir})
+        env={'CHROMIUM_OUTPUT_DIR': self.m.chromium.output_dir},
+        chartjson_file=chartjson_file)
 
   def check_webview_licenses(self, name='check licenses'):
     self.m.python(

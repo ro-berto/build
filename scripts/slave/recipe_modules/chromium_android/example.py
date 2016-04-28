@@ -208,7 +208,8 @@ def RunSteps(api, buildername):
             'out', api.chromium.c.BUILD_CONFIG, 'chrome_apk', 'libs',
             'armeabi-v7a', 'libchrome.so'),
         so_with_symbols_path=api.path['checkout'].join(
-          'out', api.chromium.c.BUILD_CONFIG, 'lib', 'libchrome.so'))
+          'out', api.chromium.c.BUILD_CONFIG, 'lib', 'libchrome.so'),
+        chartjson_file=True)
 
   if config.get('run_webview_cts'):
     api.chromium_android.run_webview_cts()
