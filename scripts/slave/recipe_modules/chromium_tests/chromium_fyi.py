@@ -160,7 +160,7 @@ SPEC = {
     },
     'MD Top Chrome ChromeOS non-material': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos'],
+      'chromium_apply_config': ['chromeos', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -179,7 +179,7 @@ SPEC = {
     },
     'MD Top Chrome ChromeOS material-hybrid': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos'],
+      'chromium_apply_config': ['chromeos', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -198,6 +198,7 @@ SPEC = {
     },
     'MD Top Chrome Win material': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
