@@ -82,6 +82,9 @@ def _GetTargetCMakeArgs(buildername, bot_utils):
   if _HasToken(buildername, 'small'):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_SMALL=1')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_SMALL=1')
+  if _HasToken(buildername, "nothreads"):
+    _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_NO_THREADS=1')
+    _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_NO_THREADS=1')
   return args
 
 
@@ -180,6 +183,7 @@ def GenTests(api):
     ('linux_noasm_asan', api.platform('linux', 64)),
     ('linux32_noasm_asan', api.platform('linux', 64)),
     ('linux_small', api.platform('linux', 64)),
+    ('linux_nothreads', api.platform('linux', 64)),
     ('mac', api.platform('mac', 64)),
     ('mac_small', api.platform('mac', 64)),
     ('win32', api.platform('win', 64)),
