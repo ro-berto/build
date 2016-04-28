@@ -46,10 +46,6 @@ def RunSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
 
-  if mastername == 'tryserver.chromium.perf' and api.chromium_tests.builders[
-      mastername]['builders'][buildername]['bot_type'] == 'tester':
-    api.bisect_tester.upload_job_url()
-
   bot_config = api.chromium_tests.create_bot_config_object(
       mastername, buildername)
   api.chromium_tests.configure_build(bot_config)
@@ -116,31 +112,6 @@ def GenTests(api):
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
       )
 
-      if bot_type == 'tester' and mastername == 'tryserver.chromium.perf':
-        bisect_config = {
-            'test_type': 'perf',
-            'command': 'tools/perf/run_benchmark -v '
-                       '--browser=release page_cycler.intl_ar_fa_he',
-            'good_revision': '300138',
-            'bad_revision': '300148',
-            'metric': 'warm_times/page_load_time',
-            'repeat_count': '2',
-            'max_time_minutes': '5',
-            'truncate_percent': '25',
-            'bug_id': '425582',
-            'gs_bucket': 'chrome-perf',
-            'builder_host': 'master4.golo.chromium.org',
-            'builder_port': '8341',
-        }
-        test += api.step_data('saving url to temp file',
-                              stdout=api.raw_io.output('/tmp/dummy1'))
-        test += api.step_data('saving json to temp file',
-                              stdout=api.raw_io.output('/tmp/dummy2'))
-        if 'bisector' in buildername:
-          test += api.step_data('Performance Test 2 of 2', retcode=1)
-        test += api.properties(bisect_config=bisect_config)
-        test += api.properties(job_name='f7a7b4135624439cbd27fdd5133d74ec')
-        test += api.bisect_tester(tempfile='/tmp/dummy')
       if bot_config.get('parent_buildername'):
         test += api.properties(parent_got_revision='1111111')
         test += api.properties(

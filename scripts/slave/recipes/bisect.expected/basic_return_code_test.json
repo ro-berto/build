@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.perf",
       "--builder",
-      "linux_perf_bisector",
+      "linux_perf_bisect",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -158,46 +158,11 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
-      "--properties",
-      "{\"buildername\": \"linux_perf_bisector\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
-    ],
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read test spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -745,7 +710,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "name": "Working on revision chromium@00316c9ddf.Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisector/builds/571\", \"change\": \"Zero to non-zero\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"mean_value\": 0, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": null, \"values\": []}], \"score\": 0, \"status\": \"started\", \"test_type\": \"return_code\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\", \"change\": \"Zero to non-zero\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"mean_value\": 0, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": null, \"values\": []}], \"score\": 0, \"status\": \"started\", \"test_type\": \"return_code\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -942,7 +907,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "name": "Working on revision chromium@fc6dfc7ff5.Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisector/builds/571\", \"change\": \"Zero to non-zero\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"mean_value\": 0, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": null, \"values\": []}], \"score\": 0, \"status\": \"started\", \"test_type\": \"return_code\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\", \"change\": \"Zero to non-zero\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"mean_value\": 0, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": null, \"values\": []}], \"score\": 0, \"status\": \"started\", \"test_type\": \"return_code\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1179,7 +1144,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisector/builds/571\", \"change\": \"Zero to non-zero\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": {\"author\": \"DummyAuthor\", \"cl\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"cl_date\": \"01/01/2015\", \"commit_info\": \"A long description for a CL.\\nContaining multiple lines\", \"email\": \"dummy@nowhere.com\", \"revisions_links\": [], \"subject\": \"Some random CL\"}, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"mean_value\": 0, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": null, \"values\": []}], \"score\": 0.0, \"status\": \"completed\", \"test_type\": \"return_code\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\", \"change\": \"Zero to non-zero\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": {\"author\": \"DummyAuthor\", \"cl\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"cl_date\": \"01/01/2015\", \"commit_info\": \"A long description for a CL.\\nContaining multiple lines\", \"email\": \"dummy@nowhere.com\", \"revisions_links\": [], \"subject\": \"Some random CL\"}, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"mean_value\": 0, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": null, \"values\": []}, {\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 1, \"result\": \"bad\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": null, \"values\": []}], \"score\": 0.0, \"status\": \"completed\", \"test_type\": \"return_code\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

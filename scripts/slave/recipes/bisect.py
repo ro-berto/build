@@ -35,16 +35,16 @@ def GenTests(api):
   return_code_test = api.test('basic_return_code_test')
   basic_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisector')
+      buildername='linux_perf_bisect')
   broken_bad_rev_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisector')
+      buildername='linux_perf_bisect')
   broken_good_rev_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisector')
+      buildername='linux_perf_bisect')
   return_code_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisector')
+      buildername='linux_perf_bisect')
 
   bisect_config = {
       'test_type': 'perf',
