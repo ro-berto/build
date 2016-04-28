@@ -78,7 +78,7 @@
       "-u",
       "[CUSTOM_C:\\_B_CACHE]\\skia\\tools\\buildbot_spec.py",
       "/path/to/tmp/json",
-      "Build-Win-MSVC-x86-Debug-VS2015"
+      "Build-Win-MSVC-x86-Debug"
     ],
     "cwd": "[CUSTOM_C:\\_B_CACHE]\\skia",
     "name": "exec buildbot_spec.py",
@@ -90,7 +90,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"MSVC\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"VS2015\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"os\": \"Win\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
@@ -140,7 +139,7 @@
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
       "PATH": "[DEPOT_TOOLS]:%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools];RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]\\scripts",
-      "SKIA_OUT": "[CUSTOM_C:\\_B_CACHE]\\skia\\out\\Build-Win-MSVC-x86-Debug-VS2015"
+      "SKIA_OUT": "[CUSTOM_C:\\_B_CACHE]\\skia\\out\\Build-Win-MSVC-x86-Debug"
     },
     "name": "build most"
   },
@@ -149,7 +148,7 @@
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', '*.dylib', 'skia_launcher', 'lib/*.so', 'iOSShell.app', 'iOSShell.ipa']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    dst_path = os.path.join(dst, os.path.relpath(f, src))\n    if not os.path.isdir(os.path.dirname(dst_path)):\n      os.makedirs(os.path.dirname(dst_path))\n    print 'Copying build product %s to %s' % (f, dst_path)\n    shutil.move(f, dst_path)\n",
-      "[CUSTOM_C:\\_B_CACHE]\\skia\\out\\Build-Win-MSVC-x86-Debug-VS2015\\Debug",
+      "[CUSTOM_C:\\_B_CACHE]\\skia\\out\\Build-Win-MSVC-x86-Debug\\Debug",
       "[SWARM_OUT_DIR]\\out\\Debug"
     ],
     "name": "copy build products",

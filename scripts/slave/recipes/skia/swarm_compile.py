@@ -24,7 +24,7 @@ TEST_BUILDERS = {
       'Build-Ubuntu-GCC-x86_64-Debug-CrOS_Link',
     ],
     'skiabot-win-compile-000': [
-      'Build-Win-MSVC-x86-Debug-VS2015',
+      'Build-Win-MSVC-x86-Debug',
     ],
     'skiabot-linux-swarm-012': [
       'Build-Ubuntu-GCC-x86_64-Release-Valgrind',
@@ -81,7 +81,7 @@ def GenTests(api):
 
   mastername = 'client.skia.compile'
   slavename = 'skiabot-win-compile-000'
-  buildername = 'Build-Win-MSVC-x86-Debug-VS2015'
+  buildername = 'Build-Win-MSVC-x86-Debug'
   yield (
       api.test('win_cleanup_after_failed_compile') +
       api.properties(buildername=buildername,
