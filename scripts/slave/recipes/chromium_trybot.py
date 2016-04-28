@@ -39,7 +39,7 @@ CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
 
 
 CHROMIUM_BLINK_TESTS_PATHS = freeze([
-  # Service worker code is primarily tested in Blink layout tests.
+  'components/test_runner',
   'content/browser/bluetooth',
   'content/browser/service_worker',
   'content/child/service_worker',
@@ -47,6 +47,7 @@ CHROMIUM_BLINK_TESTS_PATHS = freeze([
   'content/renderer/bluetooth',
   'content/renderer/service_worker',
   'content/shell/browser/layout_test',
+  'content/shell/renderer/layout_test',
   'device/bluetooth',
   'device/usb/public/interfaces',
   'media',
