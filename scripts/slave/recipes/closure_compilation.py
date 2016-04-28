@@ -18,12 +18,10 @@ DEPS = [
 MASTERS = freeze({
   'chromium.fyi': {
     'buildername': 'Closure Compilation Linux',
-    'slavename': 'vm999-m1',
     'testname': 'closure_compilation_fyi',
   },
   'tryserver.chromium.linux': {
     'buildername': 'closure_compilation',
-    'slavename': 'slave836-c4',
     'testname': 'closure_compilation_try',
   },
 })
@@ -67,6 +65,5 @@ def GenTests(api):
       api.properties.generic(
           buildername=config['buildername'],
           mastername=mastername,
-          slavename=config['slavename'],
       )
     )
