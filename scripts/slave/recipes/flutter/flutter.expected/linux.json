@@ -109,8 +109,7 @@
   },
   {
     "cmd": [
-      "travis",
-      "setup.sh"
+      "travis/setup.sh"
     ],
     "cwd": "[SLAVE_BUILD]/flutter",
     "env": {
@@ -122,8 +121,7 @@
   },
   {
     "cmd": [
-      "travis",
-      "test.sh"
+      "travis/test.sh"
     ],
     "cwd": "[SLAVE_BUILD]/flutter",
     "env": {

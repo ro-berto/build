@@ -142,10 +142,10 @@ def RunSteps(api):
     if api.platform.is_mac:
       SetupXcode(api)
 
-    api.step('setup.sh', ['travis', 'setup.sh'], cwd=checkout)
+    api.step('setup.sh', ['travis/setup.sh'], cwd=checkout)
 
     if api.platform.is_linux:
-      api.step('test.sh', ['travis', 'test.sh'], cwd=checkout)
+      api.step('test.sh', ['travis/test.sh'], cwd=checkout)
 
     BuildExamples(api, git_hash)
 
