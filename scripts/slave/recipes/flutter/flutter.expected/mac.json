@@ -153,49 +153,8 @@
   },
   {
     "cmd": [
-      "flutter",
-      "config",
-      "--no-analytics"
-    ],
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "flutter config"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "doctor"
-    ],
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "flutter doctor"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "update-packages"
-    ],
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "update packages"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "analyze",
-      "--flutter-repo",
-      "--no-current-directory",
-      "--no-current-package",
-      "--congratulate"
+      "travis",
+      "setup.sh"
     ],
     "cwd": "[SLAVE_BUILD]/flutter",
     "env": {
@@ -203,77 +162,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "flutter analyze"
-  },
-  {
-    "cmd": [
-      "dart",
-      "-c",
-      "test/all.dart"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/cassowary",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "test cassowary"
-  },
-  {
-    "cmd": [
-      "dart",
-      "-c",
-      "test/all.dart"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_driver",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "test flutter_driver"
-  },
-  {
-    "cmd": [
-      "dart",
-      "-c",
-      "test/all.dart"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_tools",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "test flutter_tools"
-  },
-  {
-    "cmd": [
-      "dart",
-      "-c",
-      "test/all.dart"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/flx",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "test flx"
-  },
-  {
-    "cmd": [
-      "dart",
-      "-c",
-      "test/all.dart"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/newton",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "test newton"
+    "name": "setup.sh"
   },
   {
     "cmd": [

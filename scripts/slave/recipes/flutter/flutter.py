@@ -23,66 +23,6 @@ def GetCloudPath(api, git_hash, path):
   return 'flutter/%s/%s' % (git_hash, path)
 
 
-def AnalyzeFlutter(api):
-  analyze_cmd = [
-    'flutter',
-    'analyze',
-    '--flutter-repo',
-    '--no-current-directory',
-    '--no-current-package',
-    '--congratulate'
-  ]
-  api.step('flutter analyze', analyze_cmd, cwd=api.path['checkout'])
-
-
-def TestFlutterPackagesAndExamples(api):
-  checkout = api.path['checkout']
-
-  def _pub_test(path):
-    api.step('test %s' % api.path.basename(path),
-        ['dart', '-c', 'test/all.dart'], cwd=checkout.join(path))
-
-  def _flutter_test(path):
-    # TODO(eseidel): Sadly tests are linux-only for now. :(
-    # https://github.com/flutter/flutter/issues/1707
-    if api.platform.is_linux:
-      api.step('test %s' % api.path.basename(path), ['flutter', 'test'],
-          cwd=checkout.join(path))
-
-  # TODO(yjbanov): reenable when https://github.com/flutter/flutter/issues/3360 is fixed
-  # def _drive_test(path, test_name):
-  #   # We depend on the iOS simulator for now.
-  #   if not api.platform.is_mac:
-  #     return
-  #   api.step('drive %s' % api.path.basename(path),
-  #       ['flutter', 'drive', '--verbose', '--target',
-  #       'test_driver/%s.dart' % test_name],
-  #       cwd=checkout.join(path))
-
-  # keep the rest of this function in sync with
-  # https://github.com/flutter/flutter/blob/master/travis/test.sh
-
-  _pub_test('packages/cassowary')
-  _flutter_test('packages/flutter')
-  _pub_test('packages/flutter_driver')
-  _flutter_test('packages/flutter_sprites')
-  _pub_test('packages/flutter_tools')
-  _pub_test('packages/flx')
-  _pub_test('packages/newton')
-
-  _flutter_test('dev/manual_tests')
-  _flutter_test('examples/hello_world')
-  _flutter_test('examples/layers')
-  _flutter_test('examples/material_gallery')
-  _flutter_test('examples/stocks')
-
-  # We're not getting perf numbers from these, just making sure they run.
-  # TODO(yjbanov): reenable when https://github.com/flutter/flutter/issues/3360 is fixed
-  # _drive_test('dev/benchmarks/complex_layout', 'scroll_perf')
-  # _drive_test('examples/material_gallery', 'scroll_perf')
-  # _drive_test('examples/stocks', 'scroll_perf')
-
-
 def TestCreateAndLaunch(api):
   with MakeTempDir(api) as temp_dir:
     api.step('test create', ['flutter', 'create', '--with-driver-test',
@@ -202,12 +142,11 @@ def RunSteps(api):
     if api.platform.is_mac:
       SetupXcode(api)
 
-    # Disable analytics on the bots and download dependencies for later steps.
-    api.step('flutter config', ['flutter', 'config', '--no-analytics'])
-    api.step('flutter doctor', ['flutter', 'doctor'])
-    api.step('update packages', ['flutter', 'update-packages'])
-    AnalyzeFlutter(api)
-    TestFlutterPackagesAndExamples(api)
+    api.step('setup.sh', ['travis', 'setup.sh'], cwd=checkout)
+
+    if api.platform.is_linux:
+      api.step('test.sh', ['travis', 'test.sh'], cwd=checkout)
+
     BuildExamples(api, git_hash)
 
     # TODO(yjbanov): we do not yet have Android devices hooked up, nor do we
