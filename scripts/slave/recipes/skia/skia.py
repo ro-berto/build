@@ -75,7 +75,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  def AndroidTestData(builder):
+  def AndroidTestData(builder, adb=None):
     test_data = (
         api.step_data(
             'get EXTERNAL_STORAGE dir',
@@ -87,6 +87,14 @@ def GenTests(api):
             'read SK_IMAGE_VERSION',
             stdout=api.raw_io.output('42'))
     )
+    if adb:
+      test_data += api.step_data(
+          'which adb',
+          stdout=api.raw_io.output(adb))
+    else:
+      test_data += api.step_data(
+        'which adb',
+        retcode=1)
     if 'Test' in builder:
       test_data += (
         api.step_data(
@@ -119,10 +127,13 @@ def GenTests(api):
           ccache = '/usr/bin/ccache' if 'Appurify' in builder else None
           test += api.step_data('has ccache?',
                                 stdout=api.json.output({'ccache':ccache}))
-        if ('Android' in builder and
-            ('Test' in builder or 'Perf' in builder) and
-            not 'Appurify' in builder):
-          test += AndroidTestData(builder)
+        if 'Android' in builder and not 'Appurify' in builder:
+          if 'Test' in builder or 'Perf' in builder:
+            test += AndroidTestData(builder)
+          else:
+            test += api.step_data(
+                'which adb',
+                retcode=1)
         if 'ChromeOS' in builder:
           test += api.step_data('read SKP_VERSION',
                                 stdout=api.raw_io.output('42'))
@@ -162,7 +173,10 @@ def GenTests(api):
     api.step_data(
                 'has ccache?',
                 stdout=api.json.output({'ccache':'/usr/bin/ccache'})) +
-    api.path.exists(api.path['slave_build'])
+    api.path.exists(api.path['slave_build']) +
+    api.step_data(
+        'which adb',
+        retcode=1)
   )
 
   builder = 'Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug'
@@ -318,3 +332,28 @@ def GenTests(api):
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
+
+  builder = 'Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug'
+  slave = 'skiabot-shuttle-ubuntu12-nexus7-001'
+  master = 'client.skia.android'
+  yield (
+    api.test('adb_in_path') +
+    api.properties(buildername=builder,
+                   mastername=master,
+                   slavename=slave,
+                   buildnumber=6,
+                   revision='abc123') +
+    api.step_data(
+                'has ccache?',
+                stdout=api.json.output({'ccache':None})) +
+    AndroidTestData(builder, adb='/usr/bin/adb') +
+    api.step_data('read SKP_VERSION',
+                  stdout=api.raw_io.output('42')) +
+    api.step_data('read SK_IMAGE_VERSION',
+                  stdout=api.raw_io.output('42')) +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    )
+  )
+

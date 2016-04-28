@@ -74,12 +74,15 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
       self._android_sdk_root = android_devices.SWARMING_SDK_ROOT
       self.serial = None
       self.serial_args = []
-    self._adb = _ADBWrapper(
-        self._skia_api.m.adb,
-        self._skia_api.m.path.join(self._android_sdk_root,
-                                   'platform-tools', 'adb'),
-        self.serial_args,
-        self)
+    try:
+      adb = self._skia_api.m.step('which adb',
+                                  cmd=['which', 'adb'],
+                                  stdout=self._skia_api.m.raw_io.output(),
+                                  infra_step=True).stdout.rstrip()
+    except self._skia_api.m.step.StepFailure:
+      adb = self._skia_api.m.path.join(self._android_sdk_root,
+                                       'platform-tools', 'adb')
+    self._adb = _ADBWrapper(self._skia_api.m.adb, adb, self.serial_args, self)
     self._has_root = slave_info.has_root
     self._default_env = {'ANDROID_SDK_ROOT': self._android_sdk_root,
                          'ANDROID_HOME': self._android_sdk_root,
@@ -240,6 +243,11 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
           cmd=['sleep', '10'],
           infra_step=True)
       self._adb.wait_for_device()
+      if self._skia_api.running_in_swarming:
+        self._adb(name='kill-server',
+                  serial=self.serial,
+                  cmd=['kill-server'],
+                  infra_step=True)
 
   def read_file_on_device(self, path, *args, **kwargs):
     """Read the given file."""

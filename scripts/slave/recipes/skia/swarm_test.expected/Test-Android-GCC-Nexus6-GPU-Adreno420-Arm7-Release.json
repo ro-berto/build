@@ -47,6 +47,18 @@
   },
   {
     "cmd": [
+      "which",
+      "adb"
+    ],
+    "name": "which adb",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
     "env": {
@@ -565,6 +577,21 @@
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "wait for charge (2)"
+  },
+  {
+    "cmd": [
+      "/b/android-sdk-linux/platform-tools/adb",
+      "kill-server"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "kill-server"
   },
   {
     "name": "$result",

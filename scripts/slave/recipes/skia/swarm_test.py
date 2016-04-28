@@ -57,7 +57,10 @@ def GenTests(api):
             stdout=api.raw_io.output('42')) +
        api.step_data(
             'exists skia_dm',
-            stdout=api.raw_io.output(''))
+            stdout=api.raw_io.output('')) +
+       api.step_data(
+            'which adb',
+            retcode=1)
       )
 
     return test_data

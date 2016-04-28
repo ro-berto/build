@@ -69,6 +69,9 @@ def GenTests(api):
           ccache = '/usr/bin/ccache' if 'Appurify' in builder else None
           test += api.step_data('has ccache?',
                                 stdout=api.json.output({'ccache':ccache}))
+          test += api.step_data(
+            'which adb',
+            retcode=1)
         if 'Trybot' in builder:
           test += api.properties(issue=500,
                                  patchset=1,
