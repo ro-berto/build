@@ -78,6 +78,8 @@ def _RunStepsInternal(api):
     ]
   else:  # pragma: no cover
     assert False, 'patch_storage %s is not supported' % patch_storage
+  if api.properties.get('dry_run'):
+    presubmit_args.append('--dry_run')
 
   presubmit_args.extend([
     '--root', abs_root,
@@ -130,6 +132,18 @@ def GenTests(api):
         buildername='chromium_presubmit',
         repo_name='chromium',
         force_checkout=True) +
+    api.step_data('presubmit', api.json.output([['chromium_presubmit',
+                                                 ['compile']]]))
+  )
+
+  yield (
+    api.test('chromium_dry_run') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        patch_project='chromium',
+        dry_run=True) +
     api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                  ['compile']]]))
   )
