@@ -7,7 +7,7 @@
       "--master",
       "chromium.linux",
       "--builder",
-      "Android Tests",
+      "Android Builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -174,7 +174,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=arm test_isolation_mode=prepare use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -193,7 +193,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Android Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -214,8 +214,12 @@
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Android Tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"instrumentation_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"override_compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"chrome_public_test_apk\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        ], @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"override_isolate_target\": \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@          \"dimension_sets\": [@@@",
@@ -225,7 +229,7 @@
       "@@@STEP_LOG_LINE@json.output@            }@@@",
       "@@@STEP_LOG_LINE@json.output@          ]@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"chrome_public_test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"chrome_public_test_apk\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -284,19 +288,38 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--clean-isolated-files"
     ],
-    "name": "rmtree build directory",
+    "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Android Builder",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--swarming-targets-file",
+      "chrome_public_test_apk\n",
+      "//out/Release"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@chrome_public_test_apk@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
   {
@@ -306,19 +329,123 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-service-account-json-file",
+      "/creds/service_accounts/service-account-goma-client.json",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--",
+      "chrome_public_test_apk",
+      "system_webview_apk"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[SLAVE_BUILD]/src/out/Release/chrome_public_test_apk.isolated.gen.json"
+    ],
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chrome_public_test_apk\": \"[dummy hash for chrome_public_test_apk]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-linux-archive/chromium.linux/Android Builder/full-build-linux.zip",
+      "gs://chromium-linux-archive/chromium.linux/Android Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--master-name",
-      "chromium.linux",
-      "--build-number",
-      "571"
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "name": "extract build"
+    "name": "package build"
+  },
+  {
+    "cmd": [],
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Tests",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Tests@@@"
+    ]
   },
   {
     "name": "$result",

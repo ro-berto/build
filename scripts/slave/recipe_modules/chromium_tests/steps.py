@@ -228,7 +228,8 @@ class LocalGTestTest(Test):
   def __init__(self, name, args=None, target_name=None, use_isolate=False,
                revision=None, webkit_revision=None, android_isolate_path=None,
                android_shard_timeout=None, android_tool=None,
-               override_compile_targets=None, use_xvfb=True, **runtest_kwargs):
+               override_compile_targets=None, override_isolate_target=None,
+               use_xvfb=True, **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -240,6 +241,8 @@ class LocalGTestTest(Test):
       revision: Revision of the Chrome checkout.
       webkit_revision: Revision of the WebKit checkout.
       override_compile_targets: List of compile targets for this test
+          (for tests that don't follow target naming conventions).
+      override_isolate_target: List of isolate targets for this test
           (for tests that don't follow target naming conventions).
       use_xvfb: whether to use the X virtual frame buffer. Only has an
           effect on Linux. Defaults to True. Mostly harmless to
@@ -258,6 +261,7 @@ class LocalGTestTest(Test):
     self._android_shard_timeout = android_shard_timeout
     self._android_tool = android_tool
     self._override_compile_targets = override_compile_targets
+    self._override_isolate_target = override_isolate_target
     self._use_xvfb = use_xvfb
     self._runtest_kwargs = runtest_kwargs
 
@@ -273,8 +277,10 @@ class LocalGTestTest(Test):
   def uses_local_devices(self):
     return True # pragma: no cover
 
-  def isolate_target(self, _api):
-    return self.target_name  # pragma: no cover
+  def isolate_target(self, _api):  # pragma: no cover
+    if self._override_isolate_target:
+      return self._override_isolate_target
+    return self.target_name
 
   def compile_targets(self, api):
     if self._override_compile_targets:
@@ -442,6 +448,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
         swarming_expiration = swarming_spec.get('expiration')
         swarming_hard_timeout = swarming_spec.get('hard_timeout')
     override_compile_targets = test.get('override_compile_targets', None)
+    override_isolate_target = test.get('override_isolate_target', None)
     target_name = str(test['test'])
     name = str(test.get('name', target_name))
     swarming_dimensions = swarming_dimensions or {}
@@ -461,6 +468,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                         swarming_expiration=swarming_expiration,
                         swarming_hard_timeout=swarming_hard_timeout,
                         override_compile_targets=override_compile_targets,
+                        override_isolate_target=override_isolate_target,
                         use_xvfb=use_xvfb)
     else:
       yield GTestTest(name, args=args, target_name=target_name,
@@ -472,6 +480,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                       swarming_expiration=swarming_expiration,
                       swarming_hard_timeout=swarming_hard_timeout,
                       override_compile_targets=override_compile_targets,
+                      override_isolate_target=override_isolate_target,
                       use_xvfb=use_xvfb)
 
 
@@ -817,7 +826,7 @@ class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None, priority=None,
                expiration=None, hard_timeout=None, upload_test_results=True,
-               override_compile_targets=None):
+               override_compile_targets=None, override_isolate_target=None):
     super(SwarmingGTestTest, self).__init__(name, dimensions, tags, target_name,
                                             extra_suffix, priority, expiration,
                                             hard_timeout)
@@ -825,6 +834,7 @@ class SwarmingGTestTest(SwarmingTest):
     self._shards = shards
     self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
+    self._override_isolate_target = override_isolate_target
 
   def compile_targets(self, api):
     # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
@@ -842,8 +852,10 @@ class SwarmingGTestTest(SwarmingTest):
     return [self.target_name, self.target_name + '_run']
 
   def isolate_target(self, api):
-    # TODO(agrieve): Remove _apk suffix in favour of bin/run_${target} once
-    #     GYP is gone. http://crbug.com/599919
+    # TODO(agrieve): Remove override_isolate_target and _apk suffix in
+    #     favour of bin/run_${target} once GYP is gone. http://crbug.com/599919
+    if self._override_isolate_target:
+      return self._override_isolate_target
     if api.chromium.c.TARGET_PLATFORM == 'android':
       return self.target_name + '_apk'
     return self.target_name
@@ -1302,8 +1314,11 @@ class GTestTest(Test):
       self._test = SwarmingGTestTest(
           name, args, target_name, swarming_shards, swarming_dimensions,
           swarming_tags, swarming_extra_suffix, swarming_priority,
-          swarming_expiration, swarming_hard_timeout, override_compile_targets=runtest_kwargs.get(
-            'override_compile_targets'))
+          swarming_expiration, swarming_hard_timeout,
+          override_compile_targets=runtest_kwargs.get(
+              'override_compile_targets'),
+          override_isolate_target=runtest_kwargs.get(
+              'override_isolate_target'))
     else:
       self._test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
 
