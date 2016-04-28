@@ -76,6 +76,17 @@ def GenTests(api):
            'base': { 'exclusions': ['fo.*'] },
            'chromium': { 'exclusions': [] }})))
 
+  # Matches ignore.
+  yield (api.test('match_ignore') +
+         api.properties(
+           affected_files=['OWNERS'],
+           example_changed_paths=['OWNERS']) +
+         api.override_step_data(
+          'read filter exclusion spec',
+          api.json.output({
+           'base': { 'ignores': ['OWNERS'] },
+           'chromium': { }})))
+
   # Analyze returns matching result.
   yield (api.test('analyzes_returns_true') +
          api.override_step_data(

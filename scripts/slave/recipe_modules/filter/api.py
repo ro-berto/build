@@ -14,10 +14,10 @@ class FilterApi(recipe_api.RecipeApi):
     self._compile_targets = []
     self._paths = []
 
-  def __is_path_in_exclusion_list(self, path, exclusions):
+  def __is_path_in_regex_list(self, path, regexes):
     """Returns true if |path| matches any of the regular expressions in
-    |exclusions|."""
-    for regex in exclusions:
+    |regexes|."""
+    for regex in regexes:
       match = regex.match(path)
       if match and match.end() == len(path):
         return regex.pattern
@@ -59,13 +59,6 @@ class FilterApi(recipe_api.RecipeApi):
       )
     step_result.presentation.step_text = 'path: %r' % config_path
     return step_result.json.output
-
-  def _load_exclusions(self, names, file_name):
-    file_contents = self._load_analyze_config(file_name)
-    exclusions = []
-    for name in names:
-      exclusions.extend(file_contents[name]['exclusions'])
-    return exclusions
 
   def does_patch_require_compile(self,
                                  affected_files,
@@ -120,7 +113,13 @@ class FilterApi(recipe_api.RecipeApi):
     names = ['base']
     if additional_names:
       names.extend(additional_names)
-    exclusions = self._load_exclusions(names, config_file_name)
+
+    config_contents = self._load_analyze_config(config_file_name)
+    exclusions = []
+    ignores = []
+    for name in names:
+      exclusions.extend(config_contents[name].get('exclusions', []))
+      ignores.extend(config_contents[name].get('ignores', []))
 
     test_targets = test_targets or []
     additional_compile_targets = additional_compile_targets or []
@@ -132,18 +131,27 @@ class FilterApi(recipe_api.RecipeApi):
     # Check the path of each file against the exclusion list. If found, no need
     # to check dependencies.
     exclusion_regexs = [re.compile(exclusion) for exclusion in exclusions]
+    ignore_regexs = [re.compile(ignore) for ignore in ignores]
+    ignored = True
     for path in self.paths:
-      first_match = self.__is_path_in_exclusion_list(path, exclusion_regexs)
+      first_match = self.__is_path_in_regex_list(path, exclusion_regexs)
       if first_match:
-        step_result = self.m.python.inline(
-            'analyze',
-            'import sys; sys.exit(0)',
-            add_python_log=False)
+        # TODO(phajdan.jr): consider using plain api.step here, not python.
+        step_result = self.m.python.succeeding_step(
+            'analyze', 'Analyze disabled: matched exclusion')
         step_result.presentation.logs.setdefault('excluded_files', []).append(
             '%s (regex = \'%s\')' % (path, first_match))
         self._compile_targets = sorted(all_targets)
         self._test_targets = sorted(test_targets)
         return
+
+      if not self.__is_path_in_regex_list(path, ignore_regexs):
+        ignored = False
+
+    if ignored:
+      self.m.python.succeeding_step(
+          'analyze', 'No compile necessary (all files ignored)')
+      return
 
     analyze_input = {
         'files': self.paths,
