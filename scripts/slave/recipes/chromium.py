@@ -1047,3 +1047,13 @@ def GenTests(api):
     ) +
     api.override_step_data('[collect] base_unittests', retcode=1)
   )
+
+  yield (
+    api.test('kitchen_path_config') +
+    api.properties(
+        mastername='chromium.fyi',
+        buildername='Linux Kitchen (kitchen_run)',
+        slavename='build1-a1',
+        buildnumber='77457',
+        path_config='kitchen')
+  )

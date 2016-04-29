@@ -164,6 +164,14 @@ class ChromiumApi(recipe_api.RecipeApi):
       '--src-dir', self.m.path['checkout'],
       '--goma-cache-dir', self.m.path['goma_cache'],
     ]
+
+    # Use explicit goma deps cache dir if it's set in the path config.
+    # Otherwise use the default one inside build output directory.
+    try:
+      args.extend(['--goma-deps-cache-dir', self.m.path['goma_deps_cache']])
+    except KeyError:
+      pass
+
     if self.c.compile_py.build_args:
       args += ['--build-args', self.c.compile_py.build_args]
     if self.c.compile_py.build_tool:
