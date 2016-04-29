@@ -59,6 +59,7 @@ CHROMIUM_BLINK_TESTS_PATHS = freeze([
   'third_party/libpng',
   'third_party/libwebp',
   'third_party/qcms',
+  'third_party/skia',
   'third_party/yasm',
   'third_party/zlib',
   'v8',
@@ -882,6 +883,14 @@ def GenTests(api):
     api.platform.name('win') +
     api.override_step_data('webkit_tests (with patch)',
                            api.test_utils.canned_test_output(passing=True))
+  )
+
+  yield (
+    api.test('use_skia_patch_on_blink_trybot') +
+    props(mastername='tryserver.blink',
+          buildername='mac_blink_rel',
+          patch_project='skia') +
+    api.platform.name('mac')
   )
 
   yield (
