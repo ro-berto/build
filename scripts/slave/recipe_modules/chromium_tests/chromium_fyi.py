@@ -1404,6 +1404,7 @@ SPEC = {
     'ClangToTMac': {
       'chromium_config': 'clang_tot_mac',
       'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -1446,6 +1447,7 @@ SPEC = {
     },
     'ClangToTMac (dbg)': {
       'chromium_config': 'clang_tot_mac',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -1467,6 +1469,7 @@ SPEC = {
     },
     'ClangToTMacASan': {
       'chromium_config': 'clang_tot_mac_asan',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
