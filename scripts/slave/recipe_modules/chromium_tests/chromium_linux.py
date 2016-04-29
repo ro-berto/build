@@ -181,9 +181,6 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'arm64_builder',
-      'compile_targets': [
-        'android_builder_tests'
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -200,10 +197,6 @@ SPEC = {
       },
       'android_config': 'main_builder',
       'bot_type': 'builder',
-      'compile_targets': [
-        'cronet_test_instrumentation_apk',
-        'system_webview_apk',
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -270,9 +263,6 @@ SPEC = {
       },
       'android_config': 'main_builder',
       'bot_type': 'builder',
-      'compile_targets': [
-        'system_webview_apk',
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -319,10 +309,6 @@ SPEC = {
       },
       'android_config': 'clang_builder',
       'bot_type': 'builder_tester',
-      'compile_targets': [
-        'android_builder_tests',
-        'system_webview_apk',
-      ],
       'testing': {
         'platform': 'linux',
       },

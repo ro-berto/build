@@ -324,9 +324,7 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--",
-      "android_builder_tests",
-      "system_webview_apk"
+      "--"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
