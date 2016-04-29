@@ -1,3 +1,4 @@
+per-file full_chromium_fyi*=thakis@chromium.org
 per-file full_chromium_gpu*=kbr@chromium.org
 per-file full_chromium_perf*=dtu@chromium.org
 per-file full_chromium_perf*=eakuefner@chromium.org
