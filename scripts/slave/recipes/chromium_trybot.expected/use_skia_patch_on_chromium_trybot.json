@@ -306,7 +306,7 @@
       "win_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"chromium_builder_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"mini_installer\"]}",
+      "{\"additional_compile_targets\": [\"chromium_builder_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"mini_installer\", \"next_version_mini_installer\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -329,7 +329,8 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"next_version_mini_installer\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
