@@ -945,87 +945,48 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     flush_thread.start()
 
     try:
-      if debug:
-        in_line = proc.stdout.readline()
-        while in_line:
-          # Capture all characters except \r.
-          in_line = in_line.replace('\r', '')
+      in_byte = proc.stdout.read(1)
+      in_line = cStringIO.StringIO()
+      while in_byte:
+        # Capture all characters except \r.
+        if in_byte != '\r':
+          in_line.write(in_byte)
 
+        # Write and flush on newline.
+        if in_byte == '\n':
           if log_event:
             log_event.set()
           if parser_func:
-            parser_func(in_line.strip())
+            parser_func(in_line.getvalue().strip())
 
           if filter_obj:
-            filtered_line = filter_obj.FilterLine(in_line)
+            filtered_line = filter_obj.FilterLine(in_line.getvalue())
             if filtered_line is not None:
               writefh.write(filtered_line)
           else:
-            writefh.write(in_line)
-          if debug and proc.poll() is not None:
-            print 'Child process has terminated'
-          in_line = proc.stdout.readline()
-
-        print threading.currentThread(), 'ProcessRead: proc.stdout finished.'
-
-        if log_event and in_line:
-          log_event.set()
-
-        # Write remaining data and flush on EOF.
-        if parser_func:
-          parser_func(in_line.strip())
-
-        if filter_obj:
-          if in_line:
-            filtered_line = filter_obj.FilterDone(in_line)
-            if filtered_line is not None:
-              writefh.write(filtered_line)
-        else:
-          if in_line:
-            writefh.write(in_line)
-      else:
-        in_byte = proc.stdout.read(1)
-        in_line = cStringIO.StringIO()
-        while in_byte:
-          # Capture all characters except \r.
-          if in_byte != '\r':
-            in_line.write(in_byte)
-
-          # Write and flush on newline.
-          if in_byte == '\n':
-            if log_event:
-              log_event.set()
-            if parser_func:
-              parser_func(in_line.getvalue().strip())
-
-            if filter_obj:
-              filtered_line = filter_obj.FilterLine(in_line.getvalue())
-              if filtered_line is not None:
-                writefh.write(filtered_line)
-            else:
-              writefh.write(in_line.getvalue())
-            in_line = cStringIO.StringIO()
-          if debug and proc.poll() is not None:
-            print 'Child process has terminated'
-          in_byte = proc.stdout.read(1)
-
-        print threading.currentThread(), 'ProcessRead: proc.stdout finished.'
-
-        if log_event and in_line.getvalue():
-          log_event.set()
-
-        # Write remaining data and flush on EOF.
-        if parser_func:
-          parser_func(in_line.getvalue().strip())
-
-        if filter_obj:
-          if in_line.getvalue():
-            filtered_line = filter_obj.FilterDone(in_line.getvalue())
-            if filtered_line is not None:
-              writefh.write(filtered_line)
-        else:
-          if in_line.getvalue():
             writefh.write(in_line.getvalue())
+          in_line = cStringIO.StringIO()
+        if debug and proc.poll() is not None:
+          print 'Child process has terminated'
+        in_byte = proc.stdout.read(1)
+
+      print threading.currentThread(), 'ProcessRead: proc.stdout finished.'
+
+      if log_event and in_line.getvalue():
+        log_event.set()
+
+      # Write remaining data and flush on EOF.
+      if parser_func:
+        parser_func(in_line.getvalue().strip())
+
+      if filter_obj:
+        if in_line.getvalue():
+          filtered_line = filter_obj.FilterDone(in_line.getvalue())
+          if filtered_line is not None:
+            writefh.write(filtered_line)
+      else:
+        if in_line.getvalue():
+          writefh.write(in_line.getvalue())
     finally:
       print threading.currentThread(), 'ProcessRead: cleaning up.'
       kill_event.set()
