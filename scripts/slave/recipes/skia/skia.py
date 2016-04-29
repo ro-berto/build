@@ -28,9 +28,6 @@ TEST_BUILDERS = {
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
     ],
-    'skiabot-shuttle-ubuntu12-003': [
-      'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
-    ],
     'skiabot-shuttle-ubuntu12-gtx550ti-001': [
       'Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench',
     ],
@@ -134,11 +131,6 @@ def GenTests(api):
             test += api.step_data(
                 'which adb',
                 retcode=1)
-        if 'ChromeOS' in builder:
-          test += api.step_data('read SKP_VERSION',
-                                stdout=api.raw_io.output('42'))
-          test += api.step_data('read SK_IMAGE_VERSION',
-                                stdout=api.raw_io.output('42'))
         if 'Trybot' in builder:
           test += api.properties(issue=500,
                                  patchset=1,
