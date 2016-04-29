@@ -255,8 +255,6 @@ def get_timeouts(builder_cfg):
     expiration = 2*24*60*60
     hard_timeout = 9*60*60
     io_timeout = 60*60
-  elif 'Coverage' == builder_cfg['configuration']:
-    hard_timeout = 3*60*60
   return expiration, hard_timeout, io_timeout
 
 
