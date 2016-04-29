@@ -6,6 +6,7 @@
 
 
 DEPS = [
+  'depot_tools/infra_paths',
   'gatekeeper',
   'recipe_engine/path',
 ]

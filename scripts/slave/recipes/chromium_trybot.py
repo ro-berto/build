@@ -792,16 +792,6 @@ def GenTests(api):
     )
   )
 
-  yield (
-    api.test('swarming_paths') +
-    api.properties.tryserver(
-      mastername='tryserver.chromium.linux',
-      buildername='linux_chromium_rel_ng',
-      path_config='swarming',
-    ) +
-    api.platform.name('linux')
-  )
-
   # This tests that if the first fails, but the second pass succeeds
   # that we fail the whole build.
   yield (

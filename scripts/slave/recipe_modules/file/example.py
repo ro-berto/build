@@ -5,6 +5,7 @@
 from recipe_engine.types import freeze
 
 DEPS = [
+  'depot_tools/infra_paths',
   'file',
   'recipe_engine/path',
   'recipe_engine/raw_io',

@@ -10,6 +10,7 @@ import re
 
 
 DEPS = [
+  'depot_tools/infra_paths',
   'file',
   'recipe_engine/path',
   'recipe_engine/platform',
