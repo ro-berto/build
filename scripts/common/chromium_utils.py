@@ -1020,6 +1020,11 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     proc = subprocess.Popen(command, stdout=sys.stdout, stderr=sys.stderr,
                             bufsize=0, **kwargs)
 
+    # Wait for the command to terminate.
+    proc.wait()
+    assert proc.returncode is not None
+    return proc.returncode
+
   else:
     if not (parser_func or filter_obj):
       filter_obj = RunCommandFilter()
@@ -1056,6 +1061,7 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
                                       'filter_obj': filter_obj,
                                       'log_event': log_event,
                                       'debug': debug})
+    thread.daemon = True
 
     kill_lock = threading.Lock()
 
@@ -1131,34 +1137,30 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
     # Wait for the commands to terminate.
     for handle in proc_handles:
+      if debug:
+        print "Waiting on", handle, "to finish"
       handle.wait()
+      assert handle.returncode is not None
+      if debug:
+        print handle, "finished with", handle.returncode
+
+    if debug:
+      print "All processes finished", proc_handles
 
     # Wake up timeout threads.
     finished_event.set()
     log_event.set()
 
     if debug:
-      print 'before thread.join()'
-
-    # Wait for the reader thread to complete (implies EOF reached on stdout/
-    # stderr pipes).
-    thread.join()
-
-    if debug:
-      print 'after thread.join()'
+      print threading.currentThread(), "Threads",
+      print threading.enumerate()
 
     # Check whether any of the sub commands has failed.
-    for handle in proc_handles:
+    for handle in proc_handles[1:]:
       if handle.returncode:
         return handle.returncode
 
-  if debug:
-    print 'before proc.wait()'
-  # Wait for the command to terminate.
-  proc.wait()
-  if debug:
-    print 'after proc.wait()'
-  return proc.returncode
+    return proc_handles[0].returncode
 
 
 def GetStatusOutput(command, **kwargs):
