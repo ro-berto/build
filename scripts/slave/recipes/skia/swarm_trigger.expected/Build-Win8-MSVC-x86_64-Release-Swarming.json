@@ -487,7 +487,7 @@
       "--io-timeout",
       "1200",
       "--hard-timeout",
-      "3600",
+      "7200",
       "--dimension",
       "gpu",
       "none",
