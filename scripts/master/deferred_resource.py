@@ -48,6 +48,12 @@ class CredentialFactory(object):
     return self.f(*args, **kwargs)
 
 
+class DaemonThreadPool(ThreadPool):
+  def threadFactory(self, *args, **kwargs):
+    thread = threading.Thread(*args, **kwargs)
+    thread.daemon = True
+    return thread
+
 
 class DeferredResource(object):
   """Wraps an apiclient Resource, converts its methods to deferred.
@@ -159,7 +165,7 @@ class DeferredResource(object):
 
   @classmethod
   def _create_thread_pool(cls, max_concurrent_requests):
-    return ThreadPool(minthreads=1, maxthreads=max_concurrent_requests)
+    return DaemonThreadPool(minthreads=1, maxthreads=max_concurrent_requests)
 
   @classmethod
   def _create_async(
