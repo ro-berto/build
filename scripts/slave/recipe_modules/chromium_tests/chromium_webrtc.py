@@ -45,7 +45,7 @@ def BaseSpec(bot_type, chromium_apply_config, gclient_config, platform,
 
 
 def BuildSpec(platform, target_bits, build_config='Release',
-              gclient_config='chromium_webrtc'):
+              gclient_config='chromium_webrtc', mb=False):
   spec = BaseSpec(
       bot_type='builder',
       chromium_apply_config=['dcheck', 'blink_logging_on'],
@@ -58,6 +58,10 @@ def BuildSpec(platform, target_bits, build_config='Release',
     spec['compile_targets'] = ['android_builder_chromium_webrtc']
   else:
     spec['compile_targets'] = ['chromium_builder_webrtc']
+
+  if mb:
+    spec['chromium_apply_config'].append('mb')
+
   return spec
 
 

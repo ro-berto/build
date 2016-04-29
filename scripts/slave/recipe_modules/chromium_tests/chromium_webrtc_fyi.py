@@ -45,10 +45,11 @@ for b in SPEC['builders'].itervalues():
 # they run at.
 _builders = collections.defaultdict(dict)
 
-def AddBuildSpec(name, platform, target_bits=64, build_config='Release'):
+def AddBuildSpec(name, platform, target_bits=64, build_config='Release',
+                 mb=False):
   SPEC['builders'][name] = chromium_webrtc.BuildSpec(
       platform, target_bits, build_config=build_config,
-      gclient_config='chromium_webrtc_tot')
+      gclient_config='chromium_webrtc_tot', mb=mb)
   assert target_bits not in _builders[platform]
   _builders[platform][target_bits] = name
 
@@ -66,12 +67,13 @@ def AddTestSpec(name, perf_id, platform, target_bits=64,
       test_spec_file='chromium.webrtc.fyi.json')
 
 
-AddBuildSpec('Win Builder', 'win', target_bits=32)
-AddBuildSpec('Mac Builder', 'mac')
+AddBuildSpec('Win Builder', 'win', target_bits=32, mb=True)
+AddBuildSpec('Mac Builder', 'mac', mb=True)
 AddBuildSpec('Linux Builder', 'linux')
 AddBuildSpec('Android Builder (dbg)', 'android', target_bits=32,
-             build_config='Debug')
-AddBuildSpec('Android Builder ARM64 (dbg)', 'android', build_config='Debug')
+             build_config='Debug', mb=True)
+AddBuildSpec('Android Builder ARM64 (dbg)', 'android', build_config='Debug',
+             mb=True)
 
 AddTestSpec('Win7 Tester', 'chromium-webrtc-trunk-tot-rel-win7', 'win',
             target_bits=32)
