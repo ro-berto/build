@@ -675,6 +675,7 @@ SPEC = {
     },
     'CrWinClang64(dll)': {
       'chromium_config': 'chromium_win_clang',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1508,6 +1509,7 @@ SPEC = {
     },
     'ClangToTWin': {
       'chromium_config': 'chromium_win_clang_official_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
@@ -1541,6 +1543,7 @@ SPEC = {
     },
     'ClangToTWin(dbg)': {
       'chromium_config': 'chromium_win_clang_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -1573,6 +1576,7 @@ SPEC = {
     },
     'ClangToTWin(dll)': {
       'chromium_config': 'chromium_win_clang_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1606,6 +1610,7 @@ SPEC = {
     },
     'ClangToTWin64': {
       'chromium_config': 'chromium_win_clang_official_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
@@ -1639,6 +1644,7 @@ SPEC = {
     },
     'ClangToTWin64(dbg)': {
       'chromium_config': 'chromium_win_clang_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -1671,6 +1677,7 @@ SPEC = {
     },
     'ClangToTWin64(dll)': {
       'chromium_config': 'chromium_win_clang_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
