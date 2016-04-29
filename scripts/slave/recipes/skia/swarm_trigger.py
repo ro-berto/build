@@ -45,6 +45,7 @@ TEST_BUILDERS = {
       'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release-Swarming',
       'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
+      'Test-Win8-MSVC-ShuttleA-GPU-HD7770-x86_64-Release-Swarming',
       'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
     ],
   },
@@ -95,15 +96,22 @@ def swarm_dimensions(builder_spec):
       dimensions['os'] = 'iOS-9.2'
     elif builder_cfg['cpu_or_gpu'] == 'CPU':
       dimensions['gpu'] = 'none'
-      # TODO(borenet): Add appropriate CPU dimension(s).
-      #dimensions['cpu'] = builder_cfg['cpu_or_gpu_value']
-    else:  # pragma: no cover
-      # TODO: Create a dictionary of GPU name to device id when we have more
-      #       GPUs listed here.
-      if builder_cfg['cpu_or_gpu_value'] == 'GTX550Ti':
-        dimensions['gpu'] = '10de:1244'
-      else:
-        dimensions['gpu'] = builder_cfg['cpu_or_gpu_value']
+      dimensions['cpu'] = {
+        'AVX':  'x86-64',
+        'AVX2': 'x86-64-avx2',
+        'SSE4': 'x86-64',
+      }[builder_cfg['cpu_or_gpu_value']]
+    else:
+      dimensions['gpu'] = {
+        'GeForce320M': '10de:08a4',
+        'GT610':       '10de:104a',
+        'GTX550Ti':    '10de:1244',
+        'GTX660':      '10de:11c0',
+        'GTX960':      '10de:1401',
+        'HD4000':      '8086:0a2e',
+        'HD4600':      '8086:0416',
+        'HD7770':      '1002:683d',
+      }[builder_cfg['cpu_or_gpu_value']]
   else:
     dimensions['gpu'] = 'none'
   return dimensions

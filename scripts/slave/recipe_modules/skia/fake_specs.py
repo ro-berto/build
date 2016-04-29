@@ -1001,6 +1001,39 @@ FAKE_SPECS = {
     'upload_dm_results': False,
     'upload_perf_results': False,
   },
+  'Test-Win8-MSVC-ShuttleA-GPU-HD7770-x86_64-Release-Swarming': {
+    'build_targets': [
+      'dm',
+    ],
+    'builder_cfg': {
+      'arch': 'x86_64',
+      'compiler': 'MSVC',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'GPU',
+      'cpu_or_gpu_value': 'HD7770',
+      'extra_config': 'Swarming',
+      'is_trybot': False,
+      'model': 'ShuttleA',
+      'os': 'Win8',
+      'role': 'Test',
+    },
+    'configuration': 'Release_x64',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': True,
+    'env': {
+      'GYP_DEFINES':
+          ('qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 ski'
+           'a_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp'),
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming': {
     'build_targets': [
       'dm',
