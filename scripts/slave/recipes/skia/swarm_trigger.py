@@ -450,6 +450,9 @@ def RunSteps(api):
       api.path['checkout'].join('infra', 'bots', 'tools', 'luci-go'),
       swarming_rev='')
 
+  # Run gsutil.py to ensure that it's installed.
+  api.gsutil(['help'])
+
   recipes_hash = isolate_recipes(api)
 
   do_compile_steps = builder_spec.get('do_compile_steps', True)
