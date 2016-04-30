@@ -393,7 +393,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "bucket": "master.client.skia",
         "builder_name": "Linux Tests-Trybot",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",

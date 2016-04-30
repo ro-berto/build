@@ -403,7 +403,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "bucket": "master.chromium.webkit",
         "builder_name": "WebKit Win10",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -419,9 +418,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@WebKit Win10@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.webkit",
         "builder_name": "WebKit Win7",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -440,7 +447,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@WebKit Win10<br />WebKit Win7@@@"
+      "@@@STEP_TEXT@WebKit Win7@@@"
     ]
   },
   {

@@ -271,7 +271,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus9 Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -287,9 +286,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Nexus9 Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus9 Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -305,9 +312,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Nexus9 Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (3)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus9 Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -326,7 +341,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus9 Perf (1)<br />Android Nexus9 Perf (2)<br />Android Nexus9 Perf (3)@@@"
+      "@@@STEP_TEXT@Android Nexus9 Perf (3)@@@"
     ]
   },
   {

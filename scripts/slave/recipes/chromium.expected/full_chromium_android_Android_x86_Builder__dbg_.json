@@ -335,10 +335,6 @@
     "name": "package build"
   },
   {
-    "cmd": [],
-    "name": "trigger"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

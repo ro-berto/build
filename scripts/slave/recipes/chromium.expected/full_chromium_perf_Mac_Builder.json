@@ -293,7 +293,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.10 Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -309,9 +308,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.10 Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -327,9 +334,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (3)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.10 Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -345,9 +360,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (4)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.10 Perf (4)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -363,9 +386,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Perf (4)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (5)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.10 Perf (5)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -381,9 +412,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Perf (5)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (6)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.11 Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -399,9 +438,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.11 Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (7)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.11 Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -417,9 +464,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.11 Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (8)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.11 Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -435,9 +490,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.11 Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (9)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.11 Perf (4)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -453,9 +516,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.11 Perf (4)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (10)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac 10.11 Perf (5)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -471,9 +542,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.11 Perf (5)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (11)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac HDD Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -489,9 +568,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (12)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac HDD Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -507,9 +594,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (13)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac HDD Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -525,9 +620,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (14)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac HDD Perf (4)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -543,9 +646,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (4)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (15)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac HDD Perf (5)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -561,9 +672,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (5)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (16)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac Retina Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -579,9 +698,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac Retina Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (17)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac Retina Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -597,9 +724,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac Retina Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (18)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac Retina Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -615,9 +750,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac Retina Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (19)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac Retina Perf (4)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -633,9 +776,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac Retina Perf (4)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (20)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Mac Retina Perf (5)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -654,7 +805,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Perf (1)<br />Mac 10.10 Perf (2)<br />Mac 10.10 Perf (3)<br />Mac 10.10 Perf (4)<br />Mac 10.10 Perf (5)<br />Mac 10.11 Perf (1)<br />Mac 10.11 Perf (2)<br />Mac 10.11 Perf (3)<br />Mac 10.11 Perf (4)<br />Mac 10.11 Perf (5)<br />Mac HDD Perf (1)<br />Mac HDD Perf (2)<br />Mac HDD Perf (3)<br />Mac HDD Perf (4)<br />Mac HDD Perf (5)<br />Mac Retina Perf (1)<br />Mac Retina Perf (2)<br />Mac Retina Perf (3)<br />Mac Retina Perf (4)<br />Mac Retina Perf (5)@@@"
+      "@@@STEP_TEXT@Mac Retina Perf (5)@@@"
     ]
   },
   {

@@ -452,7 +452,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Optional Win7 Release (ATI)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -468,9 +467,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Optional Win7 Release (ATI)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Optional Win7 Release (NVIDIA)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -486,9 +493,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Optional Win7 Release (NVIDIA)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (3)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Win7 Release (ATI)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -504,9 +519,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win7 Release (ATI)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (4)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Win7 Release (NVIDIA GeForce 730)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -522,9 +545,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win7 Release (NVIDIA GeForce 730)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (5)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Win7 Release (NVIDIA)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -540,9 +571,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win7 Release (NVIDIA)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (6)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Win7 Release (New Intel)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -558,9 +597,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win7 Release (New Intel)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (7)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Win8 Release (NVIDIA)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -579,7 +626,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Optional Win7 Release (ATI)<br />Optional Win7 Release (NVIDIA)<br />Win7 Release (ATI)<br />Win7 Release (NVIDIA GeForce 730)<br />Win7 Release (NVIDIA)<br />Win7 Release (New Intel)<br />Win8 Release (NVIDIA)@@@"
+      "@@@STEP_TEXT@Win8 Release (NVIDIA)@@@"
     ]
   },
   {

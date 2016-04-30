@@ -338,10 +338,6 @@
     "name": "package build"
   },
   {
-    "cmd": [],
-    "name": "trigger"
-  },
-  {
     "cmd": [
       "python",
       "-u",

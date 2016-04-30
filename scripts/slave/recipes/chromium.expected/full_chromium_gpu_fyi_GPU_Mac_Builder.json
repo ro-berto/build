@@ -466,7 +466,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Mac 10.10 Release (ATI)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -482,9 +481,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Release (ATI)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Mac 10.10 Release (Intel)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -500,9 +507,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Release (Intel)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (3)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Mac 10.10 Retina Release (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -518,9 +533,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Retina Release (AMD)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (4)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Mac Retina Release",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -536,9 +559,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac Retina Release@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (5)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Optional Mac 10.10 Release (Intel)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -554,9 +585,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Optional Mac 10.10 Release (Intel)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (6)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Optional Mac 10.10 Retina Release (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -572,9 +611,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Optional Mac 10.10 Retina Release (AMD)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (7)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Optional Mac Retina Release",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -593,7 +640,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Release (ATI)<br />Mac 10.10 Release (Intel)<br />Mac 10.10 Retina Release (AMD)<br />Mac Retina Release<br />Optional Mac 10.10 Release (Intel)<br />Optional Mac 10.10 Retina Release (AMD)<br />Optional Mac Retina Release@@@"
+      "@@@STEP_TEXT@Optional Mac Retina Release@@@"
     ]
   },
   {

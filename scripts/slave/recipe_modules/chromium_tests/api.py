@@ -417,20 +417,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 self.m.chromium.c.HOST_PLATFORM == 'mac'),
         )
 
-      trigger_specs = []
-      for loop_mastername, loop_buildername, builder_dict in sorted(
+      for loop_buildername, builder_dict in sorted(
           bot_db.bot_configs_matching_parent_buildername(
               mastername, buildername)):
         trigger_spec = {
-            'bucket': 'master.' + loop_mastername,
             'builder_name': loop_buildername,
             'properties': {},
         }
         for name, value in update_step.presentation.properties.iteritems():
           if name.startswith('got_'):
             trigger_spec['properties']['parent_' + name] = value
-        trigger_specs.append(trigger_spec)
-      self.m.trigger(*trigger_specs)
+        self.m.trigger(trigger_spec)
 
     if bot_config.get('archive_build') and not self.m.tryserver.is_tryserver:
       self.m.chromium.archive_build(

@@ -200,10 +200,6 @@
     "name": "compile"
   },
   {
-    "cmd": [],
-    "name": "trigger"
-  },
-  {
     "cmd": [
       "python",
       "-u",

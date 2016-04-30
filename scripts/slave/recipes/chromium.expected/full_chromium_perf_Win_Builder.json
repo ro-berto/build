@@ -279,7 +279,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Win 7 Low-End Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -295,9 +294,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Low-End Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Win 7 Low-End Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -313,9 +320,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Low-End Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (3)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Win 7 Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -331,9 +346,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (4)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Win 7 Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -349,9 +372,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (5)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Win 7 Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -367,9 +398,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (6)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Win 7 Perf (4)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -385,9 +424,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Perf (4)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (7)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.perf",
         "builder_name": "Win 7 Perf (5)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -406,7 +453,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Low-End Perf (1)<br />Win 7 Low-End Perf (2)<br />Win 7 Perf (1)<br />Win 7 Perf (2)<br />Win 7 Perf (3)<br />Win 7 Perf (4)<br />Win 7 Perf (5)@@@"
+      "@@@STEP_TEXT@Win 7 Perf (5)@@@"
     ]
   },
   {

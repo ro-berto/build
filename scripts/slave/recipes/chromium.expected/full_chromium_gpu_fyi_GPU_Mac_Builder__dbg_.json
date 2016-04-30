@@ -436,7 +436,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Mac 10.10 Debug (ATI)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -452,9 +451,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Debug (ATI)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Mac 10.10 Debug (Intel)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -470,9 +477,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Debug (Intel)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (3)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Mac 10.10 Retina Debug (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -488,9 +503,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac 10.10 Retina Debug (AMD)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (4)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.gpu.fyi",
         "builder_name": "Mac Retina Debug",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -509,7 +532,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Debug (ATI)<br />Mac 10.10 Debug (Intel)<br />Mac 10.10 Retina Debug (AMD)<br />Mac Retina Debug@@@"
+      "@@@STEP_TEXT@Mac Retina Debug@@@"
     ]
   },
   {

@@ -401,7 +401,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "bucket": "master.chromium.win",
         "builder_name": "Win7 (32) Tests",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -417,9 +416,17 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      },
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win7 (32) Tests@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
       {
-        "bucket": "master.chromium.win",
         "builder_name": "Win7 Tests (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -438,7 +445,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 (32) Tests<br />Win7 Tests (1)@@@"
+      "@@@STEP_TEXT@Win7 Tests (1)@@@"
     ]
   },
   {
