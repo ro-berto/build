@@ -105,6 +105,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "cfi_vptr=1 clang=1 clang_use_chrome_plugins=0 component=static_library target_arch=x64",
       "GYP_LINK_CONCURRENCY": "8",
       "LLVM_FORCE_HEAD_REVISION": "YES",
@@ -158,6 +159,25 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.fyi",
+      "-b",
+      "CFI Linux ToT",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "//out/Release"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files"
   },
   {
     "allow_subannotations": true,
