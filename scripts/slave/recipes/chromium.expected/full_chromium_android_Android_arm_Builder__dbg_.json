@@ -343,6 +343,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "bucket": "master.chromium.android",
         "builder_name": "Android WebView CTS L-MR1 (dbg)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -358,17 +359,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android WebView CTS L-MR1 (dbg)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (2)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.android",
         "builder_name": "Android Webview L (dbg)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -384,17 +377,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Webview L (dbg)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (3)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.android",
         "builder_name": "Android Webview M (dbg)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -410,17 +395,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Webview M (dbg)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (4)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.android",
         "builder_name": "Jelly Bean Tester",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -436,17 +413,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Jelly Bean Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (5)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.android",
         "builder_name": "KitKat Tablet Tester",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -462,17 +431,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@KitKat Tablet Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (6)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.android",
         "builder_name": "Lollipop Low-end Tester",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -488,17 +449,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Lollipop Low-end Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (7)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.android",
         "builder_name": "Lollipop Phone Tester",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -514,17 +467,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Lollipop Phone Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (8)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.android",
         "builder_name": "Lollipop Tablet Tester",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -540,17 +485,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Lollipop Tablet Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (9)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.android",
         "builder_name": "Marshmallow Tablet Tester",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -569,7 +506,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Marshmallow Tablet Tester@@@"
+      "@@@STEP_TEXT@Android WebView CTS L-MR1 (dbg)<br />Android Webview L (dbg)<br />Android Webview M (dbg)<br />Jelly Bean Tester<br />KitKat Tablet Tester<br />Lollipop Low-end Tester<br />Lollipop Phone Tester<br />Lollipop Tablet Tester<br />Marshmallow Tablet Tester@@@"
     ]
   },
   {

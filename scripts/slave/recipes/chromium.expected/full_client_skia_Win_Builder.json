@@ -402,6 +402,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "bucket": "master.client.skia",
         "builder_name": "Win7 Tests (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",

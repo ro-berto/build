@@ -381,6 +381,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "bucket": "master.chromium.gpu",
         "builder_name": "Linux Release (NVIDIA)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",

@@ -271,6 +271,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Galaxy S5 Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -286,17 +287,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Galaxy S5 Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (2)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Galaxy S5 Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -312,17 +305,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Galaxy S5 Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (3)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Galaxy S5 Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -338,17 +323,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Galaxy S5 Perf (3)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (4)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus5 Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -364,17 +341,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus5 Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (5)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus5 Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -390,17 +359,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus5 Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (6)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus5 Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -416,17 +377,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus5 Perf (3)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (7)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus5X Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -442,17 +395,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus5X Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (8)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus5X Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -468,17 +413,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus5X Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (9)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus5X Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -494,17 +431,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus5X Perf (3)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (10)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus6 Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -520,17 +449,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus6 Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (11)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus6 Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -546,17 +467,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus6 Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (12)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus6 Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -572,17 +485,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus6 Perf (3)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (13)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus7v2 Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -598,17 +503,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus7v2 Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (14)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus7v2 Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -624,17 +521,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus7v2 Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (15)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android Nexus7v2 Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -650,17 +539,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus7v2 Perf (3)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (16)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android One Perf (1)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -676,17 +557,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android One Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (17)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android One Perf (2)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -702,17 +575,9 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android One Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (18)",
-    "trigger_specs": [
+      },
       {
+        "bucket": "master.chromium.perf",
         "builder_name": "Android One Perf (3)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -731,7 +596,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android One Perf (3)@@@"
+      "@@@STEP_TEXT@Android Galaxy S5 Perf (1)<br />Android Galaxy S5 Perf (2)<br />Android Galaxy S5 Perf (3)<br />Android Nexus5 Perf (1)<br />Android Nexus5 Perf (2)<br />Android Nexus5 Perf (3)<br />Android Nexus5X Perf (1)<br />Android Nexus5X Perf (2)<br />Android Nexus5X Perf (3)<br />Android Nexus6 Perf (1)<br />Android Nexus6 Perf (2)<br />Android Nexus6 Perf (3)<br />Android Nexus7v2 Perf (1)<br />Android Nexus7v2 Perf (2)<br />Android Nexus7v2 Perf (3)<br />Android One Perf (1)<br />Android One Perf (2)<br />Android One Perf (3)@@@"
     ]
   },
   {

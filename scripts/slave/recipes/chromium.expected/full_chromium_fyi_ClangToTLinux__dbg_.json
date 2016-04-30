@@ -270,6 +270,10 @@
     "name": "package build"
   },
   {
+    "cmd": [],
+    "name": "trigger"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

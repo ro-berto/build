@@ -280,6 +280,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "trigger"
+  },
+  {
     "cmd": [
       "python",
       "-u",

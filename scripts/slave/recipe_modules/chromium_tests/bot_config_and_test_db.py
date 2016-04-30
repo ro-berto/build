@@ -120,7 +120,7 @@ class BotConfig(object):
       bot_config = bot_db.get_bot_config(
           bot_id['mastername'], bot_id['buildername'])
 
-      for _, test_bot in bot_db.bot_configs_matching_parent_buildername(
+      for _, _, test_bot in bot_db.bot_configs_matching_parent_buildername(
           bot_id['mastername'], bot_id['buildername']):
         tests_including_triggered.extend(test_bot.get('tests', []))
 
@@ -182,14 +182,20 @@ class BotConfigAndTestDB(object):
     return self._db[mastername]['master_dict'].get('settings', {})
 
   def bot_configs_matching_parent_buildername(
-      self, mastername, parent_buildername):
+      self, parent_mastername, parent_buildername):
     """A generator of all the (buildername, bot_config) tuples whose
     parent_buildername is the passed one on the given master.
     """
-    for buildername, bot_config in self._db[mastername]['master_dict'].get(
-        'builders', {}).iteritems():
-      if bot_config.get('parent_buildername') == parent_buildername:
-        yield buildername, bot_config
+    for mastername, master_config in self._db.iteritems():
+      master_dict = self._db[parent_mastername]['master_dict']
+      for buildername, bot_config in master_dict.get(
+          'builders', {}).iteritems():
+        master_matches = (bot_config.get('parent_mastername', mastername) ==
+                          parent_mastername)
+        builder_matches = (bot_config.get('parent_buildername') ==
+                           parent_buildername)
+        if master_matches and builder_matches:
+          yield mastername, buildername, bot_config
 
   def get_test_spec(self, mastername, buildername):
     return self._db[mastername]['test_spec'].get(buildername, {})
