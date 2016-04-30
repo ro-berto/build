@@ -1701,8 +1701,8 @@ class BlinkTest(Test):
       if api.platform.is_win:
         step_result = api.python(
           step_name,
-          api.path['build'].join('scripts', 'slave', 'chromium',
-                                 'layout_test_wrapper.py'),
+          api.path['checkout'].join('third_party', 'WebKit', 'Tools',
+                                    'Scripts', 'run-webkit-tests'),
           args,
           step_test_data=lambda: api.test_utils.test_api.canned_test_output(
               passing=True, minimal=True))
