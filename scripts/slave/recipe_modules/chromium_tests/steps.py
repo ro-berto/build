@@ -1698,7 +1698,16 @@ class BlinkTest(Test):
                    '--skipped', 'always'])
 
     try:
-      step_result = api.chromium.runtest(
+      if api.platform.is_win:
+        step_result = api.python(
+          step_name,
+          api.path['build'].join('scripts', 'slave', 'chromium',
+                                 'layout_test_wrapper.py'),
+          args,
+          step_test_data=lambda: api.test_utils.test_api.canned_test_output(
+              passing=True, minimal=True))
+      else:
+        step_result = api.chromium.runtest(
           api.path['build'].join('scripts', 'slave', 'chromium',
                                  'layout_test_wrapper.py'),
           args, name=step_name,
