@@ -20,21 +20,13 @@ def RunSteps(api):
   api.bot_update.ensure_checkout()
   api.path['checkout'] = api.path['slave_build'].join('src')
 
-  build_config_dir = api.path['checkout'].join(
+  build_config_base_dir = api.path['checkout'].join(
       'webrtc',
       'build',
       'ios',
-      api.properties['mastername'],
-  )
-  include_dir = api.path['checkout'].join(
-      'webrtc',
-      'build',
-      'ios',
-      'tests',
   )
   buildername = api.properties['buildername'].replace(' ', '_')
-  api.ios.read_build_config(build_config_dir=build_config_dir,
-                            include_dir=include_dir,
+  api.ios.read_build_config(build_config_base_dir=build_config_base_dir,
                             buildername=buildername)
   mb_config_path = api.path['checkout'].join(
       'webrtc',

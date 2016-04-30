@@ -69,8 +69,7 @@ class iOSApi(recipe_api.RecipeApi):
   def read_build_config(
     self,
     master_name=None,
-    build_config_dir=None,
-    include_dir=None,
+    build_config_base_dir=None,
     buildername=None,
   ):
     """Reads the iOS build config for this bot.
@@ -78,24 +77,15 @@ class iOSApi(recipe_api.RecipeApi):
     Args:
       master_name: Name of a master to read the build config from, or None
         to read from buildbot properties at run-time.
-      build_config_dir: Directory to read the build config from, or None
-        to read from the default directory.
-      include_dir: Directory to read includes from, or None to read from
-        the default directory.
+      build_config_base_dir: Directory to search for build config master and
+        test include directories.
     """
-    build_config_dir = build_config_dir or self.m.path['checkout'].join(
-      'ios',
-      'build',
-      'bots',
-      master_name or self.m.properties['mastername'],
-    )
-    include_dir = include_dir or self.m.path['checkout'].join(
-      'ios',
-      'build',
-      'bots',
-      'tests',
-    )
     buildername = buildername or self.m.properties['buildername']
+    master_name = master_name or self.m.properties['mastername']
+    build_config_base_dir = build_config_base_dir or (
+        self.m.path['checkout'].join('ios', 'build', 'bots'))
+    build_config_dir = build_config_base_dir.join(master_name)
+    include_dir = build_config_base_dir.join('tests')
 
     self.__config = self.m.json.read(
       'read build config',
@@ -148,6 +138,8 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config.setdefault('mb_type', None)
     self.__config.setdefault('gn_args', [])
     self.__config.setdefault('use_analyze', True)
+
+    self.__config['mastername'] = master_name
 
     # Elements of the "tests" list are dicts. There are two types of elements,
     # determined by the presence of one of these mutually exclusive keys:
@@ -293,7 +285,7 @@ class iOSApi(recipe_api.RecipeApi):
       step_result.presentation.step_text += '<br />GYP_CHROMIUM_NO_ACTION=1'
 
     if self.using_mb:
-      self.m.chromium.run_mb(self.m.properties['mastername'],
+      self.m.chromium.run_mb(self.__config['mastername'],
                              self.m.properties['buildername'],
                              name='generate_build_files' + suffix,
                              mb_config_path=mb_config_path,
