@@ -492,7 +492,10 @@
       "--builder-name",
       "win_chromium_rel_ng",
       "--step-name",
-      "webkit_tests (with patch)"
+      "webkit_tests (with patch)",
+      "--master-name",
+      "tryserver.chromium.win",
+      "--debug-rwt-logging"
     ],
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [

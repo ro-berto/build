@@ -195,7 +195,10 @@
       "webkit_tests (with patch)",
       "--no-pixel-tests",
       "--additional-expectations",
-      "[SLAVE_BUILD]\\src\\v8\\tools\\blink_tests\\TestExpectations"
+      "[SLAVE_BUILD]\\src\\v8\\tools\\blink_tests\\TestExpectations",
+      "--master-name",
+      "client.v8.fyi",
+      "--debug-rwt-logging"
     ],
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [

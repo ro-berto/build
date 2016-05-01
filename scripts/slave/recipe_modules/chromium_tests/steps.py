@@ -1700,6 +1700,10 @@ class BlinkTest(Test):
     try:
       if api.platform.is_win:
         args[2] = '--results-directory'
+        args += [
+            '--master-name', api.properties['mastername'],
+            '--debug-rwt-logging',
+        ]
         step_result = api.python(
           step_name,
           api.path['checkout'].join('third_party', 'WebKit', 'Tools',

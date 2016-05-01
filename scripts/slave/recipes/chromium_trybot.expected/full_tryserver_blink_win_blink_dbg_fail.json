@@ -408,7 +408,10 @@
       "--builder-name",
       "win_blink_dbg",
       "--step-name",
-      "webkit_tests (with patch)"
+      "webkit_tests (with patch)",
+      "--master-name",
+      "tryserver.blink",
+      "--debug-rwt-logging"
     ],
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
@@ -639,7 +642,10 @@
       "--test-list",
       "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html",
       "--skipped",
-      "always"
+      "always",
+      "--master-name",
+      "tryserver.blink",
+      "--debug-rwt-logging"
     ],
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [

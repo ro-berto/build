@@ -404,7 +404,10 @@
       "--builder-name",
       "WebKit Win7 (dbg)",
       "--step-name",
-      "webkit_tests"
+      "webkit_tests",
+      "--master-name",
+      "chromium.webkit",
+      "--debug-rwt-logging"
     ],
     "name": "webkit_tests",
     "~followup_annotations": [

@@ -408,7 +408,10 @@
       "--builder-name",
       "win_blink_rel",
       "--step-name",
-      "webkit_tests (with patch)"
+      "webkit_tests (with patch)",
+      "--master-name",
+      "tryserver.blink",
+      "--debug-rwt-logging"
     ],
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
