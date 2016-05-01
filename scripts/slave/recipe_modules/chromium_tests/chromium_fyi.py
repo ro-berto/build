@@ -714,6 +714,7 @@ SPEC = {
     },
     'CrWinClangLLD': {
       'chromium_config': 'chromium_win_clang_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -752,6 +753,7 @@ SPEC = {
     },
     'CrWinClngLLDdbg': {
       'chromium_config': 'chromium_win_clang_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -790,6 +792,7 @@ SPEC = {
     },
     'CrWinClangLLD64': {
       'chromium_config': 'chromium_win_clang_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -828,6 +831,7 @@ SPEC = {
     },
     'CrWinClngLLD64dbg': {
       'chromium_config': 'chromium_win_clang_tot',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
