@@ -1698,21 +1698,7 @@ class BlinkTest(Test):
                    '--skipped', 'always'])
 
     try:
-      if api.platform.is_win:
-        args[2] = '--results-directory'
-        args += [
-            '--master-name', api.properties['mastername'],
-            '--debug-rwt-logging',
-        ]
-        step_result = api.python(
-          step_name,
-          api.path['checkout'].join('third_party', 'WebKit', 'Tools',
-                                    'Scripts', 'run-webkit-tests'),
-          args,
-          step_test_data=lambda: api.test_utils.test_api.canned_test_output(
-              passing=True, minimal=True))
-      else:
-        step_result = api.chromium.runtest(
+      step_result = api.chromium.runtest(
           api.path['build'].join('scripts', 'slave', 'chromium',
                                  'layout_test_wrapper.py'),
           args, name=step_name,
