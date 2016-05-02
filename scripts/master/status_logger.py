@@ -448,7 +448,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     builder_name = build.getBuilder().name
     build_number = build.getNumber()
     step_name = step.getName()
-    step_text = step.getText()
+    step_text = ' '.join(step.getText())
     self.log('stepStarted', '%s, %d, %s', builder_name, build_number, step_name)
     started, _ = step.getTimes()
     self.send_build_event(
