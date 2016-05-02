@@ -307,7 +307,8 @@ class iOSApi(recipe_api.RecipeApi):
           tests,
           self.__config['additional_compile_targets'] + tests,
           'trybot_analyze_config.json',
-          additional_names=['chromium', 'ios']
+          additional_names=['chromium', 'ios'],
+          mb_mastername=self.__config['mastername'],
         )
       )
 

@@ -194,7 +194,7 @@ def GenTests(api):
     + api.platform('mac', 64)
     + api.properties(patch_url='patch url')
     + api.properties(
-      buildername='ios',
+      buildername='ios-simulator-gn',
       buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
@@ -210,6 +210,7 @@ def GenTests(api):
         'ios_enable_code_signing=false',
         'use_goma=true',
       ],
+      'use_analyze': True,
       'mb_type': 'gn',
       'compiler': 'ninja',
       'configuration': 'Debug',
@@ -222,7 +223,6 @@ def GenTests(api):
         },
       ],
     })
-    + suppress_analyze()
   )
 
 
