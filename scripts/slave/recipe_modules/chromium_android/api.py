@@ -959,7 +959,11 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_webview_cts(self):
 
-    _CTS_FILE_NAME = 'android-cts-5.1_r5-linux_x86-arm.zip'
+    _CTS_FILE_NAME = self.m.file.read(
+        'Fetch for the name of the cts file',
+        self.m.path['checkout'].join(
+          'android_webview', 'tools', 'webview_cts_gcs_path.txt'),
+        test_data='android-cts-5.1_r5-linux_x86-arm.zip')
     _CTS_XML_TESTCASE_ELEMENTS = ('./TestPackage/TestSuite[@name="android"]/'
                                   'TestSuite[@name="webkit"]/'
                                   'TestSuite[@name="cts"]/TestCase')
