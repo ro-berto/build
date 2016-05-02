@@ -318,7 +318,9 @@ F('linux_tsan_rel', linux().ChromiumFactory(
        'gs_bucket': 'gs://chromium-browser-tsan',
        'gs_acl': 'public-read',
        'tsan': True,
-       'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
+       'gclient_env': {'GYP_DEFINES': tsan_gyp},
+       'use_mb': True,
+    }))
 
 B('TSAN Debug', 'linux_tsan_dbg', 'compile', 'chromium_lkgr')
 F('linux_tsan_dbg', linux().ChromiumFactory(
