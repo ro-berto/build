@@ -100,7 +100,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     """Return the path to the build executable directory."""
     build_dir = self.c.build_dir
     if self.c.use_build_dir_cache:
-      build_dir = build_dir.join(self.m.properties['buildername'])
+      sanitized_buildername = ''.join(c if c.isalnum() else '_'
+                                      for c in self.m.properties['buildername'])
+      build_dir = build_dir.join(sanitized_buildername)
     return self.m.path.join(build_dir, target or self.c.build_config_fs)
 
   @property
