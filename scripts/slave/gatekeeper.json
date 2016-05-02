@@ -361,16 +361,13 @@
           "tree."
         ],
         "builders": {
-          "iOS_Device": {
+          "ios-device": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
           },
-          "iOS_Simulator_(dbg)": {
+          "ios-simulator": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"],
             "closing_optional": [],
             "comment": ["closing_optional due to crbug.com/393861"]
-          },
-          "iOS_Device_(ninja)": {
-            "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
           },
           "Mac GN (dbg)": {
             "close_tree": false

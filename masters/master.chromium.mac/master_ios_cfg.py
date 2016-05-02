@@ -14,19 +14,17 @@ def Update(config, active_master, c):
                             branch='master',
                             treeStableTimer=60,
                             builderNames=[
-          'iOS_Device',
-          'iOS_Simulator_(dbg)',
-          'iOS_Device_(ninja)',
-          'iOS_Device_GN',
-          'iOS_Simulator_GN_(dbg)',
+          'ios-device',
+          'ios-device-gn',
+          'ios-simulator',
+          'ios-simulator-gn',
       ]),
   ])
   specs = [
-    {'name': 'iOS_Device'},
-    {'name': 'iOS_Simulator_(dbg)'},
-    {'name': 'iOS_Device_(ninja)'},
-    {'name': 'iOS_Device_GN'},
-    {'name': 'iOS_Simulator_GN_(dbg)'},
+    {'name': 'ios-device'},
+    {'name': 'ios-device-gn'},
+    {'name': 'ios-simulator'},
+    {'name': 'ios-simulator-gn'},
   ]
 
   c['builders'].extend([

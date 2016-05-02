@@ -56,12 +56,11 @@ SUPPRESSIONS = {
         'Win7 Debug (NVIDIA)',
     ],
     'master.chromium.mac': [
+        'ios-device',
+        'ios-device-gn',
+        'ios-simulator',
+        'ios-simulator-gn',
         'Mac10.11 Tests',
-        'iOS_Device',
-        'iOS_Device_GN',
-        'iOS_Device_(ninja)',
-        'iOS_Simulator_GN_(dbg)',
-        'iOS_Simulator_(dbg)',
     ],
     'master.chromium.memory': [
         'Linux ASan Tests (sandboxed)',
