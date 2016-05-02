@@ -28,7 +28,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self._build_properties = None
 
   def get_config_defaults(self):
-    return {
+    defaults = {
       'HOST_PLATFORM': self.m.platform.name,
       'HOST_ARCH': self.m.platform.arch,
       'HOST_BITS': self.m.platform.bits,
@@ -50,7 +50,18 @@ class ChromiumApi(recipe_api.RecipeApi):
         else self.m.platform.bits),
 
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release'),
+
+      'CHECKOUT_PATH': self.m.path['checkout'],
     }
+
+    # Fallback in case build path is not available.
+    # TODO(phajdan.jr): get rid of the need for BUILD_PATH in config.
+    try:
+      defaults['BUILD_PATH'] = self.m.path['build']
+    except KeyError:
+      defaults['BUILD_PATH'] = self.package_repo_resource()
+
+    return defaults
 
   def get_env(self):
     ret = {}

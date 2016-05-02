@@ -8,6 +8,10 @@ from recipe_engine import recipe_api
 from recipe_engine.config_types import Path
 
 class EmulatorApi(recipe_api.RecipeApi):
+  def get_config_defaults(self):
+    return {
+        'CHECKOUT_PATH': self.m.path['checkout'],
+    }
 
   def install_emulator_deps(self, api_level, **kwargs):
     args = [

@@ -29,7 +29,8 @@ def check(val, potentials):
 # Schema for config items in this module.
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                TARGET_PLATFORM, TARGET_ARCH, TARGET_BITS,
-               BUILD_CONFIG, TARGET_CROS_BOARD, **_kwargs):
+               BUILD_CONFIG, TARGET_CROS_BOARD,
+               BUILD_PATH, CHECKOUT_PATH, **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
     compile_py = ConfigGroup(
@@ -110,6 +111,9 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     TARGET_BITS = Static(check(TARGET_BITS, HOST_TARGET_BITS)),
     TARGET_CROS_BOARD = Static(TARGET_CROS_BOARD),
 
+    BUILD_PATH = Static(BUILD_PATH),
+    CHECKOUT_PATH = Static(CHECKOUT_PATH),
+
     gn_args = List(basestring),
 
     lto = Single(bool, empty_val=False, required=False),
@@ -166,11 +170,9 @@ def BASE(c):
       c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
   # Test runner memory tools that are not compile-time based.
-  c.runtests.memory_tests_runner = Path('[CHECKOUT]', 'tools', 'valgrind',
-                                        'chrome_tests',
-                                        platform_ext={'win': '.bat',
-                                                      'mac': '.sh',
-                                                      'linux': '.sh'})
+  c.runtests.memory_tests_runner = c.CHECKOUT_PATH.join(
+      'tools', 'valgrind', 'chrome_tests',
+      platform_ext={'win': '.bat', 'mac': '.sh', 'linux': '.sh'})
 
   if c.project_generator.tool not in PROJECT_GENERATORS:  # pragma: no cover
     raise BadConf('"%s" is not a supported project generator tool, the '
@@ -233,7 +235,7 @@ def ninja(c):
   out_path = 'out'
   if c.TARGET_CROS_BOARD:
     out_path += '_%s' % (c.TARGET_CROS_BOARD,)
-  c.build_dir = Path('[CHECKOUT]', out_path)
+  c.build_dir = c.CHECKOUT_PATH.join(out_path)
 
 @config_ctx()
 def msvs2010(c):
@@ -311,7 +313,7 @@ def goma(c):
 
   c.gyp_env.GYP_DEFINES['use_goma'] = 1
 
-  goma_dir = Path('[BUILD]', 'goma')
+  goma_dir = c.BUILD_PATH.join('goma')
   c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
   c.compile_py.goma_dir = goma_dir
 
@@ -676,7 +678,7 @@ def chromium_cfi(c):
 def chromium_xcode(c):  # pragma: no cover
   c.compile_py.build_tool = 'xcode'
   c.compile_py.default_targets = ['All']
-  c.compile_py.xcode_project = Path('[CHECKOUT]', 'build', 'all.xcodeproj')
+  c.compile_py.xcode_project = c.CHECKOUT_PATH.join('build', 'all.xcodeproj')
 
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):
@@ -725,9 +727,9 @@ def android_common(c):
   gyp_defs['OS'] = 'android'
 
   c.env.PATH.extend([
-      Path('[CHECKOUT]', 'third_party', 'android_tools', 'sdk',
-           'platform-tools'),
-      Path('[CHECKOUT]', 'build', 'android')])
+      c.CHECKOUT_PATH.join(
+          'third_party', 'android_tools', 'sdk', 'platform-tools'),
+      c.CHECKOUT_PATH.join('build', 'android')])
 
 @config_ctx()
 def android_findbugs(c):

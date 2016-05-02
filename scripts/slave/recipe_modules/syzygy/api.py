@@ -50,6 +50,11 @@ PATCH=1
     # This is populated by the sync step.
     self._revision = None
 
+  def get_config_defaults(self):
+    return {
+      'CHECKOUT_PATH': self.m.path['checkout'],
+    }
+
   @property
   def build_dir(self):
     """Returns the build directory for the project."""

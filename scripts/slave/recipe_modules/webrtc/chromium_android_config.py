@@ -9,5 +9,5 @@ from recipe_engine.config_types import Path
 
 @CONFIG_CTX(includes=['base_config'])
 def webrtc(c):
-  c.test_runner = Path('[CHECKOUT]', 'webrtc', 'build', 'android',
-                       'test_runner.py')
+  c.test_runner = c.CHECKOUT_PATH.join(
+      'webrtc', 'build', 'android', 'test_runner.py')

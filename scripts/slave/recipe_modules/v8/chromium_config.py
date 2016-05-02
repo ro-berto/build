@@ -19,14 +19,14 @@ def v8(c):
   if c.TARGET_PLATFORM == 'android':
     c.gyp_env.GYP_DEFINES['OS'] = 'android'
   del c.gyp_env.GYP_DEFINES['component']
-  c.build_dir = Path('[CHECKOUT]', 'out')
+  c.build_dir = c.CHECKOUT_PATH.join('out')
   c.compile_py.build_tool = 'make'
 
   if c.HOST_PLATFORM == 'mac':
     c.compile_py.build_tool = 'xcode'
   elif c.HOST_PLATFORM == 'win':
     c.compile_py.build_tool = 'vs'
-    c.build_dir = Path('[CHECKOUT]', 'build')
+    c.build_dir = c.CHECKOUT_PATH.join('build')
 
   if c.BUILD_CONFIG == 'Debug':
     c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
@@ -72,8 +72,8 @@ def disassembler(c):
 
 @CONFIG_CTX(includes=['v8'])
 def embed_script_mjsunit(c):
-  c.gyp_env.GYP_DEFINES['embed_script'] = Path(
-      '[CHECKOUT]', 'test', 'mjsunit', 'mjsunit.js')
+  c.gyp_env.GYP_DEFINES['embed_script'] = c.CHECKOUT_PATH.join(
+      'test', 'mjsunit', 'mjsunit.js')
 
 
 @CONFIG_CTX(includes=['v8'])
@@ -108,7 +108,7 @@ def jsfunfuzz(c):
 
 @CONFIG_CTX(includes=['v8'], group='builder')
 def make(c):
-  c.build_dir = Path('[CHECKOUT]', 'out')
+  c.build_dir = c.CHECKOUT_PATH.join('out')
   c.compile_py.build_tool = 'make'
 
 

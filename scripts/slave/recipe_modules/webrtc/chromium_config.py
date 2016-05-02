@@ -16,11 +16,10 @@ SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
 def webrtc_standalone(c):
   _compiler_defaults(c)
 
-  c.runtests.memory_tests_runner = Path('[CHECKOUT]', 'tools',
-                                        'valgrind-webrtc', 'webrtc_tests',
-                                        platform_ext={'win': '.bat',
-                                                      'mac': '.sh',
-                                                      'linux': '.sh'})
+  c.runtests.memory_tests_runner = c.CHECKOUT_PATH.join(
+      'tools', 'valgrind-webrtc', 'webrtc_tests',
+      platform_ext={'win': '.bat', 'mac': '.sh', 'linux': '.sh'})
+
 @CONFIG_CTX(includes=['ninja', 'gcc', 'goma'])
 def webrtc_gcc(c):
   _compiler_defaults(c)

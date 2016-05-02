@@ -13,11 +13,9 @@ from recipe_engine.config_types import Path
 def libyuv(c):
   _libyuv_common(c)
 
-  c.runtests.memory_tests_runner = Path('[CHECKOUT]', 'tools',
-                                        'valgrind-libyuv', 'libyuv_tests',
-                                        platform_ext={'win': '.bat',
-                                                      'mac': '.sh',
-                                                      'linux': '.sh'})
+  c.runtests.memory_tests_runner = c.CHECKOUT_PATH.join(
+      'tools', 'valgrind-libyuv', 'libyuv_tests',
+      platform_ext={'win': '.bat', 'mac': '.sh', 'linux': '.sh'})
 
 @CONFIG_CTX(includes=['chromium_clang'])
 def libyuv_clang(c):

@@ -25,7 +25,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def get_config_defaults(self):
     return {
-      'REVISION': self.m.properties.get('revision', '')
+      'REVISION': self.m.properties.get('revision', ''),
+      'CHECKOUT_PATH': self.m.path['checkout'],
     }
 
   @property
