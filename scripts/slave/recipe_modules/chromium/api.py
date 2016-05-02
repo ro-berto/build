@@ -203,7 +203,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--out-dir', out_dir]
     else:
       args += ['--target-output-dir', self.m.path.join(
-        self.c.build_dir, self.c.build_config_fs)]
+        self.c.build_dir, target or self.c.build_config_fs)]
     if self.c.compile_py.mode:
       args += ['--mode', self.c.compile_py.mode]
     if self.c.compile_py.goma_dir:
