@@ -260,6 +260,10 @@ class SkiaApi(recipe_api.RecipeApi):
     if self.do_test_steps or self.do_perf_steps:
       self.cleanup_steps()
 
+    self.check_failure()
+
+  def check_failure(self):
+    """Raise an exception if any step failed."""
     if self.failed:
       raise self.m.step.StepFailure('Failed build steps: %s' %
                                     ', '.join([f.name for f in self.failed]))

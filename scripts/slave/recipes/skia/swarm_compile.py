@@ -42,6 +42,7 @@ def RunSteps(api):
   api.skia.setup(running_in_swarming=True)
   api.skia.compile_steps()
   api.skia.cleanup_steps()
+  api.skia.check_failure()
 
 
 def GenTests(api):
