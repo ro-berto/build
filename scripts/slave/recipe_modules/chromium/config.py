@@ -30,7 +30,7 @@ def check(val, potentials):
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                TARGET_PLATFORM, TARGET_ARCH, TARGET_BITS,
                BUILD_CONFIG, TARGET_CROS_BOARD,
-               BUILD_PATH, CHECKOUT_PATH, **_kwargs):
+               BUILD_PATH, CHECKOUT_PATH, BUILDER_CACHE_PATH=None, **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
     compile_py = ConfigGroup(
@@ -82,6 +82,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       args = Set(basestring),
     ),
     build_dir = Single(Path),
+    use_build_dir_cache = Single(bool),
     cros_sdk = ConfigGroup(
       external = Single(bool, empty_val=True, required=False),
       args = List(basestring),
@@ -113,6 +114,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
 
     BUILD_PATH = Static(BUILD_PATH),
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
+    BUILDER_CACHE_PATH = Static(BUILDER_CACHE_PATH),
 
     gn_args = List(basestring),
 
@@ -236,6 +238,12 @@ def ninja(c):
   if c.TARGET_CROS_BOARD:
     out_path += '_%s' % (c.TARGET_CROS_BOARD,)
   c.build_dir = c.CHECKOUT_PATH.join(out_path)
+
+@config_ctx()
+def use_build_dir_cache(c):
+  c.use_build_dir_cache = True
+  if c.BUILDER_CACHE_PATH:
+    c.build_dir = c.BUILDER_CACHE_PATH
 
 @config_ctx()
 def msvs2010(c):
