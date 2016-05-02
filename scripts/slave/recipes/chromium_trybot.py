@@ -88,7 +88,6 @@ def all_compile_targets(api, tests):
                     for test in tests
                     for x in test.compile_targets(api)))
 
-
 def is_source_file(api, filepath):
   """Returns true iff the file is a source file."""
   _, ext = api.path.splitext(filepath)
@@ -127,7 +126,7 @@ def _RunStepsInternal(api):
     tests.extend(additional_tests)
     tests_including_triggered.extend(additional_tests)
 
-  affected_files = api.tryserver.get_files_affected_by_patch()
+  affected_files = api.chromium_tests.get_files_affected_by_patch('src/')
 
   affects_blink_paths = False
   for path in CHROMIUM_BLINK_TESTS_PATHS:
