@@ -45,10 +45,10 @@ def AddFiles(api, pkg, relative_paths):
     pkg.add_file(pkg.root.join(path), archive_name=api.path.basename(path))
 
 
-def UploadArtifacts(api, platform, file_paths):
+def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
   with MakeTempDir(api) as temp_dir:
     local_zip = temp_dir.join('artifacts.zip')
-    remote_name = '%s/artifacts.zip' % platform
+    remote_name = '%s/%s' % (platform, archive_name)
     remote_zip = GetCloudPath(api, remote_name)
     pkg = api.zip.make_package(api.path['checkout'], local_zip)
     AddFiles(api, pkg, file_paths)
@@ -122,11 +122,24 @@ def BuildLinuxAndroidArm(api):
     'build/android/ant/chromium-debug.keystore',
   ] + AddPathPrefix(api, 'out/android_Release', out_paths))
 
-  RunGN(api, '--release', '--android', '--deploy')
-  Build(api, 'android_Release_Deploy', ':dist')
-  UploadArtifacts(api, 'android-arm-release', [
-    'build/android/ant/chromium-debug.keystore',
-  ] + AddPathPrefix(api, 'out/android_Release_Deploy', out_paths))
+  # Build and upload a deploy mode configuration that uses AOT compilation.
+  def MakeDeployBuild(gn_flag, build_output_dir, upload_dir):
+    RunGN(api, gn_flag, '--android', '--deploy')
+    Build(api, build_output_dir)
+
+    UploadArtifacts(api, upload_dir, [
+      'build/android/ant/chromium-debug.keystore',
+      'sky/engine/bindings/dart_vm_entry_points.txt',
+      'sky/engine/bindings/dart_vm_entry_points_android.txt',
+    ] + AddPathPrefix(api, 'out/%s' % build_output_dir, out_paths))
+
+    # Upload artifacts used for AOT compilation on Linux hosts.
+    UploadArtifacts(api, upload_dir, [
+      'out/%s/clang_x86/gen_snapshot' % build_output_dir,
+    ], archive_name='linux-x64.zip')
+
+  MakeDeployBuild('--debug', 'android_Debug_Deploy', 'android-arm-profile')
+  MakeDeployBuild('--release', 'android_Release_Deploy', 'android-arm-release')
 
   UploadDartPackage(api, 'sky_engine')
   UploadDartPackage(api, 'sky_services')
