@@ -115,6 +115,8 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "--target-output-dir",
+      "[SLAVE_BUILD]\\src\\out\\Debug",
       "--goma-dir",
       "[BUILD]\\goma",
       "--",

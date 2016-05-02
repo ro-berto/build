@@ -436,7 +436,7 @@
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[BUILD]/goma",
-      "//out/Release"
+      "[SLAVE_BUILD]/src/out/Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -469,6 +469,8 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
+      "--target-output-dir",
+      "[SLAVE_BUILD]/src/out/Release",
       "--goma-dir",
       "[BUILD]/goma",
       "--goma-fail-fast",
@@ -683,7 +685,7 @@
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[BUILD]/goma",
-      "//out/Release"
+      "[SLAVE_BUILD]/src/out/Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -716,6 +718,8 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
+      "--target-output-dir",
+      "[SLAVE_BUILD]/src/out/Release",
       "--goma-dir",
       "[BUILD]/goma",
       "--goma-fail-fast",

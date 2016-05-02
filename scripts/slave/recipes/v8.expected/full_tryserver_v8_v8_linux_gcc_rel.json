@@ -107,6 +107,8 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "make",
+      "--target-output-dir",
+      "[SLAVE_BUILD]/v8/out/Release",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--"

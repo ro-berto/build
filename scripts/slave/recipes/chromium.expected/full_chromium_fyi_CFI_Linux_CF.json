@@ -179,7 +179,7 @@
       "CFI Linux CF",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "//out/Release"
+      "[SLAVE_BUILD]/src/out/Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -232,6 +232,8 @@
       "[ROOT]/build_data_dir",
       "--compiler",
       "clang",
+      "--target-output-dir",
+      "[SLAVE_BUILD]/src/out/Release",
       "--",
       "All"
     ],

@@ -123,7 +123,7 @@
       "Win LKGR (DrM 64)",
       "--config-file",
       "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
-      "//out/Release_x64"
+      "[SLAVE_BUILD]\\src\\out\\Release_x64"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -199,6 +199,8 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "--target-output-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--goma-dir",
       "[BUILD]\\goma",
       "--",

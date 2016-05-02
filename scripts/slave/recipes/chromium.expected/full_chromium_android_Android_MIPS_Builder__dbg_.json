@@ -207,7 +207,7 @@
       "Android MIPS Builder (dbg)",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "//out/Debug"
+      "[SLAVE_BUILD]/src/out/Debug"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -236,6 +236,8 @@
       "ninja",
       "--build-data-dir",
       "[ROOT]/build_data_dir",
+      "--target-output-dir",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--"
     ],
     "env": {

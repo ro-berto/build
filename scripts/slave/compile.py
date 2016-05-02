@@ -1251,6 +1251,8 @@ def real_main():
                                   'workflow, the name of the ChromeOS board.')
   option_parser.add_option('--out-dir', action='store',
                            help='Specify a custom output directory.')
+  option_parser.add_option('--target-output-dir',
+                           help='Full path to final output directory.')
   option_parser.add_option('--goma-dir',
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
@@ -1355,7 +1357,8 @@ def real_main():
       sys.stderr.write('Unknown build tool %s.\n' % repr(options.build_tool))
       return 2
 
-  options.target_output_dir = get_target_build_dir(args, options)
+  if not options.target_output_dir:
+    options.target_output_dir = get_target_build_dir(args, options)
 
   return main(options, args)
 

@@ -201,6 +201,9 @@ class ChromiumApi(recipe_api.RecipeApi):
         ]
     if out_dir:
       args += ['--out-dir', out_dir]
+    else:
+      args += ['--target-output-dir', self.m.path.join(
+        self.c.build_dir, self.c.build_config_fs)]
     if self.c.compile_py.mode:
       args += ['--mode', self.c.compile_py.mode]
     if self.c.compile_py.goma_dir:
@@ -565,11 +568,8 @@ class ChromiumApi(recipe_api.RecipeApi):
                                                    'mb_config.pyl'))
     isolated_targets = isolated_targets or []
 
-    out_dir = 'out'
-    if self.c.TARGET_CROS_BOARD:
-      out_dir += '_%s' % self.c.TARGET_CROS_BOARD
-
-    build_dir = build_dir or '//%s/%s' % (out_dir, self.c.build_config_fs)
+    build_dir = build_dir or self.m.path.join(
+        self.c.build_dir, self.c.build_config_fs)
 
     args=[
         'gen',

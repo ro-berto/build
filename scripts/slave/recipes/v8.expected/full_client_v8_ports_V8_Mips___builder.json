@@ -130,6 +130,8 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "make",
+      "--target-output-dir",
+      "[SLAVE_BUILD]/v8/out/Release",
       "--"
     ],
     "env": {

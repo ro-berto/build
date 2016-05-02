@@ -216,7 +216,7 @@
       "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "--swarming-targets-file",
       "browser_tests\n",
-      "//out/Release"
+      "[SLAVE_BUILD]\\src\\out\\Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -274,6 +274,8 @@
       "[ROOT]\\build_data_dir",
       "--compiler",
       "clang",
+      "--target-output-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--",
       "all"
     ],
