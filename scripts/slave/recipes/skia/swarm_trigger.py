@@ -84,7 +84,7 @@ def swarm_dimensions(builder_spec):
   builder_cfg = builder_spec['builder_cfg']
   dimensions['os'] = builder_cfg['os']
   if 'Win' in builder_cfg['os']:
-    dimensions['os'] = 'Windows'  # pragma: no cover
+    dimensions['os'] = 'Windows'
   if builder_cfg['role'] in ('Test', 'Perf'):
     if 'Android' in builder_cfg['os']:
       # For Android, the device type is a better dimension than CPU or GPU.
@@ -101,6 +101,13 @@ def swarm_dimensions(builder_spec):
         'AVX2': 'x86-64-avx2',
         'SSE4': 'x86-64',
       }[builder_cfg['cpu_or_gpu_value']]
+      if ('Win' in builder_cfg['os'] and
+          builder_cfg['cpu_or_gpu_value'] == 'AVX2'):
+        # AVX2 is not correctly detected on Windows. Fall back on other
+        # dimensions to ensure that we correctly target machines which we know
+        # have AVX2 support.
+        dimensions['cpu'] = 'x86-64'
+        dimensions['os'] = 'Windows-2008ServerR2-SP1'
     else:
       dimensions['gpu'] = {
         'GeForce320M': '10de:08a4',
