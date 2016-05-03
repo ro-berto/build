@@ -135,7 +135,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/ios/build/bots/tryserver.fake/ios.json",
+      "[SLAVE_BUILD]/src/ios/build/bots/chromium.mac/ios.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -158,7 +158,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/ios/build/bots/tryserver.fake/parent.json",
+      "[SLAVE_BUILD]/src/ios/build/bots/chromium.mac/parent.json",
       "/path/to/tmp/json"
     ],
     "name": "read parent build config (parent)",
@@ -181,7 +181,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"tryserver.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"triggered by\": \"parent\", \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.mac\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"triggered by\": \"parent\", \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },

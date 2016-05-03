@@ -13,16 +13,11 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  # New try bots mirror configs from chromium.mac.
-  # TODO(smut): Remove this when https://crbug.com/602778 is resolved.
-  master_name = None
-  if '-' in api.properties['buildername']:
-    master_name = 'chromium.mac'
-
   with api.tryserver.set_failure_hash():
     api.ios.host_info()
     bot_update_step = api.ios.checkout()
-    api.ios.read_build_config(master_name=master_name)
+    # Ensure try bots mirror configs from chromium.mac.
+    api.ios.read_build_config(master_name='chromium.mac')
     try:
       api.ios.build(suffix='with patch')
     except api.step.StepFailure:
