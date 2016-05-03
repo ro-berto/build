@@ -445,7 +445,7 @@
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated",
       "[dummy hash for isolate_recipes]",
-      "705384d88f80da637eb367e5acc6f315c0e1db2f"
+      "38380d77eec9164e5818ae45e2915a6f22d60e85"
     ],
     "name": "add_isolated_input",
     "~followup_annotations": [

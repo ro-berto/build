@@ -240,7 +240,7 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
                            name='Read win_toolchain_hash.json',
                            test_data=test_data).rstrip()
     hashes = json.loads(j)
-    extra_hashes.append(hashes['2013'])
+    extra_hashes.append(hashes['2015'])
 
   task = trigger_task(
       api,
