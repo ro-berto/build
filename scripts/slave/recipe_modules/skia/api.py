@@ -399,7 +399,7 @@ for pattern in build_products_whitelist:
             program='''import psutil
 for p in psutil.process_iter():
   try:
-    if p.name == 'mspdbsrv.exe':
+    if p.name in ('mspdbsrv.exe', 'vctip.exe', 'cl.exe', 'link.exe'):
       p.kill()
   except psutil._error.AccessDenied:
     pass
