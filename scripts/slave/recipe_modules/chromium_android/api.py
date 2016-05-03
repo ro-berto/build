@@ -967,6 +967,9 @@ class AndroidApi(recipe_api.RecipeApi):
     _CTS_XML_TESTCASE_ELEMENTS = ('./TestPackage/TestSuite[@name="android"]/'
                                   'TestSuite[@name="webkit"]/'
                                   'TestSuite[@name="cts"]/TestCase')
+    self_result = self.m.step.active_result
+    self_result.presentation.logs['cts_file_name'] = [_CTS_FILE_NAME]
+    _CTS_FILE_NAME = _CTS_FILE_NAME.strip()
     # WebView user agent is changed, and new CTS hasn't been published to
     # reflect that.
     _EXPECTED_FAILURES = {
