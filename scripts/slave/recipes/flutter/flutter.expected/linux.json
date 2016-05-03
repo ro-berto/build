@@ -205,23 +205,8 @@
   },
   {
     "cmd": [
-      "pub",
-      "global",
-      "activate",
-      "dartdoc",
-      "0.9.4"
-    ],
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "pub global activate dartdoc"
-  },
-  {
-    "cmd": [
-      "dart",
-      "dev/dartdoc.dart"
+      "infra/docs.sh",
+      "--upload"
     ],
     "cwd": "[SLAVE_BUILD]/flutter",
     "env": {
@@ -230,28 +215,6 @@
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "dartdoc packages"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "[SLAVE_BUILD]/flutter/dev/docs/doc/api",
-      "gs://docs.flutter.io/flutter"
-    ],
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "gsutil rsync docs"
   },
   {
     "name": "$result",

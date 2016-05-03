@@ -41,17 +41,9 @@ def MakeTempDir(api):
     api.file.rmtree('temp dir', temp_dir)
 
 
-def GenerateDocs(api, pub_cache):
-  activate_cmd = ['pub', 'global', 'activate', 'dartdoc', '0.9.4']
-  api.step('pub global activate dartdoc', activate_cmd)
-
+def GenerateDocs(api):
   checkout = api.path['checkout']
-  api.step('dartdoc packages', ['dart', 'dev/dartdoc.dart'], cwd=checkout)
-
-  docs_path = checkout.join('dev', 'docs', 'doc', 'api')
-  remote_path = 'gs://docs.flutter.io/flutter'
-  api.gsutil(['-m', 'rsync', '-d', '-r', docs_path, remote_path],
-      name='rsync docs')
+  api.step('dartdoc packages', ['infra/docs.sh', '--upload'], cwd=checkout)
 
 
 def BuildExamples(api, git_hash):
@@ -160,9 +152,7 @@ def RunSteps(api):
     # always moving the docs forward. Possibly by using a separate builder.
     # Until then, only generate on linux to reduce the chance of race.
     if api.platform.is_linux:
-      # TODO(eseidel): Is there a way for GenerateDocs to read PUB_CACHE from
-      # the env instead of me passing it in?
-      GenerateDocs(api, pub_cache)
+      GenerateDocs(api)
 
 
 def GenTests(api):
