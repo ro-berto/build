@@ -38,6 +38,10 @@ def clang_builder(c):
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
+@CONFIG_CTX(includes=['clang_builder', 'mb'])
+def clang_builder_mb(c):
+  pass
+
 @CONFIG_CTX(includes=['main_builder'])
 def component_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'  # pragma: no cover

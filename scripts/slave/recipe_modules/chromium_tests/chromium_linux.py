@@ -299,7 +299,7 @@ SPEC = {
 
     'Android Clang Builder (dbg)': {
       'chromium_config': 'android_clang',
-      'chromium_apply_config': ['chrome_with_codecs', 'errorprone', 'mb'],
+      'chromium_apply_config': ['chrome_with_codecs', 'errorprone'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -307,7 +307,7 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'clang_builder',
+      'android_config': 'clang_builder_mb',
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',

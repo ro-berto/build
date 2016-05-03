@@ -65,7 +65,11 @@ def main_builder_rel_mb(c):
   pass
 
 @config_ctx()
-def clang_builder(c):
+def clang_builder(c):  # pragma: no cover
+  pass
+
+@config_ctx()
+def clang_builder_mb(c):
   pass
 
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
