@@ -47,3 +47,16 @@ Specify different Buildbot changes:
             'when_timestamp': 1416859562,
         }]
     })
+
+**WARNING**: on buildbot, this requires certain configuration on the
+master prior first use. See more below.
+
+## Master configuration for buildbucket triggering
+
+*   in master.cfg of the source master `ActiveMaster` parameter MUST be passed
+    to `AnnotationObserver` for the builder that is triggering a build.
+*   source master's master_site_config.py MUST have
+    `service_account_(file|path)` set
+*   the source master's service account must have permissions to schedule builds
+    in the target master's bucket. If they use same service account, it is fine.
+*   the target master MUST be polling buildbucket

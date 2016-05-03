@@ -77,6 +77,8 @@ class TriggerApi(recipe_api.RecipeApi):
                 'my_prop': 123,
             },
         })
+      WARNING: on buildbot, this requires certain configuration on the
+      master prior first use. See ./README.md.
 
       Create Buildbot changes:
         api.trigger({
