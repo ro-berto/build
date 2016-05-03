@@ -134,7 +134,11 @@ Build #{{ b.getNumber() }}
       {% set item_class = cycler('alt', '') %}
       {% for l in s.logs %}
         <li class="{{ item_class.next() }}">
-          <a href="{{ l.link }}">{{ l.name }}</a>
+          {% if l.link %}
+            <a href="{{ l.link }}">{{ l.name }}</a>
+          {% else %}
+            <span>{{ l.name }}</span>
+          {% endif %}
           {% if s.aliases %}
             {% for a in s.aliases.get(l.name, ()) %}
               <a href="{{ a.url }}">[{{ a.text }}]</a>

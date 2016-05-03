@@ -146,7 +146,11 @@ Build #{{ b.getNumber() }}
       {% set item_class = cycler('alt', '') %}
       {% for l in s.logs %}
         <li class="{{ item_class.next() }}">
-          <a href="{{ l.link }}">{{ l.name }}</a>
+          {% if l.link %}
+            <a href="{{ l.link }}">{{ l.name }}</a>
+          {% else %}
+            <span>{{ l.name }}</span>
+          {% endif %}
           <a href="https://storage.cloud.google.com/chrome-build-logs-private/logs/{{
                    b.getProperty('mastername') }}/{{ b.getBuilder().getName()
                    }}/{{ '%.7d' % b.getNumber() }}/{{ s.name|replace('/', '_') }}.{{

@@ -121,13 +121,6 @@ class StatusResourceBuild(HtmlResource):
             step['urls'] = map(lambda x:dict(url=x[1],logname=x[0]), s.getURLs().items())
             step['nest_level'] = s.getNestLevel()
 
-            step['aliases'] = {}
-            for base, aliases in s.getAliases().iteritems():
-                step['aliases'][base] = [{
-                    'text': a[0],
-                    'url': a[1],
-                } for a in aliases]
-
             step['logs']= []
 
             for l in s.getLogs():
@@ -136,6 +129,29 @@ class StatusResourceBuild(HtmlResource):
                                            (urllib.quote(s.getName(), safe=''),
                                             urllib.quote(logname, safe=''))),
                                       'name': logname })
+
+            step['aliases'] = {}
+            seen_aliases = set()
+            for base, aliases in s.getAliases().iteritems():
+                step['aliases'][base] = [{
+                    'text': a[0],
+                    'url': a[1],
+                } for a in aliases]
+                seen_aliases.add(base)
+
+            seen_aliases.difference_update(s['logname'] for s in step['urls'])
+            seen_aliases.difference_update(s['name'] for s in step['logs'])
+
+            # Append link-less log anchors for unbased aliases to attach to.
+            #
+            # We include an empty link so that custom templates that don't
+            # support aliases don't crash when trying to render these anchors.
+            # This will cause waterfalls that have alias data but haven't
+            # updated their templates to render them to show blank links. This
+            # is okay, since waterfalls that accept alias data should have
+            # their templates updated to render this data.
+            for base in sorted(seen_aliases):
+                step['logs'].append({'name': base, 'link': ''})
 
         ps = cxt['properties'] = []
         for name, value, source in b.getProperties().asList():
