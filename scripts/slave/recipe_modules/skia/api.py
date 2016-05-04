@@ -167,7 +167,8 @@ class SkiaApi(recipe_api.RecipeApi):
       # and aren't in the expected location, so we need to override them.
       self.m.path.c.base_paths['depot_tools'] = (
           self.m.path.c.base_paths['slave_build'] + ('depot_tools',))
-      self.default_env['PATH'] = '%s:%%(PATH)s' % self.m.path['depot_tools']
+      self.default_env['PATH'] = self.m.path.pathsep.join([
+          '%s' % self.m.path['depot_tools'], '%(PATH)s'])
       self.m.path.c.base_paths['build'] = (
           self.m.path.c.base_paths['slave_build'] + ('build',))
       self.default_env['PYTHONPATH'] = self.m.path['build'].join('scripts')
