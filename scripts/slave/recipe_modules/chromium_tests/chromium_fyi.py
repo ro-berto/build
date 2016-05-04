@@ -43,11 +43,7 @@ SPEC = {
     'Chromium Mac 10.10 MacViews': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': [
-        'chromium_mac_mac_views',
-        'mb',
-        'force_mac_toolchain'
-      ],
+      'chromium_apply_config': ['chromium_mac_mac_views', 'mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -63,12 +59,29 @@ SPEC = {
     },
     'Chromium Mac 10.11': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+    'Chromium Mac 10.11 Force Mac Toolchain': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_apply_config': ['force_mac_toolchain'],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -247,7 +260,6 @@ SPEC = {
     'Print Preview Mac': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['force_mac_toolchain'],
       'GYP_DEFINES': {
         'component': 'shared_library',
       },
@@ -368,7 +380,6 @@ SPEC = {
     'Mac OpenSSL': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['force_mac_toolchain'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -1138,7 +1149,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb', 'force_mac_toolchain'],
+      'chromium_apply_config': ['goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1153,7 +1164,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb', 'force_mac_toolchain'],
+      'chromium_apply_config': ['goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -1168,12 +1179,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary (clobber)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'goma_canary',
-        'mb',
-        'force_mac_toolchain',
-      ],
+      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1188,12 +1194,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary (dbg)(clobber)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'goma_canary',
-        'mb',
-        'force_mac_toolchain',
-      ],
+      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -1412,7 +1413,7 @@ SPEC = {
     'ClangToTMac': {
       'chromium_config': 'clang_tot_mac',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -1436,7 +1437,6 @@ SPEC = {
     },
     'ClangToTMac tester': {
       'chromium_config': 'chromium_no_goma',
-      'chromium_apply_config': ['force_mac_toolchain'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1456,7 +1456,7 @@ SPEC = {
     },
     'ClangToTMac (dbg)': {
       'chromium_config': 'clang_tot_mac',
-      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -1478,7 +1478,7 @@ SPEC = {
     },
     'ClangToTMacASan': {
       'chromium_config': 'clang_tot_mac_asan',
-      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1501,7 +1501,6 @@ SPEC = {
     'ClangToTMacASan tester': {
       'chromium_config': 'chromium_mac_asan',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['force_mac_toolchain'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
