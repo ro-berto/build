@@ -324,6 +324,27 @@
     "cmd": [
       "python",
       "-u",
+      "import os\nfor r, _, files in os.walk(os.getcwd()):\n  for fname in files:\n    f = os.path.join(r, fname)\n    if os.path.isfile(f):\n      if os.access(f, os.X_OK):\n        os.chmod(f, 0755)\n      else:\n        os.chmod(f, 0644)\n"
+    ],
+    "cwd": "[BUILD]",
+    "name": "fix filemodes",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@for r, _, files in os.walk(os.getcwd()):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for fname in files:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    f = os.path.join(r, fname)@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if os.path.isfile(f):@@@",
+      "@@@STEP_LOG_LINE@python.inline@      if os.access(f, os.X_OK):@@@",
+      "@@@STEP_LOG_LINE@python.inline@        os.chmod(f, 0755)@@@",
+      "@@@STEP_LOG_LINE@python.inline@      else:@@@",
+      "@@@STEP_LOG_LINE@python.inline@        os.chmod(f, 0644)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"

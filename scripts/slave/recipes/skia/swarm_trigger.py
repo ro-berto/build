@@ -124,6 +124,23 @@ def swarm_dimensions(builder_spec):
   return dimensions
 
 
+def fix_filemodes(api, path):
+  """Set all filemodes to 644 or 755 in the given directory path."""
+  api.python.inline(
+      name='fix filemodes',
+      program='''import os
+for r, _, files in os.walk(os.getcwd()):
+  for fname in files:
+    f = os.path.join(r, fname)
+    if os.path.isfile(f):
+      if os.access(f, os.X_OK):
+        os.chmod(f, 0755)
+      else:
+        os.chmod(f, 0644)
+''',
+      cwd=path)
+
+
 def isolate_recipes(api):
   """Isolate the recipes."""
   # This directory tends to be missing for some reason.
@@ -131,6 +148,10 @@ def isolate_recipes(api):
       'third_party_infra',
       api.path['build'].join('third_party', 'infra'),
       infra_step=True)
+
+  # Fix filemodes. These tend to get messed up somehow.
+  fix_filemodes(api, api.path['build'])
+
   skia_recipes_dir = api.path['build'].join(
       'scripts', 'slave', 'recipes', 'skia')
   api.skia_swarming.create_isolated_gen_json(
