@@ -588,9 +588,9 @@
       "../../..",
       "skia/swarm_compile",
       "buildername=Build-Ubuntu-GCC-x86_64-Debug-Swarming",
-      "mastername=client.skia",
-      "buildnumber=5",
-      "slavename=skiabot-linux-test-000",
+      "mastername=client.skia.compile",
+      "buildnumber=1",
+      "slavename=skiabot-dummy-compile-slave",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
       "revision=164710"

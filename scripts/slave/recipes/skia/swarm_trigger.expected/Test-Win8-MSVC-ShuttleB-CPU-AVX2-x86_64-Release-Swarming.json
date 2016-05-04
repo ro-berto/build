@@ -598,9 +598,9 @@
       "../../..",
       "skia/swarm_compile",
       "buildername=Build-Win8-MSVC-x86_64-Release-Swarming",
-      "mastername=client.skia.fyi",
-      "buildnumber=5",
-      "slavename=skiabot-linux-housekeeper-003",
+      "mastername=client.skia.compile",
+      "buildnumber=1",
+      "slavename=skiabot-dummy-compile-slave",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
       "revision=164710"

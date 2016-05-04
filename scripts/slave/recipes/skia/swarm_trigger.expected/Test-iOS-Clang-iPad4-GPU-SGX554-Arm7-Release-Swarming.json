@@ -592,9 +592,9 @@
       "../../..",
       "skia/swarm_compile",
       "buildername=Build-Mac-Clang-Arm7-Release-iOS",
-      "mastername=client.skia.fyi",
-      "buildnumber=5",
-      "slavename=skiabot-linux-housekeeper-003",
+      "mastername=client.skia.compile",
+      "buildnumber=1",
+      "slavename=skiabot-dummy-compile-slave",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
       "revision=164710"

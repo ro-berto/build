@@ -164,10 +164,10 @@ def isolate_recipes(api):
   return api.skia_swarming.batcharchive(['isolate_recipes'])[0][1]
 
 
-def trigger_task(api, task_name, builder, builder_spec, got_revision,
-                 infrabots_dir, idempotent=False, store_output=True,
-                 extra_isolate_hashes=None, expiration=None, hard_timeout=None,
-                 io_timeout=None):
+def trigger_task(api, task_name, builder, master, slave, buildnumber,
+                 builder_spec, got_revision, infrabots_dir, idempotent=False,
+                 store_output=True, extra_isolate_hashes=None, expiration=None,
+                 hard_timeout=None, io_timeout=None):
   """Trigger the given bot to run as a Swarming task."""
   # TODO(borenet): We're using Swarming directly to run the recipe through
   # recipes.py. Once it's possible to track the state of a Buildbucket build,
@@ -175,11 +175,11 @@ def trigger_task(api, task_name, builder, builder_spec, got_revision,
 
   properties = {
     'buildername': builder,
-    'mastername': api.properties['mastername'],
-    'buildnumber': api.properties['buildnumber'],
+    'mastername': master,
+    'buildnumber': buildnumber,
     'reason': 'Triggered by Skia swarm_trigger Recipe',
     'revision': got_revision,
-    'slavename': api.properties['slavename'],
+    'slavename': slave,
     'swarm_out_dir': '${ISOLATED_OUTDIR}',
   }
   builder_cfg = builder_spec['builder_cfg']
@@ -264,10 +264,18 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
     hashes = json.loads(j)
     extra_hashes.append(hashes['2015'])
 
+  # Fake these properties for compile tasks so that they can be de-duped.
+  master = 'client.skia.compile'
+  slave = 'skiabot-dummy-compile-slave'
+  buildnumber = 1
+
   task = trigger_task(
       api,
       'compile',
       builder_name,
+      master,
+      slave,
+      buildnumber,
       compile_builder_spec,
       got_revision,
       infrabots_dir,
@@ -305,6 +313,9 @@ def perf_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
       api,
       'perf',
       api.properties['buildername'],
+      api.properties['mastername'],
+      api.properties['slavename'],
+      api.properties['buildnumber'],
       builder_spec,
       got_revision,
       infrabots_dir,
@@ -361,6 +372,9 @@ def test_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
       api,
       'test',
       api.properties['buildername'],
+      api.properties['mastername'],
+      api.properties['slavename'],
+      api.properties['buildnumber'],
       builder_spec,
       got_revision,
       infrabots_dir,
