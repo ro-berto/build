@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CUSTOM_/_B_CACHE]",
+      "[CUSTOM_/_B_WORK]",
       "511"
     ],
     "name": "makedirs checkout_path",
@@ -28,9 +28,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[CUSTOM_/_B_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
-    "cwd": "[CUSTOM_/_B_CACHE]",
+    "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "[DEPOT_TOOLS]:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
@@ -53,7 +53,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CUSTOM_/_B_CACHE]",
+    "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "[DEPOT_TOOLS]:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
@@ -76,11 +76,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CUSTOM_/_B_CACHE]/skia/tools/buildbot_spec.py",
+      "[CUSTOM_/_B_WORK]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Build-Ubuntu-GCC-x86_64-Release-CMake"
     ],
-    "cwd": "[CUSTOM_/_B_CACHE]/skia",
+    "cwd": "[CUSTOM_/_B_WORK]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -116,16 +116,16 @@
   },
   {
     "cmd": [
-      "[CUSTOM_/_B_CACHE]/skia/cmake/cmake_build"
+      "[CUSTOM_/_B_WORK]/skia/cmake/cmake_build"
     ],
-    "cwd": "[CUSTOM_/_B_CACHE]/skia",
+    "cwd": "[CUSTOM_/_B_WORK]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
       "PATH": "[DEPOT_TOOLS]:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[CUSTOM_/_B_CACHE]/skia/out/Build-Ubuntu-GCC-x86_64-Release-CMake"
+      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Release-CMake"
     },
     "name": "cmake_build"
   },
@@ -134,7 +134,7 @@
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', '*.dylib', 'skia_launcher', 'lib/*.so', 'iOSShell.app', 'iOSShell.ipa']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    dst_path = os.path.join(dst, os.path.relpath(f, src))\n    if not os.path.isdir(os.path.dirname(dst_path)):\n      os.makedirs(os.path.dirname(dst_path))\n    print 'Copying build product %s to %s' % (f, dst_path)\n    shutil.move(f, dst_path)\n",
-      "[CUSTOM_/_B_CACHE]/skia/out/Build-Ubuntu-GCC-x86_64-Release-CMake/Release",
+      "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Release-CMake/Release",
       "[CUSTOM_[SWARM_OUT_DIR]]/out/Release"
     ],
     "name": "copy build products",

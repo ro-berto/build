@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CUSTOM_C:\\_B_CACHE]",
+      "[CUSTOM_C:\\_B_WORK]",
       "511"
     ],
     "name": "makedirs checkout_path",
@@ -28,9 +28,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[CUSTOM_C:\\\\_B_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
     ],
-    "cwd": "[CUSTOM_C:\\_B_CACHE]",
+    "cwd": "[CUSTOM_C:\\_B_WORK]",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "[DEPOT_TOOLS]:%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]",
@@ -53,7 +53,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CUSTOM_C:\\_B_CACHE]",
+    "cwd": "[CUSTOM_C:\\_B_WORK]",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "[DEPOT_TOOLS]:%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools];RECIPE_PACKAGE_REPO[depot_tools]",
@@ -76,11 +76,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CUSTOM_C:\\_B_CACHE]\\skia\\tools\\buildbot_spec.py",
+      "[CUSTOM_C:\\_B_WORK]\\skia\\tools\\buildbot_spec.py",
       "/path/to/tmp/json",
       "Build-Win-MSVC-x86-Debug"
     ],
-    "cwd": "[CUSTOM_C:\\_B_CACHE]\\skia",
+    "cwd": "[CUSTOM_C:\\_B_WORK]\\skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -117,7 +117,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CUSTOM_C:\\_B_CACHE]\\skia\\infra\\bots\\bootstrap_win_toolchain_json.py",
+      "[CUSTOM_C:\\_B_WORK]\\skia\\infra\\bots\\bootstrap_win_toolchain_json.py",
       "--win_toolchain_json",
       "[SLAVE_BUILD]\\src\\build\\win_toolchain.json",
       "--depot_tools_parent_dir",
@@ -131,7 +131,7 @@
       "make.py",
       "most"
     ],
-    "cwd": "[CUSTOM_C:\\_B_CACHE]\\skia",
+    "cwd": "[CUSTOM_C:\\_B_WORK]\\skia",
     "env": {
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
@@ -139,7 +139,7 @@
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
       "PATH": "[DEPOT_TOOLS]:%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools];RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]\\scripts",
-      "SKIA_OUT": "[CUSTOM_C:\\_B_CACHE]\\skia\\out\\Build-Win-MSVC-x86-Debug"
+      "SKIA_OUT": "[CUSTOM_C:\\_B_WORK]\\skia\\out\\Build-Win-MSVC-x86-Debug"
     },
     "name": "build most",
     "~followup_annotations": [

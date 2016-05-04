@@ -175,9 +175,11 @@ class SkiaApi(recipe_api.RecipeApi):
       # Compile bots keep a persistent checkout.
       if self.is_compile_bot:
         if 'Win' in self.builder_name:
-          self.checkout_root = self.make_path('C:\\', 'b', 'cache')
+          self.checkout_root = self.make_path('C:\\', 'b', 'work')
+          self.gclient_cache = self.make_path('C:\\', 'b', 'cache')
         else:
-          self.checkout_root = self.make_path('/', 'b', 'cache')
+          self.checkout_root = self.make_path('/', 'b', 'work')
+          self.gclient_cache = self.make_path('/', 'b', 'cache')
 
     self.skia_dir = self.checkout_root.join('skia')
     self.infrabots_dir = self.skia_dir.join('infra', 'bots')
@@ -315,8 +317,8 @@ class SkiaApi(recipe_api.RecipeApi):
         self.got_revision = self.m.properties['revision']
         return
 
-      # The gclient cache gets deleted by Swarming, so don't use it.
-      cfg_kwargs['CACHE_DIR'] = None
+      # Use a persistent gclient cache for Swarming.
+      cfg_kwargs['CACHE_DIR'] = self.gclient_cache
 
     # Create the checkout path if necessary.
     if not self.m.path.exists(self.checkout_root):
