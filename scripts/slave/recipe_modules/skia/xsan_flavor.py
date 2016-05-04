@@ -24,13 +24,33 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
       # MSAN and TSAN can't run together with ASAN, so they're their own bots.
       'MSAN': 'memory',
       'TSAN': 'thread',
-    }[self._skia_api.builder_cfg['extra_config']]
+    }[self._skia_api.builder_cfg['extra_config'].replace('Swarming', '')]
 
   def compile(self, target):
     cmd = [self._skia_api.skia_dir.join('tools', 'xsan_build'),
            self._sanitizer, target]
     self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
                        cwd=self._skia_api.skia_dir)
+
+  def copy_extra_build_products(self, swarming_out_dir):
+    # Include msan_out if MSAN.
+    if 'MSAN' in self._skia_api.builder_cfg['extra_config']:
+      msan_out = self._skia_api.m.path.join(
+          'third_party', 'externals', 'llvm', 'msan_out')
+      self._skia_api.m.file.copytree(
+          'copy msan_out',
+          self._skia_api.skia_dir.join(msan_out),
+          swarming_out_dir.join(msan_out),
+          symlinks=True)
+    # Include llvm_symbolizer from the Chromium DEPS so that suppressions work
+    # by symbol name.
+    # TODO(benjaminwagner): Figure out how to add this to Skia DEPS for
+    # target_os 'llvm'.
+    self._skia_api.m.file.copytree(
+        'copy llvm-build',
+        self._skia_api.checkout_root.join('src', 'third_party', 'llvm-build'),
+        swarming_out_dir.join('llvm-build'),
+        symlinks=True)
 
   def step(self, name, cmd, env=None, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
@@ -44,10 +64,13 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
                            lsan_suppressions)
     env['TSAN_OPTIONS'] = 'suppressions=%s' % tsan_suppressions
     env['UBSAN_OPTIONS'] = 'suppressions=%s' % ubsan_suppressions
+    if self._skia_api.running_in_swarming:
+      self._skia_api.default_env['PATH'] = '%s:%s' % (
+          self._skia_api.default_env['PATH'],
+          self._skia_api.slave_dir.join('llvm-build', 'Release+Asserts', 'bin'))
 
     path_to_app = self.out_dir.join(cmd[0])
     new_cmd = [path_to_app]
     new_cmd.extend(cmd[1:])
     return self._skia_api.run(self._skia_api.m.step, name, cmd=new_cmd, env=env,
                               **kwargs)
-

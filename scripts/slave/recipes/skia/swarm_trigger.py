@@ -45,6 +45,7 @@ TEST_BUILDERS = {
       'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release-Swarming',
       'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
+      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-SwarmingMSAN',
       'Test-Win8-MSVC-ShuttleA-GPU-HD7770-x86_64-Release-Swarming',
       'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
     ],

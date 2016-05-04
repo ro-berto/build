@@ -210,6 +210,13 @@ class DefaultFlavorUtils(object):
     if 'CommandBuffer' in self._skia_api.builder_name:
       self._skia_api._run_once(self.build_command_buffer)
 
+  def copy_extra_build_products(self, swarming_out_dir):
+    """Copy extra build products to specified directory.
+
+    Copy flavor-specific build products to swarming_out_dir for use in test and
+    perf steps. Only called if running_in_swarming."""
+    pass
+
   @property
   def out_dir(self):
     """Flavor-specific out directory."""

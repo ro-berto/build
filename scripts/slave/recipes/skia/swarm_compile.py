@@ -25,6 +25,9 @@ TEST_BUILDERS = {
     'skiabot-win-compile-000': [
       'Build-Win-MSVC-x86-Debug',
     ],
+    'skiabot-linux-swarm-007': [
+      'Build-Ubuntu-GCC-x86_64-Debug-SwarmingMSAN',
+    ],
     'skiabot-linux-swarm-012': [
       'Build-Ubuntu-GCC-x86_64-Release-Valgrind',
     ],

@@ -268,7 +268,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]/out/coverage_results/file 1",
-      "[SWARM_OUT_DIR]"
+      "[CUSTOM_[SWARM_OUT_DIR]]"
     ],
     "name": "Copy to swarming out"
   },
@@ -278,7 +278,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]/out/coverage_results/file 2",
-      "[SWARM_OUT_DIR]"
+      "[CUSTOM_[SWARM_OUT_DIR]]"
     ],
     "name": "Copy to swarming out (2)"
   },

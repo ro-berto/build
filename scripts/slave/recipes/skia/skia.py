@@ -62,6 +62,7 @@ TEST_BUILDERS = {
       'Housekeeper-PerCommit-Trybot',
       'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
       'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
+      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-SwarmingMSAN',
     ],
   },
 }
@@ -347,4 +348,3 @@ def GenTests(api):
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
-

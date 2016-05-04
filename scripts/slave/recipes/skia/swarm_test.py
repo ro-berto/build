@@ -27,6 +27,9 @@ TEST_BUILDERS = {
     'skiabot-nexus6-001': [
       'Test-Android-GCC-Nexus6-GPU-Adreno420-Arm7-Release',
     ],
+    'skiabot-linux-swarm-007': [
+      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-SwarmingMSAN',
+    ],
     'skiabot-linux-swarm-012': [
       'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
     ],
@@ -95,4 +98,3 @@ def GenTests(api):
 
 
         yield test
-

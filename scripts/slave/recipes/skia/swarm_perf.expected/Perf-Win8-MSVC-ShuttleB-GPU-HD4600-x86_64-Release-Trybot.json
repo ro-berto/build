@@ -68,7 +68,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SWARM_OUT_DIR]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data"
+      "[CUSTOM_[SWARM_OUT_DIR]]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data"
     ],
     "env": {
       "PYTHONPATH": "build\\scripts"
@@ -90,7 +90,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SWARM_OUT_DIR]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
+      "[CUSTOM_[SWARM_OUT_DIR]]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
       "511"
     ],
     "name": "makedirs data",
@@ -120,7 +120,7 @@
       "--nocpu",
       "--dummy-flags",
       "--outResultsFile",
-      "[SWARM_OUT_DIR]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data\\nanobench_abc123.json",
+      "[CUSTOM_[SWARM_OUT_DIR]]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data\\nanobench_abc123.json",
       "--properties",
       "gitHash",
       "abc123",
@@ -159,7 +159,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SWARM_OUT_DIR]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
+      "[CUSTOM_[SWARM_OUT_DIR]]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data",
       "511"
     ],
     "name": "makedirs perf_dir",

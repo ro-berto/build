@@ -82,9 +82,9 @@ def is_valgrind(builder_cfg):
 
 
 def is_xsan(builder_cfg):
-  return (builder_cfg.get('extra_config') == 'ASAN' or
-          builder_cfg.get('extra_config') == 'MSAN' or
-          builder_cfg.get('extra_config') == 'TSAN')
+  return ('ASAN' in builder_cfg.get('extra_config', '') or
+          'MSAN' in builder_cfg.get('extra_config', '') or
+          'TSAN' in builder_cfg.get('extra_config', ''))
 
 
 class SkiaApi(recipe_api.RecipeApi):
@@ -191,6 +191,10 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Some bots also require a checkout of chromium.
     self._need_chromium_checkout = 'CommandBuffer' in self.builder_name
+    if (self.running_in_swarming and
+        self.is_compile_bot and
+        'SAN' in self.builder_name):
+      self._need_chromium_checkout = True
 
     # Check out the Skia code.
     self.checkout_steps()
@@ -207,7 +211,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.images_dir = self.slave_dir.join('images')
     self.skia_out = self.skia_dir.join('out', self.builder_name)
     if self.running_in_swarming:
-      self.swarming_out_dir = self.m.properties['swarm_out_dir']
+      self.swarming_out_dir = self.make_path(self.m.properties['swarm_out_dir'])
       self.local_skp_dir = self.slave_dir.join('skps')
       if not self.is_compile_bot:
         self.skia_out = self.slave_dir.join('out')
@@ -349,7 +353,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.m.tryserver.maybe_apply_issue()
 
     if self._need_chromium_checkout:
-      self.m.gclient.runhooks()
+      self.m.gclient.runhooks(cwd=self.checkout_root)
 
   def copy_build_products(self, src, dst):
     """Copy whitelisted build products from src to dst."""
@@ -391,7 +395,8 @@ for pattern in build_products_whitelist:
       if self.running_in_swarming:
         self.copy_build_products(
             self.flavor.out_dir,
-            self.m.path.join(self.swarming_out_dir, 'out', self.configuration))
+            self.swarming_out_dir.join('out', self.configuration))
+        self.flavor.copy_extra_build_products(self.swarming_out_dir)
     finally:
       if 'Win' in self.builder_cfg.get('os', ''):
         self.m.python.inline(
