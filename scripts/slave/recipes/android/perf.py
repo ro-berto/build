@@ -24,9 +24,11 @@ DEPS = [
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
-                    num_host_shards=1, target_bits=64):
+                    num_host_shards=1, target_bits=64,
+                    remove_system_webview=False):
   def _CreateShardTestSpec(name, perf_id, required_apks, num_device_shards,
-                           num_host_shards, shard_index, target_bits):
+                           num_host_shards, shard_index, target_bits,
+                           remove_system_webview):
     spec = {
       'perf_id': perf_id,
       'required_apks': required_apks,
@@ -37,6 +39,7 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
       'known_devices_file': '.known_devices',
+      'remove_system_webview': remove_system_webview,
     }
     if target_bits == 32:
       builder_name = 'android_perf_rel'
@@ -52,7 +55,7 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
     builder_name = '%s (%d)' % (name, shard_index + 1)
     tester_spec[builder_name] = _CreateShardTestSpec(
         name, perf_id, required_apks, num_device_shards, num_host_shards,
-        shard_index, target_bits)
+        shard_index, target_bits, remove_system_webview)
   return tester_spec
 
 def _ChromiumPerfTesters():
@@ -88,10 +91,12 @@ def _ChromiumPerfFYITesters():
   testers = [
     _CreateTestSpec('Android Nexus5 WebView Perf', 'android-webview',
         required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
-        num_device_shards=5, num_host_shards=1, target_bits=32),
+        num_device_shards=5, num_host_shards=1, target_bits=32,
+        remove_system_webview=True),
     _CreateTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
         required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
-        num_device_shards=7, num_host_shards=2, target_bits=64),
+        num_device_shards=7, num_host_shards=2, target_bits=64,
+        remove_system_webview=True),
   ]
   master_spec = {}
   for spec in testers:
@@ -146,7 +151,9 @@ def RunSteps(api):
   api.chromium_android.download_build(bucket=builder['bucket'],
     path=builder['path'](api))
 
-  api.chromium_android.common_tests_setup_steps(perf_setup=True)
+  api.chromium_android.common_tests_setup_steps(
+      perf_setup=True,
+      remove_system_webview=builder.get('remove_system_webview', False))
 
   required_apks = builder.get('required_apks', [])
   for apk in required_apks:

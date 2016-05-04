@@ -356,7 +356,8 @@
       "--disable-network",
       "--disable-java-debug",
       "--max-battery-temp",
-      "350"
+      "350",
+      "--remove-system-webview"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
