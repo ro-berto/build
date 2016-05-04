@@ -14,8 +14,8 @@ class Dart(Master.Master3):
   # This IP refers to a golem server in BigCluster
   http_status_push_url = "http://108.170.219.8:8080/submit-buildbot-info/"
   project_name = 'Dart'
-  master_port = 8040
-  slave_port = 8140
+  master_port = 20308
+  slave_port = 30308
   # Enable when there's a public waterfall.
-  master_port_alt = 8240
+  master_port_alt = 25308
   buildbot_url = 'http://build.chromium.org/p/client.dart/'
