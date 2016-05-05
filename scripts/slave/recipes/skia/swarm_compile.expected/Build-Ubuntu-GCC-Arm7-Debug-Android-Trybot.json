@@ -33,7 +33,7 @@
     "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
       "CHROME_HEADLESS": "1",
-      "PATH": "[DEPOT_TOOLS]:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts"
     },
     "name": "gclient setup"
@@ -49,7 +49,7 @@
     "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
       "CHROME_HEADLESS": "1",
-      "PATH": "[DEPOT_TOOLS]:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts"
     },
     "name": "gclient revert"
@@ -72,7 +72,7 @@
     "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
       "CHROME_HEADLESS": "1",
-      "PATH": "[DEPOT_TOOLS]:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts"
     },
     "name": "gclient sync",
@@ -173,7 +173,7 @@
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
-      "PATH": "[DEPOT_TOOLS]:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot"
     },
@@ -212,7 +212,7 @@
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
-      "PATH": "[DEPOT_TOOLS]:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot"
@@ -234,7 +234,7 @@
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
-      "PATH": "[DEPOT_TOOLS]:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot"
