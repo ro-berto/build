@@ -652,7 +652,8 @@ class ChromiumApi(recipe_api.RecipeApi):
   def taskkill(self):
     self.m.python(
       'taskkill',
-      self.package_repo_resource('scripts', 'slave', 'kill_processes.py'))
+      self.package_repo_resource('scripts', 'slave', 'kill_processes.py'),
+      infra_step=True)
 
   def cleanup_temp(self):
     self.m.python(
