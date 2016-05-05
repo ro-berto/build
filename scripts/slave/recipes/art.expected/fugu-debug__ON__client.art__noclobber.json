@@ -145,7 +145,7 @@
   {
     "cmd": [
       "make",
-      "-j4",
+      "-j2",
       "test-art-target-gtest32"
     ],
     "env": {
@@ -270,7 +270,7 @@
   {
     "cmd": [
       "make",
-      "-j4",
+      "-j2",
       "test-art-target-run-test-optimizing",
       "dist"
     ],
@@ -397,7 +397,7 @@
   {
     "cmd": [
       "make",
-      "-j4",
+      "-j2",
       "test-art-target-run-test-interpreter",
       "dist"
     ],
@@ -523,7 +523,7 @@
   {
     "cmd": [
       "make",
-      "-j4",
+      "-j2",
       "test-art-target-run-test-jit",
       "dist"
     ],

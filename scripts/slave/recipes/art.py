@@ -143,7 +143,7 @@ def setup_target(api,
          'ANDROID_BUILD_TOP': build_top_dir,
          'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
                      api.path.pathsep + '%(PATH)s',
-          'LEGACY_USE_JAVA7': 'true',
+         'LEGACY_USE_JAVA7': 'true',
          'JACK_SERVER': 'false',
          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
                                                    'jacks')),
@@ -182,6 +182,10 @@ def setup_target(api,
 
   checkout(api)
   clobber(api)
+
+  # Decrease the number of parallel tests, as some tests eat lots of memory.
+  if debug and device == 'fugu':
+    make_jobs = 2
 
   with api.step.defer_results():
     api.step('build target', [art_tools.join('buildbot-build.sh'),
