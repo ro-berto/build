@@ -163,6 +163,10 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'enable_swarming': True,
+      'swarming_dimensions': {
+        'cpu': 'x86-64',
+        'os': 'Windows-8.1-SP0',
+      },
       'testing': {
         'platform': 'win',
       },
