@@ -90,17 +90,19 @@ def AnalyzeDartUI(api):
   api.step('analyze dart_ui', ['/bin/sh', 'travis/analyze.sh'], cwd=checkout)
 
 
-def BuildLinuxAndroidx64(api):
-  RunGN(api, '--release', '--android', '--simulator')
-  Build(api, 'android_sim_Release')
-  UploadArtifacts(api, 'android-x64', [
-    'build/android/ant/chromium-debug.keystore',
-    'out/android_sim_Release/apks/SkyShell.apk',
-    'out/android_sim_Release/gen/sky/shell/shell/shell/libs/x86_64/' +
-    'libsky_shell.so',
-    'out/android_sim_Release/icudtl.dat',
-    'out/android_sim_Release/gen/sky/shell/shell/classes.dex.jar',
-  ])
+def BuildLinuxAndroidx86(api):
+  for x86_variant, abi in [('x64', 'x86_64'), ('x86', 'x86')]:
+    RunGN(api, '--release', '--android', '--android-cpu=' + x86_variant)
+    out_dir = 'android_Release_' + x86_variant
+    Build(api, out_dir)
+    UploadArtifacts(api, 'android-' + x86_variant, [
+      'build/android/ant/chromium-debug.keystore',
+      'out/%s/apks/SkyShell.apk' % out_dir,
+      ('out/%s/gen/sky/shell/shell/shell/libs/%s/libsky_shell.so' %
+       (out_dir, abi)),
+      'out/%s/icudtl.dat' % out_dir,
+      'out/%s/gen/sky/shell/shell/classes.dex.jar' % out_dir,
+    ])
 
 
 def AddPathPrefix(api, prefix, paths):
@@ -263,7 +265,7 @@ def RunSteps(api):
       BuildLinux(api)
       TestObservatory(api)
       BuildLinuxAndroidArm(api)
-      BuildLinuxAndroidx64(api)
+      BuildLinuxAndroidx86(api)
 
     if api.platform.is_mac:
       BuildMac(api)
