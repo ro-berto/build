@@ -65,8 +65,7 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
     env['TSAN_OPTIONS'] = 'suppressions=%s' % tsan_suppressions
     env['UBSAN_OPTIONS'] = 'suppressions=%s' % ubsan_suppressions
     if self._skia_api.running_in_swarming:
-      self._skia_api.default_env['PATH'] = '%s:%s' % (
-          self._skia_api.default_env['PATH'],
+      self._skia_api.default_env['PATH'] = '%%(PATH)s:%s' % (
           self._skia_api.slave_dir.join('llvm-build', 'Release+Asserts', 'bin'))
       env['LD_LIBRARY_PATH'] = self._skia_api.slave_dir.join(
           'third_party', 'externals', 'llvm', 'msan_out', 'lib')
