@@ -67,6 +67,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -83,6 +84,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -100,6 +102,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -117,6 +120,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -134,6 +138,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -152,6 +157,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -179,6 +185,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -206,6 +213,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -268,6 +276,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -291,6 +300,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -309,6 +319,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -348,6 +359,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -397,6 +409,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -457,6 +470,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -476,6 +490,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -493,6 +508,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -507,6 +523,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -521,6 +538,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -536,6 +554,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -552,6 +571,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -567,6 +587,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },

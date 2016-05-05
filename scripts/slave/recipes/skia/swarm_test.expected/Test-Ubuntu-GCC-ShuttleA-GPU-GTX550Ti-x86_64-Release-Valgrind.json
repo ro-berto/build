@@ -116,6 +116,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -173,6 +174,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
@@ -230,6 +232,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "PATH": "[DEPOT_TOOLS]:%(PATH)s",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
