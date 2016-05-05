@@ -168,6 +168,11 @@ def RunSteps(api, target_mastername, target_buildername,
       all_revisions.index(r)
           for r in set(suspected_revisions) if r in all_revisions]
   if suspected_revision_index:
+    # For consecutive suspected revisions, make them all in the same sub-range
+    # by removing the newer revisions, but keep the oldest one.
+    suspected_revision_index = [i for i in suspected_revision_index
+                                if i - 1 not in suspected_revision_index]
+
     sub_ranges = []
     remaining_revisions = all_revisions[:]
     for index in sorted(suspected_revision_index, reverse=True):
@@ -452,7 +457,7 @@ def GenTests(api):
   )
 
   # Entire regression range: (r1, r6]
-  # Suspected_revisions: [r4]
+  # Suspected_revisions: [r4, r5]
   # Expected smaller ranges: [r3, [r4, r5, r6]], [None, [r2]]
   # Actual culprit: r3
   # Should only run compile on r3, and then r2.
