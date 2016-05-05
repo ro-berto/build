@@ -429,6 +429,8 @@
       "Test-Android-GCC-Nexus6-GPU-Adreno420-Arm7-Release",
       "build_number",
       "5",
+      "--colorImages",
+      "/storage/emulated/legacy/skiabot/skia_images/colorspace",
       "--key",
       "arch",
       "Arm7",

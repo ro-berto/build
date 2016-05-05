@@ -404,6 +404,8 @@
       "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug",
       "build_number",
       "6",
+      "--colorImages",
+      "[SLAVE_BUILD]/images/colorspace",
       "--key",
       "arch",
       "x86_64",

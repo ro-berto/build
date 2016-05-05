@@ -34,6 +34,8 @@ BOTO_CHROMIUM_SKIA_GM = 'chromium-skia-gm.boto'
 GS_SUBDIR_TMPL_SK_IMAGE = 'skimage/v%s'
 GS_SUBDIR_TMPL_SKP = 'playback_%s/skps'
 
+MIN_COLORSPACE_SKIMAGE_VERSION = 5
+
 TEST_EXPECTED_SKP_VERSION = '42'
 TEST_EXPECTED_SK_IMAGE_VERSION = '42'
 
@@ -278,8 +280,8 @@ class SkiaApi(recipe_api.RecipeApi):
     if not hasattr(self, '_already_ran'):
       self._already_ran = {}
     if not fn.__name__ in self._already_ran:
-      self._already_ran[fn.__name__] = True
-      fn(*args, **kwargs)
+      self._already_ran[fn.__name__] = fn(*args, **kwargs)
+    return self._already_ran[fn.__name__]
 
   def update_repo(self, parent_dir, repo):
     """Update an existing repo. This is safe to call without gen_steps."""
@@ -539,11 +541,6 @@ for p in psutil.process_iter():
   def _download_and_copy_images(self):
     """Download and copy test images if needed."""
     version = self.download_images(self.tmp_dir, self.images_dir, self.running_in_swarming)
-
-    """host_version, version_file, gs_path_tmpl, tmp_dir,
-               host_path, device_path, test_expected_version,
-               test_actual_version, running_in_swarming"""
-
     self.copy_dir(
         version,
         VERSION_FILE_SK_IMAGE,
@@ -554,6 +551,7 @@ for p in psutil.process_iter():
         test_actual_version=self.m.properties.get(
             'test_downloaded_sk_image_version',
             TEST_EXPECTED_SK_IMAGE_VERSION))
+    return version
 
   def download_skps(self, tmp_dir, local_skp_dir, running_in_swarming):
     """Download SKPs if needed."""
@@ -579,6 +577,7 @@ for p in psutil.process_iter():
         test_expected_version=TEST_EXPECTED_SKP_VERSION,
         test_actual_version=self.m.properties.get(
             'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION))
+    return version
 
   def install(self):
     """Copy the required executables and files to the device."""
@@ -633,7 +632,7 @@ print json.dumps({'ccache': ccache})
     """Run the DM test."""
     self._run_once(self.install)
     self._run_once(self._download_and_copy_skps)
-    self._run_once(self._download_and_copy_images)
+    skimage_version = self._run_once(self._download_and_copy_images)
 
     use_hash_file = False
     if self.upload_dm_results:
@@ -722,6 +721,11 @@ print json.dumps({'ccache': ccache})
       '--nameByHash',
       '--properties'
     ] + properties
+
+    if int(skimage_version) >= MIN_COLORSPACE_SKIMAGE_VERSION:
+      args .extend(['--colorImages',
+                    self.flavor.device_path_join(self.device_dirs.images_dir,
+                                                 'colorspace')])
 
     args.append('--key')
     args.extend(self._KeyParams())

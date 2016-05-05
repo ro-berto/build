@@ -379,6 +379,8 @@
       "Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer",
       "build_number",
       "5",
+      "--colorImages",
+      "[SLAVE_BUILD]/images/colorspace",
       "--key",
       "arch",
       "x86_64",

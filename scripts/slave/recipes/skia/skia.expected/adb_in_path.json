@@ -671,6 +671,8 @@
       "Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug",
       "build_number",
       "6",
+      "--colorImages",
+      "/storage/emulated/legacy/skiabot/skia_images/colorspace",
       "--key",
       "arch",
       "Arm7",

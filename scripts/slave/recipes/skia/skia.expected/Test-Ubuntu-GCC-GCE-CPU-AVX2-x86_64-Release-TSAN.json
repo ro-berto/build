@@ -226,6 +226,8 @@
       "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN",
       "build_number",
       "5",
+      "--colorImages",
+      "[SLAVE_BUILD]/images/colorspace",
       "--key",
       "arch",
       "x86_64",

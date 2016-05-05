@@ -203,6 +203,8 @@
       "500",
       "patchset",
       "1",
+      "--colorImages",
+      "[SLAVE_BUILD]\\images\\colorspace",
       "--key",
       "arch",
       "x86_64",
