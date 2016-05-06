@@ -27,22 +27,18 @@ def RunSteps(api):
   commit_pos = api.commit_position.parse_revision(revs['got_revision_cp'])
   api.gclient.runhooks()
 
-  # Clobber all out dirs to be sure to get a clean build.
-  for out_dir in ["out_ios_arm",
-                  "out_ios_arm64",
-                  "out_ios_framework",
-                  "out_ios_ia32",
-                  "out_ios_libs",
-                  "out_ios_x86_64"]:
-    api.file.rmtree(out_dir, api.path['checkout'].join(out_dir))
-
   build_script = api.path['checkout'].join('webrtc', 'build', 'ios',
                                            'build_ios_framework.sh')
-  api.step('build', [build_script], cwd=api.path['checkout'])
+  api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])
 
-  output_dir = api.path['checkout'].join('out_ios_framework')
+  api.step('build', [build_script, '-r', commit_pos], cwd=api.path['checkout'])
+
+  output_dir = api.path['checkout'].join('out_ios_libs')
   zip_out = api.path['slave_build'].join('webrtc_ios_api_framework.zip')
-  api.zip.directory('zip', output_dir, zip_out)
+  pkg = api.zip.make_package(output_dir, zip_out)
+  pkg.add_directory(output_dir.join('WebRTC.framework'))
+  pkg.add_directory(output_dir.join('WebRTC.framework.dSYM'))
+  pkg.zip('zip archive')
 
   api.gsutil.upload(
       zip_out,
