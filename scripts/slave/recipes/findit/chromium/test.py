@@ -60,6 +60,7 @@ class TestResult(object):
   SKIPPED = 'skipped'  # A commit doesn't impact the test.
   PASSED = 'passed'  # The compile or test passed.
   FAILED = 'failed'  # The compile or test failed.
+  INFRA_FAILED = 'infra_failed'  # Infra failed.
 
 
 def _compile_and_test_at_revision(api, target_mastername, target_buildername,
@@ -206,6 +207,7 @@ def RunSteps(api, target_mastername, target_testername,
       'metadata': try_job_metadata
   }
 
+  revision_being_checked = None
   try:
     # We compile & run tests from the first revision to the last revision in the
     # regression range serially instead of a typical bisecting, because jumping
@@ -215,11 +217,16 @@ def RunSteps(api, target_mastername, target_testername,
     # If this won't work out, we will figure out a better solution for speed of
     # both compile and test.
     for current_revision in revisions_to_check:
+      revision_being_checked = current_revision
       test_results[current_revision] = _compile_and_test_at_revision(
           api, target_mastername, target_buildername, target_testername,
           current_revision, tests, use_analyze)
       # TODO(http://crbug.com/566975): check whether culprits for all failed
       # tests are found and stop running tests at later revisions if so.
+  except api.step.InfraFailure:
+    test_results[revision_being_checked] = TestResult.INFRA_FAILED
+    report['metadata']['infra_failure'] = True
+    raise
   finally:
     # Give the full report including test results and metadata.
     step_result = api.python.succeeding_step(
@@ -466,4 +473,31 @@ def GenTests(api):
           'test r1.gl_tests (r1) on Mac-10.9',
           simulated_gtest_output(passed_test_names=['Test.One'])
       )
+  )
+
+  yield (
+      api.test('record_infra_failure') +
+      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
+      api.override_step_data('test r1.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'test r1.compile',
+          api.json.output({
+              'notice': [
+                  {
+                      'infra_status': {
+                          'ping_status_code': 408,
+                      },
+                  },
+              ],
+          }),
+          retcode=1)
   )
