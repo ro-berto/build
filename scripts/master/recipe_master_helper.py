@@ -101,6 +101,8 @@ def AddRecipeBasedBuilders(buildmaster_config=None,
         'generate_gtest_json': True,
         'build_config': slave['build_config']
       }
+      if '$recipe_engine' in slave:
+        factory_properties['$recipe_engine'] = slave['$recipe_engine']
       if 'perf_id' in slave:
         factory_properties['show_perf_results'] = True
         factory_properties['perf_id'] = slave['perf_id']
