@@ -53,8 +53,9 @@ master prior first use. See more below.
 
 ## Master configuration for buildbucket triggering
 
-*   in master.cfg of the source master `ActiveMaster` parameter MUST be passed
-    to `AnnotationFactory` for the builder that is triggering a build.
+*   if you don't use builders.pyl, in master.cfg of the source master
+    `ActiveMaster` parameter MUST be passed to `AnnotationFactory` for the
+    builder that is triggering a build.
 *   source master's master_site_config.py MUST have
     `service_account_(file|path)` set
 *   the source master's service account must have permissions to schedule builds
