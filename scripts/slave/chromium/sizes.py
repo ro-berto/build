@@ -349,9 +349,9 @@ def main_android(options, args):
                             options.target)
 
   binaries = [
-      'chrome_public_apk/libs/armeabi-v7a/libchrome_public.so',
-      'lib/libchrome_public.so',
-      'libchromepublic.so',
+      'chrome_public_apk/libs/armeabi-v7a/libchrome.so',
+      'lib/libchrome.so',
+      'libchrome.so',
   ]
 
   return check_android_binaries(binaries, target_dir, options)
