@@ -10,6 +10,7 @@ import environment_setup
 
 import collections
 import errno
+import fileinput
 import json
 import os
 import shutil
@@ -17,6 +18,8 @@ import subprocess
 import sys
 import tempfile
 import time
+
+import xctest_utils
 
 from common import gtest_utils
 from slave import slave_utils
@@ -236,7 +239,7 @@ class TestRunner(object):
     raise NotImplementedError
 
   @staticmethod
-  def _Run(command):
+  def _Run(command, env=None):
     """Runs the specified command, parsing GTest output.
 
     Args:
@@ -701,5 +704,262 @@ class SimulatorTestRunner(TestRunner):
       self.CreateNewHomeDirectory()
 
       result = self._Run(self.GetLaunchCommand(), *args, **kwargs)
+
+    return self.RunAllTests(result, *args, **kwargs)
+
+
+class XCTestRunner(SimulatorTestRunner):
+  """Class for running xctests on an iOS simulator."""
+  def __init__(
+    self,
+    app_path,
+    test_host,
+    platform,
+    version,
+    xcode_version=None,
+    gs_bucket=None,
+    perf_bot_name=None,
+    perf_build_number=None,
+    perf_builder_name=None,
+    perf_master_name=None,
+    perf_revision=None,
+    perf_x_value=None,
+    test_args=None,
+  ):
+    """Initializes an instance of the XCTestRunner class.
+
+      Args:
+      app_path: Full path to the compiled app to run.
+      test_host: Name of the compiled test host app to run tests.
+      platform: The platform to simulate. Supported values can be found by
+      running 'xcodebuild -list'. e.g. 'iPhone 5', 'iPhone 5s'.
+      version: The iOS version the simulator should be running. Supported values
+      can be found by running 'xcodebuild -list'. e.g. '8.0', '7.1'.
+      xcode_version: Version of Xcode to use.
+      gs_bucket: Google Storage bucket to upload test data to, or None if the
+      test data should not be uploaded.
+      perf_bot_name: Name of this bot as indicated to the perf dashboard.
+      perf_build_number: Build number to indicate to the perf dashboard.
+      perf_builder_name: Name of this builder as indicated to the perf
+      dashboard.
+      perf_master_name: Name of the master as indicated to the perf dashboard.
+      perf_revision: Revision to indicate to the perf dashboard.
+      perf_x_value: Value to use on the x axis for all data uploaded to the
+      perf dashboard.
+      test_args: Arguments to pass when launching the test.
+
+      Raises:
+      SimulatorNotFoundError: If the given iossim path cannot be found.
+    """
+    super(XCTestRunner.__bases__[0], self).__init__(
+      app_path,
+      xcode_version=xcode_version,
+      gs_bucket=gs_bucket,
+      perf_bot_name=perf_bot_name,
+      perf_build_number=perf_build_number,
+      perf_builder_name=perf_builder_name,
+      perf_master_name=perf_master_name,
+      perf_revision=perf_revision,
+      perf_x_value=perf_x_value,
+      test_args=test_args,
+    )
+    self.test_host_name = test_host
+    # Test target name is its host name without '_host' suffix.
+    self.test_target_name = test_host.rsplit('_', 1)[0]
+    self.platform = platform
+    self.version = version
+    self.timeout = '120'
+    self.homedir = ''
+    self.start_time = None
+
+  def GetLaunchCommand(self, test_filter=None, blacklist=False):
+    """Returns the invocation command which is used to run the test.
+
+      Args:
+      test_filter: A list of tests to filter by, or None to mean all.
+      blacklist: Whether to blacklist the elements of test_filter or not. Only
+      works when test_filter is not None.
+
+      Returns:
+      A list whose elements are the args representing the command.
+    """
+    built_dir = os.path.split(self.app_path)[0]
+    xcodeproj_path = 'TestProject/TestProject.xcodeproj'
+
+    cmd =['xcodebuild', 'test',
+          'BUILT_PRODUCTS_DIR=%s' % built_dir,
+          '-project', '%s' % xcodeproj_path,
+          '-scheme','TestProject',
+          '-destination','platform=iOS Simulator,name=%s,OS=%s'
+            % (self.platform, self.version),
+          'APP_TARGET_NAME=%s' % self.test_host_name,
+          'TEST_TARGET_NAME=%s' % self.test_target_name]
+    return cmd
+
+  def GetLaunchEnvironment(self):
+    """Returns the environment which is used to run the xctest.
+    """
+    env = dict(os.environ, APP_TARGET_NAME=self.test_host_name,
+               TEST_TARGET_NAME=self.test_target_name)
+    return env
+
+  @staticmethod
+  def _Run(command, env=None):
+    """Runs the specified command, parsing GTest output.
+
+      Args:
+      command: The shell command to execute, as a list of arguments.
+
+      Returns:
+      A GTestResult instance.
+      """
+    result = utils.GTestResult(command)
+
+    print ' '.join(command)
+    print 'cwd:', os.getcwd()
+    sys.stdout.flush()
+
+    proc = subprocess.Popen(
+      command,
+      env=env,
+      stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+    )
+
+    parser = xctest_utils.XCTestLogParser()
+
+    while True:
+      line = proc.stdout.readline()
+      if not line:
+        break
+      line = line.rstrip()
+      parser.ProcessLine(line)
+      print line
+      sys.stdout.flush()
+
+    proc.wait()
+
+    for test in parser.FailedTests(include_flaky=True):
+      # Tests are named as TestCase.TestName.
+      # A TestName starting with FLAKY_ should not turn the build red.
+      if '.' in test and test.split('.', 1)[1].startswith('FLAKY_'):
+        result.flaked_tests[test] = parser.FailureDescription(test)
+      else:
+        result.failed_tests[test] = parser.FailureDescription(test)
+
+    result.passed_tests.extend(parser.PassedTests(include_flaky=True))
+
+    print command[0], 'returned', proc.returncode
+    print
+    sys.stdout.flush()
+
+    # iossim can return 5 if it exits noncleanly, even if no tests failed.
+    # Therefore we can't rely on this exit code to determine success or failure.
+    result.finalize(proc.returncode, parser.CompletedWithoutFailure())
+    print result
+    return result
+
+  def RunAllTests(self, result, *args, **kwargs):
+    """Ensures all tests run, even if any crash the test app.
+
+      Args:
+        result: A GTestResult instance from having run the app.
+
+      Returns:
+        True if all tests were successful on the initial run.
+
+      Raises:
+        AppLaunchError: If the given result had crashed.
+    """
+    if result.crashed and not result.crashed_test:
+      # If the app crashed without even starting, give up.
+      raise AppLaunchError
+
+    failed_tests = result.failed_tests
+    flaked_tests = result.flaked_tests
+    passed_tests = result.passed_tests
+    perf_links = result.perf_links
+
+    try:
+      while (result.crashed
+             and result.crashed_test
+             and not kwargs.get('retries')):
+        # If the app crashed on a specific test, then resume at the next test,
+        # except when 'retries' is nonzero. The 'retries' kwarg already forces
+        # the underlying gtest call to retry a fixed amount of times, and we
+        # don't want to conflict with this, because stability and memory tests
+        # rely on this behavior to run the same test on successive URLs.
+        self.Print(
+          '%s appears to have crashed during %s. Resuming at next test...' % (
+            self.app_name, result.crashed_test,
+           ), blank_lines=2, time_to_sleep=5)
+
+        # Now run again, filtering out every test that ran. This is equivalent
+        # to starting at the next test.
+        result = self._Run(self.GetLaunchCommand(
+          test_filter=passed_tests + failed_tests.keys() + flaked_tests.keys(),
+          blacklist=True,
+        ), *args, **kwargs)
+
+        # We are never overwriting any old data, because we aren't running any
+        # tests twice here.
+        failed_tests.update(result.failed_tests)
+        flaked_tests.update(result.flaked_tests)
+        passed_tests.extend(result.passed_tests)
+        perf_links.update(result.perf_links)
+
+      if failed_tests and not result.crashed and not kwargs.get('retries'):
+        # If the app failed without crashing, retry the failed tests in case of
+        # flake, except when 'retries' is nonzero.
+        msg = ['The following tests appear to have failed:']
+        msg.extend(failed_tests.keys())
+        msg.append('These tests will be retried, but their retry results will'
+                   ' not affect the outcome of this test step.')
+        msg.append('Retry results are purely for informational purposes.')
+        msg.append('Retrying...')
+        self.Print('\n'.join(msg), blank_lines=2, time_to_sleep=5)
+
+        self._Run(self.GetLaunchCommand(
+          test_filter=failed_tests.keys(),
+        ), self.GetLaunchEnvironment(), *args, **kwargs)
+    except OSError as e:
+      if e.errno == errno.E2BIG:
+        self.Print(
+          'Too many tests were found in this app to resume.',
+          blank_lines=1,
+          time_to_sleep=0,
+        )
+      else:
+        self.Print(
+          'Unexpected OSError: %s.' % e.errno, blank_lines=1, time_to_sleep=0)
+
+    self.InterpretResult(failed_tests, flaked_tests, passed_tests, perf_links)
+
+    # At this point, all the tests have run, so used failed_tests to determine
+    # the success/failure.
+    return not failed_tests
+
+  @TestRunner.RequireTearDown
+  def Launch(self, *args, **kwargs):
+    """Launches the test."""
+    self.SetUp()
+
+    result = self._Run(
+      self.GetLaunchCommand(), self.GetLaunchEnvironment(), *args, **kwargs)
+
+    if result.crashed and not result.crashed_test:
+      # If the app crashed, but there is no specific test which crashed,
+      # then the app must have failed to even start. Try one more time.
+      self.Print(
+        '%s appears to have crashed on startup. Retrying...' % self.app_name,
+        blank_lines=2,
+        time_to_sleep=5,
+      )
+
+      # Use a new home directory to launch a fresh simulator.
+      self.KillSimulators()
+      self.CreateNewHomeDirectory()
+
+      result = self._Run(
+        self.GetLaunchCommand(), self.GetLaunchEnvironment(), *args, **kwargs)
 
     return self.RunAllTests(result, *args, **kwargs)

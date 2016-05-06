@@ -23,7 +23,7 @@ import json
 import sys
 
 # pylint: disable=relative-import
-from test_runner import SimulatorTestRunner, TestRunnerError
+from test_runner import SimulatorTestRunner, XCTestRunner, TestRunnerError
 
 
 def main(args, test_args):
@@ -31,15 +31,26 @@ def main(args, test_args):
   test_runner = None
 
   try:
-    test_runner = SimulatorTestRunner(
-      args.app,
-      args.iossim,
-      args.platform,
-      args.version,
-      xcode_version=args.xcode_version,
-      gs_bucket=args.bucket,
-      test_args=test_args,
-    )
+    if args.test_host:
+      test_runner = XCTestRunner(
+        args.app,
+        args.test_host,
+        args.platform,
+        args.version,
+        xcode_version=args.xcode_version,
+        gs_bucket=args.bucket,
+        test_args=test_args,
+      )
+    else:
+      test_runner = SimulatorTestRunner(
+        args.app,
+        args.iossim,
+        args.platform,
+        args.version,
+        xcode_version=args.xcode_version,
+        gs_bucket=args.bucket,
+        test_args=test_args,
+      )
 
     return 0 if test_runner.Launch() else 1
   except TestRunnerError as e:
@@ -82,7 +93,6 @@ if __name__ == '__main__':
     '--iossim',
     help='Compiled iossim to run the app on.',
     metavar='iossim',
-    required=True,
     type=str,
   )
   parser.add_argument(
@@ -101,6 +111,13 @@ if __name__ == '__main__':
     type=str,
   )
   parser.add_argument(
+    '-t',
+    '--test-host',
+    help='Compiled test host to run tests.',
+    metavar='host',
+    type=str,
+  )
+  parser.add_argument(
     '-v',
     '--version',
     help='Version of iOS the simulator should run.',
@@ -115,5 +132,4 @@ if __name__ == '__main__':
     metavar='ver',
     type=str,
   )
-
   sys.exit(main(*parser.parse_known_args()))

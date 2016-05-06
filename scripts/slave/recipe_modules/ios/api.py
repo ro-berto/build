@@ -352,15 +352,28 @@ class iOSApi(recipe_api.RecipeApi):
     infrastructure_failures = []
 
     for test in self.__config['tests']:
-      cmd = [
-        self.package_repo_resource(
-          'scripts', 'slave', 'ios', 'run.py'),
-        '--app', self.m.path['slave_build'].join(
-          self.most_recent_app_dir,
-          '%s.app' % test['app'],
-        ),
-        '--json_file', self.m.json.output(),
-      ]
+      cmd = []
+      if test.get('host'):
+        cmd = [
+          self.package_repo_resource(
+            'scripts', 'slave', 'ios', 'run.py'),
+          '--app', self.m.path['slave_build'].join(
+            self.most_recent_app_dir,
+            '%s.app' % test['app'],
+          ),
+          '--test-host', test['host'],
+          '--json_file', self.m.json.output(),
+        ]
+      else:
+        cmd = [
+          self.package_repo_resource(
+            'scripts', 'slave', 'ios', 'run.py'),
+          '--app', self.m.path['slave_build'].join(
+            self.most_recent_app_dir,
+            '%s.app' % test['app'],
+          ),
+          '--json_file', self.m.json.output(),
+        ]
 
       step_name = test['app']
 

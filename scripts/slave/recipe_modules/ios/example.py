@@ -53,6 +53,12 @@ def GenTests(api):
           'device type': 'fake device 2',
           'os': '7.1',
         },
+        {
+          'app': 'fake test 3',
+          'host': 'fake test 3_host',
+          'device type': 'fake device 3',
+          'os': '9.3',
+        },
       ],
     })
   )
