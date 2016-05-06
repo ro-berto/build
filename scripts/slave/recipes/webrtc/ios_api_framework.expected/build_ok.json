@@ -91,7 +91,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/webrtc/build/ios/build_ios_framework.sh",
+      "[SLAVE_BUILD]/src/webrtc/build/ios/build_ios_libs.sh",
       "-c"
     ],
     "cwd": "[SLAVE_BUILD]/src",
@@ -99,7 +99,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/webrtc/build/ios/build_ios_framework.sh",
+      "[SLAVE_BUILD]/src/webrtc/build/ios/build_ios_libs.sh",
       "-r",
       "170242"
     ],

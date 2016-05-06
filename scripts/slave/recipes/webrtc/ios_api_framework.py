@@ -28,7 +28,7 @@ def RunSteps(api):
   api.gclient.runhooks()
 
   build_script = api.path['checkout'].join('webrtc', 'build', 'ios',
-                                           'build_ios_framework.sh')
+                                           'build_ios_libs.sh')
   api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])
 
   api.step('build', [build_script, '-r', commit_pos], cwd=api.path['checkout'])
