@@ -89,6 +89,8 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
 def _ComputeBuilders(builders, m_annotator):
   actual_builders = []
 
+  default_properties = builders.get('default_properties')
+
   def cmp_fn(a, b):
     a_cat = builders['builders'][a].get('category')
     b_cat = builders['builders'][b].get('category')
@@ -111,10 +113,17 @@ def _ComputeBuilders(builders, m_annotator):
 
     slavebuilddir = builder_data.get('slavebuilddir',
                                      util.safeTranslate(builder_name))
+
+    if default_properties:
+      props = default_properties.copy()
+      props.update(builder_data.get('properties', {}))
+    else:
+      props = builder_data.get('properties')
+
     factory = m_annotator.BaseFactory(
         recipe=builder_data['recipe'],
         max_time=builder_data.get('builder_timeout_s'),
-        factory_properties=builder_data.get('properties')
+        factory_properties=props,
     )
     actual_builders.append({
         'auto_reboot': builder_data.get('auto_reboot', True),

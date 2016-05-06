@@ -8,6 +8,10 @@
   "service_account_file": "service-account-chromium-tryserver.json",
   "buildbucket_bucket": "master.tryserver.chromium.android",
 
+  "default_properties": {
+    "$recipe_engine": {"mode_flags": {"use_subprocess42": True}}
+  },
+
   # This is sorted first alphabetically by slave pool, and then alphabetically
   # by builder name
   "builders": {
