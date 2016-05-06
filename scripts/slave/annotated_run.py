@@ -48,25 +48,27 @@ LOGDOG_ERROR_RETURNCODES = (
 # underneath that master.
 WHITELIST_ALL = '*'
 
-# Whitelist of {master}=>[{builder}|WHITELIST_ALL] whitelisting specific masters
-# and builders for experimental LogDog/Annotee export.
-LOGDOG_WHITELIST_MASTER_BUILDERS = {
-    'chromium.infra': { WHITELIST_ALL },
-    'chromium.infra.cron': { WHITELIST_ALL },
-    'tryserver.infra': { WHITELIST_ALL },
+# Whitelist of {project}=>({master}=>[{builder}|WHITELIST_ALL]) whitelisting
+# specific masters and builders for experimental LogDog/Annotee export.
+LOGDOG_WHITELIST_PROJECTS = {
+    'chromium': {
+      'chromium.infra': { WHITELIST_ALL },
+      #'chromium.infra.cron': { WHITELIST_ALL },
+      #'tryserver.infra': { WHITELIST_ALL },
 
-    # Chromium tryservers.
-    'tryserver.chromium.android': { WHITELIST_ALL },
-    'tryserver.chromium.mac': { WHITELIST_ALL },
-    'tryserver.chromium.linux': { WHITELIST_ALL },
-    'tryserver.chromium.win': { WHITELIST_ALL },
+      ## Chromium tryservers.
+      #'tryserver.chromium.android': { WHITELIST_ALL },
+      #'tryserver.chromium.mac': { WHITELIST_ALL },
+      #'tryserver.chromium.linux': { WHITELIST_ALL },
+      #'tryserver.chromium.win': { WHITELIST_ALL },
 
-    # Chromium continuous waterfalls.
-    'chromium.android': { WHITELIST_ALL },
-    'chromium.mac': { WHITELIST_ALL },
-    'chromium.linux': { WHITELIST_ALL },
-    'chromium.win': { WHITELIST_ALL },
-    'chromium.fyi': { WHITELIST_ALL },
+      ## Chromium continuous waterfalls.
+      #'chromium.android': { WHITELIST_ALL },
+      #'chromium.mac': { WHITELIST_ALL },
+      #'chromium.linux': { WHITELIST_ALL },
+      #'chromium.win': { WHITELIST_ALL },
+      #'chromium.fyi': { WHITELIST_ALL },
+    },
 }
 
 # LogDogPlatform is the set of platform-specific LogDog bootstrapping
@@ -78,7 +80,7 @@ LogDogPlatform = collections.namedtuple('LogDogPlatform', (
 
 # CIPD tag for LogDog Butler/Annotee to use.
 LOGDOG_CIPD_CANARY = 'latest'
-LOGDOG_CIPD_VERSION = 'git_revision:36fbc27d6caa3951e74848cc7ce9f08f9ea6ad95'
+LOGDOG_CIPD_VERSION = 'git_revision:6d18c44be838199afd5224206c2794f08e226f49'
 
 # RecipeRuntime will probe this for values.
 # - First, (),
@@ -87,6 +89,7 @@ LOGDOG_CIPD_VERSION = 'git_revision:36fbc27d6caa3951e74848cc7ce9f08f9ea6ad95'
 PLATFORM_CONFIG = {
   # All systems.
   (): {
+    'logdog_project': 'chromium',
     'logdog_host': 'luci-logdog',
     'logdog_pubsub_topic': 'projects/luci-logdog/topics/logs',
     'logdog_max_buffer_age': '15s',
@@ -398,7 +401,8 @@ def _build_logdog_prefix(properties):
   return 'bb/%(mastername)s/%(buildername)s/%(buildnumber)s' % components
 
 
-def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
+def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, project,
+                      cmd):
   """Executes the recipe engine, bootstrapping it through LogDog/Annotee.
 
   This method executes the recipe engine, bootstrapping it through
@@ -417,6 +421,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
     config (Config): Recipe runtime configuration.
     properties (dict): Build properties.
     cmd (list): The recipe runner command list to bootstrap.
+    project (str): The "luci-config" project to log to.
 
   Returns (int): The return code of the recipe runner process.
 
@@ -492,6 +497,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   cmd = [
       butler,
       '-log-level', log_level,
+      '-project', project,
       '-prefix', prefix,
       '-output', 'pubsub,topic="%s"' % (pubsub_topic,),
   ]
@@ -511,6 +517,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   cmd += [
       annotee,
       '-log-level', log_level,
+      '-project', project,
       '-butler-stream-server', streamserver_uri,
       '-logdog-host', host,
       '-annotate', 'tee',
@@ -527,33 +534,39 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   return rv
 
 
-def _should_run_logdog(properties):
+def _get_logdog_project(force_project, properties):
   """Returns (bool): True if LogDog should be used for this run.
 
   Args:
+    force_project (str): If not None or empty, force LogDog, and use this
+        project name.
     properties (dict): The factory properties for this recipe run.
   """
+  if force_project:
+    return force_project
+
   mastername = properties.get('mastername')
   buildername = properties.get('buildername')
   if not all((mastername, buildername)):
     LOGGER.warning('Required mastername/buildername is not set.')
-    return False
+    return None
 
   # Key on mastername.
-  bdict = LOGDOG_WHITELIST_MASTER_BUILDERS.get(mastername)
-  if bdict is not None:
-    # Key on buildername. If WHITELIST_ALL is present, other builders are
-    # blacklisted.
-    if (
-        (WHITELIST_ALL in bdict and buildername not in bdict) or
-        (WHITELIST_ALL not in bdict and buildername in bdict)):
-      LOGGER.info('Whitelisted master %s, builder %s.',
-                  mastername, buildername)
-      return True
+  for project, mdict in LOGDOG_WHITELIST_PROJECTS.iteritems():
+    bdict = mdict.get(mastername)
+    if bdict is not None:
+      # Key on buildername. If WHITELIST_ALL is present, other builders are
+      # blacklisted.
+      if (
+          (WHITELIST_ALL in bdict and buildername not in bdict) or
+          (WHITELIST_ALL not in bdict and buildername in bdict)):
+        LOGGER.info('Whitelisted master %s, builder %s for project %s.',
+                    mastername, buildername, project)
+        return project
 
   LOGGER.info('Master %s, builder %s is not whitelisted for LogDog.',
               mastername, buildername)
-  return False
+  return None
 
 
 def get_recipe_properties(workdir, build_properties,
@@ -713,8 +726,9 @@ def get_args(argv):
   group.add_argument('--logdog-verbose',
       action='count', default=0,
       help='Increase LogDog verbosity. This can be specified multiple times.')
-  group.add_argument('--logdog-force', action='store_true',
-      help='Force LogDog bootstrapping, even if the system is not configured.')
+  group.add_argument('--logdog-force-project', action='store',
+      help='Force LogDog bootstrapping using this project name, even if the '
+          'system is not specifically whitelisted.')
   group.add_argument('--logdog-butler-path',
       help='Path to the LogDog Butler. If empty, one will be probed/downloaded '
            'from CIPD.')
@@ -775,9 +789,10 @@ def _exec_recipe(rt, opts, basedir, tdir, config, properties):
 
   status = None
   try:
-    if opts.logdog_force or _should_run_logdog(properties):
+    logdog_project = _get_logdog_project(opts.logdog_force_project, properties)
+    if logdog_project:
       status = _logdog_bootstrap(rt, opts, basedir, tdir, config, properties,
-                                 cmd)
+                                 logdog_project, cmd)
   except LogDogNotBootstrapped as e:
     LOGGER.info('Not bootstrapped: %s', e.message)
   except LogDogBootstrapError as e:

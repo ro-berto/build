@@ -32,9 +32,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 MockOptions = collections.namedtuple('MockOptions',
-    ('dry_run', 'logdog_force', 'logdog_butler_path', 'logdog_annotee_path',
-     'logdog_verbose', 'logdog_service_account_json', 'logdog_pubsub_topic',
-     'logdog_host'))
+    ('dry_run', 'logdog_force_project', 'logdog_butler_path',
+     'logdog_annotee_path', 'logdog_verbose', 'logdog_service_account_json',
+     'logdog_pubsub_topic', 'logdog_host'))
 
 
 class AnnotatedRunTest(unittest.TestCase):
@@ -99,7 +99,7 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
     self.tdir = self.rt.tempdir()
     self.opts = MockOptions(
         dry_run=False,
-        logdog_force=False,
+        logdog_force_project=None,
         logdog_annotee_path=None,
         logdog_butler_path=None,
         logdog_verbose=False,
@@ -170,16 +170,23 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
 
   def setUp(self):
     super(AnnotatedRunLogDogExecTest, self).setUp()
-    self._orig_whitelist = annotated_run.LOGDOG_WHITELIST_MASTER_BUILDERS
-    annotated_run.LOGDOG_WHITELIST_MASTER_BUILDERS = {
-      'master.some': [
-        'yesbuilder',
-      ],
+    self._orig_whitelist = annotated_run.LOGDOG_WHITELIST_PROJECTS
+    annotated_run.LOGDOG_WHITELIST_PROJECTS = {
+        'alpha': {
+          'master.some': [
+            'yesbuilder',
+          ],
 
-      'master.all': [
-        annotated_run.WHITELIST_ALL,
-        'blacklisted',
-      ],
+          'master.all': [
+            annotated_run.WHITELIST_ALL,
+            'blacklisted',
+          ],
+        },
+        'beta': {
+          'master.other': [
+            annotated_run.WHITELIST_ALL,
+          ],
+        },
     }
     self.properties.update({
       'mastername': 'master.some',
@@ -196,7 +203,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     self._patchers.append(is_gce_patch)
 
   def tearDown(self):
-    annotated_run.LOGDOG_WHITELIST_MASTER_BUILDERS = self._orig_whitelist
+    annotated_run.LOGDOG_WHITELIST_PROJECTS = self._orig_whitelist
     super(AnnotatedRunLogDogExecTest, self).tearDown()
 
   def _assertAnnoteeCommand(self, value):
@@ -206,16 +213,22 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
       self.assertEqual(json.load(fd), value)
 
   def test_should_run_logdog(self):
-    self.assertFalse(annotated_run._should_run_logdog({
+    self.assertIsNone(annotated_run._get_logdog_project(None, {
       'mastername': 'master.undefined', 'buildername': 'any'}))
-    self.assertFalse(annotated_run._should_run_logdog({
+    self.assertIsNone(annotated_run._get_logdog_project(None, {
       'mastername': 'master.some', 'buildername': 'nobuilder'}))
-    self.assertTrue(annotated_run._should_run_logdog({
-      'mastername': 'master.some', 'buildername': 'yesbuilder'}))
-    self.assertTrue(annotated_run._should_run_logdog({
-      'mastername': 'master.all', 'buildername': 'anybuilder'}))
-    self.assertFalse(annotated_run._should_run_logdog({
+    self.assertIsNone(annotated_run._get_logdog_project(None, {
       'mastername': 'master.all', 'buildername': 'blacklisted'}))
+
+    self.assertEqual(annotated_run._get_logdog_project(None, {
+      'mastername': 'master.some', 'buildername': 'yesbuilder'}), 'alpha')
+    self.assertEqual(annotated_run._get_logdog_project(None, {
+      'mastername': 'master.all', 'buildername': 'anybuilder'}), 'alpha')
+    self.assertEqual(annotated_run._get_logdog_project(None, {
+      'mastername': 'master.other', 'buildername': 'anybuilder'}), 'beta')
+
+    self.assertEqual(annotated_run._get_logdog_project('forceproj', {
+      'mastername': 'master.other', 'buildername': 'anybuilder'}), 'forceproj')
 
   @mock.patch('os.path.isfile')
   @mock.patch('slave.annotated_run._get_service_account_json')
@@ -241,6 +254,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     annotated_run._run_command.assert_called_with(
         [butler_path,
             '-log-level', 'warning',
+            '-project', 'alpha',
             '-prefix', 'bb/master.some/yesbuilder/1337',
             '-output', 'pubsub,topic="projects/luci-logdog/topics/logs"',
             '-service-account-json', 'creds.json',
@@ -252,6 +266,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
             '--',
             annotee_path,
                 '-log-level', 'warning',
+                '-project', 'alpha',
                 '-butler-stream-server', streamserver_uri,
                 '-logdog-host', 'luci-logdog',
                 '-annotate', 'tee',
@@ -266,7 +281,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
 
   @mock.patch('slave.annotated_run._logdog_bootstrap', return_value=0)
   def test_runs_bootstrap_when_forced(self, lb):
-    opts = self.opts._replace(logdog_force=True)
+    opts = self.opts._replace(logdog_force_project='myproj')
     rv = annotated_run._exec_recipe(self.rt, opts, self.basedir, self.tdir,
                                     self._config(), self.properties)
     self.assertEqual(rv, 0)
@@ -276,7 +291,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
   @mock.patch('slave.annotated_run._logdog_bootstrap', return_value=2)
   def test_forwards_error_code(self, lb):
     opts = self.opts._replace(
-        logdog_force=True)
+        logdog_force_project='myroj')
     rv = annotated_run._exec_recipe(self.rt, opts, self.basedir, self.tdir,
                                     self._config(), self.properties)
     self.assertEqual(rv, 2)
@@ -328,6 +343,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
         mock.call([
             'logdog_butler.exe',
             '-log-level', 'warning',
+            '-project', 'alpha',
             '-prefix', 'bb/master.some/yesbuilder/1337',
             '-output', 'pubsub,topic="projects/luci-logdog/topics/logs"',
             '-service-account-json', 'creds.json',
@@ -339,6 +355,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
             '--',
             'logdog_annotee.exe',
                 '-log-level', 'warning',
+                '-project', 'alpha',
                 '-butler-stream-server', streamserver_uri,
                 '-logdog-host', 'luci-logdog',
                 '-annotate', 'tee',
@@ -396,7 +413,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     os.environ['LOGDOG_STREAM_PREFIX'] = 'foo'
     self.assertRaises(annotated_run.LogDogNotBootstrapped,
         annotated_run._logdog_bootstrap, self.rt, self.opts, self.basedir,
-        self.tdir, self._config(), self.properties, [])
+        self.tdir, self._config(), self.properties, 'myproject', [])
 
 
 if __name__ == '__main__':
