@@ -359,7 +359,7 @@ class iOSApi(recipe_api.RecipeApi):
             'scripts', 'slave', 'ios', 'run.py'),
           '--app', self.m.path['slave_build'].join(
             self.most_recent_app_dir,
-            '%s.app' % test['app'],
+            '%s.app' % test['host'],
           ),
           '--test-host', test['host'],
           '--json_file', self.m.json.output(),

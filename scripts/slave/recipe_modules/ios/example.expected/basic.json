@@ -437,7 +437,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake test 3.app",
+      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake test 3_host.app",
       "--test-host",
       "fake test 3_host",
       "--json_file",
