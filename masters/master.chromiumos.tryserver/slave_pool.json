@@ -105,20 +105,6 @@
         "cros-standard8-c2", 
         "cros-standard9-c2"
       ]
-    }, 
-    "testing": {
-      "gce": [
-        "cros-testing1-c2", 
-        "cros-testing10-c2", 
-        "cros-testing2-c2", 
-        "cros-testing3-c2", 
-        "cros-testing4-c2", 
-        "cros-testing5-c2", 
-        "cros-testing6-c2", 
-        "cros-testing7-c2", 
-        "cros-testing8-c2", 
-        "cros-testing9-c2"
-      ]
     }
   }
 }
