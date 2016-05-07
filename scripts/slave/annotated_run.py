@@ -80,7 +80,7 @@ LogDogPlatform = collections.namedtuple('LogDogPlatform', (
 
 # CIPD tag for LogDog Butler/Annotee to use.
 LOGDOG_CIPD_CANARY = 'latest'
-LOGDOG_CIPD_VERSION = 'git_revision:6d18c44be838199afd5224206c2794f08e226f49'
+LOGDOG_CIPD_VERSION = 'git_revision:7217257ea091b8952113d87235d643b620210097'
 
 # RecipeRuntime will probe this for values.
 # - First, (),
