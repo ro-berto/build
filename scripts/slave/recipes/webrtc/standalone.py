@@ -28,6 +28,10 @@ def RunSteps(api):
     step_result = api.step('Disabled: see http://crbug.com/595702', cmd=None)
     step_result.presentation.status = api.step.WARNING
     return
+  if api.properties['buildername'] == 'Android32 Builder x86 (dbg)':
+    step_result = api.step('Disabled: see http://crbug.com/610145 ', cmd=None)
+    step_result.presentation.status = api.step.WARNING
+    return
 
   if api.platform.is_mac:
     api.ios.host_info()
