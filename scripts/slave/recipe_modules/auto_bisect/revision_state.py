@@ -307,7 +307,7 @@ class RevisionState(object):
             self.build_number = build_number
             current_build = build
             break
-      except api.m.step.StepFailure:  # pragma: no cover
+      except (api.m.step.StepFailure, ValueError):  # pragma: no cover
         # If we cannot get json from buildbot, we cannot determine if a build is
         # failed, hence we consider it in progress until it times out.
         return False
