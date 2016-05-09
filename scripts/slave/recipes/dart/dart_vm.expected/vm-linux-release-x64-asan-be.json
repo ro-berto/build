@@ -80,7 +80,12 @@
     "cwd": "[SLAVE_BUILD]/sdk",
     "env": {
       "ASAN_OPTIONS": "handle_segv=0:detect_stack_use_after_return=1",
-      "CXX": "third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC"
+      "CC": "third_party/clang/linux/bin/clang",
+      "CC_host": "third_party/clang/linux/bin/clang",
+      "CPLUS_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
+      "CXX": "third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC",
+      "CXX_host": "third_party/clang/linux/bin/clang++",
+      "C_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/"
     },
     "name": "build dart"
   },

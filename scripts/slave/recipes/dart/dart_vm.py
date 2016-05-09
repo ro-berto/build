@@ -14,14 +14,22 @@ DEPS = [
   'test_utils',
 ]
 
-linux_clang_env = {'CC': 'third_party/clang/linux/bin/clang',
-                   'CXX': 'third_party/clang/linux/bin/clang++'}
-clang_asan = 'third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC'
+linux_clang_env = {
+  'CC': 'third_party/clang/linux/bin/clang',
+  'CXX': 'third_party/clang/linux/bin/clang++',
+  'CC_host': 'third_party/clang/linux/bin/clang',
+  'CXX_host': 'third_party/clang/linux/bin/clang++',
+  'C_INCLUDE_PATH': 'third_party/clang/linux/lib/clang/3.4/include/',
+  'CPLUS_INCLUDE_PATH': 'third_party/clang/linux/lib/clang/3.4/include/',
+}
+asan64 = linux_clang_env.copy()
+asan64['CXX'] = asan64['CXX'] + ' -fsanitize=address -fPIC'
+asan64['ASAN_OPTIONS'] = 'handle_segv=0:detect_stack_use_after_return=1'
+asan32 = asan64.copy()
+asan32['ASAN_OPTIONS'] = 'handle_segv=0:detect_stack_use_after_return=0'
 linux_asan_env = {
-  'x64': {'CXX': clang_asan,
-          'ASAN_OPTIONS': 'handle_segv=0:detect_stack_use_after_return=1'},
-  'ia32': {'CXX': clang_asan,
-           'ASAN_OPTIONS': 'handle_segv=0:detect_stack_use_after_return=0'},
+  'x64': asan64,
+  'ia32': asan32,
 }
 windows_env = {'LOGONSERVER': '\\\\AD1'}
 default_envs = {
