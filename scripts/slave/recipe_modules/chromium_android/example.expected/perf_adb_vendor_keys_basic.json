@@ -138,6 +138,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

@@ -154,6 +154,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "GYP_DEFINES": "component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",

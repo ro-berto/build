@@ -53,6 +53,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
       "GYP_DEFINES": "pdf_enable_v8=0 pdf_enable_xfa=0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"

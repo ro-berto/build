@@ -86,6 +86,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
       "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",

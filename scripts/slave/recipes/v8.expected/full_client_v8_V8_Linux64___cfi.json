@@ -84,6 +84,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "cfi_diag=1 cfi_vptr=1 clang=1 gomadir='[BUILD]/goma' release_extra_cflags='-O1 -fno-inline-functions -fno-inline' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
