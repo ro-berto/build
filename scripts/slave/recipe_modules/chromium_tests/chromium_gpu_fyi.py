@@ -752,15 +752,13 @@ SPEC = {
     },
     'Android Debug (Nexus 5X)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
+      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder',
+      'android_config': 'arm64_builder_mb',
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
@@ -777,15 +775,13 @@ SPEC = {
     },
     'Android Debug (Nexus 9)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
+      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder',
+      'android_config': 'arm64_builder_mb',
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
