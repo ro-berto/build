@@ -98,7 +98,7 @@ def RunSteps(api):
                  api.path['tools'].join('clean_output_directory.py'),
                  cwd=api.path['checkout'])
 
-  api.gclient.runhooks()
+  api.gclient.runhooks(env=b['env'].copy())  # Modifies its env argument.
 
   api.python('taskkill before building',
              api.path['checkout'].join('tools', 'task_kill.py'),
