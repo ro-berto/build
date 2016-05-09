@@ -126,6 +126,7 @@ def _MojomFiles(build_dir, suffixes):
     'gen/device',
     'gen/mojo',
     'gen/services',
+    'gen/third_party/WebKit/public',
   ]
   mojom_files = []
   for walk_dir in walk_dirs:
