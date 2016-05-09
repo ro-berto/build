@@ -659,6 +659,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     self.halt_on_failure = False
     self.honor_zero_return_code = False
     self.cursor = None
+    self.fatal_errors = []  # a list of fatal error descriptions
 
     self.show_perf = show_perf
     self.perf_id = perf_id
@@ -666,6 +667,9 @@ class AnnotationObserver(buildstep.LogLineObserver):
     self.target = target
     self.active_master = active_master
     self.bb_triggering_service = None
+
+  def record_fatal_error(self, description):
+    self.fatal_errors.append(description)
 
   def initialSection(self):
     """Initializes the annotator's sections.
@@ -875,7 +879,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
     buildstep.LogLineObserver.outReceived(self, data)
     if self.sections:
       self.ensureStepIsStarted(self.cursor)
-      self.cursor['log'].addStdout(data)
+      if self.cursor['log'].finished:
+        # This might happen if the section was finished with a premature error
+        # asynchronously.
+        pass
+      else:
+        self.cursor['log'].addStdout(data)
 
   def errReceived(self, data):
     buildstep.LogLineObserver.errReceived(self, data)
@@ -1214,8 +1223,22 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def STEP_TRIGGER(self, spec):
     # Support: @@@STEP_TRIGGER <json spec>@@@ (trigger build(s)).
+    builder_names = ['<unknown>']
+
+    section = self.cursor
+    critical = True
+
+    def handle_exception(ex):
+      if not section['step'].isFinished():
+        self.finishStep(section, builder.EXCEPTION, ex)
+      if critical:
+        self.record_fatal_error(
+            'step %s: could not trigger builds %r: %s' %
+            (section['name'], builder_names, ex))
+
     try:
       spec = json.loads(spec)
+      critical = spec.get('critical', True)
       bucket = spec.get('bucket')
       builder_names = spec.get('builderNames')
       properties = spec.get('properties') or {}
@@ -1245,10 +1268,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
       # buildset is added, then it is a success. This lambda function returns a
       # tuple, which is received by addAsyncOpToCursor.
       d.addCallback(lambda _: (builder.SUCCESS, None))
-      description = 'Triggering build(s) on %s' % (', '.join(builder_names),)
-      self.addAsyncOpToCursor(d, description)
+      self.addAsyncOpToCursor(
+          d,
+          'Triggering build(s) on %s' % (', '.join(builder_names),))
+      d.addErrback(handle_exception)
     except Exception as ex:
-      self.finishStep(self.cursor, builder.FAILURE, ex)
+      handle_exception(ex)
 
   @staticmethod
   def getPropertiesForTriggeredBuild(current_properties, new_properties):
@@ -1406,13 +1431,21 @@ class AnnotationObserver(buildstep.LogLineObserver):
     defer.returnValue((bsid, brids))
 
   def handleReturnCode(self, return_code):
-    # Treat all non-zero return codes as failure.
-    # We could have a special return code for warnings/exceptions, however,
-    # this might conflict with some existing use of a return code.
-    # Besides, applications can always intercept return codes and emit
-    # STEP_* tags.
-    succeeded = return_code == 0
-    if succeeded:
+    succeeded = False
+    if self.fatal_errors:
+      # Even if return_code==0 and self.honor_zero_return_code is True
+      # we can't do much when there are fatal errors
+      preamble = self.sections[0]
+      fatal_errors_str = '\n'.join(self.fatal_errors)
+      fatal_error_log = preamble['step'].addLog('fatal_errors')
+      fatal_error_log.addStdout(fatal_errors_str)
+      fatal_error_log.finish()
+      self.annotate_status = builder.EXCEPTION
+      if not self.cursorIsPreamble():
+        self.finishCursor(self.annotate_status,
+                          reason='Fatal errors: %s' % fatal_errors_str)
+    elif return_code == 0:
+      succeeded = True
       # Do not close the initial section because it will be closed by
       # self.finished when runCommand completes.
       if not self.cursorIsPreamble():
@@ -1420,6 +1453,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
       if self.honor_zero_return_code:
         self.annotate_status = builder.SUCCESS
     else:
+      # Treat all non-zero return codes as failure.
+      # We could have a special return code for warnings/exceptions, however,
+      # this might conflict with some existing use of a return code.
+      # Besides, applications can always intercept return codes and emit
+      # STEP_* tags.
+
       # Only change annotate status if it'd otherwise indicate success.
       # This helps propagate purple (exception) step status to to-level
       # purple build status as opposed to red.

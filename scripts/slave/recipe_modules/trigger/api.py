@@ -38,6 +38,8 @@ class TriggerApi(recipe_api.RecipeApi):
           builder_name (str): in BuildBot context, builder name
           bucket (str): buildbucket bucket where the triggered builds will be
             placed.
+          critical (bool): if True (default) and triggering fails on the
+            buildbot master side, mark entire build as failed (exception).
           properties (dict): build properties for a new build.
           buildbot_changes (list of dict): list of Buildbot changes to create.
             See below.
