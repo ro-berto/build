@@ -154,12 +154,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
+    kwargs = {}
+    try:
+      builder_cache = self.m.path['builder_cache']
+    except KeyError:  # no-op if builder cache is not set up.
+      pass
+    else:
+      sanitized_buildername = ''.join(
+          c if c.isalnum() else '_' for c in self.m.properties['buildername'])
+      checkout_path = builder_cache.join(
+          'checkouts', sanitized_buildername)
+      self.m.shutil.makedirs('checkout path', checkout_path)
+      kwargs['cwd'] = checkout_path
+
     # Bot Update re-uses the gclient configs.
     update_step = self.m.bot_update.ensure_checkout(
         patch_root=bot_config.get('patch_root'),
         root_solution_revision=root_solution_revision,
         clobber=bot_config.get('clobber', False),
-        force=force)
+        force=force, **kwargs)
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
