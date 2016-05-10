@@ -64,7 +64,7 @@ def UploadDartPackage(api, package_name):
     remote_name = '%s.zip' % package_name
     remote_zip = GetCloudPath(api, remote_name)
     parent_dir = api.path['checkout'].join(
-        'out/android_Release/dist/packages')
+        'out/android_debug/dist/packages')
     pkg = api.zip.make_package(parent_dir, local_zip)
     pkg.add_directory(parent_dir.join(package_name))
     pkg.zip('Zip %s Package' % package_name)
@@ -83,8 +83,8 @@ def MakeTempDir(api):
 
 
 def AnalyzeDartUI(api):
-  RunGN(api, '--debug')
-  Build(api, 'Debug', 'generate_dart_ui')
+  RunGN(api, '--unoptimized')
+  Build(api, 'host_debug_unopt', 'generate_dart_ui')
 
   checkout = api.path['checkout']
   api.step('analyze dart_ui', ['/bin/sh', 'travis/analyze.sh'], cwd=checkout)
@@ -92,8 +92,8 @@ def AnalyzeDartUI(api):
 
 def BuildLinuxAndroidx86(api):
   for x86_variant, abi in [('x64', 'x86_64'), ('x86', 'x86')]:
-    RunGN(api, '--release', '--android', '--android-cpu=' + x86_variant)
-    out_dir = 'android_Release_' + x86_variant
+    RunGN(api, '--android', '--android-cpu=' + x86_variant)
+    out_dir = 'android_debug_' + x86_variant
     Build(api, out_dir)
     UploadArtifacts(api, 'android-' + x86_variant, [
       'build/android/ant/chromium-debug.keystore',
@@ -118,15 +118,18 @@ def BuildLinuxAndroidArm(api):
     'icudtl.dat',
     'gen/sky/shell/shell/classes.dex.jar',
   ]
-  RunGN(api, '--release', '--android', '--enable-gcm', '--enable-firebase')
-  Build(api, 'android_Release', ':dist', 'gcm', 'sky/services/firebase')
+  RunGN(api, '--android', '--enable-gcm', '--enable-firebase')
+  Build(api, 'android_debug', ':dist', 'gcm', 'sky/services/firebase')
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
-  ] + AddPathPrefix(api, 'out/android_Release', out_paths))
+  ] + AddPathPrefix(api, 'out/android_debug', out_paths))
 
-  # Build and upload a deploy mode configuration that uses AOT compilation.
-  def MakeDeployBuild(gn_flag, build_output_dir, upload_dir):
-    RunGN(api, gn_flag, '--android', '--deploy')
+  # Build and upload engines for the runtime modes that use AOT compilation.
+  for runtime_mode in ['profile', 'release']:
+    build_output_dir = 'android_' + runtime_mode
+    upload_dir = 'android-arm-' + runtime_mode
+
+    RunGN(api, '--android', '--runtime-mode=' + runtime_mode)
     Build(api, build_output_dir)
 
     UploadArtifacts(api, upload_dir, [
@@ -139,9 +142,6 @@ def BuildLinuxAndroidArm(api):
     UploadArtifacts(api, upload_dir, [
       'out/%s/clang_x86/gen_snapshot' % build_output_dir,
     ], archive_name='linux-x64.zip')
-
-  MakeDeployBuild('--debug', 'android_Debug_Deploy', 'android-arm-profile')
-  MakeDeployBuild('--release', 'android_Release_Deploy', 'android-arm-release')
 
   UploadDartPackage(api, 'sky_engine')
   UploadDartPackage(api, 'sky_services')
@@ -160,24 +160,24 @@ def BuildLinuxAndroidArm(api):
     Upload(ServicesOut(dex_jar), dex_jar)
     Upload(ServicesOut(interfaces_jar), interfaces_jar)
 
-  UploadService('firebase', 'out/android_Release/gen/sky/services')
-  UploadService('gcm', 'out/android_Release/gen/third_party')
+  UploadService('firebase', 'out/android_debug/gen/sky/services')
+  UploadService('gcm', 'out/android_debug/gen/third_party')
 
 
 def BuildLinux(api):
-  RunGN(api, '--release')
-  Build(api, 'Release')
+  RunGN(api)
+  Build(api, 'host_debug')
   UploadArtifacts(api, 'linux-x64', [
-    'out/Release/flutter.mojo',
-    'out/Release/icudtl.dat',
-    'out/Release/sky_shell',
-    'out/Release/sky_snapshot',
+    'out/host_debug/flutter.mojo',
+    'out/host_debug/icudtl.dat',
+    'out/host_debug/sky_shell',
+    'out/host_debug/sky_snapshot',
   ])
 
 
 def TestObservatory(api):
   checkout = api.path['checkout']
-  sky_shell_path = checkout.join('out/Release/sky_shell')
+  sky_shell_path = checkout.join('out/host_debug/sky_shell')
   empty_main_path = \
       checkout.join('sky/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('sky/shell/testing/observatory/test.dart')
