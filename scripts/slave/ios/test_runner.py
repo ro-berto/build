@@ -714,6 +714,7 @@ class XCTestRunner(SimulatorTestRunner):
     self,
     app_path,
     test_host,
+    test_project_dir,
     platform,
     version,
     xcode_version=None,
@@ -731,6 +732,7 @@ class XCTestRunner(SimulatorTestRunner):
       Args:
       app_path: Full path to the compiled app to run.
       test_host: Name of the compiled test host app to run tests.
+      test_project_dir: Directory of the dummy test project.
       platform: The platform to simulate. Supported values can be found by
       running 'xcodebuild -list'. e.g. 'iPhone 5', 'iPhone 5s'.
       version: The iOS version the simulator should be running. Supported values
@@ -766,6 +768,7 @@ class XCTestRunner(SimulatorTestRunner):
     self.test_host_name = test_host
     # Test target name is its host name without '_host' suffix.
     self.test_target_name = test_host.rsplit('_', 1)[0]
+    self.test_project_dir = test_project_dir
     self.platform = platform
     self.version = version
     self.timeout = '120'
@@ -784,11 +787,10 @@ class XCTestRunner(SimulatorTestRunner):
       A list whose elements are the args representing the command.
     """
     built_dir = os.path.split(self.app_path)[0]
-    xcodeproj_path = 'TestProject/TestProject.xcodeproj'
 
     cmd =['xcodebuild', 'test',
           'BUILT_PRODUCTS_DIR=%s' % built_dir,
-          '-project', '%s' % xcodeproj_path,
+          '-project', self.test_project_dir,
           '-scheme','TestProject',
           '-destination','platform=iOS Simulator,name=%s,OS=%s'
             % (self.platform, self.version),

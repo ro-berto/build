@@ -362,6 +362,8 @@ class iOSApi(recipe_api.RecipeApi):
             '%s.app' % test['host'],
           ),
           '--test-host', test['host'],
+          '--dummyproj', self.package_repo_resource(
+            'scripts', 'slave', 'ios', 'TestProject', 'TestProject.xcodeproj'),
           '--json_file', self.m.json.output(),
         ]
       else:

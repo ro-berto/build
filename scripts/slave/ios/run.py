@@ -35,6 +35,7 @@ def main(args, test_args):
       test_runner = XCTestRunner(
         args.app,
         args.test_host,
+        args.dummyproj,
         args.platform,
         args.version,
         xcode_version=args.xcode_version,
@@ -86,6 +87,13 @@ if __name__ == '__main__':
     '--bucket',
     help='Google Storage bucket to upload test data to.',
     metavar='path',
+    type=str,
+  )
+  parser.add_argument(
+    '-d',
+    '--dummyproj',
+    help='Dummy test project path.',
+    metavar='.xcodeproj',
     type=str,
   )
   parser.add_argument(
