@@ -68,7 +68,7 @@ def BuildExamples(api, git_hash):
 
   # TODO(eseidel): We should not have to hard-code the desired apk name here.
   BuildAndArchive(api, 'examples/stocks', 'Stocks.apk')
-  BuildAndArchive(api, 'examples/material_gallery', 'Gallery.apk')
+  BuildAndArchive(api, 'examples/flutter_gallery', 'Gallery.apk')
 
 
 def RunFindXcode(api, step_name, target_version=None):

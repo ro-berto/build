@@ -173,13 +173,13 @@
       "build",
       "apk"
     ],
-    "cwd": "[SLAVE_BUILD]/flutter/examples/material_gallery",
+    "cwd": "[SLAVE_BUILD]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "flutter build apk material_gallery"
+    "name": "flutter build apk flutter_gallery"
   },
   {
     "cmd": [
@@ -190,7 +190,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[SLAVE_BUILD]/flutter/examples/material_gallery/build/app.apk",
+      "[SLAVE_BUILD]/flutter/examples/flutter_gallery/build/app.apk",
       "gs://flutter_infra/flutter/deadbeef/examples/Gallery.apk"
     ],
     "env": {
