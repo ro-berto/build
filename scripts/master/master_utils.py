@@ -2,12 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import ctypes
-import ctypes.util
 import os
 import random
 import re
-import sys
 
 import buildbot
 from buildbot import interfaces, util
@@ -477,11 +474,6 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   if active_master.buildbucket_bucket and active_master.service_account_path:
     SetupBuildbucket(c, active_master)
 
-  # TODO(dsansome): enable this on all masters if it works, remove completely
-  # if it doesn't.
-  if GetMastername() in {'chromium.infra', 'chromium.infra.cron'}:
-    SetMasterProcessName()
-
 
 def SetupBuildbucket(c, active_master):
   def params_hook(params, build):
@@ -667,34 +659,3 @@ class PreferredBuilderNextSlaveFunc(object):
         s for s in slave_builders
         if s.slave.properties.getProperty('preferred_builder') == builder.name]
     return random.choice(preferred_slaves or slave_builders)
-
-
-def SetMasterProcessName():
-  """Sets the name of this process to the name of the master.  Linux only."""
-
-  if sys.platform != 'linux2':
-    sys.exit(2)
-    return
-
-  SetCommandLine("master: %s" % GetMastername())
-
-
-def SetCommandLine(cmdline):
-  # Get the current commandline.
-  argc = ctypes.c_int()
-  argv = ctypes.POINTER(ctypes.c_char_p)()
-  ctypes.pythonapi.Py_GetArgcArgv(ctypes.byref(argc), ctypes.byref(argv))
-
-  # Calculate its length.
-  cmdlen = sum([len(argv[i]) for i in xrange(0, argc.value)]) + argc.value
-
-  # Pad the cmdline string to the required length.  If it's longer than the
-  # currentl commandline, truncate it.
-  if len(cmdline) >= cmdlen:
-    new_cmdline = ctypes.c_char_p(cmdline[:cmdlen-1] + '\0')
-  else:
-    new_cmdline = ctypes.c_char_p(cmdline.ljust(cmdlen, '\0'))
-
-  # Replace the old commandline.
-  libc = ctypes.CDLL(ctypes.util.find_library('c'))
-  libc.memcpy(argv.contents, new_cmdline, cmdlen)
