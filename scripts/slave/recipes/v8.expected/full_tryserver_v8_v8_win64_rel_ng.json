@@ -144,8 +144,6 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "--target-output-dir",
-      "[SLAVE_BUILD]\\v8\\out\\Release_x64",
       "--goma-dir",
       "[BUILD]\\goma",
       "--goma-fail-fast",

@@ -181,8 +181,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--target-output-dir",
-      "[SLAVE_BUILD]/src/out/Debug",
       "--"
     ],
     "env": {

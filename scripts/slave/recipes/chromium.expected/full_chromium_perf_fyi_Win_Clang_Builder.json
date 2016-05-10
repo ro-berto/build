@@ -182,8 +182,6 @@
       "ninja",
       "--build-data-dir",
       "[ROOT]\\build_data_dir",
-      "--target-output-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
       "--mode",
       "official",
       "--",

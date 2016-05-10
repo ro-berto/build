@@ -7,32 +7,28 @@ from . import steps
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
 
-def get_kitchen_spec(use_cache=False):
-  spec = {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': [
-      'mb',
-      'ninja_confirm_noop',
-      'archive_gpu_tests',
-      'chrome_with_codecs'
-    ],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 64,
-    },
-    'compile_targets': [
-      'all',
-    ],
-    'testing': {
-      'platform': 'linux',
-    },
-    'use_isolate': True,
-    'enable_swarming': True,
-  }
-  if use_cache:
-    spec['chromium_apply_config'].append('use_build_dir_cache')
-  return spec
+KITCHEN_TEST_SPEC = {
+  'chromium_config': 'chromium',
+  'chromium_apply_config': [
+    'mb',
+    'ninja_confirm_noop',
+    'archive_gpu_tests',
+    'chrome_with_codecs'
+  ],
+  'gclient_config': 'chromium',
+  'chromium_config_kwargs': {
+    'BUILD_CONFIG': 'Release',
+    'TARGET_BITS': 64,
+  },
+  'compile_targets': [
+    'all',
+  ],
+  'testing': {
+    'platform': 'linux',
+  },
+  'use_isolate': True,
+  'enable_swarming': True,
+}
 
 
 SPEC = {
@@ -2074,7 +2070,7 @@ SPEC = {
       },
     },
 
-    'Linux Kitchen (kitchen_run)': get_kitchen_spec(use_cache=True),
-    'Linux Kitchen (annotated_run)': get_kitchen_spec(),
+    'Linux Kitchen (kitchen_run)': KITCHEN_TEST_SPEC,
+    'Linux Kitchen (annotated_run)': KITCHEN_TEST_SPEC,
   },
 }

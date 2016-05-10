@@ -132,7 +132,7 @@
       "Chromium Windows Analyze",
       "--config-file",
       "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
-      "[SLAVE_BUILD]\\src\\out\\Debug"
+      "//out/Debug"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -159,8 +159,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--target-output-dir",
-      "[SLAVE_BUILD]\\src\\out\\Debug",
       "--clobber",
       "--",
       "chrome"

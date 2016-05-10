@@ -101,8 +101,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--target-output-dir",
-      "[SLAVE_BUILD]\\src\\out\\Debug",
       "--ninja-ensure-up-to-date",
       "--",
       "build_all"

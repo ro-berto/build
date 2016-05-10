@@ -166,8 +166,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--target-output-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--clobber",
       "--",
       "chrome"
@@ -700,8 +698,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--target-output-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--",
       "chrome"
     ],

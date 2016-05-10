@@ -240,7 +240,7 @@
       "[CACHE]/cipd/goma",
       "--android-version-code=3",
       "--android-version-name=example",
-      "[SLAVE_BUILD]/src/out/Debug"
+      "//out/Debug"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

@@ -113,8 +113,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--target-output-dir",
-      "[SLAVE_BUILD]\\v8\\out\\Release",
       "--"
     ],
     "env": {

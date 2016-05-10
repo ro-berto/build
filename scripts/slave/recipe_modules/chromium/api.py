@@ -61,11 +61,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     except KeyError:
       defaults['BUILD_PATH'] = self.package_repo_resource()
 
-    try:
-      defaults['BUILDER_CACHE_PATH'] = self.m.path['builder_cache']
-    except KeyError:
-      pass
-
     return defaults
 
   def get_env(self):
@@ -93,17 +88,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   @property
   def output_dir(self):
     """Return the path to the built executable directory."""
-    # TODO(phajdan.jr): output_dir is deprecated in favor of get_output_dir.
     return self.c.build_dir.join(self.c.build_config_fs)
-
-  def get_output_dir(self, target=None):
-    """Return the path to the build executable directory."""
-    build_dir = self.c.build_dir
-    if self.c.use_build_dir_cache:
-      sanitized_buildername = ''.join(c if c.isalnum() else '_'
-                                      for c in self.m.properties['buildername'])
-      build_dir = build_dir.join(sanitized_buildername)
-    return self.m.path.join(build_dir, target or self.c.build_config_fs)
 
   @property
   def version(self):
@@ -216,8 +201,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         ]
     if out_dir:
       args += ['--out-dir', out_dir]
-    else:
-      args += ['--target-output-dir', self.get_output_dir(target=target)]
     if self.c.compile_py.mode:
       args += ['--mode', self.c.compile_py.mode]
     if self.c.compile_py.goma_dir:
@@ -582,7 +565,11 @@ class ChromiumApi(recipe_api.RecipeApi):
                                                    'mb_config.pyl'))
     isolated_targets = isolated_targets or []
 
-    build_dir = build_dir or self.get_output_dir()
+    out_dir = 'out'
+    if self.c.TARGET_CROS_BOARD:
+      out_dir += '_%s' % self.c.TARGET_CROS_BOARD
+
+    build_dir = build_dir or '//%s/%s' % (out_dir, self.c.build_config_fs)
 
     args=[
         'gen',

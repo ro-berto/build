@@ -105,8 +105,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--target-output-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
       "--ninja-ensure-up-to-date",
       "--clobber",
       "--",

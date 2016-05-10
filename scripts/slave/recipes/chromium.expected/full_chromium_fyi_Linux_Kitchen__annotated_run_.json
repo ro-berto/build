@@ -259,7 +259,7 @@
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "[SLAVE_BUILD]/src/out/Release"
+      "//out/Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -294,8 +294,6 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
-      "--target-output-dir",
-      "[SLAVE_BUILD]/src/out/Release",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--ninja-ensure-up-to-date",

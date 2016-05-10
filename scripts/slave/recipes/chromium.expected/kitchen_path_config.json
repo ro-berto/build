@@ -271,7 +271,7 @@
       "[BUILDER_CACHE]/checkouts/Linux_Kitchen__kitchen_run_/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "[BUILDER_CACHE]/Linux_Kitchen__kitchen_run_/Release"
+      "//out/Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -306,8 +306,6 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
-      "--target-output-dir",
-      "[BUILDER_CACHE]/Linux_Kitchen__kitchen_run_/Release",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--ninja-ensure-up-to-date",
