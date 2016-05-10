@@ -102,6 +102,7 @@
       buildSettings = {
         IPHONEOS_DEPLOYMENT_TARGET = 9.0;
         SDKROOT = iphoneos;
+        CODE_SIGNING_REQUIRED = NO;
       };
       name = Default;
     };
@@ -109,6 +110,7 @@
       isa = XCBuildConfiguration;
       buildSettings = {
         PRODUCT_NAME = "$(APP_TARGET_NAME)";
+        CONFIGURATION_BUILD_DIR = "$(BUILT_PRODUCTS_DIR)";
       };
       name = Default;
     };
@@ -117,6 +119,7 @@
       buildSettings = {
         PRODUCT_NAME = "$(TEST_TARGET_NAME)";
         TEST_HOST = "$(BUILT_PRODUCTS_DIR)/$(APP_TARGET_NAME).app/$(APP_TARGET_NAME)";
+        CONFIGURATION_BUILD_DIR = "$(BUILT_PRODUCTS_DIR)";
       };
       name = Default;
     };
