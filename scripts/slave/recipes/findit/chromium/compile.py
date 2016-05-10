@@ -43,6 +43,10 @@ PROPERTIES = {
     'suspected_revisions': Property(
         kind=List(basestring), default=[],
         help='A list of suspected revisions from heuristic analysis.'),
+    'use_bisect': Property(
+        kind=Single(bool, empty_val=False, required=False), default=True,
+        help='Use bisect to skip more revisions. '
+             'Effective only when compile_targets is given.'),
 }
 
 
@@ -112,7 +116,7 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
 
 def RunSteps(api, target_mastername, target_buildername,
              good_revision, bad_revision,
-             compile_targets, use_analyze, suspected_revisions):
+             compile_targets, use_analyze, suspected_revisions, use_bisect):
   bot_config = api.chromium_tests.create_bot_config_object(
       target_mastername, target_buildername)
   api.chromium_tests.configure_build(
@@ -189,20 +193,21 @@ def RunSteps(api, target_mastername, target_buildername,
   try_job_metadata = {
       'regression_range_size': len(all_revisions),
       'sub_ranges': sub_ranges[:],
+      'use_bisect': use_bisect,
   }
   report = {
       'result': compile_results,
       'metadata': try_job_metadata,
   }
 
-  suspected_revision = None
+  culprit_candidate = None
   revision_being_checked = None
   found = False
   try:
     while not found and sub_ranges:
       # Sub-ranges with newer revisions are tested first.
       first_revision = sub_ranges[0][0]
-      following_revisions = sub_ranges[0][1:]
+      remaining_revisions = sub_ranges[0][1:]
       sub_ranges.pop(0)
 
       if first_revision is not None:  # No compile for last known good revision.
@@ -215,27 +220,47 @@ def RunSteps(api, target_mastername, target_buildername,
           # The first revision of this sub-range already failed, thus either it
           # is the culprit or the culprit is in a sub-range with older
           # revisions.
-          suspected_revision = first_revision
+          culprit_candidate = first_revision
           continue
 
-      # If the first revision passed, the culprit is either in the current range
-      # or is the first revision of previous range with newer revisions as
-      # identified above.
-      for revision in following_revisions:
-        revision_being_checked = revision
-        compile_result = _run_compile_at_revision(
-            api, target_mastername, target_buildername,
-            revision, compile_targets, use_analyze)
-        compile_results[revision] = compile_result
-        if compile_result == CompileResult.FAILED:
-          # First failure after a series of pass.
-          suspected_revision = revision
-          found = True
-          break
+      # If the first revision in the current sub-range passed, the culprit is
+      # either in the remaining revisions of the current sub-range or is the
+      # first revision of last checked sub-range.
 
-      if not found and suspected_revision is not None:
-        # If all revisions in the current range passed, and the first revision
-        # of previous range failed, the culprit is found too.
+      if compile_targets and use_bisect:
+        # Could bisect only when failed compile targets are given.
+        while remaining_revisions:
+          middle_index = len(remaining_revisions) / 2
+          revision_being_checked = remaining_revisions[middle_index]
+          compile_result = _run_compile_at_revision(
+              api, target_mastername, target_buildername,
+              revision_being_checked, compile_targets, use_analyze)
+          compile_results[revision_being_checked] = compile_result
+          if compile_result == CompileResult.FAILED:
+            # This failed revision is the new candidate to suspect.
+            culprit_candidate = revision_being_checked
+            remaining_revisions = remaining_revisions[:middle_index]
+          else:  # Compile passed, or skipped for non-existent compile targets.
+            # TODO(http://crbug.com/610526): If compile failures is due to
+            # "unknown targets", bisect won't work due to skipped compile.
+            remaining_revisions = remaining_revisions[middle_index + 1:]
+      else:
+        for revision in remaining_revisions:
+          revision_being_checked = revision
+          compile_result = _run_compile_at_revision(
+              api, target_mastername, target_buildername,
+              revision, compile_targets, use_analyze)
+          compile_results[revision] = compile_result
+          if compile_result == CompileResult.FAILED:
+            # First failure after a series of pass.
+            culprit_candidate = revision
+            break
+
+      if culprit_candidate is not None:
+        # If linear or binary search finished without exceptions, and the
+        # suspected revision was set for a failure of compile rerun, then the
+        # culprit is found. If an exception occurs, the suspected revision might
+        # not be correct even it is set.
         found = True
   except api.step.InfraFailure:
     compile_results[revision_being_checked] = CompileResult.INFRA_FAILED
@@ -243,7 +268,7 @@ def RunSteps(api, target_mastername, target_buildername,
     raise
   finally:
     if found:
-      report['culprit'] = suspected_revision
+      report['culprit'] = culprit_candidate
 
     # Report the result.
     step_result = api.python.succeeding_step(
@@ -252,7 +277,7 @@ def RunSteps(api, target_mastername, target_buildername,
     if found:
       step_result.presentation.step_text = (
           '<br/>Culprit: <a href="https://crrev.com/%s">%s</a>' % (
-              suspected_revision, suspected_revision))
+              culprit_candidate, culprit_candidate))
 
     # Set the report as a build property too, so that it will be reported back
     # to Buildbucket and Findit will pull from there instead of buildbot master.
@@ -264,7 +289,7 @@ def RunSteps(api, target_mastername, target_buildername,
 def GenTests(api):
   def props(compile_targets=None, use_analyze=False,
             good_revision=None, bad_revision=None,
-            suspected_revisions=None):
+            suspected_revisions=None, use_bisect=False):
     properties = {
         'mastername': 'tryserver.chromium.linux',
         'buildername': 'linux_variable',
@@ -275,6 +300,7 @@ def GenTests(api):
         'good_revision': good_revision or 'r0',
         'bad_revision': bad_revision or 'r1',
         'use_analyze': use_analyze,
+        'use_bisect': use_bisect,
     }
     if compile_targets:
       properties['compile_targets'] = compile_targets
@@ -541,4 +567,36 @@ def GenTests(api):
                                  'not_found': [],
                              })) +
       api.override_step_data('test r2.compile', retcode=1)
+  )
+
+  # Entire regression range: (r1, r10]
+  # Actual culprit: r5
+  # Should only run compile on r6(failed), then r4(pass) and r5(failed).
+  yield (
+      api.test('find_culprit_using_bisect') +
+      props(compile_targets=['target_name'],
+            good_revision='r1',
+            bad_revision='r10',
+            use_bisect=True) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(2, 11))))) +
+      api.override_step_data('test r6.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r6.compile', retcode=1) +
+      api.override_step_data('test r4.check_targets',
+                             api.json.output({
+                                 'found': [],
+                                 'not_found': ['target_name'],
+                             })) +
+      api.override_step_data('test r5.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r5.compile', retcode=1)
   )

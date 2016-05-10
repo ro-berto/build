@@ -612,6 +612,7 @@
       "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"culprit\": \"r2\", @@@",
       "@@@STEP_LOG_LINE@report@  \"metadata\": {@@@",
+      "@@@STEP_LOG_LINE@report@    \"use_bisect\": false, @@@",
       "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 4, @@@",
       "@@@STEP_LOG_LINE@report@    \"sub_ranges\": [@@@",
       "@@@STEP_LOG_LINE@report@      [@@@",
@@ -625,7 +626,7 @@
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
       "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"culprit\": \"r2\", \"metadata\": {\"regression_range_size\": 4, \"sub_ranges\": [[null, \"r2\", \"r3\", \"r4\", \"r5\"]]}, \"result\": {\"r2\": \"failed\"}}@@@"
+      "@@@SET_BUILD_PROPERTY@report@{\"culprit\": \"r2\", \"metadata\": {\"regression_range_size\": 4, \"sub_ranges\": [[null, \"r2\", \"r3\", \"r4\", \"r5\"]], \"use_bisect\": false}, \"result\": {\"r2\": \"failed\"}}@@@"
     ]
   },
   {
