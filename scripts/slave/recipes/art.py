@@ -185,7 +185,7 @@ def setup_target(api,
 
   # Decrease the number of parallel tests, as some tests eat lots of memory.
   if debug and device == 'fugu':
-    make_jobs = 2
+    make_jobs = 1
 
   with api.step.defer_results():
     api.step('build target', [art_tools.join('buildbot-build.sh'),
