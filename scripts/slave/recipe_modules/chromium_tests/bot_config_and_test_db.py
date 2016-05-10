@@ -76,29 +76,34 @@ class BotConfig(object):
           chromium_tests_api.get_compile_targets_for_scripts().json.output
 
     masternames = set(bot_id['mastername'] for bot_id in self._bot_ids)
-    for mastername in masternames:
-      test_spec = self._get_test_spec(chromium_tests_api, mastername)
-
+    for mastername in sorted(self._bots_dict):
       # We manually thaw the path to the elements we are modifying, since the
       # builders are frozen.
       master_dict = dict(self._bots_dict[mastername])
-      builders = master_dict['builders'] = dict(master_dict['builders'])
-      for loop_buildername in builders:
-        builder_dict = builders[loop_buildername] = (
-            dict(builders[loop_buildername]))
-        builders[loop_buildername]['tests'] = (
-            chromium_tests_api.generate_tests_from_test_spec(
-                chromium_tests_api.m, test_spec, builder_dict,
-                loop_buildername, mastername,
-                # TODO(phajdan.jr): Get enable_swarming value from builder_dict.
-                # Above should remove the need to get bot_config and buildername
-                # in this method.
-                self.get('enable_swarming', False),
-                builder_dict.get('swarming_dimensions', {}),
-                scripts_compile_targets,
-                builder_dict.get('test_generators', []),
-                bot_update_step
-            ))
+
+      if mastername in masternames:
+        test_spec = self._get_test_spec(chromium_tests_api, mastername)
+
+        builders = master_dict['builders'] = dict(master_dict['builders'])
+        for loop_buildername in builders:
+          builder_dict = builders[loop_buildername] = (
+              dict(builders[loop_buildername]))
+          builders[loop_buildername]['tests'] = (
+              chromium_tests_api.generate_tests_from_test_spec(
+                  chromium_tests_api.m, test_spec, builder_dict,
+                  loop_buildername, mastername,
+                  # TODO(phajdan.jr): Get enable_swarming value from
+                  # builder_dict. Above should remove the need to get
+                  # bot_config and buildername in this method.
+                  self.get('enable_swarming', False),
+                  builder_dict.get('swarming_dimensions', {}),
+                  scripts_compile_targets,
+                  builder_dict.get('test_generators', []),
+                  bot_update_step
+              ))
+      else:
+        test_spec = None
+
 
       bot_db._add_master_dict_and_test_spec(
           mastername, freeze(master_dict), freeze(test_spec))
@@ -120,7 +125,7 @@ class BotConfig(object):
       bot_config = bot_db.get_bot_config(
           bot_id['mastername'], bot_id['buildername'])
 
-      for _, test_bot in bot_db.bot_configs_matching_parent_buildername(
+      for _, _, test_bot in bot_db.bot_configs_matching_parent_buildername(
           bot_id['mastername'], bot_id['buildername']):
         tests_including_triggered.extend(test_bot.get('tests', []))
 
@@ -182,14 +187,20 @@ class BotConfigAndTestDB(object):
     return self._db[mastername]['master_dict'].get('settings', {})
 
   def bot_configs_matching_parent_buildername(
-      self, mastername, parent_buildername):
+      self, parent_mastername, parent_buildername):
     """A generator of all the (buildername, bot_config) tuples whose
     parent_buildername is the passed one on the given master.
     """
-    for buildername, bot_config in self._db[mastername]['master_dict'].get(
-        'builders', {}).iteritems():
-      if bot_config.get('parent_buildername') == parent_buildername:
-        yield buildername, bot_config
+    for mastername, master_config in self._db.iteritems():
+      master_dict = master_config['master_dict']
+      for buildername, bot_config in master_dict.get(
+          'builders', {}).iteritems():
+        master_matches = (bot_config.get('parent_mastername', mastername) ==
+                          parent_mastername)
+        builder_matches = (bot_config.get('parent_buildername') ==
+                           parent_buildername)
+        if master_matches and builder_matches:
+          yield mastername, buildername, bot_config
 
   def get_test_spec(self, mastername, buildername):
     return self._db[mastername]['test_spec'].get(buildername, {})

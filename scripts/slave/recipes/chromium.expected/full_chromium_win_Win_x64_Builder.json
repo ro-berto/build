@@ -426,16 +426,7 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Tests x64 (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (2)",
-    "trigger_specs": [
+      },
       {
         "builder_name": "Win10 Tests x64",
         "properties": {
@@ -457,7 +448,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win10 Tests x64@@@"
+      "@@@STEP_TEXT@Win 7 Tests x64 (1)<br />Win10 Tests x64@@@"
     ]
   },
   {

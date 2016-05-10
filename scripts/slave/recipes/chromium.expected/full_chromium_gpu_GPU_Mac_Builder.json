@@ -442,16 +442,7 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Release (Intel)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (2)",
-    "trigger_specs": [
+      },
       {
         "builder_name": "Mac 10.10 Retina Release (AMD)",
         "properties": {
@@ -473,7 +464,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Retina Release (AMD)@@@"
+      "@@@STEP_TEXT@Mac 10.10 Release (Intel)<br />Mac 10.10 Retina Release (AMD)@@@"
     ]
   },
   {

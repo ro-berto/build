@@ -396,16 +396,7 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Coverage (dbg)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (2)",
-    "trigger_specs": [
+      },
       {
         "builder_name": "Android Remoting Tests",
         "properties": {
@@ -424,16 +415,7 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Remoting Tests@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (3)",
-    "trigger_specs": [
+      },
       {
         "builder_name": "Android Tests (amp instrumentation test split)",
         "properties": {
@@ -452,16 +434,7 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Tests (amp instrumentation test split)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (4)",
-    "trigger_specs": [
+      },
       {
         "builder_name": "Android Tests (amp split)",
         "properties": {
@@ -480,16 +453,7 @@
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
           "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
         }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Tests (amp split)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger (5)",
-    "trigger_specs": [
+      },
       {
         "builder_name": "Android Tests (trial)(dbg)",
         "properties": {
@@ -511,7 +475,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Tests (trial)(dbg)@@@"
+      "@@@STEP_TEXT@Android Coverage (dbg)<br />Android Remoting Tests<br />Android Tests (amp instrumentation test split)<br />Android Tests (amp split)<br />Android Tests (trial)(dbg)@@@"
     ]
   },
   {

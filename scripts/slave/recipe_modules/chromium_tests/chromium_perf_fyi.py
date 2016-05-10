@@ -8,7 +8,8 @@ from . import steps
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
 
-def _AddBotSpec(name, platform, parent_builder, perf_id, target_bits):
+def _AddBotSpec(name, platform, parent_builder, perf_id, target_bits,
+                parent_master=None):
   SPEC['builders'][name] = {
     'disable_tests': True,
     'bot_type': 'tester',
@@ -29,6 +30,8 @@ def _AddBotSpec(name, platform, parent_builder, perf_id, target_bits):
                              shard_index=0, num_host_shards=1),
     ],
   }
+  if parent_master:
+    SPEC['builders'][name]['parent_mastername'] = parent_master
 
 
 SPEC = {
@@ -81,9 +84,10 @@ SPEC = {
 _AddBotSpec(
     name='Win 7 Intel GPU Perf (Xeon)',
     platform='win',
-    parent_builder='Win x64 FYI Builder',
+    parent_builder='Win x64 Builder',
     perf_id='chromium-rel-win7-gpu-intel',
-    target_bits=64)
+    target_bits=64,
+    parent_master='chromium.perf')
 
 _AddBotSpec(
     name='Win Clang Perf',
