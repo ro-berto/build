@@ -136,7 +136,7 @@ BUILDERS = freeze({
   },
   'client.v8.fyi': {
     'Android Builder': {
-      'recipe_config': 'perf',
+      'recipe_config': 'main_builder_rel_mb',
       'gclient_apply_config': [
         'android',
         'perf',
@@ -152,6 +152,16 @@ BUILDERS = freeze({
         'path': lambda api: ('v8_android_perf_rel/full-build-linux_%s.zip'
                              % api.properties['revision']),
       },
+      'run_mb': True,
+      'targets': [
+        'android_tools',
+        'cc_perftests',
+        'chrome_public_apk',
+        'gpu_perftests',
+        'push_apps_to_background_apk',
+        'system_webview_apk',
+        'system_webview_shell_apk',
+      ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
     }
   },
