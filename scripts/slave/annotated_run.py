@@ -661,9 +661,9 @@ def get_factory_properties_from_disk(workdir, mastername, buildername):
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   out, err = proc.communicate()
   if proc.returncode:
-    raise LookupError('Failed to get the master config; dump_master_cfg %s'
-                      'returned %d):\n%s\n%s\n'% (
-                      mastername, proc.returncode, out, err))
+    raise LookupError('Failed to get the master config; running %r in %r '
+                      'returned exit code %d\nstdout: %s\nstderr: %s'% (
+                      dump_cmd, env.Build, proc.returncode, out, err))
 
   with open(master_json, 'rU') as f:
     config = json.load(f)
