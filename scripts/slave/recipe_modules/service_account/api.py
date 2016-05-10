@@ -19,16 +19,19 @@ class ServiceAccountApi(recipe_api.RecipeApi):
     else:
       self.set_config('service_account_default')
 
-  def get_token(self, account):
+  def get_token(self, account, scopes=None):
     if self.c is None:
       self._config_defaults()
     account_file = self.m.path.join(self.c.accounts_path,
-                                'service-account-%s.json' % account)
+                                    'service-account-%s.json' % account)
+    cmd = [self.c.authutil_path, 'token',
+           '-service-account-json=' + account_file]
+    if scopes:
+      cmd += ['-scopes', ' '.join(scopes)]
+
     try:
       # TODO: authutil is to be deployed using cipd.
-      step_result = self.m.step('get access token',
-                                [self.c.authutil_path, 'token',
-                                 '-service-account-json=' + account_file],
+      step_result = self.m.step('get access token', cmd,
                                 stdout=self.m.raw_io.output())
     except self.m.step.StepFailure as ex:
       if not self.m.path.exists(self.c.authutil_path):
