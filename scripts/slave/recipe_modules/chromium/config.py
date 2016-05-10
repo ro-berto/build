@@ -585,6 +585,10 @@ def clang_tot_linux_asan(c):
   # Like chromium_linux_asan, without goma.
   pass
 
+@config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
+def clang_tot_linux_lld(c):
+  pass
+
 @config_ctx(includes=['clang_tot_linux', 'ubsan_vptr', 'sanitizer_coverage'])
 def clang_tot_linux_ubsan_vptr(c):
   pass
