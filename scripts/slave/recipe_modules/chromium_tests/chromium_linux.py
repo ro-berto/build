@@ -149,23 +149,12 @@ SPEC = {
       'android_config': 'main_builder',
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_instrumentation_test,
         steps.generate_script,
         steps.generate_isolated_script,
         steps.generate_junit_test,
       ],
-      'tests': [
-        steps.AndroidInstrumentationTest('AndroidWebViewTest'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
-        steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
-        steps.AndroidInstrumentationTest('ContentShellTest'),
-        steps.AndroidInstrumentationTest('MojoTest'),
-        steps.GTestTest(
-            'breakpad_unittests',
-            override_compile_targets=['breakpad_unittests_deps']),
-        steps.GTestTest(
-            'sandbox_linux_unittests',
-            override_compile_targets=['sandbox_linux_unittests_deps']),
-      ],
+      'tests': [],
       'testing': {
         'platform': 'linux',
       },
