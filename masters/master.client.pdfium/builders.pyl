@@ -80,6 +80,27 @@
         "rel": True,
       },
     },
+    "linux_xfa_debug_gn": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "3xfa_gn",
+      "properties": {
+        "xfa": True,
+        "gn": True,
+      },
+    },
+    "linux_xfa_rel_gn": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "3xfa_gn",
+      "properties": {
+        "xfa": True,
+        "rel": True,
+        "gn": True,
+      },
+    },
     "linux_xfa_asan": {
       "recipe": "pdfium",
       "scheduler": "pdfium_commits",
@@ -97,6 +118,27 @@
       "category": "1xfa",
       "properties": {
         "xfa": True,
+      },
+    },
+    "mac_xfa_debug_gn": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["mac"],
+      "category": "3xfa_gn",
+      "properties": {
+        "xfa": True,
+        "gn": True,
+      },
+    },
+    "mac_xfa_rel_gn": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["mac"],
+      "category": "3xfa_gn",
+      "properties": {
+        "xfa": True,
+        "rel": True,
+        "gn": True,
       },
     },
     "windows_xfa": {
@@ -127,6 +169,29 @@
         "xfa": True,
         "win64": True,
         "rel": True,
+      },
+    },
+    "windows_xfa_64_debug_gn": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["windows"],
+      "category": "3xfa_gn",
+      "properties": {
+        "xfa": True,
+        "win64": True,
+        "gn": True,
+      },
+    },
+    "windows_xfa_64_rel_gn": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["windows"],
+      "category": "3xfa_gn",
+      "properties": {
+        "xfa": True,
+        "win64": True,
+        "rel": True,
+        "gn": True,
       },
     },
     "windows_xfa_clang": {

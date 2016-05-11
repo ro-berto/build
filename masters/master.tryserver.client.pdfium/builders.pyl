@@ -37,6 +37,18 @@
         "v8": False,
       }
     },
+    "linux_xfa_rel_gn": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "3xfa_gn",
+      "properties": {
+        "xfa": True,
+        "rel": True,
+        "gn": True,
+      }
+    },
 
     "mac": {
       "recipe": "pdfium",
@@ -65,6 +77,18 @@
         "v8": False,
       }
     },
+    "mac_xfa_rel_gn": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "3xfa_gn",
+      "properties": {
+        "xfa": True,
+        "rel": True,
+        "gn": True,
+      }
+    },
 
     "win": {
       "recipe": "pdfium",
@@ -91,6 +115,19 @@
       "category": "2no_v8",
       "properties": {
         "v8": False,
+      }
+    },
+    "win_xfa_64_rel_gn": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["win_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "3xfa_gn",
+      "properties": {
+        "xfa": True,
+        "win64": True,
+        "rel": True,
+        "gn": True,
       }
     },
   },

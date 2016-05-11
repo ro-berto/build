@@ -21,6 +21,7 @@ PROPERTIES = {
   "win64": Property(default=False, kind=bool),
   "clang": Property(default=False, kind=bool),
   "rel": Property(default=False, kind=bool),
+  "gn": Property(default=False, kind=bool),
 }
 
 
@@ -29,7 +30,7 @@ def _MakeGypDefines(gyp_defines):
                    gyp_defines.iteritems()])
 
 
-def _CheckoutSteps(api, memory_tool, xfa, v8, win64, clang):
+def _CheckoutSteps(api, memory_tool, xfa, v8, win64, clang, gn):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
   api.bot_update.ensure_checkout(force=True)
@@ -48,11 +49,28 @@ def _CheckoutSteps(api, memory_tool, xfa, v8, win64, clang):
   if win64:
     gyp_defines['target_arch'] = 'x64'
 
-  env = {
-      'GYP_DEFINES': _MakeGypDefines(gyp_defines)
-  }
+  if gn:
+    env = {'GYP_CHROMIUM_NO_ACTION' : '1',
+           'GYP_DEFINES': _MakeGypDefines(gyp_defines)}
+  else:
+    env = {'GYP_DEFINES': _MakeGypDefines(gyp_defines)}
+
   api.gclient.runhooks(env=env)
 
+
+def _GNGenBuilds(api, xfa, v8, rel, out_dir):
+  gn_bool = {True: 'true', False: 'false'};
+  # Generate build files by GN.
+  checkout = api.path['checkout']
+  gn_cmd = api.path['depot_tools'].join('gn.py')
+  # Prepare the arguments to pass in.
+  args = ('is_debug=%s pdf_enable_v8=%s pdf_enable_xfa=%s '
+          'pdf_is_standalone=true clang_use_chrome_plugins=false') % (
+             gn_bool[not rel], gn_bool[v8], gn_bool[xfa])
+
+  api.python('gn gen', gn_cmd,
+             ['gen', api.path.join('out', out_dir), '--args="' + args + '"'],
+             cwd=checkout)
 
 def _BuildSteps(api, out_dir):
   # Build sample file using Ninja
@@ -127,12 +145,15 @@ def _RunTests(api, memory_tool, v8, out_dir):
              cwd=api.path['checkout'], env=env)
 
 
-def RunSteps(api, memory_tool, xfa, v8, win64, clang, rel):
-  _CheckoutSteps(api, memory_tool, xfa, v8, win64, clang)
+def RunSteps(api, memory_tool, xfa, v8, win64, clang, rel, gn):
+  _CheckoutSteps(api, memory_tool, xfa, v8, win64, clang, gn)
 
   out_dir = 'Release' if rel else 'Debug'
   if win64:
     out_dir += '_x64'
+
+  if gn:
+    _GNGenBuilds(api, xfa, v8, rel, out_dir)
 
   _BuildSteps(api, out_dir)
   with api.step.defer_results():
@@ -218,6 +239,29 @@ def GenTests(api):
   )
 
   yield (
+      api.test('win_xfa_64_debug_gn') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     win64=True,
+                     gn=True,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_64_debug_gn',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('win_xfa_64_rel_gn') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     win64=True,
+                     rel=True,
+                     gn=True,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_64_rel_gn',
+                     slavename="test_slave")
+  )
+
+  yield (
       api.test('win_xfa_clang') +
       api.platform('win', 64) +
       api.properties(xfa=True,
@@ -258,11 +302,53 @@ def GenTests(api):
   )
 
   yield (
+      api.test('linux_xfa_debug_gn') +
+      api.platform('linux', 64) +
+      api.properties(xfa=True,
+                     gn=True,
+                     mastername="client.pdfium",
+                     buildername='linux_xfa_debug_gn',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('linux_xfa_rel_gn') +
+      api.platform('linux', 64) +
+      api.properties(xfa=True,
+                     rel=True,
+                     gn=True,
+                     mastername="client.pdfium",
+                     buildername='linux_xfa_rel_gn',
+                     slavename="test_slave")
+  )
+
+  yield (
       api.test('mac_xfa') +
       api.platform('mac', 64) +
       api.properties(xfa=True,
                      mastername="client.pdfium",
                      buildername='mac_xfa',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('mac_xfa_debug_gn') +
+      api.platform('mac', 64) +
+      api.properties(xfa=True,
+                     gn=True,
+                     mastername="client.pdfium",
+                     buildername='mac_xfa_debug_gn',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('mac_xfa_rel_gn') +
+      api.platform('mac', 64) +
+      api.properties(xfa=True,
+                     rel=True,
+                     gn=True,
+                     mastername="client.pdfium",
+                     buildername='mac_xfa_rel_gn',
                      slavename="test_slave")
   )
 
