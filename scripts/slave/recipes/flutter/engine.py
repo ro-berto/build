@@ -186,43 +186,57 @@ def TestObservatory(api):
 
 
 def BuildMac(api):
-  RunGN(api, '--release')
-  Build(api, 'Release')
-  UploadArtifacts(api, 'darwin-x64', [
-    'out/Release/sky_snapshot'
+  RunGN(api, '--runtime-mode', 'release')
+  Build(api, 'host_release')
+  UploadArtifacts(api, 'mac_release', [
+    'out/host_release/sky_snapshot'
   ])
 
 
-def GenerateXcodeProject(api):
+def PackageIOSVariant(api, label, device_out, sim_out):
   checkout = api.path['checkout']
   out_dir = checkout.join('out')
 
-  RunGN(api, '--release', '--ios', '--simulator')
-  Build(api, 'ios_sim_Release')
-
-  RunGN(api, '--release', '--ios')
-  Build(api, 'ios_Release')
-
-  RunGN(api, '--release', '--ios', '--ios-force-armv7')
-  Build(api, 'ios_Release_armv7')
-
   # Copy device 'Flutter' directory to a deploy dir:
-  deploy_dir = out_dir.join('FlutterXcode')
+  deploy_dir = out_dir.join(label, 'FlutterXcode')
 
   create_ios_sdk_cmd = [
     checkout.join('sky/tools/create_ios_sdk.py'),
     '--dst',
-    deploy_dir
+    deploy_dir,
+    '--device-out-dir',
+    api.path.join(out_dir, device_out),
+    '--simulator-out-dir',
+    api.path.join(out_dir, sim_out),
   ]
-  api.step('Create iOS SDK', create_ios_sdk_cmd, cwd=checkout)
+  api.step('Create iOS %s SDK' % label, create_ios_sdk_cmd, cwd=checkout)
 
   # Zip the whole thing and upload it to cloud storage:
-  flutter_zip = out_dir.join('FlutterXcode.zip')
-  api.zip.directory('make FlutterXcode.zip', deploy_dir, flutter_zip)
+  flutter_zip = out_dir.join(label, 'FlutterXcode.zip')
+  api.zip.directory('Archive FlutterXcode %s' % label, deploy_dir, flutter_zip)
 
-  UploadArtifacts(api, 'ios', [
-    'out/FlutterXcode.zip'
-  ])
+  UploadArtifacts(api,
+    'ios_%s' % label, [ 'out/%s/FlutterXcode.zip' % label ]
+  )
+
+
+def BuildIOS(api):
+  # Generate Ninja files for all valid configurations.
+  RunGN(api, '--ios', '--runtime-mode', 'debug')
+  RunGN(api, '--ios', '--runtime-mode', 'profile')
+  RunGN(api, '--ios', '--runtime-mode', 'release')
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator')
+
+  # Build all configurations.
+  Build(api, 'ios_debug_sim')
+  Build(api, 'ios_debug')
+  Build(api, 'ios_profile')
+  Build(api, 'ios_release')
+
+  # Package all variants
+  PackageIOSVariant(api, 'debug',   'ios_debug',   'ios_debug_sim')
+  PackageIOSVariant(api, 'profile', 'ios_profile', 'ios_debug_sim')
+  PackageIOSVariant(api, 'release', 'ios_release', 'ios_debug_sim')
 
 
 def GetCheckout(api):
@@ -267,7 +281,7 @@ def RunSteps(api):
 
     if api.platform.is_mac:
       BuildMac(api)
-      GenerateXcodeProject(api)
+      BuildIOS(api)
 
 
 def GenTests(api):
