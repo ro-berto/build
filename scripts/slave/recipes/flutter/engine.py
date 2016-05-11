@@ -186,10 +186,10 @@ def TestObservatory(api):
 
 
 def BuildMac(api):
-  RunGN(api, '--runtime-mode', 'release')
-  Build(api, 'host_release')
-  UploadArtifacts(api, 'mac_release', [
-    'out/host_release/sky_snapshot'
+  RunGN(api, '--runtime-mode', 'debug')
+  Build(api, 'host_debug')
+  UploadArtifacts(api, 'mac_debug', [
+    'out/host_debug/sky_snapshot'
   ])
 
 

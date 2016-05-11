@@ -129,23 +129,23 @@
     "cmd": [
       "[SLAVE_BUILD]/src/sky/tools/gn",
       "--runtime-mode",
-      "release"
+      "debug"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gn --runtime-mode release"
+    "name": "gn --runtime-mode debug"
   },
   {
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/src/out/host_release"
+      "[SLAVE_BUILD]/src/out/host_debug"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "build host_release"
+    "name": "build host_debug"
   },
   {
     "cmd": [
@@ -156,8 +156,8 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip mac_release Artifacts",
-    "stdin": "{\"entries\": [{\"archive_name\": \"sky_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/host_release/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "name": "Zip mac_debug Artifacts",
+    "stdin": "{\"entries\": [{\"archive_name\": \"sky_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/host_debug/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -169,14 +169,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_1/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/mac_release/artifacts.zip"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/mac_debug/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload \"mac_release/artifacts.zip\"",
+    "name": "gsutil upload \"mac_debug/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/mac_release/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/mac_debug/artifacts.zip@@@"
     ]
   },
   {
