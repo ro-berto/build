@@ -45,8 +45,6 @@ SUPPRESSIONS = {
         'Linux ChromiumOS Full',
     ],
     'master.chromium.gpu': [
-        'Android Debug (Nexus 5)',
-        'Android Debug (Nexus 6)',
         'GPU Linux Builder (dbg)',
         'GPU Mac Builder (dbg)',
         'GPU Win Builder (dbg)',
