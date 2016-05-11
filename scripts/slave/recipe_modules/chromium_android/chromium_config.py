@@ -10,7 +10,7 @@ CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 
 @CONFIG_CTX(includes=['android_common', 'ninja', 'static_library'],
             config_vars={'TARGET_ARCH': 'arm', 'TARGET_BITS': 32,
-                         'BUILD_CONFIG': 'Debug'})
+                         'TARGET_PLATFORM': 'android', 'BUILD_CONFIG': 'Debug'})
 def base_config(c):
   c.compile_py.default_targets=[]
 
@@ -94,7 +94,8 @@ def cronet_builder(c):
                                 'net_unittests',
                                 'net_unittests_apk',]
 
-@CONFIG_CTX(includes=['main_builder_rel'])
+@CONFIG_CTX(includes=['main_builder'],
+            config_vars={'BUILD_CONFIG': 'Release'})
 def arm_v6_builder_rel(c):  # pragma: no cover
   c.gyp_env.GYP_DEFINES['arm_version'] = 6
   c.gn_args.append('arm_version=6')
