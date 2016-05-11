@@ -44,9 +44,11 @@ class CronetApi(recipe_api.RecipeApi):
     droid.init_and_sync(use_bot_update=True)
 
 
-  def build(self, use_revision=True):
+  def build(self, use_revision=True, use_goma=True):
     self.m.chromium.runhooks()
-    if self.m.chromium.c.project_generator.tool == 'mb':
+    if self.m.chromium.c.project_generator.tool == 'gn': # pragma: no cover
+      self.m.chromium.run_gn(use_goma=use_goma)
+    elif self.m.chromium.c.project_generator.tool == 'mb':
       self.m.chromium.run_mb(
           self.m.properties['mastername'],
           self.m.properties['buildername'])

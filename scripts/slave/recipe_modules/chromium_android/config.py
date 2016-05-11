@@ -124,6 +124,10 @@ def arm_l_builder_rel(c):  # pragma: no cover
   pass
 
 @config_ctx()
+def arm_v6_builder_rel(c):  # pragma: no cover
+  pass
+
+@config_ctx()
 def x64_base(c):
   pass
 

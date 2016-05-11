@@ -76,9 +76,13 @@ def cronet_builder(c):
   c.gyp_env.GYP_DEFINES['disable_brotli_filter'] = 1
   c.gyp_env.GYP_DEFINES['disable_file_support'] = 1
   c.gyp_env.GYP_DEFINES['disable_ftp_support'] = 1
-  c.gyp_env.GYP_DEFINES['enable_bidirectional_stream'] = 1
   c.gyp_env.GYP_DEFINES['enable_websockets'] = 0
   c.gyp_env.GYP_DEFINES['use_platform_icu_alternatives'] = 1
+  c.gn_args.append('disable_brotli_filter=true')
+  c.gn_args.append('disable_file_support=true')
+  c.gn_args.append('disable_ftp_support=true')
+  c.gn_args.append('enable_websockets=false')
+  c.gn_args.append('use_platform_icu_alternatives=true')
   c.compile_py.clobber = True
   # TODO(jbudorick): Remove {cronet,net}_unittests_apk targets after
   # gn switch is finished.
@@ -89,6 +93,11 @@ def cronet_builder(c):
                                 'cronet_unittests_apk',
                                 'net_unittests',
                                 'net_unittests_apk',]
+
+@CONFIG_CTX(includes=['main_builder_rel'])
+def arm_v6_builder_rel(c):  # pragma: no cover
+  c.gyp_env.GYP_DEFINES['arm_version'] = 6
+  c.gn_args.append('arm_version=6')
 
 @CONFIG_CTX(includes=['main_builder'])
 def arm_l_builder(c):  # pragma: no cover
