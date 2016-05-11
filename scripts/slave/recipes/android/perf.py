@@ -81,32 +81,18 @@ def _ChromiumPerfTesters():
     _CreateTestSpec('Android One Perf', 'android-one',
         required_apks=['ChromePublic.apk'], num_device_shards=7,
         num_host_shards=3, target_bits=32),
-  ]
-  master_spec = {}
-  for spec in testers:
-    master_spec.update(spec)
-  return master_spec
-
-def _ChromiumPerfFYITesters():
-  testers = [
-    _CreateTestSpec('Android Nexus5 WebView Perf', 'android-webview',
-        required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
-        num_device_shards=5, num_host_shards=1, target_bits=32,
-        remove_system_webview=True),
     _CreateTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
         required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
-        num_device_shards=7, num_host_shards=2, target_bits=64,
+        num_device_shards=7, num_host_shards=3, target_bits=64,
         remove_system_webview=True),
   ]
   master_spec = {}
   for spec in testers:
     master_spec.update(spec)
   return master_spec
-
 
 BUILDERS = freeze({
   'chromium.perf': _ChromiumPerfTesters(),
-  'chromium.perf.fyi': _ChromiumPerfFYITesters(),
 })
 
 

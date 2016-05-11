@@ -15,7 +15,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/step',
   'depot_tools/tryserver',
-  'trigger',
 ]
 
 @contextmanager
@@ -65,12 +64,6 @@ BUILDERS = freeze({
         'system_webview_apk',
         'system_webview_shell_apk',
       ],
-      'triggers': [
-        {
-          'buildername': 'Android Nexus5 WebView Perf (1)',
-          'mastername': 'master.chromium.perf.fyi',
-        },
-      ]
     },
     'Android arm64 Builder': {
       'recipe_config': 'arm64_builder_rel_mb',
@@ -94,16 +87,6 @@ BUILDERS = freeze({
         'system_webview_apk',
         'system_webview_shell_apk',
       ],
-      'triggers': [
-        {
-          'buildername': 'Android Nexus5X WebView Perf (1)',
-          'mastername': 'master.chromium.perf.fyi',
-        },
-        {
-          'buildername': 'Android Nexus5X WebView Perf (2)',
-          'mastername': 'master.chromium.perf.fyi',
-        }
-      ]
     }
   },
   'tryserver.chromium.perf': {
@@ -226,14 +209,6 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   if upload_config:
     droid.zip_and_upload_build(upload_config['bucket'])
 
-  # TODO(mikecase): Remove this logic once WebView bots are on chromium.perf
-  if bot_config.get('triggers'):
-    api.trigger(*[{'bucket': b['mastername'],
-                   'builder_name': b['buildername'],
-                   'properties': {
-                      'revision': api.properties['revision'],
-                      'parent_revision': api.properties['revision']}
-                   } for b in bot_config['triggers']])
 
 def RunSteps(api, mastername, buildername, revision):
   with api.tryserver.set_failure_hash():
