@@ -117,6 +117,11 @@ class Process(_pollingfile._PollingTimer, BaseProcess):
 
     closedNotifies = 0
 
+    # in some cases the subprocess can exit, but the std{out,err} handles never
+    # close. We set a 30s timeout after the first notification that the process
+    # has quit to consider it really dead.
+    BOGUS_PROCESS_DEATH_TIMEOUT_SECS = 30
+
     def __init__(self, reactor, protocol, command, args, environment, path):
         _pollingfile._PollingTimer.__init__(self, reactor)
         BaseProcess.__init__(self, protocol)
@@ -233,6 +238,8 @@ class Process(_pollingfile._PollingTimer, BaseProcess):
 
         self._addPollableResource(_Reaper(self))
 
+        self.lostProcessTimeout = None
+        self.isDead = False
 
     def signalProcess(self, signalID):
         if self.pid is None:
@@ -305,14 +312,31 @@ class Process(_pollingfile._PollingTimer, BaseProcess):
         self.closedNotifies += 1
         self.maybeCallProcessEnded()
 
+    def doCallProcessEnded(self):
+        if self.lostProcessTimeout is not None:
+            self.lostProcessTimeout.cancel()
+            self.lostProcessTimeout = None
+
+        if self.isDead:
+            return
+        self.isDead = True
+
+        win32file.CloseHandle(self.hProcess)
+        win32file.CloseHandle(self.hThread)
+        self.hProcess = None
+        self.hThread = None
+        self.loseConnection()
+
+        BaseProcess.maybeCallProcessEnded(self)
 
     def maybeCallProcessEnded(self):
-        if self.closedNotifies == 3 and self.lostProcess:
-            win32file.CloseHandle(self.hProcess)
-            win32file.CloseHandle(self.hThread)
-            self.hProcess = None
-            self.hThread = None
-            BaseProcess.maybeCallProcessEnded(self)
+        if self.lostProcess:
+            if self.closedNotifies == 3:
+                self.doCallProcessEnded()
+            elif self.lostProcessTimeout is None:
+                self.lostProcessTimeout = self.reactor.callLater(
+                    self.BOGUS_PROCESS_DEATH_TIMEOUT_SECS,
+                    self.doCallProcessEnded)
 
 
     # IConsumer
