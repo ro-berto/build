@@ -614,6 +614,9 @@ class ChromiumApi(recipe_api.RecipeApi):
         'GOMA_SERVICE_ACCOUNT_JSON_FILE': self.m.goma.service_account_json_path,
       }
     }
+    if self.c.env.FORCE_MAC_TOOLCHAIN:
+      kwargs['env']['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
+
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
