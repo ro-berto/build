@@ -40,12 +40,6 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._skia_api.run(self._skia_api.m.step, 'build iOSShell', cmd=cmd,
                        cwd=self._skia_api.m.path['checkout'])
 
-  @property
-  def out_dir(self):
-    """Flavor-specific out directory."""
-    return self._skia_api.skia_dir.join(
-        'xcodebuild', '%s-iphoneos' % self._skia_api.configuration)
-
   def device_path_join(self, *args):
     """Like os.path.join(), but for paths on a connected iOS device."""
     return '/'.join(args)
@@ -112,6 +106,13 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         env=self.default_env,
         infra_step=True,
     ) # pragma: no cover
+
+  def copy_extra_build_products(self, swarming_out_dir):
+    xcode_dir = self._skia_api.m.path.join(
+        'xcodebuild', '%s-iphoneos' % self._skia_api.configuration)
+    self._skia_api.copy_build_products(
+        self._skia_api.skia_dir.join(xcode_dir),
+        swarming_out_dir.join(xcode_dir))
 
   def create_clean_device_dir(self, path):
     """Like shutil.rmtree() + os.makedirs(), but on a connected device."""
