@@ -72,7 +72,7 @@ index 0ccee9e..6cd000c 100644
 =======
 
 diff --git a/third_party/twisted_10_2/twisted/internet/_dumbwin32proc.py b/third_party/twisted_10_2/twisted/internet/_dumbwin32proc.py
-index 6a31ae3..767e6ad 100644
+index 6a31ae3..3a6d2e7 100644
 --- a/third_party/twisted_10_2/twisted/internet/_dumbwin32proc.py
 +++ b/third_party/twisted_10_2/twisted/internet/_dumbwin32proc.py
 @@ -117,6 +117,11 @@ class Process(_pollingfile._PollingTimer, BaseProcess):
@@ -96,13 +96,14 @@ index 6a31ae3..767e6ad 100644
  
      def signalProcess(self, signalID):
          if self.pid is None:
-@@ -305,14 +312,31 @@ class Process(_pollingfile._PollingTimer, BaseProcess):
+@@ -305,14 +312,32 @@ class Process(_pollingfile._PollingTimer, BaseProcess):
          self.closedNotifies += 1
          self.maybeCallProcessEnded()
  
 +    def doCallProcessEnded(self):
 +        if self.lostProcessTimeout is not None:
-+            self.lostProcessTimeout.cancel()
++            if self.lostProcessTimeout.active():
++                self.lostProcessTimeout.cancel()
 +            self.lostProcessTimeout = None
 +
 +        if self.isDead:

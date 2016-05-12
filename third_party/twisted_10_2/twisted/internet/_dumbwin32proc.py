@@ -314,7 +314,8 @@ class Process(_pollingfile._PollingTimer, BaseProcess):
 
     def doCallProcessEnded(self):
         if self.lostProcessTimeout is not None:
-            self.lostProcessTimeout.cancel()
+            if self.lostProcessTimeout.active():
+                self.lostProcessTimeout.cancel()
             self.lostProcessTimeout = None
 
         if self.isDead:
