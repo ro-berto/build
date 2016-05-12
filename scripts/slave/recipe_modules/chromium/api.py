@@ -514,7 +514,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
     self.m.gclient.runhooks(**kwargs)
 
-  def run_gn(self, use_goma=False):
+  def run_gn(self, use_goma=False, gn_path=None):
+    if not gn_path:
+      gn_path = self.m.path['depot_tools'].join('gn.py')
+
     gn_args = list(self.c.gn_args)
 
     # TODO(dpranke): Figure out if we should use the '_x64' thing to
@@ -552,15 +555,17 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_args.append('goma_dir="%s"' % self.c.compile_py.goma_dir)
     gn_args.extend(self.c.project_generator.args)
 
-    self.m.python(
-        name='gn',
-        script=self.m.path['depot_tools'].join('gn.py'),
-        args=[
-            '--root=%s' % str(self.m.path['checkout']),
-            'gen',
-            build_dir,
-            '--args=%s' % ' '.join(gn_args),
-        ])
+    # TODO(jbudorick): Change this s.t. no clients use gn.py.
+    step_args = [
+        '--root=%s' % str(self.m.path['checkout']),
+        'gen',
+        build_dir,
+        '--args=%s' % ' '.join(gn_args),
+    ]
+    if str(gn_path).endswith('.py'):
+      self.m.python(name='gn', script=gn_path, args=step_args)
+    else:
+      self.m.step(name='gn', cmd=[gn_path] + step_args)
 
   def run_mb(self, mastername, buildername, use_goma=True,
              mb_config_path=None, isolated_targets=None, name=None,

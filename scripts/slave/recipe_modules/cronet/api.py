@@ -28,7 +28,8 @@ class CronetApi(recipe_api.RecipeApi):
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
-  def init_and_sync(self, recipe_config, kwargs, gyp_defs):
+  def init_and_sync(self, recipe_config, kwargs, gyp_defs,
+                    chromium_apply_config=None):
     default_kwargs = {
       'REPO_URL': 'https://chromium.googlesource.com/chromium/src',
       'INTERNAL': False,
@@ -40,6 +41,8 @@ class CronetApi(recipe_api.RecipeApi):
         recipe_config,
         **dict(default_kwargs.items() + kwargs.items()))
     self.m.chromium.apply_config('cronet_builder')
+    for c in chromium_apply_config or []:
+      self.m.chromium.apply_config(c)
     self.m.chromium.c.gyp_env.GYP_DEFINES.update(gyp_defs)
     droid.init_and_sync(use_bot_update=True)
 
@@ -47,7 +50,11 @@ class CronetApi(recipe_api.RecipeApi):
   def build(self, use_revision=True, use_goma=True):
     self.m.chromium.runhooks()
     if self.m.chromium.c.project_generator.tool == 'gn': # pragma: no cover
-      self.m.chromium.run_gn(use_goma=use_goma)
+      assert (self.m.chromium.c.HOST_PLATFORM == 'linux'
+              and self.m.chromium.c.HOST_BITS == 64)
+      self.m.chromium.run_gn(
+          use_goma=use_goma,
+          gn_path=self.m.path['checkout'].join('buildtools', 'linux64', 'gn'))
     elif self.m.chromium.c.project_generator.tool == 'mb':
       self.m.chromium.run_mb(
           self.m.properties['mastername'],
