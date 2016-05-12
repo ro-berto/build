@@ -866,6 +866,7 @@ def main_ninja(options, args):
 
   # Prepare environment.
   env = EchoDict(os.environ)
+  env['NINJA_STATUS'] = '[%f/%t, %r running] '
   goma_ready = goma_setup(options, env)
   exit_status = -1
   try:
