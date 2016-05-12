@@ -19,11 +19,16 @@ class ServiceAccountApi(recipe_api.RecipeApi):
     else:
       self.set_config('service_account_default')
 
+  def get_json_path(self, account):
+    if self.c is None:
+      self._config_defaults()
+    return self.m.path.join(self.c.accounts_path,
+                            'service-account-%s.json' % account)
+
   def get_token(self, account, scopes=None):
     if self.c is None:
       self._config_defaults()
-    account_file = self.m.path.join(self.c.accounts_path,
-                                    'service-account-%s.json' % account)
+    account_file = self.get_json_path(account)
     cmd = [self.c.authutil_path, 'token',
            '-service-account-json=' + account_file]
     if scopes:
