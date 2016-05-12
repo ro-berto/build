@@ -14,8 +14,6 @@ def Update(c):
   hourly_builders = [
     'Android Builder (dbg)',
     'Android Builder ARM64 (dbg)',
-    'Android GN',
-    'Android GN (dbg)',
     'Linux Builder',
     'Mac Builder',
     'Mac GN',
@@ -81,16 +79,6 @@ def Update(c):
     {'name': 'Android Tests (dbg) (L Nexus6)', 'category': 'android'},
     {'name': 'Android Tests (dbg) (L Nexus7.2)', 'category': 'android'},
     {'name': 'Android Tests (dbg) (L Nexus9)', 'category': 'android'},
-    {
-      'name': 'Android GN',
-      'category': 'android',
-      'slavebuilddir': 'android_gn',
-    },
-    {
-      'name': 'Android GN (dbg)',
-      'category': 'android',
-      'slavebuilddir': 'android_gn',
-    },
   ]
 
   for spec in specs:
