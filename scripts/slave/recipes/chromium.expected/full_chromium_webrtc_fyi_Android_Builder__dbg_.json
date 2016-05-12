@@ -332,7 +332,6 @@
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--",
-      "android_builder_chromium_webrtc",
       "content_browsertests_apk"
     ],
     "env": {

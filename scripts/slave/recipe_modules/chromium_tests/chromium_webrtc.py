@@ -55,7 +55,7 @@ def BuildSpec(platform, target_bits, build_config='Release',
       build_config=build_config)
 
   if platform == 'android':
-    spec['compile_targets'] = ['android_builder_chromium_webrtc']
+    spec['compile_targets'] = []
   else:
     spec['compile_targets'] = ['chromium_builder_webrtc']
 
