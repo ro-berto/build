@@ -529,11 +529,17 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.TARGET_PLATFORM == 'android':
       gn_args.append('target_os="android"')
     elif self.c.TARGET_PLATFORM in ('linux', 'mac', 'win'):
-      assert self.c.TARGET_BITS == 64
-      gn_args.append('target_cpu="x64"')
+      assert self.c.TARGET_ARCH == 'intel' and self.c.TARGET_BITS == 64
 
-    if self.c.TARGET_ARCH == 'arm':
-      gn_args.append('target_cpu="arm"')
+    gn_cpu = {
+      ('intel', 32): 'x86',
+      ('intel', 64): 'x64',
+      ('arm',   32): 'arm',
+      ('arm',   64): 'arm64',
+      ('mipsel',  32): 'mipsel',
+    }.get((self.c.TARGET_ARCH, self.c.TARGET_BITS))
+    if gn_cpu:
+      gn_args.append('target_cpu="%s"' % gn_cpu)
 
     # TODO: crbug.com/395784.
     # Consider getting the flags to use via the project_generator config
