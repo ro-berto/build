@@ -51,7 +51,7 @@ def webrtc_openh264(c):
   if c.TARGET_PLATFORM == 'android':
     raise BadConf('h264 decode not supported for Android')  # pragma: no cover
   c.gyp_env.GYP_DEFINES['ffmpeg_branding'] = 'Chrome'
-  c.gyp_env.GYP_DEFINES['rtc_use_264'] = 1
+  c.gyp_env.GYP_DEFINES['rtc_use_h264'] = 1
 
 def _compiler_defaults(c):
   c.compile_py.default_targets = ['All']
