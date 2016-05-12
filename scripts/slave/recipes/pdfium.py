@@ -69,7 +69,8 @@ def _GNGenBuilds(api, xfa, v8, rel, out_dir):
              gn_bool[not rel], gn_bool[v8], gn_bool[xfa])
 
   api.python('gn gen', gn_cmd,
-             ['gen', api.path.join('out', out_dir), '--args="' + args + '"'],
+             ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
+              '--args=' + args + ''],
              cwd=checkout)
 
 def _BuildSteps(api, out_dir):

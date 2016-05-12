@@ -66,9 +66,10 @@
       "python",
       "-u",
       "[DEPOT_TOOLS]\\gn.py",
+      "--root=[SLAVE_BUILD]\\pdfium",
       "gen",
-      "out\\Release_x64",
-      "--args=\"is_debug=false pdf_enable_v8=true pdf_enable_xfa=true pdf_is_standalone=true clang_use_chrome_plugins=false\""
+      "//out/Release_x64",
+      "--args=is_debug=false pdf_enable_v8=true pdf_enable_xfa=true pdf_is_standalone=true clang_use_chrome_plugins=false"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "gn gen"
