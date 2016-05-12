@@ -187,6 +187,7 @@ def RunSteps(api, target_mastername, target_buildername,
     sub_ranges.append([None] + remaining_revisions)
   else:
     # Treat the entire regression range as a single sub-range.
+    # None is a placeholder for the last known good revision.
     sub_ranges = [[None] + all_revisions]
 
   compile_results = {}
@@ -206,21 +207,21 @@ def RunSteps(api, target_mastername, target_buildername,
   try:
     while not found and sub_ranges:
       # Sub-ranges with newer revisions are tested first.
-      first_revision = sub_ranges[0][0]
+      revision_before_suspect = sub_ranges[0][0]
       remaining_revisions = sub_ranges[0][1:]
       sub_ranges.pop(0)
 
-      if first_revision is not None:  # No compile for last known good revision.
-        revision_being_checked = first_revision
+      if revision_before_suspect is not None:
+        revision_being_checked = revision_before_suspect
         compile_result = _run_compile_at_revision(
             api, target_mastername, target_buildername,
-            first_revision, compile_targets, use_analyze)
-        compile_results[first_revision] = compile_result
+            revision_being_checked, compile_targets, use_analyze)
+        compile_results[revision_being_checked] = compile_result
         if compile_result == CompileResult.FAILED:
           # The first revision of this sub-range already failed, thus either it
           # is the culprit or the culprit is in a sub-range with older
           # revisions.
-          culprit_candidate = first_revision
+          culprit_candidate = revision_being_checked
           continue
 
       # If the first revision in the current sub-range passed, the culprit is
@@ -230,8 +231,12 @@ def RunSteps(api, target_mastername, target_buildername,
       if compile_targets and use_bisect:
         # Could bisect only when failed compile targets are given.
         while remaining_revisions:
-          middle_index = len(remaining_revisions) / 2
-          revision_being_checked = remaining_revisions[middle_index]
+          if remaining_revisions[0] in suspected_revisions:
+            # In this case, we test the suspected revision before real bisect.
+            index = 0
+          else:
+            index = len(remaining_revisions) / 2
+          revision_being_checked = remaining_revisions[index]
           compile_result = _run_compile_at_revision(
               api, target_mastername, target_buildername,
               revision_being_checked, compile_targets, use_analyze)
@@ -239,11 +244,11 @@ def RunSteps(api, target_mastername, target_buildername,
           if compile_result == CompileResult.FAILED:
             # This failed revision is the new candidate to suspect.
             culprit_candidate = revision_being_checked
-            remaining_revisions = remaining_revisions[:middle_index]
+            remaining_revisions = remaining_revisions[:index]
           else:  # Compile passed, or skipped for non-existent compile targets.
             # TODO(http://crbug.com/610526): If compile failures is due to
             # "unknown targets", bisect won't work due to skipped compile.
-            remaining_revisions = remaining_revisions[middle_index + 1:]
+            remaining_revisions = remaining_revisions[index + 1:]
       else:
         for revision in remaining_revisions:
           revision_being_checked = revision
@@ -592,6 +597,36 @@ def GenTests(api):
                              api.json.output({
                                  'found': [],
                                  'not_found': ['target_name'],
+                             })) +
+      api.override_step_data('test r5.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r5.compile', retcode=1)
+  )
+
+  # Entire regression range: (r1, r8]
+  # Suspected_revisions: [r5]
+  # Expected smaller ranges:
+  #     [r4, r5, r6, r7, r8], [None, r2, r3]
+  # Actual culprit: r5
+  # Should only run compile on r4(pass), and r5(failed).
+  yield (
+      api.test('check_suspected_revision_before_bisect') +
+      props(compile_targets=['target_name'],
+            good_revision='r1',
+            bad_revision='r8',
+            suspected_revisions=['r5'],
+            use_bisect=True) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(2, 9))))) +
+      api.override_step_data('test r4.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
                              })) +
       api.override_step_data('test r5.check_targets',
                              api.json.output({
