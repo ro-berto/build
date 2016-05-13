@@ -533,7 +533,7 @@ def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
 class DynamicPerfTests(Test):
   def __init__(self, perf_id, platform, target_bits, max_battery_temp=None,
                num_device_shards=1, num_host_shards=1, shard_index=0,
-               known_devices_file=None):
+               known_devices_file=None, override_browser_name=None):
     self._perf_id = perf_id
     self._platform = platform
     self._target_bits = target_bits
@@ -544,13 +544,15 @@ class DynamicPerfTests(Test):
     self._shard_index = shard_index
     self._known_devices_file = known_devices_file
 
-  @staticmethod
-  def _browser_name(platform, target_bits):
-    if platform == 'android':
-      return 'android-chromium'
-    if platform == 'win' and target_bits == 64:
-      return 'release_x64'
-    return 'release'
+    if override_browser_name:
+      self._browser_name = override_browser_name
+    else:
+      if platform == 'android':
+        self._browser_name = 'android-chromium'
+      elif platform == 'win' and target_bits == 64:
+        self._browser_name = 'release_x64'
+      else:
+        self._browser_name ='release'
 
   @property
   def name(self):
@@ -576,7 +578,7 @@ class DynamicPerfTests(Test):
       device = None
 
     tests = api.chromium.list_perf_tests(
-        browser=self._browser_name(self._platform, self._target_bits),
+        browser=self._browser_name,
         num_shards=self._num_host_shards * self._num_device_shards,
         device=device).json.output
 

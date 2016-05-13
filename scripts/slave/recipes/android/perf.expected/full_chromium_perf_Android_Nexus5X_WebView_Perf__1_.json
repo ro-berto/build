@@ -422,7 +422,7 @@
       "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
       "list",
       "--browser",
-      "android-chromium",
+      "android-webview",
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",

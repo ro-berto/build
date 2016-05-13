@@ -25,10 +25,10 @@ REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
                     num_host_shards=1, target_bits=64,
-                    remove_system_webview=False):
+                    browser_name=None, remove_system_webview=False):
   def _CreateShardTestSpec(name, perf_id, required_apks, num_device_shards,
                            num_host_shards, shard_index, target_bits,
-                           remove_system_webview):
+                           browser_name, remove_system_webview):
     spec = {
       'perf_id': perf_id,
       'required_apks': required_apks,
@@ -39,6 +39,7 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
       'known_devices_file': '.known_devices',
+      'browser_name': browser_name,
       'remove_system_webview': remove_system_webview,
     }
     if target_bits == 32:
@@ -55,7 +56,7 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
     builder_name = '%s (%d)' % (name, shard_index + 1)
     tester_spec[builder_name] = _CreateShardTestSpec(
         name, perf_id, required_apks, num_device_shards, num_host_shards,
-        shard_index, target_bits, remove_system_webview)
+        shard_index, target_bits, browser_name, remove_system_webview)
   return tester_spec
 
 def _ChromiumPerfTesters():
@@ -84,7 +85,7 @@ def _ChromiumPerfTesters():
     _CreateTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
         required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
         num_device_shards=7, num_host_shards=3, target_bits=64,
-        remove_system_webview=True),
+        browser_name='android-webview', remove_system_webview=True),
   ]
   master_spec = {}
   for spec in testers:
@@ -162,7 +163,8 @@ def RunSteps(api):
         num_device_shards=builder['num_device_shards'],
         num_host_shards=builder.get('num_host_shards', 1),
         shard_index=builder.get('shard_index', 0),
-        known_devices_file=builder.get('known_devices_file', None))
+        known_devices_file=builder.get('known_devices_file', None),
+        override_browser_name=builder.get('browser_name'))
     dynamic_perf_tests.run(api, None)
 
     if failures:

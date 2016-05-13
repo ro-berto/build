@@ -79,8 +79,9 @@ def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
       platform=platform,
       target_bits=target_bits,
       tests=[steps.DynamicPerfTests(
-        perf_id, platform, target_bits, max_battery_temp, num_device_shards,
-        num_host_shards, shard_index, known_devices_file)],
+        perf_id, platform, target_bits, max_battery_temp=max_battery_temp,
+        num_device_shards=num_device_shards, num_host_shards=num_host_shards,
+        shard_index=shard_index, known_devices_file=known_devices_file)],
   )
 
   spec['parent_buildername'] = parent_builder
