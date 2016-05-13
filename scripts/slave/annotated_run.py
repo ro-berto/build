@@ -80,7 +80,7 @@ LogDogPlatform = collections.namedtuple('LogDogPlatform', (
 
 # CIPD tag for LogDog Butler/Annotee to use.
 LOGDOG_CIPD_CANARY = 'latest'
-LOGDOG_CIPD_VERSION = 'git_revision:7217257ea091b8952113d87235d643b620210097'
+LOGDOG_CIPD_VERSION = 'git_revision:c14cc8b8353865d22095e523179ff7768e3243f9'
 
 # RecipeRuntime will probe this for values.
 # - First, (),
@@ -90,7 +90,7 @@ PLATFORM_CONFIG = {
   # All systems.
   (): {
     'logdog_project': 'chromium',
-    'logdog_host': 'luci-logdog',
+    'logdog_host': 'luci-logdog.appspot.com',
     'logdog_pubsub_topic': 'projects/luci-logdog/topics/logs',
     'logdog_max_buffer_age': '15s',
   },
