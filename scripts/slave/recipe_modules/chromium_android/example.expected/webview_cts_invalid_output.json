@@ -632,6 +632,16 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/android_webview/tools/cts_config/expected_failure_on_bot.json",
+      "/path/to/tmp/"
+    ],
+    "name": "Fetch the expected failures tests for CTS from chromium checkout"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
@@ -666,7 +676,19 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@stdout@Invalid CTS output here...@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_LOG_END@stdout@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                        {@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                          \"android.webkit.cts.ExampleBlacklistedTest\":@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                            [@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                              {@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                                \"name\": \"testA\", @@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                                \"_bug_id\": \"crbug.com/123\"@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                              },@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                              {\"name\": \"testB\"}@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                            ]@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                          }@@@",
+      "@@@STEP_LOG_END@disabled_tests@@@"
     ]
   },
   {

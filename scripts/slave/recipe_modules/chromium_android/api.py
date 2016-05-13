@@ -114,7 +114,8 @@ class AndroidApi(recipe_api.RecipeApi):
       result = self.m.bot_update.ensure_checkout(
           spec, refs=refs, with_branch_heads=with_branch_heads, force=True)
     else:
-      result = self.m.gclient.checkout(spec, with_branch_heads=with_branch_heads)
+      result = self.m.gclient.checkout(
+          spec, with_branch_heads=with_branch_heads)
 
     # TODO(sivachandra): Manufacture gclient spec such that it contains "src"
     # solution + repo_name solution. Then checkout will be automatically
@@ -964,6 +965,8 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join(
           'android_webview', 'tools', 'cts_config', 'webview_cts_gcs_path.txt'),
         test_data='android-cts-5.1_r5-linux_x86-arm.zip')
+    _CTS_CONFIG_SRC_PATH = self.m.path['checkout'].join(
+        'android_webview', 'tools', 'cts_config')
     _CTS_XML_TESTCASE_ELEMENTS = ('./TestPackage/TestSuite[@name="android"]/'
                                   'TestSuite[@name="webkit"]/'
                                   'TestSuite[@name="cts"]/TestCase')
@@ -972,28 +975,23 @@ class AndroidApi(recipe_api.RecipeApi):
     _CTS_FILE_NAME = _CTS_FILE_NAME.strip()
     # WebView user agent is changed, and new CTS hasn't been published to
     # reflect that.
-    _EXPECTED_FAILURES = {
-      'android.webkit.cts.WebSettingsTest': [
-        'testUserAgentString_default',
-      ],
-      # crbug.com/534643, crbug.com/514474, crbug.com/563493, crbug.com/587179
-      'android.webkit.cts.WebViewTest': [
-        'testPageScroll',
-        'testStopLoading',
-        'testJavascriptInterfaceForClientPopup',
-        'testRequestImageRef',
-        'testSetDownloadListener',
-        'testSetInitialScale',
-      ],
-      # crbug.com/514473
-      'android.webkit.cts.WebViewSslTest': [
-        'testSslErrorProceedResponseNotReusedForDifferentHost',
-      ],
-      # crbug.com/594573
-      'android.webkit.cts.WebChromeClientTest': [
-        'testOnJsBeforeUnload',
-      ],
-    }
+    expected_failure_json = self.m.file.read(
+        'Fetch the expected failures tests for CTS from chromium checkout',
+        _CTS_CONFIG_SRC_PATH.join('expected_failure_on_bot.json'),
+        test_data = '''
+                        {
+                          "android.webkit.cts.ExampleBlacklistedTest":
+                            [
+                              {
+                                "name": "testA", 
+                                "_bug_id": "crbug.com/123"
+                              },
+                              {"name": "testB"}
+                            ]
+                          }'''
+        )
+    expected_failure = self.m.json.loads(expected_failure_json)
+    
 
     cts_base_dir = self.m.path.mkdtemp('cts')
     cts_zip_path = cts_base_dir.join(_CTS_FILE_NAME)
@@ -1018,6 +1016,8 @@ class AndroidApi(recipe_api.RecipeApi):
         result = self.m.step.active_result
         if result.stdout:
           result.presentation.logs['stdout'] = result.stdout.splitlines()
+        result.presentation.logs['disabled_tests'] = (
+            expected_failure_json.split('\n'))
 
       from xml.etree import ElementTree
 
@@ -1046,8 +1046,9 @@ class AndroidApi(recipe_api.RecipeApi):
           if test_method.get('result') == 'notExecuted':
             not_executed_tests.append(method_name)
           elif (test_method.find('./FailedScene') is not None and
-                test_method.get('name') not in _EXPECTED_FAILURES.get(
-                    class_name, [])):
+                test_method.get('name') not in 
+                  [ t.get('name') for t in 
+                    expected_failure.get(class_name, []) ]):
             unexpected_test_failures.append(method_name)
 
       if unexpected_test_failures or not_executed_tests:
