@@ -184,23 +184,25 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/src/out/android_profile"
+      "[SLAVE_BUILD]/src/out/android_profile",
+      "sky/engine/bindings:snapshot_cc"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "build android_profile"
+    "name": "build android_profile sky/engine/bindings:snapshot_cc"
   },
   {
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/src/out/android_release"
+      "[SLAVE_BUILD]/src/out/android_release",
+      "sky/engine/bindings:snapshot_cc"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "build android_release"
+    "name": "build android_release sky/engine/bindings:snapshot_cc"
   },
   {
     "cmd": [

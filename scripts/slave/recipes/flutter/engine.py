@@ -190,8 +190,8 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
 
   Build(api, 'host_debug')
-  Build(api, 'android_profile')
-  Build(api, 'android_release')
+  Build(api, 'android_profile', 'sky/engine/bindings:snapshot_cc')
+  Build(api, 'android_release', 'sky/engine/bindings:snapshot_cc')
 
   UploadArtifacts(api, 'darwin-x64', [
     'out/host_debug/sky_snapshot'
