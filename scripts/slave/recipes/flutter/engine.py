@@ -118,8 +118,8 @@ def BuildLinuxAndroidArm(api):
     'icudtl.dat',
     'gen/sky/shell/shell/classes.dex.jar',
   ]
-  RunGN(api, '--android', '--enable-gcm', '--enable-firebase')
-  Build(api, 'android_debug', ':dist', 'gcm', 'sky/services/firebase')
+  RunGN(api, '--android', '--enable-gcm')
+  Build(api, 'android_debug', ':dist', 'gcm')
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
   ] + AddPathPrefix(api, 'out/android_debug', out_paths))
@@ -160,7 +160,6 @@ def BuildLinuxAndroidArm(api):
     Upload(ServicesOut(dex_jar), dex_jar)
     Upload(ServicesOut(interfaces_jar), interfaces_jar)
 
-  UploadService('firebase', 'out/android_debug/gen/sky/services')
   UploadService('gcm', 'out/android_debug/gen/third_party')
 
 
