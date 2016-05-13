@@ -186,10 +186,24 @@ def TestObservatory(api):
 
 def BuildMac(api):
   RunGN(api, '--runtime-mode', 'debug')
+  RunGN(api, '--runtime-mode', 'profile', '--android')
+  RunGN(api, '--runtime-mode', 'release', '--android')
+
   Build(api, 'host_debug')
-  UploadArtifacts(api, 'mac_debug', [
+  Build(api, 'android_profile')
+  Build(api, 'android_release')
+
+  UploadArtifacts(api, 'darwin-x64', [
     'out/host_debug/sky_snapshot'
   ])
+
+  UploadArtifacts(api, "android-arm-profile" , [
+    'out/android_profile/clang_i386/gen_snapshot',
+  ], archive_name='darwin-x64.zip')
+
+  UploadArtifacts(api, "android-arm-release" , [
+    'out/android_release/clang_i386/gen_snapshot',
+  ], archive_name='darwin-x64.zip')
 
 
 def PackageIOSVariant(api, label, device_out, sim_out):
