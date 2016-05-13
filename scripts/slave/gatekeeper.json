@@ -226,6 +226,18 @@
             ]
           }
         }
+      },
+      {
+        "close_tree": false,
+        "builders": {
+          "recipe-autoroller-public": {
+            "tree_notify": [
+              "martiniss@chromium.org",
+              "estaab@chromium.org"
+            ],
+            "forgiving_optional": [ "*" ]
+          }
+        }
       }
     ],
     "https://build.chromium.org/p/chromium.infra": [
