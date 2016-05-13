@@ -2,9 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from collections import defaultdict
 import json
 
 from recipe_engine.config import Dict
+from recipe_engine.config import List
 from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
@@ -53,6 +55,9 @@ PROPERTIES = {
     'use_analyze': Property(
         kind=Single(bool, empty_val=False, required=False), default=True,
         help='Use analyze to skip commits that do not affect tests.'),
+    'suspected_revisions': Property(
+        kind=List(basestring), default=[],
+        help='A list of suspected revisions from heuristic analysis.'),
 }
 
 
@@ -134,6 +139,7 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
           suffix=revision, test_filters=requested_tests)
 
     # Process failed tests.
+    failed_tests_dict = defaultdict(list)
     for failed_test in failed_tests:
       valid = failed_test.has_valid_results(api, suffix=revision)
       results[failed_test.name] = {
@@ -141,8 +147,9 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
           'valid': valid,
       }
       if valid:
-        results[failed_test.name]['failures'] = list(
-            failed_test.failures(api, suffix=revision))
+        test_list = list(failed_test.failures(api, suffix=revision))
+        results[failed_test.name]['failures'] = test_list
+        failed_tests_dict[failed_test.name].extend(test_list)
 
     # Process passed tests.
     for test in actual_tests_to_run:
@@ -162,11 +169,26 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
             'valid': True,
         }
 
-    return results
+    return results, failed_tests_dict
 
 
-def RunSteps(api, target_mastername, target_testername,
-             good_revision, bad_revision, tests, use_analyze):
+def _get_reduced_test_dict(original_test_dict, failed_tests_dict):
+  # Remove tests that are in both dicts from the original test dict.
+  if not failed_tests_dict:
+    return original_test_dict
+  reduced_dict = defaultdict(list)
+  for step, tests in original_test_dict.iteritems():
+    if step in failed_tests_dict:
+      for test in tests:
+        if test not in failed_tests_dict[step]:
+          reduced_dict[step].append(test)
+    else:
+      reduced_dict[step].extend(tests)
+  return reduced_dict
+
+
+def RunSteps(api, target_mastername, target_testername, good_revision,
+             bad_revision, tests, use_analyze, suspected_revisions):
   assert tests, 'No failed tests were specified.'
 
   # Figure out which builder configuration we should match for compile config.
@@ -198,6 +220,37 @@ def RunSteps(api, target_mastername, target_testername,
       root_solution_revision=bad_revision)
   revisions_to_check = api.findit.revisions_between(good_revision, bad_revision)
 
+  suspected_revision_index = [
+      revisions_to_check.index(r)
+          for r in set(suspected_revisions) if r in revisions_to_check]
+
+  # Segments revisions_to_check by suspected_revisions.
+  # Each sub_range will contain following elements:
+  # 1. Revision before a suspected_revision or None as a placeholder
+  #    when no such revision
+  # 2. Suspected_revision
+  # 3. Revisions between a suspected_revision and the revision before next
+  #    suspected_revision, or remaining revisions before all suspect_revisions.
+  # For example, if revisions_to_check are [r0, r1, ..., r6] and
+  # suspected_revisions are [r2, r5], sub_ranges will be:
+  # [[None, r0], [r1, r2, r3], [r4, r5, r6]]
+  if suspected_revision_index:
+    # If there are consecutive revisions being suspected, include them
+    # in the same sub_range by only saving the oldest revision.
+    suspected_revision_index = [i for i in suspected_revision_index
+                                if i - 1 not in suspected_revision_index]
+    sub_ranges = []
+    remaining_revisions = revisions_to_check[:]
+    for index in sorted(suspected_revision_index, reverse=True):
+      if index > 0:
+        sub_ranges.append(remaining_revisions[index - 1:])
+        remaining_revisions = remaining_revisions[:index - 1]
+    # None is a placeholder for the last known good revision.
+    sub_ranges.append([None] + remaining_revisions)
+  else:
+    # Treats the entire regression range as a single sub-range.
+    sub_ranges = [[None] + revisions_to_check]
+
   test_results = {}
   try_job_metadata = {
       'regression_range_size': len(revisions_to_check)
@@ -209,25 +262,71 @@ def RunSteps(api, target_mastername, target_testername,
 
   revision_being_checked = None
   try:
-    # We compile & run tests from the first revision to the last revision in the
-    # regression range serially instead of a typical bisecting, because jumping
-    # between new and old revisions might affect Goma capacity and build cycle
-    # times. Thus we plan to go with this simple serial approach first so that
-    # compile would be fast due to incremental compile.
-    # If this won't work out, we will figure out a better solution for speed of
-    # both compile and test.
-    for current_revision in revisions_to_check:
-      revision_being_checked = current_revision
-      test_results[current_revision] = _compile_and_test_at_revision(
-          api, target_mastername, target_buildername, target_testername,
-          current_revision, tests, use_analyze)
-      # TODO(http://crbug.com/566975): check whether culprits for all failed
-      # tests are found and stop running tests at later revisions if so.
+    culprits = defaultdict(dict)
+    # Tests that haven't found culprits in tested revision(s).
+    tests_have_not_found_culprit = tests
+    # Iterates through sub_ranges and find culprits for each failed test.
+    # Sub-ranges with newer revisions are tested first so we have better chance
+    # that try job will reproduce exactly the same failure as in waterfall.
+    for sub_range in sub_ranges:
+      if not tests_have_not_found_culprit:  # All tests have found culprits.
+        break
+
+      # The revision right before the suspected revision provided by
+      # the heuristic result.
+      potential_green_rev = sub_range[0]
+      following_revisions = sub_range[1:]
+      if potential_green_rev:
+        revision_being_checked = potential_green_rev
+        test_results[potential_green_rev], tests_failed_in_potential_green = (
+            _compile_and_test_at_revision(
+                api, target_mastername, target_buildername, target_testername,
+                potential_green_rev,tests_have_not_found_culprit, use_analyze))
+      else:
+        tests_failed_in_potential_green = {}
+
+      tests_passed_in_potential_green = _get_reduced_test_dict(
+         tests_have_not_found_culprit, tests_failed_in_potential_green)
+
+      # Culprits for tests that failed in potential green should be earlier, so
+      # removes passed tests and only runs failed ones in following revisions.
+      if tests_passed_in_potential_green:
+        tests_to_run = tests_passed_in_potential_green
+        for revision in following_revisions:
+          revision_being_checked = revision
+          # Since tests_to_run are tests that passed in previous revision,
+          # whichever test that fails now will find current revision is the
+          # culprit.
+          test_results[revision], tests_failed_in_revision = (
+              _compile_and_test_at_revision(
+                  api, target_mastername, target_buildername, target_testername,
+                  revision, tests_to_run, use_analyze))
+
+          # Removes tests that passed in potential green and failed in
+          # following revisions: culprits have been found for them.
+          tests_have_not_found_culprit = _get_reduced_test_dict(
+              tests_have_not_found_culprit, tests_failed_in_revision)
+
+          # Only runs tests that have not found culprits in later revisions.
+          tests_to_run = _get_reduced_test_dict(
+              tests_to_run, tests_failed_in_revision)
+
+          # Records found culprits.
+          for step, test_list in tests_failed_in_revision.iteritems():
+            for test in test_list:
+              culprits[step][test] = revision
+
+          if not tests_to_run:
+            break
+
   except api.step.InfraFailure:
     test_results[revision_being_checked] = TestResult.INFRA_FAILED
     report['metadata']['infra_failure'] = True
     raise
   finally:
+    if culprits:
+      report['culprits'] = culprits
+
     # Give the full report including test results and metadata.
     step_result = api.python.succeeding_step(
         'report', [json.dumps(report, indent=2)], as_log='report')
@@ -240,7 +339,9 @@ def RunSteps(api, target_mastername, target_testername,
 
 
 def GenTests(api):
-  def props(tests, platform_name, tester_name, use_analyze=False):
+  def props(
+      tests, platform_name, tester_name, use_analyze=False, good_revision=None,
+      bad_revision=None, suspected_revisions=None):
     properties = {
         'mastername': 'tryserver.chromium.%s' % platform_name,
         'buildername': '%s_chromium_variable' % platform_name,
@@ -248,11 +349,13 @@ def GenTests(api):
         'buildnumber': 1,
         'target_mastername': 'chromium.%s' % platform_name,
         'target_testername': tester_name,
-        'good_revision': 'r0',
-        'bad_revision': 'r1',
+        'good_revision': good_revision or 'r0',
+        'bad_revision': bad_revision or 'r1',
         'tests': tests,
         'use_analyze': use_analyze,
     }
+    if suspected_revisions:
+      properties['suspected_revisions'] = suspected_revisions
     return api.properties(**properties) + api.platform.name(platform_name)
 
   def simulated_gtest_output(failed_test_names=(), passed_test_names=()):
@@ -473,6 +576,375 @@ def GenTests(api):
           'test r1.gl_tests (r1) on Mac-10.9',
           simulated_gtest_output(passed_test_names=['Test.One'])
       )
+  )
+
+  yield (
+      api.test('findit_culprit_in_last_sub_range') +
+      props(
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+           good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
+      api.override_step_data('test r2.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r3.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r2.gl_tests (r2) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r3.gl_tests (r3) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.One']))
+  )
+
+  yield (
+      api.test('findit_culprit_in_middle_sub_range') +
+      props(
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+           good_revision='r0', bad_revision='r6',
+           suspected_revisions=['r3', 'r6']) +
+      api.override_step_data('test r2.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r3.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r5.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r6.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r2.gl_tests (r2) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r3.gl_tests (r3) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r5.gl_tests (r5) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r6.gl_tests (r6) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One']))
+  )
+
+  yield (
+      api.test('findit_culprit_in_first_sub_range') +
+      props(
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+           good_revision='r0', bad_revision='r6',
+           suspected_revisions=['r6']) +
+      api.override_step_data('test r1.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r5.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r6.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r1.gl_tests (r1) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r5.gl_tests (r5) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r6.gl_tests (r6) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One']))
+  )
+
+  yield (
+      api.test('findit_steps_multiple_culprits') +
+      props(
+          {'gl_tests': ['Test.gl_One'], 'browser_tests': ['Test.browser_One']},
+          'mac', 'Mac10.9 Tests', use_analyze=False,
+           good_revision='r0', bad_revision='r6',
+           suspected_revisions=['r3','r6']) +
+      api.override_step_data('test r2.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+                  {
+                      'test': 'browser_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r3.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+                  {
+                      'test': 'browser_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r5.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+                  {
+                      'test': 'browser_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r6.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+                  {
+                      'test': 'browser_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r5.gl_tests (r5) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.gl_One'])) +
+      api.override_step_data(
+          'test r5.browser_tests (r5) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.browser_One'])) +
+      api.override_step_data(
+          'test r6.browser_tests (r6) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.browser_One']))+
+      api.override_step_data(
+          'test r2.gl_tests (r2) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.gl_One'])) +
+      api.override_step_data(
+          'test r3.gl_tests (r3) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.gl_One']))
+  )
+
+  yield (
+      api.test('findit_tests_multiple_culprits') +
+      props(
+          {'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+          'mac', 'Mac10.9 Tests', use_analyze=False,
+           good_revision='r0', bad_revision='r6',
+           suspected_revisions=['r3', 'r5']) +
+      api.override_step_data('test r2.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r3.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r4.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r5.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r6.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r4.gl_tests (r4) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One', 'Test.Three'],
+                                 failed_test_names=['Test.Two'])) +
+      api.override_step_data(
+          'test r5.gl_tests (r5) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One'],
+                                 failed_test_names=['Test.Three'])) +
+      api.override_step_data(
+          'test r6.gl_tests (r6) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.One']))+
+      api.override_step_data(
+          'test r2.gl_tests (r2) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.Two'])) +
+      api.override_step_data(
+          'test r3.gl_tests (r3) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.Two']))
+  )
+
+
+  yield (
+      api.test('findit_consecutive_culprits') +
+      props(
+          {'gl_tests': ['Test.One']},
+          'mac', 'Mac10.9 Tests', use_analyze=False,
+           good_revision='r0', bad_revision='r6',
+           suspected_revisions=['r3', 'r4']) +
+      api.override_step_data('test r2.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r3.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r4.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r4.gl_tests (r4) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r2.gl_tests (r2) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r3.gl_tests (r3) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One']))
   )
 
   yield (
