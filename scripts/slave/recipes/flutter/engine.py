@@ -284,9 +284,10 @@ def RunSteps(api):
   with api.step.context({'env': env}):
     AnalyzeDartUI(api)
 
+    api.step('download android tools',
+      [checkout.join('tools/android/download_android_tools.py')])
+
     if api.platform.is_linux:
-      api.step('download android tools',
-        [checkout.join('tools/android/download_android_tools.py')])
       BuildLinux(api)
       TestObservatory(api)
       BuildLinuxAndroidArm(api)
