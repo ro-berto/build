@@ -318,7 +318,6 @@
       "[CACHE]/cipd/goma",
       "--",
       "browser_tests",
-      "chromium_builder_webrtc",
       "content_browsertests",
       "content_unittests",
       "media_unittests",

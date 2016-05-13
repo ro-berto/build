@@ -190,6 +190,7 @@
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "blink_logging_always_on=1 component=static_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -246,6 +247,27 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.webrtc.fyi",
+      "-b",
+      "Linux Builder",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "//out/Release"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
@@ -274,7 +296,6 @@
       "[CACHE]/cipd/goma",
       "--",
       "browser_tests",
-      "chromium_builder_webrtc",
       "content_browsertests",
       "content_unittests",
       "media_unittests",
