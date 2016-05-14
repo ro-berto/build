@@ -331,6 +331,34 @@ SPEC = {
       ],
     },
 
+    'Android N5X Swarm Builder': {
+      'use_isolate': True,
+      'enable_swarming': True,
+      'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder_mb',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests': [
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_instrumentation_test,
+        steps.generate_isolated_script,
+        steps.generate_junit_test,
+        steps.generate_script,
+      ],
+    },
+
     'Android Webview L (dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
