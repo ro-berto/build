@@ -164,15 +164,15 @@
   {
     "cmd": [
       "[CUSTOM_/_B_WORK]/skia/platform_tools/android/bin/android_ninja",
-      "dm",
+      "most",
       "-d",
       "arm_v7_neon",
       "--gcc"
     ],
     "cwd": "[CUSTOM_/_B_WORK]/skia",
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
@@ -181,29 +181,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Release-Android"
     },
-    "name": "build dm"
-  },
-  {
-    "cmd": [
-      "[CUSTOM_/_B_WORK]/skia/platform_tools/android/bin/android_ninja",
-      "nanobench",
-      "-d",
-      "arm_v7_neon",
-      "--gcc"
-    ],
-    "cwd": "[CUSTOM_/_B_WORK]/skia",
-    "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
-      "BUILDTYPE": "Release",
-      "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
-      "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Release-Android"
-    },
-    "name": "build nanobench"
+    "name": "build most"
   },
   {
     "cmd": [

@@ -11,7 +11,6 @@ import json
 DEFAULT_SDK_ROOT = '/home/chrome-bot/android-sdk-linux'
 MAC_SDK_ROOT = '/Users/chrome-bot/adt-bundle-mac-x86_64-20140702/sdk'
 MACMINI_SDK_ROOT = '/Users/chrome-bot/android-sdk-macosx'
-SWARMING_SDK_ROOT = '/b/android-sdk-linux'
 
 SlaveInfo = collections.namedtuple('SlaveInfo',
                                    'serial android_sdk_root has_root')

@@ -62,8 +62,8 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -78,8 +78,8 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -91,7 +91,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
       "echo",
       "$EXTERNAL_STORAGE"
@@ -108,7 +108,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "root"
     ],
     "env": {
@@ -139,8 +139,8 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -155,8 +155,8 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -172,8 +172,8 @@
       "--verbose"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -185,7 +185,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
       "stop"
     ],
@@ -200,7 +200,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
       "dumpsys",
       "batteryproperties"
@@ -222,8 +222,8 @@
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -245,7 +245,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
@@ -272,7 +272,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
@@ -289,7 +289,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
       "rm",
       "-r",
@@ -306,7 +306,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
       "if",
       "[",
@@ -330,7 +330,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
       "mkdir",
       "-p",
@@ -386,8 +386,8 @@
       "Android"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -427,8 +427,8 @@
       "[CUSTOM_[SWARM_OUT_DIR]]/perfdata/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release/data"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -440,7 +440,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
       "dumpsys",
       "batteryproperties"
@@ -456,7 +456,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "reboot"
     ],
     "env": {
@@ -487,8 +487,8 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -503,8 +503,8 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
     "env": {
-      "ANDROID_HOME": "/b/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -516,7 +516,7 @@
   },
   {
     "cmd": [
-      "/b/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "kill-server"
     ],
     "env": {

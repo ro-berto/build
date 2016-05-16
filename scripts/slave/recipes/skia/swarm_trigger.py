@@ -19,6 +19,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/step',
   'recipe_engine/time',
   'skia',
   'skia_swarming',
@@ -250,8 +251,10 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
   if builder_name != api.properties['buildername']:
     compile_builder_spec = api.skia.get_builder_spec(
         api.path['slave_build'].join('skia'), builder_name)
-  # Windows bots require a toolchain.
+
   extra_hashes = extra_isolate_hashes[:]
+
+  # Windows bots require a toolchain.
   if 'Win' in builder_name:
     test_data = '''{
   "2013": "705384d88f80da637eb367e5acc6f315c0e1db2f",
@@ -505,12 +508,28 @@ def RunSteps(api):
   api.gsutil(['help'])
 
   recipes_hash = isolate_recipes(api)
+  extra_hashes = [recipes_hash]
+
+  # Android bots require an SDK.
+  if 'Android' in api.properties['buildername']:
+    test_data = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
+    hash_file = infrabots_dir.join('android_sdk_hash')
+    # try/except as a temporary measure to prevent breakages for backfills
+    # and branches.
+    try:
+      h = api.skia._readfile(hash_file,
+                             name='Read android_sdk_hash',
+                             test_data=test_data).rstrip()
+    except api.step.StepFailure:
+      # Just fall back on the original hash.
+      h = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
+    extra_hashes.append(h)
 
   do_compile_steps = builder_spec.get('do_compile_steps', True)
   compile_hash = None
   if do_compile_steps:
     compile_hash = compile_steps_swarm(api, builder_spec, got_revision,
-                                       infrabots_dir, [recipes_hash])
+                                       infrabots_dir, extra_hashes)
 
   do_test_steps = builder_spec['do_test_steps']
   do_perf_steps = builder_spec['do_perf_steps']
@@ -518,7 +537,6 @@ def RunSteps(api):
   if not (do_test_steps or do_perf_steps):
     return
 
-  extra_hashes = [recipes_hash]
   if compile_hash:
     extra_hashes.append(compile_hash)
 
@@ -597,4 +615,11 @@ def GenTests(api):
       api.path['slave_build'].join('skia'),
       api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
   )
+  yield test
+
+  builder = 'Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan'
+  master = 'client.skia.compile'
+  slave = 'skiabot-linux-compile-000'
+  test = test_for_bot(api, builder, master, slave, 'Missing_android_sdk_hash')
+  test += api.step_data('Read android_sdk_hash', retcode=1)
   yield test

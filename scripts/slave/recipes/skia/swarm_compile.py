@@ -21,6 +21,7 @@ TEST_BUILDERS = {
       'Build-Mac-Clang-Arm7-Release-iOS',
       'Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot',
       'Build-Ubuntu-GCC-Arm7-Release-Android',
+      'Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan',
     ],
     'skiabot-win-compile-000': [
       'Build-Win-MSVC-x86-Debug',

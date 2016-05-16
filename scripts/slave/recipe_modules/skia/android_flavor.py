@@ -71,7 +71,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self.serial = slave_info.serial
     self.serial_args = ['-s', slave_info.serial]
     if self._skia_api.running_in_swarming:
-      self._android_sdk_root = android_devices.SWARMING_SDK_ROOT
+      self._android_sdk_root = self._skia_api.slave_dir.join('android-sdk')
       self.serial = None
       self.serial_args = []
     try:
@@ -118,6 +118,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
       cmd.append('--clang')
     if 'GCC' in self._skia_api.builder_name:
       cmd.append('--gcc')
+    if 'Vulkan' in self._skia_api.builder_name:
+      cmd.append('--vulkan')
     self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
                        env=env, cwd=self._skia_api.m.path['checkout'])
 

@@ -89,26 +89,23 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
-      "Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming"
+      "Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dm\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"most\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"arch\": \"Arm7\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu\": \"GPU\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"Tegra3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"Swarming\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"Android_Vulkan\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"model\": \"Nexus7v2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Android\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_arch\": \"Arm7\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"arm_v7_neon\", @@@",
@@ -116,14 +113,13 @@
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_warnings_as_errors=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_warnings_as_errors=1\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"product.board\": \"flo\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -407,49 +403,10 @@
       "[SLAVE_BUILD]/skia/infra/bots/android_sdk_hash",
       "/path/to/tmp/"
     ],
-    "name": "Read android_sdk_hash"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
-      "/path/to/tmp/json",
-      "Build-Ubuntu-GCC-Arm7-Release-Android"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec buildbot_spec.py (2)",
+    "name": "Read android_sdk_hash",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"most\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"Android\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"target_arch\": \"Arm7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"arm_v7_neon\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_warnings_as_errors=1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
@@ -560,7 +517,7 @@
       "--shards",
       "1",
       "--task-name",
-      "compile_skia/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming/5",
+      "compile_skia/Ubuntu/def456/Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan/5",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -579,19 +536,19 @@
       "pool",
       "Skia",
       "--tag",
-      "buildername:Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming",
+      "buildername:Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan",
       "--tag",
       "buildnumber:5",
       "--tag",
       "data:def456",
       "--tag",
-      "master:client.skia.fyi",
+      "master:client.skia.compile",
       "--tag",
       "name:compile_skia",
       "--tag",
       "os:Ubuntu",
       "--tag",
-      "slavename:skiabot-linux-housekeeper-003",
+      "slavename:skiabot-linux-compile-000",
       "--tag",
       "stepname:compile_skia on Ubuntu",
       "--idempotent",
@@ -600,7 +557,7 @@
       "--workdir",
       "../../..",
       "skia/swarm_compile",
-      "buildername=Build-Ubuntu-GCC-Arm7-Release-Android",
+      "buildername=Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan",
       "mastername=client.skia.compile",
       "buildnumber=1",
       "slavename=skiabot-dummy-compile-slave",
@@ -611,9 +568,9 @@
     "name": "[trigger] compile_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming/5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Ubuntu/def456/Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compile_skia/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming/5\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compile_skia/Ubuntu/def456/Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan/5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -636,7 +593,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "compile_skia/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming/5",
+      "compile_skia/Ubuntu/def456/Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan/5",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -683,370 +640,6 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/tmp",
-      "511"
-    ],
-    "name": "makedirs tmp_dir",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "Get downloaded SKP_VERSION"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/SKP_VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "Get expected SKP_VERSION"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "Get downloaded SK_IMAGE_VERSION"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "Get expected SK_IMAGE_VERSION"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
-      "511"
-    ],
-    "name": "makedirs swarming tmp dir (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/test_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Android\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
-    ],
-    "name": "Write test_skia.isolated.gen.json"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/swarming.client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
-    ],
-    "name": "isolate tests (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_skia\": \"[dummy hash for test_skia]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test_skia\": \"[dummy hash for test_skia]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated",
-      "[dummy hash for isolate_recipes]",
-      "a27a70d73b85191b9e671ff2a44547c3f7cc15ee",
-      "abc123"
-    ],
-    "name": "add_isolated_input (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import json@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1]) as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  isolated = json.load(f)@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not isolated.get('includes'):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'] = []@@@",
-      "@@@STEP_LOG_LINE@python.inline@for h in sys.argv[2:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(h)@@@",
-      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  json.dump(isolated, f, sort_keys=True)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/swarming.client/isolateserver.py",
-      "archive",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated"
-    ],
-    "name": "upload new .isolated file for test_skia",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
-      "trigger",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--priority",
-      "90",
-      "--shards",
-      "1",
-      "--task-name",
-      "test_skia/Android/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming/5",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--expiration",
-      "14400",
-      "--io-timeout",
-      "1200",
-      "--hard-timeout",
-      "14400",
-      "--dimension",
-      "device_type",
-      "flo",
-      "--dimension",
-      "os",
-      "Android",
-      "--dimension",
-      "pool",
-      "Skia",
-      "--tag",
-      "buildername:Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming",
-      "--tag",
-      "buildnumber:5",
-      "--tag",
-      "data:def456",
-      "--tag",
-      "master:client.skia.fyi",
-      "--tag",
-      "name:test_skia",
-      "--tag",
-      "os:Android",
-      "--tag",
-      "slavename:skiabot-linux-housekeeper-003",
-      "--tag",
-      "stepname:test_skia on Android",
-      "def456",
-      "--",
-      "--workdir",
-      "../../..",
-      "skia/swarm_test",
-      "buildername=Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming",
-      "mastername=client.skia.fyi",
-      "buildnumber=5",
-      "slavename=skiabot-linux-housekeeper-003",
-      "reason=Triggered by Skia swarm_trigger Recipe",
-      "swarm_out_dir=${ISOLATED_OUTDIR}",
-      "revision=164710"
-    ],
-    "name": "[trigger] test_skia on Android",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_skia/Android/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming/5\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test_skia/Android/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming/5\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia"
-    ],
-    "name": "rmtree results_dir",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
-      "collect",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--shards",
-      "1",
-      "test_skia/Android/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming/5",
-      "--task-summary-json",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia"
-    ],
-    "name": "test_skia on Android",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@swarming pending 71s@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"abandoned_ts\": null, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"completed_ts\": \"2014-09-25T01:42:00.123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        5.7, @@@",
-      "@@@STEP_LOG_LINE@json.output@        31.5@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"exit_codes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        0, @@@",
-      "@@@STEP_LOG_LINE@json.output@        0@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"id\": \"148aa78d7aa0000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"isolated_out\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"view_url\": \"blah\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"outputs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"Heart beat succeeded on win32.\\n\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"Foo\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": 112, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"try_number\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"user\": \"unknown\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/dm"
-    ],
-    "name": "rmtree dm_dir",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/dm",
-      "[SLAVE_BUILD]/dm",
-      "0"
-    ],
-    "name": "dm_dir"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::skia]/resources/upload_dm_results.py",
-      "[SLAVE_BUILD]/dm",
-      "164710",
-      "Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming",
-      "5",
-      "",
-      "[SLAVE_BUILD]/skia/common/py/utils"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
-      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
-    },
-    "name": "Upload DM Results"
   },
   {
     "name": "$result",
