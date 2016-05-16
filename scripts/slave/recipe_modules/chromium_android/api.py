@@ -960,10 +960,29 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.m.chromium.get_env(),
         **kwargs)
 
-  def run_webview_cts(self, suffix=None):
-    suffix = ' (%s)' % suffix if suffix else ''
+  def _set_webview_command_line(self, command_line_args):
+    """Set the Android WebView command line.
 
-    _CTS_FILE_NAME = self.m.file.read(
+    Args:
+      command_line_args: A list of command line arguments you want set for
+          webview.
+    """
+    _WEBVIEW_COMMAND_LINE = '/data/local/tmp/webview-command-line'
+
+    command_line_script_args = ['--executable', 'webview',
+                                '--device-path', _WEBVIEW_COMMAND_LINE]
+    command_line_script_args.extend(command_line_args)
+    self.m.python('write webview command line file',
+                  self.m.path['checkout'].join(
+                      'build', 'android', 'adb_command_line.py'),
+                  command_line_script_args)
+
+  def run_webview_cts(self, command_line_args=None, suffix=None):
+    suffix = ' (%s)' % suffix if suffix else ''
+    if command_line_args:
+      self._set_webview_command_line(command_line_args)
+
+    _cts_file_name = self.m.file.read(
         'Fetch for the name of the cts file',
         self.m.path['checkout'].join(
           'android_webview', 'tools', 'cts_config', 'webview_cts_gcs_path.txt'),
@@ -974,8 +993,8 @@ class AndroidApi(recipe_api.RecipeApi):
                                   'TestSuite[@name="webkit"]/'
                                   'TestSuite[@name="cts"]/TestCase')
     self_result = self.m.step.active_result
-    self_result.presentation.logs['cts_file_name'] = [_CTS_FILE_NAME]
-    _CTS_FILE_NAME = _CTS_FILE_NAME.strip()
+    self_result.presentation.logs['cts_file_name'] = [_cts_file_name]
+    _cts_file_name = _cts_file_name.strip()
     # WebView user agent is changed, and new CTS hasn't been published to
     # reflect that.
     expected_failure_json = self.m.file.read(
@@ -997,10 +1016,10 @@ class AndroidApi(recipe_api.RecipeApi):
     
 
     cts_base_dir = self.m.path.mkdtemp('cts')
-    cts_zip_path = cts_base_dir.join(_CTS_FILE_NAME)
+    cts_zip_path = cts_base_dir.join(_cts_file_name)
     self.m.gsutil.download(name='Download CTS',
                            bucket='chromium-cts',
-                           source=_CTS_FILE_NAME,
+                           source=_cts_file_name,
                            dest=cts_zip_path)
 
     cts_extract_dir = cts_base_dir.join('cts-extracted')

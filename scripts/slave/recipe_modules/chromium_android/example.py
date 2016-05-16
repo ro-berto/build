@@ -212,7 +212,8 @@ def RunSteps(api, buildername):
         chartjson_file=True)
 
   if config.get('run_webview_cts'):
-    api.chromium_android.run_webview_cts()
+    api.chromium_android.run_webview_cts(command_line_args=[
+        '--webview_arg_1', '--webview_arg_2'])
 
   api.chromium_android.logcat_dump()
   api.chromium_android.stack_tool_steps()
