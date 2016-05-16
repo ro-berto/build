@@ -318,14 +318,16 @@ class AndroidApi(recipe_api.RecipeApi):
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
                                disable_location=False, min_battery_level=None,
                                disable_network=False, disable_java_debug=False,
-                               reboot_timeout=None, max_battery_temp=None):
+                               reboot_timeout=None, max_battery_temp=None,
+                               remove_system_webview=False):
     self.authorize_adb_devices()
     self.device_status_check(restart_usb=restart_usb)
     self.provision_devices(
       skip_wipe=skip_wipe, disable_location=disable_location,
       min_battery_level=min_battery_level, disable_network=disable_network,
       disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout,
-      max_battery_temp=max_battery_temp)
+      max_battery_temp=max_battery_temp,
+      remove_system_webview=remove_system_webview)
 
   @property
   def blacklist_file(self):
@@ -958,7 +960,8 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.m.chromium.get_env(),
         **kwargs)
 
-  def run_webview_cts(self):
+  def run_webview_cts(self, suffix=None):
+    suffix = ' (%s)' % suffix if suffix else ''
 
     _CTS_FILE_NAME = self.m.file.read(
         'Fetch for the name of the cts file',
@@ -1010,7 +1013,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
     try:
       try:
-        self.m.step('Run CTS', [cts_path, 'run', 'cts', '-p', 'android.webkit'],
+        self.m.step('Run CTS%s' % suffix,
+                    [cts_path, 'run', 'cts', '-p', 'android.webkit'],
                     env=env, stdout=self.m.raw_io.output())
       finally:
         result = self.m.step.active_result
