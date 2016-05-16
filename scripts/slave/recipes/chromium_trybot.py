@@ -752,6 +752,14 @@ def GenTests(api):
   )
 
   yield (
+    api.test('use_webrtc_patch_on_chromium_trybot') +
+    props(buildername='win_chromium_rel_ng',
+          mastername='tryserver.chromium.win',
+          patch_project='webrtc') +
+    api.platform.name('win')
+  )
+
+  yield (
     api.test('use_skia_patch_on_chromium_trybot') +
     props(buildername='win_chromium_rel_ng',
           mastername='tryserver.chromium.win',
