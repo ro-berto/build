@@ -269,11 +269,11 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]\\src\\third_party",
+    "cwd": "[SLAVE_BUILD]\\src/third_party/webrtc",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@third_party/foo.cc@@@",
+      "@@@STEP_LOG_LINE@files@third_party/webrtc/foo.cc@@@",
       "@@@STEP_LOG_END@files@@@",
       "@@@SET_BUILD_PROPERTY@subproject_tag@\"chromium\"@@@"
     ]
@@ -315,7 +315,7 @@
       "win_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"chromium_builder_tests\"], \"files\": [\"third_party/foo.cc\"], \"test_targets\": [\"mini_installer\"]}",
+      "{\"additional_compile_targets\": [\"chromium_builder_tests\"], \"files\": [\"third_party/webrtc/foo.cc\"], \"test_targets\": [\"mini_installer\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
