@@ -14,6 +14,7 @@ import fileinput
 import json
 import os
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -41,6 +42,23 @@ class AppNotFoundError(TestRunnerError):
     super(AppNotFoundError, self).__init__(
       'App does not exist: %s.' % app_path
     )
+
+
+class AppInstallationError(TestRunnerError):
+  """There was an error installing the app."""
+  pass
+
+
+class AppUninstallationError(TestRunnerError):
+  """There was an error uninstalling the app."""
+  pass
+
+
+class DeviceDetectionError(TestRunnerError):
+  """There was an error concerning the number of detected devices."""
+  def __init__(self, num):
+    super(DeviceDetectionError, self).__init__(
+      'Expected 1 connected device, found %s.' % num)
 
 
 class XcodeVersionNotFoundError(TestRunnerError):
@@ -708,15 +726,13 @@ class SimulatorTestRunner(TestRunner):
     return self.RunAllTests(result, *args, **kwargs)
 
 
-class XCTestRunner(SimulatorTestRunner):
-  """Class for running xctests on an iOS simulator."""
+class XCTestRunner(TestRunner):
+  """Base class containing common functionalities to run xctests."""
   def __init__(
     self,
     app_path,
     test_host,
     test_project_dir,
-    platform,
-    version,
     xcode_version=None,
     gs_bucket=None,
     perf_bot_name=None,
@@ -727,16 +743,12 @@ class XCTestRunner(SimulatorTestRunner):
     perf_x_value=None,
     test_args=None,
   ):
-    """Initializes an instance of the XCTestRunner class.
+    """Initializes an instance of the SimulatorXCTestRunner class.
 
-      Args:
+    Args:
       app_path: Full path to the compiled app to run.
       test_host: Name of the compiled test host app to run tests.
       test_project_dir: Directory of the dummy test project.
-      platform: The platform to simulate. Supported values can be found by
-      running 'xcodebuild -list'. e.g. 'iPhone 5', 'iPhone 5s'.
-      version: The iOS version the simulator should be running. Supported values
-      can be found by running 'xcodebuild -list'. e.g. '8.0', '7.1'.
       xcode_version: Version of Xcode to use.
       gs_bucket: Google Storage bucket to upload test data to, or None if the
       test data should not be uploaded.
@@ -750,10 +762,11 @@ class XCTestRunner(SimulatorTestRunner):
       perf dashboard.
       test_args: Arguments to pass when launching the test.
 
-      Raises:
-      SimulatorNotFoundError: If the given iossim path cannot be found.
+    Raises:
+      AppNotFoundError: If the specified app cannot be found.
+      UnexpectedAppExtensionError: If the app was not an .app or an .ipa.
     """
-    super(XCTestRunner.__bases__[0], self).__init__(
+    super(XCTestRunner, self).__init__(
       app_path,
       xcode_version=xcode_version,
       gs_bucket=gs_bucket,
@@ -769,34 +782,18 @@ class XCTestRunner(SimulatorTestRunner):
     # Test target name is its host name without '_host' suffix.
     self.test_target_name = test_host.rsplit('_', 1)[0]
     self.test_project_dir = test_project_dir
-    self.platform = platform
-    self.version = version
     self.timeout = '120'
     self.homedir = ''
     self.start_time = None
 
-  def GetLaunchCommand(self, test_filter=None, blacklist=False):
-    """Returns the invocation command which is used to run the test.
+  def TearDown(self):
+    """Performs post-test tear down."""
+    raise NotImplementedError
 
-      Args:
-      test_filter: A list of tests to filter by, or None to mean all.
-      blacklist: Whether to blacklist the elements of test_filter or not. Only
-      works when test_filter is not None.
-
-      Returns:
-      A list whose elements are the args representing the command.
-    """
-    built_dir = os.path.split(self.app_path)[0]
-
-    cmd =['xcodebuild', 'test',
-          'BUILT_PRODUCTS_DIR=%s' % built_dir,
-          '-project', self.test_project_dir,
-          '-scheme','TestProject',
-          '-destination','platform=iOS Simulator,name=%s,OS=%s'
-            % (self.platform, self.version),
-          'APP_TARGET_NAME=%s' % self.test_host_name,
-          'TEST_TARGET_NAME=%s' % self.test_target_name]
-    return cmd
+  def HandleJsonFileWithPath(self, summary):
+    """Parse data in summarydir and send to perf dashboard."""
+    with open(summary) as jsonFile:
+      return json.load(jsonFile)
 
   def GetLaunchEnvironment(self):
     """Returns the environment which is used to run the xctest.
@@ -805,16 +802,29 @@ class XCTestRunner(SimulatorTestRunner):
                TEST_TARGET_NAME=self.test_target_name)
     return env
 
+  def GetLaunchCommand(self, test_filter=None, blacklist=False):
+    """Returns the command which is used to launch the test.
+
+    Args:
+      test_filter: A list of tests to filter by, or None to mean all.
+      blacklist: Whether to blacklist the elements of test_filter or not. Only
+      works when test_filter is not None.
+
+    Returns:
+      A list whose elements are the args representing the command.
+    """
+    raise NotImplementedError
+
   @staticmethod
   def _Run(command, env=None):
     """Runs the specified command, parsing GTest output.
 
-      Args:
+    Args:
       command: The shell command to execute, as a list of arguments.
 
-      Returns:
+    Returns:
       A GTestResult instance.
-      """
+    """
     result = utils.GTestResult(command)
 
     print ' '.join(command)
@@ -860,17 +870,21 @@ class XCTestRunner(SimulatorTestRunner):
     print result
     return result
 
+  def Launch(self):
+    """Launches the test."""
+    raise NotImplementedError
+
   def RunAllTests(self, result, *args, **kwargs):
     """Ensures all tests run, even if any crash the test app.
 
-      Args:
-        result: A GTestResult instance from having run the app.
+    Args:
+      result: A GTestResult instance from having run the app.
 
-      Returns:
-        True if all tests were successful on the initial run.
+    Returns:
+      True if all tests were successful on the initial run.
 
-      Raises:
-        AppLaunchError: If the given result had crashed.
+    Raises:
+      AppLaunchError: If the given result had crashed.
     """
     if result.crashed and not result.crashed_test:
       # If the app crashed without even starting, give up.
@@ -893,7 +907,7 @@ class XCTestRunner(SimulatorTestRunner):
         self.Print(
           '%s appears to have crashed during %s. Resuming at next test...' % (
             self.app_name, result.crashed_test,
-           ), blank_lines=2, time_to_sleep=5)
+          ), blank_lines=2, time_to_sleep=5)
 
         # Now run again, filtering out every test that ran. This is equivalent
         # to starting at the next test.
@@ -940,6 +954,267 @@ class XCTestRunner(SimulatorTestRunner):
     # the success/failure.
     return not failed_tests
 
+
+class SimulatorXCTestRunner(XCTestRunner):
+  """Class for running xctests on an iOS simulator."""
+  def __init__(
+    self,
+    app_path,
+    test_host,
+    test_project_dir,
+    platform,
+    version,
+    xcode_version=None,
+    gs_bucket=None,
+    perf_bot_name=None,
+    perf_build_number=None,
+    perf_builder_name=None,
+    perf_master_name=None,
+    perf_revision=None,
+    perf_x_value=None,
+    test_args=None,
+  ):
+    """Initializes an instance of the SimulatorXCTestRunner class.
+
+    Args:
+      app_path: Full path to the compiled app to run.
+      test_host: Name of the compiled test host app to run tests.
+      test_project_dir: Directory of the dummy test project.
+      platform: The platform to simulate. Supported values can be found by
+      running 'xcodebuild -list'. e.g. 'iPhone 5', 'iPhone 5s'.
+      version: The iOS version the simulator should be running. Supported values
+      can be found by running 'xcodebuild -list'. e.g. '8.0', '7.1'.
+      xcode_version: Version of Xcode to use.
+      gs_bucket: Google Storage bucket to upload test data to, or None if the
+      test data should not be uploaded.
+      perf_bot_name: Name of this bot as indicated to the perf dashboard.
+      perf_build_number: Build number to indicate to the perf dashboard.
+      perf_builder_name: Name of this builder as indicated to the perf
+      dashboard.
+      perf_master_name: Name of the master as indicated to the perf dashboard.
+      perf_revision: Revision to indicate to the perf dashboard.
+      perf_x_value: Value to use on the x axis for all data uploaded to the
+      perf dashboard.
+      test_args: Arguments to pass when launching the test.
+
+    Raises:
+      SimulatorNotFoundError: If the given iossim path cannot be found.
+    """
+    super(SimulatorXCTestRunner, self).__init__(
+      app_path,
+      test_host,
+      test_project_dir,
+      xcode_version=xcode_version,
+      gs_bucket=gs_bucket,
+      perf_bot_name=perf_bot_name,
+      perf_build_number=perf_build_number,
+      perf_builder_name=perf_builder_name,
+      perf_master_name=perf_master_name,
+      perf_revision=perf_revision,
+      perf_x_value=perf_x_value,
+      test_args=test_args,
+    )
+    self.platform = platform
+    self.version = version
+
+  def UploadTestData(self):
+    """Uploads the contents of the test's Documents directory.
+
+    Returns:
+      True if test data was uploaded, False otherwise.
+    """
+    if not self.gs_bucket:
+      return False
+
+    apps_dir = ''
+
+    # [homedir]/Library/Developers/CoreSimulator/Devices contains UDID
+    # directories for each simulated platform started with this home directory.
+    # We'd expect just one such directory since we generate a unique home
+    # directory for each SimulatorTestRunner instance. Inside the device
+    # UDID directory is where we find the Applications directory.
+    udid_dir = os.path.join(
+      self.homedir,
+      'Library',
+      'Developer',
+      'CoreSimulator',
+      'Devices',
+    )
+
+    if os.path.exists(udid_dir):
+      udids = os.listdir(udid_dir)
+
+      if len(udids) == 1:
+        apps_dir = os.path.join(
+          udid_dir,
+          udids[0],
+          'data',
+        )
+
+        if self.version.startswith('7'):
+          # On iOS 7 the Applications directory is found right here.
+          apps_dir = os.path.join(apps_dir, 'Applications')
+        else:
+          # On iOS 8+ the Application (singular) directory is a little deeper.
+          apps_dir = os.path.join(
+            apps_dir,
+            'Containers',
+            'Data',
+            'Application',
+          )
+      else:
+        self.Print(
+          'Unexpected number of simulated device UDIDs in %s.' % udid_dir
+        )
+
+    docs_dir = None
+
+    if os.path.exists(apps_dir):
+      self.Print('Found Applications directory.')
+      docs_dir = self.FindTestDocumentsDirectory(apps_dir)
+
+    if docs_dir is not None and os.path.exists(docs_dir):
+      subprocess.check_call([
+        'screencapture',
+        os.path.join(docs_dir, 'desktop.png'),
+      ])
+
+      self.summary['links']['test data'] = slave_utils.ZipAndUpload(
+        self.gs_bucket,
+        '%s.zip' % self.app_name,
+        docs_dir,
+      )
+
+      summary = os.path.join(docs_dir, 'summary.json')
+      if os.path.exists(summary):
+        self.HandleJsonFileWithPath(summary)
+
+      shutil.rmtree(docs_dir, ignore_errors=True)
+      return True
+
+    return False
+
+  def SetStartTime(self):
+    """Sets the start time, for finding crash reports during this run."""
+    # Crash reports have a timestamp in their filename, formatted as
+    # YYYY-MM-DD-HHMMSS.
+    self.start_time = time.strftime('%Y-%m-%d-%H%M%S', time.localtime())
+
+  def CreateNewHomeDirectory(self):
+    """Creates a new home directory for the simulator."""
+    self.homedir = tempfile.mkdtemp()
+
+  def RemoveHomeDirectory(self):
+    """Recursively removes the home directory being used by the simulator."""
+    if os.path.exists(self.homedir):
+      shutil.rmtree(self.homedir, ignore_errors=True)
+      self.homedir = ''
+
+  def KillSimulators(self):
+    """Forcibly kills any running iOS simulator instances."""
+    kill_cmd = [
+      'pkill',
+      '-9',
+      '-x',
+      # The iOS simulator has a different name depending on the Xcode version.
+      'iPhone Simulator',  # Xcode 5
+      'iOS Simulator',  # Xcode 6
+      'Simulator',  # Xcode 7
+    ]
+
+    # If a signal was sent, wait for the simulator to actually be killed.
+    if not utils.call(*kill_cmd).returncode:
+      time.sleep(5)
+
+  def SetUp(self):
+    self.KillSimulators()
+    self.CreateNewHomeDirectory()
+    self.SetStartTime()
+
+  def TearDown(self):
+    """Forcibly kills any running iOS simulator instances."""
+    self.UploadTestData()
+    self.GetCrashReports()
+    self.KillSimulators()
+    self.RemoveHomeDirectory()
+
+  def FindTestDocumentsDirectory(self, apps_dir):
+    """Finds the test's Documents directory in the given Applications directory.
+
+    Args:
+      apps_dir: The Applications directory, containing app ID directories.
+
+    Returns:
+      The Documents directory, or None if it doesn't exist.
+    """
+    for appid_dir in os.listdir(apps_dir):
+      appid_dir = os.path.join(apps_dir, appid_dir)
+      app_bundle = os.path.join(appid_dir, '%s.app' % self.app_name)
+      metadata_plist = os.path.join(
+        appid_dir, '.com.apple.mobile_container_manager.metadata.plist')
+      docs_dir = os.path.join(appid_dir, 'Documents')
+
+      if os.path.exists(docs_dir):
+        # iOS 7 app ID directories contain the app bundle. iOS 8 app ID
+        # directories contain a metadata plist with the CFBundleIdentifier.
+        if os.path.exists(app_bundle):
+          return docs_dir
+        elif os.path.exists(metadata_plist) and utils.call(
+          utils.PLIST_BUDDY,
+          '-c', 'Print:MCMMetadataIdentifier',
+          metadata_plist,
+        ).stdout[0] == self.cfbundleid:
+          return docs_dir
+
+    self.Print('Could not find %s on the simulator.' % self.app_name)
+
+  def GetCrashReports(self):
+    # A crash report's naming scheme is [app]_[timestamp]_[hostname].crash.
+    # e.g. net_unittests_2014-05-13-150900_vm1-a1.crash.
+    crash_reports_dir = os.path.expanduser(os.path.join(
+      '~',
+      'Library',
+      'Logs',
+      'DiagnosticReports',
+    ))
+
+    if os.path.exists(crash_reports_dir):
+      for crash_report in os.listdir(crash_reports_dir):
+        report_name, ext = os.path.splitext(crash_report)
+
+        if report_name.startswith(self.app_name) and ext == '.crash':
+          report_time = report_name[len(self.app_name) + 1:].split('_')[0]
+
+          # Timestamps are big-endian and therefore comparable this way.
+          if report_time > self.start_time:
+            with open(os.path.join(crash_reports_dir, crash_report)) as f:
+              self.summary['logs']['crash report (%s)' % report_time] = (
+                f.read().splitlines())
+
+  def GetLaunchCommand(self, test_filter=None, blacklist=False):
+    """Returns the invocation command which is used to run the test.
+
+    Args:
+      test_filter: A list of tests to filter by, or None to mean all.
+      blacklist: Whether to blacklist the elements of test_filter or not. Only
+      works when test_filter is not None.
+
+    Returns:
+      A list whose elements are the args representing the command.
+    """
+    built_dir = os.path.split(self.app_path)[0]
+
+    cmd =['xcodebuild', 'test',
+          'BUILT_PRODUCTS_DIR=%s' % built_dir,
+          '-project', self.test_project_dir,
+          '-scheme','TestProject',
+          '-destination','platform=iOS Simulator,name=%s,OS=%s'
+          % (self.platform, self.version),
+          '-archivePath', self.homedir,
+          'APP_TARGET_NAME=%s' % self.test_host_name,
+          'TEST_TARGET_NAME=%s' % self.test_target_name]
+    return cmd
+
   @TestRunner.RequireTearDown
   def Launch(self, *args, **kwargs):
     """Launches the test."""
@@ -964,4 +1239,156 @@ class XCTestRunner(SimulatorTestRunner):
       result = self._Run(
         self.GetLaunchCommand(), self.GetLaunchEnvironment(), *args, **kwargs)
 
-    return self.RunAllTests(result, *args, **kwargs)
+
+class DeviceXCTestRunner(XCTestRunner):
+  """Class for running xctests on an iOS device."""
+  def __init__(
+    self,
+    app_path,
+    test_host,
+    test_project_dir,
+    xcode_version=None,
+    gs_bucket=None,
+    perf_bot_name=None,
+    perf_build_number=None,
+    perf_builder_name=None,
+    perf_master_name=None,
+    perf_revision=None,
+    perf_x_value=None,
+    test_args=None,
+  ):
+    """Initializes an instance of the SimulatorXCTestRunner class.
+
+    Args:
+      app_path: Full path to the compiled app to run.
+      test_host: Name of the compiled test host app to run tests.
+      test_project_dir: Directory of the dummy test project.
+      xcode_version: Version of Xcode to use.
+      gs_bucket: Google Storage bucket to upload test data to, or None if the
+      test data should not be uploaded.
+      perf_bot_name: Name of this bot as indicated to the perf dashboard.
+      perf_build_number: Build number to indicate to the perf dashboard.
+      perf_builder_name: Name of this builder as indicated to the perf
+      dashboard.
+      perf_master_name: Name of the master as indicated to the perf dashboard.
+      perf_revision: Revision to indicate to the perf dashboard.
+      perf_x_value: Value to use on the x axis for all data uploaded to the
+      perf dashboard.
+      test_args: Arguments to pass when launching the test.
+
+    Raises:
+      DeviceDetectionError: If this machine does not have exactly one device
+        connected. Having more than one device connected causes problems when
+        trying to issue commands to any one device, which interfere with
+        installing and running the test app.
+    """
+    super(DeviceXCTestRunner, self).__init__(
+      app_path,
+      test_host,
+      test_project_dir,
+      xcode_version=xcode_version,
+      gs_bucket=gs_bucket,
+      perf_bot_name=perf_bot_name,
+      perf_build_number=perf_build_number,
+      perf_builder_name=perf_builder_name,
+      perf_master_name=perf_master_name,
+      perf_revision=perf_revision,
+      perf_x_value=perf_x_value,
+      test_args=test_args,
+    )
+    self.cfbundleid = utils.call(
+      utils.PLIST_BUDDY,
+      '-c', 'Print:CFBundleIdentifier',
+      os.path.join(self.app_path, 'Info.plist'),
+    ).stdout[0]
+
+    call_result = utils.call('idevice_id', '--list')
+    self.device_id = call_result.stdout[0]
+
+    if len(call_result.stdout) != 1:
+      raise DeviceDetectionError(len(call_result.stdout))
+
+  def IsAppInstalled(self):
+    """Returns True iff the app is installed on the device."""
+    # Prior to iOS 8, idevicefs would list apps with an @ prefix:
+    # e.g. $ idevicefs ls @
+    # @com.google.gtest.chromeiosunittests
+    # @com.google.gtest.ios_unittests
+    #
+    # On iOS 8, idevicefs omits the @:
+    # e.g. $ idevice fs ls @
+    # com.google.gtest.chromeiosunittests
+    # com.google.gtest.ios_unittests
+    return self.cfbundleid in [
+      app.lstrip('@') for app in utils.call('idevicefs', 'ls', '@').stdout]
+
+  def InstallApp(self):
+    """Ensures the app is installed on the device."""
+    utils.call('ideviceinstaller', '--install', self.app_path)
+
+    if not self.IsAppInstalled():
+      raise AppInstallationError()
+
+    signal.signal(signal.SIGTERM, self.UninstallApp)
+
+  def UninstallApp(self, *args, **kwargs):
+    """Ensures the app is removed from the device."""
+    utils.call('ideviceinstaller', '--uninstall', self.cfbundleid)
+
+    if self.IsAppInstalled():
+      raise AppUninstallationError()
+
+    signal.signal(signal.SIGTERM, signal.SIG_DFL)
+
+  def TearDown(self):
+    """Uninstalls the app from the device."""
+    self.UploadTestData()
+    self.UninstallApp()
+
+  def GetLaunchCommand(self, test_filter=None, blacklist=False):
+    """Returns the invocation command which is used to run the test.
+
+    Args:
+      test_filter: A list of tests to filter by, or None to mean all.
+      blacklist: Whether to blacklist the elements of test_filter or not. Only
+      works when test_filter is not None.
+
+    Returns:
+      A list whose elements are the args representing the command.
+    """
+    built_dir = os.path.split(self.app_path)[0]
+
+    cmd =['xcodebuild', 'test',
+          'BUILT_PRODUCTS_DIR=%s' % built_dir,
+          'CONFIGURATION_BUILD_DIR=%s' % built_dir,
+          '-project', self.test_project_dir,
+          '-configuration', 'iphoneos',
+          '-scheme', 'TestProject',
+          '-destination','id=%s' % self.device_id,
+          'APP_TARGET_NAME=%s' % self.test_host_name,
+          'TEST_TARGET_NAME=%s' % self.test_target_name]
+    return cmd
+
+  @TestRunner.RequireTearDown
+  def Launch(self, *args, **kwargs):
+    """Launches the test."""
+    self.InstallApp()
+
+    result = self._Run(
+      self.GetLaunchCommand(), self.GetLaunchEnvironment(), *args, **kwargs)
+
+    if result.crashed and not result.crashed_test:
+      # If the app crashed, but there is no specific test which crashed,
+      # then the app must have failed to even start. Try one more time.
+      self.Print(
+        '%s appears to have crashed on startup. Retrying...' % self.app_name,
+        blank_lines=2,
+        time_to_sleep=5,
+      )
+
+      # Uninstall and re-install the app.
+      self.UninstallApp()
+      self.InstallApp()
+
+      result = self._Run(
+        self.GetLaunchCommand(), self.GetLaunchEnvironment(), *args, **kwargs)

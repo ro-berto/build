@@ -23,7 +23,8 @@ import json
 import sys
 
 # pylint: disable=relative-import
-from test_runner import SimulatorTestRunner, XCTestRunner, TestRunnerError
+from test_runner import SimulatorTestRunner, SimulatorXCTestRunner, \
+  TestRunnerError
 
 
 def main(args, test_args):
@@ -32,7 +33,7 @@ def main(args, test_args):
 
   try:
     if args.test_host:
-      test_runner = XCTestRunner(
+      test_runner = SimulatorXCTestRunner(
         args.app,
         args.test_host,
         args.dummyproj,
