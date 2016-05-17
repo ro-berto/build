@@ -896,7 +896,7 @@ class XCTestRunner(TestRunner):
     perf_links = result.perf_links
 
     try:
-      while (result.crashed
+      if (result.crashed
              and result.crashed_test
              and not kwargs.get('retries')):
         # If the app crashed on a specific test, then resume at the next test,
@@ -1239,6 +1239,7 @@ class SimulatorXCTestRunner(XCTestRunner):
       result = self._Run(
         self.GetLaunchCommand(), self.GetLaunchEnvironment(), *args, **kwargs)
 
+    return self.RunAllTests(result, *args, **kwargs)
 
 class DeviceXCTestRunner(XCTestRunner):
   """Class for running xctests on an iOS device."""
@@ -1392,3 +1393,5 @@ class DeviceXCTestRunner(XCTestRunner):
 
       result = self._Run(
         self.GetLaunchCommand(), self.GetLaunchEnvironment(), *args, **kwargs)
+
+    return self.RunAllTests(result, *args, **kwargs)
