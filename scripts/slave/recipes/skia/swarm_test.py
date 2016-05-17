@@ -28,7 +28,7 @@ TEST_BUILDERS = {
       'Test-Android-GCC-Nexus6-GPU-Adreno420-Arm7-Release',
     ],
     'skiabot-linux-swarm-007': [
-      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-SwarmingMSAN',
+      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-MSAN',
     ],
     'skiabot-linux-swarm-012': [
       'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',

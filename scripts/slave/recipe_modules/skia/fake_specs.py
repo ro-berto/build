@@ -33,14 +33,13 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Build-Mac-Clang-x86_64-Release-CMake': {
+  'Build-Mac-Clang-x86_64-Release': {
     'build_targets': [
       'most',
     ],
     'builder_cfg': {
       'compiler': 'Clang',
       'configuration': 'Release',
-      'extra_config': 'CMake',
       'is_trybot': False,
       'os': 'Mac',
       'role': 'Build',
@@ -64,14 +63,14 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Build-Mac-Clang-x86_64-Release-Swarming': {
+  'Build-Mac-Clang-x86_64-Release-CMake': {
     'build_targets': [
       'most',
     ],
     'builder_cfg': {
       'compiler': 'Clang',
       'configuration': 'Release',
-      'extra_config': 'Swarming',
+      'extra_config': 'CMake',
       'is_trybot': False,
       'os': 'Mac',
       'role': 'Build',
@@ -275,14 +274,13 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Build-Ubuntu-GCC-x86_64-Debug-Swarming': {
+  'Build-Ubuntu-GCC-x86_64-Debug': {
     'build_targets': [
       'most',
     ],
     'builder_cfg': {
       'compiler': 'GCC',
       'configuration': 'Debug',
-      'extra_config': 'Swarming',
       'is_trybot': False,
       'os': 'Ubuntu',
       'role': 'Build',
@@ -303,7 +301,7 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Build-Ubuntu-GCC-x86_64-Debug-SwarmingMSAN': {
+  'Build-Ubuntu-GCC-x86_64-Debug-MSAN': {
     'build_targets': [
       'dm',
       'nanobench',
@@ -311,7 +309,7 @@ FAKE_SPECS = {
     'builder_cfg': {
       'compiler': 'GCC',
       'configuration': 'Debug',
-      'extra_config': 'SwarmingMSAN',
+      'extra_config': 'MSAN',
       'is_trybot': False,
       'os': 'Ubuntu',
       'role': 'Build',
@@ -360,14 +358,13 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Build-Ubuntu-GCC-x86_64-Release-Swarming-Trybot': {
+  'Build-Ubuntu-GCC-x86_64-Release-Trybot': {
     'build_targets': [
       'most',
     ],
     'builder_cfg': {
       'compiler': 'GCC',
       'configuration': 'Release',
-      'extra_config': 'Swarming',
       'is_trybot': True,
       'os': 'Ubuntu',
       'role': 'Build',
@@ -447,16 +444,15 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Build-Win8-MSVC-x86_64-Release-Swarming': {
+  'Build-Win-MSVC-x86_64-Release': {
     'build_targets': [
       'most',
     ],
     'builder_cfg': {
       'compiler': 'MSVC',
       'configuration': 'Release',
-      'extra_config': 'Swarming',
       'is_trybot': False,
-      'os': 'Win8',
+      'os': 'Win',
       'role': 'Build',
       'target_arch': 'x86_64',
     },
@@ -468,9 +464,8 @@ FAKE_SPECS = {
     'do_test_steps': False,
     'env': {
       'GYP_DEFINES':
-          ('qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 ski'
-           'a_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_wi'
-           'n_ltcg=0'),
+          ('qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86_64 skia_warnings_as_errors'
+           '=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0'),
     },
     'nanobench_flags': [
       '--dummy-flags',
@@ -626,7 +621,7 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': True,
   },
-  'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot': {
+  'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot': {
     'build_targets': [
       'nanobench',
     ],
@@ -636,7 +631,6 @@ FAKE_SPECS = {
       'configuration': 'Release',
       'cpu_or_gpu': 'CPU',
       'cpu_or_gpu_value': 'AVX2',
-      'extra_config': 'Swarming',
       'is_trybot': True,
       'model': 'GCE',
       'os': 'Ubuntu',
@@ -789,7 +783,7 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming': {
+  'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release': {
     'build_targets': [
       'dm',
     ],
@@ -799,7 +793,6 @@ FAKE_SPECS = {
       'configuration': 'Release',
       'cpu_or_gpu': 'GPU',
       'cpu_or_gpu_value': 'Tegra3',
-      'extra_config': 'Swarming',
       'is_trybot': False,
       'model': 'Nexus7v2',
       'os': 'Android',
@@ -822,7 +815,7 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming': {
+  'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release': {
     'build_targets': [
       'dm',
     ],
@@ -832,7 +825,6 @@ FAKE_SPECS = {
       'configuration': 'Release',
       'cpu_or_gpu': 'CPU',
       'cpu_or_gpu_value': 'AVX',
-      'extra_config': 'Swarming',
       'is_trybot': False,
       'model': 'MacMini6.2',
       'os': 'Mac',
@@ -960,7 +952,7 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming': {
+  'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-MSAN': {
     'build_targets': [
       'dm',
       'nanobench',
@@ -971,7 +963,7 @@ FAKE_SPECS = {
       'configuration': 'Debug',
       'cpu_or_gpu': 'CPU',
       'cpu_or_gpu_value': 'AVX2',
-      'extra_config': 'Swarming',
+      'extra_config': 'MSAN',
       'is_trybot': False,
       'model': 'GCE',
       'os': 'Ubuntu',
@@ -990,7 +982,7 @@ FAKE_SPECS = {
     'nanobench_flags': [
       '--dummy-flags',
     ],
-    'upload_dm_results': True,
+    'upload_dm_results': False,
     'upload_perf_results': False,
   },
   'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-SwarmingMSAN': {
@@ -1093,7 +1085,7 @@ FAKE_SPECS = {
     'upload_dm_results': False,
     'upload_perf_results': False,
   },
-  'Test-Win8-MSVC-ShuttleA-GPU-HD7770-x86_64-Release-Swarming': {
+  'Test-Win8-MSVC-ShuttleA-GPU-HD7770-x86_64-Release': {
     'build_targets': [
       'dm',
     ],
@@ -1103,7 +1095,6 @@ FAKE_SPECS = {
       'configuration': 'Release',
       'cpu_or_gpu': 'GPU',
       'cpu_or_gpu_value': 'HD7770',
-      'extra_config': 'Swarming',
       'is_trybot': False,
       'model': 'ShuttleA',
       'os': 'Win8',
@@ -1126,7 +1117,7 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming': {
+  'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release': {
     'build_targets': [
       'dm',
     ],
@@ -1136,7 +1127,6 @@ FAKE_SPECS = {
       'configuration': 'Release',
       'cpu_or_gpu': 'CPU',
       'cpu_or_gpu_value': 'AVX2',
-      'extra_config': 'Swarming',
       'is_trybot': False,
       'model': 'ShuttleB',
       'os': 'Win8',
@@ -1228,7 +1218,7 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
-  'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release-Swarming': {
+  'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release': {
     'build_targets': [
       'iOSShell',
     ],
@@ -1238,7 +1228,6 @@ FAKE_SPECS = {
       'configuration': 'Release',
       'cpu_or_gpu': 'GPU',
       'cpu_or_gpu_value': 'SGX554',
-      'extra_config': 'Swarming',
       'is_trybot': False,
       'model': 'iPad4',
       'os': 'iOS',

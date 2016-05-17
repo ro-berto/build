@@ -37,18 +37,18 @@ TEST_BUILDERS = {
   },
   'client.skia.fyi': {
     'skiabot-linux-housekeeper-003': [
-      'Build-Mac-Clang-x86_64-Release-Swarming',
-      'Build-Ubuntu-GCC-x86_64-Debug-Swarming',
-      'Build-Ubuntu-GCC-x86_64-Release-Swarming-Trybot',
-      'Build-Win8-MSVC-x86_64-Release-Swarming',
-      'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
-      'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming',
-      'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release-Swarming',
-      'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
-      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
-      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-SwarmingMSAN',
-      'Test-Win8-MSVC-ShuttleA-GPU-HD7770-x86_64-Release-Swarming',
-      'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
+      'Build-Mac-Clang-x86_64-Release',
+      'Build-Ubuntu-GCC-x86_64-Debug',
+      'Build-Ubuntu-GCC-x86_64-Release-Trybot',
+      'Build-Win-MSVC-x86_64-Release',
+      'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot',
+      'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release',
+      'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release',
+      'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release',
+      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug',
+      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-MSAN',
+      'Test-Win8-MSVC-ShuttleA-GPU-HD7770-x86_64-Release',
+      'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release',
     ],
   },
 }
@@ -65,6 +65,8 @@ def derive_compile_bot_name(builder_name, builder_spec):
     elif os == 'iOS':  # pragma: nocover
       extra_config = os
       os = 'Mac'
+    elif 'Win' in os:
+      os = 'Win'
     builder_name = 'Build-%s-%s-%s-%s' % (
       os,
       builder_cfg['compiler'],
@@ -606,7 +608,7 @@ def GenTests(api):
       for builder in builders_by_slave:
         yield test_for_bot(api, builder, mastername, slavename)
 
-  builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming'
+  builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'
   master = 'client.skia'
   slave = 'skiabot-linux-test-000'
   test = test_for_bot(api, builder, master, slave, 'No_downloaded_SKP_VERSION')

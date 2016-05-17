@@ -96,7 +96,7 @@
       "-u",
       "[CUSTOM_/_B_WORK]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
-      "Build-Ubuntu-GCC-x86_64-Debug-SwarmingMSAN"
+      "Build-Ubuntu-GCC-x86_64-Debug-MSAN"
     ],
     "cwd": "[CUSTOM_/_B_WORK]/skia",
     "name": "exec buildbot_spec.py",
@@ -109,7 +109,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"SwarmingMSAN\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"MSAN\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
@@ -146,7 +146,7 @@
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Debug-SwarmingMSAN"
+      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Debug-MSAN"
     },
     "name": "build dm"
   },
@@ -163,7 +163,7 @@
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Debug-SwarmingMSAN"
+      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Debug-MSAN"
     },
     "name": "build nanobench"
   },
@@ -172,7 +172,7 @@
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', '*.dylib', 'skia_launcher', 'lib/*.so', 'iOSShell.app', 'iOSShell.ipa']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    dst_path = os.path.join(dst, os.path.relpath(f, src))\n    if not os.path.isdir(os.path.dirname(dst_path)):\n      os.makedirs(os.path.dirname(dst_path))\n    print 'Copying build product %s to %s' % (f, dst_path)\n    shutil.move(f, dst_path)\n",
-      "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Debug-SwarmingMSAN/Debug",
+      "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Debug-MSAN/Debug",
       "[CUSTOM_[SWARM_OUT_DIR]]/out/Debug"
     ],
     "name": "copy build products",
