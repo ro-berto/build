@@ -4,7 +4,7 @@
 # found in the LICENSE file.
 
 """
-This tool creates a tarball with all the sources, but without .svn directories.
+This tool creates a tarball with all the sources, but without .git directories.
 
 It can also remove files which are not strictly required for build, so that
 the resulting tarball can be reasonably small (last time it was ~110 MB).
@@ -24,23 +24,11 @@ import tarfile
 
 
 NONESSENTIAL_DIRS = (
-    'breakpad/src/processor/testdata',
-    'chrome/browser/resources/tracing/tests',
     'chrome/common/extensions/docs',
-    'courgette/testdata',
-    'data',
-    'native_client/src/trusted/service_runtime/testdata',
-    'o3d/documentation',
-    'o3d/samples',
-    'o3d/tests',
-    'third_party/angle/samples/gles2_book',
     'third_party/findbugs',
     'third_party/hunspell_dictionaries',
     'third_party/hunspell/tests',
-    'third_party/lighttpd',
     'third_party/sqlite/src/test',
-    'third_party/sqlite/test',
-    'third_party/vc_80',
     'third_party/xdg-utils/tests',
     'third_party/yasm/source/patched-yasm/modules/arch/x86/tests',
     'third_party/yasm/source/patched-yasm/modules/dbgfmts/dwarf2/tests',
@@ -53,20 +41,23 @@ NONESSENTIAL_DIRS = (
     'third_party/yasm/source/patched-yasm/modules/objfmts/win64/tests',
     'third_party/yasm/source/patched-yasm/modules/objfmts/xdf/tests',
     'third_party/WebKit/LayoutTests',
-    'third_party/WebKit/Source/JavaScriptCore/tests',
-    'third_party/WebKit/Source/WebCore/ChangeLog',
-    'third_party/WebKit/Source/WebKit2',
     'third_party/WebKit/Tools/Scripts',
     'tools/gyp/test',
     'v8/test',
-    'webkit/data/layout_tests',
-    'webkit/tools/test/reference_build',
 )
 
-TESTDIRS = (
+ESSENTIAL_FILES = (
+    'chrome/test/data/webui/i18n_process_css_test.html',
+)
+
+TEST_DIRS = (
+    'breakpad/src/processor/testdata',
+    'chrome/browser/resources/tracing/tests',
     'chrome/test/data',
     'content/test/data',
+    'courgette/testdata',
     'media/test/data',
+    'native_client/src/trusted/service_runtime/testdata',
     'net/data',
 )
 
@@ -92,8 +83,8 @@ class MyTarFile(tarfile.TarFile):
       print 'A\t%s' % name
 
   def add(self, name, arcname=None, recursive=True, exclude=None, filter=None):
-    head, tail = os.path.split(name)
-    if tail in ('.svn', '.git'):
+    _, file_name = os.path.split(name)
+    if file_name in ('.git', 'out'):
       self.__report_skipped(name)
       return
 
@@ -104,17 +95,20 @@ class MyTarFile(tarfile.TarFile):
         self.__report_skipped(name)
         return
 
-      # Remove contents of non-essential directories, but preserve gyp files,
-      # so that build/gyp_chromium can work.
-      for nonessential_dir in (NONESSENTIAL_DIRS + TESTDIRS):
-        dir_path = os.path.join(self.__src_dir, nonessential_dir)
-        if (name.startswith(dir_path) and
-            os.path.isfile(name) and
-            'gyp' not in name and
-            'gn' not in name and
-            'isolate' not in name and
-            'grd' not in name):
-          self.__report_skipped(name)
+      # Preserve GYP/GN files, and other potentially critical files, so that
+      # build/gyp_chromium / gn gen can work.
+      rel_name = os.path.relpath(name, self.__src_dir)
+      keep_file = ('.gyp' in file_name or
+                   '.gn' in file_name or
+                   '.isolate' in file_name or
+                   '.grd' in file_name or
+                   rel_name in ESSENTIAL_FILES)
+
+      # Remove contents of non-essential directories.
+      if not keep_file:
+        for nonessential_dir in (NONESSENTIAL_DIRS + TEST_DIRS):
+          if rel_name.startswith(nonessential_dir) and os.path.isfile(name):
+            self.__report_skipped(name)
           return
 
     self.__report_added(name)
@@ -166,7 +160,7 @@ def main(argv):
   archive.set_src_dir(options.src_dir)
   try:
     if options.test_data:
-      for directory in TESTDIRS:
+      for directory in TEST_DIRS:
         archive.add(os.path.join(options.src_dir, directory),
                     arcname=os.path.join(output_basename, directory))
     else:
