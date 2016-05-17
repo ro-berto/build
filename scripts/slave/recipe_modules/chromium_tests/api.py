@@ -675,14 +675,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     Paths are relative to `relative_to` which for analyze should be 'src/'.
     """
-    patch_project = self.m.properties.get('patch_project')
-    patch_root = self.m.gclient.calculate_patch_root(patch_project)
-    if (patch_project == 'webrtc' and
-        patch_root == self.m.path.join('src', 'third_party')):
-      # TODO(kjellander): Remove this hack when http://crbug.com/611808 is
-      # fixed.
-      patch_root = 'src/third_party/webrtc'
-
+    patch_root = self.m.gclient.calculate_patch_root(
+        self.m.properties.get('patch_project'))
     affected_files = self.m.tryserver.get_files_affected_by_patch(patch_root)
     for i, path in enumerate(affected_files):
       path = str(path)
