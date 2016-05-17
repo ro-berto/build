@@ -179,7 +179,8 @@ class WebRTCApi(recipe_api.RecipeApi):
 
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
-               perf_test=False, perf_dashboard_id=None, parallel=True):
+               python_mode=False, perf_test=False, perf_dashboard_id=None,
+               parallel=True):
     """Helper function to invoke chromium.runtest().
 
     Notice that the name parameter should be the same as the test executable in
@@ -197,11 +198,11 @@ class WebRTCApi(recipe_api.RecipeApi):
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
           xvfb=True, perf_dashboard_id=perf_dashboard_id,
-          test_type=perf_dashboard_id, env=env, revision=self.revision_number,
-          perf_id=self.c.PERF_ID, perf_config=self.c.PERF_CONFIG)
+          test_type=perf_dashboard_id, env=env, python_mode=python_mode,
+          revision=self.revision_number, perf_id=self.c.PERF_ID,
+          perf_config=self.c.PERF_CONFIG)
     else:
       annotate = 'gtest'
-      python_mode = False
       test_type = test
       flakiness_dash = (not self.m.tryserver.is_tryserver and
                         not self.m.chromium.c.runtests.memory_tool)

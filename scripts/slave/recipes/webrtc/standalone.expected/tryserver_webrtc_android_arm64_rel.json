@@ -349,9 +349,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_audio_decoder_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -366,9 +364,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_common_audio_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -383,9 +379,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_common_video_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -400,9 +394,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_modules_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -417,9 +409,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_modules_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -434,9 +424,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_peerconnection_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -451,9 +439,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_system_wrappers_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -468,9 +454,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_test_support_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -485,9 +469,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_tools_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -502,9 +484,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_video_engine_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -519,9 +499,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_voice_engine_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -536,9 +514,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_webrtc_nonparallel_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "900"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -553,9 +529,7 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_webrtc_perf_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "-t",
-      "2700"
+      "--verbose"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

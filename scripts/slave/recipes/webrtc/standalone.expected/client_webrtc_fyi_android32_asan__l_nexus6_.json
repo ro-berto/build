@@ -379,9 +379,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -397,9 +395,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -415,9 +411,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -433,9 +427,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -451,9 +443,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -469,9 +459,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -487,9 +475,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -505,9 +491,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -523,9 +507,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -541,9 +523,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -559,9 +539,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -577,9 +555,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "900"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -595,9 +571,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
-      "-t",
-      "2700"
+      "--tool=asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
