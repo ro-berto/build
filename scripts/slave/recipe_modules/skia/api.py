@@ -170,6 +170,9 @@ class SkiaApi(recipe_api.RecipeApi):
       self.m.path.c.base_paths['depot_tools'] = (
           self.m.path.c.base_paths['slave_build'] +
           ('build', 'scripts', 'slave', '.recipe_deps', 'depot_tools'))
+      if 'Win' in self.builder_name:
+        self.m.path.c.base_paths['depot_tools'] = (
+            'c:\\', 'Users', 'chrome-bot', 'depot_tools')
       self.m.path.c.base_paths['build'] = (
           self.m.path.c.base_paths['slave_build'] + ('build',))
       self.default_env['PYTHONPATH'] = self.m.path['build'].join('scripts')
