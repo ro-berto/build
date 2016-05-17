@@ -1630,6 +1630,38 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'v8_linux_noi18n_rel_ng': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_linux_noi18n_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux_noi18n_rel_ng_triggered': {
+        'v8_apply_config': ['no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_linux_noi18n_rel_ng',
+        'enable_swarming': True,
+        'tests': [
+          V8Testing_2,
+          Test262,
+          Mozilla,
+          SimdJs,
+        ],
+        'variants': V8NoExhaustiveVariants(),
+        'testing': {'platform': 'linux'},
+      },
       'v8_linux_greedy_allocator_dbg': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_apply_config': ['greedy_allocator'],
