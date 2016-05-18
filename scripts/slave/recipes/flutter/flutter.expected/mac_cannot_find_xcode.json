@@ -103,7 +103,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/flutter/infra/download_android_tools.py"
+      "[SLAVE_BUILD]/flutter/dev/infra/download_android_tools.py"
     ],
     "name": "download android tools"
   },
@@ -116,7 +116,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/dev/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },

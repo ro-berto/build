@@ -43,7 +43,7 @@ def MakeTempDir(api):
 
 def GenerateDocs(api):
   checkout = api.path['checkout']
-  api.step('dartdoc packages', ['infra/docs.sh', '--upload'], cwd=checkout)
+  api.step('dartdoc packages', ['dev/infra/docs.sh', '--upload'], cwd=checkout)
 
 
 def BuildExamples(api, git_hash):
@@ -113,7 +113,7 @@ def RunSteps(api):
   checkout = api.path['checkout']
 
   api.step('download android tools',
-      [checkout.join('infra', 'download_android_tools.py')])
+      [checkout.join('dev', 'infra', 'download_android_tools.py')])
 
   dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
@@ -126,7 +126,7 @@ def RunSteps(api):
         '%(PATH)s')),
     # Setup our own pub_cache to not affect other slaves on this machine.
     'PUB_CACHE': pub_cache,
-    'ANDROID_HOME': checkout.join('infra', 'android_tools'),
+    'ANDROID_HOME': checkout.join('dev', 'infra', 'android_tools'),
   }
 
   # The context adds dart-sdk tools to PATH sets PUB_CACHE.
@@ -134,10 +134,10 @@ def RunSteps(api):
     if api.platform.is_mac:
       SetupXcode(api)
 
-    api.step('setup.sh', ['travis/setup.sh'], cwd=checkout)
+    api.step('setup.sh', ['dev/bots/setup.sh'], cwd=checkout)
 
     if api.platform.is_linux:
-      api.step('test.sh', ['travis/test.sh'], cwd=checkout)
+      api.step('test.sh', ['dev/bots/test.sh'], cwd=checkout)
 
     BuildExamples(api, git_hash)
 
