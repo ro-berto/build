@@ -947,7 +947,7 @@ def main_ninja(options, args):
             # Also increasing cpus for v8/blink trybots.
             ['build%d-m4' % x for x in xrange(45, 48)] +
             # Also increasing cpus for LTO buildbots.
-            ['slave20-c1', 'slave33-c1']):
+            ['slave%d-c1' % x for x in [20, 33] + range(78, 108)]):
           return min(10 * number_of_processors, 200)
 
         return 50
