@@ -36,8 +36,10 @@ class ServiceAccountApi(recipe_api.RecipeApi):
 
     try:
       # TODO: authutil is to be deployed using cipd.
-      step_result = self.m.step('get access token', cmd,
-                                stdout=self.m.raw_io.output())
+      step_result = self.m.step(
+          'get access token', cmd, stdout=self.m.raw_io.output(),
+          step_test_data=lambda: self.m.raw_io.test_api.stream_output(
+              'abc124', stream='stdout'))
     except self.m.step.StepFailure as ex:
       if not self.m.path.exists(self.c.authutil_path):
         ex.result.presentation.logs['Authutil not found'] = [
