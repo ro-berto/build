@@ -1,0 +1,129 @@
+{
+  "master_base_class": "Master3",
+  "master_classname": "Boringssl",
+  "master_port": 20311,
+  "master_port_alt": 25311,
+  "slave_port": 30311,
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "builders": {
+    "linux": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
+    "linux_shared": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
+    "linux32": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
+    "linux_noasm_asan": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
+    "linux_small": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
+    "linux_nothreads": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
+    "mac": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["mac"],
+      "category": "1mac",
+    },
+    "mac_small": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["mac"],
+      "category": "1mac",
+    },
+    "win64": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
+    "win64_small": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
+    "win32": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
+    "win32_small": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
+    "docs": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "3docs",
+    },
+  },
+
+  "schedulers": {
+    "boringssl_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://boringssl.googlesource.com/boringssl.git",
+    },
+  },
+
+  "slave_pools": {
+    "linux_trusty": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": [
+        "slave44-c3",
+      ],
+    },
+    "mac": {
+      "slave_data": {
+        "bits": 64,
+        "os": "mac",
+        "version": "10.9",
+      },
+      "slaves": [
+        "vm2-m3",
+      ],
+    },
+    "windows": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win7",
+      },
+      "slaves": [
+        "vm131-m3",
+      ],
+    },
+  },
+}
