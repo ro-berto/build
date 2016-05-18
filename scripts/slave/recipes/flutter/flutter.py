@@ -43,7 +43,7 @@ def MakeTempDir(api):
 
 def GenerateDocs(api):
   checkout = api.path['checkout']
-  api.step('dartdoc packages', ['dev/infra/docs.sh', '--upload'], cwd=checkout)
+  api.step('dartdoc packages', ['dev/bots/docs.sh', '--upload'], cwd=checkout)
 
 
 def BuildExamples(api, git_hash):
@@ -113,7 +113,7 @@ def RunSteps(api):
   checkout = api.path['checkout']
 
   api.step('download android tools',
-      [checkout.join('dev', 'infra', 'download_android_tools.py')])
+      [checkout.join('dev', 'bots', 'download_android_tools.py')])
 
   dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
@@ -126,7 +126,7 @@ def RunSteps(api):
         '%(PATH)s')),
     # Setup our own pub_cache to not affect other slaves on this machine.
     'PUB_CACHE': pub_cache,
-    'ANDROID_HOME': checkout.join('dev', 'infra', 'android_tools'),
+    'ANDROID_HOME': checkout.join('dev', 'bots', 'android_tools'),
   }
 
   # The context adds dart-sdk tools to PATH sets PUB_CACHE.
