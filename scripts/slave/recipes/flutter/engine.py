@@ -194,7 +194,9 @@ def BuildMac(api):
   Build(api, 'android_release', 'sky/engine/bindings:snapshot_cc')
 
   UploadArtifacts(api, 'darwin-x64', [
-    'out/host_debug/sky_snapshot'
+    'out/host_debug/sky_snapshot',
+    'out/host_debug/sky_shell',
+    'out/host_debug/icudtl.dat',
   ])
 
   UploadArtifacts(api, "android-arm-profile" , [

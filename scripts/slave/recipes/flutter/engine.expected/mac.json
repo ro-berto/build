@@ -214,7 +214,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip darwin-x64 Artifacts",
-    "stdin": "{\"entries\": [{\"archive_name\": \"sky_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/host_debug/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"sky_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/host_debug/sky_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"sky_shell\", \"path\": \"[SLAVE_BUILD]/src/out/host_debug/sky_shell\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/host_debug/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
