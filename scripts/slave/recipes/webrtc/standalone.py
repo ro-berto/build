@@ -24,11 +24,6 @@ def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
-  if api.properties['buildername'] == 'Android32 Builder x86 (dbg)':
-    step_result = api.step('Disabled: see http://crbug.com/610145 ', cmd=None)
-    step_result.presentation.status = api.step.WARNING
-    return
-
   if api.platform.is_mac:
     api.ios.host_info()
   webrtc.checkout()
