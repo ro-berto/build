@@ -61,7 +61,8 @@ def _AppendFlags(args, key, flags):
     args[key] = flags
 
 
-def _GetTargetCMakeArgs(buildername, bot_utils):
+def _GetTargetCMakeArgs(buildername, checkout):
+  bot_utils = checkout.join('util', 'bot')
   args = {}
   if _HasToken(buildername, 'shared'):
     args['BUILD_SHARED_LIBS'] = '1'
@@ -82,9 +83,19 @@ def _GetTargetCMakeArgs(buildername, bot_utils):
   if _HasToken(buildername, 'small'):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_SMALL=1')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_SMALL=1')
-  if _HasToken(buildername, "nothreads"):
+  if _HasToken(buildername, 'nothreads'):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_NO_THREADS=1')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_NO_THREADS=1')
+  if _HasToken(buildername, 'android'):
+    args['CMAKE_TOOLCHAIN_FILE'] = checkout.join('third_party', 'android-cmake',
+                                                 'android.toolchain.cmake')
+    args['ANDROID_NDK'] = bot_utils.join('android_tools', 'ndk')
+    if _HasToken(buildername, 'arm'):
+      args['ANDROID_ABI'] = 'armeabi-v7a'
+      args['ANDROID_NATIVE_API_LEVEL'] = 16
+    elif _HasToken(buildername, 'aarch64'):
+      args['ANDROID_ABI'] = 'arm64-v8a'
+      args['ANDROID_NATIVE_API_LEVEL'] = 21
   return args
 
 
@@ -123,12 +134,15 @@ PROPERTIES = {
 def RunSteps(api, buildername):
   # Sync and pull in everything.
   api.gclient.set_config('boringssl')
+  if _HasToken(buildername, 'android'):
+    api.gclient.c.target_os.add('android')
   api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
 
   # Set up paths.
   bot_utils = api.path['checkout'].join('util', 'bot')
   go_env = bot_utils.join('go', 'env.py')
+  adb_path = bot_utils.join('android_tools', 'sdk', 'platform-tools', 'adb')
   build_dir = api.path['checkout'].join('build')
   runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
 
@@ -147,7 +161,7 @@ def RunSteps(api, buildername):
   cmake = bot_utils.join('cmake-' + _GetHostToolSuffix(api.platform), 'bin',
                          'cmake' + _GetHostExeSuffix(api.platform))
   cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
-  cmake_args.update(_GetTargetCMakeArgs(buildername, bot_utils))
+  cmake_args.update(_GetTargetCMakeArgs(buildername, api.path['checkout']))
   api.python('cmake', go_env,
              msvc_prefix + [cmake, '-GNinja'] +
              ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
@@ -159,19 +173,42 @@ def RunSteps(api, buildername):
     env = _GetTargetEnv(buildername, bot_utils)
 
     # Run the unit tests.
-    deferred = api.python('unit tests', go_env,
-                          msvc_prefix + ['go', 'run',
-                                         api.path.join('util', 'all_tests.go'),
-                                         '-json-output',
-                                         api.test_utils.test_results()],
-                          cwd=api.path['checkout'], env=env)
+    if _HasToken(buildername, 'android'):
+      deferred = api.python('unit tests', go_env,
+                            ['go', 'run',
+                             api.path.join('util', 'run_android_tests.go'),
+                             '-build-dir', build_dir,
+                             '-adb', adb_path,
+                             '-suite', 'unit',
+                             '-json-output', api.test_utils.test_results()],
+                            cwd=api.path['checkout'], env=env)
+    else:
+      deferred = api.python('unit tests', go_env,
+                            msvc_prefix + ['go', 'run',
+                                           api.path.join('util',
+                                                         'all_tests.go'),
+                                           '-json-output',
+                                           api.test_utils.test_results()],
+                            cwd=api.path['checkout'], env=env)
     _LogFailingTests(api, deferred)
 
     # Run the SSL tests.
-    deferred = api.python('ssl tests', go_env,
-                          msvc_prefix + ['go', 'test', '-pipe', '-json-output',
-                                         api.test_utils.test_results()],
-                          cwd=runner_dir, env=env)
+    if _HasToken(buildername, 'android'):
+      deferred = api.python('ssl tests', go_env,
+                            ['go', 'run',
+                             api.path.join('util', 'run_android_tests.go'),
+                             '-build-dir', build_dir,
+                             '-adb', adb_path,
+                             '-suite', 'ssl',
+                             '-runner-args', '-pipe',
+                             '-json-output', api.test_utils.test_results()],
+                            cwd=api.path['checkout'], env=env)
+    else:
+      deferred = api.python('ssl tests', go_env,
+                            msvc_prefix + ['go', 'test', '-pipe',
+                                           '-json-output',
+                                           api.test_utils.test_results()],
+                            cwd=runner_dir, env=env)
     _LogFailingTests(api, deferred)
 
 
@@ -190,6 +227,8 @@ def GenTests(api):
     ('win32_small', api.platform('win', 64)),
     ('win64', api.platform('win', 64)),
     ('win64_small', api.platform('win', 64)),
+    ('android_arm', api.platform('linux', 64)),
+    ('android_aarch64', api.platform('linux', 64)),
   ]
   for (buildername, host_platform) in tests:
     yield (

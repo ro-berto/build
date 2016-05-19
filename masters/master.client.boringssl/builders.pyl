@@ -79,11 +79,23 @@
       "slave_pools": ["windows"],
       "category": "2win",
     },
-    "docs": {
+    "android_arm": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
+      "slave_pools": ["android_n5"],
+      "category": "3android",
+    },
+    "android_aarch64": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["android_n5x"],
+      "category": "3android",
+    },
+    "docs": {
+      "recipe": "boringssl_docs",
+      "scheduler": "boringssl_commits",
       "slave_pools": ["linux_trusty"],
-      "category": "3docs",
+      "category": "4docs",
     },
   },
 
@@ -123,6 +135,26 @@
       },
       "slaves": [
         "vm131-m3",
+      ],
+    },
+    "android_n5": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": [
+        "build8-b3",
+      ],
+    },
+    "android_n5x": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": [
+        "build9-b3",
       ],
     },
   },
