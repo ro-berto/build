@@ -52,7 +52,6 @@ ESSENTIAL_FILES = (
 
 TEST_DIRS = (
     'breakpad/src/processor/testdata',
-    'chrome/browser/resources/tracing/tests',
     'chrome/test/data',
     'content/test/data',
     'courgette/testdata',
