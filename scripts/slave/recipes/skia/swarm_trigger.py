@@ -120,7 +120,7 @@ def swarm_dimensions(builder_spec):
         'GTX660':      '10de:11c0',
         'GTX960':      '10de:1401',
         'HD4000':      '8086:0a2e',
-        'HD4600':      '8086:0416',
+        'HD4600':      '8086:0412',
         'HD7770':      '1002:683d',
       }[builder_cfg['cpu_or_gpu_value']]
   else:
