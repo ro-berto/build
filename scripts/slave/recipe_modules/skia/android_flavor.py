@@ -209,7 +209,6 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
           infra_step=True)
       self._adb.wait_for_device()
 
-    # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.run(self._skia_api.m.step,
                        name='kill skia',
                        cmd=[
@@ -228,6 +227,18 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._adb(name='starting battery stats',
               serial=self.serial,
               cmd=['shell', 'dumpsys', 'batteryproperties'],
+              infra_step=True)
+
+    # Print out CPU scale info.
+    self._adb(name='cat scaling_governor',
+              serial=self.serial,
+              cmd=['shell', 'cat',
+                   '/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor'],
+              infra_step=True)
+    self._adb(name='cat cpu_freq',
+              serial=self.serial,
+              cmd=['shell', 'cat',
+                   '/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq'],
               infra_step=True)
 
   def cleanup_steps(self):

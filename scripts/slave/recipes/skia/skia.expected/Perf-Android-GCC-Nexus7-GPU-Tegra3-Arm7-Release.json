@@ -350,6 +350,38 @@
   },
   {
     "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "015d210a13480604",
+      "shell",
+      "cat",
+      "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+    },
+    "name": "cat scaling_governor"
+  },
+  {
+    "cmd": [
+      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "-s",
+      "015d210a13480604",
+      "shell",
+      "cat",
+      "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
+    },
+    "name": "cat cpu_freq"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "--verbose",
       "-s",

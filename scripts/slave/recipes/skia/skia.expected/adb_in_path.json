@@ -366,6 +366,38 @@
   },
   {
     "cmd": [
+      "/usr/bin/adb",
+      "-s",
+      "015d210a13480604",
+      "shell",
+      "cat",
+      "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+    ],
+    "env": {
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
+    },
+    "name": "cat scaling_governor"
+  },
+  {
+    "cmd": [
+      "/usr/bin/adb",
+      "-s",
+      "015d210a13480604",
+      "shell",
+      "cat",
+      "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+    ],
+    "env": {
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
+    },
+    "name": "cat cpu_freq"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "--verbose",
       "-s",

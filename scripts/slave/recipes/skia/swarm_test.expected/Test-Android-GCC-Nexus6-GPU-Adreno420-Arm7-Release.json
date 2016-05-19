@@ -141,6 +141,38 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
+      "shell",
+      "cat",
+      "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "cat scaling_governor"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
+      "shell",
+      "cat",
+      "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "cat cpu_freq"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "--verbose",
       "[SLAVE_BUILD]/skia/resources",
