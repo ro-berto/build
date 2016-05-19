@@ -639,6 +639,37 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_instrumentation_nodefault_build') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Android Builder') +
+    api.override_step_data('read test spec', api.json.output({
+      'Android Tests': {
+        'instrumentation_tests': [
+          {
+            'test': 'blimp_test_apk',
+          }
+        ],
+      },
+    }))
+  )
+
+  yield (
+    api.test('dynamic_instrumentation_nodefault_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Android Tests',
+                           parent_buildername='Android Builder') +
+    api.override_step_data('read test spec', api.json.output({
+      'Android Tests': {
+        'instrumentation_tests': [
+          {
+            'test': 'blimp_test_apk',
+          }
+        ],
+      },
+    }))
+  )
+
+  yield (
     api.test('dynamic_swarmed_instrumentation_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Tests',

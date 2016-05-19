@@ -1613,7 +1613,7 @@ class AndroidInstrumentationTest(AndroidTest):
         or AndroidInstrumentationTest._DEFAULT_SUITES_BY_TARGET.get(name)
         or {})
     if not compile_targets:
-      compile_targets = [suite_defaults['compile_target']]
+      compile_targets = [suite_defaults.get('compile_target', name)]
       compile_targets.extend(
           suite_defaults.get('additional_compile_targets', []))
 
