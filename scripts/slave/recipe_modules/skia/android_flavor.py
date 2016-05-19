@@ -230,16 +230,17 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
               infra_step=True)
 
     # Print out CPU scale info.
-    self._adb(name='cat scaling_governor',
-              serial=self.serial,
-              cmd=['shell', 'cat',
-                   '/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor'],
-              infra_step=True)
-    self._adb(name='cat cpu_freq',
-              serial=self.serial,
-              cmd=['shell', 'cat',
-                   '/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq'],
-              infra_step=True)
+    if self._has_root:
+      self._adb(name='cat scaling_governor',
+                serial=self.serial,
+                cmd=['shell', 'cat',
+                     '/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor'],
+                infra_step=True)
+      self._adb(name='cat cpu_freq',
+                serial=self.serial,
+                cmd=['shell', 'cat',
+                     '/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq'],
+                infra_step=True)
 
   def cleanup_steps(self):
     """Run any device-specific cleanup steps."""
