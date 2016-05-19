@@ -198,13 +198,10 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
     # We use recipes.cfg hashes to uniquely identify changes (which might be
     # rebased).
     cfg_contents = roll_result['picked_roll_details']['spec']
-    # TODO(phajdan.jr): remove prefix once new roller is no longer experimental.
-    cfg_digest = hashlib.md5('EXPERIMENTAL-' + cfg_contents).hexdigest()
+    cfg_digest = hashlib.md5(cfg_contents).hexdigest()
 
     # We use diff hashes to uniquely identify patchsets within a change.
     self.m.git('commit', '-a', '-m', 'roll recipes.cfg', cwd=workdir)
-    # TODO(phajdan.jr): verify that git-show order is stable and includes
-    # all info we need to hash.
     diff_result = self.m.git(
         'show', '--format=%b',
         stdout=self.m.raw_io.output(),
@@ -213,8 +210,7 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
             '-some line\n+some other line\n'))
     diff = diff_result.stdout
     diff_result.presentation.logs['output'] = diff.splitlines()
-    # TODO(phajdan.jr): remove prefix once new roller is no longer experimental.
-    diff_digest = hashlib.md5('EXPERIMENTAL-' + diff).hexdigest()
+    diff_digest = hashlib.md5(diff).hexdigest()
 
     # Check if we have uploaded this before.
     need_to_upload = False

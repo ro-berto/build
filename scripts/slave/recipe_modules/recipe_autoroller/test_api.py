@@ -65,9 +65,7 @@ class RecipeAutorollerTestApi(recipe_test_api.RecipeTestApi):
               {
                 'issue': '123456789',
                 'issue_url': 'https://codereview.chromium.org/123456789',
-                # N.B. this is the actual md5 of the step test data specified
-                # for upstream-diff.
-                'diff_digest': 'd4fbd1f86c94d02a0e9f2a3d08aebc1c'
+                'diff_digest': 'afe53a0e969fd0b2a6b5c5f89724d0c6'
               }),
               stream='stdout'),
           self.m.raw_io.stream_output('', stream='stderr'))
