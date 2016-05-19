@@ -513,7 +513,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     build_number = build.getNumber()
     bot = build.getSlavename()
     step_name = step.getName()
-    step_text = step.getText()
+    step_text = ' '.join(step.getText())
     self.log('stepFinished', '%s, %d, %s, %r',
              builder_name, build_number, step_name, results)
     _, finished = step.getTimes()
