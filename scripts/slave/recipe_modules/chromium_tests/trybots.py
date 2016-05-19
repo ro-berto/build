@@ -152,6 +152,10 @@ TRYBOTS = freeze({
         'buildername': 'GPU Linux Builder (dbg)',
         'tester': 'Linux Debug (NVIDIA)',
       }),
+      'linux_angle_chromeos_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Linux ChromiumOS Builder',
+      }),
       'mac_angle_rel_ng': {
         'bot_ids': [
           {
