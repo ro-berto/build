@@ -496,7 +496,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip ios_debug Artifacts",
+    "name": "Zip ios Artifacts",
     "stdin": "{\"entries\": [{\"archive_name\": \"FlutterXcode.zip\", \"path\": \"[SLAVE_BUILD]/src/out/debug/FlutterXcode.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
@@ -509,14 +509,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_4/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios_debug/artifacts.zip"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload \"ios_debug/artifacts.zip\"",
+    "name": "gsutil upload \"ios/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios_debug/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios/artifacts.zip@@@"
     ]
   },
   {
@@ -578,7 +578,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip ios_profile Artifacts",
+    "name": "Zip ios-profile Artifacts",
     "stdin": "{\"entries\": [{\"archive_name\": \"FlutterXcode.zip\", \"path\": \"[SLAVE_BUILD]/src/out/profile/FlutterXcode.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_5/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
@@ -591,14 +591,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_5/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios_profile/artifacts.zip"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios-profile/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload \"ios_profile/artifacts.zip\"",
+    "name": "gsutil upload \"ios-profile/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios_profile/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios-profile/artifacts.zip@@@"
     ]
   },
   {
@@ -660,7 +660,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip ios_release Artifacts",
+    "name": "Zip ios-release Artifacts",
     "stdin": "{\"entries\": [{\"archive_name\": \"FlutterXcode.zip\", \"path\": \"[SLAVE_BUILD]/src/out/release/FlutterXcode.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
@@ -673,14 +673,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_6/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios_release/artifacts.zip"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios-release/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload \"ios_release/artifacts.zip\"",
+    "name": "gsutil upload \"ios-release/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios_release/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios-release/artifacts.zip@@@"
     ]
   },
   {

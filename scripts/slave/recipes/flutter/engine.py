@@ -208,7 +208,7 @@ def BuildMac(api):
   ], archive_name='darwin-x64.zip')
 
 
-def PackageIOSVariant(api, label, device_out, sim_out):
+def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
   checkout = api.path['checkout']
   out_dir = checkout.join('out')
 
@@ -231,7 +231,7 @@ def PackageIOSVariant(api, label, device_out, sim_out):
   api.zip.directory('Archive FlutterXcode %s' % label, deploy_dir, flutter_zip)
 
   UploadArtifacts(api,
-    'ios_%s' % label, [ 'out/%s/FlutterXcode.zip' % label ]
+    bucket_name, [ 'out/%s/FlutterXcode.zip' % label ]
   )
 
 
@@ -249,9 +249,12 @@ def BuildIOS(api):
   Build(api, 'ios_release')
 
   # Package all variants
-  PackageIOSVariant(api, 'debug',   'ios_debug',   'ios_debug_sim')
-  PackageIOSVariant(api, 'profile', 'ios_profile', 'ios_debug_sim')
-  PackageIOSVariant(api, 'release', 'ios_release', 'ios_debug_sim')
+  PackageIOSVariant(api,
+      'debug',   'ios_debug',   'ios_debug_sim', 'ios')
+  PackageIOSVariant(api,
+      'profile', 'ios_profile', 'ios_debug_sim', 'ios-profile')
+  PackageIOSVariant(api,
+      'release', 'ios_release', 'ios_debug_sim', 'ios-release')
 
 
 def GetCheckout(api):
