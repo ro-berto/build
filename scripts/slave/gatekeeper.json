@@ -491,7 +491,8 @@
       {
         "tree_notify": [
           "davidben+boringssl@google.com",
-          "agl+boringssl@google.com"
+          "agl+boringssl@google.com",
+          "boringssl-dev+build@chromium.org"
         ],
 
         "forgive_all": "true",
