@@ -108,7 +108,7 @@ class MyTarFile(tarfile.TarFile):
         for nonessential_dir in (NONESSENTIAL_DIRS + TEST_DIRS):
           if rel_name.startswith(nonessential_dir) and os.path.isfile(name):
             self.__report_skipped(name)
-          return
+            return
 
     self.__report_added(name)
     tarfile.TarFile.add(self, name, arcname=arcname, recursive=recursive)
