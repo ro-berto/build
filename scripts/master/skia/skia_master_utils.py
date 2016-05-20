@@ -32,7 +32,7 @@ import re
 
 DEFAULT_AUTO_REBOOT = False
 DEFAULT_DO_TRYBOT = True
-DEFAULT_RECIPE = 'skia/skia'
+DEFAULT_RECIPE = 'skia/swarm_trigger'
 DEFAULT_TRYBOT_ONLY = False
 BUILDBUCKET_SCHEDULER_NAME = 'buildbucket'
 MASTER_ONLY_SCHEDULER_NAME = 'skia_master_only'
