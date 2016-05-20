@@ -262,6 +262,25 @@ class V8Api(recipe_api.RecipeApi):
       env['GYP_MSVS_VERSION'] = self.m.chromium.c.gyp_env.GYP_MSVS_VERSION
     self.m.chromium.runhooks(env=env, **kwargs)
 
+  def peek_gn(self):
+    """Runs gn and compares flags with gyp (fyi only)."""
+    # TODO(machenbach): Whitelist all builders eventually.
+    if (self.m.properties['buildername'] not in [
+        'V8 Linux64 - builder',
+      ]):
+      return
+    gyp_build_dir = self.m.chromium.c.build_dir.join(
+        self.m.chromium.c.build_config_fs)
+    with self.m.tempfile.temp_dir('v8_gn') as gn_build_dir:
+      self.m.chromium.run_gn(
+          use_goma=True, build_dir=gn_build_dir, ok_ret='any')
+      self.m.python(
+          'compare build flags (fyi)',
+          self.m.path['checkout'].join('tools', 'gyp_flag_compare.py'),
+          [gn_build_dir, gyp_build_dir, 'all', 'all'],
+          ok_ret='any',
+      )
+
   @property
   def build_environment(self):
     if self.m.properties.get('parent_build_environment'):

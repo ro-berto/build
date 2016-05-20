@@ -514,7 +514,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
     self.m.gclient.runhooks(**kwargs)
 
-  def run_gn(self, use_goma=False, gn_path=None):
+  def run_gn(self, use_goma=False, gn_path=None, build_dir=None, **kwargs):
     if not gn_path:
       gn_path = self.m.path['depot_tools'].join('gn.py')
 
@@ -522,7 +522,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # TODO(dpranke): Figure out if we should use the '_x64' thing to
     # consistent w/ GYP, or drop it to be consistent w/ the other platforms.
-    build_dir = '//out/%s' % self.c.build_config_fs
+    build_dir = build_dir or '//out/%s' % self.c.build_config_fs
 
     if self.c.BUILD_CONFIG == 'Debug':
       gn_args.append('is_debug=true')
@@ -563,9 +563,9 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--args=%s' % ' '.join(gn_args),
     ]
     if str(gn_path).endswith('.py'):
-      self.m.python(name='gn', script=gn_path, args=step_args)
+      self.m.python(name='gn', script=gn_path, args=step_args, **kwargs)
     else:
-      self.m.step(name='gn', cmd=[gn_path] + step_args)
+      self.m.step(name='gn', cmd=[gn_path] + step_args, **kwargs)
 
   def run_mb(self, mastername, buildername, use_goma=True,
              mb_config_path=None, isolated_targets=None, name=None,

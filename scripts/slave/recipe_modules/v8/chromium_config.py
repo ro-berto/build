@@ -38,6 +38,10 @@ def v8(c):
     c.build_config_fs = c.BUILD_CONFIG
     c.compile_py.pass_arch_flag = True
 
+  # TODO(machenbach): Remove this as soon as a project specific default is
+  # possible. Also add corresponding gn_args for all gyp_defines in this
+  # file.
+  c.gn_args.append('use_sysroot=false')
 
 @CONFIG_CTX(includes=['v8'])
 def arm_hard_float(c):

@@ -18,6 +18,7 @@ DEPS = [
   'swarming',
   'swarming_client',
   'test_utils',
+  'recipe_engine/tempfile',
   'recipe_engine/time',
   'trigger',
   'depot_tools/tryserver',
