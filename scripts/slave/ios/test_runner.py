@@ -778,6 +778,7 @@ class XCTestRunner(TestRunner):
       perf_x_value=perf_x_value,
       test_args=test_args,
     )
+    self.app_path = os.path.abspath(app_path)
     self.test_host_name = test_host
     # Test target name is its host name without '_host' suffix.
     self.test_target_name = test_host.rsplit('_', 1)[0]
