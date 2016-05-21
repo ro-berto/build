@@ -13,6 +13,7 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
     'adb',
+    'buildbucket',
     'depot_tools/bot_update',
     'chromium',
     'chromium_android',
@@ -47,11 +48,16 @@ PROPERTIES = {
         kind=str, help='The first known good revision.'),
     'tests': Property(
         kind=Dict(value_type=list),
+        default={},
         help='The failed tests, the test name should be full name, e.g.: {'
              '  "browser_tests": ['
              '    "suite.test1", "suite.test2"'
              '  ]'
              '}'),
+    'buildbucket': Property(
+        default=None,
+        help='The buildbucket property in which we can find build id.'
+             'We need to use build id to get tests.'),
     'use_analyze': Property(
         kind=Single(bool, empty_val=False, required=False), default=True,
         help='Use analyze to skip commits that do not affect tests.'),
@@ -188,7 +194,18 @@ def _get_reduced_test_dict(original_test_dict, failed_tests_dict):
 
 
 def RunSteps(api, target_mastername, target_testername, good_revision,
-             bad_revision, tests, use_analyze, suspected_revisions):
+             bad_revision, tests, buildbucket,
+             use_analyze, suspected_revisions):
+
+  if not tests:
+    # tests should be saved in build parameter in this case.
+    buildbucket_json = json.loads(buildbucket)
+    build_id = buildbucket_json['build']['id']
+    get_build_result = api.buildbucket.get_build(build_id)
+    tests = json.loads(
+        get_build_result.stdout['build']['parameters_json']).get(
+            'additional_build_parameters', {}).get('tests')
+
   assert tests, 'No failed tests were specified.'
 
   # Figure out which builder configuration we should match for compile config.
@@ -341,7 +358,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
 def GenTests(api):
   def props(
       tests, platform_name, tester_name, use_analyze=False, good_revision=None,
-      bad_revision=None, suspected_revisions=None):
+      bad_revision=None, suspected_revisions=None, buildbucket=None):
     properties = {
         'mastername': 'tryserver.chromium.%s' % platform_name,
         'buildername': '%s_chromium_variable' % platform_name,
@@ -351,11 +368,14 @@ def GenTests(api):
         'target_testername': tester_name,
         'good_revision': good_revision or 'r0',
         'bad_revision': bad_revision or 'r1',
-        'tests': tests,
         'use_analyze': use_analyze,
     }
+    if tests:
+      properties['tests'] = tests
     if suspected_revisions:
       properties['suspected_revisions'] = suspected_revisions
+    if buildbucket:
+      properties['buildbucket'] = buildbucket
     return api.properties(**properties) + api.platform.name(platform_name)
 
   def simulated_gtest_output(failed_test_names=(), passed_test_names=()):
@@ -379,6 +399,17 @@ def GenTests(api):
 
     return api.test_utils.raw_gtest_output(
         canned_jsonish, 1 if failed_test_names else 0)
+
+  def simulated_buildbucket_output(additional_build_parameters):
+    buildbucket_output = {
+        'build':{
+          'parameters_json': json.dumps(additional_build_parameters)
+        }
+    }
+
+    return api.buildbucket.step_data(
+        'buildbucket.get',
+        stdout=api.raw_io.output(json.dumps(buildbucket_output)))
 
   yield (
       api.test('nonexistent_test_step_skipped') +
@@ -894,7 +925,6 @@ def GenTests(api):
           simulated_gtest_output(failed_test_names=['Test.Two']))
   )
 
-
   yield (
       api.test('findit_consecutive_culprits') +
       props(
@@ -972,4 +1002,61 @@ def GenTests(api):
               ],
           }),
           retcode=1)
+  )
+
+  yield (
+      api.test('use_build_parameter_for_tests') +
+      props({}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+            good_revision='r0', bad_revision='r6',
+            suspected_revisions=['r3', 'r4'],
+            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({
+          'additional_build_parameters' : {
+              'tests': {
+                  'gl_tests': ['Test.One']
+              }
+          }}) +
+      api.override_step_data('test r2.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r3.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r4.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r4.gl_tests (r4) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r2.gl_tests (r2) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r3.gl_tests (r3) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One']))
   )
