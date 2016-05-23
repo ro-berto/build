@@ -1476,7 +1476,7 @@ BUILDERS = {
       'V8 Linux - x87 - nosnap - debug builder': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'no_snapshot',  'x87'],
+          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot',  'x87'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1491,7 +1491,7 @@ BUILDERS = {
       'V8 Linux - x87 - nosnap - debug': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'no_snapshot', 'x87'],
+          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot', 'x87'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
