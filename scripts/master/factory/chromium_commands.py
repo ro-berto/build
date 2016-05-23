@@ -174,7 +174,6 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, self._cf_archive_tool,
            '--target', self._target]
 
-    cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
 
     self.AddTestStep(retcode_command.ReturnCodeCommand,
