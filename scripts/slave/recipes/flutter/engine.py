@@ -230,9 +230,12 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
   flutter_zip = out_dir.join(label, 'FlutterXcode.zip')
   api.zip.directory('Archive FlutterXcode %s' % label, deploy_dir, flutter_zip)
 
-  UploadArtifacts(api,
-    bucket_name, [ 'out/%s/FlutterXcode.zip' % label ]
-  )
+  UploadArtifacts(api, bucket_name, [
+    'sky/engine/bindings/dart_vm_entry_points.txt',
+    'sky/engine/bindings/snapshot.dart',
+    'out/%s/clang_x64/gen_snapshot' % device_out,
+    'out/%s/FlutterXcode.zip' % label,
+  ])
 
 
 def BuildIOS(api):
