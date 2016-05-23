@@ -311,7 +311,7 @@ class StatusPush(StatusReceiverMultiService):
       # pendingBuilds requires a deferred call.
       builder_info = {
         'slaves': builder.slavenames,
-        'current_builds': sorted(b.getNumber() for b in builder.currentBuilds),
+        'currentBuilds': sorted(b.getNumber() for b in builder.currentBuilds),
       }
       builder_infos[name] = builder_info
 
