@@ -89,7 +89,10 @@ BUILDERS = freeze({
     },
     'device_flags_builder': {
       'device_flags': 'device_flags_file',
-    }
+    },
+    'no_cache_builder': {
+      'use_git_cache': False,
+    },
 })
 
 from recipe_engine.recipe_api import Property
@@ -117,7 +120,8 @@ def RunSteps(api, buildername):
     api.chromium.c.env.ADB_VENDOR_KEYS = api.path['build'].join(
       'site_config', '.adb_key')
 
-  api.chromium_android.init_and_sync(use_bot_update=False)
+  api.chromium_android.init_and_sync(
+      use_bot_update=False, use_git_cache=config.get('use_git_cache', True))
 
   api.chromium.runhooks()
   api.chromium_android.run_tree_truth(additional_repos=['foo'])

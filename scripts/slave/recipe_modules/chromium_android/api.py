@@ -92,10 +92,14 @@ class AndroidApi(recipe_api.RecipeApi):
     )
 
   def init_and_sync(self, gclient_config='android_bare',
-                    with_branch_heads=False, use_bot_update=True):
+                    with_branch_heads=False, use_bot_update=True,
+                    use_git_cache=True):
     # TODO(sivachandra): Move the setting of the gclient spec below to an
     # internal config extension when they are supported by the recipe system.
-    spec = self.m.gclient.make_config(gclient_config)
+    if use_git_cache:
+      spec = self.m.gclient.make_config(gclient_config)
+    else:
+      spec = self.m.gclient.make_config(gclient_config, CACHE_DIR=None)
     spec.target_os = ['android']
     s = spec.solutions[0]
     s.name = self.c.deps_dir
@@ -864,7 +868,8 @@ class AndroidApi(recipe_api.RecipeApi):
                                remove_system_webview=False):
     self.create_adb_symlink()
     if self.c.gce_setup:
-      self.launch_gce_instances(snapshot=self.c.gce_snapshot, count=self.c.gce_count)
+      self.launch_gce_instances(snapshot=self.c.gce_snapshot,
+                                count=self.c.gce_count)
       self.spawn_logcat_monitor()
       self.provision_devices(emulators=True,
                              remove_system_webview=remove_system_webview)
@@ -1284,7 +1289,8 @@ class AndroidApi(recipe_api.RecipeApi):
         f.result.presentation.status = self.m.step.FAILURE
       raise
 
-  def test_runner(self, step_name, args=None, wrapper_script_suite_name=None, **kwargs):
+  def test_runner(self, step_name, args=None, wrapper_script_suite_name=None,
+                  **kwargs):
     """Wrapper for the python testrunner script.
 
     Args:
