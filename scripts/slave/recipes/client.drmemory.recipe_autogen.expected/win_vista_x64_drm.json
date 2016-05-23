@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "client.drmemory",
       "--builder",
@@ -26,7 +26,7 @@
       "--output_manifest"
     ],
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -48,20 +48,20 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/tools/buildbot/bot_tools/unpack.bat"
+      "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools\\unpack.bat"
     ],
-    "cwd": "[SLAVE_BUILD]/tools/buildbot/bot_tools",
+    "cwd": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools",
     "name": "unpack tools"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "[BUILD]\\scripts\\slave\\drmemory\\build_env.bat",
       "ctest",
       "--timeout",
       "60",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]/drmemory/tests/runsuite.cmake,drmemory_only;long;build=42"
+      "[SLAVE_BUILD]\\drmemory\\tests\\runsuite.cmake,drmemory_only;long;build=42"
     ],
     "name": "Dr. Memory ctest"
   },
@@ -71,7 +71,7 @@
       "checkout",
       "--force",
       "http://data-race-test.googlecode.com/svn/trunk/",
-      "[SLAVE_BUILD]/tsan"
+      "[SLAVE_BUILD]\\tsan"
     ],
     "name": "Checkout TSan tests"
   },
@@ -80,119 +80,119 @@
       "E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat",
       "make",
       "-C",
-      "[SLAVE_BUILD]/tsan/unittest"
+      "[SLAVE_BUILD]\\tsan\\unittest"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools",
+      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools",
       "CYGWIN": "nodosfilewarning"
     },
     "name": "Build TSan Tests"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "[BUILD]\\scripts\\slave\\drmemory\\build_env.bat",
       "build_drmemory-dbg-32\\bin\\drmemory",
       "-dr_ops",
       "-msgbox_mask 0 -stderr_mask 15",
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]/drmemory/tests/app_suite/default-suppressions.txt",
+      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "--",
-      "[SLAVE_BUILD]/tsan/unittest/bin/racecheck_unittest-windows-x86-O0.exe",
+      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
     },
     "name": "dbg full TSan tests"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "[BUILD]\\scripts\\slave\\drmemory\\build_env.bat",
       "build_drmemory-dbg-32\\bin\\drmemory",
       "-dr_ops",
       "-msgbox_mask 0 -stderr_mask 15",
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]/drmemory/tests/app_suite/default-suppressions.txt",
+      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "-light",
       "--",
-      "[SLAVE_BUILD]/tsan/unittest/bin/racecheck_unittest-windows-x86-O0.exe",
+      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
     },
     "name": "dbg light TSan tests"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "[BUILD]\\scripts\\slave\\drmemory\\build_env.bat",
       "build_drmemory-rel-32\\bin\\drmemory",
       "-dr_ops",
       "-msgbox_mask 0 -stderr_mask 15",
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]/drmemory/tests/app_suite/default-suppressions.txt",
+      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "--",
-      "[SLAVE_BUILD]/tsan/unittest/bin/racecheck_unittest-windows-x86-O0.exe",
+      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
     },
     "name": "rel full TSan tests"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "[BUILD]\\scripts\\slave\\drmemory\\build_env.bat",
       "build_drmemory-rel-32\\bin\\drmemory",
       "-dr_ops",
       "-msgbox_mask 0 -stderr_mask 15",
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]/drmemory/tests/app_suite/default-suppressions.txt",
+      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "-light",
       "--",
-      "[SLAVE_BUILD]/tsan/unittest/bin/racecheck_unittest-windows-x86-O0.exe",
+      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
     },
     "name": "rel light TSan tests"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "[BUILD]\\scripts\\slave\\drmemory\\build_env.bat",
       "build_drmemory-dbg-32\\bin\\drmemory",
       "-dr_ops",
       "-msgbox_mask 0 -stderr_mask 15",
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]/drmemory/tests/app_suite/default-suppressions.txt",
+      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "--",
-      "[SLAVE_BUILD]/tsan/unittest/bin/racecheck_unittest-windows-x86-O0.exe",
+      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
     },
     "name": "dbg full nosyms TSan tests"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "[BUILD]\\scripts\\slave\\drmemory\\build_env.bat",
       "7z",
       "a",
       "-xr!*.pdb",
@@ -208,7 +208,7 @@
       "xmlresults"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
     },
     "name": "Pack test results"
   },
@@ -216,9 +216,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]\\resources\\gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[DEPOT_TOOLS]\\gsutil.py",
       "----",
       "cp",
       "testlogs_r123456789abcdef_b42.7z",

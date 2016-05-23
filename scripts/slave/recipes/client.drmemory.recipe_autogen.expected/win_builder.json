@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "client.drmemory",
       "--builder",
@@ -26,7 +26,7 @@
       "--output_manifest"
     ],
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -48,22 +48,22 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/tools/buildbot/bot_tools/unpack.bat"
+      "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools\\unpack.bat"
     ],
-    "cwd": "[SLAVE_BUILD]/tools/buildbot/bot_tools",
+    "cwd": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools",
     "name": "unpack tools"
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "[BUILD]\\scripts\\slave\\drmemory\\build_env.bat",
       "ctest",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]/drmemory/package.cmake,build=0x1234567;drmem_only"
+      "[SLAVE_BUILD]\\drmemory\\package.cmake,build=0x1234567;drmem_only"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
     },
     "name": "Package Dr. Memory"
   },
@@ -72,6 +72,7 @@
       "cmd.exe",
       "/C",
       "dir",
+      "/O-D",
       "/B",
       "DrMemory-Windows-*0x1234567.zip"
     ],
@@ -84,7 +85,7 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[SLAVE_BUILD]/DrMemory-Windows-1.2.3-0x1234567-sfx.exe"
+      "[SLAVE_BUILD]\\DrMemory-Windows-1.2.3-0x1234567-sfx.exe"
     ],
     "name": "Delete prior sfx archive",
     "~followup_annotations": [
@@ -97,16 +98,16 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "[BUILD]\\scripts\\slave\\drmemory\\build_env.bat",
       "7z",
       "a",
       "-sfx",
       "DrMemory-Windows-1.2.3-0x1234567-sfx.exe",
-      "build_drmemory-debug-32\\_CPack_Packages\\Windows\\ZIP\\DrMemory-Windows-1.2.3-0x1234567\\*"
+      "..\\[SLAVE_BUILD]\\build_drmemory-debug-32\\_CPack_Packages\\Windows\\ZIP\\DrMemory-Windows-1.2.3-0x1234567\\*"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
     },
     "name": "create sfx archive"
   },
@@ -115,8 +116,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/DrMemory-Windows-1.2.3-0x1234567-sfx.exe",
-      "[SLAVE_BUILD]/drmemory-windows-latest-sfx.exe"
+      "[SLAVE_BUILD]\\DrMemory-Windows-1.2.3-0x1234567-sfx.exe",
+      "[SLAVE_BUILD]\\drmemory-windows-latest-sfx.exe"
     ],
     "name": "copy locally"
   },
@@ -124,9 +125,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]\\resources\\gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[DEPOT_TOOLS]\\gsutil.py",
       "----",
       "cp",
       "drmemory-windows-latest-sfx.exe",
@@ -142,9 +143,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]\\resources\\gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[DEPOT_TOOLS]\\gsutil.py",
       "----",
       "cp",
       "DrMemory-Windows-*1234567.zip",

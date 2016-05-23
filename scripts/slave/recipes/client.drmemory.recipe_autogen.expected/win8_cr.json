@@ -3,9 +3,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]\\resources\\gsutil_wrapper.py",
       "--",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "[DEPOT_TOOLS]\\gsutil.py",
       "----",
       "cp",
       "gs://chromium-drmemory-builds/drmemory-windows-latest-sfx.exe",

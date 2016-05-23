@@ -9,6 +9,7 @@ DEPS = [
     'file',
     'gsutil',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
@@ -1290,23 +1291,29 @@ def win_builder_steps(api):
              cwd=api.path["slave_build"])
     # Find package basename step
     step_result = api.step("Find package basename",
-                           ["cmd.exe", "/C", "dir", "/B",
+                           ["cmd.exe", "/C", "dir", "/O-D", "/B",
                             "DrMemory-Windows-*0x" + build_properties[
                                 "got_revision"][:7] + ".zip"],
                            stdout=api.raw_io.output(),
                            cwd=api.path["slave_build"])
-    basename = step_result.stdout[:-4]
+    # There can be multiple if we've done test builds so grab the first
+    # line (we sorted by date with /O-D):
+    basename = step_result.stdout.split()[0][:-4]
     # Delete prior sfx archive step
     api.file.remove("Delete prior sfx archive",
         api.path["slave_build"].join(basename + "-sfx.exe"),
         ok_ret=(0,1))
     # Create sfx archive step
+    lastdir = api.path.basename(api.path["slave_build"])
     api.step("create sfx archive",
              [api.path["build"].join("scripts", "slave", "drmemory",
                                      "build_env.bat"), "7z", "a", "-sfx",
               basename + "-sfx.exe",
-              "build_drmemory-debug-32\\_CPack_Packages\\Windows\\ZIP\\" +
-              basename + "\\*"],
+              # To get the archive to contain paths relative to the
+              # ...\\ZIP\\basename\\ dir we pass ..\\lastdir:
+              api.path.join(
+                '..', lastdir, 'build_drmemory-debug-32', '_CPack_Packages',
+                'Windows', 'ZIP', basename, '*')],
              cwd=api.path["slave_build"],
              env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools")})
@@ -1352,179 +1359,257 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('linux_builder') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='linux-builder') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('linux_lucid_x64_drm') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='linux-lucid_x64-drm') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('win_vista_x64_drm') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win-vista_x64-drm') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('mac_mavericks_x64_DR') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='mac-mavericks_x64-DR') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('linux_cr_builder') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='linux-cr-builder') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('linux_cr_builder_clobber') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='linux-cr-builder') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave') +
-    api.properties(clobber='')
-        )
-  yield (api.test('mac_builder_DR') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='mac-builder-DR') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('win_xp_drm') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win-xp-drm') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('mac_mavericks_x64_drm') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='mac-mavericks_x64-drm') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('linux_cr') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='linux-cr') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('win8_cr_builder') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win8-cr-builder') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('win8_cr_builder_clobber') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win8-cr-builder') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave') +
-    api.properties(clobber='')
-        )
-  yield (api.test('win8_cr') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win8-cr') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave') +
-    api.step_data("Get the revision number",
+  yield (api.test('linux_builder')
+     + api.properties(
+       mastername='client.drmemory',
+       buildername='linux-builder',
+       revision='123456789abcdef',
+       got_revision='123456789abcdef',
+       buildnumber=42,
+       slavename='TestSlave',
+     )
+  )
+
+  yield (api.test('linux_lucid_x64_drm')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='linux-lucid_x64-drm',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('linux', 64)
+  )
+
+  yield (api.test('win_vista_x64_drm')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win-vista_x64-drm',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('win', 64)
+  )
+
+  yield (api.test('mac_mavericks_x64_DR')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='mac-mavericks_x64-DR',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('mac', 64)
+  )
+
+  yield (api.test('linux_cr_builder')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='linux-cr-builder',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+  )
+
+  yield (api.test('linux_cr_builder_clobber')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='linux-cr-builder',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+      clobber='',
+    )
+  )
+
+  yield (api.test('mac_builder_DR')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='mac-builder-DR',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('mac', 64)
+  )
+
+  yield (api.test('win_xp_drm')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win-xp-drm',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('win', 32)
+  )
+
+  yield (api.test('mac_mavericks_x64_drm')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='mac-mavericks_x64-drm',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('mac', 64)
+  )
+
+  yield (api.test('linux_cr')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='linux-cr',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+  )
+
+  yield (api.test('win8_cr_builder')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win8-cr-builder',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('win', 64)
+  )
+
+  yield (api.test('win8_cr_builder_clobber')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win8-cr-builder',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+      clobber='',
+    )
+    + api.platform('win', 64)
+  )
+
+  yield (api.test('win8_cr')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win8-cr',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.step_data("Get the revision number",
       stdout=api.raw_io.output("Dr. Memory version 1.9.16845"
         " -- build 178560794"))
-        )
-  yield (api.test('win7_cr') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win7-cr') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave') +
-    api.step_data("Get the revision number",
+    + api.platform('win', 64)
+  )
+
+  yield (api.test('win7_cr')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win7-cr',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.step_data("Get the revision number",
       stdout=api.raw_io.output("Dr. Memory version 1.9.16845"
         " -- build 178560794"))
-        )
-  yield (api.test('win_8_x64_drm') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win-8_x64-drm') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('win7_cr_builder') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win7-cr-builder') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('win7_cr_builder_clobber') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win7-cr-builder') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave') +
-    api.properties(clobber='')
-        )
-  yield (api.test('win_7_x64_drm') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win-7_x64-drm') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('mac_builder') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='mac-builder') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('win_builder') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='win-builder') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber=42) +
-    api.properties(slavename='TestSlave') +
-    api.step_data("Find package basename",
-      stdout=api.raw_io.output("DrMemory-Windows-1.2.3-0x1234567.zip")
-        ))
-  yield (api.test('builder_not_in_dispatch_directory') +
-    api.properties(mastername='client.drmemory') +
-    api.properties(buildername='nonexistent_builder') +
-    api.properties(slavename='TestSlave')
-        )
+    + api.platform('win', 64)
+  )
+
+  yield (api.test('win_8_x64_drm')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win-8_x64-drm',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('win', 64)
+  )
+
+  yield (api.test('win7_cr_builder')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win7-cr-builder',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('win', 64)
+  )
+
+  yield (api.test('win7_cr_builder_clobber')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win7-cr-builder',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+      clobber='',
+    )
+    + api.platform('win', 64)
+  )
+
+  yield (api.test('win_7_x64_drm')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win-7_x64-drm',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('win', 64)
+  )
+
+  yield (api.test('mac_builder')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='mac-builder',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('mac', 64)
+  )
+
+  yield (api.test('win_builder')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='win-builder',
+      revision='123456789abcdef',
+      got_revision='123456789abcdef',
+      buildnumber=42,
+      slavename='TestSlave',
+    )
+    + api.platform('win', 32)
+    + api.step_data("Find package basename",
+      stdout=api.raw_io.output("DrMemory-Windows-1.2.3-0x1234567.zip"))
+  )
+
+  yield (api.test('builder_not_in_dispatch_directory')
+    + api.properties(
+      mastername='client.drmemory',
+      buildername='nonexistent_builder',
+      slavename='TestSlave',
+    )
+  )
