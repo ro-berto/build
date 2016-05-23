@@ -83,18 +83,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Android Clang Builder (dbg)',
       }, analyze_mode='compile'),
-      'android_chromium_gn_rel': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android GN',
-      }),
-      'android_chromium_gn_compile_dbg': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android GN (dbg)',
-      }, analyze_mode='compile'),
-      'android_chromium_gn_compile_rel': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android GN',
-      }, analyze_mode='compile'),
       'android_compile_dbg': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder (dbg)',

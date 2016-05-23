@@ -73,8 +73,6 @@ def Update(_config_arg, _active_master, c):
   helper.Update(c)
 
   specs = [
-    {'name': 'Android GN'},
-    {'name': 'Android GN (dbg)'},
     {'name': 'Cast Android (dbg)'},
   ]
 

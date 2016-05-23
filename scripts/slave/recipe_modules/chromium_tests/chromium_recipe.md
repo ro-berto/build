@@ -67,14 +67,14 @@ interested in testing.
 `chromium` recipe trybots currently are configured by specifying the main
 waterfall configuration they are supposed to emulate. This information is stored
 in the [`chromium_tests/trybots.py`](https://chromium.googlesource.com/chromium/tools/build.git/+/master/scripts/slave/recipe_modules/chromium_tests/trybots.py)
-file. So, for example, the `android_chromium_gn_compile_rel` trybot is
+file. So, for example, the `linux_android_rel_ng` trybot is
 configured as follows:
 
       ...
-      'android_chromium_gn_compile_rel': {
+      'linux_android_rel_ng': {
         'mastername': 'chromium.linux',
-        'buildername': 'Android GN',
-        'analyze_mode': 'compile',
+        'buildername': 'Android Builder',
+        'tester': 'Android Tests',
       },
       ...
 

@@ -113,13 +113,6 @@
       "category": "2Builders",
       "slavebuilddir": "android_build",
     },
-    "Android GN Builder (dbg)": {
-      "recipe": "chromium",
-      "scheduler": "android_commits",
-      "slave_pools": ["gn_builders"],
-      "category": "2Builders",
-      "slavebuilddir": "gn",
-    },
     "Android Swarm Builder": {
       "recipe": "chromium",
       "scheduler": "android_commits",
@@ -220,6 +213,8 @@
           "slave37-c1",
           "slave38-c1",
           "slave39-c1",
+          "slave41-c1",
+          "slave46-c1",
           "slave76-c1",
         ],
     },
@@ -254,17 +249,6 @@
         "bits": "64",
       },
       "slaves": ["build69-b1"],
-    },
-    "gn_builders": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": [
-          "slave41-c1",
-          "slave46-c1",
-        ],
     },
     "jelly_bean_tester": {
       "slave_data": {
