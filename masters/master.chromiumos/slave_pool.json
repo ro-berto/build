@@ -8,7 +8,7 @@
         "build86-m2"
       ], 
       "amd64-generic-paladin": [
-        "build141-m2"
+        "build257-m2"
       ], 
       "arm-generic-full": [
         "build92-m2"
@@ -51,7 +51,6 @@
     }
   }, 
   "unallocated": [
-    "build91-m2", 
     "cros199-c2", 
     "build94-m2"
   ]
