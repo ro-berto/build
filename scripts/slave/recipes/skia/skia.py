@@ -79,6 +79,9 @@ def GenTests(api):
             'get EXTERNAL_STORAGE dir',
             stdout=api.raw_io.output('/storage/emulated/legacy')) +
         api.step_data(
+            'adb root',
+            stdout=api.raw_io.output('restarting adbd as root')) +
+        api.step_data(
             'read SKP_VERSION',
             stdout=api.raw_io.output('42')) +
         api.step_data(

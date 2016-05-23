@@ -118,7 +118,8 @@
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
-    "name": "adb root"
+    "name": "adb root",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [

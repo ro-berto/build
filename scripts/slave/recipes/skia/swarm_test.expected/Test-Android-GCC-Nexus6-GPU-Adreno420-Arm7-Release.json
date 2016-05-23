@@ -108,6 +108,67 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
+      "root"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "adb root",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "sleep",
+      "10"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "wait"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
+    ],
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "wait for device (2)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
+    ],
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "wait for charge (2)"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
       "--verbose"
     ],
@@ -127,6 +188,21 @@
     "cmd": [
       "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
       "shell",
+      "stop"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "stop shell"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
+      "shell",
       "dumpsys",
       "batteryproperties"
     ],
@@ -138,6 +214,38 @@
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "starting battery stats"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
+      "shell",
+      "cat",
+      "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "cat scaling_governor"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/android-sdk/platform-tools/adb",
+      "shell",
+      "cat",
+      "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+    ],
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "cat cpu_freq"
   },
   {
     "cmd": [
@@ -542,7 +650,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
-    "name": "wait for device (2)"
+    "name": "wait for device (3)"
   },
   {
     "cmd": [
@@ -558,7 +666,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
-    "name": "wait for charge (2)"
+    "name": "wait for charge (3)"
   },
   {
     "cmd": [

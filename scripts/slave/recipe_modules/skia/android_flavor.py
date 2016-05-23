@@ -21,6 +21,7 @@ class _ADBWrapper(object):
   def __init__(self, adb_api, path_to_adb, serial_args, android_flavor):
     self._adb = adb_api
     self._adb.set_adb_path(path_to_adb)
+    self._has_root = False  # This is set in install().
     self._serial_args = serial_args
     self._wait_count = 0
     self._android_flavor = android_flavor
@@ -85,7 +86,6 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
                                                'platform-tools', 'adb')
     self._adb = _ADBWrapper(
         self._skia_api.m.adb, path_to_adb, self.serial_args, self)
-    self._has_root = slave_info.has_root
     self._default_env = {'ANDROID_SDK_ROOT': self._android_sdk_root,
                          'ANDROID_HOME': self._android_sdk_root,
                          'SKIA_ANDROID_VERBOSE_SETUP': 1}
@@ -194,21 +194,32 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._remove_device_dir(path)
     self._create_device_dir(path)
 
+  def has_root(self):
+    """Determine if we have root access on this device."""
+    has_root = False
+    try:
+      output = self._adb(name='adb root',
+                         serial=self.serial,
+                         cmd=['root'],
+                         stdout=self._skia_api.m.raw_io.output(),
+                         infra_step=True).stdout.rstrip()
+      if ('restarting adbd as root' in output or
+          'adbd is already running as root' in output):
+        has_root = True
+    except self._skia_api.m.step.StepFailure:  # pragma: nocover
+      pass
+    # Wait for the device to reconnect.
+    self._skia_api.run(
+        self._skia_api.m.step,
+        name='wait',
+        cmd=['sleep', '10'],
+        infra_step=True)
+    self._adb.wait_for_device()
+    return has_root
+
   def install(self):
     """Run device-specific installation steps."""
-    if self._has_root:
-      self._adb(name='adb root',
-                serial=self.serial,
-                cmd=['root'],
-                infra_step=True)
-      # Wait for the device to reconnect.
-      self._skia_api.run(
-          self._skia_api.m.step,
-          name='wait',
-          cmd=['sleep', '10'],
-          infra_step=True)
-      self._adb.wait_for_device()
-
+    self._has_root = self.has_root()
     self._skia_api.run(self._skia_api.m.step,
                        name='kill skia',
                        cmd=[
