@@ -59,7 +59,7 @@ F('f_webkit_linux_leak_rel', m_annotator.BaseFactory('chromium'))
 #
 
 B('WebKit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='global_scheduler',
-    auto_reboot=False)
+    auto_reboot=True)
 F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
 
 
