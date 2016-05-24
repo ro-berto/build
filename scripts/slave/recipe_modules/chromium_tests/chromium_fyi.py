@@ -73,6 +73,22 @@ SPEC = {
         'platform': 'mac',
       },
     },
+    'Chromium Mac 10.11 Force Mac Toolchain': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Linux ARM': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
