@@ -718,6 +718,39 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': True,
   },
+  'Test-Android-GCC-GalaxyS3-GPU-Mali400-Arm7-Debug': {
+    'build_targets': [
+      'dm',
+      'nanobench',
+    ],
+    'builder_cfg': {
+      'arch': 'Arm7',
+      'compiler': 'GCC',
+      'configuration': 'Debug',
+      'cpu_or_gpu': 'GPU',
+      'cpu_or_gpu_value': 'Mali400',
+      'is_trybot': False,
+      'model': 'GalaxyS3',
+      'os': 'Android',
+      'role': 'Test',
+    },
+    'configuration': 'Debug',
+    'device_cfg': 'arm_v7_neon',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': True,
+    'do_test_steps': True,
+    'env': {
+      'GYP_DEFINES': 'skia_arch_type=arm skia_warnings_as_errors=0',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'product.board': 'smdk4x12',
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Test-Android-GCC-Nexus6-GPU-Adreno420-Arm7-Release': {
     'build_targets': [
       'dm',

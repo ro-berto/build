@@ -196,6 +196,11 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def has_root(self):
     """Determine if we have root access on this device."""
+    # Special case: GalaxyS3 hangs on `adb root`. Don't bother.
+    if 'GalaxyS3' in self._skia_api.builder_name:
+      return False
+
+    # Determine if we have root access.
     has_root = False
     try:
       output = self._adb(name='adb root',

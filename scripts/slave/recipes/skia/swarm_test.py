@@ -18,6 +18,9 @@ DEPS = [
 
 TEST_BUILDERS = {
   'client.skia': {
+    'skiabot-galaxys3-001': [
+      'Test-Android-GCC-GalaxyS3-GPU-Mali400-Arm7-Debug',
+    ],
     'skiabot-linux-tester-000': [
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug',
     ],
@@ -54,9 +57,6 @@ def GenTests(api):
             'get EXTERNAL_STORAGE dir',
             stdout=api.raw_io.output('/storage/emulated/legacy')) +
         api.step_data(
-            'adb root',
-            stdout=api.raw_io.output('restarting adbd as root')) +
-        api.step_data(
             'read SKP_VERSION',
             stdout=api.raw_io.output('42')) +
         api.step_data(
@@ -69,6 +69,10 @@ def GenTests(api):
             'which adb',
             retcode=1)
       )
+    if 'GalaxyS3' not in builder:
+      test_data += api.step_data(
+          'adb root',
+          stdout=api.raw_io.output('restarting adbd as root'))
 
     return test_data
 
