@@ -141,7 +141,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["vm195-m4"],
+      "slaves": ["vm195-m4", "slave767-c4"],
     },
     "mac_slave_pool": {
       "slave_data": {
@@ -149,7 +149,7 @@
         "os": "mac",
         "version": "10.9",
       },
-      "slaves": ["vm200-m4"],
+      "slaves": ["vm200-m4", "vm154-m4"],
     },
     "win_slave_pool": {
       "slave_data": {
@@ -157,7 +157,7 @@
         "os": "win",
         "version": "win7",
       },
-      "slaves": ["vm345-m4"],
+      "slaves": ["vm345-m4", "vm155-m4"],
     },
   },
 }
