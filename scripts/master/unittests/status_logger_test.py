@@ -86,23 +86,16 @@ class Step(object):
 
 
 @contextlib.contextmanager
-def _make_logger(file_content=None):
+def _make_logger(event_logfile=None, ts_mon_logfile=None,
+                 logging_ignore_basedir=None, event_logging=None):
   """Create a status_logger and delete any temp files when done."""
   tempdir = tempfile.mkdtemp(prefix='status-logger')
 
-  filename = 'logstatus'
-  if file_content is None:
-    filename = 'does_not_exist'
-  else:
-    with open(os.path.join(tempdir, filename), 'w') as f:
-      if not file_content:
-        f.write('\n')
-      else:
-        f.write(json.dumps(file_content))
-
   logger = status_logger.StatusEventLogger(
-    configfile=filename, basedir=tempdir, event_logging_dir=tempdir)
-  logger._create_logger()
+      basedir=tempdir, event_logging_dir=tempdir,
+      event_logfile=event_logfile, ts_mon_logfile=ts_mon_logfile,
+      logging_ignore_basedir=logging_ignore_basedir,
+      event_logging=event_logging)
   logger._create_event_logger()
   logger._create_ts_mon_logger()
   yield logger
@@ -114,39 +107,33 @@ def _make_logger(file_content=None):
 ### Main test class.
 
 class StatusLoggerTest(unittest.TestCase):
-  def testNoFile(self):
-    with _make_logger() as logger:
-      self.assertTrue(logger)
 
   def testNormalInitialization(self):
-    with _make_logger('') as logger:
-      self.assertTrue(logger.active)
-      self.assertTrue(logger._logging)
+    with _make_logger() as logger:
+      self.assertTrue(logger._event_logging)
 
   def testDisableLogger(self):
-    with _make_logger({'file_logging': False}) as logger:
-      self.assertTrue(logger.active)
-      self.assertFalse(logger._logging)
+    with _make_logger(event_logging=False) as logger:
+      self.assertFalse(logger._event_logging)
+
+  def testConfigureEndpointsAbsolutePath(self):
+    with _make_logger(logging_ignore_basedir=True,
+                      event_logfile='/tmp/events_custom.log',
+                      ts_mon_logfile='/tmp/ts_mon_custom.log') as logger:
+      self.assertTrue(logger._event_logging_dir)
+      self.assertEqual(logger._event_logfile, '/tmp/events_custom.log')
+      self.assertEqual(logger._ts_mon_logfile, '/tmp/ts_mon_custom.log')
 
   def testConfigureEndpoints(self):
-    config_dict = {
-        'logfile': '/tmp/bummer',
-        'logging_ignore_basedir': True,
-    }
-    with _make_logger(config_dict) as logger:
-      self.assertTrue(logger.active)
-      self.assertTrue(logger._logging)
+    with _make_logger(event_logfile='events_custom.log',
+                      ts_mon_logfile='ts_mon_custom.log') as logger:
       self.assertTrue(logger._event_logging_dir)
-      self.assertEqual(logger.logfile, '/tmp/bummer')
+      self.assertIn('events_custom.log', logger._event_logfile)
+      self.assertIn('ts_mon_custom.log', logger._ts_mon_logfile)
 
   def testStartBuild(self):
-    config_dict = {
-        'file_logging': True,
-        'event_logging': True,
-    }
-    with _make_logger(config_dict) as logger:
+    with _make_logger(event_logging=True) as logger:
       logger.buildStarted('coconuts', Build())
-      self.assertTrue(os.path.exists(logger.logfile))
       self.assertTrue(os.path.isdir(logger._event_logging_dir))
       self.assertTrue(os.path.exists(logger._event_logfile))
       # Ensure we added valid json
@@ -156,13 +143,8 @@ class StatusLoggerTest(unittest.TestCase):
         json.loads(content)
 
   def testStartStep(self):
-    config_dict = {
-        'file_logging': True,
-        'event_logging': True,
-    }
-    with _make_logger(config_dict) as logger:
+    with _make_logger(event_logging=True) as logger:
       logger.stepStarted(Build(), Step())
-      self.assertTrue(os.path.exists(logger.logfile))
       self.assertTrue(os.path.isdir(logger._event_logging_dir))
       self.assertTrue(os.path.exists(logger._event_logfile))
       # Ensure we added valid json
@@ -172,13 +154,8 @@ class StatusLoggerTest(unittest.TestCase):
         json.loads(content)
 
   def testStopBuild(self):
-    config_dict = {
-        'file_logging': True,
-        'event_logging': True,
-    }
-    with _make_logger(config_dict) as logger:
+    with _make_logger(event_logging=True) as logger:
       logger.buildFinished('coconuts', Build(), 0)
-      self.assertTrue(os.path.exists(logger.logfile))
       self.assertTrue(os.path.isdir(logger._event_logging_dir))
       self.assertTrue(os.path.exists(logger._event_logfile))
       # Ensure we added valid json
@@ -188,16 +165,11 @@ class StatusLoggerTest(unittest.TestCase):
         json.loads(content)
 
   def testStopStep(self):
-    config_dict = {
-        'file_logging': True,
-        'event_logging': True,
-    }
     steps = [Step(step_number=1),
              Step(step_number=2, result=1),
              Step(step_number=3)]
-    with _make_logger(config_dict) as logger:
+    with _make_logger(event_logging=True) as logger:
       logger.stepFinished(Build(steps=steps), steps[-1], [0])
-      self.assertTrue(os.path.exists(logger.logfile))
       self.assertTrue(os.path.isdir(logger._event_logging_dir))
       self.assertTrue(os.path.exists(logger._event_logfile))
 
@@ -222,20 +194,15 @@ class StatusLoggerTest(unittest.TestCase):
         self.assertEqual(expected, d)
 
   def testStepStepWithMissingProject(self):
-    config_dict = {
-        'file_logging': True,
-        'event_logging': True,
-    }
     properties = {'patch_project': '',
                   'subproject_tag': ''}
     steps = [Step(step_number=1),
              Step(step_number=2, result=1),
              Step(step_number=3)]
-    with _make_logger(config_dict) as logger:
+    with _make_logger(event_logging=True) as logger:
       logger.stepFinished(Build(steps=steps, properties=properties),
                           steps[-1],
                           [0])
-      self.assertTrue(os.path.exists(logger.logfile))
       self.assertTrue(os.path.isdir(logger._event_logging_dir))
       self.assertTrue(os.path.exists(logger._event_logfile))
 
