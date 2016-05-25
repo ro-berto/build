@@ -260,6 +260,8 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
     remaining_revisions = revisions_to_check[:]
     for index in sorted(suspected_revision_index, reverse=True):
       if index > 0:
+        # try job will not run linearly, sets use_analyze to False.
+        use_analyze = False
         sub_ranges.append(remaining_revisions[index - 1:])
         remaining_revisions = remaining_revisions[:index - 1]
     # None is a placeholder for the last known good revision.
@@ -1059,4 +1061,41 @@ def GenTests(api):
       api.override_step_data(
           'test r3.gl_tests (r3) on Mac-10.9',
           simulated_gtest_output(passed_test_names=['Test.One']))
+  )
+
+  yield (
+      api.test('use_analyze_set_to_False_for_non_linear_try_job') +
+      props(
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=True,
+           good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
+      api.override_step_data('test r2.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data('test r3.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r2.gl_tests (r2) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r3.gl_tests (r3) on Mac-10.9',
+          simulated_gtest_output(failed_test_names=['Test.One']))
   )
