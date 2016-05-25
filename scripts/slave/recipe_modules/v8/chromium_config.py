@@ -42,6 +42,7 @@ def v8(c):
   # possible. Also add corresponding gn_args for all gyp_defines in this
   # file.
   c.gn_args.append('use_sysroot=false')
+  c.gn_args.append('icu_use_data_file = false')
 
 @CONFIG_CTX(includes=['v8'])
 def arm_hard_float(c):
