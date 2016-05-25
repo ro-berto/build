@@ -682,7 +682,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                 annotation=None, except_annotation=None,
                                 screenshot=False, verbose=False, tool=None,
                                 apk_package=None,
-                                host_driven_root=None,  # unused?
                                 official_build=False,
                                 json_results_file=None,
                                 timeout_scale=None, strict_mode=None,
@@ -707,8 +706,6 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--verbose')
     if self.c.coverage or self.c.incremental_coverage:
       args.extend(['--coverage-dir', self.coverage_dir])
-    if host_driven_root:
-      args.extend(['--host-driven-root', host_driven_root])
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
     if timeout_scale:

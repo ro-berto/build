@@ -558,8 +558,6 @@
       "-E",
       "FlakyTest",
       "--screenshot",
-      "--host-driven-root",
-      "[SLAVE_BUILD]/src/chrome/test",
       "--strict-mode",
       "off",
       "--test-apk",

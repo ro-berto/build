@@ -191,7 +191,6 @@ def RunSteps(api, buildername):
       except_annotation='FlakyTest',
       screenshot=True,
       official_build=True,
-      host_driven_root=api.path['checkout'].join('chrome', 'test'),
       timeout_scale=config.get('timeout_scale'),
       strict_mode=config.get('strict_mode'),
       additional_apks=['Additional.apk'],

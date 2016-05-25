@@ -1606,8 +1606,7 @@ class AndroidInstrumentationTest(AndroidTest):
   def __init__(self, name, compile_targets=None, apk_under_test=None,
                test_apk=None, isolate_file_path=None, timeout_scale=None,
                annotation=None, except_annotation=None, screenshot=False,
-               verbose=True, tool=None, host_driven_root=None,
-               additional_apks=None):
+               verbose=True, tool=None, additional_apks=None):
     suite_defaults = (
         AndroidInstrumentationTest._DEFAULT_SUITES.get(name)
         or AndroidInstrumentationTest._DEFAULT_SUITES_BY_TARGET.get(name)
@@ -1627,7 +1626,6 @@ class AndroidInstrumentationTest(AndroidTest):
     self._apk_under_test = (
         apk_under_test or suite_defaults.get('apk_under_test'))
     self._except_annotation = except_annotation
-    self._host_driven_root = host_driven_root
     self._screenshot = screenshot
     self._test_apk = test_apk or suite_defaults.get('test_apk')
     self._timeout_scale = timeout_scale
@@ -1652,7 +1650,6 @@ class AndroidInstrumentationTest(AndroidTest):
         isolate_file_path=self.isolate_file_path,
         annotation=self._annotation, except_annotation=self._except_annotation,
         screenshot=self._screenshot, verbose=self._verbose, tool=self._tool,
-        host_driven_root=self._host_driven_root,
         json_results_file=json_results_file,
         timeout_scale=self._timeout_scale,
         wrapper_script_suite_name=self._wrapper_script_suite_name,

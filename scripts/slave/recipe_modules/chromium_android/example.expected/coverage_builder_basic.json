@@ -579,8 +579,6 @@
       "--screenshot",
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Release/coverage",
-      "--host-driven-root",
-      "[SLAVE_BUILD]/src/chrome/test",
       "--test-apk",
       "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
       "--apk-under-test",
