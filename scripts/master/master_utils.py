@@ -477,10 +477,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   if active_master.buildbucket_bucket and active_master.service_account_path:
     SetupBuildbucket(c, active_master)
 
-  # TODO(dsansome): enable this on all masters if it works, remove completely
-  # if it doesn't.
-  if GetMastername() in {'chromium.infra', 'chromium.infra.cron'}:
-    SetMasterProcessName()
+  SetMasterProcessName()
 
 
 def SetupBuildbucket(c, active_master):
