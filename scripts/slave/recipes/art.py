@@ -187,6 +187,9 @@ def setup_target(api,
   if debug and device == 'fugu':
     make_jobs = 1
 
+  if debug and device == 'mips32':
+    make_jobs = 1
+
   with api.step.defer_results():
     api.step('build target', [art_tools.join('buildbot-build.sh'),
                               '-j8', '--target'],
