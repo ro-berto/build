@@ -347,8 +347,9 @@ def load_gatekeeper_tree_config(filename):
     assert isinstance(tree_name, basestring)
 
     masters = tree_config.get('masters', [])
-    assert isinstance(masters, list)
+    assert isinstance(masters, dict)
     assert all(isinstance(master, basestring) for master in masters)
+    assert all(isinstance(allowed, list) for allowed in masters.values())
 
     assert isinstance(tree_config.get('build-db', ''), basestring)
     assert isinstance(tree_config.get('default-from-email', ''), basestring)
@@ -367,6 +368,18 @@ def load_gatekeeper_tree_config(filename):
             not tree_config.get('use-project-email-address')), (
       'You can only specify one of "default-from-email",'
       ' "use-project-email-address".')
+
+    if tree_config.get('set-status', True) or tree_config.get('open-tree'):
+      all_builders = set()
+      for allowed in masters.values():
+        all_builders = all_builders.union(allowed)
+
+      all_builders.remove('*')
+      assert not all_builders, (
+        "Invalid tree config. Masters with individually specified"
+        "builders cannot set tree status. Email infra-dev@chromium.org"
+        "if you want this feature.")
+
 
   return trees_config
 

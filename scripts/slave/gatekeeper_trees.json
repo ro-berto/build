@@ -1,30 +1,30 @@
 {
     "chromiumos": {
-        "masters": [
-            "https://build.chromium.org/p/chromiumos",
-            "https://build.chromium.org/p/chromium.chromiumos"
-        ]
+        "masters": {
+            "https://build.chromium.org/p/chromiumos": ["*"],
+            "https://build.chromium.org/p/chromium.chromiumos": ["*"]
+        }
    },
    "build": {
         "build-db": "build_db.json",
-        "masters": [
-            "https://build.chromium.org/p/chromium.tools.build"
-        ]
+        "masters": {
+            "https://build.chromium.org/p/chromium.tools.build": ["*"]
+        }
     },
     "chromium": {
         "build-db": "waterfall_build_db.json",
-        "masters": [
-            "https://build.chromium.org/p/chromium",
-            "https://build.chromium.org/p/chromium.chrome",
-            "https://build.chromium.org/p/chromium.chromiumos",
-            "https://build.chromium.org/p/chromium.gpu",
-            "https://build.chromium.org/p/chromium.infra.cron",
-            "https://build.chromium.org/p/chromium.linux",
-            "https://build.chromium.org/p/chromium.mac",
-            "https://build.chromium.org/p/chromium.memory",
-            "https://build.chromium.org/p/chromium.webkit",
-            "https://build.chromium.org/p/chromium.win"
-        ],
+        "masters": {
+            "https://build.chromium.org/p/chromium": ["*"],
+            "https://build.chromium.org/p/chromium.chrome": ["*"],
+            "https://build.chromium.org/p/chromium.chromiumos": ["*"],
+            "https://build.chromium.org/p/chromium.gpu": ["*"],
+            "https://build.chromium.org/p/chromium.infra.cron": ["*"],
+            "https://build.chromium.org/p/chromium.linux": ["*"],
+            "https://build.chromium.org/p/chromium.mac": ["*"],
+            "https://build.chromium.org/p/chromium.memory": ["*"],
+            "https://build.chromium.org/p/chromium.webkit": ["*"],
+            "https://build.chromium.org/p/chromium.win": ["*"]
+        },
         "open-tree": true,
         "password-file": "/creds/gatekeeper/chromium_status_password",
         "revision-properties": "got_revision_cp",
@@ -33,15 +33,15 @@
         "track-revisions": true
     },
     "chromium_android": {
-        "masters": [
-            "https://build.chromium.org/p/chromium.android"
-        ]
+        "masters": {
+            "https://build.chromium.org/p/chromium.android": ["*"]
+        }
     },
     "infra": {
         "build-db": "infra_db.json",
-        "masters": [
-            "https://build.chromium.org/p/chromium.infra"
-        ],
+        "masters": {
+            "https://build.chromium.org/p/chromium.infra": ["*"]
+        },
         "open-tree": true,
         "status-url": "https://infra-status.appspot.com",
         "set-status": true,
@@ -49,9 +49,9 @@
     },
     "nacl": {
         "build-db": "nacl_build_db.json",
-        "masters": [
-            "https://build.chromium.org/p/client.nacl"
-        ],
+        "masters": {
+            "https://build.chromium.org/p/client.nacl": ["*"]
+        },
         "open-tree": true,
         "password-file": "/creds/gatekeeper/nacl_status_password",
         "revision-properties": "got_revision_cp",
@@ -60,17 +60,17 @@
         "track-revisions": true
     },
     "nacl-sdk": {
-        "masters": [
-            "https://build.chromium.org/p/client.nacl.sdk"
-        ],
+        "masters": {
+            "https://build.chromium.org/p/client.nacl.sdk": ["*"]
+        },
         "revision-properties": "got_revision_cp",
         "track-revisions": true
     },
     "nacl-ports": {
         "build-db": "nacl_ports_build_db.json",
-        "masters": [
-            "https://build.chromium.org/p/client.nacl.ports"
-        ],
+        "masters": {
+            "https://build.chromium.org/p/client.nacl.ports": ["*"]
+        },
         "open-tree": true,
         "password-file": "/creds/gatekeeper/nacl_ports_status_password",
         "revision-properties": "got_revision_cp",
@@ -80,9 +80,9 @@
     },
     "pdfium": {
         "build-db": "pdfium_build_db.json",
-        "masters": [
-            "https://build.chromium.org/p/client.pdfium"
-        ],
+        "masters": {
+            "https://build.chromium.org/p/client.pdfium": ["*"]
+        },
         "open-tree": true,
         "password-file": "/creds/gatekeeper/pdfium_status_password",
         "revision-properties": "got_revision_cp",
@@ -92,10 +92,10 @@
     },
     "v8": {
         "build-db": "v8_build_db.json",
-        "masters": [
-            "https://build.chromium.org/p/client.v8",
-            "https://build.chromium.org/p/client.v8.fyi"
-        ],
+        "masters": {
+            "https://build.chromium.org/p/client.v8": ["*"],
+            "https://build.chromium.org/p/client.v8.fyi": ["*"]
+        },
         "open-tree": true,
         "password-file": "/creds/gatekeeper/v8_status_password",
         "revision-properties": "got_revision_cp",
@@ -105,9 +105,9 @@
     },
     "webrtc": {
         "build-db": "webrtc_build_db.json",
-        "masters": [
-            "https://build.chromium.org/p/client.webrtc"
-        ],
+        "masters": {
+            "https://build.chromium.org/p/client.webrtc": ["*"]
+        },
         "open-tree": true,
         "password-file": "/creds/gatekeeper/webrtc_status_password",
         "revision-properties": "got_revision",
@@ -116,19 +116,19 @@
         "track-revisions": true
     },
     "chromium.perf": {
-        "masters": [
-            "https://build.chromium.org/p/chromium.perf"
-        ]
+        "masters": {
+            "https://build.chromium.org/p/chromium.perf": ["*"]
+        }
     },
     "non-closers": {
-        "masters": [
-            "https://build.chromium.org/p/chromium.fyi",
-            "https://build.chromium.org/p/chromium.lkgr",
-            "https://build.chromium.org/p/chromium.memory.fyi",
-            "https://build.chromium.org/p/client.boringssl",
-            "https://build.chromium.org/p/client.catapult",
-            "https://build.chromium.org/p/client.crashpad",
-            "https://build.chromium.org/p/client.libvpx"
-        ]
+        "masters": {
+            "https://build.chromium.org/p/chromium.fyi": ["*"],
+            "https://build.chromium.org/p/chromium.lkgr": ["*"],
+            "https://build.chromium.org/p/chromium.memory.fyi": ["*"],
+            "https://build.chromium.org/p/client.boringssl": ["*"],
+            "https://build.chromium.org/p/client.catapult": ["*"],
+            "https://build.chromium.org/p/client.crashpad": ["*"],
+            "https://build.chromium.org/p/client.libvpx": ["*"]
+        }
     }
 }

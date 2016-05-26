@@ -8,13 +8,19 @@ from recipe_engine import recipe_test_api
 
 
 class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
-  def fake_test_data(self):
-    return self.m.json.output({
+  def fake_test_data(self, data=None):
+    if not data:
+      data = self.fake_test_json()
+
+    return self.m.json.output(data)
+
+  def fake_test_json(self):
+    return {
       'blink': {
         'build-db': 'blink_build_db.json',
-        'masters': [
-          'https://build.chromium.org/p/chromium.webkit',
-        ],
+        'masters': {
+          'https://build.chromium.org/p/chromium.webkit': ["*"],
+        },
         'filter-domain': 'google.com',
         'open-tree': True,
         'password-file': '.blink_status_password',
@@ -27,4 +33,4 @@ class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
         'use-project-email-address': True,
       },
       'chromium': {},
-    })
+    }
