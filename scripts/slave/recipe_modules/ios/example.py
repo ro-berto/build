@@ -54,10 +54,10 @@ def GenTests(api):
           'os': '7.1',
         },
         {
-          'app': 'fake test 3',
-          'host': 'fake test 3_host',
+          'app': 'fake_eg_test_host',
           'device type': 'fake device 3',
           'os': '9.3',
+          'xctest': True,
         },
       ],
     })
