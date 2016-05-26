@@ -467,6 +467,30 @@
     "name": "voice_engine_unittests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Debug_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win64 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win64 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--test-type=xmllite_xmpp_unittests",
+      "--step-name=xmllite_xmpp_unittests",
+      "--builder-name=Win64 Debug",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
+      "[SLAVE_BUILD]\\src\\out\\Debug_x64\\xmllite_xmpp_unittests",
+      "--"
+    ],
+    "name": "xmllite_xmpp_unittests"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

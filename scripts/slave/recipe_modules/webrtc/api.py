@@ -31,6 +31,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     'tools_unittests',
     'video_engine_tests',
     'voice_engine_unittests',
+    'xmllite_xmpp_unittests',
   )
 
   # Android APK tests.

@@ -511,6 +511,31 @@
     "name": "voice_engine_unittests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_ubsan\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_ubsan\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--test-type=xmllite_xmpp_unittests",
+      "--step-name=xmllite_xmpp_unittests",
+      "--builder-name=linux_ubsan",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/xmllite_xmpp_unittests",
+      "--"
+    ],
+    "name": "xmllite_xmpp_unittests"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
