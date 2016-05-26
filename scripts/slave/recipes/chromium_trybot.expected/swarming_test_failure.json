@@ -538,6 +538,9 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "[trigger] gl_tests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -578,6 +581,9 @@
       "1",
       "gl_tests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "gl_tests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -605,6 +611,9 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Upload to test-results [gl_tests (with patch) on Ubuntu-12.04]"
   },
   {
@@ -636,6 +645,7 @@
       "--output_manifest"
     ],
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update (without patch)",
@@ -725,6 +735,9 @@
       "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "clean isolated files (2)"
   },
   {
@@ -806,6 +819,9 @@
       "/path/to/tmp/",
       "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "find isolated targets"
   },
   {
@@ -823,6 +839,9 @@
       "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
       "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -903,6 +922,9 @@
       "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "[trigger] gl_tests (without patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -943,6 +965,9 @@
       "1",
       "gl_tests (without patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "gl_tests (without patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
@@ -968,6 +993,9 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Upload to test-results [gl_tests (without patch) on Ubuntu-12.04]"
   },
   {
@@ -976,6 +1004,9 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "gl_tests (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

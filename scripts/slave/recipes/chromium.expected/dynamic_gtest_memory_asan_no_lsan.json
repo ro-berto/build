@@ -310,6 +310,9 @@
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-batch-limit=1"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "browser_tests"
   },
   {

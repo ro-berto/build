@@ -701,6 +701,9 @@
       "--gtest_filter=Test.One:Test.Two:Test.Three",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "test r1.[trigger] gl_tests (r1) on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -742,6 +745,9 @@
       "1",
       "gl_tests (r1)/Windows-7-SP1/[dummy has/win_chromium_variable/1"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "test r1.gl_tests (r1) on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -767,6 +773,9 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "test r1.Upload to test-results [test r1.gl_tests (r1) on Windows-7-SP1]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -780,6 +789,9 @@
       "--target",
       "Release"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "test r1.process_dumps",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

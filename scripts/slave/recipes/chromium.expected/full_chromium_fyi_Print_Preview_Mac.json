@@ -310,6 +310,10 @@
       "--platform",
       "browser_test.mac"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "print_preview_tests"
   },
   {

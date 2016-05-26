@@ -297,6 +297,9 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -369,6 +372,9 @@
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "[trigger] telemetry_gpu_unittests on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -401,6 +407,9 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "telemetry_gpu_unittests on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@outdir_json@{@@@",

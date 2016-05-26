@@ -310,6 +310,9 @@
       "base_unittests",
       "--test-launcher-print-test-stdio=always"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "base_unittests"
   },
   {

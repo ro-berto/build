@@ -417,6 +417,9 @@
       "--platform",
       "win"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "sizes"
   },
   {
@@ -427,6 +430,9 @@
       "--target",
       "Release"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "process_dumps"
   },
   {

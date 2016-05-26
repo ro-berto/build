@@ -318,6 +318,9 @@
       "--build-number=571",
       "base_unittests"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "base_unittests"
   },
   {
@@ -349,6 +352,9 @@
       "--test-launcher-shard-index=0",
       "--test-launcher-total-shards=2"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "browser_tests"
   },
   {
@@ -378,6 +384,9 @@
       "--build-number=571",
       "content_unittests"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "renamed_content_unittests"
   },
   {

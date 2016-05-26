@@ -281,6 +281,9 @@
       "--browser=release",
       "page_cycler.intl_ar_fa_he"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Performance Test 1 of 2",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
@@ -310,6 +313,9 @@
       "--browser=release",
       "page_cycler.intl_ar_fa_he"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Performance Test 2 of 2",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
@@ -323,6 +329,9 @@
       "-u",
       "RECIPE_MODULE[build::bisect_tester]/resources/put_temp.py"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "saving json to temp file",
     "stdin": "{\"output\": [], \"results\": {\"values\": [0, 0]}, \"retcodes\": [0, 0]}",
     "stdout": "/path/to/tmp/"
@@ -339,6 +348,9 @@
       "/tmp/dummy2",
       "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results@@@"

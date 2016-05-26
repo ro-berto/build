@@ -541,6 +541,9 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "[trigger] gl_tests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -581,6 +584,9 @@
       "1",
       "gl_tests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "gl_tests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
@@ -606,6 +612,9 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Upload to test-results [gl_tests (with patch) on Ubuntu-12.04]"
   },
   {

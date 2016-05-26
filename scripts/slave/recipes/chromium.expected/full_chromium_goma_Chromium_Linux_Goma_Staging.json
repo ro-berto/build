@@ -290,6 +290,10 @@
       "--build-number=571",
       "base_unittests"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
+    },
     "name": "base_unittests"
   },
   {
@@ -315,6 +319,10 @@
       "--build-number=571",
       "content_unittests"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
+    },
     "name": "content_unittests"
   },
   {

@@ -271,6 +271,9 @@
       "--num-shards",
       "5"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "List Perf Tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -331,6 +334,9 @@
       "--run-python-script",
       "/path/to/run_benchmark"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "dromaeo.cssqueryjquery",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",

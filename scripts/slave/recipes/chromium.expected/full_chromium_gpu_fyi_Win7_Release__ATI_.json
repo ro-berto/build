@@ -301,6 +301,9 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -374,6 +377,9 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "[trigger] browser_tests on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -414,6 +420,9 @@
       "1",
       "browser_tests/Windows-7-SP1/ffffffffff/Win7 Release (ATI)/571"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "browser_tests on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
@@ -439,6 +448,9 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "Upload to test-results [browser_tests on Windows-7-SP1]"
   },
   {
@@ -449,6 +461,9 @@
       "--target",
       "Release"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "process_dumps"
   },
   {

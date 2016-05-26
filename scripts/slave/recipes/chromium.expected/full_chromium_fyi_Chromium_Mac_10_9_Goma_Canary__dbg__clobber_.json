@@ -338,6 +338,10 @@
       "--build-number=571",
       "base_unittests"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "base_unittests"
   },
   {
@@ -362,6 +366,10 @@
       "--build-number=571",
       "content_unittests"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "content_unittests"
   },
   {

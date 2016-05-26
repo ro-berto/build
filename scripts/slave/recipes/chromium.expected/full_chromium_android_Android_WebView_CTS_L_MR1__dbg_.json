@@ -305,6 +305,10 @@
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "create adb symlink"
   },
   {
@@ -482,6 +486,10 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "spawn_device_monitor"
   },
   {
@@ -506,6 +514,10 @@
       "[SLAVE_BUILD]/src/android_webview/tools/cts_config/webview_cts_gcs_path.txt",
       "/path/to/tmp/"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "Fetch for the name of the cts file",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@cts_file_name@android-cts-5.1_r5-linux_x86-arm.zip@@@",
@@ -520,10 +532,18 @@
       "[SLAVE_BUILD]/src/android_webview/tools/cts_config/expected_failure_on_bot.json",
       "/path/to/tmp/"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "Fetch the expected failures tests for CTS from chromium checkout"
   },
   {
     "cmd": [],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "Update CTS"
   },
   {
@@ -533,6 +553,10 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILD]/site_config/cts"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "Update CTS.rmtree Delete old CTS",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -554,6 +578,10 @@
       "[BUILD]/site_config/cts",
       "511"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "Update CTS.makedirs Create CTS dir",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -581,6 +609,10 @@
       "gs://chromium-cts/android-cts-5.1_r5-linux_x86-arm.zip",
       "[BUILD]/site_config/cts/android-cts-5.1_r5-linux_x86-arm.zip"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "Update CTS.gsutil Download new CTS",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -592,6 +624,10 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "Update CTS.Extract new CTS",
     "stdin": "{\"output\": \"[BUILD]/site_config/cts/unzipped\", \"zip_file\": \"[BUILD]/site_config/cts/android-cts-5.1_r5-linux_x86-arm.zip\"}",
     "~followup_annotations": [
@@ -607,6 +643,7 @@
       "android.webkit"
     ],
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:%(PATH)s"
     },
     "name": "Run CTS",
@@ -636,6 +673,10 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "shutdown_device_monitor"
   },
   {
@@ -647,6 +688,10 @@
       "[SLAVE_BUILD]/src/out/Debug/full_log",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "logcat_dump"
   },
   {
@@ -665,6 +710,10 @@
       "[SLAVE_BUILD]/src/out/Debug/full_log",
       "gs://chromium-android/logcat_dumps/Android WebView CTS L-MR1 (dbg)/571"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android WebView CTS L-MR1 (dbg)/571@@@"
@@ -706,6 +755,10 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[SLAVE_BUILD]/src/out/Debug/test_logs/*.log"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

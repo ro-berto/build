@@ -605,6 +605,9 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "test r1.checkperms (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -623,6 +626,9 @@
       "--target",
       "Release"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "test r1.process_dumps",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

@@ -529,47 +529,48 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   @contextlib.contextmanager
   def wrap_chromium_tests(self, bot_config, tests=None):
-    bot_type = bot_config.get('bot_type', 'builder_tester')
+    with self.m.step.context({'env': self.m.chromium.get_env()}):
+      bot_type = bot_config.get('bot_type', 'builder_tester')
 
-    if bot_type in ('tester', 'builder_tester'):
-      isolated_targets = [
-          t.isolate_target(self.m) for t in tests if t.uses_swarming]
-      if isolated_targets:
-        self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
+      if bot_type in ('tester', 'builder_tester'):
+        isolated_targets = [
+            t.isolate_target(self.m) for t in tests if t.uses_swarming]
+        if isolated_targets:
+          self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
 
-    if bot_type == 'tester':
-      if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
-          bot_config.get('root_devices')):
-        self.m.adb.root_devices()
+      if bot_type == 'tester':
+        if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
+            bot_config.get('root_devices')):
+          self.m.adb.root_devices()
 
-    # Some recipes use this wrapper to setup devices and have their own way
-    # to run tests. If platform is Android and tests is None, run device steps.
-    require_device_steps = (tests is None or
-                            any([t.uses_local_devices for t in tests]))
+      # Some recipes use this wrapper to setup devices and have their own way
+      # to run tests. If platform is Android and tests is None, run device steps.
+      require_device_steps = (tests is None or
+                              any([t.uses_local_devices for t in tests]))
 
-    if self.m.chromium.c.TARGET_PLATFORM == 'android' and require_device_steps:
-      #TODO(prasadv): Remove this hack and implement specific functions
-      # at the point of call.
-      remove_system_webview = bot_config.get('remove_system_webview')
-      perf_setup = bot_config.matches_any_bot_id(lambda bot_id:
-          bot_id['mastername'].startswith('chromium.perf') or
-          bot_id['mastername'].startswith('tryserver.chromium.perf'))
-      self.m.chromium_android.common_tests_setup_steps(
-          perf_setup=perf_setup,
-          remove_system_webview=remove_system_webview)
+      if self.m.chromium.c.TARGET_PLATFORM == 'android' and require_device_steps:
+        #TODO(prasadv): Remove this hack and implement specific functions
+        # at the point of call.
+        remove_system_webview = bot_config.get('remove_system_webview')
+        perf_setup = bot_config.matches_any_bot_id(lambda bot_id:
+            bot_id['mastername'].startswith('chromium.perf') or
+            bot_id['mastername'].startswith('tryserver.chromium.perf'))
+        self.m.chromium_android.common_tests_setup_steps(
+            perf_setup=perf_setup,
+            remove_system_webview=remove_system_webview)
 
-    try:
-      yield
-    finally:
-      if self.m.platform.is_win:
-        self.m.chromium.process_dumps()
+      try:
+        yield
+      finally:
+        if self.m.platform.is_win:
+          self.m.chromium.process_dumps()
 
-      if self.m.chromium.c.TARGET_PLATFORM == 'android':
-        if require_device_steps:
-          self.m.chromium_android.common_tests_final_steps(
-              logcat_gs_bucket='chromium-android')
-        else:
-          self.m.chromium_android.test_report()
+        if self.m.chromium.c.TARGET_PLATFORM == 'android':
+          if require_device_steps:
+            self.m.chromium_android.common_tests_final_steps(
+                logcat_gs_bucket='chromium-android')
+          else:
+            self.m.chromium_android.test_report()
 
   def _resolve_fixed_revisions(self, bot_update_json):
     """Set all fixed revisions from the first sync to their respective

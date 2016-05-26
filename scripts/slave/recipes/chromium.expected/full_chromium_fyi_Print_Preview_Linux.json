@@ -287,7 +287,8 @@
       "browser_test.linux"
     ],
     "env": {
-      "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
+      "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "print_preview_tests"
   },

@@ -319,6 +319,9 @@
       "--build-number=571",
       "aura_unittests.exe"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "aura_unittests"
   },
   {
@@ -349,6 +352,9 @@
       "--test-launcher-shard-index=0",
       "--test-launcher-total-shards=2"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "browser_tests"
   },
   {
@@ -366,6 +372,9 @@
       "--write-full-results-to",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "test_installer"
   },
   {
@@ -376,6 +385,9 @@
       "--target",
       "Release"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "process_dumps"
   },
   {

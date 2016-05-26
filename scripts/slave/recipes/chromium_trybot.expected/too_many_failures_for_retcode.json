@@ -418,6 +418,9 @@
       "--step-name",
       "webkit_tests (with patch)"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 101",
@@ -441,6 +444,9 @@
       "--gs-bucket",
       "gs://chromium-layout-test-archives"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/linux_blink_rel/571/layout-test-results/results.html@@@",
@@ -478,6 +484,7 @@
       "--output_manifest"
     ],
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update (without patch)",
@@ -662,6 +669,9 @@
       "--skipped",
       "always"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@"
@@ -673,6 +683,9 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "webkit_tests (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

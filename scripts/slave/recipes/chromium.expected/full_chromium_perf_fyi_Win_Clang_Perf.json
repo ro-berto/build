@@ -243,6 +243,9 @@
       "--num-shards",
       "1"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "List Perf Tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -306,6 +309,9 @@
       "-v",
       "--b=2"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "blink_perf.all.exact",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
@@ -341,6 +347,9 @@
       "-v",
       "--b=2"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "blink_perf.all.release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
@@ -375,6 +384,9 @@
       "--upload-results",
       "blink_perf.dom"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "blink_perf.dom",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
@@ -407,6 +419,9 @@
       "--run-python-script",
       "/path/to/run_benchmark"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "dromaeo.cssqueryjquery",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
@@ -439,6 +454,9 @@
       "--run-python-script",
       "/path/to/run_benchmark"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "dromaeo.cssqueryjquery.release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
@@ -453,6 +471,9 @@
       "--target",
       "Release"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "process_dumps"
   },
   {

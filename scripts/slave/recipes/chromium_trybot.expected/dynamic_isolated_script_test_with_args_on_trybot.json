@@ -548,6 +548,9 @@
       "--build-revision=\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "[trigger] telemetry_gpu_unittests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -580,6 +583,9 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "telemetry_gpu_unittests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@outdir_json@{@@@",

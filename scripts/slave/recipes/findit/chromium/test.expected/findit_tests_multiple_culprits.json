@@ -708,6 +708,10 @@
       "--gtest_filter=Test.One:Test.Two:Test.Three",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r4.[trigger] gl_tests (r4) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -749,6 +753,10 @@
       "1",
       "gl_tests (r4)/Mac-10.9/[dummy has/mac_chromium_variable/1"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r4.gl_tests (r4) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -777,6 +785,10 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r4.Upload to test-results [test r4.gl_tests (r4) on Mac-10.9]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1246,6 +1258,10 @@
       "--gtest_filter=Test.One:Test.Three",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r5.[trigger] gl_tests (r5) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1287,6 +1303,10 @@
       "1",
       "gl_tests (r5)/Mac-10.9/[dummy has/mac_chromium_variable/1"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r5.gl_tests (r5) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1315,6 +1335,10 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r5.Upload to test-results [test r5.gl_tests (r5) on Mac-10.9]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1784,6 +1808,10 @@
       "--gtest_filter=Test.One",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r6.[trigger] gl_tests (r6) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1825,6 +1853,10 @@
       "1",
       "gl_tests (r6)/Mac-10.9/[dummy has/mac_chromium_variable/1"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r6.gl_tests (r6) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1853,6 +1885,10 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r6.Upload to test-results [test r6.gl_tests (r6) on Mac-10.9]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2322,6 +2358,10 @@
       "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r2.[trigger] gl_tests (r2) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2363,6 +2403,10 @@
       "1",
       "gl_tests (r2)/Mac-10.9/[dummy has/mac_chromium_variable/1"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r2.gl_tests (r2) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2388,6 +2432,10 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r2.Upload to test-results [test r2.gl_tests (r2) on Mac-10.9]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2857,6 +2905,10 @@
       "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r3.[trigger] gl_tests (r3) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2898,6 +2950,10 @@
       "1",
       "gl_tests (r3)/Mac-10.9/[dummy has/mac_chromium_variable/1"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r3.gl_tests (r3) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2926,6 +2982,10 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "test r3.Upload to test-results [test r3.gl_tests (r3) on Mac-10.9]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

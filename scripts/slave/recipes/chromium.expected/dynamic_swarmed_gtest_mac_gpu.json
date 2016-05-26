@@ -308,6 +308,10 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -384,6 +388,10 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "[trigger] gl_tests on Intel GPU on Mac on Mac-10.10",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -466,6 +474,10 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "[trigger] gl_tests on NVIDIA GPU on Mac Retina on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -506,6 +518,10 @@
       "1",
       "gl_tests on Intel GPU on Mac/Mac-10.10/eeeeeeeeee/Mac10.9 Tests/571"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "gl_tests on Intel GPU on Mac on Mac-10.10",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
@@ -531,6 +547,10 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Upload to test-results [gl_tests on Intel GPU on Mac on Mac-10.10]"
   },
   {
@@ -557,6 +577,10 @@
       "1",
       "gl_tests on NVIDIA GPU on Mac Retina/Mac-10.9/eeeeeeeeee/Mac10.9 Tests/571"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "gl_tests on NVIDIA GPU on Mac Retina on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
@@ -582,6 +606,10 @@
       "--chrome-revision",
       "170242"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Upload to test-results [gl_tests on NVIDIA GPU on Mac Retina on Mac-10.9]"
   },
   {

@@ -311,6 +311,9 @@
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-bot-mode"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "content_browsertests"
   },
   {
@@ -344,6 +347,9 @@
       "--test-launcher-bot-mode",
       "--test-launcher-print-test-stdio=always"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "browser_tests"
   },
   {
@@ -368,6 +374,9 @@
       "--build-number=571",
       "content_unittests.exe"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "content_unittests"
   },
   {
@@ -397,6 +406,9 @@
       "--test-launcher-jobs=1",
       "--test-launcher-print-test-stdio=always"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "media_unittests"
   },
   {
@@ -422,6 +434,9 @@
       "remoting_unittests.exe",
       "--gtest_filter=Webrtc*"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "remoting_unittests"
   },
   {
@@ -432,6 +447,9 @@
       "--target",
       "Release"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "process_dumps"
   },
   {
