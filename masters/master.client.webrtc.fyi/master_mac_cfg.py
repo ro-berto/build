@@ -17,7 +17,6 @@ def Update(c):
                                 'Mac64 Release (swarming)',
                                 'iOS64 Debug (GN)',
                                 'iOS64 Release (GN)',
-                                'iOS API Framework Builder',
                             ]),
   ])
 
@@ -32,11 +31,6 @@ def Update(c):
       'name': 'iOS64 Release (GN)',
       'slavebuilddir': 'mac64_gn',
       'recipe': 'webrtc/ios',
-    },
-    {
-      'name': 'iOS API Framework Builder',
-      'slavebuilddir': 'mac64_api_framework',
-      'recipe': 'webrtc/ios_api_framework',
     },
   ]
 

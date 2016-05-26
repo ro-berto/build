@@ -55,13 +55,13 @@ def RunSteps(api):
 def GenTests(api):
   yield (
     api.test('build_ok') +
-    api.properties.generic(mastername='client.webrtc.fyi',
+    api.properties.generic(mastername='client.webrtc',
                            buildername='iOS API Framework Builder')
   )
 
   yield (
     api.test('build_failure') +
-    api.properties.generic(mastername='client.webrtc.fyi',
+    api.properties.generic(mastername='client.webrtc',
                            buildername='iOS API Framework Builder') +
     api.step_data('build', retcode=1)
   )

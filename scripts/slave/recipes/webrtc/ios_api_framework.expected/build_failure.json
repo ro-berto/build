@@ -27,7 +27,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "client.webrtc.fyi",
+      "client.webrtc",
       "--builder",
       "iOS API Framework Builder",
       "--slave",
