@@ -111,6 +111,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'Android Swarm Builder',
       }),
+      'android_n5x_swarming_rel': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Android N5X Swarm Builder',
+      }),
       'cast_shell_android': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Cast Android (dbg)',

@@ -114,6 +114,13 @@
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_android_launch"],
     },
+    "android_n5x_swarming_rel": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "chromium_trybot",
+      "scheduler": None,
+      "slavebuilddir": "android",
+      "slave_pools": ["ccompute_android_launch"],
+    },
     "android_chromium_variable": {
       "builder_timeout_s": 36000,  # 60 * 600
       "recipe": "findit/chromium/compile",
