@@ -67,7 +67,7 @@ def GenTests(api):
   )
 
   yield (
-    api.test('trybot_biuld') +
+    api.test('trybot_build') +
     api.properties.tryserver(mastername='tryserver.webrtc',
                              buildername='ios_api_framework')
   )
