@@ -15,23 +15,11 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Mac64 Release (swarming)',
-                                'iOS64 Debug (GN)',
-                                'iOS64 Release (GN)',
                             ]),
   ])
 
   specs = [
     {'name': 'Mac64 Release (swarming)', 'slavebuilddir': 'mac_swarming'},
-    {
-      'name': 'iOS64 Debug (GN)',
-      'slavebuilddir': 'mac64_gn',
-      'recipe': 'webrtc/ios',
-    },
-    {
-      'name': 'iOS64 Release (GN)',
-      'slavebuilddir': 'mac64_gn',
-      'recipe': 'webrtc/ios',
-    },
   ]
 
   c['builders'].extend([
