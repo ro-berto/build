@@ -29,7 +29,7 @@ def Extend(pythonpath, cwd):
       ('mock-1.0.1',),
       ('coverage-3.7.1',),
       ('twisted_10_2',),
-      ('requests_1_2_3',),
+      ('requests_2_10_0',),
       ('sqlalchemy_0_7_1',),
       ('sqlalchemy_migrate_0_7_1',),
       ('tempita_0_5',),

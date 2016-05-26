@@ -221,12 +221,6 @@ class BuildPythonPathIsValidTestCase(unittest.TestCase):
 
 class InfraPythonPathTestCase(unittest.TestCase):
 
-  def setUp(self):
-    self._orig_modules = dict(sys.modules)
-
-  def tearDown(self):
-    sys.modules = self._orig_modules
-
   def testGenerate(self):
     self.assertIsNotNone(env.GetInfraPythonPath(hermetic=True))
     self.assertIsNotNone(env.GetInfraPythonPath(hermetic=False))
@@ -239,7 +233,7 @@ class InfraPythonPathTestCase(unittest.TestCase):
       import requests
       self.assertEqual(
           env.SplitPath(requests.__file__)[-4:-1],
-          ['third_party', 'requests_1_2_3', 'requests'])
+          ['third_party', 'requests_2_10_0', 'requests'])
 
   def testTwistedLoads(self):
     # NOTE: Update this if 'twisted' version changes.
