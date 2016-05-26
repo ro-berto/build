@@ -433,6 +433,39 @@ BUILDERS = freeze({
         },
         'testing': {'platform': 'linux'},
       },
+      'Android32 x86 Debug': {
+        'recipe_config': 'libyuv_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Android32 MIPS Debug': {
+        'recipe_config': 'libyuv_android_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'mipsel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Android64 x64 Debug': {
+        'recipe_config': 'libyuv_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'Android Debug (GN)': {
         'recipe_config': 'libyuv_android',
         'chromium_apply_config': ['gn'],
@@ -735,6 +768,36 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+      },
+     'android_x86': {
+        'recipe_config': 'libyuv_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'linux'},
+      },
+      'android_x64': {
+        'recipe_config': 'libyuv_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+      },
+      'android_mips': {
+        'recipe_config': 'libyuv_android_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'mipsel',
+          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
       },

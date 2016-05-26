@@ -20,6 +20,9 @@ def Update(c):
           'Android Release (GN)',
           'Android Clang Debug',
           'Android ARM64 Debug',
+          'Android32 x86 Debug',
+          'Android64 x64 Debug',
+          'Android32 MIPS Debug',
       ]),
   ])
 
@@ -30,6 +33,9 @@ def Update(c):
     {'name': 'Android Release (GN)', 'slavebuilddir': 'android_gn'},
     {'name': 'Android Clang Debug', 'slavebuilddir': 'android_clang'},
     {'name': 'Android ARM64 Debug', 'slavebuilddir': 'android_arm64'},
+    {'name': 'Android32 x86 Debug', 'slavebuilddir': 'android_x86'},
+    {'name': 'Android64 x64 Debug', 'slavebuilddir': 'android_x64'},
+    {'name': 'Android32 MIPS Debug', 'slavebuilddir': 'android_mips'},
   ]
 
   c['builders'].extend([
