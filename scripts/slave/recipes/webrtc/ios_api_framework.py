@@ -7,6 +7,7 @@ DEPS = [
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/tryserver',
   'file',
   'gsutil',
   'ios',
@@ -29,24 +30,26 @@ def RunSteps(api):
 
   build_script = api.path['checkout'].join('webrtc', 'build', 'ios',
                                            'build_ios_libs.sh')
-  api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])
+  if not api.tryserver.is_tryserver:
+    api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])
 
   api.step('build', [build_script, '-r', commit_pos], cwd=api.path['checkout'])
 
-  output_dir = api.path['checkout'].join('out_ios_libs')
-  zip_out = api.path['slave_build'].join('webrtc_ios_api_framework.zip')
-  pkg = api.zip.make_package(output_dir, zip_out)
-  pkg.add_directory(output_dir.join('WebRTC.framework'))
-  pkg.add_directory(output_dir.join('WebRTC.framework.dSYM'))
-  pkg.add_file(output_dir.join('LICENSE.html'))
-  pkg.zip('zip archive')
+  if not api.tryserver.is_tryserver:
+    output_dir = api.path['checkout'].join('out_ios_libs')
+    zip_out = api.path['slave_build'].join('webrtc_ios_api_framework.zip')
+    pkg = api.zip.make_package(output_dir, zip_out)
+    pkg.add_directory(output_dir.join('WebRTC.framework'))
+    pkg.add_directory(output_dir.join('WebRTC.framework.dSYM'))
+    pkg.add_file(output_dir.join('LICENSE.html'))
+    pkg.zip('zip archive')
 
-  api.gsutil.upload(
-      zip_out,
-      'chromium-webrtc',
-      'ios_api_framework/webrtc_ios_api_framework_%d.zip' % commit_pos,
-      args=['-a', 'public-read'],
-      unauthenticated_url=True)
+    api.gsutil.upload(
+        zip_out,
+        'chromium-webrtc',
+        'ios_api_framework/webrtc_ios_api_framework_%d.zip' % commit_pos,
+        args=['-a', 'public-read'],
+        unauthenticated_url=True)
 
 
 def GenTests(api):
@@ -61,4 +64,10 @@ def GenTests(api):
     api.properties.generic(mastername='client.webrtc.fyi',
                            buildername='iOS API Framework Builder') +
     api.step_data('build', retcode=1)
+  )
+
+  yield (
+    api.test('trybot_biuld') +
+    api.properties.tryserver(mastername='tryserver.webrtc',
+                             buildername='ios_api_framework')
   )
