@@ -272,9 +272,7 @@ def _get_step_data_for_revision(api, revision_data, skip_results=False):
         stdout=api.json.output({'git_sha': commit_hash}))
 
   if not skip_results:
-    step_name = ('Waiting for chromium@%s.gsutil '
-                 'Get test results for build %s') % (commit_hash[:10],
-                                                     commit_hash)
+    step_name = ('gsutil Get test results for build %s') % (commit_hash)
     if 'refrange' in revision_data:
       parent_step = 'Gathering reference values.'
     else:

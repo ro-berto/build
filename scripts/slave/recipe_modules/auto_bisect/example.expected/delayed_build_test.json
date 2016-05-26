@@ -197,7 +197,216 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
-    "name": "gsutil ls (2)"
+    "name": "gsutil ls (2)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "-c",
+      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
+      "try",
+      "--bot",
+      "linux_perf_bisect_builder",
+      "--revision",
+      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+      "--name",
+      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-build",
+      "--clobber",
+      "--svn_repo",
+      "svn://svn.chromium.org/chrome-try/try-perf",
+      "--diff",
+      "/dev/null"
+    ],
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "name": "Requesting build for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111 via git try."
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+    ],
+    "name": "gsutil ls (3)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder?as_text=1",
+      "--outfile",
+      "/path/to/tmp/"
+    ],
+    "name": "fetch builder state"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+    ],
+    "name": "sleeping",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@import time@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+    ],
+    "name": "gsutil ls (4)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder?as_text=1",
+      "--outfile",
+      "/path/to/tmp/"
+    ],
+    "name": "fetch builder state (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder/builds/2106?as_text=1",
+      "--outfile",
+      "/path/to/tmp/"
+    ],
+    "name": "fetch build details"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+    ],
+    "name": "sleeping (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@import time@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+    ],
+    "name": "gsutil ls (5)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder/builds/2106?as_text=1",
+      "--outfile",
+      "/path/to/tmp/"
+    ],
+    "name": "fetch build details (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
+    ],
+    "name": "gsutil ls (6)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder?as_text=1",
+      "--outfile",
+      "/path/to/tmp/"
+    ],
+    "name": "fetch builder state (3)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+    ],
+    "name": "sleeping (3)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@import time@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
+    ],
+    "name": "gsutil ls (7)"
   },
   {
     "cmd": [],
@@ -225,60 +434,12 @@
   },
   {
     "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "name": "Waiting for chromium@a6298e4afe"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
-    ],
-    "name": "Waiting for chromium@a6298e4afe.gsutil ls",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder?as_text=1",
-      "--outfile",
-      "/path/to/tmp/"
-    ],
-    "name": "Waiting for chromium@a6298e4afe.fetch builder state",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "name": "Waiting for chromium@a6298e4afe.sleeping",
+    "name": "sleeping (4)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
@@ -286,116 +447,6 @@
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
-    ],
-    "name": "Waiting for chromium@a6298e4afe.gsutil ls (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder?as_text=1",
-      "--outfile",
-      "/path/to/tmp/"
-    ],
-    "name": "Waiting for chromium@a6298e4afe.fetch builder state (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder/builds/2106?as_text=1",
-      "--outfile",
-      "/path/to/tmp/"
-    ],
-    "name": "Waiting for chromium@a6298e4afe.fetch build details",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "name": "Waiting for chromium@a6298e4afe.sleeping (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
-    ],
-    "name": "Waiting for chromium@a6298e4afe.gsutil ls (3)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder/builds/2106?as_text=1",
-      "--outfile",
-      "/path/to/tmp/"
-    ],
-    "name": "Waiting for chromium@a6298e4afe.fetch build details (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "name": "Waiting for chromium@00316c9ddf"
   },
   {
     "cmd": [
@@ -408,10 +459,7 @@
       "ls",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
-    "name": "Waiting for chromium@00316c9ddf.gsutil ls",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "gsutil ls (8)"
   },
   {
     "cmd": [
@@ -424,10 +472,20 @@
       "cat",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
-    "name": "Waiting for chromium@00316c9ddf.gsutil Get test results for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "name": "gsutil Get test results for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+    ],
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "name": "resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_TEST_FAILURE\"]@@@"
     ]
   },

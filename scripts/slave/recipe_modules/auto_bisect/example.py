@@ -87,13 +87,13 @@ def GenTests(api):
       api, _get_ref_range_only_test_data(), 'failed_build_test',
       extra_config={'dummy_builds': None})
   failed_build_test += api.step_data('gsutil ls', retcode=1)
+  failed_build_test += api.step_data('gsutil ls (2)' , retcode=1)
+  failed_build_test += api.step_data('gsutil ls (3)' , retcode=1)
   failed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.gsutil ls' , retcode=1)
-  failed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.fetch builder state',
+      'fetch builder state',
       api.raw_io.output(json.dumps({'cachedBuilds': ['2106']})))
   failed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.fetch build details',
+      'fetch build details',
       api.raw_io.output(json.dumps({
           'results': 2,
           'properties': [('build_archive_url',
@@ -107,27 +107,26 @@ def GenTests(api):
       api, _get_ref_range_only_test_data(), 'delayed_build_test',
       extra_config={'dummy_builds': None})
   delayed_build_test += api.step_data('gsutil ls', retcode=1)
+  delayed_build_test += api.step_data('gsutil ls (2)', retcode=1)
+  delayed_build_test += api.step_data('gsutil ls (3)', retcode=1)
+  delayed_build_test += api.step_data('gsutil ls (4)', retcode=1)
+  delayed_build_test += api.step_data('gsutil ls (5)', retcode=1)
+  delayed_build_test += api.step_data('gsutil ls (6)', retcode=1)
   delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.gsutil ls', retcode=1)
-  delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.gsutil ls (2)', retcode=1)
-  delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.gsutil ls (3)', retcode=1)
-  delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.fetch builder state',
+      'fetch builder state',
       api.raw_io.output(json.dumps({'cachedBuilds': []})))
   delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.fetch builder state (2)',
+      'fetch builder state (2)',
       api.raw_io.output(json.dumps({'cachedBuilds': ['2106']})))
   delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.fetch build details',
+      'fetch build details',
       api.raw_io.output(json.dumps({
           'properties': [('build_archive_url',
                           ('gs://chrome-perf/Linux Builder/full-build-linux_'
                            'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))]
       })))
   delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.fetch build details (2)',
+      'fetch build details (2)',
       api.raw_io.output(json.dumps({
           'results': 2,
           'properties': [('build_archive_url',
@@ -430,9 +429,7 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
 
   if include_build_steps:
     if test_results:
-      step_name = ('Waiting for chromium@%s.gsutil '
-                   'Get test results for build %s') % (commit_hash[:10],
-                                                       commit_hash)
+      step_name = ('gsutil Get test results for build %s') % commit_hash
       yield api.step_data(step_name, stdout=api.json.output(test_results))
 
     if revision_data.get('DEPS', False):
