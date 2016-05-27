@@ -52,22 +52,23 @@ WHITELIST_ALL = '*'
 # specific masters and builders for experimental LogDog/Annotee export.
 LOGDOG_WHITELIST_PROJECTS = {
     'chromium': {
-      'chromium.infra': { WHITELIST_ALL },
-      'chromium.infra.cron': { WHITELIST_ALL },
-      'tryserver.infra': { WHITELIST_ALL },
+      ## Chrome Infra waterfalls.
+      #'chromium.infra': { WHITELIST_ALL },
+      #'chromium.infra.cron': { WHITELIST_ALL },
+      #'tryserver.infra': { WHITELIST_ALL },
 
-      # Chromium tryservers.
-      'tryserver.chromium.android': { WHITELIST_ALL },
-      'tryserver.chromium.mac': { WHITELIST_ALL },
-      'tryserver.chromium.linux': { WHITELIST_ALL },
-      'tryserver.chromium.win': { WHITELIST_ALL },
+      ## Chromium tryservers.
+      #'tryserver.chromium.android': { WHITELIST_ALL },
+      #'tryserver.chromium.mac': { WHITELIST_ALL },
+      #'tryserver.chromium.linux': { WHITELIST_ALL },
+      #'tryserver.chromium.win': { WHITELIST_ALL },
 
-      # Chromium continuous waterfalls.
-      'chromium.android': { WHITELIST_ALL },
-      'chromium.mac': { WHITELIST_ALL },
-      'chromium.linux': { WHITELIST_ALL },
-      'chromium.win': { WHITELIST_ALL },
-      'chromium.fyi': { WHITELIST_ALL },
+      ## Chromium continuous waterfalls.
+      #'chromium.android': { WHITELIST_ALL },
+      #'chromium.mac': { WHITELIST_ALL },
+      #'chromium.linux': { WHITELIST_ALL },
+      #'chromium.win': { WHITELIST_ALL },
+      #'chromium.fyi': { WHITELIST_ALL },
     },
 }
 
