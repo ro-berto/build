@@ -16,6 +16,15 @@ class CIPDApi(recipe_api.RecipeApi):
   def set_service_account_credentials(self, path):
     self._cipd_credentials = path
 
+  @property
+  def default_bot_service_account_credentials(self):
+    # Path to a service account credentials to use to talk to CIPD backend.
+    # Deployed by Puppet.
+    if self.m.platform.is_win:
+      return 'C:\\creds\\service_accounts\\service-account-cipd-builder.json'
+    else:
+      return '/creds/service_accounts/service-account-cipd-builder.json'
+
   def platform_suffix(self):
     """Use to get full package name that is platform indepdent.
 
