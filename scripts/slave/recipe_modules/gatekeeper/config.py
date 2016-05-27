@@ -17,4 +17,4 @@ config_ctx = config_item_context(BaseConfig)
 
 @config_ctx()
 def basic(c):
-  c.use_new_logic = False
+  c.use_new_logic = True
