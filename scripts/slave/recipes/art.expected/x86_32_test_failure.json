@@ -215,7 +215,36 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
     },
-    "name": "test jdwp",
+    "name": "test jdwp jit"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/art/tools/run-jdwp-tests.sh",
+      "--mode=host",
+      "--variant=X32",
+      "--no-jit"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "HOST_PREFER_32_BIT": "true",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "sdk"
+    },
+    "name": "test jdwp aot",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
@@ -223,7 +252,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 9 aggregated steps failed. Failures: Step('test jdwp') failed with return_code 1",
+    "reason": "1 out of 10 aggregated steps failed. Failures: Step('test jdwp aot') failed with return_code 1",
     "status_code": 1
   }
 ]

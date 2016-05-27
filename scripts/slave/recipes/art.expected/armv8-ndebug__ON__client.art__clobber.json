@@ -870,7 +870,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp"
+    "name": "test jdwp jit"
   },
   {
     "cmd": [
@@ -905,7 +905,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp: adb logcat"
+    "name": "test jdwp jit: adb logcat"
   },
   {
     "cmd": [
@@ -936,7 +936,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp: crashes"
+    "name": "test jdwp jit: crashes"
   },
   {
     "cmd": [
@@ -969,7 +969,141 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp: adb clear log"
+    "name": "test jdwp jit: adb clear log"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/art/tools/run-jdwp-tests.sh",
+      "--mode=device",
+      "--variant=X64",
+      "--no-jit"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_SERIAL": "HT4CTJT03670",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "armv8",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jdwp aot"
+  },
+  {
+    "cmd": [
+      "adb",
+      "logcat",
+      "-d",
+      "-v",
+      "threadtime"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_SERIAL": "HT4CTJT03670",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "armv8",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jdwp aot: adb logcat"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_SERIAL": "HT4CTJT03670",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "armv8",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jdwp aot: crashes"
+  },
+  {
+    "cmd": [
+      "adb",
+      "logcat",
+      "-c"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_SERIAL": "HT4CTJT03670",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "armv8",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jdwp aot: adb clear log"
   },
   {
     "name": "$result",

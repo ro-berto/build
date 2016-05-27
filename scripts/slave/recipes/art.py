@@ -126,7 +126,15 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
                     '--variant=X%d' % bitness]
     if debug:
       jdwp_command.append('--debug')
-    api.step('test jdwp', jdwp_command, env=env)
+    api.step('test jdwp jit', jdwp_command, env=env)
+
+    jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
+                    '--mode=host',
+                    '--variant=X%d' % bitness,
+                    '--no-jit']
+    if debug:
+      jdwp_command.append('--debug')
+    api.step('test jdwp aot', jdwp_command, env=env)
 
 def setup_target(api,
     serial,
@@ -253,8 +261,17 @@ def setup_target(api,
                     '--variant=X%d' % bitness]
     if debug:
       jdwp_command.append('--debug')
-    api.step('test jdwp', jdwp_command, env=test_env)
-    test_logging(api, 'test jdwp')
+    api.step('test jdwp jit', jdwp_command, env=test_env)
+    test_logging(api, 'test jdwp jit')
+
+    jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
+                    '--mode=device',
+                    '--variant=X%d' % bitness,
+                    '--no-jit']
+    if debug:
+      jdwp_command.append('--debug')
+    api.step('test jdwp aot', jdwp_command, env=test_env)
+    test_logging(api, 'test jdwp aot')
 
 def setup_aosp_builder(api):
   full_checkout(api)
@@ -435,7 +452,7 @@ def GenTests(api):
         buildername='host-x86-ndebug',
         slavename='TestSlave',
       ) +
-      api.step_data('test jdwp', retcode=1))
+      api.step_data('test jdwp aot', retcode=1))
   yield (
       api.test('target_hammerhead_setup_failure') +
       api.properties(
@@ -451,7 +468,7 @@ def GenTests(api):
         buildername='hammerhead-ndebug',
         slavename='TestSlave',
       ) +
-      api.step_data('test jdwp', retcode=1))
+      api.step_data('test jdwp aot', retcode=1))
   yield (
       api.test('target_hammerhead_device_cleanup_failure') +
       api.properties(
