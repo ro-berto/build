@@ -467,27 +467,6 @@
   },
   {
     "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "Gathering reference values.Waiting for chromium@e28dc0d49c",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
@@ -497,14 +476,14 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
-    "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil ls",
+    "name": "Gathering reference values.gsutil ls (3)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.Triggering test job for e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+    "name": "Gathering reference values.Triggering test job for e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "trigger_specs": [
       {
         "builder_name": "linux_perf_tester",
@@ -526,7 +505,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -535,9 +514,9 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.sleeping",
+    "name": "Gathering reference values.sleeping",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
@@ -557,9 +536,9 @@
       "ls",
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
-    "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil ls (2)",
+    "name": "Gathering reference values.gsutil ls (4)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -573,29 +552,8 @@
       "cat",
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
-    "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil Get test results for build e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+    "name": "Gathering reference values.gsutil Get test results for build e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "Gathering reference values.Waiting for chromium@a6298e4afe",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -611,14 +569,14 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "name": "Gathering reference values.Waiting for chromium@a6298e4afe.gsutil ls",
+    "name": "Gathering reference values.gsutil ls (5)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "Gathering reference values.Waiting for chromium@a6298e4afe.Triggering test job for a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "name": "Gathering reference values.Triggering test job for a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "trigger_specs": [
       {
         "builder_name": "linux_perf_tester",
@@ -640,7 +598,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -649,9 +607,9 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "name": "Gathering reference values.Waiting for chromium@a6298e4afe.sleeping",
+    "name": "Gathering reference values.sleeping (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
@@ -671,9 +629,9 @@
       "ls",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
     ],
-    "name": "Gathering reference values.Waiting for chromium@a6298e4afe.gsutil ls (2)",
+    "name": "Gathering reference values.gsutil ls (6)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -687,10 +645,10 @@
       "cat",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
     ],
-    "name": "Gathering reference values.Waiting for chromium@a6298e4afe.gsutil Get test results for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "name": "Gathering reference values.gsutil Get test results for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -711,6 +669,34 @@
   {
     "cmd": [],
     "name": "Working on revision chromium@00316c9ddf"
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Working on revision chromium@00316c9ddf.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "a6298e4afedbf2cd461755ea6f45b0ad64222222"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Working on revision chromium@00316c9ddf.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -795,13 +781,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "Working on revision chromium@00316c9ddf.Waiting for chromium@00316c9ddf",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -812,14 +791,14 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
-    "name": "Working on revision chromium@00316c9ddf.Waiting for chromium@00316c9ddf.gsutil ls",
+    "name": "Working on revision chromium@00316c9ddf.gsutil ls (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "Working on revision chromium@00316c9ddf.Waiting for chromium@00316c9ddf.Triggering test job for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "name": "Working on revision chromium@00316c9ddf.Triggering test job for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "trigger_specs": [
       {
         "builder_name": "linux_perf_tester",
@@ -841,7 +820,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -850,9 +829,9 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "name": "Working on revision chromium@00316c9ddf.Waiting for chromium@00316c9ddf.sleeping",
+    "name": "Working on revision chromium@00316c9ddf.sleeping",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
@@ -872,9 +851,9 @@
       "ls",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
-    "name": "Working on revision chromium@00316c9ddf.Waiting for chromium@00316c9ddf.gsutil ls (2)",
+    "name": "Working on revision chromium@00316c9ddf.gsutil ls (3)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -888,10 +867,10 @@
       "cat",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
-    "name": "Working on revision chromium@00316c9ddf.Waiting for chromium@00316c9ddf.gsutil Get test results for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "name": "Working on revision chromium@00316c9ddf.gsutil Get test results for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -903,10 +882,10 @@
       "[14, 15, 16]",
       "0.01"
     ],
-    "name": "Working on revision chromium@00316c9ddf.Waiting for chromium@00316c9ddf.Checking sample difference",
+    "name": "Working on revision chromium@00316c9ddf.Checking sample difference",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
@@ -920,10 +899,10 @@
       "[14, 15, 16]",
       "0.01"
     ],
-    "name": "Working on revision chromium@00316c9ddf.Waiting for chromium@00316c9ddf.Checking sample difference (2)",
+    "name": "Working on revision chromium@00316c9ddf.Checking sample difference (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
@@ -1026,13 +1005,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "Working on revision chromium@fc6dfc7ff5.Waiting for chromium@fc6dfc7ff5",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -1043,14 +1015,14 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip"
     ],
-    "name": "Working on revision chromium@fc6dfc7ff5.Waiting for chromium@fc6dfc7ff5.gsutil ls",
+    "name": "Working on revision chromium@fc6dfc7ff5.gsutil ls (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "Working on revision chromium@fc6dfc7ff5.Waiting for chromium@fc6dfc7ff5.Triggering test job for fc6dfc7ff5b1073408499478969261b826441144",
+    "name": "Working on revision chromium@fc6dfc7ff5.Triggering test job for fc6dfc7ff5b1073408499478969261b826441144",
     "trigger_specs": [
       {
         "builder_name": "linux_perf_tester",
@@ -1072,7 +1044,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1081,9 +1053,9 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "name": "Working on revision chromium@fc6dfc7ff5.Waiting for chromium@fc6dfc7ff5.sleeping",
+    "name": "Working on revision chromium@fc6dfc7ff5.sleeping",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
@@ -1103,9 +1075,9 @@
       "ls",
       "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
     ],
-    "name": "Working on revision chromium@fc6dfc7ff5.Waiting for chromium@fc6dfc7ff5.gsutil ls (2)",
+    "name": "Working on revision chromium@fc6dfc7ff5.gsutil ls (3)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1119,10 +1091,10 @@
       "cat",
       "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
     ],
-    "name": "Working on revision chromium@fc6dfc7ff5.Waiting for chromium@fc6dfc7ff5.gsutil Get test results for build fc6dfc7ff5b1073408499478969261b826441144",
+    "name": "Working on revision chromium@fc6dfc7ff5.gsutil Get test results for build fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1134,10 +1106,10 @@
       "[68, 70, 72]",
       "0.01"
     ],
-    "name": "Working on revision chromium@fc6dfc7ff5.Waiting for chromium@fc6dfc7ff5.Checking sample difference",
+    "name": "Working on revision chromium@fc6dfc7ff5.Checking sample difference",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
@@ -1151,10 +1123,10 @@
       "[68, 70, 72]",
       "0.01"
     ],
-    "name": "Working on revision chromium@fc6dfc7ff5.Waiting for chromium@fc6dfc7ff5.Checking sample difference (2)",
+    "name": "Working on revision chromium@fc6dfc7ff5.Checking sample difference (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]

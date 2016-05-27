@@ -26,7 +26,7 @@ def RunSteps(api):
       mastername, buildername)
   api.chromium_tests.configure_build(bot_config)
   api.m.chromium_tests.prepare_checkout(bot_config)
-  api.auto_bisect.perform_bisect()
+  api.auto_bisect.perform_bisect(do_not_nest_wait_for_revision=True)
 
 def GenTests(api):
   basic_test = api.test('basic')
@@ -272,9 +272,7 @@ def _get_step_data_for_revision(api, revision_data, skip_results=False):
         stdout=api.json.output({'git_sha': commit_hash}))
 
   if not skip_results:
-    step_name = ('Waiting for chromium@%s.gsutil '
-                 'Get test results for build %s') % (commit_hash[:10],
-                                                     commit_hash)
+    step_name = ('gsutil Get test results for build %s') % (commit_hash)
     if 'refrange' in revision_data:
       parent_step = 'Gathering reference values.'
     else:

@@ -7,10 +7,10 @@ import collections
 import json
 
 
-def perform_bisect(api):  # pragma: no cover
+def perform_bisect(api, **flags):  # pragma: no cover
   bisect_config = api.m.properties.get('bisect_config')
   assert isinstance(bisect_config, collections.Mapping)
-  bisector = api.create_bisector(bisect_config)
+  bisector = api.create_bisector(bisect_config, **flags)
   with api.m.step.nest('Gathering reference values'):
     _gather_reference_range(api, bisector)
   if (not bisector.failed and bisector.check_improvement_direction() and

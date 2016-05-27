@@ -68,13 +68,15 @@ _DIRECTION_OF_IMPROVEMENT_ABORT_REASON = (
 class Bisector(object):
   """This class abstracts an ongoing bisect (or n-sect) job."""
 
-  def __init__(self, api, bisect_config, revision_class, init_revisions=True):
+  def __init__(self, api, bisect_config, revision_class, init_revisions=True,
+               **flags):
     """Initializes the state of a new bisect job from a dictionary.
 
     Note that the initial good_rev and bad_rev MUST resolve to a commit position
     in the chromium repo.
     """
     super(Bisector, self).__init__()
+    self.flags = flags
     self._api = api
     self.result_codes = set()
     self.ensure_sync_master_branch()
@@ -742,22 +744,25 @@ class Bisector(object):
     for r in revision_list:
       self.wait_for(r)
 
-  def wait_for(self, revision):
+  def wait_for(self, revision, nest_check=True):
     """Waits for the revision to finish its job."""
-    with self.api.m.step.nest('Waiting for ' + revision.revision_string()):
-      while True:
-        revision.update_status()
-        if revision.in_progress:
-          self.api.m.python.inline(
-              'sleeping',
-              """
-              import sys
-              import time
-              time.sleep(20*60)
-              sys.exit(0)
-              """)
-        else:
-          break
+    if nest_check and not self.flags.get(
+        'do_not_nest_wait_for_revision'):  # pragma: no cover
+      with self.api.m.step.nest('Waiting for ' + revision.revision_string()):
+        return self.wait_for(revision, nest_check=False)
+    while True:
+      revision.update_status()
+      if revision.in_progress:
+        self.api.m.python.inline(
+            'sleeping',
+            """
+            import sys
+            import time
+            time.sleep(20*60)
+            sys.exit(0)
+            """)
+      else:
+        break
 
   def _update_candidate_range(self):
     """Updates lkgr and fkbr (last known good/first known bad) revisions.

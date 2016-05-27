@@ -46,10 +46,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
     self.builder_bot = None
     self.full_deploy_script = None
 
-  def perform_bisect(self):
-    return local_bisect.perform_bisect(self)
+  def perform_bisect(self, **flags):
+    return local_bisect.perform_bisect(self, **flags)
 
-  def create_bisector(self, bisect_config_dict, dummy_mode=False):
+  def create_bisector(self, bisect_config_dict, dummy_mode=False, **flags):
     """Passes the api and the config dictionary to the Bisector constructor.
 
     For details about the keys in the bisect config dictionary go to:
@@ -67,7 +67,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     self.override_poll_interval = bisect_config_dict.get('poll_sleep')
     return bisector.Bisector(self, bisect_config_dict,
                              revision_state.RevisionState,
-                             init_revisions=not dummy_mode)
+                             init_revisions=not dummy_mode, **flags)
 
   def set_platform_gs_prefix(self, gs_url):
     """Sets GS path for the platform."""
@@ -351,6 +351,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
       bot_db: A BotConfigAndTestDB object, used for some job types.
       kwargs: Args to use only for legacy bisect.
     """
+    flags = {}
+    if kwargs.get('do_not_nest_wait_for_revision'):
+      flags['do_not_nest_wait_for_revision'] = kwargs.pop(
+          'do_not_nest_wait_for_revision')
     if bot_db is None:  # pragma: no cover
       self.bot_db = api.chromium_tests.create_bot_db_from_master_dict(
           '', None, None)
@@ -371,7 +375,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         # We can distinguish between a config for a full bisect vs a single
         # test by checking for the presence of the good_revision key.
         if api.properties.get('bisect_config').get('good_revision'):
-          local_bisect.perform_bisect(self)  # pragma: no cover
+          local_bisect.perform_bisect(self, **flags)  # pragma: no cover
         else:
           self.start_test_run_for_bisect(update_step, self.bot_db,
                                          api.properties)

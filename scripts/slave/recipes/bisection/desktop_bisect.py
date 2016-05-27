@@ -26,8 +26,11 @@ def RunSteps(api):
                                                            buildername)
   api.chromium_tests.configure_build(bot_config)
   api.gclient.apply_config('perf')
+  # TODO(robertocn): remove do_not_nest_wait_for_revision once downstream
+  # expectations have been fixed, and make it behave like this by default.
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
-  api.auto_bisect.start_try_job(api, update_step=update_step, bot_db=bot_db)
+  api.auto_bisect.start_try_job(api, update_step=update_step, bot_db=bot_db,
+                                do_not_nest_wait_for_revision=True)
 
 
 def GenTests(api):
