@@ -744,19 +744,20 @@ class Bisector(object):
 
   def wait_for(self, revision):
     """Waits for the revision to finish its job."""
-    while True:
-      revision.update_status()
-      if revision.in_progress:
-        self.api.m.python.inline(
-            'sleeping',
-            """
-            import sys
-            import time
-            time.sleep(20*60)
-            sys.exit(0)
-            """)
-      else:
-        break
+    with self.api.m.step.nest('Waiting for ' + revision.revision_string()):
+      while True:
+        revision.update_status()
+        if revision.in_progress:
+          self.api.m.python.inline(
+              'sleeping',
+              """
+              import sys
+              import time
+              time.sleep(20*60)
+              sys.exit(0)
+              """)
+        else:
+          break
 
   def _update_candidate_range(self):
     """Updates lkgr and fkbr (last known good/first known bad) revisions.
