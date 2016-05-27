@@ -111,3 +111,11 @@ _AddBotSpec(
     parent_builder='Win Clang Builder',
     perf_id='chromium-win-clang',
     target_bits=32)
+
+_AddBotSpec(
+    name='Mac Retina Power Perf',
+    platform='mac',
+    parent_builder='Mac Builder',
+    perf_id='mac-retina-fyi',
+    target_bits=64,
+    parent_master='chromium.perf')

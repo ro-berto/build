@@ -92,8 +92,21 @@ def _ChromiumPerfTesters():
     master_spec.update(spec)
   return master_spec
 
+def _ChromiumPerfFyiTesters():
+  testers = [
+    _CreateTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5',
+        required_apks=['ChromePublic.apk'], num_device_shards=7,
+        num_host_shards=1, target_bits=32),
+  ]
+
+  master_spec = {}
+  for spec in testers:
+    master_spec.update(spec)
+  return master_spec
+
 BUILDERS = freeze({
   'chromium.perf': _ChromiumPerfTesters(),
+  'chromium.perf.fyi': _ChromiumPerfFyiTesters(),
 })
 
 
