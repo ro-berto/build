@@ -1427,7 +1427,9 @@ def parse_args():
                    help='Gerrit repository to pull the ref from.')
   parse.add_option('--gerrit_ref', help='Gerrit ref to apply.')
   parse.add_option('--specs', help='Gcilent spec.')
-  parse.add_option('--master', help='Master name.')
+  parse.add_option('--master',
+                   help='Master name. If specified and it is not in '
+                        'bot_update\'s whitelist, bot_update will be noop.')
   parse.add_option('-f', '--force', action='store_true',
                    help='Bypass check to see if we want to be run. '
                         'Should ONLY be used locally or by smart recipes.')
@@ -1685,8 +1687,13 @@ def main():
   slave = options.slave_name
   master = options.master
 
+  if not master:
+    # bot_update activation whitelist is checked only on buildbot masters.
+    # If there is no master, bot_update is always active.
+    options.force = True
+
   # Check if this script should activate or not.
-  active = check_valid_host(master, builder, slave) or options.force or False
+  active = options.force or check_valid_host(master, builder, slave)
 
   # Print a helpful message to tell developers whats going on with this step.
   print_help_text(
