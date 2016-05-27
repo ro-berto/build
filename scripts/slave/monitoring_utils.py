@@ -20,13 +20,13 @@ LOGGER = logging.getLogger('monitoring_utils')
 
 
 PLATFORM_CONFIG = {
-  'linux': {
+  ('linux',): {
     'run_cmd': ['/opt/infra-python/run.py'],
   },
-  'mac': {
+  ('mac',): {
     'run_cmd': ['/opt/infra-python/run.py'],
   },
-  'win': {
+  ('win',): {
     'run_cmd': ['C:\\infra-python\\ENV\\Scripts\\python.exe',
                 'C:\\infra-python\\run.py'],
   },
@@ -40,7 +40,7 @@ def _check_call(cmd, **kwargs):
 
 def write_build_monitoring_event(datadir, build_properties):
   # Ensure that all command components of "run_cmd" are available.
-  config = PLATFORM_CONFIG.get(infra_platform.get()[0])
+  config = infra_platform.cascade_config(PLATFORM_CONFIG)
   if not config or 'run_cmd' not in config:
     LOGGER.warning('No run.py is defined for this platform.')
     return

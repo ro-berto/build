@@ -1,0 +1,63 @@
+# Copyright (c) 2016 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This is a Python literal file describing LogDog builder configuration for
+# sepcific Chromium Infrastructure BuildBot masters.
+#
+# Master names do not include the "master." prefix.
+#
+# The mapping looks like:
+# {
+#   # Top-level dictionary is a config service project name.
+#   'project-name': {
+#     # Including a master name automatically makes it candidate for LogDog
+#     # logging to this config service project.
+#     #
+#     # By default, all builders are enabled for an included master. This can
+#     # be further specialized by adding builder-specific configurations within
+#     # the master's dictionary.
+#     #
+#     # The special builder name, "*", is a wildcard builder that specifies the
+#     # default configuration for any builders not explicitly named.
+#     'master.name': {
+#       # Specialize a specific builder name.
+#       'builder-name': {
+#         # (Optional) CIPD tag to use for Butler/Annotee checkout. This can be
+#         # used to canary new versions on specific waterfalls.
+#         'cipd_tag': '...',
+#
+#         # (Optional) Boolean value to disable LogDog on a specific builder.
+#         #
+#         # This can be set to False on the wildcard ("*") builder to create an
+#         # effective whitelist by setting specific builders to "True".
+#         'enabled': False,
+#       },
+#     },
+#     'master.all-enabled': {},
+#   },
+# }
+#
+# These mappings apply to waterfalls defined in the `build` repository:
+# https://chromium.googlesource.com/chromium/tools/build/+/master
+#
+{
+  'chromium': {
+    'chromium.infra': {},
+    'chromium.infra.cron': {},
+    'tryserver.infra': {},
+
+    # Chromium tryservers.
+    'tryserver.chromium.android': {},
+    'tryserver.chromium.mac': {},
+    'tryserver.chromium.linux': {},
+    'tryserver.chromium.win': {},
+
+    # Chromium continuous waterfalls.
+    'chromium.android': {},
+    'chromium.mac': {},
+    'chromium.linux': {},
+    'chromium.win': {},
+    'chromium.fyi': {},
+  },
+}

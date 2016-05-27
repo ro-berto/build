@@ -42,3 +42,44 @@ def get():
     raise ValueError("Don't understand architecture [%s]" % (arch,))
 
   return plat, bits
+
+
+def cascade_config(config):
+  """Returns (dict): The constructed configuration dictionary.
+
+  Traverses the supplied configuration dictionary, building a cascading
+  configuration by folding in values of increasingly-specialized platform tuple
+  keys. The platform tuple that is traversed is the one returned by 'get'.
+
+  For example, on a 64-bit Linux platform with a 'config' dictionary of:
+  config = {
+    (): {
+      'foo': 'foo-generic',
+      'bar': 'bar-generic',
+      'baz': 'baz-generic',
+    },
+    ('linux',): {
+      'bar': 'bar-linux',
+      'baz': 'baz-linux',
+    },
+    ('linux', 64): {
+      'baz': 'baz-linux-amd64',
+    },
+  }
+
+  The resulting dictionary would be:
+  {
+    'foo': 'foo-generic',
+    'bar': 'bar-linux',
+    'baz': 'baz-linux-amd64',
+  }
+
+  Args:
+    config (dict): Dictionary keyed on platform tuples.
+  """
+  # Cascade the platform configuration.
+  p = get()
+  result = {}
+  for i in xrange(len(p)+1):
+    result.update(config.get(p[:i], {}))
+  return result
