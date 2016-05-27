@@ -90,6 +90,22 @@ _AddBotSpec(
     parent_master='chromium.perf')
 
 _AddBotSpec(
+    name='Win Power Perf (HP)',
+    platform='win',
+    parent_builder='Win x64 Builder',
+    perf_id='win-power-fyi-hp',
+    target_bits=64,
+    parent_master='chromium.perf')
+
+_AddBotSpec(
+    name='Win Power Perf (DELL)',
+    platform='win',
+    parent_builder='Win x64 Builder',
+    perf_id='win-power-fyi-dell',
+    target_bits=64,
+    parent_master='chromium.perf')
+
+_AddBotSpec(
     name='Win Clang Perf',
     platform='win',
     parent_builder='Win Clang Builder',
