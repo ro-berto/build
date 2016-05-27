@@ -33,8 +33,25 @@
         "track-revisions": true
     },
     "chromium_android": {
+        "open-tree": false,
+        "set-status": false,
         "masters": {
-            "https://build.chromium.org/p/chromium.android": ["*"]
+            "https://build.chromium.org/p/chromium.android": ["*"],
+            "https://build.chromium.org/p/chromium": ["Android"],
+            "https://build.chromium.org/p/chromium.webkit": [
+                "Android Builder", "Webkit Android (Nexus4)"
+            ],
+            "https://build.chromium.org/p/chromium.linux": [
+                "Android Builder (dbg)",
+                "Android Tests (dbg)",
+                "Android Builder",
+                "Android Tests",
+                "Android Clang Builder (dbg)",
+                "Cast Android (dbg)"
+            ],
+            "https://build.chromium.org/p/chromium.fyi": [
+                "Android Builder (dbg)"
+            ]
         }
     },
     "infra": {
