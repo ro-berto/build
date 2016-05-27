@@ -252,7 +252,7 @@ class ChromiumApi(recipe_api.RecipeApi):
           **kwargs)
     except self.m.step.StepFailure as e:
       # Handle failures caused by goma.
-      if 'goma' in self.c.compile_py.compiler:
+      if self.c.compile_py.compiler and 'goma' in self.c.compile_py.compiler:
         step_result = self.m.step.active_result
         failure_result_code = ''
         try:
