@@ -213,9 +213,7 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
   checkout = api.path['checkout']
   out_dir = checkout.join('out')
 
-  # Copy device 'Flutter' directory to a deploy dir:
   deploy_dir = out_dir.join(label, 'FlutterXcode')
-
   create_ios_sdk_cmd = [
     checkout.join('sky/tools/create_ios_sdk.py'),
     '--dst',
@@ -227,15 +225,22 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
   ]
   api.step('Create iOS %s SDK' % label, create_ios_sdk_cmd, cwd=checkout)
 
-  # Zip the whole thing and upload it to cloud storage:
-  flutter_zip = out_dir.join(label, 'FlutterXcode.zip')
-  api.zip.directory('Archive FlutterXcode %s' % label, deploy_dir, flutter_zip)
+  # Zip the Xcode project and upload it to cloud storage:
+  api.zip.directory('Archive FlutterXcode %s' % label,
+    deploy_dir,
+    out_dir.join(label, 'FlutterXcode.zip'))
+
+  # Zip Flutter.framework and upload it to cloud storage:
+  api.zip.directory('Archive Flutter.framework for %s' % label,
+    deploy_dir.join('Tools/common/Flutter.framework'),
+    out_dir.join(label, 'Flutter.framework.zip'))
 
   UploadArtifacts(api, bucket_name, [
     'dart/runtime/bin/dart_io_entries.txt',
     'sky/engine/bindings/dart_vm_entry_points.txt',
     'sky/engine/bindings/snapshot.dart',
     'out/%s/clang_x64/gen_snapshot' % device_out,
+    'out/%s/Flutter.framework.zip' % label,
     'out/%s/FlutterXcode.zip' % label,
   ])
 
