@@ -428,7 +428,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
         web_template_globals=web_template_globals,
         **kwargs))
 
-  # Add a status logger, which is only active if '.logstatus' is touched.
+  # Add a status logger.
   c['status'].append(status_logger.StatusEventLogger())
 
   # Keep last build logs, the default is too low.

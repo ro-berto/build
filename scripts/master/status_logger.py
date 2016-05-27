@@ -35,88 +35,59 @@ class StatusEventLogger(StatusReceiverMultiService):
 
   DEFAULT_LOGGING_IGNORE_BASEDIR = False
 
-  def __init__(self, logfile='status.log', configfile='.logstatus',
-               basedir=None, event_logging_dir=None):
+  def __init__(self, basedir=None, event_logging_dir=None,
+               event_logfile=None, ts_mon_logfile=None,
+               logging_ignore_basedir=None, event_logging=None):
     """Create a StatusEventLogger.
 
     Args:
-      logfile: base filename for events to be written to.
-      configfile: the name of the configuration file.
       basedir: the basedir of the configuration and log files. Set to the
                service's parent directory by default, mainly overridden for
                testing.
       event_logging_dir: directory where to write events. This object adds the
                master name to the path. Mainly overridden for testing.
+      event_logfile: file name for writing events.
+      ts_mon_logfile: file name for writing ts_mon metrics.
+      logging_ignore_basedir (bool): when True, do not prepend
+               event_logging_dir to event_logfile and ts_mon_logfile.
+      event_logging (bool or None): enables logging events to event pipeline.
+               Default: enabled.
     """
-    self._logfile = self._original_logfile = logfile
-    self._configfile = configfile
     self._basedir = basedir
     self.master_dir = os.path.basename(os.path.abspath(os.curdir))
+
+    self.logging_ignore_basedir = (
+        logging_ignore_basedir or self.DEFAULT_LOGGING_IGNORE_BASEDIR)
 
     self._event_logging_dir = os.path.join(
       event_logging_dir or '/var/log/chrome-infra',
       'status_logger-' + self.master_dir)
 
-    self._event_logfile = os.path.join(self._event_logging_dir, 'events.log')
-    self._ts_mon_logfile = os.path.join(self._event_logging_dir, 'ts_mon.log')
+    event_logfile = event_logfile or 'events.log'
+    ts_mon_logfile = ts_mon_logfile or 'ts_mon.log'
 
-    # These are defaults which may be overridden.
-    self.logging_ignore_basedir = self.DEFAULT_LOGGING_IGNORE_BASEDIR
+    if not self.logging_ignore_basedir:
+      event_logfile = os.path.join(self._event_logging_dir, event_logfile)
+      ts_mon_logfile = os.path.join(self._event_logging_dir, ts_mon_logfile)
+
+    self._event_logfile = event_logfile
+    self._ts_mon_logfile = ts_mon_logfile
 
     # Will be initialized in startService.
-    self.logger = None
     self.event_logger = None
     self.ts_mon_logger = None
     self.status = None
-    self._active = False
     self._last_checked_active = 0
-    self._logging = False
-    self._event_logging = False
-    self._ts_mon_logging = False
+    self._event_logging = event_logging if event_logging is not None else True
     # Can't use super because StatusReceiverMultiService is an old-style class.
     StatusReceiverMultiService.__init__(self)
 
   def as_dict(self):
     return {
         'basedir': self.basedir,
-        'configfile': self.configfile,
-        'file_logging': self._logging,
         'event_logging': self._event_logging,
-        'ts_mon_logging': self._ts_mon_logging,
-        'logfile': self.logfile,
         'logging_ignore_basedir': self.logging_ignore_basedir,
     }
-
-  def _configure(self, config_data):
-    old_config = self.as_dict()
-
-    self._logging = config_data.get(
-        'file_logging', True)  # Preserve old behavior.
-    self._event_logging = config_data.get('event_logging',
-                                          self._event_logging)
-    self._ts_mon_logging = config_data.get('ts_mon_logging',
-                                           self._ts_mon_logging)
-    self._logfile = config_data.get(
-        'logfile', self._original_logfile)
-    self.logging_ignore_basedir = config_data.get(
-        'logging_ignore_basedir', self.DEFAULT_LOGGING_IGNORE_BASEDIR)
-
-    new_config = self.as_dict()
-    if new_config != old_config:
-      twisted_log.msg(
-          'Configuration change detected. Old:\n%s\n\nNew:\n%s\n' % (
-              json.dumps(old_config, sort_keys=True, indent=2),
-              json.dumps(new_config, sort_keys=True, indent=2)))
-
-    # Clean up if needed.
-    if not old_config['file_logging'] and new_config['file_logging']:
-      self._create_logger()
-
-    if not old_config['event_logging'] and new_config['event_logging']:
-      self._create_event_logger()
-
-    if not old_config['ts_mon_logging'] and new_config['ts_mon_logging']:
-      self._create_ts_mon_logger()
 
   @staticmethod
   def _get_requested_at_millis(build):
@@ -127,7 +98,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     """Returns dynamic or preset basedir.
 
     self.parent doesn't exist until the service is running, so this has to be
-    here instead of precomputing the logfile and configfile in __init__.
+    here instead of precomputing the logfile in __init__.
     """
     return self._basedir or self.parent.basedir
 
@@ -138,50 +109,6 @@ class StatusEventLogger(StatusReceiverMultiService):
     else:
       full_filename = os.path.join(self.basedir, filename)
     return chromium_utils.AbsoluteCanonicalPath(full_filename)
-
-  @property
-  def configfile(self):
-    return self._canonical_file(self._configfile)
-
-  @property
-  def logfile(self):
-    return self._canonical_file(
-        self._logfile, ignore_basedir=self.logging_ignore_basedir)
-
-  @property
-  def active(self):
-    now = time.time()
-    # Cache the value for self._active for one minute.
-    if now - self._last_checked_active > 60:
-      active_before = self._active
-      self._active = os.path.isfile(self.configfile)
-
-      if not self._active and active_before:
-        twisted_log.msg('Disabling status_logger.')
-
-      if self._active:
-        # Test if it parses as json, otherwise use defaults.
-        data = {}
-        try:
-          with open(self.configfile) as f:
-            data = json.load(f)
-        except ValueError as err:
-          twisted_log.msg("status_logger config file parsing failed: %s\n%s"
-                          % (self.configfile, err), logLevel=logging.ERROR)
-        self._configure(data)
-
-        if not active_before:
-          twisted_log.msg(
-              'Enabling status_logger. file_logger: %s / event_logging: %s '
-              '/ ts_mon_logging: %s' % (
-              self._logging, self._event_logging, self._ts_mon_logging))
-      else:
-        self._configure({'file_logging': False,
-                         'event_logging': False,
-                         'ts_mon_logging': False})  # Reset to defaults.
-
-      self._last_checked_active = now
-    return self._active
 
   def send_build_result(
       self, scheduled, started, finished, builder_name, bot_name, result,
@@ -247,7 +174,7 @@ class StatusEventLogger(StatusReceiverMultiService):
                        result=None, extra_result_code=None, patch_url=None):
     """Log a build/step event for event_mon."""
 
-    if self.active and self._event_logging:
+    if self._event_logging:
       # List options to pass to send_monitoring_event, without the --, to save
       # a bit of space.
       d = {'event-mon-timestamp-kind': timestamp_kind,
@@ -314,7 +241,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     formatter = logging.Formatter('%(message)s')
 
     if event_logging_dir_exists:
-      # Use delay=True so we don't open an empty file while self.active=False.
+      # Use delay=True so we don't unnecessary open a new file.
       # Also use WatchedFileHandler because it'll be rotated by an external
       # process.
       handler = logging.handlers.WatchedFileHandler(self._ts_mon_logfile,
@@ -346,7 +273,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     formatter = logging.Formatter('%(message)s')
 
     if event_logging_dir_exists:
-      # Use delay=True so we don't open an empty file while self.active=False.
+      # Use delay=True so we don't unnecessary open a new file.
       handler = TimedRotatingFileHandler(self._event_logfile, backupCount=120,
                                          when='M', interval=1, delay=True)
     else:
@@ -354,26 +281,6 @@ class StatusEventLogger(StatusReceiverMultiService):
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     self.event_logger = logger
-
-  def _create_logger(self):
-    logger = logging.getLogger(__name__)
-    # Remove handlers that may already exist. This is useful when changing the
-    # log file name.
-    for handler in logger.handlers:
-      handler.flush()
-      logger.handlers = []
-
-    logger.propagate = False
-    logger.setLevel(logging.INFO)
-    # %(bbEvent)19s because builderChangedState is 19 characters long
-    formatter = logging.Formatter('%(asctime)s - %(bbEvent)19s - %(message)s')
-    # Use delay=True so we don't open an empty file while self.active=False.
-    handler = TimedRotatingFileHandler(
-        self._canonical_file(self.logfile),
-        when='H', interval=1, delay=True)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    self.logger = logger
 
   def _get_patch_url(self, build_properties):
     # TODO(sergiyb): Add support for Gerrit.
@@ -388,7 +295,7 @@ class StatusEventLogger(StatusReceiverMultiService):
 
   def startService(self):
     """Start the service and subscribe for updates."""
-    self._create_logger()
+    twisted_log.msg('status_logger: startService()')
     self._create_event_logger()
     self._create_ts_mon_logger()
 
@@ -396,38 +303,17 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.status = self.parent.getStatus()
     self.status.subscribe(self)
 
-  def log(self, event, message, *args):
-    """Simple wrapper for log. Passes string formatting args through."""
-    if self.active and self._logging:
-      self.logger.info(message, *args, extra={'bbEvent': event})
-
-  def requestSubmitted(self, request):
-    builderName = request.getBuilderName()
-    self.log('requestSubmitted', '%s, %r', builderName, request)
-
-  def requestCancelled(self, builder, request):
-    builderName = builder.getName()
-    self.log('requestCancelled', '%s, %r', builderName, request)
-
-  def buildsetSubmitted(self, buildset):
-    reason = buildset.getReason()
-    self.log('buildsetSubmitted', '%r, %s', buildset, reason)
-
+  # Unused, but is required by the API to enable other events.
   def builderAdded(self, builderName, builder):
-    # Use slavenames rather than getSlaves() to just get strings.
-    slaves = builder.slavenames
-    self.log('builderAdded', '%s, %r', builderName, slaves)
+    twisted_log.msg('status_logger: builderAdded()')
     # Must return self in order to subscribe to builderChangedState and
     # buildStarted/Finished events.
     return self
 
-  def builderChangedState(self, builderName, state):
-    self.log('builderChangedState', '%s, %r', builderName, state)
-
   def buildStarted(self, builderName, build):
+    twisted_log.msg('status_logger: buildStarted()')
     build_number = build.getNumber()
     bot = build.getSlavename()
-    self.log('buildStarted', '%s, %d, %s', builderName, build_number, bot)
     started, _ = build.getTimes()
     self.send_build_event(
         'BEGIN', started * 1000, 'BUILD', bot, builderName, build_number,
@@ -436,20 +322,13 @@ class StatusEventLogger(StatusReceiverMultiService):
     # Must return self in order to subscribe to stepStarted/Finished events.
     return self
 
-  def buildETAUpdate(self, build, ETA):
-    # We don't actually care about ETA updates; they happen on a periodic clock.
-    pass
-
-  def changeAdded(self, change):
-    self.log('changeAdded', '%r', change)
-
   def stepStarted(self, build, step):
+    twisted_log.msg('status_logger: stepStarted()')
     bot = build.getSlavename()
     builder_name = build.getBuilder().name
     build_number = build.getNumber()
     step_name = step.getName()
     step_text = ' '.join(step.getText())
-    self.log('stepStarted', '%s, %d, %s', builder_name, build_number, step_name)
     started, _ = step.getTimes()
     self.send_build_event(
         'BEGIN', started * 1000, 'STEP', bot, builder_name, build_number,
@@ -459,63 +338,13 @@ class StatusEventLogger(StatusReceiverMultiService):
     # Must return self in order to subscribe to logStarted/Finished events.
     return self
 
-  def stepTextChanged(self, build, step, text):
-    build_name = build.getBuilder().name
-    build_number = build.getNumber()
-    step_name = step.getName()
-    self.log('stepTextChanged', '%s, %d, %s, %s',
-             build_name, build_number, step_name, text)
-
-  def stepText2Changed(self, build, step, text2):
-    build_name = build.getBuilder().name
-    build_number = build.getNumber()
-    step_name = step.getName()
-    self.log('stepText2Changed', '%s, %d, %s, %s',
-             build_name, build_number, step_name, text2)
-
-  def stepETAUpdate(self, build, step, ETA, expectations):
-    # We don't actually care about ETA updates; they happen on a periodic clock.
-    pass
-
-  def logStarted(self, build, step, log):
-    build_name = build.getBuilder().name
-    build_number = build.getNumber()
-    step_name = step.getName()
-    log_name = log.getName()
-    log_file = log.filename
-    self.log('logStarted', '%s, %d, %s, %s, %s',
-             build_name, build_number, step_name, log_name, log_file)
-    # Create an attr on the stateful log object to count its chunks.
-    # pylint: disable=protected-access
-    log.__num_chunks = 0
-    # pylint: enable=protected-access
-    # Must return self in order to subscribe to logChunk events.
-    return self
-
-  def logChunk(self, _build, _step, log, _channel, _text):
-    # Like the NSA, we only want to process metadata.
-    log.__num_chunks += 1
-
-  def logFinished(self, build, step, log):
-    build_name = build.getBuilder().name
-    build_number = build.getNumber()
-    step_name = step.getName()
-    log_name = log.getName()
-    log_file = log.filename
-    # Access to protected member __num_chunks. pylint: disable=W0212
-    log_chunks = log.__num_chunks
-    self.log('logFinished', '%s, %d, %s, %s, %s, %d',
-             build_name, build_number, step_name,
-             log_name, log_file, log_chunks)
-
   def stepFinished(self, build, step, results):
+    twisted_log.msg('status_logger: stepFinished()')
     builder_name = build.getBuilder().name
     build_number = build.getNumber()
     bot = build.getSlavename()
     step_name = step.getName()
     step_text = ' '.join(step.getText())
-    self.log('stepFinished', '%s, %d, %s, %r',
-             builder_name, build_number, step_name, results)
     _, finished = step.getTimes()
     self.send_build_event(
         'END', finished * 1000, 'STEP', bot, builder_name, build_number,
@@ -538,10 +367,9 @@ class StatusEventLogger(StatusReceiverMultiService):
       subproject_tag)
 
   def buildFinished(self, builderName, build, results):
+    twisted_log.msg('status_logger: buildFinished()')
     build_number = build.getNumber()
     bot = build.getSlavename()
-    self.log('buildFinished', '%s, %d, %s, %r',
-             builderName, build_number, bot, results)
     started, finished = build.getTimes()
 
     # Calculate when build was scheduled if possible. Use build started
@@ -594,12 +422,3 @@ class StatusEventLogger(StatusReceiverMultiService):
         buildbot.status.results.Results[results],
         project_id, subproject_tag, steps=steps_to_send,
         pre_test_time_s=pre_test_time_s)
-
-  def builderRemoved(self, builderName):
-    self.log('builderRemoved', '%s', builderName)
-
-  def slaveConnected(self, slaveName):
-    self.log('slaveConnected', '%s', slaveName)
-
-  def slaveDisconnected(self, slaveName):
-    self.log('slaveDisconnected', '%s', slaveName)
