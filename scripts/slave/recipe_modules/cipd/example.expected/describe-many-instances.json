@@ -324,6 +324,31 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/cipd/cipd",
+      "create",
+      "--pkg-def",
+      "[SLAVE_BUILD]/fake-package.yaml",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--service-account-json",
+      "fake-credentials.json",
+      "--ref",
+      "fake-ref-1",
+      "--ref",
+      "fake-ref-2",
+      "--tag",
+      "fake_tag_1:fake_value_1",
+      "--tag",
+      "fake_tag_2:fake_value_2"
+    ],
+    "name": "create fake-package.yaml",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
       "set-tag",
       "fake-package",
       "--version",

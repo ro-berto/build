@@ -50,6 +50,12 @@ def RunSteps(api):
                     tags={'fake_tag_1': 'fake_value_1',
                           'fake_tag_2': 'fake_value_2'})
 
+  # Create (build & register).
+  api.cipd.create(api.path['slave_build'].join('fake-package.yaml'),
+                  refs=['fake-ref-1', 'fake-ref-2'],
+                  tags={'fake_tag_1': 'fake_value_1',
+                        'fake_tag_2': 'fake_value_2'})
+
   # Set tag or ref of an already existing package.
   api.cipd.set_tag('fake-package',
                    version='long/weird/ref/which/doesn/not/fit/into/40chars',

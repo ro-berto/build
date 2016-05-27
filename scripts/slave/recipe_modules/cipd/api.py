@@ -98,6 +98,28 @@ class CIPDApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.test_api.example_register(package_name)
     )
 
+  def create(self, pkg_def, refs=None, tags=None):
+    """Creates a package based on YAML package definition file.
+
+    This builds and uploads the package in one step.
+    """
+    assert self._cipd_executable
+    cmd = [
+      self._cipd_executable,
+      'create',
+      '--pkg-def', pkg_def,
+      '--json-output', self.m.json.output(),
+    ]
+    if self._cipd_credentials:
+      cmd.extend(['--service-account-json', self._cipd_credentials])
+    if refs:
+      for ref in refs:
+        cmd.extend(['--ref', ref])
+    if tags:
+      for tag, value in sorted(tags.items()):
+        cmd.extend(['--tag', '%s:%s' % (tag, value)])
+    return self.m.step('create %s' % self.m.path.basename(pkg_def), cmd)
+
   def ensure(self, root, packages):
     """Ensures that packages are installed in a given root dir.
 
