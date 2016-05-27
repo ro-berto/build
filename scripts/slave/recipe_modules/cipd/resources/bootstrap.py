@@ -20,13 +20,13 @@ CIPD_BACKEND_URL = 'https://chrome-infra-packages.appspot.com'
 
 # ./cipd resolve \
 #     infra/tools/cipd/ \
-#     -version=git_revision:40a69b87c6c49c529bc3a1e57f099bddad71e38a
+#     -version=git_revision:768586a9aa72fe6a41a8a0205ed56ceb1495625c
 CLIENT_VERSIONS = {
-  'linux-386': '1d44a12b8bbea451ccc42a7409bcb0b6e2d7ebc8',
-  'linux-amd64': 'ec815bd831e9d2117620bb890af9edd9a8a3e4e4',
-  'mac-amd64': '65a72d248166409c2db79e5c2f2a44044834454a',
-  'windows-386': '386dfc4c3ca4be2d7e6ff3c87c17d9e170a3827a',
-  'windows-amd64': '93f58713e3625baf88f02d831a1d36ed13815c51',
+  'linux-386': '3f5d6d3906c3b2c6a057d1ab1634ac06aa418708',
+  'linux-amd64': '1ea0b6b254ad3f546c826dd3e437798ace2c2480',
+  'mac-amd64': 'c111be343c692e5285113a6b1c999887adbb268e',
+  'windows-386': 'dc3d1bd5b4b93945640bac4bb047c333a8fa12fd',
+  'windows-amd64': 'bccdb9a605037e3dd2a8a64e79e08f691a6f159d',
 }
 
 
