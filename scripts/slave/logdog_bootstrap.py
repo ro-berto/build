@@ -52,7 +52,8 @@ _STABLE_CIPD_TAG = 'git_revision:c64d92cc5a23f78580ec803adff517cdb49f0d2b'
 #
 # Loaded by '_get_platform'.
 Platform = collections.namedtuple('Platform', (
-    'service_host', 'viewer_host', 'max_buffer_age', 'butler', 'annotee',
+    'service_host', 'viewer_host', 'max_buffer_age',
+    'butler', 'butler_relpath', 'annotee', 'annotee_relpath',
     'credential_path', 'streamserver'))
 
 
@@ -70,6 +71,8 @@ _PLATFORM_CONFIG = {
     'credential_path': ('/creds/service_accounts/'
                         'service-account-luci-logdog-publisher.json'),
     'streamserver': 'unix',
+    'butler_relpath': 'logdog_butler',
+    'annotee_relpath': 'logdog_annotee',
   },
   ('linux', 32): {
     'butler': 'infra/tools/luci/logdog/butler/linux-386',
@@ -85,6 +88,8 @@ _PLATFORM_CONFIG = {
     'credential_path': ('/creds/service_accounts/'
                         'service-account-luci-logdog-publisher.json'),
     'streamserver': 'unix',
+    'butler_relpath': 'logdog_butler',
+    'annotee_relpath': 'logdog_annotee',
   },
   ('mac', 64): {
     'butler': 'infra/tools/luci/logdog/butler/mac-386',
@@ -96,6 +101,8 @@ _PLATFORM_CONFIG = {
     'credential_path': ('c:\\creds\\service_accounts\\'
                         'service-account-luci-logdog-publisher.json'),
     'streamserver': 'net.pipe',
+    'butler_relpath': 'logdog_butler.exe',
+    'annotee_relpath': 'logdog_annotee.exe',
   },
   ('win', 32): {
     'butler': 'infra/tools/luci/logdog/butler/windows-386',
@@ -420,12 +427,21 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       raise NotBootstrapped('No value for [%s]' % (title,))
     return v
 
-  # TODO(dnj): Consider moving this to a permanent directory on the bot so we
-  #            don't CIPD-refresh each time.
+  # Install our Butler/Annotee packages from CIPD.
   cipd_path = os.path.join(basedir, '.recipe_cipd')
   butler, annotee = _install_cipd(cipd_path,
-      *(cipd.CipdPackage(b, params.cipd_tag)
-          for b in (plat.butler, plat.annotee)))
+      # butler
+      cipd.CipdBinary(
+          package=cipd.CipdPackage(name=plat.butler, version=params.cipd_tag),
+          relpath=plat.butler_relpath,
+      ),
+
+      # annotee
+      cipd.CipdBinary(
+          package=cipd.CipdPackage(name=plat.annotee, version=params.cipd_tag),
+          relpath=plat.annotee_relpath,
+      ),
+  )
 
   butler = var('butler', opts.logdog_butler_path, butler)
   if not os.path.isfile(butler):
