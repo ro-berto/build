@@ -260,6 +260,8 @@ class V8Api(recipe_api.RecipeApi):
     # TODO(machenbach): Make this the default on windows.
     if self.m.chromium.c.gyp_env.GYP_MSVS_VERSION:
       env['GYP_MSVS_VERSION'] = self.m.chromium.c.gyp_env.GYP_MSVS_VERSION
+    if self.m.chromium.c.project_generator.tool != 'gyp':
+      env['GYP_CHROMIUM_NO_ACTION'] = 1
     self.m.chromium.runhooks(env=env, **kwargs)
 
   def peek_gn(self):
@@ -385,6 +387,8 @@ class V8Api(recipe_api.RecipeApi):
 
   def compile(self, **kwargs):
     self.m.chromium.ensure_goma()
+    if self.m.chromium.c.project_generator.tool == 'gn':
+      self.m.chromium.run_gn(use_goma=True)
     self.m.chromium.compile(**kwargs)
     self.isolate_tests()
 
