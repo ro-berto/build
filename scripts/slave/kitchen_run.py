@@ -30,33 +30,6 @@ from slave import update_scripts
 LOGGER = logging.getLogger('kitchen_run')
 
 
-KITCHEN_CIPD_VERSION = 'latest'
-
-
-CIPD_BINARIES = {
-  ('linux', 32): cipd.CipdBinary(
-      cipd.CipdPackage('infra/tools/luci/kitchen/linux-386',
-                       KITCHEN_CIPD_VERSION),
-      'kitchen'),
-  ('linux', 64): cipd.CipdBinary(
-      cipd.CipdPackage('infra/tools/luci/kitchen/linux-amd64',
-                       KITCHEN_CIPD_VERSION),
-      'kitchen'),
-  ('mac', 64): cipd.CipdBinary(
-      cipd.CipdPackage('infra/tools/luci/kitchen/mac-amd64',
-                       KITCHEN_CIPD_VERSION),
-      'kitchen'),
-  ('win', 32): cipd.CipdBinary(
-      cipd.CipdPackage('infra/tools/luci/kitchen/windows-386',
-                       KITCHEN_CIPD_VERSION),
-      'kitchen.exe'),
-  ('win', 64): cipd.CipdBinary(
-      cipd.CipdPackage('infra/tools/luci/kitchen/windows-amd64',
-                       KITCHEN_CIPD_VERSION),
-      'kitchen.exe'),
-}
-
-
 def _call(cmd, **kwargs):
   LOGGER.info('Executing command: %s', cmd)
   exit_code = subprocess.call(cmd, **kwargs)
@@ -64,14 +37,12 @@ def _call(cmd, **kwargs):
   return exit_code
 
 
-def _install_cipd_packages(path, *binaries):
-  """Bootstraps CIPD in |path| and installs requested |binaries|.
+def _install_cipd_packages(path, *packages):
+  """Bootstraps CIPD in |path| and installs requested |packages|.
 
   Args:
     path (str): The CIPD installation root.
-    binaries (list of CipdBinary): The set of CIPD binaries to install.
-
-  Returns (list): The paths to the binaries.
+    packages (list of CipdPackage): The set of CIPD packages to install.
   """
   cmd = [
       sys.executable,
@@ -79,13 +50,12 @@ def _install_cipd_packages(path, *binaries):
       '--dest-directory', path,
       '-vv' if logging.getLogger().level == logging.DEBUG else '-v',
   ]
-  for b in binaries:
-    cmd += ['-P', '%s@%s' % (b.package.name, b.package.version)]
+  for p in packages:
+    cmd += ['-P', '%s@%s' % (p.name, p.version)]
 
   exit_code = _call(cmd)
   if exit_code != 0:
     raise Exception('Failed to install CIPD packages.')
-  return [os.path.join(path, b.relpath) for b in binaries]
 
 
 def main(argv):
@@ -109,8 +79,8 @@ def main(argv):
 
   basedir = os.getcwd()
   cipd_path = os.path.join(basedir, '.kitchen_cipd')
-  (kitchen,) = _install_cipd_packages(
-      cipd_path, CIPD_BINARIES[infra_platform.get()])
+  _install_cipd_packages(
+      cipd_path, cipd.CipdPackage('infra/recipes-py', 'latest'))
 
   with robust_tempdir.RobustTempdir(
       prefix='.kitchen_run', leak=args.leak) as rt:
@@ -135,12 +105,16 @@ def main(argv):
     monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
     return _call([
-        kitchen, 'cook',
-        '-repository', args.repository,
-        '-revision', args.revision,
-        '-recipe', args.recipe,
-        '-properties-file', properties_file,
-        '-workdir', tempdir,
+        sys.executable,
+        os.path.join(cipd_path, 'recipes.py'),
+        'remote_run',
+        '--repository', args.repository,
+        '--revision', args.revision,
+        '--workdir', os.path.join(tempdir, 'remote_run_workdir'),
+        '--',
+        '--properties-file', properties_file,
+        '--workdir', os.path.join(tempdir, 'run_workdir'),
+        args.recipe,
     ])
 
 
