@@ -84,6 +84,60 @@
     "name": "cleanup_temp"
   },
   {
+    "cmd": [],
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "--platform",
+      "linux-386",
+      "--dest-directory",
+      "[SLAVE_BUILD]/cipd",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_goma.install cipd",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "ensure",
+      "--root",
+      "[CACHE]/cipd/goma",
+      "--list",
+      "infra_internal/goma/client/linux-386 release",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -132,7 +186,7 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[CACHE]/cipd/goma",
       "--"
     ],
     "env": {
@@ -496,13 +550,70 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/cipd/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisect a0.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Bisect a0.ensure_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "--platform",
+      "linux-386",
+      "--dest-directory",
+      "[SLAVE_BUILD]/cipd",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "Bisect a0.ensure_goma.install cipd",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "ensure",
+      "--root",
+      "[CACHE]/cipd/goma",
+      "--list",
+      "infra_internal/goma/client/linux-386 release",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "name": "Bisect a0.ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -555,7 +666,7 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[CACHE]/cipd/goma",
       "--",
       "d8"
     ],
@@ -691,13 +802,70 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/cipd/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisect a2.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Bisect a2.ensure_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "--platform",
+      "linux-386",
+      "--dest-directory",
+      "[SLAVE_BUILD]/cipd",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "Bisect a2.ensure_goma.install cipd",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "ensure",
+      "--root",
+      "[CACHE]/cipd/goma",
+      "--list",
+      "infra_internal/goma/client/linux-386 release",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "name": "Bisect a2.ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -750,7 +918,7 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[CACHE]/cipd/goma",
       "--",
       "d8"
     ],
@@ -921,13 +1089,70 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/cipd/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisect a1.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Bisect a1.ensure_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "--platform",
+      "linux-386",
+      "--dest-directory",
+      "[SLAVE_BUILD]/cipd",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "Bisect a1.ensure_goma.install cipd",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "ensure",
+      "--root",
+      "[CACHE]/cipd/goma",
+      "--list",
+      "infra_internal/goma/client/linux-386 release",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "name": "Bisect a1.ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -980,7 +1205,7 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[CACHE]/cipd/goma",
       "--",
       "d8"
     ],

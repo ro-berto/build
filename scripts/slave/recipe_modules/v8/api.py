@@ -384,6 +384,7 @@ class V8Api(recipe_api.RecipeApi):
           self.upload_isolated_json()
 
   def compile(self, **kwargs):
+    self.m.chromium.ensure_goma()
     self.m.chromium.compile(**kwargs)
     self.isolate_tests()
 
