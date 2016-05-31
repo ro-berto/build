@@ -8,7 +8,9 @@
       "--outfile",
       "/path/to/tmp/",
       "--headers-json",
-      "{\"Authorization\": \"Bearer ya2930948320948203480=\"}"
+      "{\"Authorization\": \"Bearer ya2930948320948203480=\"}",
+      "--attempts",
+      "3"
     ],
     "name": "Get luci-config projects"
   },
@@ -21,7 +23,9 @@
       "--outfile",
       "/path/to/tmp/",
       "--headers-json",
-      "{\"Authorization\": \"Bearer ya2930948320948203480=\"}"
+      "{\"Authorization\": \"Bearer ya2930948320948203480=\"}",
+      "--attempts",
+      "3"
     ],
     "name": "Get project 'build' config 'recipes.cfg'"
   },
