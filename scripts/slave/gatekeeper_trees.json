@@ -32,7 +32,7 @@
         "status-url": "https://chromium-status.appspot.com",
         "track-revisions": true
     },
-    "chromium_android": {
+    "android": {
         "open-tree": false,
         "set-status": false,
         "masters": {
