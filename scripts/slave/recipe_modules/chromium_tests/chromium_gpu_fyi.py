@@ -352,7 +352,8 @@ SPEC = {
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'win',
+        'TARGET_BITS': 64,
       },
       'compile_targets': [
         'all',

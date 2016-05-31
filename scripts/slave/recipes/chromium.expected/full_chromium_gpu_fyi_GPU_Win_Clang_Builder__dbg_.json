@@ -125,7 +125,7 @@
       "-u",
       "RECIPE_MODULE[build::cipd]\\resources\\bootstrap.py",
       "--platform",
-      "windows-386",
+      "windows-amd64",
       "--dest-directory",
       "[SLAVE_BUILD]\\cipd",
       "--json-output",
@@ -193,7 +193,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\cipd\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\cipd\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -207,7 +207,7 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Debug",
+      "Debug_x64",
       "--use-src-side-runtest-py",
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
@@ -268,7 +268,7 @@
       "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
-      "//out/Debug"
+      "//out/Debug_x64"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -310,7 +310,7 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "--target",
-      "Debug",
+      "Debug_x64",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
@@ -350,7 +350,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\zip_build.py",
       "--target",
-      "Debug",
+      "Debug_x64",
       "--build-url",
       "gs://chromium-gpu-fyi-archive/chromium.gpu.fyi/GPU Win Clang Builder (dbg)",
       "--build_revision",
