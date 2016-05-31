@@ -172,7 +172,11 @@ class WebRTCApi(recipe_api.RecipeApi):
           test.run(self, suffix='')
 
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
-          self.m.chromium_android.common_tests_final_steps()
+          # TODO(kjellander): Replace the three steps below with a call to
+          # common_tests_final_steps once webrtc:5956 is fixed.
+          self.m.chromium_android.shutdown_device_monitor()
+          self.m.chromium_android.logcat_dump(gs_bucket='chromium-android')
+          self.m.chromium_android.test_report()
 
     with self.m.step.defer_results():
       for test in tests:
