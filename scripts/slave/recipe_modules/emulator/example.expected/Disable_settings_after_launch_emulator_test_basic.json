@@ -166,14 +166,12 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
-      "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "-t",
+      "Debug",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
-      "-t",
-      "Debug",
       "--emulators"
     ],
     "env": {
@@ -190,9 +188,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=sample_isolate_file",
-      "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "--isolate_file_path=sample_isolate_file"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

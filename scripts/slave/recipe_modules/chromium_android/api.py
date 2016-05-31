@@ -286,8 +286,7 @@ class AndroidApi(recipe_api.RecipeApi):
         'spawn_logcat_monitor',
         [self.package_repo_resource('scripts', 'slave', 'daemonizer.py'),
          '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
-         self.m.chromium.c.build_dir.join('logcat'),
-         self.m.adb.adb_path()],
+         self.m.chromium.c.build_dir.join('logcat')],
         env=self.m.chromium.get_env(),
         infra_step=True)
 
@@ -342,9 +341,8 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
     devices_path = self.m.path['build'].join('site_config', '.known_devices')
     args = [
-        '--adb-path', self.m.adb.adb_path(),
-        '--blacklist-file', self.blacklist_file,
         '--json-output', self.m.json.output(),
+        '--blacklist-file', self.blacklist_file,
         '--known-devices-file', devices_path,
     ]
     if restart_usb:
@@ -445,10 +443,9 @@ class AndroidApi(recipe_api.RecipeApi):
                         remove_system_webview=False, emulators=False,
                         **kwargs):
     args = [
-        '--adb-path', self.m.adb.adb_path(),
+        '-t', self.m.chromium.c.BUILD_CONFIG,
         '--blacklist-file', self.blacklist_file,
         '--output-device-blacklist', self.m.json.output(add_json_log=False),
-        '-t', self.m.chromium.c.BUILD_CONFIG,
     ]
     if skip_wipe:
       args.append('--skip-wipe')
@@ -504,7 +501,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                      'android',
                                      'adb_install_apk.py'),
         apk, '-v', '--blacklist-file', self.blacklist_file,
-        '--adb-path', self.m.adb.adb_path(),
     ]
     if devices and isinstance(devices, list):
       for d in devices:
@@ -835,7 +831,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step(
         'stack_tool_for_tombstones',
         [self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
-         '-a', '-s', '-w', '--adb-path', self.m.adb.adb_path()],
+         '-a', '-s', '-w'],
         env=env,
         infra_step=True)
     if self.c.asan_symbolize:
@@ -1296,9 +1292,6 @@ class AndroidApi(recipe_api.RecipeApi):
       step_name: Name of the step.
       args: Testrunner arguments.
     """
-    if not args: # pragma: no cover
-      args = []
-    args.extend(['--adb-path', self.m.adb.adb_path()])
     with self.handle_exit_codes():
       script = self.c.test_runner
       if wrapper_script_suite_name:

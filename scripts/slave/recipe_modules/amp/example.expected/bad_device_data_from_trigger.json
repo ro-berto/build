@@ -56,9 +56,7 @@
       "SampleDeviceOS",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose",
-      "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "--verbose"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
