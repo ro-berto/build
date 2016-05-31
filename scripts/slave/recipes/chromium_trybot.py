@@ -753,10 +753,16 @@ def GenTests(api):
 
   yield (
     api.test('use_webrtc_patch_on_chromium_trybot') +
-    props(buildername='win_chromium_rel_ng',
-          mastername='tryserver.chromium.win',
-          patch_project='webrtc') +
-    api.platform.name('win')
+    props(patch_project='webrtc') +
+    api.platform.name('linux')
+  )
+
+  yield (
+    api.test('use_webrtc_patch_on_chromium_trybot_compile_failure') +
+    props(patch_project='webrtc') +
+    api.platform.name('linux') +
+    suppress_analyze(more_exclusions=['third_party/webrtc/f.*']) +
+    api.step_data('compile (with patch)', retcode=1)
   )
 
   yield (
