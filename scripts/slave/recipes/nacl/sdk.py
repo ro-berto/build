@@ -16,10 +16,13 @@ DEPS = [
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
+  api.chromium.apply_config('mb')
   api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout(force=True)
   api.tryserver.maybe_apply_issue()
   api.chromium.runhooks()
+  api.chromium.run_mb(
+      api.properties.get('mastername'), api.properties.get('buildername'))
   api.chromium.cleanup_temp()
   api.chromium.compile(['chromium_builder_tests'])
   api.python(
