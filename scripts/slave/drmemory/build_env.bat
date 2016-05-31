@@ -5,6 +5,8 @@ setlocal
 :: cmd for loops are really hard, so I hardcoded the list of MSVS paths.
 :: Alternatively we could 'reg query' this key:
 :: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\10.0\Setup\VS;ProductDir
+set vcvars="%PROGRAMFILES%\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
+if exist %vcvars% goto found_vcvars
 set vcvars="%PROGRAMFILES%\Microsoft Visual Studio 11.0\VC\bin\vcvars32.bat"
 if exist %vcvars% goto found_vcvars
 set vcvars="%PROGRAMFILES%\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat"
