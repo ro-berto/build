@@ -16,6 +16,7 @@ DEPS = [
 
 PROPERTIES = {
   'scopes': Property(),
+  'lifetime_sec': Property(),
 }
 
 BUILDERS = freeze({
@@ -28,13 +29,13 @@ BUILDERS = freeze({
 })
 
 
-def RunSteps(api, scopes):
-  _ = api.service_account.get_token('fake-account', scopes=scopes)
+def RunSteps(api, scopes, lifetime_sec):
+  _ = api.service_account.get_token('fake-account', scopes=scopes, lifetime_sec=lifetime_sec)
 
 
 def GenTests(api):
-  def props(scopes=None):
-    return api.properties.generic(scopes=scopes)
+  def props(scopes=None, lifetime_sec=None):
+    return api.properties.generic(scopes=scopes, lifetime_sec=lifetime_sec)
 
   for buildername in BUILDERS:
     platform = BUILDERS[buildername].get('platform')
@@ -52,3 +53,9 @@ def GenTests(api):
            api.step_data('get access token',
                          stdout=api.raw_io.output('MockTokenValueThing')) +
            api.platform(*platform))
+    yield (api.test(buildername + '_with_lifetime_sec') +
+           props(lifetime_sec=60) +
+           api.step_data('get access token',
+                         stdout=api.raw_io.output('MockTokenValueThing')) +
+           api.platform(*platform))
+

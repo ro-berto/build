@@ -25,7 +25,7 @@ class ServiceAccountApi(recipe_api.RecipeApi):
     return self.m.path.join(self.c.accounts_path,
                             'service-account-%s.json' % account)
 
-  def get_token(self, account, scopes=None):
+  def get_token(self, account, scopes=None, lifetime_sec=None):
     if self.c is None:
       self._config_defaults()
     account_file = self.get_json_path(account)
@@ -33,6 +33,8 @@ class ServiceAccountApi(recipe_api.RecipeApi):
            '-service-account-json=' + account_file]
     if scopes:
       cmd += ['-scopes', ' '.join(scopes)]
+    if lifetime_sec is not None:
+      cmd += ['-lifetime',  '%ds' % lifetime_sec]
 
     try:
       # TODO: authutil is to be deployed using cipd.
