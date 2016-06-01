@@ -183,7 +183,7 @@ class DefaultFlavorUtils(object):
     self._skia_api.run(
         self._skia_api.m.python, 'build command_buffer',
         script=script,
-        args=['--chrome-dir', self._skia_api.slave_dir,
+        args=['--chrome-dir', self._skia_api.checkout_root,
               '--output-dir', self.out_dir,
               '--chrome-build-type', self._skia_api.configuration,
               '--no-sync'])
