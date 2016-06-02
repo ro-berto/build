@@ -513,18 +513,34 @@
     "name": "webrtc_nonparallel_tests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--test-platform",
+      "android",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Tests (K Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"parent_buildername\": \"Android32 Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Tests (K Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"parent_buildername\": \"Android32 Builder\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=webrtc_perf_tests",
+      "--perf-id=webrtc-android-tests-nexus5-kitkat",
+      "--test-type=webrtc_perf_tests",
+      "--step-name=webrtc_perf_tests",
+      "--builder-name=Android32 Tests (K Nexus5)",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "--revision=170242",
       "[SLAVE_BUILD]/src/out/Release/bin/run_webrtc_perf_tests",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
     "name": "webrtc_perf_tests"
   },
   {

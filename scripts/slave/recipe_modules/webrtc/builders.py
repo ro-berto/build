@@ -669,6 +669,9 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus4-jellybean',
+        },
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder',
         'testing': {'platform': 'linux'},
@@ -681,6 +684,9 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus5-kitkat',
+        },
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder',
         'testing': {'platform': 'linux'},
@@ -692,6 +698,9 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus6-lollipop',
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder',

@@ -47,13 +47,17 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     tests.extend([
         BaremetalTest('voe_auto_test', revision, args=['--automated']),
         BaremetalTest('video_capture_tests', revision),
-        BaremetalTest('webrtc_perf_tests', revision, perf_test=True),
     ])
+    if not api.m.tryserver.is_tryserver:
+      tests.append(BaremetalTest('webrtc_perf_tests', revision, perf_test=True))
+
   elif test_suite == 'android':
     for test in api.ANDROID_APK_TESTS:
       tests.append(AndroidTest(test))
-    tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
-                                 perf_id=api.c.PERF_ID))
+    if (not api.m.tryserver.is_tryserver and api.c.PERF_ID and
+        api.m.chromium.c.BUILD_CONFIG == 'Release'):
+      tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
+                                   perf_id=api.c.PERF_ID))
     for test_name in api.ANDROID_INSTRUMENTATION_TESTS:
       tests.append(AndroidInstrumentationTest(test_name))
 
@@ -145,26 +149,23 @@ class AndroidPerfTest(Test):
     is entirely different.
   """
 
-  def __init__(self, name, revision, perf_id=None):
+  def __init__(self, name, revision, perf_id):
     super(AndroidPerfTest, self).__init__(name)
     self._revision = revision
     self._perf_id = perf_id
+    assert perf_id, 'You must specify a Perf ID for builders running perf tests'
 
   def run(self, api, suffix):
-    if not self._perf_id or api.m.chromium.c.BUILD_CONFIG == 'Debug':
-      # Run as a normal test for trybots and Debug, without perf data scraping.
-      api.m.chromium_android.run_test_suite(
-          self._name,
-          tool=get_android_tool(api))
-    else:
-      wrapper_script = api.m.chromium.output_dir.join('bin',
-                                                      'run_%s' % self._name)
-      args = ['--verbose']
-      api.add_test(name=self._name,
-                   test=wrapper_script,
-                   args=args,
-                   revision=self._revision,
-                   python_mode=True,
-                   perf_test=True,
-                   perf_dashboard_id=self._name)
+    assert api.m.chromium.c.BUILD_CONFIG == 'Release', (
+        'Perf tests should only be run with Release builds.')
+    wrapper_script = api.m.chromium.output_dir.join('bin',
+                                                    'run_%s' % self._name)
+    args = ['--verbose']
+    api.add_test(name=self._name,
+                 test=wrapper_script,
+                 args=args,
+                 revision=self._revision,
+                 python_mode=True,
+                 perf_test=True,
+                 perf_dashboard_id=self._name)
 
