@@ -244,8 +244,9 @@ class StatusPush(StatusReceiverMultiService):
           log.msg('PubSub: Increasing split to %d', self._splits)
         continue
 
-    # Send message pieces in parallel.
-    return defer.DeferredList(self._client.send(msg) for msg in messages)
+    # Send message pieces in parallel. We need to pass DeferredList a real
+    # list, not a generator.
+    return defer.DeferredList(list(self._client.send(msg) for msg in messages))
 
   @defer.inlineCallbacks
   def _doStatusPush(self, updated_builds):
