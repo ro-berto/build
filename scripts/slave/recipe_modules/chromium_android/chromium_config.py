@@ -209,6 +209,7 @@ def perf(c):
 def cast_builder(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
 
+@CONFIG_CTX()
 def disable_neon(c):  # pragma: no cover
   c.gn_args.append('arm_use_neon=false')
   c.gyp_env.GYP_DEFINES['arm_neon'] = 0
