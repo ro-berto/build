@@ -298,8 +298,6 @@ class AndroidApi(recipe_api.RecipeApi):
         '--', self.resource('spawn_device_monitor.py'),
         self.m.adb.adb_path(),
         json.dumps(self._devices),
-        self.m.properties['mastername'],
-        self.m.properties['buildername'],
         '--blacklist-file', self.blacklist_file
     ]
     self.m.python('spawn_device_monitor', script, args, infra_step=True)

@@ -377,8 +377,6 @@
       "RECIPE_MODULE[build::chromium_android]/resources/spawn_device_monitor.py",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
-      "chromium.perf",
-      "Android Nexus7v2 Perf (3)",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],

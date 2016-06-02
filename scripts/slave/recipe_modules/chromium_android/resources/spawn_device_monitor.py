@@ -66,7 +66,7 @@ def run_adb_command(cmd, timeout=None):
     return subprocess.check_output(cmd)
 
 
-def get_device_args(adb_path, master_name, builder_name, device):
+def get_device_args(adb_path, device):
   bat_charge = None
   bat_temp = None
   cpu_temp = None
@@ -108,29 +108,22 @@ def get_device_args(adb_path, master_name, builder_name, device):
 
   cpu_dict = {'name': "dev/cpu/temperature",
               'value': cpu_temp,
-              'device_id': device,
-              'master': master_name,
-              'builder': builder_name}
+              'device_id': device}
   cpu_temp_args = ['--float', json.dumps(cpu_dict)] if cpu_temp else []
   battery_temp_dict = {'name': 'dev/battery/temperature',
                        'value': bat_temp,
-                       'device_id': device,
-                       'master': master_name,
-                       'builder': builder_name}
+                       'device_id': device}
   bat_temp_args = ['--float', 
                    json.dumps(battery_temp_dict)] if bat_temp else []
   battery_charge_dict = {'name': 'dev/battery/charge',
                          'value': bat_charge,
-                         'device_id': device,
-                         'master': master_name,
-                         'builder': builder_name}
+                         'device_id': device}
   bat_charge_args = ['--float',
                      json.dumps(battery_charge_dict)] if bat_charge else []
   return cpu_temp_args + bat_temp_args + bat_charge_args
 
 
-def scan_blacklist_file(blacklist_file, master_name,
-                        builder_name, devices):
+def scan_blacklist_file(blacklist_file, devices):
   """Scans the blacklist file for device statuses."""
   if os.path.exists(blacklist_file):
     with open(blacklist_file, 'r') as f:
@@ -147,9 +140,7 @@ def scan_blacklist_file(blacklist_file, master_name,
       status = 'unknown'
     bad_device_dict = {'name': 'dev/status',
                        'value': status,
-                       'device_id': bad_device,
-                       'master': master_name,
-                       'builder': builder_name}
+                       'device_id': bad_device}
     args += ['--string', json.dumps(bad_device_dict)]
 
   # Collect the status for 'good' devices
@@ -158,9 +149,7 @@ def scan_blacklist_file(blacklist_file, master_name,
     if good_device not in bad_devices:
       good_device_dict = {'name': 'dev/status',
                           'value': 'good',
-                          'device_id': good_device,
-                          'master': master_name,
-                          'builder': builder_name}
+                          'device_id': good_device}
       args += ['--string', json.dumps(good_device_dict)]
 
   return args
@@ -182,8 +171,6 @@ def main(argv):
   parser.add_argument('adb_path', help='Path to adb binary.')
   parser.add_argument('devices_json',
                       help='Json list of device serials to poll.')
-  parser.add_argument('master_name', help='Name of the buildbot master.')
-  parser.add_argument('builder_name', help='Name of the buildbot builder.')
   parser.add_argument('--blacklist-file', help='Path to device blacklist file.')
   args = parser.parse_args(argv)
 
@@ -193,13 +180,10 @@ def main(argv):
   while True:
     upload_cmd_args = []
     for device in devices:
-      upload_cmd_args += get_device_args(args.adb_path, args.master_name,
-                                         args.builder_name, device)
+      upload_cmd_args += get_device_args(args.adb_path, device)
 
     if args.blacklist_file:
-      upload_cmd_args += scan_blacklist_file(args.blacklist_file,
-                                             args.master_name,
-                                             args.builder_name, devices)
+      upload_cmd_args += scan_blacklist_file(args.blacklist_file, devices)
 
     cmd = [_RUN_PY, 'infra.tools.send_ts_mon_values', '--ts-mon-device-role',
            'temperature_monitor'] + upload_cmd_args
