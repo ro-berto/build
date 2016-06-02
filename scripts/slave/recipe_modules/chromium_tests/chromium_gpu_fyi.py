@@ -776,7 +776,6 @@ SPEC = {
       'use_isolate': False,
       'enable_swarming': False,
     },
-
     'Android Debug (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
@@ -799,6 +798,29 @@ SPEC = {
       },
       'use_isolate': False,
       'enable_swarming': False,
+    },
+    'Android Swarmed Debug (Nexus 5X)': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'arm64_builder_mb',
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_isolated_script,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
     },
     'Android Debug (Nexus 6)': {
       'chromium_config': 'android',
