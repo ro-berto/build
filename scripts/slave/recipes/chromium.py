@@ -842,7 +842,7 @@ def GenTests(api):
 
   yield (
     api.test('tsan') +
-    api.properties.generic(mastername='chromium.memory.fyi',
+    api.properties.generic(mastername='chromium.memory.full',
                            buildername='Linux TSan Tests',
                            parent_buildername='Chromium Linux TSan Builder') +
     api.platform('linux', 64) +
@@ -856,7 +856,7 @@ def GenTests(api):
 
   yield (
     api.test('msan') +
-    api.properties.generic(mastername='chromium.memory.fyi',
+    api.properties.generic(mastername='chromium.memory.full',
                            buildername='Linux MSan Tests',
                            parent_buildername='Chromium Linux MSan Builder') +
     api.platform('linux', 64) +

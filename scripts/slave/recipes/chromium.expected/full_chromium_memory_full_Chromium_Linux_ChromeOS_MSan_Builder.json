@@ -5,9 +5,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "chromium.memory.fyi",
+      "chromium.memory.full",
       "--builder",
-      "Chromium Linux MSan Builder",
+      "Chromium Linux ChromeOS MSan Builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -182,7 +182,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' msan=1 msan_track_origins=2 target_arch=x64 test_isolation_mode=prepare use_goma=1 use_prebuilt_instrumented_libraries=1",
+      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library gomadir='[CACHE]/cipd/goma' msan=1 msan_track_origins=2 target_arch=x64 test_isolation_mode=prepare use_goma=1 use_prebuilt_instrumented_libraries=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -200,7 +200,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Chromium Linux MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.full\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -213,14 +213,14 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.memory.full.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.full.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux MSan Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux ChromeOS MSan Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -263,9 +263,9 @@
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.memory.fyi",
+      "chromium.memory.full",
       "-b",
-      "Chromium Linux MSan Builder",
+      "Chromium Linux ChromeOS MSan Builder",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -395,13 +395,13 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-memory-fyi-archive/chromium.memory.fyi/Chromium Linux MSan Builder",
+      "gs://chromium-memory-full-archive/chromium.memory.full/Chromium Linux ChromeOS MSan Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.full\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.full\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   },
@@ -410,7 +410,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Linux MSan Tests",
+        "builder_name": "Linux ChromeOS MSan Tests",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -430,7 +430,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Linux MSan Tests@@@"
+      "@@@STEP_TEXT@Linux ChromeOS MSan Tests@@@"
     ]
   },
   {

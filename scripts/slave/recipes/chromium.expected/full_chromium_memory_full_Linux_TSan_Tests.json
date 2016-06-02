@@ -5,9 +5,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "chromium.memory.fyi",
+      "chromium.memory.full",
       "--builder",
-      "Chromium Linux ChromeOS MSan Builder",
+      "Linux TSan Tests",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -21,7 +21,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@1111111",
       "--force",
       "--output_manifest"
     ],
@@ -34,7 +34,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"1111111\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -181,8 +181,7 @@
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library gomadir='[CACHE]/cipd/goma' msan=1 msan_track_origins=2 target_arch=x64 test_isolation_mode=prepare use_goma=1 use_prebuilt_instrumented_libraries=1",
+      "GYP_DEFINES": "clang=1 component=static_library disable_nacl=1 gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare tsan=1 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -200,7 +199,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Linux TSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.full\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -213,14 +212,14 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.memory.full.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.full.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux ChromeOS MSan Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux TSan Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -249,138 +248,146 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
-      "--clean-isolated-files"
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/out/Release"
     ],
-    "name": "clean isolated files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "gen",
-      "-m",
-      "chromium.memory.fyi",
-      "-b",
-      "Chromium Linux ChromeOS MSan Builder",
-      "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--swarming-targets-file",
-      "browser_tests\n",
-      "//out/Release"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "generate_build_files",
+    "name": "rmtree build directory",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
+      "--target",
+      "Release",
+      "--build-archive-url",
+      "gs://test-domain/test-archive.zip",
+      "--master-name",
+      "chromium.memory.full",
+      "--build-number",
+      "571"
+    ],
+    "name": "extract build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "clang_revision",
+    "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--build-tool",
-      "ninja",
-      "--build-data-dir",
-      "[ROOT]/build_data_dir",
-      "--compiler",
-      "goma-clang",
-      "--goma-jsonstatus",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--priority",
+      "27",
+      "--shards",
+      "1",
+      "--task-name",
+      "browser_tests/Ubuntu-12.04/ffffffffff/Linux TSan Tests/571",
+      "--dump-json",
       "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "gpu",
+      "none",
+      "--dimension",
+      "os",
+      "Ubuntu-12.04",
+      "--dimension",
+      "pool",
+      "Chrome",
+      "--tag",
+      "buildername:Linux TSan Tests",
+      "--tag",
+      "buildnumber:571",
+      "--tag",
+      "data:ffffffffffffffffffffffffffffffffffffffff",
+      "--tag",
+      "master:chromium.memory.full",
+      "--tag",
+      "name:browser_tests",
+      "--tag",
+      "os:Ubuntu-12.04",
+      "--tag",
+      "project:chromium",
+      "--tag",
+      "purpose:CI",
+      "--tag",
+      "purpose:post-commit",
+      "--tag",
+      "slavename:TestSlavename",
+      "--tag",
+      "stepname:browser_tests on Ubuntu-12.04",
+      "--tag",
+      "tsan:1",
+      "--idempotent",
+      "ffffffffffffffffffffffffffffffffffffffff",
       "--",
-      "browser_tests",
-      "browser_tests_run"
+      "--test-launcher-print-test-stdio=always",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[SLAVE_BUILD]/src/out/Release/browser_tests.isolated.gen.json"
-    ],
-    "name": "isolate tests",
+    "name": "[trigger] browser_tests on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Ubuntu-12.04/ffffffffff/Linux TSan Tests/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Ubuntu-12.04/ffffffffff/Linux TSan Tests/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -389,49 +396,56 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
-      "--target",
-      "Release",
-      "--build-url",
-      "gs://chromium-memory-fyi-archive/chromium.memory.fyi/Chromium Linux ChromeOS MSan Builder",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux ChromeOS MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--shards",
+      "1",
+      "browser_tests/Ubuntu-12.04/ffffffffff/Linux TSan Tests/571"
     ],
-    "name": "package build"
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "browser_tests on Ubuntu-12.04",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
-    "cmd": [],
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "Linux ChromeOS MSan Tests",
-        "properties": {
-          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
-          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
-          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
-          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
-          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
-          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
-          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
-          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
-          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
-          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
-        }
-      }
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "--master-name",
+      "chromium.memory.full",
+      "--builder-name",
+      "Linux TSan Tests",
+      "--build-number",
+      "571",
+      "--test-type",
+      "browser_tests on Ubuntu-12.04",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Linux ChromeOS MSan Tests@@@"
-    ]
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [browser_tests on Ubuntu-12.04]"
   },
   {
     "name": "$result",
