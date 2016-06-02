@@ -8,6 +8,7 @@ import datetime
 import functools
 import json
 import os
+import zlib
 
 from buildbot.status.base import StatusReceiverMultiService
 from master import auth
@@ -54,22 +55,16 @@ class PubSubClient(object):
   def close(self):
     self.resource.stop()
 
-  @defer.inlineCallbacks
   def send(self, data):
     # TODO(hinoka): Sign messages so that they can be verified to originate
     # from buildbot.
     assert self.resource
 
-    encoded_data = base64.b64encode(data)
-    body = { 'messages': [{'data': encoded_data}] }
+    body = { 'messages': [{'data': data }] }
 
-    log.msg('PubSub: Sending %d bytes' % len(encoded_data))
-    try:
-      res = yield self.resource.api.projects.topics.publish(
-          topic=self.topic, body=body)
-      log.msg('PubSub: Send successful %s' % res)
-    except Exception as e:
-      log.msg('PubSub: Send failed: %s' % e)
+    log.msg('PubSub: Sending %d bytes' % len(data))
+    return self.resource.api.projects.topics.publish(
+        topic=self.topic, body=body)
 
 # Annotation that wraps an event handler.
 def event_handler(func):
@@ -101,6 +96,10 @@ class _Build(_BuildBase):
   # Disable "no __init__ method" warning | pylint: disable=W0232
   def __repr__(self):
     return '%s/%s' % (self.builder_name, self.build_number)
+
+
+class MessageTooBigError(Exception):
+  pass
 
 
 class StatusPush(StatusReceiverMultiService):
@@ -159,11 +158,14 @@ class StatusPush(StatusReceiverMultiService):
 
     self.name = name  # Master name, since builds don't include this info.
     self.topic = topic
-    self._client = PubSubClient(self.topic, service_account_file)
+    self._service_account_file = service_account_file
+    self._client = None
     self._status = None
     self._res = None
     self._updated_builds = set()
     self._pushTimer = None
+    self._splits = 1
+    log.msg('Creating PubSub service.')
 
   @staticmethod
   def _getTimeDelta(value):
@@ -184,6 +186,7 @@ class StatusPush(StatusReceiverMultiService):
     self._status.subscribe(self)
 
     # Init the client.
+    self._client = PubSubClient(self.topic, self._service_account_file)
     yield self._client.start()
 
     # Schedule our first push.
@@ -199,6 +202,50 @@ class StatusPush(StatusReceiverMultiService):
 
     # Stop our resource.
     self._client.close()
+
+  @staticmethod
+  def _build_pubsub_message(obj):
+    data = base64.b64encode(zlib.compress(json.dumps(obj)))
+    if len(data) > 9 * 1024 * 1024:
+      # Pubsub's total publish limit per message is 10MB, we want to be below
+      # that.  Making this 9MB to account for potential overhead.
+      raise MessageTooBigError()
+    return data
+
+  def _get_pubsub_messages(self, master, builds):
+    splits = min(self._splits, max(len(builds), 1))
+    for i in xrange(splits):
+      start = int((i) * len(builds) / splits)
+      end = int((i + 1) * len(builds) / splits)
+      data = {}
+      if builds:
+        data['builds'] = builds[start:end]
+      if i == 0:
+        data['master'] = master
+      try:
+        yield self._build_pubsub_message(data)
+      except MessageTooBigError:
+        self._splits += 1
+        raise
+
+  def _send_messages(self, master, builds):
+    done = False
+    while not done:
+      try:
+        messages = list(self._get_pubsub_messages(master, builds))
+        done = True
+      except MessageTooBigError as e:
+        log.msg('PubSub: Unable to send: could not break down: %s.' % (e,))
+        if self._splits >= len(builds):
+          log.err('PubSub: Split greater than number of builds (%d >= %d).' % (
+              self._splits, len(builds)))
+          raise
+        else:
+          log.msg('PubSub: Increasing split to %d', self._splits)
+        continue
+
+    # Send message pieces in parallel.
+    return defer.DeferredList(self._client.send(msg) for msg in messages)
 
   @defer.inlineCallbacks
   def _doStatusPush(self, updated_builds):
@@ -229,11 +276,13 @@ class StatusPush(StatusReceiverMultiService):
     # Add in master builder state into the message.
     master_data = self._getMasterData()
 
-    # Send off the builds.
-    self._client.send(json.dumps({
-        'builds': send_builds,
-        'master': master_data,
-    }))
+    # Split the data into batches because PubSub has a message limit of 10MB.
+    res = yield self._send_messages(master_data, send_builds)
+    for success, result in res:
+      if success:
+        log.msg('PubSub: Send successful: %s' % result)
+      else:
+        log.msg('PubSub: Failed to push: %s' % result)
 
   def _pushTimerExpired(self):
     """Callback invoked when the push timer has expired.
