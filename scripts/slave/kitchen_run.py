@@ -22,6 +22,7 @@ from common import chromium_utils
 from common import env
 from slave import cipd
 from slave import infra_platform
+from slave import logdog_bootstrap
 from slave import monitoring_utils
 from slave import robust_tempdir
 from slave import update_scripts
@@ -75,6 +76,10 @@ def main(argv):
   parser.add_argument('--leak', action='store_true',
       help='Refrain from cleaning up generated artifacts.')
   parser.add_argument('--verbose', action='store_true')
+
+  group = parser.add_argument_group('LogDog Bootstrap')
+  logdog_bootstrap.add_arguments(group)
+
   args = parser.parse_args(argv[1:])
 
   basedir = os.getcwd()
@@ -104,7 +109,7 @@ def main(argv):
 
     monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
-    return _call([
+    recipe_cmd = [
         sys.executable,
         os.path.join(cipd_path, 'recipes.py'),
         'remote_run',
@@ -115,7 +120,28 @@ def main(argv):
         '--properties-file', properties_file,
         '--workdir', os.path.join(tempdir, 'run_workdir'),
         args.recipe,
-    ])
+    ]
+    recipe_return_code = None
+    try:
+      cmd = logdog_bootstrap.bootstrap(rt, args, basedir, tempdir, properties,
+                                       recipe_cmd)
+
+      LOGGER.info('Bootstrapping through LogDog: %s', cmd)
+      rc = _call(cmd)
+      logdog_bootstrap.assert_not_bootstrap_return_code(rc)
+
+      recipe_return_code = rc
+    except logdog_bootstrap.NotBootstrapped as e:
+      LOGGER.info('Not bootstrapped: %s', e.message)
+    except logdog_bootstrap.BootstrapError as e:
+      LOGGER.warning('Could not bootstrap LogDog: %s', e.message)
+    except Exception as e:
+      LOGGER.exception('Exception while bootstrapping LogDog.')
+    finally:
+      if recipe_return_code is None:
+        LOGGER.info('Not using LogDog. Invoking `recipes.py` directly.')
+        recipe_return_code = _call(recipe_cmd)
+    return recipe_return_code
 
 
 def shell_main(argv):
