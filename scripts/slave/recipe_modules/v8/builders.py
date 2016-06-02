@@ -364,7 +364,8 @@ BUILDERS = {
       },
       'V8 Linux64 - debug builder': {
         'gclient_apply_config': ['v8_valgrind'],
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'jsfunfuzz'],
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'jsfunfuzz', 'has_valgrind'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
