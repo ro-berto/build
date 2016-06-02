@@ -17,6 +17,7 @@ BUILDERS = {
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
+        'chromium_apply_config': ['clobber'],
       },
     },
   },
@@ -37,7 +38,7 @@ def RunSteps(api):
   api.chromium.run_mb('chromium.fyi', 'Chromium Windows Analyze',
                       use_goma=False)
 
-  api.chromium.compile(targets=['chrome'], force_clobber=True)
+  api.chromium.compile(targets=['chrome'])
 
 
 def GenTests(api):

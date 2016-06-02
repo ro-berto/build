@@ -6,47 +6,38 @@
 
 # Recipe module dependencies.
 DEPS = [
+  'chromium',
+  'pgo',
   'recipe_engine/platform',
   'recipe_engine/properties',
-  'pgo',
 ]
 
-from recipe_engine import recipe_test_api
 from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
 
 
-PROPERTIES = {
-  'buildername': Property(),
-}
-
-
 TEST_BUILDERS = freeze({
   'chromium_pgo.test' : {
-    'Test builder': {
-      'recipe_config': 'chromium',
-      'chromium_config_instrument': 'chromium_pgo_instrument',
-      'chromium_config_optimize': 'chromium_pgo_optimize',
-      'gclient_config': 'chromium',
-      'clobber': True,
-      'patch_root': 'src',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'testing': {
-        'platform': 'win',
+    'builders': {
+      'Test builder': {
+        'recipe_config': 'chromium',
+        'chromium_config_instrument': 'chromium_pgo_instrument',
+        'chromium_config_optimize': 'chromium_pgo_optimize',
+        'gclient_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'patch_root': 'src',
+        'testing': { 'platform': 'win' },
       },
     },
   }
 })
 
 
-def RunSteps(api, buildername):
-  buildername = api.properties['buildername']
-  mastername = api.properties['mastername']
-  bot_config = TEST_BUILDERS.get(mastername, {}).get(buildername)
-
+def RunSteps(api):
+  _, bot_config = api.chromium.configure_bot(TEST_BUILDERS, [])
   api.pgo.compile_pgo(bot_config)
 
 
@@ -54,8 +45,10 @@ def GenTests(api):
   def _sanitize_nonalpha(text):
     return ''.join(c if c.isalnum() else '_' for c in text)
 
-  for mastername, builders in TEST_BUILDERS.iteritems():
-    for buildername in builders:
+  # Don't use api.chromium.gen_tests_for_builders because that looks at a
+  # builder's name to set the platform, but we want to set 'win'.
+  for mastername in TEST_BUILDERS:
+    for buildername in TEST_BUILDERS[mastername]['builders']:
       yield (
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                  _sanitize_nonalpha(buildername))) +

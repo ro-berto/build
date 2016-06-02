@@ -26,6 +26,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
+        'chromium_apply_config': ['clobber'],
 
         # We need this to pull the Linux sysroots.
         'gclient_apply_config': ['chrome_internal'],
@@ -40,6 +41,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'mac',
           'TARGET_BITS': 64,
         },
+        'chromium_apply_config': ['clobber'],
       },
     },
   },
@@ -51,6 +53,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'win',
           'TARGET_BITS': 32,
         },
+        'chromium_apply_config': ['clobber'],
       },
     },
   },
@@ -69,7 +72,7 @@ def RunSteps(api):
 
   api.chromium.run_mb(mastername, buildername)
 
-  api.chromium.compile(targets=['gn', 'gn_unittests'], force_clobber=True)
+  api.chromium.compile(targets=['gn', 'gn_unittests'])
 
   path_to_binary = str(api.path['checkout'].join('out', 'Release', 'gn'))
   if api.platform.is_win:

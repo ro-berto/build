@@ -16,44 +16,42 @@ DEPS = [
 
 PGO_BUILDERS = freeze({
   'chromium.fyi': {
-    'Chromium Win PGO Builder': {
-      'recipe_config': 'chromium',
-      'chromium_config_instrument': 'chromium_pgo_instrument',
-      'chromium_config_optimize': 'chromium_pgo_optimize',
-      'gclient_config': 'chromium',
-      'clobber': True,
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+    'builders': {
+      'Chromium Win PGO Builder': {
+        'recipe_config': 'chromium',
+        'chromium_config_instrument': 'chromium_pgo_instrument',
+        'chromium_config_optimize': 'chromium_pgo_optimize',
+        'gclient_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': { 'platform': 'win' },
       },
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Chromium Win x64 PGO Builder': {
-      'recipe_config': 'chromium',
-      'chromium_config_instrument': 'chromium_pgo_instrument',
-      'chromium_config_optimize': 'chromium_pgo_optimize',
-      'gclient_config': 'chromium',
-      'clobber': True,
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
+      'Chromium Win x64 PGO Builder': {
+        'recipe_config': 'chromium',
+        'chromium_config_instrument': 'chromium_pgo_instrument',
+        'chromium_config_optimize': 'chromium_pgo_optimize',
+        'gclient_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
       },
     },
   },
   'tryserver.chromium.win': {
-    'win_pgo': {
-      'recipe_config': 'chromium',
-      'chromium_config_instrument': 'chromium_pgo_instrument',
-      'chromium_config_optimize': 'chromium_pgo_optimize',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'testing': {
-        'platform': 'win',
+    'builders': {
+      'win_pgo': {
+        'recipe_config': 'chromium',
+        'chromium_config_instrument': 'chromium_pgo_instrument',
+        'chromium_config_optimize': 'chromium_pgo_optimize',
+        'gclient_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': { 'platform': 'win' },
       },
     },
   },
@@ -61,10 +59,7 @@ PGO_BUILDERS = freeze({
 
 
 def RunSteps(api):
-  buildername = api.properties['buildername']
-  mastername = api.properties['mastername']
-  bot_config = PGO_BUILDERS.get(mastername, {}).get(buildername)
-
+  _, bot_config = api.chromium.configure_bot(PGO_BUILDERS, [])
   api.pgo.compile_pgo(bot_config)
   api.archive.zip_and_upload_build(
       'package build',
@@ -73,14 +68,5 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  def _sanitize_nonalpha(text):
-    return ''.join(c if c.isalnum() else '_' for c in text)
-
-  for mastername, builders in PGO_BUILDERS.iteritems():
-    for buildername in builders:
-      yield (
-        api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
-                                 _sanitize_nonalpha(buildername))) +
-        api.properties.generic(mastername=mastername, buildername=buildername) +
-        api.platform('win', 64)
-      )
+  for test in api.chromium.gen_tests_for_builders(PGO_BUILDERS):
+    yield test

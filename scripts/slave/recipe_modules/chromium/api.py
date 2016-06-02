@@ -155,7 +155,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
-  def compile(self, targets=None, name=None, force_clobber=False, out_dir=None,
+  def compile(self, targets=None, name=None, out_dir=None,
               target=None, **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
@@ -219,9 +219,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--goma-fail-fast', '--goma-disable-local-fallback']
     if self.c.compile_py.ninja_confirm_noop:
       args.append('--ninja-ensure-up-to-date')
-    if (self.m.properties.get('clobber') is not None or
-        self.c.compile_py.clobber or
-        force_clobber):
+    if self.c.compile_py.clobber:
       args.append('--clobber')
     if self.c.compile_py.pass_arch_flag:
       args += ['--arch', self.c.gyp_env.GYP_DEFINES['target_arch']]

@@ -79,6 +79,7 @@ def ConfigureChromiumBuilder(api, recipe_config):
   api.chromium.set_config(recipe_config['chromium_config'],
                           **recipe_config.get('chromium_config_kwargs',
                                               {'BUILD_CONFIG': 'Release'}))
+  api.chromium.apply_config('clobber')
   api.gclient.set_config(recipe_config['gclient_config'],
                          **recipe_config.get('gclient_config_kwargs', {}))
 
@@ -101,6 +102,7 @@ def ConfigureAndroidBuilder(api, recipe_config):
       'base_config', **kwargs)
   api.chromium.set_config('base_config', **kwargs)
   api.chromium.apply_config(recipe_config['chromium_config'])
+  api.chromium.apply_config('clobber')
 
 PROPERTIES = {
   'buildername': Property(),
@@ -132,7 +134,7 @@ def RunSteps(api, buildername):
 
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.runhooks()
-  api.chromium.compile(targets, force_clobber=True, name='First build')
+  api.chromium.compile(targets, name='First build')
   api.isolate.remove_build_metadata()
   if enable_isolate:
     # This archives the results and regenerate the .isolated files.
@@ -142,7 +144,7 @@ def RunSteps(api, buildername):
 
   # Do the second build and move the build artifact to the temp directory.
   api.chromium.runhooks()
-  api.chromium.compile(targets, force_clobber=True, name='Second build')
+  api.chromium.compile(targets, name='Second build')
   api.isolate.remove_build_metadata()
   if enable_isolate:
     # This should be quick if the build is indeed deterministic.

@@ -756,7 +756,7 @@ def chromium_pgo_base(c):
   c.compile_py.default_targets = ['chrome']
 
 #### 'Full' configurations
-@config_ctx(includes=['chromium_pgo_base'])
+@config_ctx(includes=['chromium_pgo_base', 'clobber'])
 def chromium_pgo_instrument(c):
   c.gyp_env.GYP_DEFINES['chrome_pgo_phase'] = 1
   # Some of the binaries needed by the PGO gets copied into the build directory
