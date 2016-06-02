@@ -71,7 +71,7 @@ def mipsel_builder_mb(c):
 def dartium_builder(c):
   c.compile_py.default_targets=['chrome_apk', 'content_shell_apk']
 
-@CONFIG_CTX()
+@CONFIG_CTX(includes=['clobber'])
 def cronet_builder(c):
   c.gyp_env.GYP_DEFINES['disable_brotli_filter'] = 1
   c.gyp_env.GYP_DEFINES['disable_file_support'] = 1
@@ -83,7 +83,6 @@ def cronet_builder(c):
   c.gn_args.append('disable_ftp_support=true')
   c.gn_args.append('enable_websockets=false')
   c.gn_args.append('use_platform_icu_alternatives=true')
-  c.compile_py.clobber = True
   # TODO(jbudorick): Remove {cronet,net}_unittests_apk targets after
   # gn switch is finished.
   c.compile_py.default_targets=['cronet_package',
