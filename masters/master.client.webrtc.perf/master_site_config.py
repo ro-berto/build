@@ -6,11 +6,11 @@
 
 from config_bootstrap import Master
 
-class WebRTCPerf(Master.Master3):
+class WebRTCPerf(Master.Master3a):
   project_name = 'WebRTC Perf'
-  master_port = 20301
-  slave_port = 30301
-  master_port_alt = 25301
+  master_port = 20309
+  slave_port = 30309
+  master_port_alt = 25309
   server_url = 'http://webrtc.googlecode.com'
   project_url = 'http://webrtc.googlecode.com'
   from_address = 'webrtc-cb-perf-watchlist@google.com'
