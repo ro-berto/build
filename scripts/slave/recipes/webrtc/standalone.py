@@ -28,6 +28,7 @@ def RunSteps(api):
     api.ios.host_info()
   webrtc.checkout()
   webrtc.cleanup()
+  api.chromium.ensure_goma()
   api.chromium.runhooks()
   webrtc.check_swarming_version()
 

@@ -146,7 +146,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.swarming.check_client_version()
 
   def compile(self):
-    self.m.chromium.ensure_goma()
     compile_targets = self.recipe_config.get('compile_targets', [])
     self.m.chromium.compile(targets=compile_targets)
 
