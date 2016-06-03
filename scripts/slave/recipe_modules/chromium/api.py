@@ -155,7 +155,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
-  def compile(self, targets=None, name=None, target=None, **kwargs):
+  def compile(self, targets=None, name=None, out_dir=None,
+              target=None, **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -198,6 +199,8 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--goma-service-account-json-file',
             self.m.goma.service_account_json_path,
         ]
+    if out_dir:
+      args += ['--out-dir', out_dir]
     if self.c.compile_py.mode:
       args += ['--mode', self.c.compile_py.mode]
     if self.c.compile_py.goma_dir:
