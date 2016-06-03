@@ -80,38 +80,6 @@
     "name": "unzipping"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "env": {
-      "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
-      "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
-      "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-      "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
-      "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
-    ],
-    "name": "cleanup_temp"
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -164,6 +132,38 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
+      "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
+      "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
+      "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
+      "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
   },
   {
     "cmd": [

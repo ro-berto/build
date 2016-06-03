@@ -246,6 +246,7 @@ class V8Api(recipe_api.RecipeApi):
       setattr(self.m.swarming, key, value)
 
   def runhooks(self, **kwargs):
+    self.m.chromium.ensure_goma()
     env = {}
     if self.c.gyp_env.AR:
       env['AR'] = self.c.gyp_env.AR
@@ -386,7 +387,6 @@ class V8Api(recipe_api.RecipeApi):
           self.upload_isolated_json()
 
   def compile(self, **kwargs):
-    self.m.chromium.ensure_goma()
     if self.m.chromium.c.project_generator.tool == 'gn':
       self.m.chromium.run_gn(use_goma=True)
     self.m.chromium.compile(**kwargs)
