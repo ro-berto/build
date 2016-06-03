@@ -27,6 +27,19 @@
         "xfa": True,
       }
     },
+    "linux_skia": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "4skia",
+      "properties": {
+        "skia": True,
+        "xfa": True,
+        "gn": True,
+        "skip_test": True,
+      }
+    },
     "linux_no_v8": {
       "recipe": "pdfium",
       "scheduler": None,
@@ -56,6 +69,19 @@
       "slave_pools": ["mac_slave_pool"],
       "slavebuilddir": "pdfium",
       "category": "0main",
+    },
+    "mac_skia": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "4skia",
+      "properties": {
+        "skia": True,
+        "xfa": True,
+        "gn": True,
+        "skip_test": True,
+      }
     },
     "mac_xfa": {
       "recipe": "pdfium",
@@ -96,6 +122,19 @@
       "slave_pools": ["win_slave_pool"],
       "slavebuilddir": "pdfium",
       "category": "0main",
+    },
+    "win_skia": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["win_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "4skia",
+      "properties": {
+        "skia": True,
+        "xfa": True,
+        "gn": True,
+        "skip_test": True,
+      }
     },
     "win_xfa": {
       "recipe": "pdfium",
