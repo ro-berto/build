@@ -155,8 +155,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
-  def compile(self, targets=None, name=None, out_dir=None,
-              target=None, **kwargs):
+  def compile(self, targets=None, name=None, target=None, **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -199,8 +198,6 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--goma-service-account-json-file',
             self.m.goma.service_account_json_path,
         ]
-    if out_dir:
-      args += ['--out-dir', out_dir]
     if self.c.compile_py.mode:
       args += ['--mode', self.c.compile_py.mode]
     if self.c.compile_py.goma_dir:
@@ -219,8 +216,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--goma-fail-fast', '--goma-disable-local-fallback']
     if self.c.compile_py.ninja_confirm_noop:
       args.append('--ninja-ensure-up-to-date')
-    if self.c.compile_py.clobber:
-      args.append('--clobber')
+    # TODO(thakis): Remove this once internal bots no longer set
+    # compile_py.clobber
+    if self.c.compile_py.clobber and not self.c.clobber_before_runhooks:
+      args.append('--clobber')  # pragma: no cover
     if self.c.compile_py.pass_arch_flag:
       args += ['--arch', self.c.gyp_env.GYP_DEFINES['target_arch']]
     if self.c.TARGET_CROS_BOARD:
@@ -490,8 +489,18 @@ class ChromiumApi(recipe_api.RecipeApi):
       self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
       self.c.compile_py.goma_dir = goma_dir
 
+  def clobber_if_needed(self):
+    """Add an explicit clobber step if requested."""
+    if self.c.clobber_before_runhooks and self.c.compile_py.clobber:
+      self.m.file.rmtree('clobber', self.c.build_dir)
+
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
+
+    # runhooks might write things into the output directory, so clobber before
+    # that.
+    self.clobber_if_needed()
+
     env = self.get_env()
     env.update(kwargs.get('env', {}))
 

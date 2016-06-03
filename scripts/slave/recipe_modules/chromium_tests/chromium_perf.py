@@ -73,7 +73,7 @@ def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
               known_devices_file):
   spec = _BaseSpec(
       bot_type='tester',
-      chromium_apply_config=[],
+      chromium_apply_config=['chromium_perf'],
       disable_tests=platform == 'android',
       gclient_config='perf',
       platform=platform,

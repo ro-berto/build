@@ -19,6 +19,7 @@ def _AddBotSpec(name, platform, parent_builder, perf_id, target_bits,
     },
     'parent_buildername': parent_builder,
     'chromium_config': 'chromium_official',
+    'chromium_apply_config': ['chromium_perf_fyi'],
     'gclient_config': 'perf',
     'testing': {
       'platform': platform,
