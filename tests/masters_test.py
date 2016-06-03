@@ -229,7 +229,7 @@ def main(argv):
       'master.chromium.lkgr': 'ChromiumLKGR',
       'master.chromium.mac': 'ChromiumMac',
       'master.chromium.memory': 'ChromiumMemory',
-      'master.chromium.memory.full': 'ChromiumMemoryFull',
+      'master.chromium.memory.fyi': 'ChromiumMemoryFYI',
       'master.chromium.mojo': 'ChromiumMojo',
       'master.chromium.perf': 'ChromiumPerf',
       'master.chromium.perf.fyi': 'ChromiumPerfFyi',

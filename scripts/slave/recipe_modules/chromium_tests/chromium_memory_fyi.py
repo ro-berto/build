@@ -6,7 +6,7 @@ from . import steps
 
 SPEC = {
   'settings': {
-    'build_gs_bucket': 'chromium-memory-full-archive',
+    'build_gs_bucket': 'chromium-memory-fyi-archive',
   },
   'builders': {
     'Chromium Linux MSan Builder': {

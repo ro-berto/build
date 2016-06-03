@@ -6,9 +6,9 @@
 
 from config_bootstrap import Master
 
-class ChromiumMemoryFull(Master.Master1):
-  project_name = 'Chromium Memory Full'
+class ChromiumMemoryFYI(Master.Master1):
+  project_name = 'Chromium Memory FYI'
   master_port = 8025
   slave_port = 8125
   master_port_alt = 8225
-  buildbot_url = 'http://build.chromium.org/p/chromium.memory.full/'
+  buildbot_url = 'http://build.chromium.org/p/chromium.memory.fyi/'

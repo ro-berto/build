@@ -404,10 +404,10 @@
         }
       }
     ],
-    "https://build.chromium.org/p/chromium.memory.full": [
+    "https://build.chromium.org/p/chromium.memory.fyi": [
       {
         "categories": [
-          "chromium_memory_full"
+          "chromium_memory_fyi"
         ],
         "sheriff_classes": ["sheriff_memory"],
 
@@ -811,7 +811,7 @@
   },
 
   "categories": {
-    "chromium_memory_full": {
+    "chromium_memory_fyi": {
       "closing_optional": [
         "*"
       ]

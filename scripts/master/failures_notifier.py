@@ -36,7 +36,7 @@ class FailuresNotifier(chromium_notifier.ChromiumNotifier):
 
     # TODO(timurrrr): Make recent_failures an optional argument.
     # We might want to use one history object for a few
-    # FailuresNotifiers (e.g. "ordinary" bots + some other set of bots)
+    # FailuresNotifiers (e.g. "ordinary" bots + Webkit bots on Memory FYI)
     self.recent_failures = failures_history.FailuresHistory(
         expiration_time=12*3600, size_limit=1000)
 

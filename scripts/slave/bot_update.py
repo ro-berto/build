@@ -250,7 +250,7 @@ ENABLED_MASTERS = [
     'chromium.lkgr',
     'chromium.mac',
     'chromium.memory',
-    'chromium.memory.full',
+    'chromium.memory.fyi',
     'chromium.perf',
     'chromium.perf.fyi',
     'chromium.swarm',
