@@ -28,7 +28,7 @@ class GSUtilApi(recipe_api.RecipeApi):
       name = (t for t in cmd if not t.startswith('-')).next()
     full_name = 'gsutil ' + name
 
-    gsutil_path = self.m.path['depot_tools'].join('gsutil.py')
+    gsutil_path = self.m.depot_tools.gsutil_py_path
     cmd_prefix = []
 
     if use_retry_wrapper:

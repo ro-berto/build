@@ -288,7 +288,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--",
       "-h",
       "x-goog-meta-Cr-Commit-Position:refs/heads/master@{#43426}",
