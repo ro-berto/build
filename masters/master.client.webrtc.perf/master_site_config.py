@@ -14,6 +14,9 @@ class WebRTCPerf(Master.Master3a):
   server_url = 'http://webrtc.googlecode.com'
   project_url = 'http://webrtc.googlecode.com'
   from_address = 'webrtc-cb-perf-watchlist@google.com'
+  tree_closing_notification_recipients = ['webrtc-cb-perf-watchlist@google.com']
+  master_domain = 'webrtc.org'
+  permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
   buildbot_url = 'http://build.chromium.org/p/client.webrtc.perf/'
   service_account_file = 'service-account-webrtc.json'
   buildbucket_bucket = 'master.client.webrtc.perf'
