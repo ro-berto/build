@@ -7,17 +7,18 @@ from master.factory import commands
 from master.factory.build_factory import BuildFactory
 
 
-def KitchenFactory(active_master, repository, recipe,
-                   revision='origin/master', factory_properties=None,
-                   timeout=1200, max_time=2400):
-  """Returns buildbot build factory which runs recipes locally using kitchen.
+def RemoteRunFactory(active_master, repository, recipe,
+                     revision='origin/master', factory_properties=None,
+                     timeout=1200, max_time=2400):
+  """Returns buildbot build factory which runs recipes using recipe engine's
+  remote_run command.
 
   |active_master| is config_bootstrap.Master's subclass from master's
   master_site_config.py .
 
   |repository| is the URL of repository containing recipe to run.
 
-  |recipe| is the name of the recipe to pass to kitchen_run.
+  |recipe| is the name of the recipe to run.
 
   |revision| is the revision to use for repo checkout (by default we use latest
   revision).
@@ -35,11 +36,11 @@ def KitchenFactory(active_master, repository, recipe,
   factory_properties = factory_properties or {}
 
   factory = BuildFactory(build_inherit_factory_properties=False)
-  factory.properties.update(factory_properties, 'KitchenFactory')
+  factory.properties.update(factory_properties, 'RemoteRunFactory')
   cmd_obj = annotator_commands.AnnotatorCommands(
       factory, active_master=active_master)
 
-  runner = cmd_obj.PathJoin(cmd_obj.script_dir, 'kitchen_run.py')
+  runner = cmd_obj.PathJoin(cmd_obj.script_dir, 'remote_run.py')
   cmd = [
       cmd_obj.python, '-u', runner,
       '--repository', repository,

@@ -28,7 +28,7 @@ from slave import robust_tempdir
 from slave import update_scripts
 
 
-LOGGER = logging.getLogger('kitchen_run')
+LOGGER = logging.getLogger('remote_run')
 
 
 def _call(cmd, **kwargs):
@@ -83,12 +83,12 @@ def main(argv):
   args = parser.parse_args(argv[1:])
 
   basedir = os.getcwd()
-  cipd_path = os.path.join(basedir, '.kitchen_cipd')
+  cipd_path = os.path.join(basedir, '.remote_run_cipd')
   _install_cipd_packages(
       cipd_path, cipd.CipdPackage('infra/recipes-py', 'latest'))
 
   with robust_tempdir.RobustTempdir(
-      prefix='.kitchen_run', leak=args.leak) as rt:
+      prefix='.remote_run', leak=args.leak) as rt:
     # Explicitly clean up possibly leaked temporary directories
     # from previous runs.
     rt.cleanup(basedir)
@@ -103,7 +103,7 @@ def main(argv):
     properties.update(args.build_properties)
     properties['build_data_dir'] = build_data_dir
     LOGGER.info('Using properties: %r', properties)
-    properties_file = os.path.join(tempdir, 'kitchen_properties.json')
+    properties_file = os.path.join(tempdir, 'remote_run_properties.json')
     with open(properties_file, 'w') as f:
       json.dump(properties, f)
 
@@ -149,7 +149,7 @@ def shell_main(argv):
       level=(logging.DEBUG if '--verbose' in argv else logging.INFO))
 
   if update_scripts.update_scripts():
-    # Re-execute with the updated kitchen_run.py.
+    # Re-execute with the updated remote_run.py.
     return _call([sys.executable] + argv)
 
   return main(argv)
