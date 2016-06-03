@@ -1016,26 +1016,13 @@ def main_win(options, args):
         options.msvs_version)
     return 1
 
-  ib = ReadHKLMValue('SOFTWARE\\Xoreax\\IncrediBuild\\Builder', 'Folder')
-  if ib:
-    ib = os.path.join(ib, 'BuildConsole.exe')
-
-  if ib and os.path.exists(ib) and not options.no_ib:
-    tool = ib
-    if options.arch == 'x64':
-      tool_options = ['/Cfg=%s|x64' % options.target]
-    else:
-      tool_options = ['/Cfg=%s|Win32' % options.target]
-    if options.project:
-      tool_options.extend(['/Prj=%s' % options.project])
+  tool = devenv
+  if options.arch == 'x64':
+    tool_options = ['/Build', '%s|x64' % options.target]
   else:
-    tool = devenv
-    if options.arch == 'x64':
-      tool_options = ['/Build', '%s|x64' % options.target]
-    else:
-      tool_options = ['/Build', options.target]
-    if options.project:
-      tool_options.extend(['/Project', options.project])
+    tool_options = ['/Build', options.target]
+  if options.project:
+    tool_options.extend(['/Project', options.project])
 
   def clobber():
     print 'Removing %s' % options.target_output_dir
@@ -1183,7 +1170,7 @@ def get_target_build_dir(args, options):
     relpath = os.path.join(outdir, options.target)
   elif build_tool == 'make-android':
     relpath = os.path.join('out')
-  elif build_tool in ['vs', 'ib']:
+  elif build_tool == 'vs':
     relpath = os.path.join('build', options.target)
   else:
     raise NotImplementedError()
@@ -1219,7 +1206,7 @@ def real_main():
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')
   option_parser.add_option('--build-tool', default=None,
-                           help='specify build tool (ib, vs, xcode)')
+                           help='specify build tool (make, ninja, vs, xcode)')
   option_parser.add_option('--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
   option_parser.add_option('--build-data-dir', action='store',
@@ -1228,8 +1215,6 @@ def real_main():
                            help='specify alternative compiler (e.g. clang)')
   if chromium_utils.IsWindows():
     # Windows only.
-    option_parser.add_option('--no-ib', action='store_true', default=False,
-                             help='use Visual Studio instead of IncrediBuild')
     option_parser.add_option('--msvs_version',
                              help='VisualStudio version to use')
   # For linux to arm cross compile.
@@ -1340,7 +1325,6 @@ def real_main():
       return 1
   else:
     build_tool_map = {
-        'ib' : main_win,
         'vs' : main_win,
         'make' : main_make,
         'make-android' : main_make_android,
