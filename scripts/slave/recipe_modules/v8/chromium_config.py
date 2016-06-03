@@ -43,6 +43,7 @@ def v8(c):
   # file.
   c.gn_args.append('use_sysroot=false')
   c.gn_args.append('icu_use_data_file = false')
+  c.gn_args.append('v8_test_isolation_mode = "prepare"')
 
 @CONFIG_CTX(includes=['v8'])
 def arm_hard_float(c):
