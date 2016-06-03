@@ -151,8 +151,7 @@
             <td>
               <a href="https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html">continuous</a> |
               <a href="https://build.chromium.org/f/chromium/symsrv/index.html">symbols</a> |
-              <a href="https://chromium-status.appspot.com">status</a> |
-              <a href="https://blink-status.appspot.com">blink status</a>
+              <a href="https://chromium-status.appspot.com">status</a>
             </td>
           </tr>
           <tr>
@@ -170,9 +169,9 @@
               <b>Chromium:</b>
             </td>
             <td>
-              <a href="https://src.chromium.org/viewvc/chrome">sources</a> |
+              <a href="https://chromium.googlesource.com/chromium/src">sources</a> |
               <a href="https://codereview.chromium.org/">reviews</a> |
-              <a href="https://code.google.com/p/chromium/issues/list?can=2&q=&sort=pri+mstone&colspec=ID%20Stars%20Pri%20Area%20Type%20Status%20Summary%20Modified%20Owner%20Mstone">bugs</a> |
+              <a href="https://bugs.chromium.org/p/chromium">bugs</a> |
               <a href="http://dev.chromium.org/Home">dev</a> |
               <a href="https://www.google.com/support/chrome/">support</a>
             </td>
@@ -209,19 +208,33 @@
             <td colspan="2">
               <script>
               document.write([
+                aView("../chromium.android", "", "chromium.android"),
+                aView("../chromium.chromedriver", "", "chromium.chromedriver"),
+                aView("../chromium.fyi", "", "chromium.fyi"),
+                aView("../chromium.gpu", "", "chromium.gpu"),
+                aView("../chromium.memory.fyi", "", "chromium.memory.fyi"),
+                aView("../chromium.perf", "", "chromium.perf"),
+                aView("../chromium.perf.fyi", "", "chromium.perf.fyi"),
+                aView("../chromium.webkit", "", "chromium.webkit"),
+                aView("../chromium.webrtc", "", "chromium.webrtc"),
+                aView("../chromiumos", "", "chromiumos"),
+              ].join(' | '));
+              </script>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+               <b>TryServers:</b>
+            </td>
+            <td colspan="2">
+              <script>
+              document.write([
                 a("../tryserver.chromium.linux/waterfall", "tryserver.chromium.linux", ""),
                 a("../tryserver.chromium.mac/waterfall", "tryserver.chromium.mac", ""),
                 a("../tryserver.chromium.win/waterfall", "tryserver.chromium.win", ""),
                 a("../tryserver.chromium.android/waterfall", "tryserver.chromium.android", ""),
                 a("../tryserver.blink/waterfall", "tryserver.blink", ""),
-                aView("../chromium.android", "", "chromium.android"),
-                aView("../chromium.fyi", "", "chromium.fyi"),
-                aView("../chromium.memory", "", "chromium.memory"),
-                aView("../chromium.memory.fyi", "", "chromium.memory.fyi"),
-                aView("../chromium.chromiumos", "", "chromium.chromiumos"),
-                aView("../chromiumos", "", "chromiumos"),
-                aView("../client.nacl", "", "client.nacl"),
-                aView("../chromium.webkit", "", "chromium.webkit")].join(' | '));
+              ].join(' | '));
               </script>
             </td>
           </tr>
@@ -236,7 +249,7 @@
                 a("./waterfall/help", "customize", ""),
                 a("./waterfall", "waterfall", ""),
                 a("./console", "console", ""),
-                a("./waterfall?show_events=true&failures_only=true", "failures", "")].join(' | '));
+              ].join(' | '));
               </script>
             </td>
           </tr>
