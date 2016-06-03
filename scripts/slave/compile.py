@@ -94,9 +94,8 @@ def ReadHKLMValue(path, value):
 def goma_setup(options, env):
   """Sets up goma if necessary.
 
-  If using the Goma compiler, first call goma_ctl with ensure_start
-  (or restart in clobber mode) to ensure the proxy is available, and returns
-  True.
+  If using the Goma compiler, first call goma_ctl  to ensure the proxy is
+  available, and returns True.
   If it failed to start up compiler_proxy, modify options.compiler and
   options.goma_dir and returns False
 
@@ -183,7 +182,7 @@ def goma_setup(options, env):
         options.goma_service_account_json_file
   if chromium_utils.IsWindows():
     env['GOMA_RPC_EXTRA_PARAMS'] = '?win'
-  goma_start_command = ['restart'] if options.clobber else ['ensure_start']
+  goma_start_command = ['restart']
   goma_ctl_cmd = [sys.executable,
                   os.path.join(options.goma_dir, 'goma_ctl.py')]
   result = chromium_utils.RunCommand(goma_ctl_cmd + goma_start_command, env=env)
