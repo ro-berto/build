@@ -283,10 +283,6 @@ def common_xcode_settings(command, options, env, compiler=None):
 
     if compiler == 'goma-clang':
       print 'using goma-clang'
-      if options.clobber:
-        # Disable compiles on local machine.  When the goma server-side object
-        # file cache is warm, this can speed up clobber builds by up to 30%.
-        env['GOMA_USE_LOCAL'] = '0'
       assert options.goma_dir
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
 
