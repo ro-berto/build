@@ -16,9 +16,11 @@ def RunSteps(api):
       mastername, buildername)
   api.chromium_tests.configure_build(bot_config)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
+  #api.chromium_tests.compile(mastername, buildername, update_step, bot_db,
+  #                           out_dir='/tmp')
   api.chromium.run_mb(mastername, buildername, use_goma=True,
                       android_version_code=3, android_version_name="example")
-  api.chromium.compile(targets=['All'])
+  api.chromium.compile(targets=['All'], out_dir='/tmp')
 
 def GenTests(api):
   yield api.test('basic_out_dir') + api.properties(

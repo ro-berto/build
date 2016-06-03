@@ -118,8 +118,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     gn_args = List(basestring),
 
     lto = Single(bool, empty_val=False, required=False),
-    clobber_before_runhooks = Single(bool, empty_val=False,
-                                     required=False, hidden=False),
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -382,10 +380,7 @@ def ozone(c):
 
 @config_ctx()
 def clobber(c):
-  # TODO(thakis): Remove compile_py.clobber once everything's using
-  # clobber_before_runhooks.
   c.compile_py.clobber = True
-  c.clobber_before_runhooks = True
 
 @config_ctx(includes=['static_library', 'clobber'])
 def official(c):
@@ -788,12 +783,10 @@ def v8_verify_heap(c):
 @config_ctx()
 def chromium_perf(c):
   c.compile_py.clobber = False
-  c.clobber_before_runhooks = False
 
 @config_ctx()
 def chromium_perf_fyi(c):
   c.compile_py.clobber = False
-  c.clobber_before_runhooks = False
   if c.HOST_PLATFORM == 'win':
     c.compile_py.compiler = None
     c.compile_py.goma_dir = None

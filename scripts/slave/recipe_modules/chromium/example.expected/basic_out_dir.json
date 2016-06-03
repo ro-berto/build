@@ -273,6 +273,8 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
+      "--out-dir",
+      "/tmp",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--",
