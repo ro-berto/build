@@ -703,77 +703,6 @@ def main_make(options, args):
 
   return result
 
-def main_make_android(options, args):
-  """Interprets options, clobbers object files, and calls make.
-  """
-
-  env = EchoDict(os.environ)
-  goma_ready = goma_setup(options, env)
-  if not goma_ready:
-    assert options.compiler not in ('goma', 'goma-clang')
-    assert options.goma_dir is None
-
-  command = ['make']
-  if goma_ready:
-    gomacc = os.path.join(options.goma_dir, 'gomacc')
-    command.extend(['CC_WRAPPER=' + gomacc,
-                    'CXX_WRAPPER=' + gomacc,
-                    'JAVAC_WRAPPER=' + gomacc,
-                    '-j150',
-                    '-l%d' % os.sysconf('SC_NPROCESSORS_ONLN'),
-                    ])
-
-  working_dir = options.src_dir
-
-  os.chdir(working_dir)
-
-  # V=1 prints the actual executed command
-  if options.verbose:
-    command.extend(['V=1'])
-  command.extend(options.build_args + args)
-
-  # Run the build.
-  env.print_overrides()
-  result = 0
-
-  bad_path_patterns = [
-    'out/target/common/obj/JAVA_LIBRARIES/*webview*',
-    'out/target/common/R/com/android/*webview*',
-    'out/target/product/*/obj/SHARED_LIBRARIES/*webview*',
-    'out/target/product/*/system/lib/*webview*',
-    'out/target/product/*/system/app/*webview*',
-    'out/host/*/obj/EXECUTABLES/*gyp*',
-    'out/host/*/obj/STATIC_LIBRARIES/*gyp*',
-    'out/host/*/obj/NOTICE_FILES/*gyp*',
-    'out/host/*/obj/GYP',
-    'out/target/product/*/obj/EXECUTABLES/*gyp*',
-    'out/target/product/*/obj/STATIC_LIBRARIES/*gyp*',
-    'out/target/product/*/obj/NOTICE_FILES/*gyp*',
-    'out/target/product/*/obj/GYP',
-  ]
-
-  def clobber():
-    print 'Removing %s' % options.target_output_dir
-    chromium_utils.RemoveDirectory(options.target_output_dir)
-
-  # The Android.mk build system handles deps differently than the 'regular'
-  # Chromium makefiles which can lead to targets not being rebuilt properly.
-  # Fixing this is actually quite hard so we always delete at least
-  # everything Chrome related from out.
-  if options.clobber:
-    clobber()
-  else:
-    for path in bad_path_patterns:
-      paths = chromium_utils.RemoveGlobbedPaths(path)
-      print '\n'.join(['Removed {}'.format(removed) for removed in paths])
-
-  result = chromium_utils.RunCommand(command, env=env)
-
-  goma_teardown(options, env, result)
-
-  return result
-
-
 class EnsureUpToDateFilter(chromium_utils.RunCommandFilter):
   """Filter for RunCommand that checks whether the output contains ninja's
   message for a no-op build."""
@@ -1168,8 +1097,6 @@ def get_target_build_dir(args, options):
     else:
       outdir = 'out'
     relpath = os.path.join(outdir, options.target)
-  elif build_tool == 'make-android':
-    relpath = os.path.join('out')
   elif build_tool == 'vs':
     relpath = os.path.join('build', options.target)
   else:
@@ -1322,7 +1249,6 @@ def real_main():
     build_tool_map = {
         'vs' : main_win,
         'make' : main_make,
-        'make-android' : main_make_android,
         'ninja' : main_ninja,
         'xcode' : main_xcode,
     }
