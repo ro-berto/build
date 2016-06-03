@@ -364,12 +364,13 @@ class SkiaApi(recipe_api.RecipeApi):
       self.update_repo(self.checkout_root, chromium)
 
     if self._need_pdfium_checkout:
-      pdfium = gclient_cfg.solutions.add()
-      pdfium.name = 'pdfium'
-      pdfium.managed = False
-      pdfium.url = 'https://pdfium.googlesource.com/pdfium.git'
-      pdfium.revision = 'origin/master'
-      self.update_repo(self.checkout_root, pdfium)
+      pass
+      # pdfium = gclient_cfg.solutions.add()
+      # pdfium.name = 'pdfium'
+      # pdfium.managed = False
+      # pdfium.url = 'https://pdfium.googlesource.com/pdfium.git'
+      # pdfium.revision = 'origin/master'
+      # self.update_repo(self.checkout_root, pdfium)
 
     # Run 'gclient sync'.
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
