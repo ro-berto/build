@@ -39,7 +39,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"product.board\": \"smdk4x12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"product.board\": \"m0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",

@@ -25,6 +25,7 @@ from . import coverage_flavor
 from . import default_flavor
 from . import fake_specs
 from . import ios_flavor
+from . import pdfium_flavor
 from . import valgrind_flavor
 from . import xsan_flavor
 
@@ -81,6 +82,10 @@ def is_ios(builder_cfg):
           builder_cfg.get('os') == 'iOS')
 
 
+def is_pdfium(builder_cfg):
+  return 'PDFium' in builder_cfg.get('extra_config', '')
+
+
 def is_valgrind(builder_cfg):
   return 'Valgrind' in builder_cfg.get('extra_config', '')
 
@@ -103,6 +108,8 @@ class SkiaApi(recipe_api.RecipeApi):
       return cmake_flavor.CMakeFlavorUtils(self)
     elif is_ios(builder_cfg):
       return ios_flavor.iOSFlavorUtils(self)
+    elif is_pdfium(builder_cfg):
+      return pdfium_flavor.PDFiumFlavorUtils(self)
     elif is_valgrind(builder_cfg):
       return valgrind_flavor.ValgrindFlavorUtils(self)
     elif is_xsan(builder_cfg):
@@ -204,6 +211,9 @@ class SkiaApi(recipe_api.RecipeApi):
         self.is_compile_bot and
         'SAN' in self.builder_name):
       self._need_chromium_checkout = True
+
+    # Some bots also require a checkout of PDFium.
+    self._need_pdfium_checkout = 'PDFium' in self.builder_name
 
     # Check out the Skia code.
     self.checkout_steps()
@@ -337,6 +347,14 @@ class SkiaApi(recipe_api.RecipeApi):
     skia.revision = self.m.properties.get('revision') or 'origin/master'
     self.update_repo(self.checkout_root, skia)
 
+    # TODO(rmistry): Remove the below block after there is a solution for
+    #                crbug.com/616443
+    entries_file = self.m.path['slave_build'].join('.gclient_entries')
+    if self.m.path.exists(entries_file):
+      self.m.file.remove('remove %s' % entries_file,
+                         entries_file,
+                         infra_step=True)
+
     if self._need_chromium_checkout:
       chromium = gclient_cfg.solutions.add()
       chromium.name = 'src'
@@ -344,6 +362,14 @@ class SkiaApi(recipe_api.RecipeApi):
       chromium.url = 'https://chromium.googlesource.com/chromium/src.git'
       chromium.revision = 'origin/lkgr'
       self.update_repo(self.checkout_root, chromium)
+
+    if self._need_pdfium_checkout:
+      pdfium = gclient_cfg.solutions.add()
+      pdfium.name = 'pdfium'
+      pdfium.managed = False
+      pdfium.url = 'https://pdfium.googlesource.com/pdfium.git'
+      pdfium.revision = 'origin/master'
+      self.update_repo(self.checkout_root, pdfium)
 
     # Run 'gclient sync'.
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'

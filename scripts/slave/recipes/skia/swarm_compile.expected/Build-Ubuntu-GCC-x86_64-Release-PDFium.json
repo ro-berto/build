@@ -44,7 +44,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[CUSTOM_/_B_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[CUSTOM_/_B_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]\ntarget_os = ['llvm']"
     ],
     "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
@@ -67,7 +67,7 @@
       "--revision",
       "skia@abc123",
       "--revision",
-      "src@origin/lkgr",
+      "pdfium@origin/master",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -81,11 +81,11 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pdfium/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 52055@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"skia/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 164710@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -97,41 +97,27 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[CUSTOM_/_B_WORK]",
-    "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CUSTOM_/_B_WORK]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
-      "Build-Ubuntu-GCC-x86_64-Debug-MSAN"
+      "Build-Ubuntu-GCC-x86_64-Release-PDFium"
     ],
     "cwd": "[CUSTOM_/_B_WORK]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dm\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"nanobench\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"most\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"MSAN\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Release\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"PDFium\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"target_arch\": \"x86_64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
@@ -143,7 +129,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -151,45 +137,101 @@
   },
   {
     "cmd": [
-      "[CUSTOM_/_B_WORK]/skia/tools/xsan_build",
-      "memory",
-      "dm"
+      "gclient",
+      "runhook",
+      "gn_linux64"
     ],
-    "cwd": "[CUSTOM_/_B_WORK]/skia",
+    "cwd": "[CUSTOM_/_B_WORK]/pdfium",
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Debug-MSAN"
+      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Release-PDFium"
     },
-    "name": "build dm"
+    "name": "runhook"
   },
   {
     "cmd": [
-      "[CUSTOM_/_B_WORK]/skia/tools/xsan_build",
-      "memory",
-      "nanobench"
+      "gn",
+      "gen",
+      "out/skia",
+      "--args=pdf_use_skia=true pdf_is_standalone=true clang_use_chrome_plugins=false"
     ],
-    "cwd": "[CUSTOM_/_B_WORK]/skia",
+    "cwd": "[CUSTOM_/_B_WORK]/pdfium",
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "CHROMIUM_BUILDTOOLS_PATH": "[CUSTOM_/_B_WORK]/pdfium/buildtools",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Release-PDFium"
+    },
+    "name": "gn_gen"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CUSTOM_/_B_WORK]/pdfium/DEPS",
+      "/path/to/tmp/"
+    ],
+    "name": "read PDFium DEPS"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "'skia_revision': '164710'",
+      "[CUSTOM_/_B_WORK]/pdfium/DEPS"
+    ],
+    "name": "write PDFium DEPs"
+  },
+  {
+    "cmd": [
+      "gclient",
+      "sync"
+    ],
+    "cwd": "[CUSTOM_/_B_WORK]/pdfium",
+    "env": {
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Debug-MSAN"
+      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Release-PDFium"
     },
-    "name": "build nanobench"
+    "name": "sync_pdfium"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "out/skia",
+      "-j100"
+    ],
+    "cwd": "[CUSTOM_/_B_WORK]/pdfium",
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
+      "PYTHONPATH": "[BUILD]/scripts",
+      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Release-PDFium"
+    },
+    "name": "build_pdfium"
   },
   {
     "cmd": [
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', '*.dylib', 'skia_launcher', 'lib/*.so', 'iOSShell.app', 'iOSShell.ipa', 'visualbench', 'visualbench.exe']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    dst_path = os.path.join(dst, os.path.relpath(f, src))\n    if not os.path.isdir(os.path.dirname(dst_path)):\n      os.makedirs(os.path.dirname(dst_path))\n    print 'Copying build product %s to %s' % (f, dst_path)\n    shutil.move(f, dst_path)\n",
-      "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Debug-MSAN/Debug",
-      "[CUSTOM_[SWARM_OUT_DIR]]/out/Debug"
+      "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Release-PDFium/Release",
+      "[CUSTOM_[SWARM_OUT_DIR]]/out/Release"
     ],
     "name": "copy build products",
     "~followup_annotations": [
@@ -219,28 +261,6 @@
       "@@@STEP_LOG_LINE@python.inline@    shutil.move(f, dst_path)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[CUSTOM_/_B_WORK]/skia/third_party/externals/llvm/msan_out",
-      "[CUSTOM_[SWARM_OUT_DIR]]/third_party/externals/llvm/msan_out",
-      "1"
-    ],
-    "name": "copy msan_out"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[CUSTOM_/_B_WORK]/src/third_party/llvm-build",
-      "[CUSTOM_[SWARM_OUT_DIR]]/llvm-build",
-      "1"
-    ],
-    "name": "copy llvm-build"
   },
   {
     "name": "$result",

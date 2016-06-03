@@ -22,6 +22,7 @@ TEST_BUILDERS = {
       'Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot',
       'Build-Ubuntu-GCC-Arm7-Release-Android',
       'Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan',
+      'Build-Ubuntu-GCC-x86_64-Release-PDFium',
     ],
     'skiabot-win-compile-000': [
       'Build-Win-MSVC-x86-Debug',
@@ -63,7 +64,8 @@ def GenTests(api):
                          swarm_out_dir='[SWARM_OUT_DIR]') +
           api.path.exists(
               api.path['slave_build'].join('skia'),
-              api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+              api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt'),
+              api.path['slave_build'].join('.gclient_entries'),
           )
         )
         if 'Win' in builder:
