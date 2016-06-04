@@ -47,8 +47,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_store_local_run_output = Single(bool, empty_val=False, required=False),
       goma_enable_compiler_info_cache = Single(
           bool, empty_val=False, required=False),
-      # TODO(thakis): Remove once nothing sets this any more.
-      clobber = Single(bool, empty_val=False, required=False, hidden=False),
       pass_arch_flag = Single(bool, empty_val=False, required=False),
       xcode_sdk = Single(basestring, required=False),
       xcode_project = Single(Path, required=False),
