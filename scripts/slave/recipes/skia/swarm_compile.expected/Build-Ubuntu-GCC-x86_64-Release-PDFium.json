@@ -25,26 +25,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[SLAVE_BUILD]/.gclient_entries"
-    ],
-    "name": "remove [SLAVE_BUILD]/.gclient_entries",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@os.remove(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[CUSTOM_/_B_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[CUSTOM_/_B_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]\ntarget_os = ['llvm']"
     ],
     "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
@@ -66,6 +50,8 @@
       "--delete_unversioned_trees",
       "--revision",
       "skia@abc123",
+      "--revision",
+      "pdfium@origin/master",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -79,6 +65,9 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pdfium/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 52055@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"skia/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 164710@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",

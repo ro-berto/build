@@ -65,7 +65,6 @@ def GenTests(api):
           api.path.exists(
               api.path['slave_build'].join('skia'),
               api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt'),
-              api.path['slave_build'].join('.gclient_entries'),
           )
         )
         if 'Win' in builder:

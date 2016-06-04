@@ -349,11 +349,11 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # TODO(rmistry): Remove the below block after there is a solution for
     #                crbug.com/616443
-    entries_file = self.m.path['slave_build'].join('.gclient_entries')
+    entries_file = self.checkout_root.join('.gclient_entries')
     if self.m.path.exists(entries_file):
       self.m.file.remove('remove %s' % entries_file,
                          entries_file,
-                         infra_step=True)
+                         infra_step=True)  # pragma: no cover
 
     if self._need_chromium_checkout:
       chromium = gclient_cfg.solutions.add()
@@ -364,13 +364,12 @@ class SkiaApi(recipe_api.RecipeApi):
       self.update_repo(self.checkout_root, chromium)
 
     if self._need_pdfium_checkout:
-      pass
-      # pdfium = gclient_cfg.solutions.add()
-      # pdfium.name = 'pdfium'
-      # pdfium.managed = False
-      # pdfium.url = 'https://pdfium.googlesource.com/pdfium.git'
-      # pdfium.revision = 'origin/master'
-      # self.update_repo(self.checkout_root, pdfium)
+      pdfium = gclient_cfg.solutions.add()
+      pdfium.name = 'pdfium'
+      pdfium.managed = False
+      pdfium.url = 'https://pdfium.googlesource.com/pdfium.git'
+      pdfium.revision = 'origin/master'
+      self.update_repo(self.checkout_root, pdfium)
 
     # Run 'gclient sync'.
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
