@@ -219,10 +219,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--goma-fail-fast', '--goma-disable-local-fallback']
     if self.c.compile_py.ninja_confirm_noop:
       args.append('--ninja-ensure-up-to-date')
-    # TODO(thakis): Remove this once internal bots no longer set
-    # compile_py.clobber
-    if self.c.compile_py.clobber and not self.c.clobber_before_runhooks:
-      args.append('--clobber')  # pragma: no cover
     if self.c.compile_py.pass_arch_flag:
       args += ['--arch', self.c.gyp_env.GYP_DEFINES['target_arch']]
     if self.c.TARGET_CROS_BOARD:
@@ -494,7 +490,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def clobber_if_needed(self):
     """Add an explicit clobber step if requested."""
-    if self.c.clobber_before_runhooks and self.c.compile_py.clobber:
+    if self.c.clobber_before_runhooks:
       self.m.file.rmtree('clobber', self.c.build_dir)
 
   def runhooks(self, **kwargs):
