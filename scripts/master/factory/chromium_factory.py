@@ -854,73 +854,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     return factory
 
-
-  def ChromiumAVPerfFactory(self, target='Release', clobber=False, tests=None,
-                              mode=None, slave_type='BuilderTester',
-                              options=None, compile_timeout=1200,
-                              build_url=None, project=None,
-                              factory_properties=None):
-    self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_AVPERF]
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-
-  def ChromiumNativeClientLatestFactory(
-      self, target='Release', clobber=False, tests=None, mode=None,
-      slave_type='BuilderTester', options=None, compile_timeout=1200,
-      build_url=None, project=None, factory_properties=None,
-      on_nacl_waterfall=True, use_chrome_lkgr=True):
-    factory_properties = factory_properties or {}
-    if on_nacl_waterfall:
-      factory_properties['primary_repo'] = 'nacl_'
-    # Remove nacl_trunk variable.
-    self._solutions[0].custom_vars_list = [
-      v for v in self._solutions[0].custom_vars_list if v[0] != 'nacl_trunk'
-    ]
-    self._solutions[0].custom_vars_list.extend(self.CUSTOM_VARS_NACL_LATEST)
-    self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
-    if factory_properties.get('needs_nacl_valgrind'):
-      self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_NACL_VALGRIND)
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-
-  def ChromiumGYPLatestFactory(self, target='Debug', clobber=False, tests=None,
-                               mode=None, slave_type='BuilderTester',
-                               options=None, compile_timeout=1200,
-                               build_url=None, project=None,
-                               factory_properties=None, gyp_format=None):
-
-    if tests is None:
-      tests = ['unit']
-
-    if gyp_format:
-      # Set GYP_GENERATORS in the environment used to execute
-      # gclient so we get the right build tool configuration.
-      if factory_properties is None:
-        factory_properties = {}
-      gclient_env = factory_properties.get('gclient_env', {})
-      gclient_env['GYP_GENERATORS'] = gyp_format
-      factory_properties['gclient_env'] = gclient_env
-
-      # And tell compile.py what build tool to use.
-      if options is None:
-        options = []
-      options.append('--build-tool=' + gyp_format)
-
-    self._solutions[0].custom_deps_list = self.CUSTOM_DEPS_GYP
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-
-  def ChromiumOSFactory(self, target='Release', clobber=False, tests=None,
-                        mode=None, slave_type='BuilderTester', options=None,
-                        compile_timeout=1200, build_url=None, project=None,
-                        factory_properties=None):
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-
   def ChromiumBranchFactory(
       self, target='Release', clobber=False, tests=None, mode=None,
       slave_type='BuilderTester', options=None, compile_timeout=1200,
@@ -935,14 +868,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                           mode=None, slave_type='BuilderTester', options=None,
                           compile_timeout=1200, build_url=None, project=None,
                           factory_properties=None):
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-
-  def ChromiumOSASANFactory(self, target='Release', clobber=False, tests=None,
-                            mode=None, slave_type='BuilderTester', options=None,
-                            compile_timeout=1200, build_url=None, project=None,
-                            factory_properties=None):
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
