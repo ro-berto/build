@@ -491,7 +491,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def clobber_if_needed(self):
     """Add an explicit clobber step if requested."""
     if self.c.clobber_before_runhooks:
-      self.m.file.rmtree('clobber', self.c.build_dir)
+      self.m.file.rmtree('clobber', self.output_dir)
 
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
