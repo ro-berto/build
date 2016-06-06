@@ -22,7 +22,7 @@ SPEC = {
       },
       # This doesn't affect the build, but ensures that trybots get the right
       # runtime flags.
-      'chromium_apply_config': ['lsan'],
+      'chromium_apply_config': ['lsan', 'mb'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
@@ -74,6 +74,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'chromium_apply_config': ['mb'],
       'bot_type': 'builder',
       'testing': {'platform': 'mac'},
       'enable_swarming': True,
@@ -103,7 +104,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'chromium_apply_config': ['lsan'],
+      'chromium_apply_config': ['lsan', 'mb'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
