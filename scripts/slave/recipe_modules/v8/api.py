@@ -246,7 +246,11 @@ class V8Api(recipe_api.RecipeApi):
       setattr(self.m.swarming, key, value)
 
   def runhooks(self, **kwargs):
-    self.m.chromium.ensure_goma()
+    if (self.m.chromium.c.compile_py.compiler and
+        self.m.chromium.c.compile_py.compiler.startswith('goma')):
+      # Only ensure goma if we want to use it. Otherwise it might break bots
+      # that don't support the goma executables.
+      self.m.chromium.ensure_goma()
     env = {}
     if self.c.gyp_env.AR:
       env['AR'] = self.c.gyp_env.AR

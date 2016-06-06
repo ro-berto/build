@@ -189,7 +189,7 @@ BUILDERS = {
         },
       },
       'V8 Linux - swarming staging': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'gn'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

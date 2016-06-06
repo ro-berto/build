@@ -80,60 +80,6 @@
     "name": "unzipping"
   },
   {
-    "cmd": [],
-    "name": "ensure_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
-      "--platform",
-      "linux-386",
-      "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "ensure_goma.install cipd",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
-      "ensure",
-      "--root",
-      "[CACHE]/cipd/goma",
-      "--list",
-      "infra_internal/goma/client/linux-386 release",
-      "--json-output",
-      "/path/to/tmp/json",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
-    ],
-    "name": "ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -147,7 +93,7 @@
       "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
+      "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
       "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
@@ -185,8 +131,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "make",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
       "--"
     ],
     "env": {
