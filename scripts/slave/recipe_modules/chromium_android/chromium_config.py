@@ -57,7 +57,7 @@ def x86_builder(c):
 def x86_builder_mb(c):
   pass
 
-@CONFIG_CTX(includes=['base_config', 'default_compiler'],
+@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
             config_vars={'TARGET_ARCH': 'mipsel'})
 def mipsel_builder(c):
   if c.TARGET_ARCH != 'mipsel':  # pragma: no cover
