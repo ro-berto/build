@@ -7,7 +7,7 @@ from recipe_engine import recipe_api
 import shlex
 
 
-DEFAULT_TASK_EXPIRATION = 4*60*60
+DEFAULT_TASK_EXPIRATION = 20*60*60
 DEFAULT_TASK_TIMEOUT = 4*60*60
 DEFAULT_IO_TIMEOUT = 20*60
 
