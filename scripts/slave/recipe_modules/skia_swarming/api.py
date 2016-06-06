@@ -226,7 +226,20 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     Args:
       swarming_task: An instance of swarming.SwarmingTask.
     """
-    return self.m.swarming.collect_task(swarming_task)
+    try:
+      return self.m.swarming.collect_task(swarming_task)
+    except self.m.step.StepFailure as e:  # pragma: no cover
+      step_result = self.m.step.active_result
+      # Change step result to Infra failure if the swarming task failed due to
+      # expiration, time outs, bot crashes or task cancelations.
+      # Infra failures have step.EXCEPTION.
+      states_infra_failure = (
+          self.m.swarming.State.EXPIRED, self.m.swarming.State.TIMED_OUT,
+          self.m.swarming.State.BOT_DIED, self.m.swarming.State.CANCELED)
+      if step_result.json.output['shards'][0]['state'] in states_infra_failure:
+        step_result.presentation.status = self.m.step.EXCEPTION
+        raise self.m.step.InfraFailure(e.name, step_result)
+      raise
 
   def collect_swarming_task_isolate_hash(self, swarming_task):
     """Wait for the given swarming task to finish and return its output hash.
