@@ -1,7 +1,0 @@
-[
-  {
-    "name": "$result",
-    "reason": "Uncaught Exception: Exception('Do not recognise the buildername Linux CT Top1k Unsupported Perf.',)",
-    "status_code": -1
-  }
-]
