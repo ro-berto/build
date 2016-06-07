@@ -13,7 +13,8 @@ DEPS = [
 
 def RunSteps(api):
   if api.properties.get('category') == 'cq':
-    repo = api.properties['gerrit']
+    repo = '%s/%s' % (api.properties['gerrit'].rstrip('/'),
+                      api.properties['patch_project'])
     refspec = api.properties['event.patchSet.ref']
   else:
     repo = api.properties.get('repository')
