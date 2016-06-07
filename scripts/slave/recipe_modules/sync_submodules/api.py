@@ -28,8 +28,8 @@ class SyncSubmodulesApi(recipe_api.RecipeApi):
     source_name = Humanish(source)
     checkout_dir = self.m.path['checkout'] = (
         self.m.path['cwd'].join(source_name))
-    self.m.git.checkout(source, ref=source_ref, dir_path=checkout_dir,
-                        submodules=False)
+    source_hash = self.m.git.checkout(
+        source, ref=source_ref, dir_path=checkout_dir, submodules=False)
 
     # Replace the remote, removing any old one that's still present.
     self.m.git('remote', 'remove', 'destination_repo', can_fail_build=False)
@@ -37,6 +37,15 @@ class SyncSubmodulesApi(recipe_api.RecipeApi):
 
     # Fetch the destination ref.
     self.m.git('fetch', 'destination_repo', '+%s' % dest_ref)
+    previous_hash = self.m.git(
+        'rev-parse', 'FETCH_HEAD^',
+        stdout=self.m.raw_io.output(),
+        step_test_data=lambda:
+            self.m.raw_io.test_api.stream_output('aabbccddee')).stdout.strip()
+
+    # If we're up to date, don't do anything else.
+    if previous_hash == source_hash:  # pragma: no cover
+      return
 
     # Create submodule references.
     self.m.step('deps2submodules', [
