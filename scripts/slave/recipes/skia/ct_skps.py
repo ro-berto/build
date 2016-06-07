@@ -136,6 +136,7 @@ def RunSteps(api):
         'TOOL_NAME': skia_tool,
         'GIT_HASH': skia_hash,
         'CONFIGURATION': configuration,
+        'BUILDER': buildername,
     }
     api.skia_swarming.create_isolated_gen_json(
         isolate_path, isolate_dir, 'linux', 'ct-%s-%s' % (skia_tool, slave_num),
@@ -159,8 +160,7 @@ def RunSteps(api):
 
   # Trigger all swarming tasks.
   dimensions={'os': 'Ubuntu-14.04', 'cpu': 'x86-64', 'pool': 'Chrome'}
-  if skia_tool == 'nanobench':
-    # Run on GPU bots for nanobench.
+  if 'GPU' in buildername:
     dimensions['gpu'] = '10de:104a'
   tasks = api.skia_swarming.trigger_swarming_tasks(
       tasks_to_swarm_hashes, dimensions=dimensions)
@@ -219,10 +219,24 @@ def GenTests(api):
   )
 
   yield(
-    api.test('CT_BENCH_10k_SKPs') +
+    api.test('CT_CPU_BENCH_10k_SKPs') +
     api.properties(
         buildername=
             'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs',
+        ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
+    ) +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('src')
+    )
+  )
+
+  yield(
+    api.test('CT_GPU_BENCH_10k_SKPs') +
+    api.properties(
+        buildername=
+            'Perf-Ubuntu-GCC-Golo-GPU-GT610-x86_64-Release-CT_BENCH_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     ) +

@@ -335,7 +335,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs-Trybot\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/ct-dm-1.isolated.gen.json"
     ],
     "name": "Write ct-dm-1.isolated.gen.json"
@@ -406,7 +406,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs-Trybot\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/ct-dm-2.isolated.gen.json"
     ],
     "name": "Write ct-dm-2.isolated.gen.json"
@@ -477,7 +477,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs-Trybot\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/ct-dm-3.isolated.gen.json"
     ],
     "name": "Write ct-dm-3.isolated.gen.json"
@@ -548,7 +548,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-4.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"4\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-4.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs-Trybot\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"4\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/ct-dm-4.isolated.gen.json"
     ],
     "name": "Write ct-dm-4.isolated.gen.json"
@@ -619,7 +619,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-5.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"5\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-dm-5.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Debug\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs-Trybot\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        164710, \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"5\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"dm\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/ct-dm-5.isolated.gen.json"
     ],
     "name": "Write ct-dm-5.isolated.gen.json"
