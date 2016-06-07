@@ -1872,24 +1872,6 @@ SPEC = {
       },
     },
 
-    'Blimp Linux (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'linux',
-      },
-      'bot_type': 'builder_tester',
-      'test_generators': [
-        steps.generate_gtest,
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Android Builder (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],

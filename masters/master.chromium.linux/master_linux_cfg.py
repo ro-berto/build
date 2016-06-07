@@ -19,6 +19,7 @@ def Update(_config, active_master, c):
           'Linux Builder (dbg)(32)',
           'Linux Builder (dbg)',
           'Cast Linux',
+          'Blimp Linux (dbg)',
       ]),
   ])
   specs = [
@@ -29,6 +30,7 @@ def Update(_config, active_master, c):
     {'name': 'Linux Builder (dbg)'},
     {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Cast Linux'},
+    {'name': 'Blimp Linux (dbg)'},
   ]
 
   c['builders'].extend([
