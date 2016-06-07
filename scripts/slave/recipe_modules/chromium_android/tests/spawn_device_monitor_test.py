@@ -118,7 +118,7 @@ class MainFuncTest(auto_stub.TestCase):
         '"value": 12, "device_id": "device_serial_1"}',
         '--float',
         '{"name": "dev/battery/temperature", '
-        '"value": 456, "device_id": "device_serial_1"}',
+        '"value": 45.6, "device_id": "device_serial_1"}',
         '--float',
         '{"name": "dev/battery/charge", '
         '"value": 96, "device_id": "device_serial_1"}',
@@ -127,7 +127,7 @@ class MainFuncTest(auto_stub.TestCase):
         '"value": 56, "device_id": "device_serial_2"}',
         '--float',
         '{"name": "dev/battery/temperature", '
-        '"value": 987, "device_id": "device_serial_2"}',
+        '"value": 98.7, "device_id": "device_serial_2"}',
         '--float',
         '{"name": "dev/battery/charge", '
         '"value": 11, "device_id": "device_serial_2"}',

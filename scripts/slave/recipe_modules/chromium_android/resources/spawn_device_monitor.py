@@ -111,7 +111,7 @@ def get_device_args(adb_path, device):
               'device_id': device}
   cpu_temp_args = ['--float', json.dumps(cpu_dict)] if cpu_temp else []
   battery_temp_dict = {'name': 'dev/battery/temperature',
-                       'value': bat_temp,
+                       'value': (bat_temp / 10.0) if bat_temp else None,
                        'device_id': device}
   bat_temp_args = ['--float', 
                    json.dumps(battery_temp_dict)] if bat_temp else []
