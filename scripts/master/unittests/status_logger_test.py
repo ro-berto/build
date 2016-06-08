@@ -164,6 +164,36 @@ class StatusLoggerTest(unittest.TestCase):
         self.assertTrue(content)
         json.loads(content)
 
+  def testReportsPatchURL(self):
+    with _make_logger() as logger:
+      mock_build = Build(
+          properties={'rietveld': 'https://codereview.chromium.org',
+                      'issue': '123456',
+                      'patchset': '100001'})
+      logger.buildFinished('coconuts', mock_build, 0)
+      self.assertTrue(os.path.isdir(logger._event_logging_dir))
+      self.assertTrue(os.path.exists(logger._event_logfile))
+      # Ensure we added valid json
+      with open(logger._event_logfile, 'r') as f:
+        content = f.read()
+        self.assertTrue(content)
+        parsed = json.loads(content)
+        self.assertEqual(parsed['build-event-patch-url'],
+                         'https://codereview.chromium.org/123456#ps100001')
+
+  def testReportsBBucketID(self):
+    with _make_logger() as logger:
+      mock_build = Build(properties={'buildbucket': '{"build":{"id":123}}'})
+      logger.buildFinished('coconuts', mock_build, 0)
+      self.assertTrue(os.path.isdir(logger._event_logging_dir))
+      self.assertTrue(os.path.exists(logger._event_logfile))
+      # Ensure we added valid json
+      with open(logger._event_logfile, 'r') as f:
+        content = f.read()
+        self.assertTrue(content)
+        parsed = json.loads(content)
+        self.assertEqual(parsed['build-event-bbucket-id'], 123)
+
   def testStopStep(self):
     steps = [Step(step_number=1),
              Step(step_number=2, result=1),

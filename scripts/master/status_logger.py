@@ -171,7 +171,8 @@ class StatusEventLogger(StatusReceiverMultiService):
   def send_build_event(self, timestamp_kind, timestamp, build_event_type,
                        bot_name, builder_name, build_number, build_scheduled_ts,
                        step_name=None, step_text=None, step_number=None,
-                       result=None, extra_result_code=None, patch_url=None):
+                       result=None, extra_result_code=None, patch_url=None,
+                       bbucket_id=None):
     """Log a build/step event for event_mon."""
 
     if self._event_logging:
@@ -196,6 +197,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         d['build-event-extra-result-code'] = extra_result_code
       if patch_url:
         d['build-event-patch-url'] = patch_url
+      if bbucket_id:
+        d['build-event-bbucket-id'] = bbucket_id
 
       self.event_logger.info(json.dumps(d))
 
@@ -293,6 +296,20 @@ class StatusEventLogger(StatusReceiverMultiService):
           build_properties.getProperty('patchset'))
     return patch_url
 
+  def _get_bbucket_id(self, build_properties):
+    """Retrieves buildbucket id from build properties.
+
+    Returns None when buildbucket properties are missing or malformed.
+    """
+    try:
+      assert 'buildbucket' in build_properties
+      bbucket_props = json.loads(
+          build_properties.getProperty('buildbucket'))
+      assert isinstance(bbucket_props, dict)
+      return bbucket_props.get('build', {}).get('id')
+    except (ValueError, AssertionError, AttributeError, TypeError) as e:
+      twisted_log.msg('Failed to get bbucket ID: %s' % e)
+
   def startService(self):
     """Start the service and subscribe for updates."""
     twisted_log.msg('status_logger: startService()')
@@ -315,10 +332,12 @@ class StatusEventLogger(StatusReceiverMultiService):
     build_number = build.getNumber()
     bot = build.getSlavename()
     started, _ = build.getTimes()
+    properties = build.getProperties()
     self.send_build_event(
         'BEGIN', started * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build),
-        patch_url=self._get_patch_url(build.getProperties()))
+        patch_url=self._get_patch_url(properties),
+        bbucket_id=self._get_bbucket_id(properties))
     # Must return self in order to subscribe to stepStarted/Finished events.
     return self
 
@@ -330,11 +349,13 @@ class StatusEventLogger(StatusReceiverMultiService):
     step_name = step.getName()
     step_text = ' '.join(step.getText())
     started, _ = step.getTimes()
+    properties = build.getProperties()
     self.send_build_event(
         'BEGIN', started * 1000, 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
         step_name=step_name, step_text=step_text, step_number=step.step_number,
-        patch_url=self._get_patch_url(build.getProperties()))
+        patch_url=self._get_patch_url(properties),
+        bbucket_id=self._get_bbucket_id(properties))
     # Must return self in order to subscribe to logStarted/Finished events.
     return self
 
@@ -346,12 +367,14 @@ class StatusEventLogger(StatusReceiverMultiService):
     step_name = step.getName()
     step_text = ' '.join(step.getText())
     _, finished = step.getTimes()
+    properties = build.getProperties()
     self.send_build_event(
         'END', finished * 1000, 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
         step_name=step_name, step_text=step_text, step_number=step.step_number,
         result=buildbot.status.results.Results[results[0]],
-        patch_url=self._get_patch_url(build.getProperties()))
+        patch_url=self._get_patch_url(properties),
+        bbucket_id=self._get_bbucket_id(properties))
 
     # Send step result to ts-mon
     properties = build.getProperties()
@@ -387,7 +410,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         self._get_requested_at_millis(build),
         result=buildbot.status.results.Results[results],
         extra_result_code=extra_result_code,
-        patch_url=self._get_patch_url(properties))
+        patch_url=self._get_patch_url(properties),
+        bbucket_id=self._get_bbucket_id(properties))
 
     pre_test_time_s = None
     for step in build.getSteps():
