@@ -12,6 +12,8 @@
   "service_account_file": "service-account-chromium-tryserver.json",
   "buildbucket_bucket": "master.tryserver.infra",
 
+  "default_remote_run_repository": "https://chromium.googlesource.com/infra/infra.git",
+
   "builders": {
     "Build Presubmit": {
       "category": "Build",
@@ -157,7 +159,8 @@
 
     "Luci-GAE Presubmit": {
       "category": "Luci-GAE",
-      "recipe": "infra/luci_gae",
+      "use_remote_run": True,
+      "recipe": "luci_gae",
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_lucigae",
@@ -165,42 +168,48 @@
 
     "Luci-GAE Linux Trusty 64 Tester": {
       "category": "Luci-GAE",
-      "recipe": "infra/luci_gae",
+      "use_remote_run": True,
+      "recipe": "luci_gae",
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "luci-gae",
     },
     "Luci-go Presubmit": {
       "category": "Luci-go",
-      "recipe": "infra/luci_go",
+      "use_remote_run": True,
+      "recipe": "luci_go",
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_lucigo",
     },
     "Luci-go Linux Trusty 64 Tester": {
       "category": "Luci-go",
-      "recipe": "infra/luci_go",
+      "use_remote_run": True,
+      "recipe": "luci_go",
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "luci-go",
     },
     "Luci-go Linux Precise 32 Tester": {
       "category": "Luci-go",
-      "recipe": "infra/luci_go",
+      "use_remote_run": True,
+      "recipe": "luci_go",
       "scheduler": None,
       "slave_pools": ["precise32_slave_pool"],
       "slavebuilddir": "luci-go",
     },
     "Luci-go Mac Tester": {
       "category": "Luci-go",
-      "recipe": "infra/luci_go",
+      "use_remote_run": True,
+      "recipe": "luci_go",
       "scheduler": None,
       "slave_pools": ["mac_slave_pool"],
       "slavebuilddir": "luci-go",
     },
     "Luci-go Win Tester": {
       "category": "Luci-go",
-      "recipe": "infra/luci_go",
+      "use_remote_run": True,
+      "recipe": "luci_go",
       "scheduler": None,
       "slave_pools": ["win64_slave_pool"],
       "slavebuilddir": "luci-go",

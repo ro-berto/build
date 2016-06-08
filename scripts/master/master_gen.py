@@ -20,6 +20,7 @@ from master import master_utils
 from master import repo_poller
 from master import slaves_list
 from master.factory import annotator_factory
+from master.factory import remote_run_factory
 
 
 def PopulateBuildmasterConfig(BuildmasterConfig, builders_path,
@@ -45,7 +46,7 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
       c,
       require_dbconfig=active_master_cls.is_production_host)
 
-  c['builders'] = _ComputeBuilders(builders, m_annotator)
+  c['builders'] = _ComputeBuilders(builders, m_annotator, active_master_cls)
 
   c['schedulers'] = _ComputeSchedulers(builders)
 
@@ -86,7 +87,7 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
   c['eventHorizon'] = 200
 
 
-def _ComputeBuilders(builders, m_annotator):
+def _ComputeBuilders(builders, m_annotator, active_master_cls):
   actual_builders = []
 
   default_properties = builders.get('default_properties')
@@ -120,11 +121,21 @@ def _ComputeBuilders(builders, m_annotator):
     else:
       props = builder_data.get('properties')
 
-    factory = m_annotator.BaseFactory(
-        recipe=builder_data['recipe'],
-        max_time=builder_data.get('builder_timeout_s'),
-        factory_properties=props,
-    )
+    if builder_data.get('use_remote_run'):
+      factory = remote_run_factory.RemoteRunFactory(
+          active_master=active_master_cls,
+          repository=builder_data.get(
+              'repository', builders.get('default_remote_run_repository')),
+          recipe=builder_data['recipe'],
+          max_time=builder_data.get('builder_timeout_s'),
+          factory_properties=props,
+      )
+    else:
+      factory = m_annotator.BaseFactory(
+          recipe=builder_data['recipe'],
+          max_time=builder_data.get('builder_timeout_s'),
+          factory_properties=props,
+      )
     actual_builders.append({
         'auto_reboot': builder_data.get('auto_reboot', True),
         'mergeRequests': merge_requests,
