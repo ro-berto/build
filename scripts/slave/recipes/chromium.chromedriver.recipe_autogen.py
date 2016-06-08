@@ -190,8 +190,8 @@ def Win7_steps(api):
   api.chromium.cleanup_temp()
   # chromedriver compile.py step
   api.step("compile", ["python_slave", api.path["build"].join("scripts",
-    "slave", "compile.py"), '--solution', 'all.sln', '--project',
-    'chromium_builder_chromedriver', '--target', 'Release'])
+    "slave", "compile.py"), '--target', 'Release',
+    'chromium_builder_chromedriver'])
   # annotated_steps step
   api.step("annotated_steps", ["python_slave", api.path["build"].join("scripts",
     "slave", "chromium", "chromedriver_buildbot_run.py"),
