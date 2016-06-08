@@ -591,6 +591,16 @@ def clang_tot_linux_asan(c):
 def clang_tot_linux_lld(c):
   pass
 
+@config_ctx(includes=['ninja', 'clang', 'goma', 'clobber',
+                      'ubsan', 'sanitizer_coverage'])
+def chromium_linux_ubsan(c):
+  pass
+
+@config_ctx(includes=['ninja', 'clang', 'goma', 'clobber',
+                      'ubsan_vptr', 'sanitizer_coverage'])
+def chromium_linux_ubsan_vptr(c):
+  pass
+
 @config_ctx(includes=['clang_tot_linux', 'ubsan_vptr', 'sanitizer_coverage'])
 def clang_tot_linux_ubsan_vptr(c):
   pass

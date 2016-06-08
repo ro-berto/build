@@ -462,6 +462,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
          gs_bucket=bot_config.get('cf_gs_bucket'),
          gs_acl=bot_config.get('cf_gs_acl'),
          archive_prefix=bot_config.get('cf_archive_name'),
+         archive_subdir_suffix=bot_config.get('cf_archive_subdir_suffix', ''),
          revision_dir=bot_config.get('cf_revision_dir'),
          fixed_staging_dir=bot_config.get('fixed_staging_dir', False),
        )

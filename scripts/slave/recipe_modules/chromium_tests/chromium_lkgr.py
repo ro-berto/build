@@ -22,12 +22,45 @@ SPEC = {
       'cf_gs_bucket': 'chromium-browser-syzyasan',
       'cf_gs_acl': 'public-read',
       'cf_archive_name': 'asan',
-      'compile_targets': [
-        'chromium_builder_asan',
-      ],
-      'testing': {
-        'platform': 'win',
+      'compile_targets': [ 'chromium_builder_asan' ],
+      'testing': { 'platform': 'win' },
+    },
+    'UBSan Release': {
+      'chromium_config': 'chromium_linux_ubsan',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
       },
+      'bot_type': 'builder',
+      'disable_tests': True,
+      'cf_archive_build': True,
+      'cf_gs_bucket': 'chromium-browser-ubsan',
+      'cf_gs_acl': 'public-read',
+      'cf_archive_name': 'ubsan',
+      'compile_targets': [ 'chromium_builder_asan' ],
+      'testing': { 'platform': 'linux' },
+    },
+    # The build process for UBSan vptr is described at
+    # http://dev.chromium.org/developers/testing/undefinedbehaviorsanitizer
+    'UBSan vptr Release': {
+      'chromium_config': 'chromium_linux_ubsan_vptr',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'disable_tests': True,
+      'cf_archive_build': True,
+      'cf_gs_bucket': 'chromium-browser-ubsan',
+      'cf_gs_acl': 'public-read',
+      'cf_archive_name': 'ubsan-vptr',
+      'cf_archive_subdir_suffix': 'vptr',
+      'compile_targets': [ 'chromium_builder_asan' ],
+      'testing': { 'platform': 'linux' },
     },
   },
 }
