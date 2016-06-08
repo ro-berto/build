@@ -274,6 +274,11 @@ def linux_cr_builder_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    if 'clobber' in api.properties:
+      api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
+
     # gclient revert step; made unnecessary by bot_update
     # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
@@ -294,8 +299,6 @@ def linux_cr_builder_steps(api):
             'crypto_unittests', 'ipc_tests', 'media_unittests',
             'net_unittests', 'printing_unittests', 'remoting_unittests',
             'sql_unittests', 'unit_tests', 'url_unittests']
-    if 'clobber' in api.properties:
-        args.append("--clobber")
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
@@ -676,6 +679,11 @@ def win8_cr_builder_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    if 'clobber' in api.properties:
+      api.file.rmtree('clobber', api.path['checkout'].join('out', 'Debug'))
+
     # gclient revert step; made unnecessary by bot_update
     # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
@@ -690,10 +698,7 @@ def win8_cr_builder_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
-    args = ['--solution', 'all.sln', '--project',
-            'chromium_builder_dbg_drmemory_win', '--target', 'Debug']
-    if 'clobber' in api.properties:
-        args.append("--clobber")
+    args = ['--target', 'Debug', 'chromium_builder_dbg_drmemory_win']
     api.step("compile", ["python_slave", api.path["build"].join(
         "scripts", "slave", "compile.py")] + args)
 
@@ -1061,6 +1066,11 @@ def win7_cr_builder_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    if 'clobber' in api.properties:
+      api.file.rmtree('clobber', api.path['checkout'].join('out', 'Debug'))
+
     # gclient revert step; made unnecessary by bot_update
     # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
@@ -1075,10 +1085,7 @@ def win7_cr_builder_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
-    args = ['--solution', 'all.sln', '--project',
-            'chromium_builder_dbg_drmemory_win', '--target', 'Debug']
-    if 'clobber' in api.properties:
-        args.append("--clobber")
+    args = ['--target', 'Debug', 'chromium_builder_dbg_drmemory_win']
     api.step("compile", ["python_slave", api.path["build"].join(
         "scripts", "slave", "compile.py")] + args)
 

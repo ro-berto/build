@@ -117,12 +117,9 @@
     "cmd": [
       "python_slave",
       "[BUILD]\\scripts\\slave\\compile.py",
-      "--solution",
-      "all.sln",
-      "--project",
-      "chromium_builder_dbg_drmemory_win",
       "--target",
-      "Debug"
+      "Debug",
+      "chromium_builder_dbg_drmemory_win"
     ],
     "name": "compile"
   },
