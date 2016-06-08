@@ -145,7 +145,7 @@
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ccache\": \"/usr/bin/ccache\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ccache\": null@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@python.inline@import json@@@",
@@ -173,7 +173,6 @@
     "cwd": "[CUSTOM_/_B_WORK]/skia",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
-      "ANDROID_MAKE_CCACHE": "/usr/bin/ccache",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",

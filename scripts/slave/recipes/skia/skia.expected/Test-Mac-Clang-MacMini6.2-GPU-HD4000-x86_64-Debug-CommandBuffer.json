@@ -1,25 +1,42 @@
 [
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]",
-      "511"
+      "git",
+      "remote",
+      "set-url",
+      "origin",
+      "https://skia.googlesource.com/skia.git"
     ],
-    "name": "makedirs checkout_path",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "git remote set-url"
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "reset",
+      "--hard",
+      "abc123"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "git reset"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-d",
+      "-f"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "git clean"
   },
   {
     "cmd": [
@@ -28,7 +45,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['llvm']"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -48,6 +65,8 @@
       "--delete_unversioned_trees",
       "--revision",
       "skia@abc123",
+      "--revision",
+      "src@origin/lkgr",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -61,6 +80,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"skia/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": 164710@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -72,9 +94,22 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
-      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
+      "Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
@@ -86,13 +121,14 @@
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"arch\": \"x86_64\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"Clang\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu\": \"CPU\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"AVX2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu\": \"GPU\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"HD4000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"CommandBuffer\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"model\": \"GCE\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"model\": \"MacMini6.2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Mac\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
@@ -102,7 +138,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CC\": \"/usr/bin/clang\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CXX\": \"/usr/bin/clang++\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
@@ -121,11 +159,35 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
       "CHROME_PATH": "[HOME]/src",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "build dm"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/build_command_buffer.py",
+      "--chrome-dir",
+      "[SLAVE_BUILD]",
+      "--output-dir",
+      "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug",
+      "--chrome-build-type",
+      "Debug",
+      "--no-sync"
+    ],
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
+    },
+    "name": "build command_buffer"
   },
   {
     "cmd": [
@@ -135,9 +197,11 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
       "CHROME_PATH": "[HOME]/src",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "build nanobench"
   },
@@ -254,8 +318,10 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "get uninteresting hashes",
     "~followup_annotations": [
@@ -295,7 +361,7 @@
   {
     "cmd": [
       "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug/Debug/dm",
+      "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug/dm",
       "--undefok",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
@@ -310,35 +376,41 @@
       "master",
       "client.skia",
       "builder",
-      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug",
+      "Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer",
       "build_number",
-      "6",
+      "5",
       "--colorImages",
       "[SLAVE_BUILD]/images/colorspace",
       "--key",
       "arch",
       "x86_64",
       "compiler",
-      "GCC",
+      "Clang",
       "configuration",
       "Debug",
       "cpu_or_gpu",
-      "CPU",
+      "GPU",
       "cpu_or_gpu_value",
-      "AVX2",
+      "HD4000",
+      "extra_config",
+      "CommandBuffer",
       "model",
-      "GCE",
+      "MacMini6.2",
       "os",
-      "Ubuntu",
+      "Mac",
+      "--uninterestingHashesFile",
+      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
       "--writePath",
       "[SLAVE_BUILD]/dm",
-      "--nogpu",
+      "--nocpu",
       "--dummy-flags"
     ],
     "env": {
       "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "dm"
   },
@@ -349,8 +421,8 @@
       "RECIPE_MODULE[build::skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug",
-      "6",
+      "Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer",
+      "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
     ],
@@ -359,15 +431,17 @@
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "Upload DM Results"
   },
   {
     "cmd": [
       "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug/Debug/nanobench",
+      "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug/nanobench",
       "--undefok",
       "-i",
       "[SLAVE_BUILD]/skia/resources",
@@ -375,13 +449,15 @@
       "[SLAVE_BUILD]/playback/skps",
       "--images",
       "[SLAVE_BUILD]/images/nanobench",
-      "--nogpu",
+      "--nocpu",
       "--dummy-flags"
     ],
     "env": {
       "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer"
     },
     "name": "nanobench"
   },

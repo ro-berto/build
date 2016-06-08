@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "git.bat",
+      "git",
       "remote",
       "set-url",
       "origin",
@@ -12,7 +12,7 @@
   },
   {
     "cmd": [
-      "git.bat",
+      "git",
       "fetch"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
@@ -20,7 +20,7 @@
   },
   {
     "cmd": [
-      "git.bat",
+      "git",
       "reset",
       "--hard",
       "abc123"
@@ -30,7 +30,7 @@
   },
   {
     "cmd": [
-      "git.bat",
+      "git",
       "clean",
       "-d",
       "-f"
@@ -536,13 +536,13 @@
       "--tag",
       "data:def456",
       "--tag",
-      "master:client.skia",
+      "master:client.skia.fyi",
       "--tag",
       "name:compile_skia",
       "--tag",
       "os:Windows",
       "--tag",
-      "slavename:skiabot-linux-swarm-000",
+      "slavename:skiabot-linux-housekeeper-003",
       "--tag",
       "stepname:compile_skia on Windows",
       "--idempotent",

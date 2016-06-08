@@ -5,33 +5,32 @@
       "-u",
       "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
-      "Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
+      "Test-Android-GCC-Nexus6-GPU-Adreno420-Arm7-Release"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dm\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"nanobench\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dm\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"arch\": \"Arm7\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Release\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu\": \"GPU\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"Tegra3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"Adreno420\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"model\": \"Nexus7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"model\": \"Nexus6\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"os\": \"Android\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"arm_v7_neon\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_warnings_as_errors=0\"@@@",
@@ -39,7 +38,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"product.board\": \"grouper\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"product.board\": \"shamu\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -65,7 +64,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -81,7 +80,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -98,7 +97,7 @@
       "$EXTERNAL_STORAGE"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -113,7 +112,7 @@
       "root"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -128,7 +127,7 @@
       "10"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -143,7 +142,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -159,7 +158,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -176,7 +175,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -192,7 +191,7 @@
       "stop"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -208,7 +207,7 @@
       "batteryproperties"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -224,7 +223,7 @@
       "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -240,7 +239,7 @@
       "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -258,7 +257,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -285,7 +284,7 @@
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -312,7 +311,7 @@
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -374,7 +373,7 @@
       "/storage/emulated/legacy/skiabot/skia_dm"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -397,7 +396,7 @@
       "fi"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -415,7 +414,7 @@
       "/storage/emulated/legacy/skiabot/skia_dm"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -454,7 +453,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -503,7 +502,7 @@
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/uninteresting_hashes.txt"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -519,7 +518,7 @@
       "-d",
       "arm_v7_neon",
       "-t",
-      "Debug",
+      "Release",
       "dm",
       "--undefok",
       "--resourcePath",
@@ -535,7 +534,7 @@
       "master",
       "client.skia",
       "builder",
-      "Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug",
+      "Test-Android-GCC-Nexus6-GPU-Adreno420-Arm7-Release",
       "build_number",
       "5",
       "--colorImages",
@@ -546,13 +545,13 @@
       "compiler",
       "GCC",
       "configuration",
-      "Debug",
+      "Release",
       "cpu_or_gpu",
       "GPU",
       "cpu_or_gpu_value",
-      "Tegra3",
+      "Adreno420",
       "model",
-      "Nexus7",
+      "Nexus6",
       "os",
       "Android",
       "--uninterestingHashesFile",
@@ -565,7 +564,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -584,7 +583,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -601,7 +600,7 @@
       "batteryproperties"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -615,7 +614,7 @@
       "reboot"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -629,7 +628,7 @@
       "10"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -644,7 +643,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -660,7 +659,7 @@
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/android-sdk",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
@@ -675,7 +674,7 @@
       "kill-server"
     ],
     "env": {
-      "BUILDTYPE": "Debug",
+      "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
