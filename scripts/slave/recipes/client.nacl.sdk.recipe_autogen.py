@@ -6,6 +6,7 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
+    'file',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -61,6 +62,10 @@ def linux_sdk_multi_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
+
     # gclient revert step; made unnecessary by bot_update
     # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
@@ -75,7 +80,7 @@ def linux_sdk_multi_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
-    args = ['--target', 'Release', '--clobber', '--compiler=goma',
+    args = ['--target', 'Release', '--compiler=goma',
             'chromium_builder_nacl_sdk']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
@@ -145,6 +150,10 @@ def mac_sdk_multi_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
+
     # gclient revert step; made unnecessary by bot_update
     # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
@@ -160,7 +169,7 @@ def mac_sdk_multi_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
-    args = ['--target', 'Release', '--clobber', '--build-tool=ninja',
+    args = ['--target', 'Release', '--build-tool=ninja',
             '--compiler=goma-clang', '--', 'chromium_builder_nacl_sdk']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
@@ -234,6 +243,10 @@ def windows_sdk_multi_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
+
     # gclient revert step; made unnecessary by bot_update
     # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
@@ -248,8 +261,8 @@ def windows_sdk_multi_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
-    args = ['--solution', 'all.sln', '--project', 'chromium_builder_nacl_sdk',
-            '--target', 'Release', '--clobber', '--compiler=goma']
+    args = ['--target', 'Release', '--compiler=goma',
+            'chromium_builder_nacl_sdk']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
@@ -293,6 +306,10 @@ def linux_sdk_multirel_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
+
     # unnamed step; null converted
     # gclient runhooks wrapper step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
@@ -306,7 +323,7 @@ def linux_sdk_multirel_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
-    args = ['--target', 'Release', '--clobber', '--compiler=goma',
+    args = ['--target', 'Release', '--compiler=goma',
             'chromium_builder_tests']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
@@ -355,6 +372,10 @@ def windows_sdk_multirel_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
+
     # unnamed step; null converted
     # gclient runhooks wrapper step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
@@ -368,8 +389,8 @@ def windows_sdk_multirel_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
-    args = ['--solution', 'all.sln', '--project', 'chromium_builder_tests',
-            '--target', 'Release', '--clobber', '--compiler=goma']
+    args = ['--target', 'Release', '--compiler=goma',
+            'chromium_builder_tests',]
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
@@ -413,6 +434,10 @@ def mac_sdk_multirel_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
+
     # unnamed step; null converted
     # gclient runhooks wrapper step
     env = {'LANDMINES_VERBOSE': '1',
@@ -427,7 +452,7 @@ def mac_sdk_multirel_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
-    args = ['--target', 'Release', '--clobber', '--build-tool=ninja',
+    args = ['--target', 'Release', '--build-tool=ninja',
             '--compiler=goma-clang', '--', 'chromium_builder_tests']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),

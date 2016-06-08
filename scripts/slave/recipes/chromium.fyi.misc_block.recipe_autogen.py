@@ -6,6 +6,7 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
+    'file',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -86,6 +87,10 @@ def CFI_Linux_CF_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout(force=True)
     build_properties.update(result.json.output.get("properties", {}))
+
+    # clobber before runhooks
+    api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
+
     # gclient revert step; made unnecessary by bot_update
     # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
@@ -101,7 +106,7 @@ def CFI_Linux_CF_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
-    args = ['--target', 'Release', '--clobber', 'chromium_builder_asan']
+    args = ['--target', 'Release', 'chromium_builder_asan']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
