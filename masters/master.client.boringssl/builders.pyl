@@ -114,6 +114,7 @@
         "version": "trusty",
       },
       "slaves": [
+        "slave43-c3",
         "slave44-c3",
       ],
     },
