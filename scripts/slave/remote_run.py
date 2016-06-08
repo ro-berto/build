@@ -82,13 +82,18 @@ def main(argv):
 
   args = parser.parse_args(argv[1:])
 
-  basedir = os.getcwd()
-  cipd_path = os.path.join(basedir, '.remote_run_cipd')
+  # Keep CIPD directory between builds.
+  cipd_path = os.path.join(os.getcwd(), '.remote_run_cipd')
   _install_cipd_packages(
       cipd_path, cipd.CipdPackage('infra/recipes-py', 'latest'))
 
   with robust_tempdir.RobustTempdir(
       prefix='.remote_run', leak=args.leak) as rt:
+    # Use base directory inside system temporary directory - if we use slave
+    # one (cwd), the paths get too long. Recipes which need different paths
+    # or persistent directories should do so explicitly.
+    basedir = tempfile.gettempdir()
+
     # Explicitly clean up possibly leaked temporary directories
     # from previous runs.
     rt.cleanup(basedir)
@@ -118,7 +123,7 @@ def main(argv):
         '--workdir', os.path.join(tempdir, 'remote_run_workdir'),
         '--',
         '--properties-file', properties_file,
-        '--workdir', os.path.join(tempdir, 'run_workdir'),
+        '--workdir', os.path.join(tempdir, 'work'),
         args.recipe,
     ]
     recipe_return_code = None
