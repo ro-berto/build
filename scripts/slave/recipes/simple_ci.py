@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.recipe_api import Property
+
 
 DEPS = [
   'recipe_engine/properties',
@@ -10,25 +12,37 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+PROPERTIES = {
+  'gerrit': Property(kind=str, help='Gerrit host', default=None,
+                     param_name='gerrit_host'),
+  'patch_project': Property(kind=str, help='Gerrit project', default=None,
+                            param_name='gerrit_project'),
+  'event.patchSet.ref': Property(kind=str, help='Gerrit patch ref',
+                                 default=None, param_name='gerrit_patch_ref'),
+  'repository': Property(kind=str, help='Full url to a Git repository',
+                         default=None, param_name='repo_url'),
+  'refspec': Property(kind=str, help='Refspec to checkout', default='master'),
+  'category': Property(kind=str, help='Build category', default=None),
+}
 
-def RunSteps(api):
-  if api.properties.get('category') == 'cq':
-    repo = '%s/%s' % (api.properties['gerrit'].rstrip('/'),
-                      api.properties['patch_project'])
-    refspec = api.properties['event.patchSet.ref']
-  else:
-    repo = api.properties.get('repository')
-    refspec = api.properties.get('refspec') or 'master'
 
-  assert repo and refspec, 'repo and refspec must be given'
+def RunSteps(api, category, repo_url, refspec, gerrit_host, gerrit_project,
+             gerrit_patch_ref):
+  if category == 'cq':
+    assert gerrit_host.startswith('https://')
+    repo_url = '%s/%s' % (gerrit_host.rstrip('/'), gerrit_project)
+    refspec = gerrit_patch_ref
+
+  assert repo_url and refspec, 'repository url and refspec must be given'
+  assert repo_url.startswith('https://')
 
   api.step('git init', ['git', 'init'])
   api.step('git reset', ['git', 'reset', '--hard'])
-  api.step('git fetch', ['git', 'fetch', repo, '%s' % refspec])
+  api.step('git fetch', ['git', 'fetch', repo_url, '%s' % refspec])
   api.step('git checkout', ['git', 'checkout', 'FETCH_HEAD'])
   api.step('git submodule update', ['git', 'submodule', 'update',
                                     '--init', '--recursive'])
-  api.python.inline(
+  result = api.python.inline(
       'read tests',
       # Multiplatform "cat"
       "with open('infra/config/ci.cfg') as f: print f.read()",
@@ -38,7 +52,7 @@ def RunSteps(api):
                './a.sh\npython b.py\npython c.py args')))
 
   tests = []
-  for l in api.step.active_result.stdout.splitlines():
+  for l in result.stdout.splitlines():
     l = l.strip()
     if l and not l.startswith('#'):
       tests.append(l)
