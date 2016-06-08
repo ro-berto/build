@@ -751,13 +751,13 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Android Debug (Nexus 5)': {
+    'Android Release (Nexus 5)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
+        'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
@@ -776,7 +776,7 @@ SPEC = {
       'use_isolate': False,
       'enable_swarming': False,
     },
-    'Android Debug (Nexus 5X)': {
+    'Android Release (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
@@ -784,30 +784,7 @@ SPEC = {
       'chromium_config_kwargs': {
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'arm64_builder_mb',
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_isolated_script,
-        steps.generate_script,
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-      'use_isolate': False,
-      'enable_swarming': False,
-    },
-    'Android Swarmed Debug (Nexus 5X)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'arm64_builder_mb',
+      'android_config': 'arm64_builder_rel_mb',
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
@@ -822,13 +799,13 @@ SPEC = {
       'use_isolate': True,
       'enable_swarming': True,
     },
-    'Android Debug (Nexus 6)': {
+    'Android Release (Nexus 6)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
+        'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
@@ -847,32 +824,7 @@ SPEC = {
       'use_isolate': False,
       'enable_swarming': False,
     },
-    'Android Debug (Nexus 6P)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_isolated_script,
-        steps.generate_script,
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-      'use_isolate': False,
-      'enable_swarming': False,
-    },
-    'Android Debug (Nexus 9)': {
+    'Android Release (Nexus 6P)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
@@ -880,7 +832,30 @@ SPEC = {
       'chromium_config_kwargs': {
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'arm64_builder_mb',
+      'android_config': 'arm64_builder_rel_mb',
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_isolated_script,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'use_isolate': False,
+      'enable_swarming': False,
+    },
+    'Android Release (Nexus 9)': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'arm64_builder_rel_mb',
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],

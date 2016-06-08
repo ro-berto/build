@@ -133,9 +133,9 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.angle': {
     'builders': {
-      'android_angle_dbg_ng': simple_bot({
+      'android_angle_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android Swarmed Debug (Nexus 5X)',
+        'buildername': 'Android Release (Nexus 5X)',
       }),
       'linux_angle_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
