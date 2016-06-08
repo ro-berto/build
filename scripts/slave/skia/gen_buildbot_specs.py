@@ -19,6 +19,7 @@ import tempfile
 
 
 SKIA_RECIPES = [
+  'housekeeper_percommit.py',
   'skia.py',
   'swarm_compile.py',
   'swarm_perf.py',

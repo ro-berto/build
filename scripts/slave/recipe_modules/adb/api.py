@@ -13,7 +13,7 @@ class AdbApi(recipe_api.RecipeApi):
   def __call__(self, cmd, serial=None, **kwargs):
     """Run an ADB command."""
     cmd_prefix = [self.adb_path()]
-    if serial:
+    if serial:  # pragma: nocover
       cmd_prefix.extend(['-s', serial])
     return self.m.step(cmd=cmd_prefix + cmd, **kwargs)
 

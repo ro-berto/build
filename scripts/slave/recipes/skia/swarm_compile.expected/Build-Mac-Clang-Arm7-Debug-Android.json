@@ -42,22 +42,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "cwd": "[CUSTOM_/_B_WORK]",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
-      "PYTHONPATH": "[BUILD]/scripts"
-    },
-    "name": "gclient revert"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "sync",
       "--nohooks",
@@ -92,29 +76,9 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/apply_issue.py",
-      "-r",
-      "[CUSTOM_/_B_WORK]/skia",
-      "-i",
-      "500",
-      "-p",
-      "1",
-      "-s",
-      "https://codereview.chromium.org",
-      "--no-auth"
-    ],
-    "name": "apply_issue",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Applied issue 500@https://codereview.chromium.org/500@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CUSTOM_/_B_WORK]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
-      "Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot"
+      "Build-Mac-Clang-Arm7-Debug-Android"
     ],
     "cwd": "[CUSTOM_/_B_WORK]/skia",
     "name": "exec buildbot_spec.py",
@@ -124,11 +88,11 @@
       "@@@STEP_LOG_LINE@json.output@    \"most\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"Clang\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"Android\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Mac\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"target_arch\": \"Arm7\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
@@ -140,7 +104,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_warnings_as_errors=1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CC\": \"/usr/bin/clang\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CXX\": \"/usr/bin/clang++\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
@@ -171,11 +137,13 @@
     ],
     "env": {
       "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot"
+      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Mac-Clang-Arm7-Debug-Android"
     },
     "name": "has ccache?",
     "stdout": "/path/to/tmp/json",
@@ -203,7 +171,7 @@
       "most",
       "-d",
       "arm_v7_neon",
-      "--gcc"
+      "--clang"
     ],
     "cwd": "[CUSTOM_/_B_WORK]/skia",
     "env": {
@@ -211,12 +179,14 @@
       "ANDROID_MAKE_CCACHE": "/usr/bin/ccache",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android-sdk",
       "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot"
+      "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Mac-Clang-Arm7-Debug-Android"
     },
     "name": "build most"
   },
@@ -225,7 +195,7 @@
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', '*.dylib', 'skia_launcher', 'lib/*.so', 'iOSShell.app', 'iOSShell.ipa', 'visualbench', 'visualbench.exe']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    dst_path = os.path.join(dst, os.path.relpath(f, src))\n    if not os.path.isdir(os.path.dirname(dst_path)):\n      os.makedirs(os.path.dirname(dst_path))\n    print 'Copying build product %s to %s' % (f, dst_path)\n    shutil.move(f, dst_path)\n",
-      "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot/Debug",
+      "[CUSTOM_/_B_WORK]/skia/out/Build-Mac-Clang-Arm7-Debug-Android/Debug",
       "[CUSTOM_[SWARM_OUT_DIR]]/out/Debug"
     ],
     "name": "copy build products",

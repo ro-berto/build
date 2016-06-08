@@ -15,6 +15,16 @@ DEPS = [
 ]
 
 
+TEST_BUILDERS = {
+  'client.skia.fyi': {
+    'skiabot-linux-housekeeper-000': [
+      'Housekeeper-PerCommit',
+      'Housekeeper-PerCommit-Trybot',
+    ],
+  },
+}
+
+
 def RunSteps(api):
   # Checkout, compile, etc.
   api.skia.gen_steps()
@@ -57,23 +67,16 @@ def RunSteps(api):
     abort_on_failure=False)
 
 def GenTests(api):
-  buildername = 'Housekeeper-PerCommit'
-  mastername = 'client.skia.fyi'
-  slavename = 'skiabot-linux-housekeeper-000'
-  yield (
-    api.test(buildername) +
-    api.properties(buildername=buildername,
-                   mastername=mastername,
-                   slavename=slavename) +
-    api.path.exists(api.path['slave_build'])
-  )
-
-  buildername = 'Housekeeper-PerCommit-Trybot'
-  yield (
-    api.test(buildername) +
-    api.properties(buildername=buildername,
-                   mastername=mastername,
-                   slavename=slavename,
-                   issue=500) +
-    api.path.exists(api.path['slave_build'])
-  )
+  for mastername, slaves in TEST_BUILDERS.iteritems():
+    for slavename, builders_by_slave in slaves.iteritems():
+      for buildername in builders_by_slave:
+        test = (
+          api.test(buildername) +
+          api.properties(buildername=buildername,
+                         mastername=mastername,
+                         slavename=slavename) +
+          api.path.exists(api.path['slave_build'])
+        )
+        if 'Trybot' in buildername:
+          test.properties['issue'] = '500'
+        yield test

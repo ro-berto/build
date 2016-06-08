@@ -71,7 +71,8 @@ class DefaultFlavorUtils(object):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
     path_to_app = self._skia_api.skia_out.join(
         self._skia_api.configuration, cmd[0])
-    if (self._skia_api.m.platform.is_linux and
+    if (('Linux' in self._skia_api.builder_name or
+         'Ubuntu' in self._skia_api.builder_name) and
         'x86_64' in self._skia_api.builder_name and
         not 'TSAN' in self._skia_api.builder_name):
       new_cmd = ['catchsegv', path_to_app]
@@ -81,7 +82,7 @@ class DefaultFlavorUtils(object):
     return self._skia_api.run(self._skia_api.m.step,
                               name, cmd=new_cmd, **kwargs)
 
-  def maybe_download_win_toolchain(self):
+  def maybe_download_win_toolchain(self):  # pragma: nocover
     """Download the Win toolchain if necessary."""
     toolchain_hash_file = self._skia_api.infrabots_dir.join(
         'win_toolchain_hash.json')
@@ -153,8 +154,7 @@ class DefaultFlavorUtils(object):
       if self._skia_api.running_in_swarming:
         self._chrome_path = self._skia_api.slave_dir.join('src')
         return self._chrome_path
-
-      if self._skia_api.m.platform.is_win:
+      elif 'Win' in self._skia_api.builder_name:  # pragma: nocover
         chrome_path = self.maybe_download_win_toolchain()
         if chrome_path:
           self._chrome_path = chrome_path
@@ -193,11 +193,11 @@ class DefaultFlavorUtils(object):
     # The CHROME_PATH environment variable is needed for builders that use
     # toolchains downloaded by Chrome.
     env = {'CHROME_PATH': self.chrome_path}
-    if self._skia_api.m.platform.is_win:
+    if 'Win' in self._skia_api.builder_name:
       make_cmd = ['python', 'make.py']
       if self._skia_api.running_in_swarming:
         self._skia_api._run_once(self.bootstrap_win_toolchain)
-      else:
+      else:  # pragma: nocover
         env['PATH'] = self._skia_api.m.path.pathsep.join([
             str(self._skia_api.slave_dir.join('win', 'depot_tools')),
             '%(PATH)s'])
