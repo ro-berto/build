@@ -54,7 +54,9 @@
       "SampleDevice",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
@@ -124,7 +126,9 @@
       "SampleDevice",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
@@ -186,7 +190,9 @@
       "SampleDevice",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
@@ -268,7 +274,9 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
@@ -373,7 +381,9 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
@@ -476,7 +486,9 @@
       "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"

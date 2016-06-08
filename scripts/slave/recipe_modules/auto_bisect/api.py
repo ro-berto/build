@@ -384,4 +384,5 @@ class AutoBisectApi(recipe_api.RecipeApi):
             affected_files, update_step, self.bot_db)
     finally:
       if api.chromium.c.TARGET_PLATFORM == 'android':
+        api.bot_update.ensure_checkout()
         api.chromium_android.common_tests_final_steps()

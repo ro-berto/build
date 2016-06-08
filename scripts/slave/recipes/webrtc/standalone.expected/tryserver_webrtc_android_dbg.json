@@ -225,7 +225,8 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[SLAVE_BUILD]/src/out/logcat",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -251,10 +252,12 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
-      "--json-output",
-      "/path/to/tmp/json",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--json-output",
+      "/path/to/tmp/json",
       "--known-devices-file",
       "[BUILD]/site_config/.known_devices"
     ],
@@ -363,12 +366,14 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
-      "-t",
-      "Debug",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-t",
+      "Debug"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -401,7 +406,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_audio_decoder_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -416,7 +423,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_common_audio_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -431,7 +440,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_common_video_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -446,7 +457,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_modules_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -461,7 +474,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_modules_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -476,7 +491,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_peerconnection_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -491,7 +508,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_system_wrappers_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -506,7 +525,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_test_support_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -521,7 +542,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_tools_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -536,7 +559,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_video_engine_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -551,7 +576,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_voice_engine_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -566,7 +593,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_webrtc_nonparallel_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -581,7 +610,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_AppRTCDemoTest",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "name": "Instrumentation test AppRTCDemoTest"
   },
@@ -592,7 +623,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_libjingle_peerconnection_android_unittest",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "name": "Instrumentation test libjingle_peerconnection_android_unittest"
   },
@@ -662,7 +695,9 @@
       "[SLAVE_BUILD]/src/build/android/tombstones.py",
       "-a",
       "-s",
-      "-w"
+      "-w",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
