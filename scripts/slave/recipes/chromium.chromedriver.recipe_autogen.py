@@ -126,8 +126,8 @@ def Mac_10_6_steps(api):
   api.chromium.cleanup_temp()
   # chromedriver compile.py step
   api.python("compile", api.path["build"].join("scripts", "slave",
-    "compile.py"), args=['--target', 'Release', '--', '-project',
-      '../build/all.xcodeproj', '-target', 'chromium_builder_chromedriver'])
+    "compile.py"), args=['--target', 'Release',
+      'chromium_builder_chromedriver'])
   # annotated_steps step
   api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),

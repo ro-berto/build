@@ -112,10 +112,6 @@
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
-      "--",
-      "-project",
-      "../build/all.xcodeproj",
-      "-target",
       "chromium_builder_chromedriver"
     ],
     "name": "compile"
