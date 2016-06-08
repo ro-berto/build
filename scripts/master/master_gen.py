@@ -90,8 +90,6 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
 def _ComputeBuilders(builders, m_annotator, active_master_cls):
   actual_builders = []
 
-  default_properties = builders.get('default_properties')
-
   def cmp_fn(a, b):
     a_cat = builders['builders'][a].get('category')
     b_cat = builders['builders'][b].get('category')
@@ -115,11 +113,11 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
     slavebuilddir = builder_data.get('slavebuilddir',
                                      util.safeTranslate(builder_name))
 
-    if default_properties:
-      props = default_properties.copy()
-      props.update(builder_data.get('properties', {}))
-    else:
-      props = builder_data.get('properties')
+    props = {}
+    props.update(builders.get('default_properties', {}).copy())
+    if builder_data.get('use_remote_run'):
+      props.update(builders.get('default_remote_run_properties', {}).copy())
+    props.update(builder_data.get('properties', {}))
 
     if builder_data.get('use_remote_run'):
       factory = remote_run_factory.RemoteRunFactory(
