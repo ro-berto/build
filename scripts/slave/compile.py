@@ -959,15 +959,6 @@ def main_win(options, args):
 
   if options.clobber:
     clobber()
-  else:
-    # Remove the log file so it doesn't grow without limit,
-    chromium_utils.RemoveFile(options.target_output_dir, 'debug.log')
-    # Remove the chrome.dll version resource so it picks up the new svn
-    # revision, unless user explicitly asked not to remove it. See
-    # Bug 1064677 for more details.
-    if not options.keep_version_file:
-      chromium_utils.RemoveFile(options.target_output_dir, 'obj', 'chrome_dll',
-                                'chrome_dll_version.rc')
 
   env = EchoDict(os.environ)
 
@@ -1113,11 +1104,6 @@ def real_main():
                            default=False,
                            help='delete the output directory after compiling '
                                 'only if it failed. Do not affect ninja.')
-  option_parser.add_option('--keep-version-file', action='store_true',
-                           default=False,
-                           help='do not delete the chrome_dll_version.rc file '
-                                'before compiling (ignored if --clobber is '
-                                'used')
   option_parser.add_option('--target', default='Release',
                            help='build target (Debug or Release)')
   option_parser.add_option('--arch', default=None,
