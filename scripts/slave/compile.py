@@ -1133,9 +1133,6 @@ def real_main():
   # For linux to arm cross compile.
   option_parser.add_option('--crosstool', default=None,
                            help='optional path to crosstool toolset')
-  option_parser.add_option('--llvm-tsan', action='store_true',
-                           default=False,
-                           help='build with LLVM\'s ThreadSanitizer')
   if chromium_utils.IsMac():
     # Mac only.
     option_parser.add_option('--xcode-target', default=None,
