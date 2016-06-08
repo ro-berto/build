@@ -1195,33 +1195,23 @@ def real_main():
       if options.project:
         args += [options.project]
     elif chromium_utils.IsMac():
-      # We're in the process of moving to ninja by default on Mac, see
-      # http://crbug.com/294387
-      # Builders for different branches will use either xcode or ninja depending
-      # on the release channel for a while. Until all release channels are on
-      # ninja, use build file mtime to figure out which build system to use.
-      # TODO(thakis): Just use main_ninja once the transition is complete.
-      if build_directory.AreNinjaFilesNewerThanXcodeFiles(
-          src_dir=options.src_dir):
-        main = main_ninja
-        options.build_tool = 'ninja'
+      main = main_ninja
+      options.build_tool = 'ninja'
 
-        # There is no standard way to pass a build target (such as 'base') to
-        # compile.py. --target specifies Debug or Release. --project could do
-        # that, but it's only supported by the msvs build tool at the moment.
-        # Because of that, most build masters pass additional options to the
-        # build tool to specify the build target. For xcode, these are in the
-        # form of '-project blah.xcodeproj -target buildtarget'. Translate these
-        # into ninja options, if needed.
-        xcode_option_parse = optparse.OptionParser()
-        xcode_option_parse.add_option('--project')
-        xcode_option_parse.add_option('--target', action='append', default=[])
-        xcode_options, xcode_args = xcode_option_parse.parse_args(
-            [re.sub('^-', '--', a) for a in args])  # optparse wants --options.
-        args = xcode_options.target + xcode_args
-      else:
-        main = main_xcode
-        options.build_tool = 'xcode'
+      # There is no standard way to pass a build target (such as 'base') to
+      # compile.py. --target specifies Debug or Release. --project could do
+      # that, but it's only supported by the msvs build tool at the moment.
+      # Because of that, most build masters pass additional options to the
+      # build tool to specify the build target. For xcode, these are in the
+      # form of '-project blah.xcodeproj -target buildtarget'. Translate these
+      # into ninja options, if needed.
+      # TODO(thakis): Looks like this is mostly unused now, remove it soon.
+      xcode_option_parse = optparse.OptionParser()
+      xcode_option_parse.add_option('--project')
+      xcode_option_parse.add_option('--target', action='append', default=[])
+      xcode_options, xcode_args = xcode_option_parse.parse_args(
+          [re.sub('^-', '--', a) for a in args])  # optparse wants --options.
+      args = xcode_options.target + xcode_args
     elif chromium_utils.IsLinux():
       main = main_ninja
       options.build_tool = 'ninja'
