@@ -59,6 +59,10 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # This disables Chromite bootstrapping by omitting the explicit "--branch"
       # argument.
       disable_bootstrap = Single(bool),
+
+      # Whether this Chromite version supports warm cache.
+      # https://chromium-review.googlesource.com/#/c/348011
+      supports_repo_cache = Single(bool),
     ),
 
     # A list of branches whose Chromite version is "old". Old Chromite
@@ -71,6 +75,11 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
 
     # A list of branches whose builders checkout Chrome from SVN instead of Git.
     chrome_svn_branches = Set(basestring),
+
+    # Directory where a warm repo cache is stored. If set, and if the current
+    # build supports a warm cache, this will be used to bootstrap the Chromite
+    # checkout.
+    repo_cache_dir = Single(basestring)
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -81,6 +90,7 @@ def base(c):
   c.repositories['tryjob'] = []
   c.repositories['chromium'] = []
   c.repositories['cros_manifest'] = []
+  c.repo_cache_dir = '/var/cache/chrome-infra/ccompute-setup/cros-internal'
 
   c.old_chromite_branches.update((
     'firmware-uboot_v2-1299.B',
@@ -125,6 +135,7 @@ def master_chromiumos_chromium(c):
 @config_ctx(group='master', includes=['external'])
 def master_chromiumos(c):
   c.cbb.builddir = 'external_master'
+  c.cbb.supports_repo_cache = True
 
 @config_ctx()
 def chromiumos_paladin(c):

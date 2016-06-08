@@ -63,6 +63,8 @@
       "--clobber",
       "--config_repo",
       "https://fake.googlesource.com/myconfig/repo.git",
+      "--repo-cache",
+      "/var/cache/chrome-infra/ccompute-setup/cros-internal",
       "x86-generic-full"
     ],
     "cwd": "[SLAVE_BUILD]",

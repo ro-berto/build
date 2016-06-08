@@ -348,6 +348,8 @@ class ChromiteApi(recipe_api.RecipeApi):
       cbb_args.extend(['--chrome_version', self.c.cbb.chrome_version])
     if self.c.cbb.config_repo:
       cbb_args.extend(['--config_repo', self.c.cbb.config_repo])
+    if self.c.repo_cache_dir and self.c.cbb.supports_repo_cache:
+      cbb_args.extend(['--repo-cache', self.c.repo_cache_dir])
 
     # Set the build ID, if specified.
     if self.c.cbb.build_id:
