@@ -33,61 +33,23 @@ S(name='chromium_lkgr', branch='lkgr')
 ## Windows
 ################################################################################
 
-# ASan/Win supports neither the component build nor NaCL at the moment.
-asan_win_gyp = ('asan=1 component=static_library enable_ipc_fuzzer=1 '
-                'v8_enable_verify_heap=1')
-
-# Clang is not stable enough on Windows to use a gatekeeper yet.
+# ASan/Win bot.
 B('Win ASan Release', 'win_asan_rel', scheduler='chromium_lkgr')
-F('win_asan_rel', win_out().ChromiumASANFactory(
-    compile_timeout=8*3600,  # We currently use a VM, which is extremely slow.
-    clobber=True,
-    options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'asan',
-       'gs_bucket': 'gs://chromium-browser-asan',
-       'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_win_gyp},
-       'use_mb': True,
-    }))
+# We currently use a VM, which is extremely slow.
+F('win_asan_rel', m_annotator.BaseFactory(recipe='chromium', timeout=8*3600))
 
 # ASan/Win coverage bot.
 B('Win ASan Release Coverage', 'win_asan_rel_cov', scheduler='chromium_lkgr')
-F('win_asan_rel_cov', win_out().ChromiumASANFactory(
-    compile_timeout=8*3600,  # We currently use a VM, which is extremely slow.
-    clobber=True,
-    options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'asan-coverage',
-       'gs_bucket': 'gs://chromium-browser-asan',
-       'gs_acl': 'public-read',
-       'gclient_env': {
-           'GYP_DEFINES': asan_win_gyp + ' sanitizer_coverage=edge',
-       },
-       'use_mb': True,
-    }))
+F('win_asan_rel_cov', m_annotator.BaseFactory(recipe='chromium',
+  # We currently use a VM, which is extremely slow.
+  timeout=8*3600))
 
-
-# ASan/Win supports neither the component build nor NaCL at the moment.
-media_gyp = (' proprietary_codecs=1 ffmpeg_branding=Chrome')
-asan_win_media_gyp = asan_win_gyp + media_gyp
-
-# Clang is not stable enough on Windows to use a gatekeeper yet.
+# ASan/Win media bot.
 B('Win ASan Release Media', 'win_asan_rel_media',
    scheduler='chromium_lkgr')
-F('win_asan_rel_media', win_out().ChromiumASANFactory(
-    compile_timeout=8*3600,  # We currently use a VM, which is extremely slow.
-    clobber=True,
-    options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'asan',
-       'gs_bucket': 'gs://chrome-test-builds/media',
-       'gclient_env': {'GYP_DEFINES': asan_win_media_gyp},
-       'use_mb': True,
-    }))
+F('win_asan_rel_media', m_annotator.BaseFactory(recipe='chromium',
+  # We currently use a VM, which is extremely slow.
+  timeout=8*3600))
 
 # Win SyzyASan bot.
 B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr', 'compile', 'chromium_lkgr')
@@ -112,6 +74,7 @@ F('mac_asan_rel', linux().ChromiumASANFactory(
        'use_mb': True,
     }))
 
+media_gyp = (' proprietary_codecs=1 ffmpeg_branding=Chrome')
 B('Mac ASAN Release Media', 'mac_asan_rel_media', 'compile', 'chromium_lkgr')
 F('mac_asan_rel_media', linux().ChromiumASANFactory(
     clobber=True,
@@ -303,81 +266,28 @@ F('linux_asan_rel_sym_ia32_v8_arm', linux().ChromiumASANFactory(
        'use_mb': True,
     }))
 
-# The build process for TSan is described at
-# http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
-tsan_gyp = ('tsan=1 disable_nacl=1 '
-            'debug_extra_cflags="-gline-tables-only" ')
-
+# TSan bots.
 B('TSAN Release', 'linux_tsan_rel', 'compile', 'chromium_lkgr')
-F('linux_tsan_rel', linux().ChromiumFactory(
-    clobber=True,
-    options=['--compiler=goma-clang', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'tsan',
-       'gs_bucket': 'gs://chromium-browser-tsan',
-       'gs_acl': 'public-read',
-       'tsan': True,
-       'gclient_env': {'GYP_DEFINES': tsan_gyp},
-       'use_mb': True,
-    }))
+F('linux_tsan_rel', m_annotator.BaseFactory(recipe='chromium'))
 
 B('TSAN Debug', 'linux_tsan_dbg', 'compile', 'chromium_lkgr')
-F('linux_tsan_dbg', linux().ChromiumFactory(
-    clobber=True,
-    target='Debug',
-    options=['--compiler=goma-clang', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'tsan',
-       'gs_bucket': 'gs://chromium-browser-tsan',
-       'gs_acl': 'public-read',
-       'tsan': True,
-       'gclient_env': {'GYP_DEFINES': tsan_gyp},
-       'use_mb': True,
-    }))
+F('linux_tsan_dbg', m_annotator.BaseFactory(recipe='chromium'))
 
-# The build process for MSan is described at
-# http://dev.chromium.org/developers/testing/memorysanitizer
-msan_gyp = ('msan=1 sanitizer_coverage=edge '
-            'use_prebuilt_instrumented_libraries=1 ')
-
+# MSan bots.
 B('MSAN Release (no origins)', 'linux_msan_rel_no_origins', 'compile',
   'chromium_lkgr')
-F('linux_msan_rel_no_origins', linux().ChromiumFactory(
-    clobber=True,
-    target='Release',
-    options=['--compiler=goma-clang', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'msan-no-origins',
-       'gs_bucket': 'gs://chromium-browser-msan',
-       'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': msan_gyp + 'msan_track_origins=0 '},
-       'use_mb': True,
-    }))
+F('linux_msan_rel_no_origins', m_annotator.BaseFactory(recipe='chromium'))
 
 B('MSAN Release (chained origins)', 'linux_msan_rel_chained_origins', 'compile',
   'chromium_lkgr')
-F('linux_msan_rel_chained_origins', linux().ChromiumFactory(
-    clobber=True,
-    target='Release',
-    options=['--compiler=goma-clang', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'msan-chained-origins',
-       'gs_bucket': 'gs://chromium-browser-msan',
-       'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': msan_gyp + 'msan_track_origins=2 '},
-       'use_mb': True,
-    }))
+F('linux_msan_rel_chained_origins', m_annotator.BaseFactory(recipe='chromium'))
 
 # This is a bot that uploads LKGR telemetry harnesses to Google Storage.
 B('Telemetry Harness Upload', 'telemetry_harness_upload', None, 'chromium_lkgr')
 F('telemetry_harness_upload',
   m_annotator.BaseFactory('perf/telemetry_harness_upload'))
 
-
+# UBSan bots.
 B('UBSan Release', 'linux_ubsan_rel', 'compile', 'chromium_lkgr')
 # UBSan builds very slowly with edge level coverage
 F('linux_ubsan_rel', m_annotator.BaseFactory(recipe='chromium', timeout=5400))

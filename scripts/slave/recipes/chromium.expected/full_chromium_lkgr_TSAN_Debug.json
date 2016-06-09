@@ -7,7 +7,7 @@
       "--master",
       "chromium.lkgr",
       "--builder",
-      "UBSan vptr Release",
+      "TSAN Debug",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -163,7 +163,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]/src/out/Debug"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -188,7 +188,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' release_extra_cflags=-fno-sanitize-recover=undefined sanitizer_coverage=edge target_arch=x64 ubsan_vptr=1 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=shared_library disable_nacl=1 gomadir='[CACHE]/cipd/goma' target_arch=x64 tsan=1 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -213,12 +213,12 @@
       "-m",
       "chromium.lkgr",
       "-b",
-      "UBSan vptr Release",
+      "TSAN Debug",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "//out/Release"
+      "//out/Debug"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -260,7 +260,7 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
@@ -294,7 +294,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "/path/to/tmp/json"
     ],
     "name": "listdir build_dir",
@@ -318,9 +318,9 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[TMP_BASE]/chrome_staging_tmp_1",
-      "ubsan-vptr-linux-release-170242",
+      "tsan-linux-debug-170242",
       "[\"file 1\", \"file 2\"]",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]/src/out/Debug"
     ],
     "name": "zipping"
   },
@@ -339,12 +339,12 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/chrome_staging_tmp_1/ubsan-vptr-linux-release-170242.zip",
-      "gs://chromium-browser-ubsan/linux-release-vptr/ubsan-vptr-linux-release-170242.zip"
+      "[TMP_BASE]/chrome_staging_tmp_1/tsan-linux-debug-170242.zip",
+      "gs://chromium-browser-tsan/linux-debug/tsan-linux-debug-170242.zip"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-ubsan/linux-release-vptr/ubsan-vptr-linux-release-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-tsan/linux-debug/tsan-linux-debug-170242.zip@@@"
     ]
   },
   {
@@ -352,9 +352,9 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/chrome_staging_tmp_1/ubsan-vptr-linux-release-170242.zip"
+      "[TMP_BASE]/chrome_staging_tmp_1/tsan-linux-debug-170242.zip"
     ],
-    "name": "ubsan-vptr-linux-release-170242.zip",
+    "name": "tsan-linux-debug-170242.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",

@@ -3,11 +3,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
+    ],
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "chromium.lkgr",
       "--builder",
-      "UBSan vptr Release",
+      "Win ASan Release Coverage",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -26,7 +34,7 @@
       "--output_manifest"
     ],
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -112,11 +120,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "RECIPE_MODULE[build::cipd]\\resources\\bootstrap.py",
       "--platform",
-      "linux-amd64",
+      "windows-386",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[SLAVE_BUILD]\\cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -125,7 +133,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -133,16 +141,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "ensure",
       "--root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]\\cipd\\goma",
       "--list",
-      "infra_internal/goma/client/linux-amd64 release",
+      "infra_internal/goma/client/windows-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
+      "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -151,7 +159,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -163,7 +171,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]\\src\\out\\Release"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -181,15 +189,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' release_extra_cflags=-fno-sanitize-recover=undefined sanitizer_coverage=edge target_arch=x64 ubsan_vptr=1 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_ipc_fuzzer=1 fastbuild=0 gomadir='[CACHE]\\cipd\\goma' sanitizer_coverage=edge target_arch=ia32 use_goma=1 v8_enable_verify_heap=1",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -197,10 +205,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
     "name": "cleanup_temp"
   },
@@ -208,20 +216,20 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.lkgr",
       "-b",
-      "UBSan vptr Release",
+      "Win ASan Release Coverage",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]\\cipd\\goma",
       "//out/Release"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "generate_build_files"
   },
@@ -230,14 +238,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--output-json",
       "/path/to/tmp/json"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -251,37 +259,37 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--build-data-dir",
-      "[ROOT]/build_data_dir",
+      "[ROOT]\\build_data_dir",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
+      "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]\\cipd\\goma",
       "--",
       "chromium_builder_asan"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "compile",
     "~followup_annotations": [
@@ -294,7 +302,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "/path/to/tmp/json"
     ],
     "name": "listdir build_dir",
@@ -316,11 +324,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
-      "[TMP_BASE]/chrome_staging_tmp_1",
-      "ubsan-vptr-linux-release-170242",
+      "RECIPE_MODULE[build::archive]\\resources\\zip_archive.py",
+      "[TMP_BASE]\\chrome_staging_tmp_1",
+      "asan-coverage-win32-release-170242",
       "[\"file 1\", \"file 2\"]",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]\\src\\out\\Release"
     ],
     "name": "zipping"
   },
@@ -328,7 +336,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--",
       "-h",
       "x-goog-meta-Cr-Commit-Position:refs/heads/master@{#170242}",
@@ -339,12 +347,12 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/chrome_staging_tmp_1/ubsan-vptr-linux-release-170242.zip",
-      "gs://chromium-browser-ubsan/linux-release-vptr/ubsan-vptr-linux-release-170242.zip"
+      "[TMP_BASE]\\chrome_staging_tmp_1\\asan-coverage-win32-release-170242.zip",
+      "gs://chromium-browser-asan/win32-release/asan-coverage-win32-release-170242.zip"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-ubsan/linux-release-vptr/ubsan-vptr-linux-release-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-asan/win32-release/asan-coverage-win32-release-170242.zip@@@"
     ]
   },
   {
@@ -352,9 +360,9 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/chrome_staging_tmp_1/ubsan-vptr-linux-release-170242.zip"
+      "[TMP_BASE]\\chrome_staging_tmp_1\\asan-coverage-win32-release-170242.zip"
     ],
-    "name": "ubsan-vptr-linux-release-170242.zip",
+    "name": "asan-coverage-win32-release-170242.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",

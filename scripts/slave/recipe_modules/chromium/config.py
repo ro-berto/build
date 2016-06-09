@@ -429,6 +429,11 @@ def msan(c):
   c.gyp_env.GYP_DEFINES['msan'] = 1
 
 @config_ctx()
+def msan_no_origin_tracking(c):
+  # Don't track the chain of stores leading from allocation site to use site.
+  c.gyp_env.GYP_DEFINES['msan_track_origins'] = 0
+
+@config_ctx()
 def msan_full_origin_tracking(c):
   # Track the chain of stores leading from allocation site to use site.
   c.gyp_env.GYP_DEFINES['msan_track_origins'] = 2
@@ -529,9 +534,6 @@ def clang_tot(c):
 
 @config_ctx(includes=['ninja', 'clang', 'asan', 'static_library'])
 def win_asan(c):
-  # These are set on the lkgr bot, and the fyi bots should match the lkgr bot.
-  # TODO(thakis): Once the lkgr bot uses recipes, the lkgr and the fyi bots
-  # should use the same context to ensure they use the same gyp defines.
   c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 
@@ -559,6 +561,10 @@ def chromium_win_clang_official(c):
 
 @config_ctx(includes=['chromium_win_clang_tot', 'official'])
 def chromium_win_clang_official_tot(c):
+  pass
+
+@config_ctx(includes=['win_asan', 'goma'])
+def chromium_win_clang_asan(c):
   pass
 
 @config_ctx(includes=['win_asan', 'clang_tot'])  # No goma.
