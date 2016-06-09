@@ -798,6 +798,10 @@ def v8_verify_heap(c):
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 
 @config_ctx()
+def enable_ipc_fuzzer(c):
+  c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
+
+@config_ctx()
 def chromium_perf(c):
   c.clobber_before_runhooks = False
 

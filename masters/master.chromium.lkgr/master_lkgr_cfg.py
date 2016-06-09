@@ -62,45 +62,13 @@ F('win_syzyasan_lkgr', m_annotator.BaseFactory(recipe='chromium', timeout=7200))
 asan_mac_gyp = 'asan=1 v8_enable_verify_heap=1 enable_ipc_fuzzer=1 '
 
 B('Mac ASAN Release', 'mac_asan_rel', 'compile', 'chromium_lkgr')
-F('mac_asan_rel', linux().ChromiumASANFactory(
-    clobber=True,
-    options=['--compiler=goma-clang', '--', '-target', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'asan',
-       'gs_bucket': 'gs://chromium-browser-asan',
-       'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_mac_gyp},
-       'use_mb': True,
-    }))
+F('mac_asan_rel', m_annotator.BaseFactory(recipe='chromium'))
 
-media_gyp = (' proprietary_codecs=1 ffmpeg_branding=Chrome')
 B('Mac ASAN Release Media', 'mac_asan_rel_media', 'compile', 'chromium_lkgr')
-F('mac_asan_rel_media', linux().ChromiumASANFactory(
-    clobber=True,
-    options=['--compiler=goma-clang', '--', '-target', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'asan',
-       'gs_bucket': 'gs://chrome-test-builds/media',
-       'gclient_env': {'GYP_DEFINES': asan_mac_gyp + media_gyp},
-       'use_mb': True,
-    }))
+F('mac_asan_rel_media', m_annotator.BaseFactory(recipe='chromium'))
 
 B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
-F('mac_asan_dbg', linux().ChromiumASANFactory(
-    clobber=True,
-    target='Debug',
-    options=['--compiler=goma-clang', '--', '-target', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'asan',
-       'gs_bucket': 'gs://chromium-browser-asan',
-       'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_mac_gyp +
-                                      ' component=static_library '},
-       'use_mb': True,
-    }))
+F('mac_asan_dbg', m_annotator.BaseFactory(recipe='chromium'))
 
 ################################################################################
 ## Linux
