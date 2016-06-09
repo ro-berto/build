@@ -17,27 +17,19 @@ DEPS = [
 
 TEST_BUILDERS = {
   'client.skia.compile': {
-    'skiabot-linux-compile-000': [
+    'skiabot-linux-swarm-000': [
+      'Build-Mac-Clang-Arm7-Debug-Android',
       'Build-Mac-Clang-Arm7-Release-iOS',
+      'Build-Mac-Clang-x86_64-Debug-CommandBuffer',
+      'Build-Mac-Clang-x86_64-Release-CMake',
       'Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot',
       'Build-Ubuntu-GCC-Arm7-Release-Android',
       'Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan',
-      'Build-Ubuntu-GCC-x86_64-Release-PDFium',
-    ],
-    'skiabot-win-compile-000': [
-      'Build-Win-MSVC-x86-Debug',
-    ],
-    'skiabot-linux-swarm-007': [
       'Build-Ubuntu-GCC-x86_64-Debug-MSAN',
-    ],
-    'skiabot-linux-swarm-012': [
-      'Build-Ubuntu-GCC-x86_64-Release-Valgrind',
-    ],
-    'skiabot-linux-swarm-014': [
       'Build-Ubuntu-GCC-x86_64-Release-CMake',
-    ],
-    'skiabot-linux-swarm-015': [
-      'Build-Mac-Clang-x86_64-Release-CMake',
+      'Build-Ubuntu-GCC-x86_64-Release-PDFium',
+      'Build-Ubuntu-GCC-x86_64-Release-Valgrind',
+      'Build-Win-MSVC-x86-Debug',
     ],
   },
 }
@@ -63,15 +55,17 @@ def GenTests(api):
                          revision='abc123',
                          swarm_out_dir='[SWARM_OUT_DIR]') +
           api.path.exists(
-              api.path['slave_build'].join('skia'),
-              api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt'),
+              api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
           )
         )
         if 'Win' in builder:
           test += api.platform('win', 64)
-
+        elif 'Mac' in builder:
+          test += api.platform('mac', 64)
+        else:
+          test += api.platform('linux', 64)
         if 'Android' in builder:
-          ccache = '/usr/bin/ccache' if 'Appurify' in builder else None
+          ccache = '/usr/bin/ccache'
           test += api.step_data('has ccache?',
                                 stdout=api.json.output({'ccache':ccache}))
           test += api.step_data(

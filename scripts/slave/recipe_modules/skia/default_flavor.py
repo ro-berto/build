@@ -81,7 +81,7 @@ class DefaultFlavorUtils(object):
     return self._skia_api.run(self._skia_api.m.step,
                               name, cmd=new_cmd, **kwargs)
 
-  def maybe_download_win_toolchain(self):
+  def maybe_download_win_toolchain(self):  # pragma: nocover
     """Download the Win toolchain if necessary."""
     toolchain_hash_file = self._skia_api.infrabots_dir.join(
         'win_toolchain_hash.json')
@@ -153,8 +153,7 @@ class DefaultFlavorUtils(object):
       if self._skia_api.running_in_swarming:
         self._chrome_path = self._skia_api.slave_dir.join('src')
         return self._chrome_path
-
-      if self._skia_api.m.platform.is_win:
+      if self._skia_api.m.platform.is_win:  # pragma: nocover
         chrome_path = self.maybe_download_win_toolchain()
         if chrome_path:
           self._chrome_path = chrome_path
@@ -197,7 +196,7 @@ class DefaultFlavorUtils(object):
       make_cmd = ['python', 'make.py']
       if self._skia_api.running_in_swarming:
         self._skia_api._run_once(self.bootstrap_win_toolchain)
-      else:
+      else:  # pragma: nocover
         env['PATH'] = self._skia_api.m.path.pathsep.join([
             str(self._skia_api.slave_dir.join('win', 'depot_tools')),
             '%(PATH)s'])

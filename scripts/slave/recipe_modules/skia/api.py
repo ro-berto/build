@@ -19,7 +19,6 @@ sys.path.append(
 from common.skia import global_constants
 
 from . import android_flavor
-from . import appurify_flavor
 from . import cmake_flavor
 from . import coverage_flavor
 from . import default_flavor
@@ -68,11 +67,6 @@ def is_android(builder_cfg):
           builder_cfg.get('os') == 'Android')
 
 
-def is_appurify(builder_cfg):
-  """Determine whether the builder is an Android bot running in Appurify."""
-  return 'Appurify' in builder_cfg.get('extra_config', '')
-
-
 def is_cmake(builder_cfg):
   return 'CMake' in builder_cfg.get('extra_config', '')
 
@@ -100,9 +94,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def get_flavor(self, builder_cfg):
     """Return a flavor utils object specific to the given builder."""
-    if is_appurify(builder_cfg):
-      return appurify_flavor.AppurifyFlavorUtils(self)
-    elif is_android(builder_cfg):
+    if is_android(builder_cfg):
       return android_flavor.AndroidFlavorUtils(self)
     elif is_cmake(builder_cfg):
       return cmake_flavor.CMakeFlavorUtils(self)
@@ -300,7 +292,7 @@ class SkiaApi(recipe_api.RecipeApi):
     repo_path = parent_dir.join(repo.name)
     if self.m.path.exists(repo_path):
       if self.m.platform.is_win:
-        git = 'git.bat'
+        git = 'git.bat'  # pragma: nocover
       else:
         git = 'git'
       self.m.step('git remote set-url',
@@ -862,7 +854,7 @@ print json.dumps({'ccache': ccache})
         json_path = self.flavor.device_path_join(
             self.device_dirs.perf_data_dir,
             'nanobench_%s.json' % self.got_revision)
-      else:
+      else:  # pragma: nocover
         git_timestamp = self.m.git.get_timestamp(test_data='1408633190',
                                                  infra_step=True)
         json_path = self.flavor.device_path_join(
@@ -895,25 +887,23 @@ print json.dumps({'ccache': ccache})
       self.flavor.copy_directory_contents_to_host(
           self.device_dirs.perf_data_dir, self.perf_data_dir)
 
-      if self.running_in_swarming:
-        # If we're running in Swarming, we wrote the results into the Swarming
-        # out dir, so we don't need to upload.
-        return
-
-      gsutil_path = self.m.path['depot_tools'].join(
-          'third_party', 'gsutil', 'gsutil')
-      upload_args = [self.builder_name, self.m.properties['buildnumber'],
-                     self.perf_data_dir, self.got_revision, gsutil_path]
-      if self.is_trybot:
-        upload_args.append(self.m.properties['issue'])
-      self.run(self.m.python,
-               'Upload %s Results' % target,
-               script=self.resource('upload_bench_results.py'),
-               args=upload_args,
-               cwd=self.m.path['checkout'],
-               env=self.gsutil_env_chromium_skia_gm,
-               abort_on_failure=False,
-               infra_step=True)
+      # If we're running in Swarming, we wrote the results into the Swarming
+      # out dir, so we don't need to upload.
+      if not self.running_in_swarming:  # pragma: nocover
+        gsutil_path = self.m.path['depot_tools'].join(
+            'third_party', 'gsutil', 'gsutil')
+        upload_args = [self.builder_name, self.m.properties['buildnumber'],
+                       self.perf_data_dir, self.got_revision, gsutil_path]
+        if self.is_trybot:
+          upload_args.append(self.m.properties['issue'])
+        self.run(self.m.python,
+                 'Upload %s Results' % target,
+                 script=self.resource('upload_bench_results.py'),
+                 args=upload_args,
+                 cwd=self.m.path['checkout'],
+                 env=self.gsutil_env_chromium_skia_gm,
+                 abort_on_failure=False,
+                 infra_step=True)
 
   def cleanup_steps(self):
     """Run any cleanup steps."""

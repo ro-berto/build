@@ -18,16 +18,11 @@ DEPS = [
 
 TEST_BUILDERS = {
   'client.skia': {
-    'skiabot-shuttle-win8-i7-4790k-001': [
+    'skiabot-linux-swarm-000': [
       'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot',
-    ],
-    'skiabot-linux-swarm-012': [
       'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
-    ],
-  },
-  'client.skia.android': {
-    'skiabot-shuttle-ubuntu12-nexus7-001': [
       'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
+      'Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench',
     ],
   },
 }

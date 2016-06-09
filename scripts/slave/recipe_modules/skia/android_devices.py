@@ -88,6 +88,7 @@ SLAVE_INFO = {
   'vm691-m3': SlaveInfo('noserial', MACMINI_SDK_ROOT, False),
   'vm692-m3': SlaveInfo('noserial', MACMINI_SDK_ROOT, False),
   'vm693-m3': SlaveInfo('noserial', MACMINI_SDK_ROOT, False),
+  'skiabot-linux-swarm-000': SlaveInfo('noserial', DEFAULT_SDK_ROOT, True),
   'default':
       SlaveInfo('noserial', DEFAULT_SDK_ROOT, False),
 }

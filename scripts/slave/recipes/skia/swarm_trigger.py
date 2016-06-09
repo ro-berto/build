@@ -28,15 +28,9 @@ DEPS = [
 
 TEST_BUILDERS = {
   'client.skia': {
-    'skiabot-linux-swarm-012': [
-       'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
-    ],
-    'skiabot-linux-swarm-013': [
+    'skiabot-linux-swarm-000': [
+      'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
       'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
-    ],
-  },
-  'client.skia.fyi': {
-    'skiabot-linux-housekeeper-003': [
       'Build-Mac-Clang-x86_64-Release',
       'Build-Ubuntu-GCC-x86_64-Debug',
       'Build-Ubuntu-GCC-x86_64-Release-Trybot',
@@ -59,10 +53,10 @@ def derive_compile_bot_name(builder_name, builder_spec):
   if builder_cfg['role'] in ('Test', 'Perf'):
     os = builder_cfg['os']
     extra_config = builder_cfg.get('extra_config')
-    if os == 'Android':  # pragma:nocover
+    if os == 'Android':
       extra_config = os
       os = 'Ubuntu'
-    elif os == 'iOS':  # pragma: nocover
+    elif os == 'iOS':
       extra_config = os
       os = 'Mac'
     elif 'Win' in os:
@@ -613,6 +607,15 @@ def GenTests(api):
   slave = 'skiabot-linux-test-000'
   test = test_for_bot(api, builder, master, slave, 'No_downloaded_SKP_VERSION')
   test += api.step_data('Get downloaded SKP_VERSION', retcode=1)
+  test += api.path.exists(
+      api.path['slave_build'].join('skia'),
+      api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+  )
+  yield test
+
+  test = test_for_bot(api, builder, master, slave,
+                      'Wrong_downloaded_SKP_VERSION')
+  test += api.properties(test_downloaded_skp_version='999')
   test += api.path.exists(
       api.path['slave_build'].join('skia'),
       api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
