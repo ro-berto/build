@@ -156,7 +156,7 @@ class GClientFactory(object):
 
   def BaseFactory(self, gclient_spec=None, official_release=False,
                   factory_properties=None, build_properties=None,
-                  delay_compile_step=False, sudo_for_remove=False,
+                  sudo_for_remove=False,
                   gclient_deps=None, slave_type=None, options=None,
                   target=None):
     if gclient_spec is None:
@@ -219,11 +219,10 @@ class GClientFactory(object):
     else:
       # Revert the tree to a clean (unmodified) state.
       factory_cmd_obj.AddGClientRevertStep()
-      if not delay_compile_step:
-        self.AddUpdateStep(gclient_spec, factory_properties, factory,
-                           slave_type, sudo_for_remove,
-                           gclient_deps=gclient_deps, options=options,
-                           blink_config=blink_config)
+      self.AddUpdateStep(gclient_spec, factory_properties, factory,
+                         slave_type, sudo_for_remove,
+                         gclient_deps=gclient_deps, options=options,
+                         blink_config=blink_config)
 
     if use_mb:
       # To be safe, we reset env back to its non-MB state and then make sure
