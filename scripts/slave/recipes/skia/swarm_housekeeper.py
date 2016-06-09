@@ -27,7 +27,7 @@ TEST_BUILDERS = {
 
 def RunSteps(api):
   # Checkout, compile, etc.
-  api.skia.gen_steps()
+  api.skia.setup(running_in_swarming=True)
 
   cwd = api.path['checkout']
 
@@ -54,8 +54,7 @@ def RunSteps(api):
 
   cmd = ['python', api.skia.resource('run_binary_size_analysis.py'),
          '--library', api.skia.skia_out.join('Release', 'lib', 'libskia.so'),
-         '--githash', api.skia.got_revision,
-         '--commit_ts', api.skia.m.git.get_timestamp(test_data='1408633190'),
+         '--githash', api.properties['revision'],
          '--gsutil_path', gsutil_path]
   if api.skia.is_trybot:
     cmd.extend(['--issue_number', str(api.skia.m.properties['issue'])])
@@ -74,7 +73,10 @@ def GenTests(api):
           api.test(buildername) +
           api.properties(buildername=buildername,
                          mastername=mastername,
-                         slavename=slavename) +
+                         slavename=slavename,
+                         buildnumber=5,
+                         revision='abc123',
+                         swarm_out_dir='[SWARM_OUT_DIR]') +
           api.path.exists(api.path['slave_build'])
         )
         if 'Trybot' in buildername:

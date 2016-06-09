@@ -28,6 +28,7 @@ TEST_BUILDERS = {
       'Build-Ubuntu-GCC-x86_64-Debug-MSAN',
       'Build-Ubuntu-GCC-x86_64-Release-CMake',
       'Build-Ubuntu-GCC-x86_64-Release-PDFium',
+      'Build-Ubuntu-GCC-x86_64-Release-Shared',
       'Build-Ubuntu-GCC-x86_64-Release-Valgrind',
       'Build-Win-MSVC-x86-Debug',
     ],

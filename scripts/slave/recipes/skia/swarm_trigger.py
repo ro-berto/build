@@ -35,6 +35,7 @@ TEST_BUILDERS = {
       'Build-Ubuntu-GCC-x86_64-Debug',
       'Build-Ubuntu-GCC-x86_64-Release-Trybot',
       'Build-Win-MSVC-x86_64-Release',
+      'Housekeeper-PerCommit',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot',
       'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release',
       'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release',
@@ -50,6 +51,8 @@ TEST_BUILDERS = {
 
 def derive_compile_bot_name(builder_name, builder_spec):
   builder_cfg = builder_spec['builder_cfg']
+  if builder_cfg['role'] == 'Housekeeper':
+    return 'Build-Ubuntu-GCC-x86_64-Release-Shared'
   if builder_cfg['role'] in ('Test', 'Perf'):
     os = builder_cfg['os']
     extra_config = builder_cfg.get('extra_config')
@@ -80,8 +83,8 @@ def swarm_dimensions(builder_spec):
     'pool': 'Skia',
   }
   builder_cfg = builder_spec['builder_cfg']
-  dimensions['os'] = builder_cfg['os']
-  if 'Win' in builder_cfg['os']:
+  dimensions['os'] = builder_cfg.get('os', 'Ubuntu')
+  if 'Win' in builder_cfg.get('os', ''):
     dimensions['os'] = 'Windows'
   if builder_cfg['role'] in ('Test', 'Perf'):
     if 'Android' in builder_cfg['os']:
@@ -201,7 +204,7 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
   }
 
   isolate_file = '%s_skia.isolate' % task_name
-  if 'Coverage' == builder_cfg['configuration']:
+  if 'Coverage' == builder_cfg.get('configuration'):
     isolate_file = 'coverage_skia.isolate'
   return api.skia_swarming.isolate_and_trigger_task(
       infrabots_dir.join(isolate_file),
@@ -237,6 +240,24 @@ def checkout_steps(api):
   got_revision = update_step.presentation.properties['got_revision']
   api.tryserver.maybe_apply_issue()
   return got_revision
+
+
+def housekeeper_swarm(api, builder_spec, got_revision, infrabots_dir,
+                      extra_isolate_hashes):
+  task = trigger_task(
+      api,
+      'housekeeper',
+      api.properties['buildername'],
+      api.properties['mastername'],
+      api.properties['slavename'],
+      api.properties['buildnumber'],
+      builder_spec,
+      got_revision,
+      infrabots_dir,
+      idempotent=False,
+      store_output=False,
+      extra_isolate_hashes=extra_isolate_hashes)
+  return api.skia_swarming.collect_swarming_task(task)
 
 
 def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
@@ -527,6 +548,11 @@ def RunSteps(api):
     compile_hash = compile_steps_swarm(api, builder_spec, got_revision,
                                        infrabots_dir, extra_hashes)
 
+  if builder_cfg['role'] == 'Housekeeper':
+    housekeeper_swarm(api, builder_spec, got_revision, infrabots_dir,
+                      extra_hashes)
+    return
+
   do_test_steps = builder_spec['do_test_steps']
   do_perf_steps = builder_spec['do_perf_steps']
 
@@ -591,6 +617,10 @@ def test_for_bot(api, builder, mastername, slavename, testname=None):
       'Valgrind' in builder and 'Test' in builder):
     test += api.step_data(
         'upload new .isolated file for perf_skia',
+        stdout=api.raw_io.output('def456 XYZ.isolated'))
+  if 'Housekeeper' in builder:
+    test += api.step_data(
+        'upload new .isolated file for housekeeper_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
 
   return test
