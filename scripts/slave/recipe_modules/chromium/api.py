@@ -581,7 +581,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def run_mb(self, mastername, buildername, use_goma=True,
              mb_config_path=None, isolated_targets=None, name=None,
              build_dir=None, android_version_code=None,
-             android_version_name=None):
+             android_version_name=None, gyp_script=None):
     mb_config_path = (mb_config_path or
                       self.m.path['checkout'].join('tools', 'mb',
                                                    'mb_config.pyl'))
@@ -623,6 +623,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--android-version-code=%s' % android_version_code]
     if android_version_name:
       args += ['--android-version-name=%s' % android_version_name]
+
+    if gyp_script:
+      args += ['--gyp-script=%s' % gyp_script]
 
     args += [build_dir]
 

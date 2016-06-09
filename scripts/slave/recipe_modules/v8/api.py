@@ -391,8 +391,17 @@ class V8Api(recipe_api.RecipeApi):
           self.upload_isolated_json()
 
   def compile(self, **kwargs):
-    if self.m.chromium.c.project_generator.tool == 'gn':
-      self.m.chromium.run_gn(use_goma=True)
+    if self.m.chromium.c.project_generator.tool == 'mb':
+      use_goma = (self.m.chromium.c.compile_py.compiler and
+                  'goma' in self.m.chromium.c.compile_py.compiler)
+      self.m.chromium.run_mb(
+          self.m.properties['mastername'],
+          self.m.properties['buildername'],
+          use_goma=use_goma,
+          mb_config_path=self.m.path['checkout'].join(
+              'infra', 'mb', 'mb_config.pyl'),
+          gyp_script=self.m.path.join('gypfiles', 'gyp_v8'),
+      )
     self.m.chromium.compile(**kwargs)
     self.isolate_tests()
 
