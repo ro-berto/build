@@ -139,24 +139,6 @@ F('linux_asan_rel_media', linux().ChromiumASANFactory(
        'use_mb': True,
     }))
 
-asan_rel_sym_gyp = ('asan=1 lsan=1 sanitizer_coverage=edge '
-                    'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 '
-                    'release_extra_cflags="-O1 -fno-inline-functions '
-                    '-fno-inline" ')
-
-B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
-F('linux_asan_rel_sym', linux().ChromiumASANFactory(
-    clobber=True,
-    options=['--compiler=goma-clang', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'asan-symbolized',
-       'gs_bucket': 'gs://chromium-browser-asan',
-       'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_rel_sym_gyp},
-       'use_mb': True,
-    }))
-
 asan_debug_gyp = ('asan=1 lsan=1 sanitizer_coverage=edge enable_ipc_fuzzer=1 ')
 
 B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
@@ -195,9 +177,6 @@ asan_ia32_v8_arm = ('asan=1 sanitizer_coverage=edge disable_nacl=1 '
                     'v8_target_arch=arm host_arch=x86_64 target_arch=ia32 '
                     'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 ')
 
-asan_ia32_v8_arm_rel_sym = ('%s release_extra_cflags="-O1 '
-                            '-fno-inline-functions -fno-inline"' %
-                            asan_ia32_v8_arm)
 asan_ia32_v8_arm_rel = asan_ia32_v8_arm
 
 # The build process is described at
@@ -247,22 +226,6 @@ F('linux_asan_rel_media_ia32_v8_arm', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan-v8-arm',
        'gs_bucket': 'gs://chrome-test-builds/media',
        'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel + linux_media_gyp},
-       'use_mb': True,
-    }))
-
-B('ASan Release (32-bit x86 with V8-ARM, symbolized)',
-  'linux_asan_rel_sym_ia32_v8_arm',
-  'compile', 'chromium_lkgr')
-F('linux_asan_rel_sym_ia32_v8_arm', linux().ChromiumASANFactory(
-    clobber=True,
-    options=['--compiler=goma-clang', 'chromium_builder_asan'],
-    factory_properties={
-       'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_subdir_suffix': 'v8-arm',
-       'cf_archive_name': 'asan-symbolized-v8-arm',
-       'gs_bucket': 'gs://chromium-browser-asan',
-       'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel_sym},
        'use_mb': True,
     }))
 
