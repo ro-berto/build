@@ -35,6 +35,9 @@ def RemoteRunFactory(active_master, repository, recipe,
   """
   factory_properties = factory_properties or {}
 
+  # This is useful e.g. for botmap updater to easily extract info about builder.
+  factory_properties.update({'recipe': recipe})
+
   factory = BuildFactory(build_inherit_factory_properties=False)
   factory.properties.update(factory_properties, 'RemoteRunFactory')
   cmd_obj = annotator_commands.AnnotatorCommands(
