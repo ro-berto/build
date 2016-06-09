@@ -367,6 +367,11 @@ def chrome_with_codecs(c):
   proprietary_codecs(c)
 
 @config_ctx()
+def chromeos_with_codecs(c):
+  ffmpeg_branding(c, branding='ChromeOS')
+  proprietary_codecs(c)
+
+@config_ctx()
 def chromiumos(c):
   c.gyp_env.GYP_DEFINES['chromeos'] = 1
 
