@@ -246,6 +246,45 @@
     "cmd": [
       "python",
       "-u",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/v8",
+      "gen",
+      "[TMP_BASE]/v8_gn_tmp_1",
+      "--args=use_sysroot=false icu_use_data_file = false v8_test_isolation_mode = \"prepare\" is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+    ],
+    "name": "gn"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
+      "[TMP_BASE]/v8_gn_tmp_1",
+      "[SLAVE_BUILD]/v8/out/Release",
+      "all",
+      "all"
+    ],
+    "name": "compare build flags (fyi)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "[TMP_BASE]/v8_gn_tmp_1"
+    ],
+    "name": "rmtree [TMP_BASE]/v8_gn_tmp_1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
@@ -1131,7 +1170,7 @@
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
       "all",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json"
+      "[TMP_BASE]/coverage_output_tmp_2/data.json"
     ],
     "name": "Initialize coverage data"
   },
@@ -1148,7 +1187,7 @@
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP_BASE]/coverage_output_tmp_2",
       "--sancov-merger",
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
@@ -1186,11 +1225,11 @@
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP_BASE]/coverage_output_tmp_2"
     ],
     "name": "Merge coverage data"
   },
@@ -1198,14 +1237,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):\n  os.remove(f)\n"
     ],
     "name": "Purge sancov files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1223,7 +1262,7 @@
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP_BASE]/coverage_output_tmp_2",
       "--sancov-merger",
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
@@ -1261,11 +1300,11 @@
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP_BASE]/coverage_output_tmp_2"
     ],
     "name": "Merge coverage data (2)"
   },
@@ -1273,14 +1312,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):\n  os.remove(f)\n"
     ],
     "name": "Purge sancov files (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1298,7 +1337,7 @@
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP_BASE]/coverage_output_tmp_2",
       "--sancov-merger",
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
@@ -1336,11 +1375,11 @@
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP_BASE]/coverage_output_tmp_2"
     ],
     "name": "Merge coverage data (3)"
   },
@@ -1348,14 +1387,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):\n  os.remove(f)\n"
     ],
     "name": "Purge sancov files (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1373,7 +1412,7 @@
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP_BASE]/coverage_output_tmp_2",
       "--sancov-merger",
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
@@ -1411,11 +1450,11 @@
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP_BASE]/coverage_output_tmp_2"
     ],
     "name": "Merge coverage data (4)"
   },
@@ -1423,14 +1462,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):\n  os.remove(f)\n"
     ],
     "name": "Purge sancov files (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1448,7 +1487,7 @@
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP_BASE]/coverage_output_tmp_2",
       "--sancov-merger",
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
@@ -1486,11 +1525,11 @@
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP_BASE]/coverage_output_tmp_2"
     ],
     "name": "Merge coverage data (5)"
   },
@@ -1498,14 +1537,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):\n  os.remove(f)\n"
     ],
     "name": "Purge sancov files (5)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1523,7 +1562,7 @@
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP_BASE]/coverage_output_tmp_2",
       "--sancov-merger",
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
@@ -1561,11 +1600,11 @@
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP_BASE]/coverage_output_tmp_2"
     ],
     "name": "Merge coverage data (6)"
   },
@@ -1573,14 +1612,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):\n  os.remove(f)\n"
     ],
     "name": "Purge sancov files (6)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1598,7 +1637,7 @@
       "--merged-test-output",
       "/path/to/tmp/json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1",
+      "[TMP_BASE]/coverage_output_tmp_2",
       "--sancov-merger",
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_merger.py",
       "--",
@@ -1636,11 +1675,11 @@
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[TMP_BASE]/coverage_output_tmp_2"
     ],
     "name": "Merge coverage data (7)"
   },
@@ -1648,14 +1687,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):\n  os.remove(f)\n"
+      "\nimport glob\nimport os\nfor f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):\n  os.remove(f)\n"
     ],
     "name": "Purge sancov files (7)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_1/*.sancov'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@for f in glob.glob('[TMP_BASE]/coverage_output_tmp_2/*.sancov'):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(f)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1669,7 +1708,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "gs://chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64/data.json"
     ],
     "name": "gsutil upload",
@@ -1684,9 +1723,9 @@
       "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
       "split",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[TMP_BASE]/coverage_output_tmp_2/data.json",
       "--output-dir",
-      "[TMP_BASE]/coverage_data_tmp_2"
+      "[TMP_BASE]/coverage_data_tmp_3"
     ],
     "name": "Split coverage data"
   },
@@ -1703,7 +1742,7 @@
       "-a",
       "public-read",
       "-R",
-      "[TMP_BASE]/coverage_data_tmp_2/*",
+      "[TMP_BASE]/coverage_data_tmp_3/*",
       "gs://chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64/"
     ],
     "name": "gsutil coverage data"

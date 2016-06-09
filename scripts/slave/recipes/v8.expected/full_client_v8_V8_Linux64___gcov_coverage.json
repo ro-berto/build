@@ -149,6 +149,45 @@
     "cmd": [
       "python",
       "-u",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/v8",
+      "gen",
+      "[TMP_BASE]/v8_gn_tmp_1",
+      "--args=use_sysroot=false icu_use_data_file = false v8_test_isolation_mode = \"prepare\" is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+    ],
+    "name": "gn"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
+      "[TMP_BASE]/v8_gn_tmp_1",
+      "[SLAVE_BUILD]/v8/out/Release",
+      "all",
+      "all"
+    ],
+    "name": "compare build flags (fyi)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "[TMP_BASE]/v8_gn_tmp_1"
+    ],
+    "name": "rmtree [TMP_BASE]/v8_gn_tmp_1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
@@ -252,7 +291,7 @@
       "[SLAVE_BUILD]/v8/out/Release",
       "--capture",
       "--output-file",
-      "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
+      "[TMP_BASE]/gcov_coverage_tmp_2/app.info"
     ],
     "name": "lcov capture"
   },
@@ -262,13 +301,13 @@
       "--directory",
       "[SLAVE_BUILD]/v8/out/Release",
       "--remove",
-      "[TMP_BASE]/gcov_coverage_tmp_1/app.info",
+      "[TMP_BASE]/gcov_coverage_tmp_2/app.info",
       "third_party/*",
       "testing/gtest/*",
       "testing/gmock/*",
       "/usr/include/*",
       "--output-file",
-      "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
+      "[TMP_BASE]/gcov_coverage_tmp_2/app.info"
     ],
     "name": "lcov remove"
   },
@@ -276,8 +315,8 @@
     "cmd": [
       "genhtml",
       "--output-directory",
-      "[TMP_BASE]/gcov_coverage_html_tmp_2",
-      "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
+      "[TMP_BASE]/gcov_coverage_html_tmp_3",
+      "[TMP_BASE]/gcov_coverage_tmp_2/app.info"
     ],
     "name": "genhtml"
   },
@@ -294,7 +333,7 @@
       "-a",
       "public-read",
       "-R",
-      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "[TMP_BASE]/gcov_coverage_html_tmp_3",
       "gs://chromium-v8/linux64_gcov_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
     ],
     "name": "gsutil coverage report",

@@ -149,6 +149,45 @@
     "cmd": [
       "python",
       "-u",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/v8",
+      "gen",
+      "[TMP_BASE]/v8_gn_tmp_1",
+      "--args=use_sysroot=false icu_use_data_file = false v8_test_isolation_mode = \"prepare\" is_debug=true target_cpu=\"x86\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+    ],
+    "name": "gn"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
+      "[TMP_BASE]/v8_gn_tmp_1",
+      "[SLAVE_BUILD]/v8/out/Debug",
+      "all",
+      "all"
+    ],
+    "name": "compare build flags (fyi)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "[TMP_BASE]/v8_gn_tmp_1"
+    ],
+    "name": "rmtree [TMP_BASE]/v8_gn_tmp_1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
@@ -246,7 +285,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
-      "[TMP_BASE]/chrome_staging_tmp_1",
+      "[TMP_BASE]/chrome_staging_tmp_2",
       "d8-arm-asan-linux-debug-v8-component-50110",
       "[\"file 1\", \"file 2\"]",
       "[SLAVE_BUILD]/v8/out/Debug"
@@ -268,7 +307,7 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/chrome_staging_tmp_1/d8-arm-asan-linux-debug-v8-component-50110.zip",
+      "[TMP_BASE]/chrome_staging_tmp_2/d8-arm-asan-linux-debug-v8-component-50110.zip",
       "gs://v8-asan/linux-debug/d8-arm-asan-linux-debug-v8-component-50110.zip"
     ],
     "name": "gsutil upload",
@@ -281,7 +320,7 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/chrome_staging_tmp_1/d8-arm-asan-linux-debug-v8-component-50110.zip"
+      "[TMP_BASE]/chrome_staging_tmp_2/d8-arm-asan-linux-debug-v8-component-50110.zip"
     ],
     "name": "d8-arm-asan-linux-debug-v8-component-50110.zip",
     "~followup_annotations": [
