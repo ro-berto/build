@@ -803,6 +803,13 @@ def v8_verify_heap(c):
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 
 @config_ctx()
+def v8_hybrid_arm(c):
+  c.gyp_env.GYP_DEFINES['disable_nacl'] = 1
+  c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'arm'
+  c.gyp_env.GYP_DEFINES['target_arch'] = 'ia32'
+  c.gyp_env.GYP_DEFINES['host_arch'] = 'x86_64'
+
+@config_ctx()
 def enable_ipc_fuzzer(c):
   c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
 
