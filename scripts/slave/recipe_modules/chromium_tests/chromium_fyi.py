@@ -360,16 +360,19 @@ SPEC = {
     },
     'CFI Linux CF': {
       'chromium_config': 'chromium_cfi',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
+      'compile_targets': [ 'chromium_builder_asan' ],
+      'cf_archive_build': True,
+      'cf_gs_bucket': 'chromium-browser-cfi',
+      'cf_gs_acl': 'public-read',
+      'cf_archive_name': 'cfi',
+      'testing': { 'platform': 'linux' },
     },
     'LTO Linux': {
       'chromium_config': 'chromium_official',
