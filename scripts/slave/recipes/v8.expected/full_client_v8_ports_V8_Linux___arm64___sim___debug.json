@@ -155,7 +155,7 @@
       "--root=[SLAVE_BUILD]/v8",
       "gen",
       "[TMP_BASE]/v8_gn_tmp_1",
-      "--args=use_sysroot=false icu_use_data_file = false v8_test_isolation_mode = \"prepare\" is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+      "--args=is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
     ],
     "name": "gn"
   },
