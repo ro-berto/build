@@ -31,6 +31,7 @@ TEST_BUILDERS = {
       'Build-Ubuntu-GCC-x86_64-Release-Shared',
       'Build-Ubuntu-GCC-x86_64-Release-Valgrind',
       'Build-Win-MSVC-x86-Debug',
+      'Build-Win-MSVC-x86_64-Release-Vulkan',
     ],
   },
 }

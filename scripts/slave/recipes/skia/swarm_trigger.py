@@ -35,6 +35,7 @@ TEST_BUILDERS = {
       'Build-Ubuntu-GCC-x86_64-Debug',
       'Build-Ubuntu-GCC-x86_64-Release-Trybot',
       'Build-Win-MSVC-x86_64-Release',
+      'Build-Win-MSVC-x86_64-Release-Vulkan',
       'Housekeeper-PerCommit',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot',
       'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release',
@@ -283,6 +284,9 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
                            test_data=test_data).rstrip()
     hashes = json.loads(j)
     extra_hashes.append(hashes['2015'])
+    if 'Vulkan' in builder_name:
+      # Vulkan 1.0.13.0
+      extra_hashes.append('7ed97908c5d208c651419d7bc7e2de5b16e8e3fe')
 
   # Fake these properties for compile tasks so that they can be de-duped.
   master = 'client.skia.compile'

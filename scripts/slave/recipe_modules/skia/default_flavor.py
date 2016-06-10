@@ -196,6 +196,8 @@ class DefaultFlavorUtils(object):
       make_cmd = ['python', 'make.py']
       if self._skia_api.running_in_swarming:
         self._skia_api._run_once(self.bootstrap_win_toolchain)
+        if 'Vulkan' in self._skia_api.builder_name:
+          env['VK_SDK_PATH'] = self._skia_api.slave_dir.join('vulkan_1.0.13.0')
       else:  # pragma: nocover
         env['PATH'] = self._skia_api.m.path.pathsep.join([
             str(self._skia_api.slave_dir.join('win', 'depot_tools')),

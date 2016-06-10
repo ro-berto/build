@@ -525,6 +525,60 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
+  'Build-Win-MSVC-x86_64-Release-Vulkan': {
+    'build_targets': [
+      'most',
+    ],
+    'builder_cfg': {
+      'compiler': 'MSVC',
+      'configuration': 'Release',
+      'extra_config': 'Vulkan',
+      'is_trybot': False,
+      'os': 'Win',
+      'role': 'Build',
+      'target_arch': 'x86_64',
+    },
+    'configuration': 'Release_x64',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': False,
+    'env': {
+      'GYP_DEFINES':
+          ('qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86_64 skia_vulkan=1 skia_warnings_as_errors'
+           '=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0'),
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
+  'Housekeeper-PerCommit': {
+    'build_targets': [
+      'most',
+    ],
+    'builder_cfg': {
+      'frequency': 'PerCommit',
+      'is_trybot': False,
+      'role': 'Housekeeper',
+    },
+    'configuration': 'Release',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': False,
+    'env': {
+      'GYP_DEFINES': 'skia_shared_lib=1 skia_warnings_as_errors=0',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Housekeeper-PerCommit-Trybot': {
     'build_targets': [
       'most',
