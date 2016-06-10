@@ -95,6 +95,8 @@ def layout_test(options, args):
     command.extend(['--skipped', options.skipped])
   if options.no_pixel_tests:
     command.append('--no-pixel-tests')
+  if options.enable_wptserve:
+    command.append('--enable-wptserve')
   if options.batch_size:
     command.extend(['--batch-size', options.batch_size])
   if options.run_part:
@@ -227,6 +229,10 @@ def main():
                                  'that will override previous expectations. '
                                  'Specify multiple times for multiple sets '
                                  'of overrides.'))
+  option_parser.add_option('--enable-wptserve', action='store_true',
+                           default=None,
+                           help=('Enable running web-platform-tests'
+                                 'using WPTserve instead of Apache.'))
   # TODO(dpranke): remove this after we fix the flag in the chromium command.
   option_parser.add_option('--additional-expectations-file',
                            dest='additional_expectations',
