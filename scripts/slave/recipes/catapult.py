@@ -14,6 +14,12 @@ DEPS = [
   'recipe_engine/python',
 ]
 
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'platform': Property(default=None, kind=str),
+}
+
 
 def _CheckoutSteps(api):
   """Checks out the catapult repo (and any dependencies) using gclient."""
@@ -39,7 +45,7 @@ def _FetchAppEngineSDKSteps(api):
   return api.path['slave_build'].join('google_appengine')
 
 
-def _RemoteSteps(api, app_engine_sdk_path):
+def _RemoteSteps(api, app_engine_sdk_path, platform):
   """Runs the build steps specified in catapult_build/build_steps.py.
 
   Steps are specified in catapult repo in order to avoid multi-sided patches
@@ -57,12 +63,12 @@ def _RemoteSteps(api, app_engine_sdk_path):
       script,
       '--api-path-checkout', api.path['checkout'],
       '--app-engine-sdk-pythonpath', app_engine_sdk_path,
-      '--platform', api.platform.name,
+      '--platform', platform or api.platform.name,
   ]
   return api.generator_script(*args)
 
 
-def RunSteps(api):
+def RunSteps(api, platform):
   _CheckoutSteps(api)
 
   # The dashboard unit tests depend on Python modules in the App Engine SDK,
@@ -70,7 +76,7 @@ def RunSteps(api):
   sdk_path = _FetchAppEngineSDKSteps(api)
   app_engine_sdk_path = api.path.pathsep.join([
       '%(PYTHONPATH)s', str(sdk_path)])
-  _RemoteSteps(api, app_engine_sdk_path)
+  _RemoteSteps(api, app_engine_sdk_path, platform)
 
 
 def GenTests(api):
@@ -85,5 +91,20 @@ def GenTests(api):
     api.generator_script(
       'build_steps.py',
       {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
+    )
+  )
+
+  yield (
+    api.test('android') +
+    api.properties(mastername='master.client.catapult',
+                   buildername='android',
+                   slavename='android_slave',
+                   platform='android') +
+    api.step_data('Fetch SDK downloader',
+                  api.gitiles.make_encoded_file(
+                      '"<simulated contents of get_appengine.py>"')) +
+    api.generator_script(
+        'build_steps.py',
+        {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
     )
   )

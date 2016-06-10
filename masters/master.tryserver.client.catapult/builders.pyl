@@ -19,6 +19,15 @@
       "slave_pools": ["linux_slave_pool"],
       "slavebuilddir": "presubmit_catapult",
     },
+    "Catapult Android Tryserver": {
+      "recipe": "catapult",
+      "scheduler": None,
+      "slave_pools": ["android_slave_pool"],
+      "slavebuilddir": "catapult",
+      "properties": {
+        "platform": "android",
+      },
+    },
     "Catapult Linux Tryserver": {
       "recipe": "catapult",
       "scheduler": None,
@@ -45,6 +54,17 @@
   "schedulers": {},
 
   "slave_pools": {
+    "android_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "precise",
+      },
+      "slaves": [
+        "build1-b3",
+        "build37-b4",
+      ],
+    },
     "linux_slave_pool": {
       "slave_data": {
         "bits": 64,
