@@ -30,21 +30,15 @@ S(name='chromium_lkgr', branch='lkgr')
 
 # ASan/Win bot.
 B('Win ASan Release', 'win_asan_rel', scheduler='chromium_lkgr')
-# We currently use a VM, which is extremely slow.
-F('win_asan_rel', m_annotator.BaseFactory(recipe='chromium', timeout=8*3600))
+F('win_asan_rel', m_annotator.BaseFactory(recipe='chromium'))
 
 # ASan/Win coverage bot.
 B('Win ASan Release Coverage', 'win_asan_rel_cov', scheduler='chromium_lkgr')
-F('win_asan_rel_cov', m_annotator.BaseFactory(recipe='chromium',
-  # We currently use a VM, which is extremely slow.
-  timeout=8*3600))
+F('win_asan_rel_cov', m_annotator.BaseFactory(recipe='chromium'))
 
 # ASan/Win media bot.
-B('Win ASan Release Media', 'win_asan_rel_media',
-   scheduler='chromium_lkgr')
-F('win_asan_rel_media', m_annotator.BaseFactory(recipe='chromium',
-  # We currently use a VM, which is extremely slow.
-  timeout=8*3600))
+B('Win ASan Release Media', 'win_asan_rel_media', scheduler='chromium_lkgr')
+F('win_asan_rel_media', m_annotator.BaseFactory(recipe='chromium'))
 
 # Win SyzyASan bot.
 B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr', 'compile', 'chromium_lkgr')
