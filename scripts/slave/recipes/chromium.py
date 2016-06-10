@@ -913,16 +913,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('archive_dependencies_failure') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Builder',
-                           buildnumber=0) +
-    api.platform('linux', 64) +
-    api.override_step_data('archive dependencies',
-                           api.test_utils.canned_gtest_output(True), retcode=1)
-  )
-
-  yield (
     api.test('perf_test_profile_failure') +
     api.properties.generic(mastername='chromium.perf',
                            buildername='Linux Perf (1)',

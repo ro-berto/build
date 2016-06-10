@@ -403,17 +403,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_config = bot_db.get_bot_config(mastername, buildername)
 
     if bot_config.get('bot_type') == 'builder':
-      if (mastername == 'chromium.linux' and
-          self.m.chromium.c.TARGET_PLATFORM != 'android'):
-        # TODO(samuong): This is restricted to Linux for now until I have more
-        # confidence that it is not totally broken.
-        self.m.archive.archive_dependencies(
-            'archive dependencies',
-            self.m.chromium.c.build_config_fs,
-            mastername,
-            buildername,
-            self.m.properties.get('buildnumber'))
-
       if not bot_config.get('cf_archive_build'):
         master_config = bot_db.get_master_settings(mastername)
         build_revision = update_step.presentation.properties['got_revision']

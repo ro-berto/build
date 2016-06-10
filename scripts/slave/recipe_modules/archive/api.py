@@ -408,25 +408,3 @@ class ArchiveApi(recipe_api.RecipeApi):
     The builder_name, or parent_buildername, is always automatically
     inserted into the URL."""
     return self._legacy_url(True, gs_bucket_name, extra_url_components)
-
-  def archive_dependencies(
-      self, step_name, target, master, builder, build, **kwargs):
-    """Returns a step invoking archive_dependencies.py to zip up and upload
-       build dependency information for the build."""
-    try:
-      script = self.package_repo_resource(
-          'scripts', 'tools', 'runit.py')
-      args = [
-          '--show-path',
-          'python',
-          self.package_repo_resource(
-              'scripts', 'slave', 'archive_dependencies.py'),
-      ]
-      args.extend(['--src-dir', self.m.path['checkout']])
-      args.extend(['--target', target])
-      args.extend(['--master', master])
-      args.extend(['--builder', builder])
-      args.extend(['--build', build])
-      self.m.python(step_name, script, args, infra_step=True, **kwargs)
-    except self.m.step.StepFailure:
-      pass
