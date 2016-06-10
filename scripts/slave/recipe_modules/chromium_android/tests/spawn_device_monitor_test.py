@@ -114,22 +114,22 @@ class MainFuncTest(auto_stub.TestCase):
         '--ts-mon-device-role',
         'temperature_monitor',
         '--float',
-        '{"name": "dev/cpu/temperature", '
+        '{"name": "dev/mobile/cpu/temperature", '
         '"value": 12, "device_id": "device_serial_1"}',
         '--float',
-        '{"name": "dev/battery/temperature", '
+        '{"name": "dev/mobile/battery/temperature", '
         '"value": 45.6, "device_id": "device_serial_1"}',
         '--float',
-        '{"name": "dev/battery/charge", '
+        '{"name": "dev/mobile/battery/charge", '
         '"value": 96, "device_id": "device_serial_1"}',
         '--float',
-        '{"name": "dev/cpu/temperature", '
+        '{"name": "dev/mobile/cpu/temperature", '
         '"value": 56, "device_id": "device_serial_2"}',
         '--float',
-        '{"name": "dev/battery/temperature", '
+        '{"name": "dev/mobile/battery/temperature", '
         '"value": 98.7, "device_id": "device_serial_2"}',
         '--float',
-        '{"name": "dev/battery/charge", '
+        '{"name": "dev/mobile/battery/charge", '
         '"value": 11, "device_id": "device_serial_2"}',
     ]
     self.assertEquals(expected_cmd, send_ts_mon_call)
@@ -224,7 +224,7 @@ class MainFuncTest(auto_stub.TestCase):
         '--ts-mon-device-role',
         'temperature_monitor',
         '--float',
-        '{"name": "dev/cpu/temperature", '
+        '{"name": "dev/mobile/cpu/temperature", '
         '"value": 12, "device_id": "device_serial_1"}'
     ]
     self.assertEquals(expected_cmd, send_ts_mon_call)
@@ -270,13 +270,13 @@ class MainFuncTest(auto_stub.TestCase):
         '--ts-mon-device-role',
         'temperature_monitor',
         '--string',
-        '{"name": "dev/status", '
+        '{"name": "dev/mobile/status", '
         '"value": "good", "device_id": "good_serial1"}',
         '--string',
-        '{"name": "dev/status", '
+        '{"name": "dev/mobile/status", '
         '"value": "oom", "device_id": "bad_serial1"}',
         '--string',
-        '{"name": "dev/status", '
+        '{"name": "dev/mobile/status", '
         '"value": "no_juice", "device_id": "bad_serial2"}',
     ]
     self.assertItemsEqual(expected_cmd, send_ts_mon_call)

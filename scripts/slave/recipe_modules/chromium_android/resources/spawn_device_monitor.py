@@ -106,16 +106,16 @@ def get_device_args(adb_path, device):
     bat_temp = None
     bat_charge = None
 
-  cpu_dict = {'name': "dev/cpu/temperature",
+  cpu_dict = {'name': "dev/mobile/cpu/temperature",
               'value': cpu_temp,
               'device_id': device}
   cpu_temp_args = ['--float', json.dumps(cpu_dict)] if cpu_temp else []
-  battery_temp_dict = {'name': 'dev/battery/temperature',
+  battery_temp_dict = {'name': 'dev/mobile/battery/temperature',
                        'value': (bat_temp / 10.0) if bat_temp else None,
                        'device_id': device}
   bat_temp_args = ['--float', 
                    json.dumps(battery_temp_dict)] if bat_temp else []
-  battery_charge_dict = {'name': 'dev/battery/charge',
+  battery_charge_dict = {'name': 'dev/mobile/battery/charge',
                          'value': bat_charge,
                          'device_id': device}
   bat_charge_args = ['--float',
@@ -138,7 +138,7 @@ def scan_blacklist_file(blacklist_file, devices):
       status = bad_devices[bad_device].get('reason', 'unknown')
     except TypeError:
       status = 'unknown'
-    bad_device_dict = {'name': 'dev/status',
+    bad_device_dict = {'name': 'dev/mobile/status',
                        'value': status,
                        'device_id': bad_device}
     args += ['--string', json.dumps(bad_device_dict)]
@@ -147,7 +147,7 @@ def scan_blacklist_file(blacklist_file, devices):
   for good_device in devices:
     # If a device isn't blacklisted, then its status is 'good'
     if good_device not in bad_devices:
-      good_device_dict = {'name': 'dev/status',
+      good_device_dict = {'name': 'dev/mobile/status',
                           'value': 'good',
                           'device_id': good_device}
       args += ['--string', json.dumps(good_device_dict)]
@@ -161,9 +161,9 @@ def main(argv):
   Polls the devices for their battery and cpu temperatures and scans the
   blacklist file every 60 seconds and uploads the data for monitoring
   through infra's ts_mon. Fully qualified, the metric names would be
-  /chrome/infra/dev/(cpu|battery)/temperature &
-  /chrome/infra/dev/battrery/charge &
-  /chrome/infra/dev/status
+  /chrome/infra/dev/mobile/(cpu|battery)/temperature &
+  /chrome/infra/dev/mobile/battery/charge &
+  /chrome/infra/dev/mobile/status
   """
 
   parser = argparse.ArgumentParser(
