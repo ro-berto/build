@@ -12,3 +12,6 @@ class ChromiumWin(Master.Master1):
   slave_port = 8185
   master_port_alt = 8285
   buildbot_url = 'http://build.chromium.org/p/chromium.win/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.win'

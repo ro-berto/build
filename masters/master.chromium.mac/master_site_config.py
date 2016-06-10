@@ -12,3 +12,6 @@ class ChromiumMac(Master.Master1):
   slave_port = 8186
   master_port_alt = 8286
   buildbot_url = 'http://build.chromium.org/p/chromium.mac/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.mac'
