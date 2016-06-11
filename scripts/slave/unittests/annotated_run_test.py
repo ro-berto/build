@@ -142,7 +142,8 @@ class AnnotatedRunExecTest(unittest.TestCase):
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   def test_exec_with_logdog_bootstrap(self, bootstrap):
-    bootstrap.return_value = ['logdog_bootstrap'] + self.recipe_args
+    bootstrap.return_value = logdog_bootstrap.BootstrapState(
+        ['logdog_bootstrap'] + self.recipe_args)
     annotated_run._run_command.return_value = (13, '')
 
     rv = annotated_run._exec_recipe(self.rt, self.opts, self.basedir, self.tdir,
@@ -167,10 +168,11 @@ class AnnotatedRunExecTest(unittest.TestCase):
                                                        dry_run=False)
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
-  @mock.patch('slave.logdog_bootstrap.assert_not_bootstrap_return_code')
-  def test_runs_directly_if_logdog_error(self, bootstrap_rc_assert, bootstrap):
-    bootstrap.return_value = ['logdog_bootstrap'] + self.recipe_args
-    bootstrap_rc_assert.side_effect = logdog_bootstrap.BootstrapError()
+  @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
+  def test_runs_directly_if_logdog_error(self, bs_result, bootstrap):
+    bootstrap.return_value = logdog_bootstrap.BootstrapState(
+        ['logdog_bootstrap'] + self.recipe_args)
+    bs_result.side_effect = logdog_bootstrap.BootstrapError()
 
     # Return a different error code depending on whether we're bootstrapping so
     # we can assert that specifically the non-bootstrapped error code is the one
@@ -186,7 +188,7 @@ class AnnotatedRunExecTest(unittest.TestCase):
     self.assertEqual(rv, 2)
 
     bootstrap.assert_called_once()
-    bootstrap_rc_assert.assert_called_once()
+    bs_result.assert_called_once()
     annotated_run._run_command.assert_has_calls([
         mock.call(['logdog_bootstrap'] + self.recipe_args, dry_run=False),
         mock.call(self.recipe_args, dry_run=False),

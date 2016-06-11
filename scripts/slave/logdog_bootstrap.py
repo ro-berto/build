@@ -119,7 +119,8 @@ _PLATFORM_CONFIG = {
 #
 # Loaded by '_get_params'.
 Params = collections.namedtuple('Params', (
-    'project', 'cipd_tag', 'mastername', 'buildername', 'buildnumber'))
+    'project', 'cipd_tag', 'mastername', 'buildername', 'buildnumber',
+    'use_bootstrap_result_file'))
 
 
 def _check_call(cmd, **kwargs):
@@ -247,7 +248,10 @@ def _get_params(properties):
       cipd_tag=builder_map['cipd_tag'],
       mastername=mastername,
       buildername=buildername,
-      buildnumber=buildnumber)
+      buildnumber=buildnumber,
+      use_bootstrap_result_file=bool(
+          builder_map.get('use_bootstrap_result_file')),
+  )
 
 
 def _get_streamserver_uri(rt, typ):
@@ -394,7 +398,7 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
     properties (dict): Build properties.
     cmd (list): The recipe runner command list to bootstrap.
 
-  Returns (int): The return code of the recipe runner process.
+  Returns (BootstrapState): The populated bootstrap state.
 
   Raises:
     NotBootstrapped: if the recipe engine was not executed because the
@@ -468,6 +472,10 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   # Generate our Butler stream server URI.
   streamserver_uri = _get_streamserver_uri(rt, plat.streamserver)
 
+  # If we are using file sentinel-based bootstrap error detection, enable.
+  bootstrap_result_path = (os.path.join(tempdir, 'bootstrap_result.json')
+                           if params.use_bootstrap_result_file else None)
+
   # Dump the bootstrapped Annotee command to JSON for Annotee to load.
   #
   # Annotee can run accept bootstrap parameters through either JSON or
@@ -510,14 +518,52 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       '-tee',
       '-json-args-path', cmd_json,
   ]
-  return cmd
+  if bootstrap_result_path:
+    cmd += ['-result-path', bootstrap_result_path]
+
+  return BootstrapState(cmd, bootstrap_result_path=bootstrap_result_path)
 
 
-def assert_not_bootstrap_return_code(rc):
-  """Returns (bool): True if the return code corresponds to a bootstrap error.
-  """
-  if rc in _BOOTSTRAP_ERROR_RETURN_CODES:
-    raise BootstrapError('Runtime error in bootstrap code (%d)' % (rc,))
+class BootstrapState(object):
+  def __init__(self, cmd, bootstrap_result_path=None):
+    self._cmd = cmd
+    self._bootstrap_result_path = bootstrap_result_path
+
+  @property
+  def cmd(self):
+    """Returns (list): The Butler-bootstrapped command."""
+    return self._cmd[:]
+
+  def get_result(self, rc):
+    """Retrieves and returns the return code of the bootstrapped process.
+
+    Args:
+      rc (int): The Butler return code.
+    Returns (int): The bootstrapped process' return code.
+
+    Raises:
+      BootstrapError: If the bootstrapped process didn't even run.
+    """
+    if self._bootstrap_result_path:
+      try:
+        with open(self._bootstrap_result_path) as fd:
+          result = json.load(fd)
+      except (IOError, ValueError) as e:
+        raise BootstrapError('Failed to open bootstrap result file [%s]: %s' % (
+              self._bootstrap_result_path, e))
+      try:
+        return result['return_code']
+      except KeyError as e:
+        raise BootstrapError('Invalid bootstrap result file [%s]: %s' % (
+            self._bootstrap_result_path, e))
+
+    # Use special return codes to determine success/failure.
+    #
+    # TODO(dnj): Deprecate this approach. Reserving return codes is difficult to
+    # coordinate across all infrastructure.
+    if rc in _BOOTSTRAP_ERROR_RETURN_CODES:
+      raise BootstrapError('Runtime error in bootstrap code (%d)' % (rc,))
+    return rc
 
 
 def add_arguments(parser):

@@ -259,14 +259,12 @@ def _exec_recipe(rt, opts, basedir, tdir, properties):
 
   recipe_return_code = None
   try:
-    cmd = logdog_bootstrap.bootstrap(rt, opts, basedir, tdir, properties,
-                                     recipe_cmd)
+    bs = logdog_bootstrap.bootstrap(rt, opts, basedir, tdir, properties,
+                                    recipe_cmd)
 
-    LOGGER.info('Bootstrapping through LogDog: %s', cmd)
-    rc, _ = _run_command(cmd, dry_run=opts.dry_run)
-    logdog_bootstrap.assert_not_bootstrap_return_code(rc)
-
-    recipe_return_code = rc # Execution functioned, do not fallback.
+    LOGGER.info('Bootstrapping through LogDog: %s', bs.cmd)
+    rc, _ = _run_command(bs.cmd, dry_run=opts.dry_run)
+    recipe_return_code = bs.get_result(rc)
   except logdog_bootstrap.NotBootstrapped as e:
     LOGGER.info('Not bootstrapped: %s', e.message)
   except logdog_bootstrap.BootstrapError as e:

@@ -128,12 +128,12 @@ def main(argv):
     ]
     recipe_return_code = None
     try:
-      cmd = logdog_bootstrap.bootstrap(rt, args, basedir, tempdir, properties,
-                                       recipe_cmd)
+      bs = logdog_bootstrap.bootstrap(rt, args, basedir, tempdir, properties,
+                                      recipe_cmd)
 
-      LOGGER.info('Bootstrapping through LogDog: %s', cmd)
-      rc = _call(cmd)
-      logdog_bootstrap.assert_not_bootstrap_return_code(rc)
+      LOGGER.info('Bootstrapping through LogDog: %s', bs.cmd)
+      rc = _call(bs.cmd)
+      rc = bs.get_result(rc)
 
       recipe_return_code = rc
     except logdog_bootstrap.NotBootstrapped as e:

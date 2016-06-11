@@ -43,7 +43,13 @@
 #
 {
   'chromium': {
-    'chromium.infra': {},
+    'chromium.infra': {
+      # Experimental/Canary: use result file instead of return code.
+      '*': {
+        'cipd_tag': 'git_revision:f7b114455b621f831cd22d107b411c98f47d1b50',
+        'use_bootstrap_result_file': True,
+      },
+    },
     'chromium.infra.cron': {},
     'tryserver.infra': {},
 

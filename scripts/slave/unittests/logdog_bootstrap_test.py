@@ -13,6 +13,7 @@ import os
 import subprocess
 import sys
 import unittest
+import StringIO
 
 import test_env  # pylint: disable=W0403,W0611
 
@@ -111,7 +112,7 @@ class LogDogBootstrapTest(unittest.TestCase):
 
     base = ldbs.Params(project='alpha', cipd_tag=ldbs._STABLE_CIPD_TAG,
                        mastername='default', buildername='builder',
-                       buildnumber=24601)
+                       buildnumber=24601, use_bootstrap_result_file=False)
 
     def mp(params):
       props = self.properties.copy()
@@ -170,16 +171,18 @@ class LogDogBootstrapTest(unittest.TestCase):
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='stable', mastername='mastername',
-        buildername='buildername', buildnumber=1337)
+        buildername='buildername', buildnumber=1337,
+        use_bootstrap_result_file=False)
     install_cipd.return_value = (butler_path, annotee_path)
     service_account.return_value = 'creds.json'
     isfile.return_value = True
 
     streamserver_uri = 'unix:%s' % (os.path.join('foo', 'butler.sock'),)
 
+    bs = ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
+                        self.properties, recipe_cmd)
     self.assertEqual(
-        ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
-                       self.properties, recipe_cmd),
+        bs.cmd,
         [butler_path,
             '-log-level', 'warning',
             '-project', 'myproject',
@@ -222,16 +225,18 @@ class LogDogBootstrapTest(unittest.TestCase):
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='stable', mastername='mastername',
-        buildername='buildername', buildnumber=1337)
+        buildername='buildername', buildnumber=1337,
+        use_bootstrap_result_file=True)
     install_cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
     service_account.return_value = 'creds.json'
     isfile.return_value = True
 
     streamserver_uri = 'net.pipe:LUCILogDogButler'
 
+    bs = ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
+                        self.properties, recipe_cmd)
     self.assertEqual(
-        ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
-                       self.properties, recipe_cmd),
+        bs.cmd,
         ['logdog_butler.exe',
             '-log-level', 'warning',
             '-project', 'myproject',
@@ -254,16 +259,40 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-print-summary',
                 '-tee',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
+                '-result-path', self._tp('bootstrap_result.json'),
         ])
 
     service_account.assert_called_once_with(
         self.opts, ldbs._PLATFORM_CONFIG[('win',)]['credential_path'])
     self._assertAnnoteeCommand(recipe_cmd)
 
-  def test_assert_not_bootstrap_return_code(self):
-    self.assertIsNone(ldbs.assert_not_bootstrap_return_code(123))
-    self.assertRaises(ldbs.BootstrapError,
-        ldbs.assert_not_bootstrap_return_code, 250)
+  def test_get_bootstrap_result(self):
+    # Return code.
+    bs = ldbs.BootstrapState([])
+    self.assertEqual(bs.get_result(123), 123)
+    self.assertRaises(ldbs.BootstrapError, bs.get_result, 250)
+
+    # Result file.
+    mo = mock.mock_open(read_data='{"return_code": 1337}')
+    with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
+      bs = ldbs.BootstrapState([], bootstrap_result_path='/foo/bar')
+      self.assertEqual(bs.get_result(250), 1337)
+
+    mo = mock.mock_open(read_data='!!! NOT JSON? !!!')
+    with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
+      bs = ldbs.BootstrapState([], bootstrap_result_path='/foo/bar')
+      self.assertRaises(ldbs.BootstrapError, bs.get_result, 0)
+
+    mo = mock.mock_open(read_data='{"invalid": "json"}')
+    with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
+      bs = ldbs.BootstrapState([], bootstrap_result_path='/foo/bar')
+      self.assertRaises(ldbs.BootstrapError, bs.get_result, 0)
+
+    mo = mock.mock_open()
+    with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
+      mo.side_effect = IOError('Test not found')
+      self.assertRaises(ldbs.BootstrapError, bs.get_result, 0)
+
 
   @mock.patch('os.path.isfile')
   def test_can_find_credentials(self, isfile):
