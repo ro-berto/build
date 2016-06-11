@@ -47,6 +47,8 @@ twistd.pid
 /scripts/tools/deps2git
 /scripts/tools/deps2git_internal
 /site_config/.bot_password
+/site_config/.boto
+/site_config/.boto.puppet-bak
 /slave/*/
 /slave/info/*
 !/slave/cert/
