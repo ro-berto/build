@@ -183,18 +183,18 @@ class Master(object):
     last_good_url = base_app_url + '/lkgr'
     last_good_blink_url = 'http://blink-status.appspot.com/lkgr'
 
-  class Master2(Base):
-    """Legacy ChromeOS master."""
-    master_host = 'master2.golo.chromium.org'
-    master_port_base = 2
+  class Master2a(Base):
+    """Chromeos master A."""
+    master_host = 'master2a.golo.chromium.org'
+    master_port_base = 15
     tree_closing_notification_recipients = [
         'chromeos-build-failures@google.com']
     from_address = 'buildbot@chromium.org'
 
-  class Master2a(Base):
-    """Chromeos master."""
-    master_host = 'master2a.golo.chromium.org'
-    master_port_base = 15
+  class Master2b(Base):
+    """Chromeos master B."""
+    master_host = 'master2b.golo.chromium.org'
+    master_port_base = 16
     tree_closing_notification_recipients = [
         'chromeos-build-failures@google.com']
     from_address = 'buildbot@chromium.org'
@@ -242,15 +242,15 @@ class Master(object):
 
   ## ChromiumOS related
 
-  class ChromiumOSBase(Master2):
-    """Legacy base class for ChromiumOS masters"""
+  class ChromiumOSBase(Master2a):
+    """Base class for ChromiumOS masters on A"""
     base_app_url = 'https://chromiumos-status.appspot.com'
     tree_status_url = base_app_url + '/status'
     store_revisions_url = base_app_url + '/revisions'
     last_good_url = base_app_url + '/lkgr'
 
-  class ChromiumOSBase2a(Master2a):
-    """Base class for ChromiumOS masters"""
+  class ChromiumOSBase2b(Master2b):
+    """Base class for ChromiumOS masters on B"""
     base_app_url = 'https://chromiumos-status.appspot.com'
     tree_status_url = base_app_url + '/status'
     store_revisions_url = base_app_url + '/revisions'

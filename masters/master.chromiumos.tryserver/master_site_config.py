@@ -8,10 +8,7 @@ from config_bootstrap import Master
 
 class ChromiumOSTryServer(Master.ChromiumOSBase):
   project_name = 'ChromiumOS Try Server'
-  master_port = 8049
-  slave_port = 8149
-  master_port_alt = 8249
-  try_job_port = 8349
+  master_port_id = 2
   buildbot_url = 'https://uberchromegw.corp.google.com/i/chromiumos.tryserver/'
   repo_url_ext = 'https://chromium.googlesource.com/chromiumos/tryjobs.git'
   repo_url_int = 'https://chrome-internal.googlesource.com/chromeos/tryjobs.git'

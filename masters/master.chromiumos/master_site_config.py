@@ -8,7 +8,5 @@ from config_bootstrap import Master
 
 class ChromiumOS(Master.ChromiumOSBase):
   project_name = 'ChromiumOS'
-  master_port = 8082
-  slave_port = 8182
-  master_port_alt = 8282
+  master_port_id = 0
   buildbot_url = 'http://build.chromium.org/p/chromiumos/'
