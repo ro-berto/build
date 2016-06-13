@@ -231,18 +231,12 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
     label_dir.join('Flutter.framework'),
     label_dir.join('Flutter.framework.zip'))
 
-  # Zip the Xcode project and upload it to cloud storage:
-  api.zip.directory('Archive FlutterXcode %s' % label,
-    out_dir.join(device_out, 'Flutter'),
-    label_dir.join('FlutterXcode.zip'))
-
   UploadArtifacts(api, bucket_name, [
     'dart/runtime/bin/dart_io_entries.txt',
     'sky/engine/bindings/dart_vm_entry_points.txt',
     'sky/engine/bindings/snapshot.dart',
     'out/%s/clang_x64/gen_snapshot' % device_out,
     'out/%s/Flutter.framework.zip' % label,
-    'out/%s/FlutterXcode.zip' % label,
   ])
 
 
