@@ -94,7 +94,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def version(self):
     """Returns a version dictionary (after get_version()), e.g.
 
-    { 'MAJOR'": '37', 'MINOR': '0', 'BUILD': '2021', 'PATCH': '0' }
+    { 'MAJOR'": '51', 'MINOR': '0', 'BUILD': '2704', 'PATCH': '0' }
     """
     text = self._version
     output = {}
@@ -107,7 +107,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self._version = self.m.file.read(
         'get version',
         self.m.path['checkout'].join('chrome', 'VERSION'),
-        test_data=("MAJOR=37\nMINOR=0\nBUILD=2021\nPATCH=0\n"))
+        test_data=("MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n"))
     return self.version
 
   def set_build_properties(self, props):

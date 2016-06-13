@@ -267,11 +267,11 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Debug/cronet/VERSION",
-      "gs://chromium-cronet/android/37.0.2021.0/Debug/VERSION"
+      "gs://chromium-cronet/android/51.0.2704.0/Debug/VERSION"
     ],
     "name": "gsutil upload_cronet_version",
     "~followup_annotations": [
-      "@@@STEP_LINK@Cronet version@https://storage.cloud.google.com/chromium-cronet/android/37.0.2021.0/Debug/VERSION@@@"
+      "@@@STEP_LINK@Cronet version@https://storage.cloud.google.com/chromium-cronet/android/51.0.2704.0/Debug/VERSION@@@"
     ]
   },
   {
@@ -285,11 +285,11 @@
       "cp",
       "-R",
       "[SLAVE_BUILD]/src/out/Debug/cronet",
-      "gs://chromium-cronet/android/37.0.2021.0/Debug"
+      "gs://chromium-cronet/android/51.0.2704.0/Debug"
     ],
     "name": "gsutil upload_cronet_package",
     "~followup_annotations": [
-      "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/37.0.2021.0/Debug@@@"
+      "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/51.0.2704.0/Debug@@@"
     ]
   },
   {
