@@ -59,8 +59,8 @@ def GenTests(api):
   builders = api.webrtc.BUILDERS
 
   def generate_builder(mastername, buildername, revision,
-                       parent_got_revision=None, legacy_trybot=False,
-                       failing_test=None, suffix=None):
+                       parent_got_revision=None, failing_test=None,
+                       suffix=None):
     suffix = suffix or ''
     bot_config = builders[mastername]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -96,11 +96,8 @@ def GenTests(api):
       test += api.step_data(failing_test, retcode=1)
 
     if mastername.startswith('tryserver'):
-      if legacy_trybot:
-        test += api.properties(patch_url='try_job_svn_patch')
-      else:
-        test += api.properties(issue=666666, patchset=1,
-                               rietveld='https://fake.rietveld.url')
+      test += api.properties(issue=666666, patchset=1,
+                             rietveld='https://fake.rietveld.url')
     test += api.properties(buildnumber=1337)
     return test
 
@@ -129,7 +126,11 @@ def GenTests(api):
   yield generate_builder(mastername, buildername, revision='12345',
                          failing_test='tools_unittests', suffix='_failing_test')
 
-  # Legacy trybot (SVN-based).
+  # GN trybot running tests (during the GN migration work).
   mastername = 'tryserver.webrtc'
-  yield generate_builder(mastername, 'linux_dbg', revision='12345',
-                         legacy_trybot=True, suffix='_legacy_svn_patch')
+  yield (
+    generate_builder(mastername, 'linux_gn_dbg', revision='12345',
+                     suffix='_running_tests') +
+    api.properties(run_tests=1)
+  )
+

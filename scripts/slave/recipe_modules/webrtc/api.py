@@ -16,7 +16,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
-  NORMAL_TESTS = (
+  NORMAL_TESTS_GYP = (
     'audio_decoder_unittests',
     'common_audio_unittests',
     'common_video_unittests',
@@ -32,6 +32,18 @@ class WebRTCApi(recipe_api.RecipeApi):
     'video_engine_tests',
     'voice_engine_unittests',
     'xmllite_xmpp_unittests',
+  )
+
+  NORMAL_TESTS_GN = (
+    'common_audio_unittests',
+    'common_video_unittests',
+    'modules_unittests',
+    'rtc_media_unittests',
+    'rtc_pc_unittests',
+    'rtc_unittests',
+    'system_wrappers_unittests',
+    'test_support_unittests',
+    'tools_unittests',
   )
 
   # Android APK tests.
@@ -158,7 +170,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.c.use_isolate:
       self.m.isolate.remove_build_metadata()
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
-                                   targets=self.NORMAL_TESTS)
+                                   targets=self.NORMAL_TESTS_GYP)
 
     tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
                                  self.c.enable_swarming)

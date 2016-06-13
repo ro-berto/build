@@ -6,20 +6,28 @@
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
   if test_suite == 'webrtc':
-    for test in api.NORMAL_TESTS:
-      tests.append(WebRTCTest(test, revision, enable_swarming=enable_swarming))
+    if api.m.chromium.c.project_generator.tool == 'gn':
+      # Only run tests if the custom property run_tests is passed with value 1.
+      if int(api.m.properties.get('run_tests', '0')) == 1:
+        for test in api.NORMAL_TESTS_GN:
+          tests.append(WebRTCTest(test, revision,
+                                  enable_swarming=enable_swarming))
+    else:
+      for test in api.NORMAL_TESTS_GYP:
+        tests.append(WebRTCTest(test, revision,
+                                enable_swarming=enable_swarming))
 
-    if api.m.platform.is_mac:
-      executable = api.m.path.join('libjingle_peerconnection_objc_test.app',
-                                   'Contents', 'MacOS',
-                                   'libjingle_peerconnection_objc_test')
-      tests.append(WebRTCTest(name='libjingle_peerconnection_objc_test',
-                              revision=revision,
-                              custom_executable=executable,
+      if api.m.platform.is_mac:
+        executable = api.m.path.join('libjingle_peerconnection_objc_test.app',
+                                     'Contents', 'MacOS',
+                                     'libjingle_peerconnection_objc_test')
+        tests.append(WebRTCTest(name='libjingle_peerconnection_objc_test',
+                                revision=revision,
+                                custom_executable=executable,
+                                enable_swarming=False))
+      tests.append(WebRTCTest('webrtc_nonparallel_tests', revision,
+                              parallel=False,
                               enable_swarming=False))
-    tests.append(WebRTCTest('webrtc_nonparallel_tests', revision,
-                            parallel=False,
-                            enable_swarming=False))
   elif test_suite == 'webrtc_baremetal':
     if api.m.platform.is_linux:
       f = api.m.path['checkout'].join
