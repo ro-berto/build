@@ -132,10 +132,8 @@ def main(argv):
                                       recipe_cmd)
 
       LOGGER.info('Bootstrapping through LogDog: %s', bs.cmd)
-      rc = _call(bs.cmd)
-      rc = bs.get_result(rc)
-
-      recipe_return_code = rc
+      _ = _call(bs.cmd)
+      recipe_return_code = bs.get_result()
     except logdog_bootstrap.NotBootstrapped as e:
       LOGGER.info('Not bootstrapped: %s', e.message)
     except logdog_bootstrap.BootstrapError as e:

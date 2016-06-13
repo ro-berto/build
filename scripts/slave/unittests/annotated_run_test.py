@@ -141,9 +141,11 @@ class AnnotatedRunExecTest(unittest.TestCase):
                                                        dry_run=False)
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
-  def test_exec_with_logdog_bootstrap(self, bootstrap):
+  @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
+  def test_exec_with_logdog_bootstrap(self, bs_result, bootstrap):
     bootstrap.return_value = logdog_bootstrap.BootstrapState(
-        ['logdog_bootstrap'] + self.recipe_args)
+        ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json')
+    bootstrap.return_value.get_result.return_value = 13
     annotated_run._run_command.return_value = (13, '')
 
     rv = annotated_run._exec_recipe(self.rt, self.opts, self.basedir, self.tdir,
@@ -171,7 +173,7 @@ class AnnotatedRunExecTest(unittest.TestCase):
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
   def test_runs_directly_if_logdog_error(self, bs_result, bootstrap):
     bootstrap.return_value = logdog_bootstrap.BootstrapState(
-        ['logdog_bootstrap'] + self.recipe_args)
+        ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json')
     bs_result.side_effect = logdog_bootstrap.BootstrapError()
 
     # Return a different error code depending on whether we're bootstrapping so
