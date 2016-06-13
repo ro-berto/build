@@ -344,7 +344,8 @@ def main_xcode(options, args):
     # Moreover clobbering should run before runhooks (which creates
     # .ninja files). For now, only delete all non-.ninja files.
     # TODO(thakis): Make "clobber" a step that runs before "runhooks". Once the
-    # master has been restarted, remove all clobber handling from compile.py.
+    # master has been restarted, remove all clobber handling from compile.py,
+    # https://crbug.com/574557
     build_directory.RmtreeExceptNinjaOrGomaFiles(clobber_dir)
 
   common_xcode_settings(command, options, env, options.compiler)
@@ -591,7 +592,7 @@ def main_ninja(options, args):
       # files). For now, only delete all non-.ninja files.
       # TODO(thakis): Make "clobber" a step that runs before "runhooks".
       # Once the master has been restarted, remove all clobber handling
-      # from compile.py.
+      # from compile.py, https://crbug.com/574557
       build_directory.RmtreeExceptNinjaOrGomaFiles(options.target_output_dir)
 
     if options.verbose:
@@ -963,25 +964,7 @@ def real_main():
       # branch below.
       if options.project:
         args += [options.project]
-    elif chromium_utils.IsMac():
-      main = main_ninja
-      options.build_tool = 'ninja'
-
-      # There is no standard way to pass a build target (such as 'base') to
-      # compile.py. --target specifies Debug or Release. --project could do
-      # that, but it's only supported by the msvs build tool at the moment.
-      # Because of that, most build masters pass additional options to the
-      # build tool to specify the build target. For xcode, these are in the
-      # form of '-project blah.xcodeproj -target buildtarget'. Translate these
-      # into ninja options, if needed.
-      # TODO(thakis): Looks like this is mostly unused now, remove it soon.
-      xcode_option_parse = optparse.OptionParser()
-      xcode_option_parse.add_option('--project')
-      xcode_option_parse.add_option('--target', action='append', default=[])
-      xcode_options, xcode_args = xcode_option_parse.parse_args(
-          [re.sub('^-', '--', a) for a in args])  # optparse wants --options.
-      args = xcode_options.target + xcode_args
-    elif chromium_utils.IsLinux():
+    elif chromium_utils.IsLinux() or chromium_utils.IsMac():
       main = main_ninja
       options.build_tool = 'ninja'
     else:
