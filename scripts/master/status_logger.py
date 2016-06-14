@@ -276,8 +276,8 @@ class StatusEventLogger(StatusReceiverMultiService):
     formatter = logging.Formatter('%(message)s')
 
     if event_logging_dir_exists:
-      # Use delay=True so we don't unnecessary open a new file.
-      handler = TimedRotatingFileHandler(self._event_logfile, backupCount=120,
+      # Use delay=True so we don't unnecessarily open a new file.
+      handler = TimedRotatingFileHandler(self._event_logfile, backupCount=1440,
                                          when='M', interval=1, delay=True)
     else:
       handler = logging.NullHandler()
