@@ -93,6 +93,12 @@ BUILDERS = freeze({
     'no_cache_builder': {
       'use_git_cache': False,
     },
+    'json_results_file': {
+      'json_results_file': 'json_results_file'
+    },
+    'result_details': {
+      'result_details': True
+    }
 })
 
 from recipe_engine.recipe_api import Property
@@ -194,7 +200,9 @@ def RunSteps(api, buildername):
       timeout_scale=config.get('timeout_scale'),
       strict_mode=config.get('strict_mode'),
       additional_apks=['Additional.apk'],
-      device_flags=config.get('device_flags'))
+      device_flags=config.get('device_flags'),
+      json_results_file=config.get('json_results_file'),
+      result_details=config.get('result_details'))
   api.chromium_android.run_test_suite(
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),

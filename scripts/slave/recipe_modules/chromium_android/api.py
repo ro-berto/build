@@ -7,11 +7,11 @@ import datetime
 import json
 import os
 import re
+import sys
 import urllib
 
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
-
 
 def _TimestampToIsoFormat(timestamp):
   return datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y%m%dT%H%M%S')
@@ -690,6 +690,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 suffix=None, num_retries=None,
                                 device_flags=None,
                                 wrapper_script_suite_name=None,
+                                result_details=False,
                                 **kwargs):
     args = [
       '--blacklist-file', self.blacklist_file,
@@ -708,6 +709,10 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--verbose')
     if self.c.coverage or self.c.incremental_coverage:
       args.extend(['--coverage-dir', self.coverage_dir])
+    if result_details:
+      details_dir = self.m.path.mkdtemp('temp_details')
+      if not json_results_file:
+        json_results_file = self.m.path.join(details_dir, 'json_results_file')
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
     if timeout_scale:
@@ -740,6 +745,25 @@ class AndroidApi(recipe_api.RecipeApi):
         args=args,
         wrapper_script_suite_name=wrapper_script_suite_name,
         **kwargs)
+
+    if result_details:
+      try:
+        details_html = details_dir.join('details.html')
+        self.m.python(
+            'Generate Result Details',
+            self.resource('test_results_presentation.py'),
+            args=['--json-file',
+                  json_results_file,
+                  '--html-file',
+                  details_html])
+        details_list = self.m.file.read(
+            'Read detail.html',
+            details_html,
+            test_data="<!DOCTYPE html><html></html>").splitlines()
+        self.m.step.active_result.presentation.logs['result_details'] = (
+            details_list)
+      finally:
+        self.m.file.rmtree('Remove details.html tmp files.', details_dir)
     return step_result
 
   def launch_gce_instances(self, snapshot='clean-17-l-phone-image-no-popups',
