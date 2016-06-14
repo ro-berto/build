@@ -14,3 +14,6 @@ class ChromiumWebkit(Master.Master1):
   base_app_url = 'https://blink-status.appspot.com'
   tree_status_url = base_app_url + '/status'
   buildbot_url = 'http://build.chromium.org/p/chromium.webkit/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.webkit'

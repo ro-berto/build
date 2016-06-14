@@ -12,3 +12,6 @@ class ChromiumChrome(Master.Master1):
   slave_port = 8115
   master_port_alt = 8215
   buildbot_url = 'http://build.chromium.org/p/chromium.chrome/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.chrome'
