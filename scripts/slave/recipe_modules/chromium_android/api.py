@@ -502,8 +502,9 @@ class AndroidApi(recipe_api.RecipeApi):
                                      'android',
                                      'adb_install_apk.py'),
         apk, '-v', '--blacklist-file', self.blacklist_file,
-        '--adb-path', self.m.adb.adb_path(),
     ]
+    if int(self.m.chromium.get_version().get('MAJOR', 0)) > 50:
+      install_cmd += ['--adb-path', self.m.adb.adb_path()]
     if devices and isinstance(devices, list):
       for d in devices:
         install_cmd += ['-d', d]

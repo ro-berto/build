@@ -476,6 +476,16 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "name": "get version"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
