@@ -116,11 +116,11 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "target-arm-vm-linux-release-stable"
+        "builder_name": "test-coverage-stable"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@target-arm-vm-linux-release-stable@@@"
+      "@@@STEP_TEXT@test-coverage-stable@@@"
     ]
   },
   {

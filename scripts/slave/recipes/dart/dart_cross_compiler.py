@@ -22,6 +22,12 @@ builders = {
   'cross-arm-vm-linux-release': {
     'mode': 'release',
     'target_arch': 'arm'},
+  'cross-mips-box-vm-linux-release': {
+    'mode': 'release',
+    'target_arch': 'mips'},
+  'cross-mips-board-vm-linux-release': {
+    'mode': 'release',
+    'target_arch': 'mips'},
   'test-coverage': {
     'mode': 'release',
     'target_arch': 'x64',
@@ -69,8 +75,9 @@ def RunSteps(api):
              cwd=api.path['checkout'])
 
   # Trigger slaves
+  target_builder = buildername.replace('cross-', 'target-')
   trigger_spec = [{
-    'builder_name': 'target-arm-vm-linux-release-%s' % channel
+    'builder_name': '%s-%s' % (target_builder, channel)
   }]
   api.trigger(*trigger_spec)
 
