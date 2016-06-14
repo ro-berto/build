@@ -384,5 +384,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
             affected_files, update_step, self.bot_db)
     finally:
       if api.chromium.c.TARGET_PLATFORM == 'android':
-        api.bot_update.ensure_checkout()
+        if self.internal_bisect:  # pragma: no cover
+          api.chromium_android.init_and_sync(
+              gclient_config=api.chromium_android.c.internal_dir_name,
+              use_bot_update=True)
+        else:
+          api.bot_update.ensure_checkout()
         api.chromium_android.common_tests_final_steps()
