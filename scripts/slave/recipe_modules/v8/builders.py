@@ -103,7 +103,6 @@ BUILDERS = {
           'V8 Linux - gc stress',
           'V8 Linux - debug',
           'V8 Linux - debug - avx2',
-          'V8 Linux - debug - greedy allocator',
         ],
       },
       'V8 Linux - nosnap builder': {
@@ -330,21 +329,6 @@ BUILDERS = {
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - debug - greedy allocator': {
-        'v8_apply_config': ['greedy_allocator'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - debug builder',
-        'build_gs_archive': 'linux_dbg_archive',
-        'enable_swarming': True,
-        # TODO(machenbach): Add test262 and mozilla tests.
-        'tests': [V8Testing, Benchmarks, SimdJs],
-        'variants': V8Variant('turbofan'),
-        'testing': {'platform': 'linux'},
-      },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
@@ -378,7 +362,6 @@ BUILDERS = {
           'V8 Fuzzer',
           'V8 Linux64 - debug',
           'V8 Linux64 - debug - avx2',
-          'V8 Linux64 - debug - greedy allocator',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
@@ -508,22 +491,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'tests': [Mjsunit],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 - debug - greedy allocator': {
-        'v8_apply_config': ['greedy_allocator'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-          'HOST_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux64 - debug builder',
-        'build_gs_archive': 'linux64_dbg_archive',
-        'enable_swarming': True,
-        # TODO(machenbach): Add test262 and mozilla tests.
-        'tests': [V8Testing, Benchmarks, SimdJs],
-        'variants': V8Variant('turbofan'),
         'testing': {'platform': 'linux'},
       },
 ####### Category: Windows
@@ -1669,20 +1636,6 @@ BUILDERS = {
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
-      'v8_linux_greedy_allocator_dbg': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_apply_config': ['greedy_allocator'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        # TODO(machenbach): Add test262 and mozilla.
-        'tests': [V8Testing_2, Benchmarks, SimdJs],
-        'variants': V8Variant('turbofan'),
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux_nosnap_rel': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_snapshot'],
         'v8_config_kwargs': {
@@ -1812,19 +1765,6 @@ BUILDERS = {
           'pool': 'V8-AVX2',
           'gpu': '102b',
         },
-      },
-      'v8_linux64_greedy_allocator_dbg': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_apply_config': ['greedy_allocator'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [V8Testing_2, Benchmarks],
-        'variants': V8Variant('turbofan'),
-        'testing': {'platform': 'linux'},
       },
       'v8_linux_gc_stress_dbg': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],

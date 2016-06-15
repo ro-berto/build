@@ -162,7 +162,7 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_greedy_allocator_dbg',
+        'v8_linux_arm_armv8a_rel',
         'positional_extra_flags',
     ) +
     api.properties(
@@ -314,19 +314,6 @@ def GenTests(api):
   # Bisect a0 -> no failures.
   # Bisect a1 -> no failures.
   # Report a2 and a3 as possible culprits.
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 Linux64 - debug - greedy allocator',
-        'bisect_tester',
-    ) +
-    api.v8.fail('Check', variant='turbofan') +
-    api.time.step(120)
-  )
-
-  # TODO(machenbach): Remove some tests. Now all testers are slim swarming
-  # testers.
-  # Same as above with a swarming tester.
   yield (
     api.v8.test(
         'client.v8',

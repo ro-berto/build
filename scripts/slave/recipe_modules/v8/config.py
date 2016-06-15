@@ -64,7 +64,7 @@ def deopt_fuzz_random(c):
 
 @config_ctx()
 def enable_armv8(c):
-  c.testing.test_args.extend(['--extra-flags', '--enable-armv8'])
+  c.testing.test_args.extend(['--extra-flags=--enable-armv8'])
 
 
 @config_ctx()
@@ -75,12 +75,6 @@ def gc_stress(c):
 @config_ctx()
 def gcov_coverage(c):
   c.testing.test_args.extend(['--gcov-coverage'])
-
-
-@config_ctx()
-def greedy_allocator(c):
-  c.testing.test_args.extend(
-      ['--extra-flags', '--turbo-verify-allocation --turbo-greedy-regalloc'])
 
 
 @config_ctx()

@@ -407,33 +407,10 @@
             "webkit": "[dummy hash for webkit]"
           }
         }
-      },
-      {
-        "builder_name": "V8 Linux - debug - greedy allocator",
-        "properties": {
-          "parent_build_environment": {
-            "GYP_DEFINES": "clang=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=ia32",
-            "GYP_GENERATORS": "ninja"
-          },
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "mozilla": "[dummy hash for mozilla]",
-            "simdjs": "[dummy hash for simdjs]",
-            "test262": "[dummy hash for test262]",
-            "webkit": "[dummy hash for webkit]"
-          }
-        }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Linux - debug<br />V8 Linux - debug - avx2<br />V8 Linux - debug - greedy allocator<br />V8 Linux - gc stress@@@"
+      "@@@STEP_TEXT@V8 Linux - debug<br />V8 Linux - debug - avx2<br />V8 Linux - gc stress@@@"
     ]
   },
   {
