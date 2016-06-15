@@ -36,13 +36,10 @@ def v8(c):
   # compiling v8 standalone with ninja.
   if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:
     c.build_config_fs = c.BUILD_CONFIG
-    c.compile_py.pass_arch_flag = True
 
 
 @CONFIG_CTX(includes=['v8'])
 def arm_hard_float(c):
-  c.compile_py.pass_arch_flag = True
-  c.compile_py.cross_tool = '/usr/bin/arm-linux-gnueabihf'
   c.gyp_env.GYP_DEFINES['arm_float_abi'] = 'hard'
 
 

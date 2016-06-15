@@ -181,8 +181,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--crosstool",
-      "/usr/bin/arm-linux-gnueabihf",
       "--compiler",
       "goma",
       "--goma-jsonstatus",
@@ -191,8 +189,6 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--arch",
-      "arm",
       "--"
     ],
     "env": {

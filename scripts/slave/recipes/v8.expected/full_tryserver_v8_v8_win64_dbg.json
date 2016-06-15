@@ -202,8 +202,6 @@
       "[CACHE]\\cipd\\goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
-      "--arch",
-      "x64",
       "--"
     ],
     "env": {

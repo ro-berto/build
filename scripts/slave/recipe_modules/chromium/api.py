@@ -189,8 +189,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--build-tool', self.c.compile_py.build_tool]
     if self.m.properties.get('build_data_dir'):
       args += ['--build-data-dir', self.m.properties.get('build_data_dir')]
-    if self.c.compile_py.cross_tool:
-      args += ['--crosstool', self.c.compile_py.cross_tool]
     if self.c.compile_py.compiler:
       args += ['--compiler', self.c.compile_py.compiler]
       if 'goma' in self.c.compile_py.compiler:
@@ -219,8 +217,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--goma-fail-fast', '--goma-disable-local-fallback']
     if self.c.compile_py.ninja_confirm_noop:
       args.append('--ninja-ensure-up-to-date')
-    if self.c.compile_py.pass_arch_flag:
-      args += ['--arch', self.c.gyp_env.GYP_DEFINES['target_arch']]
     if self.c.TARGET_CROS_BOARD:
       args += ['--cros-board', self.c.TARGET_CROS_BOARD]
 
