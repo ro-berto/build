@@ -400,6 +400,7 @@ class V8Api(recipe_api.RecipeApi):
               'infra', 'mb', 'mb_config.pyl'),
           gyp_script=self.m.path.join('gypfiles', 'gyp_v8'),
       )
+    self.peek_gn()
     self.m.chromium.compile(**kwargs)
     self.isolate_tests()
 

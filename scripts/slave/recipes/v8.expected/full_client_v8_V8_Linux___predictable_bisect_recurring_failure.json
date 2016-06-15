@@ -130,6 +130,17 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/v8",
       "gen",
@@ -164,17 +175,6 @@
       "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
-    ],
-    "name": "cleanup_temp"
   },
   {
     "allow_subannotations": true,
@@ -653,6 +653,52 @@
     "name": "Bisect a0.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/v8",
+      "gen",
+      "[TMP_BASE]/v8_gn_tmp_2",
+      "--args=is_debug=false target_cpu=\"x86\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+    ],
+    "name": "Bisect a0.gn",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
+      "[TMP_BASE]/v8_gn_tmp_2",
+      "[SLAVE_BUILD]/v8/out/Release",
+      "all",
+      "all"
+    ],
+    "name": "Bisect a0.compare build flags (fyi)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "[TMP_BASE]/v8_gn_tmp_2"
+    ],
+    "name": "Bisect a0.rmtree [TMP_BASE]/v8_gn_tmp_2",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {

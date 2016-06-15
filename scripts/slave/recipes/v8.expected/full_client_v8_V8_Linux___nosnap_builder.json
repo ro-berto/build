@@ -151,6 +151,17 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/v8",
       "gen",
@@ -185,17 +196,6 @@
       "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
-    ],
-    "name": "cleanup_temp"
   },
   {
     "allow_subannotations": true,

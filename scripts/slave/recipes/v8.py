@@ -64,7 +64,6 @@ def RunSteps(api):
     if v8.c.mips_cross_compile:
       v8.setup_mips_toolchain()
     v8.runhooks()
-    v8.peek_gn()
     api.chromium.cleanup_temp()
 
     if v8.generate_gcov_coverage:
