@@ -130,6 +130,9 @@ def main(argv):
         '--workdir', os.path.join(tempdir, 'w'),
         args.recipe,
     ]
+    # If we bootstrap through logdog, the recipe command line gets written
+    # to a temporary file and does not appear in the log.
+    LOGGER.info('Recipe command line: %r', recipe_cmd)
     recipe_return_code = None
     try:
       bs = logdog_bootstrap.bootstrap(rt, args, basedir, tempdir, properties,
