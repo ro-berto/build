@@ -577,7 +577,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def run_mb(self, mastername, buildername, use_goma=True,
              mb_config_path=None, isolated_targets=None, name=None,
              build_dir=None, android_version_code=None,
-             android_version_name=None, gyp_script=None):
+             android_version_name=None, gyp_script=None, **kwargs):
     mb_config_path = (mb_config_path or
                       self.m.path['checkout'].join('tools', 'mb',
                                                    'mb_config.pyl'))
@@ -627,7 +627,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # This runs with an almost-bare env being passed along, so we get a clean
     # environment without any GYP_DEFINES being present to cause confusion.
-    kwargs = {
+    step_kwargs = {
       'name': name or 'generate_build_files',
       'script': self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
       'args': args,
@@ -636,13 +636,15 @@ class ChromiumApi(recipe_api.RecipeApi):
       }
     }
     if self.c.env.FORCE_MAC_TOOLCHAIN:
-      kwargs['env']['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
+      step_kwargs['env']['FORCE_MAC_TOOLCHAIN'] = (
+        self.c.env.FORCE_MAC_TOOLCHAIN)
 
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
-      kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
+      step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
 
-    self.m.python(**kwargs)
+    step_kwargs.update(kwargs)
+    self.m.python(**step_kwargs)
 
     # Comes after self.m.python so the log appears in the correct step result.
     result = self.m.step.active_result

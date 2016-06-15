@@ -168,13 +168,32 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/v8",
-      "gen",
-      "[TMP_BASE]/v8_gn_tmp_1",
-      "--args=is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+      "RECIPE_MODULE[build::v8]/resources/patch_mb_config.py",
+      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "/path/to/tmp/"
     ],
-    "name": "gn"
+    "name": "patch mb config (fyi)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.v8",
+      "-b",
+      "v8_linux_arm64_gc_stress_dbg",
+      "--config-file",
+      "[mb config]",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "[TMP_BASE]/v8_gn_tmp_1"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files with gn (fyi)"
   },
   {
     "cmd": [
