@@ -102,7 +102,8 @@ def RunSteps(api):
                  args=["--mode=release", "--compiler=none", "--runtime=vm",
                        "--arch=ia32", "--time", "--use-sdk", "--report",
                        "--write-debug-log", "--write-test-outcome-log",
-                       "--progress=buildbot", "-v", "--clear_browser_cache",
+                       "--progress=buildbot", "-v",
+                       "--reset-browser-configuration",
                        "--shards=%s" % num_shards, "--shard=%s" % shard,
                        "--checked", "dart2js", "try"],
                  cwd=api.path['checkout'])
@@ -111,7 +112,7 @@ def RunSteps(api):
       args = ["--mode=release", "--compiler=none", "--runtime=drt",
               "--arch=ia32", "--time", "--use-sdk", "--report",
               "--write-debug-log", "--write-test-outcome-log",
-              "--progress=buildbot", "-v", "--clear_browser_cache",
+              "--progress=buildbot", "-v", "--reset-browser-configuration",
               "--checked", "try"]
       if sharded:
         args.extend(["--shards=%s" % num_shards, "--shard=%s" % shard])
@@ -131,7 +132,7 @@ def RunSteps(api):
                    '--runtime=%s' % runtime,
                    '--progress=buildbot',
                    '-v',
-                   '--clear_browser_cache',
+                   '--reset-browser-configuration',
                    '--report',
                    '--time',
                    '--failure-summary',

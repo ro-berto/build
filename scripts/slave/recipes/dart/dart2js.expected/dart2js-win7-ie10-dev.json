@@ -93,7 +93,7 @@
       "--runtime=ie10",
       "--progress=buildbot",
       "-v",
-      "--clear_browser_cache",
+      "--reset-browser-configuration",
       "--report",
       "--time",
       "--failure-summary",
