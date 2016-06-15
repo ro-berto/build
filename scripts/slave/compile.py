@@ -258,43 +258,6 @@ def goma_teardown(options, env, exit_status):
                                options.build_data_dir)
 
 
-def common_xcode_settings(command, options, env, compiler=None):
-  """
-  Sets desirable Mac environment variables and command-line options
-  that are common to the Xcode builds.
-  """
-  compiler = options.compiler
-  assert compiler in (None, 'clang', 'goma', 'goma-clang')
-
-  if compiler == 'goma':
-    print 'using goma'
-    assert options.goma_dir
-    command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
-    return
-
-  cc = None
-  ldplusplus = None
-  src_path = os.path.dirname(options.build_dir)
-  if compiler in ('clang', 'goma-clang'):
-    clang_bin_dir = os.path.abspath(os.path.join(
-        src_path, 'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
-    cc = os.path.join(clang_bin_dir, 'clang')
-    ldplusplus = os.path.join(clang_bin_dir, 'clang++')
-
-    if compiler == 'goma-clang':
-      print 'using goma-clang'
-      assert options.goma_dir
-      command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
-
-  if cc:
-    print 'Forcing CC = %s' % cc
-    env['CC'] = cc
-
-  if ldplusplus:
-    print 'Forcing LDPLUSPLUS = %s' % ldplusplus
-    env['LDPLUSPLUS'] = ldplusplus
-
-
 def maybe_set_official_build_envvars(options, env):
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
@@ -302,73 +265,6 @@ def maybe_set_official_build_envvars(options, env):
   if options.mode == 'official':
     # Official builds are always Google Chrome.
     env['CHROME_BUILD_TYPE'] = '_official'
-
-
-def main_xcode(options, args):
-  """Interprets options, clobbers object files, and calls xcodebuild.
-  """
-
-  env = EchoDict(os.environ)
-  goma_ready = goma_setup(options, env)
-  if not goma_ready:
-    assert options.compiler not in ('goma', 'goma-clang')
-    assert options.goma_dir is None
-
-  # Print some basic information about xcodebuild to ease debugging.
-  chromium_utils.RunCommand(['xcodebuild', '-sdk', '-version'], env=env)
-
-  # If the project isn't in args, add all.xcodeproj to simplify configuration.
-  command = ['xcodebuild', '-configuration', options.target]
-
-  # TODO(mmoss) Support the old 'args' usage until we're confident the master is
-  # switched to passing '--solution' everywhere.
-  if not '-project' in args:
-    # TODO(mmoss) Temporary hack to ignore the Windows --solution flag that is
-    # passed to all builders. This can be taken out once the master scripts are
-    # updated to only pass platform-appropriate --solution values.
-    if (not options.solution or
-        os.path.splitext(options.solution)[1] != '.xcodeproj'):
-      options.solution = '../build/all.xcodeproj'
-    command.extend(['-project', options.solution])
-
-  if options.xcode_target:
-    command.extend(['-target', options.xcode_target])
-
-  # Note: this clobbers all targets, not just Debug or Release.
-  if options.clobber:
-    clobber_dir = os.path.dirname(options.target_output_dir)
-    print 'Removing %s' % clobber_dir
-    # Deleting output_dir would also delete all the .ninja files. iOS builds
-    # generates ninja configuration inside the xcodebuild directory to be able
-    # to run sub builds. crbug.com/138950 is tracking this issue.
-    # Moreover clobbering should run before runhooks (which creates
-    # .ninja files). For now, only delete all non-.ninja files.
-    # TODO(thakis): Make "clobber" a step that runs before "runhooks". Once the
-    # master has been restarted, remove all clobber handling from compile.py,
-    # https://crbug.com/574557
-    build_directory.RmtreeExceptNinjaOrGomaFiles(clobber_dir)
-
-  common_xcode_settings(command, options, env, options.compiler)
-  maybe_set_official_build_envvars(options, env)
-
-  # Add on any remaining args
-  command.extend(args)
-
-  try:
-    os.makedirs(options.build_dir)
-  except OSError, e:
-    if e.errno != errno.EEXIST:
-      raise
-
-  os.chdir(options.build_dir)
-
-  # Run the build.
-  env.print_overrides()
-  result = chromium_utils.RunCommand(command, env=env)
-
-  goma_teardown(options, env, result)
-
-  return result
 
 
 def common_make_settings(
@@ -845,10 +741,7 @@ def get_target_build_dir(args, options):
   build_tool = options.build_tool
 
   ret = None
-  if build_tool == 'xcode':
-    relpath = os.path.join('xcodebuild',
-        options.target + ('-iphoneos' if 'iphoneos' in args else ''))
-  elif build_tool in ['make', 'ninja']:
+  if build_tool in ['make', 'ninja']:
     if chromium_utils.IsLinux() and options.cros_board:
       # When building ChromeOS's Simple Chrome workflow, the output directory
       # has a CROS board name suffix.
@@ -889,7 +782,7 @@ def real_main():
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')
   option_parser.add_option('--build-tool', default=None,
-                           help='specify build tool (make, ninja, vs, xcode)')
+                           help='specify build tool (make, ninja, vs)')
   option_parser.add_option('--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
   option_parser.add_option('--build-data-dir', action='store',
@@ -903,10 +796,6 @@ def real_main():
   # For linux to arm cross compile.
   option_parser.add_option('--crosstool', default=None,
                            help='optional path to crosstool toolset')
-  if chromium_utils.IsMac():
-    # Mac only.
-    option_parser.add_option('--xcode-target', default=None,
-                             help='Target from the xcodeproj file')
   if chromium_utils.IsLinux():
     option_parser.add_option('--cros-board', action='store',
                              help='If building for the ChromeOS Simple Chrome '
@@ -975,7 +864,6 @@ def real_main():
         'vs' : main_win,
         'make' : main_make,
         'ninja' : main_ninja,
-        'xcode' : main_xcode,
     }
     main = build_tool_map.get(options.build_tool)
     if not main:
