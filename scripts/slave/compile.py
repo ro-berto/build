@@ -75,22 +75,6 @@ class EchoDict(dict):
     fh.write('\n')
 
 
-def ReadHKLMValue(path, value):
-  """Retrieve the install path from the registry for Visual Studio 8.0 and
-  Incredibuild."""
-  # Only available on Windows.
-  # pylint: disable=F0401
-  import win32api, win32con
-  try:
-    regkey = win32api.RegOpenKeyEx(win32con.HKEY_LOCAL_MACHINE, path, 0,
-                                   win32con.KEY_READ)
-    value = win32api.RegQueryValueEx(regkey, value)[0]
-    win32api.RegCloseKey(regkey)
-    return value
-  except win32api.error:
-    return None
-
-
 def goma_setup(options, env):
   """Sets up goma if necessary.
 
@@ -369,6 +353,7 @@ def main_make(options, args):
 
   return result
 
+
 class EnsureUpToDateFilter(chromium_utils.RunCommandFilter):
   """Filter for RunCommand that checks whether the output contains ninja's
   message for a no-op build."""
@@ -574,199 +559,24 @@ def main_ninja(options, args):
         override_gsutil=override_gsutil)
 
 
-def main_win(options, args):
-  """Interprets options, clobbers object files, and calls the build tool.
-  """
-  if not options.solution:
-    options.solution = 'all.sln'
-  solution = os.path.join(options.build_dir, options.solution)
-
-  # Prefer the version specified in the .sln. When devenv.com is used at the
-  # command line to start a build, it doesn't accept sln file from a different
-  # version.
-  if not options.msvs_version:
-    sln = open(os.path.join(solution), 'rU')
-    header = sln.readline().strip()
-    sln.close()
-    if header.endswith('13.00'):
-      options.msvs_version = '12'
-    elif header.endswith('12.00'):
-      options.msvs_version = '11'
-    elif header.endswith('11.00'):
-      options.msvs_version = '10'
-    elif header.endswith('10.00'):
-      options.msvs_version = '9'
-    elif header.endswith('9.00'):
-      options.msvs_version = '8'
-    else:
-      print >> sys.stderr, "Unknown sln header:\n" + header
-      return 1
-
-  REG_ROOT = 'SOFTWARE\\Microsoft\\VisualStudio\\'
-  devenv = ReadHKLMValue(REG_ROOT + options.msvs_version + '.0', 'InstallDir')
-  if devenv:
-    devenv = os.path.join(devenv, 'devenv.com')
-  else:
-    print >> sys.stderr, ("MSVS %s was requested but is not installed." %
-        options.msvs_version)
-    return 1
-
-  tool = devenv
-  if options.arch == 'x64':
-    tool_options = ['/Build', '%s|x64' % options.target]
-  else:
-    tool_options = ['/Build', options.target]
-  if options.project:
-    tool_options.extend(['/Project', options.project])
-
-  def clobber():
-    print 'Removing %s' % options.target_output_dir
-    chromium_utils.RemoveDirectory(options.target_output_dir)
-
-  if options.clobber:
-    clobber()
-
-  env = EchoDict(os.environ)
-
-  # no goma support yet for this build tool.
-  assert options.compiler != 'goma'
-
-  maybe_set_official_build_envvars(options, env)
-
-  result = -1
-  command = [tool, solution] + tool_options + args
-  errors = []
-  # Examples:
-  # midl : command line error MIDL1003 : error returned by the C
-  #   preprocessor (-1073741431)
-  #
-  # Error executing C:\PROGRA~2\MICROS~1\Common7\Tools\Bin\Midl.Exe (tool
-  #    returned code: 1282)
-  #
-  # ---
-  #
-  # cl : Command line error D8027 : cannot execute 'C:\Program Files
-  #    (x86)\Microsoft Visual Studio 8\VC\bin\c2.dll'
-  #
-  # ---
-  #
-  # Warning: Could not delete file "c:\b\slave\win\build\src\build\Debug\
-  #    chrome.dll" : Access is denied
-  # --------------------Build System Warning--------------------------------
-  #    -------
-  # Could not delete file:
-  #     Could not delete file "c:\b\slave\win\build\src\build\Debug\
-  #        chrome.dll" : Access is denied
-  #     (Automatically running xgHandle on first 10 files that could not be
-  #        deleted)
-  #     Searching for '\Device\HarddiskVolume1\b\slave\win\build\src\build\
-  #        Debug\chrome.dll':
-  #     No handles found.
-  #     (xgHandle utility returned code: 0x00000000)
-  #
-  # ---
-  #
-  # webkit.lib(WebGeolocationError.obj) : fatal error LNK1318: Unexpected PDB
-  # error; OK (0) ''
-  #
-  # Error executing link.exe (tool returned code: 1318)
-  #
-  # ---
-  #
-  # browser.lib(background_application_list_model.obj) : fatal error LNK1000:
-  # Internal error during IMAGE::Pass2
-  # (along with a register dump)
-  #
-  # ---
-  #
-  # ...\browser\history\download_create_info.cc : fatal error C1033: cannot open
-  #   program database '...\src\build\debug\obj\browser\browser\vc80_ib_2.idb'
-  #
-  # ---
-  #
-  # --------------------Build System Error (Agent 'Ib1 (CPU 1)')----------------
-  # Fatalerror:
-  #     Failed to execute command: extension_function_registry (ID 1591)
-  #     Failed to update directory: E:\b\build\slave\win\build\src\build\Release
-  #     File table management has failed.
-  #     Shared stream group lock abandoned, marking as corrupt
-  #     --------
-  #     Unable to complete operation (retried 10 times): cl: foo.cc -> foo.obj
-
-  known_toolset_bugs = [
-    '\\c2.dll',
-    'Midl.Exe (tool returned code: 1282)',
-    'LINK : fatal error LNK1102: out of memory',
-    'fatal error LNK1318: Unexpected PDB error',
-    'fatal error LNK1000: Internal error during IMAGE::Pass2',
-    'fatal error C1033',
-    'Build System Error',
-  ]
-  def scan(line):
-    for known_line in known_toolset_bugs:
-      if known_line in line:
-        errors.append(line)
-        break
-
-  env.print_overrides()
-  result = chromium_utils.RunCommand(
-      command, parser_func=scan, env=env, universal_newlines=True)
-  if errors:
-    print '\n\nRetrying a clobber build because of:'
-    print '\n'.join(('  ' + l for l in errors))
-    print 'Removing %s' % options.target_output_dir
-    for _ in range(3):
-      try:
-        chromium_utils.RemoveDirectory(options.target_output_dir)
-        break
-      except OSError, e:
-        print e
-        print '\nSleeping 15 seconds. Lovely windows file locks.'
-        time.sleep(15)
-    else:
-      print 'Failed to delete a file 3 times in a row, aborting.'
-      return 1
-    result = chromium_utils.RunCommand(command, env=env)
-
-  # TODO(maruel): As soon as the try server is restarted, replace with:
-  # if result and not options.clobber and options.clobber_post_fail:
-  if result and not options.clobber:
-    clobber()
-
-  return result
-
-
 def get_target_build_dir(args, options):
   """Keep this function in sync with src/build/landmines.py"""
-  build_tool = options.build_tool
-
-  ret = None
-  if build_tool in ['make', 'ninja']:
-    if chromium_utils.IsLinux() and options.cros_board:
-      # When building ChromeOS's Simple Chrome workflow, the output directory
-      # has a CROS board name suffix.
-      outdir = 'out_%s' % (options.cros_board,)
-    elif options.out_dir:
-      outdir = options.out_dir
-    else:
-      outdir = 'out'
-    relpath = os.path.join(outdir, options.target)
-  elif build_tool == 'vs':
-    relpath = os.path.join('build', options.target)
+  assert options.build_tool in ['make', 'ninja']
+  if chromium_utils.IsLinux() and options.cros_board:
+    # When building ChromeOS's Simple Chrome workflow, the output directory
+    # has a CROS board name suffix.
+    outdir = 'out_%s' % (options.cros_board,)
+  elif options.out_dir:
+    outdir = options.out_dir
   else:
-    raise NotImplementedError()
-  ret = os.path.join(options.src_dir, relpath)
-  return os.path.abspath(ret)
+    outdir = 'out'
+  return os.path.abspath(os.path.join(options.src_dir, outdir, options.target))
 
 
 def real_main():
   option_parser = optparse.OptionParser()
   option_parser.add_option('--clobber', action='store_true', default=False,
                            help='delete the output directory before compiling')
-  option_parser.add_option('--clobber-post-fail', action='store_true',
-                           default=False,
-                           help='delete the output directory after compiling '
-                                'only if it failed. Do not affect ninja.')
   option_parser.add_option('--target', default='Release',
                            help='build target (Debug or Release)')
   option_parser.add_option('--arch', default=None,
@@ -782,17 +592,13 @@ def real_main():
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')
   option_parser.add_option('--build-tool', default=None,
-                           help='specify build tool (make, ninja, vs)')
+                           help='specify build tool (make, ninja)')
   option_parser.add_option('--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
   option_parser.add_option('--build-data-dir', action='store',
                            help='specify a build data directory.')
   option_parser.add_option('--compiler', default=None,
                            help='specify alternative compiler (e.g. clang)')
-  if chromium_utils.IsWindows():
-    # Windows only.
-    option_parser.add_option('--msvs_version',
-                             help='VisualStudio version to use')
   # For linux to arm cross compile.
   option_parser.add_option('--crosstool', default=None,
                            help='optional path to crosstool toolset')
@@ -861,7 +667,6 @@ def real_main():
       return 1
   else:
     build_tool_map = {
-        'vs' : main_win,
         'make' : main_make,
         'ninja' : main_ninja,
     }
