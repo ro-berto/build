@@ -101,7 +101,7 @@
       "slave_pools": ["slaves_with_devices"],
     },
     "linux_android_rel_ng": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 11400,  # 60 * 190
       "recipe": "chromium_trybot",
       "scheduler": None,
       "slavebuilddir": "android",
