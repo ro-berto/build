@@ -80,13 +80,17 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
   results = {}
   with api.step.nest('test %s' % str(revision)):
     # Checkout code at the given revision to recompile.
-    bot_config = api.chromium_tests.create_bot_config_object(
-        target_mastername, target_buildername)
+    bot_id = {
+        'mastername': target_mastername,
+        'buildername': target_buildername,
+        'tester': target_testername}
+    bot_config = api.chromium_tests.create_generalized_bot_config_object(
+        [bot_id])
     bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
         bot_config, root_solution_revision=revision)
 
     # Figure out which test steps to run.
-    _, all_tests = api.chromium_tests.get_tests(bot_config, bot_db)
+    all_tests, _ = api.chromium_tests.get_tests(bot_config, bot_db)
     requested_tests_to_run = [
         test for test in all_tests if test.name in requested_tests]
 
