@@ -1925,23 +1925,35 @@ def ParseBuildersFileContents(path, contents):
   # Set some additional derived fields that are derived from the
   # file's location in the filesystem.
   basedir = os.path.dirname(os.path.abspath(path))
+  repodir = os.path.basename(os.path.dirname(os.path.dirname(basedir)))
   master_dirname = os.path.basename(basedir)
   master_name_comps = master_dirname.split('.')[1:]
   buildbot_path =  '.'.join(master_name_comps)
   master_classname =  ''.join(c[0].upper() + c[1:] for c in master_name_comps)
   builders['master_dirname'] = master_dirname
   builders.setdefault('master_classname', master_classname)
+  builders['name'] = '.'.join(master_name_comps)
   builders.setdefault('buildbot_url',
                       'https://build.chromium.org/p/%s/' % buildbot_path)
 
   builders.setdefault('buildbucket_bucket', None)
   builders.setdefault('service_account_file', None)
+  builders.setdefault('pubsub_service_account_file', None)
+  pubsub_topic = None
+  if builders['pubsub_service_account_file']:
+    pubsub_topic = 'projects/luci-milo/topics/internal-buildbot'
+    if repodir == 'build':
+      pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  builders.setdefault('pubsub_topic', pubsub_topic)
 
   # The _str fields are printable representations of Python values:
   # if builders['foo'] == "hello", then builders['foo_str'] == "'hello'".
   # This allows them to be read back in by Python scripts properly.
   builders['buildbucket_bucket_str'] = repr(builders['buildbucket_bucket'])
   builders['service_account_file_str'] = repr(builders['service_account_file'])
+  builders['pubsub_service_account_file_str'] = repr(
+      builders['pubsub_service_account_file'])
+  builders['pubsub_topic_str'] = repr(builders['pubsub_topic'])
 
   return builders
 

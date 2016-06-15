@@ -16,3 +16,7 @@ class %(master_classname)s(Master.%(master_base_class)s):
   buildbot_url = '%(buildbot_url)s'
   buildbucket_bucket = %(buildbucket_bucket_str)s
   service_account_file = %(service_account_file_str)s
+  # To enable outbound pubsub event streaming.
+  pubsub_service_account_file = %(pubsub_service_account_file_str)s
+  pubsub_topic = %(pubsub_topic_str)s
+  name = '%(name)s'
