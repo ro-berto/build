@@ -23,6 +23,7 @@ class TryServerChromiumLinux(Master.Master4a):
   buildbot_url = 'http://build.chromium.org/p/tryserver.chromium.linux/'
   service_account_file = 'service-account-chromium-tryserver.json'
   buildbucket_bucket = 'master.tryserver.chromium.linux'
+  # For pushing data to Milo
   pubsub_service_account_file = 'service-account-luci-milo.json'
-  pubsub_topic_url = 'projects/luci-milo/topics/public-buildbot'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'tryserver.chromium.linux'
