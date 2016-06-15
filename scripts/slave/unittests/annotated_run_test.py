@@ -81,9 +81,14 @@ class AnnotatedRunExecTest(unittest.TestCase):
     self._patchers = []
     map(self._patch, (
         mock.patch('slave.annotated_run._run_command'),
+        mock.patch('slave.annotated_run._build_dir'),
+        mock.patch('slave.annotated_run._builder_dir'),
         mock.patch('os.path.exists'),
-        mock.patch('os.getcwd'),
         ))
+
+    # Mock build and builder directories.
+    annotated_run._build_dir.return_value = '/home/user/builder/build'
+    annotated_run._builder_dir.return_value = '/home/user/builder'
 
     self.rt = robust_tempdir.RobustTempdir(prefix='annotated_run_test')
     self.basedir = self.rt.tempdir()
@@ -95,16 +100,14 @@ class AnnotatedRunExecTest(unittest.TestCase):
       'mastername': 'master.random',
       'buildername': 'builder',
     }
-    self.cwd = os.path.join('home', 'user')
     self.rpy_path = os.path.join(env.Build, 'scripts', 'slave', 'recipes.py')
     self.recipe_args = [
         sys.executable, '-u', self.rpy_path, '--verbose', 'run',
-        '--workdir=%s' % (self.cwd,),
+        '--workdir=/home/user/builder/build',
         '--properties-file=%s' % (self._tp('recipe_properties.json'),),
         'example/recipe']
 
     # Use public recipes.py path.
-    os.getcwd.return_value = self.cwd
     os.path.exists.return_value = False
 
   def tearDown(self):

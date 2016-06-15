@@ -28,6 +28,17 @@ from slave import update_scripts
 # Logging instance.
 LOGGER = logging.getLogger('annotated_run')
 
+# /b/build/slave/<slavename>/build/
+BUILD_DIR = os.getcwd()
+# /b/build/slave/<slavename>/
+BUILDER_DIR = os.path.dirname(BUILD_DIR)
+
+def _build_dir():
+  return BUILD_DIR
+
+def _builder_dir():
+  return BUILDER_DIR
+
 def _ensure_directory(*path):
   path = os.path.join(*path)
   if not os.path.isdir(path):
@@ -252,7 +263,7 @@ def _exec_recipe(rt, opts, basedir, tdir, properties):
       sys.executable, '-u', recipe_runner,
       '--verbose',
       'run',
-      '--workdir=%s' % os.getcwd(),
+      '--workdir=%s' % _build_dir(),
       '--properties-file=%s' % props_file,
       properties['recipe'],
   ]
@@ -290,7 +301,7 @@ def main(argv):
   clean_old_recipe_engine()
 
   # Enter our runtime environment.
-  basedir = os.getcwd()
+  basedir = _builder_dir()
   with robust_tempdir.RobustTempdir(
       prefix='.recipe_runtime', leak=opts.leak) as rt:
     tdir = rt.tempdir(base=basedir)
