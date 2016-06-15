@@ -812,9 +812,10 @@ def FindUpwardParent(start_dir, *desired_list):
                          (desired_path, start_dir))
     found_path = os.path.join(cur_dir, desired_path)
   # Strip the entire original desired path from the end of the one found
-  # and remove a trailing path separator, if present.
+  # and remove a trailing path separator, if present (unless it's
+  # filesystem/drive root).
   found_path = found_path[:len(found_path) - len(desired_path)]
-  if found_path.endswith(os.sep):
+  if found_path.endswith(os.sep) and os.path.dirname(found_path) != found_path:
     found_path = found_path[:len(found_path) - 1]
   return found_path
 

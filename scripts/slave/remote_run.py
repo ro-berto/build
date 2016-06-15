@@ -88,11 +88,15 @@ def main(argv):
       cipd_path, cipd.CipdPackage('infra/recipes-py', 'latest'))
 
   with robust_tempdir.RobustTempdir(
-      prefix='.remote_run', leak=args.leak) as rt:
-    # Use base directory inside system temporary directory - if we use slave
-    # one (cwd), the paths get too long. Recipes which need different paths
-    # or persistent directories should do so explicitly.
-    basedir = tempfile.gettempdir()
+      prefix='rr', leak=args.leak) as rt:
+    try:
+      basedir = chromium_utils.FindUpward(os.getcwd(), 'b')
+    except chromium_utils.PathNotFound as e:
+      LOGGER.warn(e)
+      # Use base directory inside system temporary directory - if we use slave
+      # one (cwd), the paths get too long. Recipes which need different paths
+      # or persistent directories should do so explicitly.
+      basedir = tempfile.gettempdir()
 
     # Explicitly clean up possibly leaked temporary directories
     # from previous runs.
@@ -120,10 +124,10 @@ def main(argv):
         'remote_run',
         '--repository', args.repository,
         '--revision', args.revision,
-        '--workdir', os.path.join(tempdir, 'remote_run_workdir'),
+        '--workdir', os.path.join(tempdir, 'rw'),
         '--',
         '--properties-file', properties_file,
-        '--workdir', os.path.join(tempdir, 'work'),
+        '--workdir', os.path.join(tempdir, 'w'),
         args.recipe,
     ]
     recipe_return_code = None
