@@ -43,6 +43,25 @@
       "slave_pools": ["linux_trusty"],
       "category": "0linux",
     },
+    "linux_rel": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
+    "linux32_rel": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
+    # Debug-mode linux_clang is covered by linux_noasm_asan above.
+    "linux_clang_rel": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
     "mac": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
@@ -50,6 +69,12 @@
       "category": "1mac",
     },
     "mac_small": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["mac"],
+      "category": "1mac",
+    },
+    "mac_rel": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
       "slave_pools": ["mac"],
@@ -67,6 +92,12 @@
       "slave_pools": ["windows"],
       "category": "2win",
     },
+    "win64_rel": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
     "win32": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
@@ -79,13 +110,31 @@
       "slave_pools": ["windows"],
       "category": "2win",
     },
+    "win32_rel": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
     "android_arm": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
       "slave_pools": ["android_n5"],
       "category": "3android",
     },
+    "android_arm_rel": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["android_n5"],
+      "category": "3android",
+    },
     "android_aarch64": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["android_n5x"],
+      "category": "3android",
+    },
+    "android_aarch64_rel": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
       "slave_pools": ["android_n5x"],

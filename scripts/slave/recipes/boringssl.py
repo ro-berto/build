@@ -66,6 +66,8 @@ def _GetTargetCMakeArgs(buildername, checkout):
   args = {}
   if _HasToken(buildername, 'shared'):
     args['BUILD_SHARED_LIBS'] = '1'
+  if _HasToken(buildername, 'rel'):
+    args['CMAKE_BUILD_TYPE'] = 'Release'
   if _HasToken(buildername, 'linux32'):
     # 32-bit Linux is cross-compiled on the 64-bit Linux bot.
     args['CMAKE_SYSTEM_NAME'] = 'Linux'
@@ -75,9 +77,10 @@ def _GetTargetCMakeArgs(buildername, checkout):
     _AppendFlags(args, 'CMAKE_ASM_FLAGS', '-m32 -msse2')
   if _HasToken(buildername, 'noasm'):
     args['OPENSSL_NO_ASM'] = '1'
-  if _HasToken(buildername, 'asan'):
+  if _HasToken(buildername, 'asan') or _HasToken(buildername, 'clang'):
     args['CMAKE_C_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang')
     args['CMAKE_CXX_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang++')
+  if _HasToken(buildername, 'asan'):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-fsanitize=address')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-fsanitize=address')
   if _HasToken(buildername, 'small'):
@@ -214,21 +217,32 @@ def RunSteps(api, buildername):
 
 def GenTests(api):
   tests = [
+    # To ensure full test coverage, add a test for each builder configuration.
     ('linux', api.platform('linux', 64)),
     ('linux_shared', api.platform('linux', 64)),
     ('linux32', api.platform('linux', 64)),
     ('linux_noasm_asan', api.platform('linux', 64)),
-    ('linux32_noasm_asan', api.platform('linux', 64)),
     ('linux_small', api.platform('linux', 64)),
     ('linux_nothreads', api.platform('linux', 64)),
+    ('linux_rel', api.platform('linux', 64)),
+    ('linux32_rel', api.platform('linux', 64)),
+    ('linux_clang_rel', api.platform('linux', 64)),
     ('mac', api.platform('mac', 64)),
     ('mac_small', api.platform('mac', 64)),
+    ('mac_rel', api.platform('mac', 64)),
     ('win32', api.platform('win', 64)),
     ('win32_small', api.platform('win', 64)),
+    ('win32_rel', api.platform('win', 64)),
     ('win64', api.platform('win', 64)),
     ('win64_small', api.platform('win', 64)),
+    ('win64_rel', api.platform('win', 64)),
     ('android_arm', api.platform('linux', 64)),
+    ('android_arm_rel', api.platform('linux', 64)),
     ('android_aarch64', api.platform('linux', 64)),
+    ('android_aarch64_rel', api.platform('linux', 64)),
+    # This is not a builder configuration, but it ensures _AppendFlags handles
+    # appending to CMAKE_CXX_FLAGS when there is already a value in there.
+    ('linux_nothreads_small', api.platform('linux', 64)),
   ]
   for (buildername, host_platform) in tests:
     yield (

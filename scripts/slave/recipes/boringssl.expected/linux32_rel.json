@@ -7,7 +7,7 @@
       "--master",
       "client.boringssl",
       "--builder",
-      "linux32_noasm_asan",
+      "linux32_rel",
       "--slave",
       "slavename",
       "--spec",
@@ -108,13 +108,11 @@
       "[SLAVE_BUILD]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
       "-DCMAKE_ASM_FLAGS=-m32 -msse2",
-      "-DCMAKE_CXX_COMPILER=[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/clang++",
-      "-DCMAKE_CXX_FLAGS=-m32 -msse2 -fsanitize=address",
-      "-DCMAKE_C_COMPILER=[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/clang",
-      "-DCMAKE_C_FLAGS=-m32 -msse2 -fsanitize=address",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_CXX_FLAGS=-m32 -msse2",
+      "-DCMAKE_C_FLAGS=-m32 -msse2",
       "-DCMAKE_SYSTEM_NAME=Linux",
       "-DCMAKE_SYSTEM_PROCESSOR=x86",
-      "-DOPENSSL_NO_ASM=1",
       "[SLAVE_BUILD]/boringssl"
     ],
     "cwd": "[SLAVE_BUILD]/boringssl/build",
@@ -143,9 +141,6 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/boringssl",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
-    },
     "name": "unit tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
@@ -202,9 +197,6 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/boringssl/ssl/test/runner",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
-    },
     "name": "ssl tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
