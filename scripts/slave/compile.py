@@ -251,8 +251,7 @@ def maybe_set_official_build_envvars(options, env):
     env['CHROME_BUILD_TYPE'] = '_official'
 
 
-def common_make_settings(
-    command, options, env, crosstool=None, compiler=None):
+def common_make_settings(command, options, env, compiler=None):
   """
   Sets desirable environment variables and command-line options that are used
   in the Make build.
@@ -265,28 +264,6 @@ def common_make_settings(
 
   # Set jobs parallelization based on number of cores.
   jobs = os.sysconf('SC_NPROCESSORS_ONLN')
-
-  # Test if we can use ccache.
-  ccache = ''
-  if chromium_utils.IsLinux():
-    if os.path.exists('/usr/bin/ccache'):
-      # The default CCACHE_DIR is $HOME/.ccache which, on some of our
-      # bots, is over NFS.  This is intentional.  Talk to thestig or
-      # mmoss if you have questions.
-      ccache = 'ccache '
-
-    # Setup crosstool environment variables.
-    if crosstool:
-      env['AR'] = crosstool + '-ar'
-      env['AS'] = crosstool + '-as'
-      env['CC'] = ccache + crosstool + '-gcc'
-      env['CXX'] = ccache + crosstool + '-g++'
-      env['LD'] = crosstool + '-ld'
-      env['RANLIB'] = crosstool + '-ranlib'
-      command.append('-j%d' % jobs)
-      # Don't use build-in rules.
-      command.append('-r')
-      return
 
   if compiler in ('goma', 'goma-clang'):
     print 'using', compiler
@@ -321,8 +298,7 @@ def main_make(options, args):
     working_dir = options.src_dir
 
   os.chdir(working_dir)
-  common_make_settings(command, options, env, options.crosstool,
-      options.compiler)
+  common_make_settings(command, options, env, options.compiler)
 
   # V=1 prints the actual executed command
   if options.verbose:
@@ -579,8 +555,6 @@ def real_main():
                            help='delete the output directory before compiling')
   option_parser.add_option('--target', default='Release',
                            help='build target (Debug or Release)')
-  option_parser.add_option('--arch', default=None,
-                           help='target architecture (ia32, x64, ...')
   option_parser.add_option('--solution', default=None,
                            help='name of solution/sub-project to build')
   option_parser.add_option('--project', default=None,
@@ -599,9 +573,6 @@ def real_main():
                            help='specify a build data directory.')
   option_parser.add_option('--compiler', default=None,
                            help='specify alternative compiler (e.g. clang)')
-  # For linux to arm cross compile.
-  option_parser.add_option('--crosstool', default=None,
-                           help='optional path to crosstool toolset')
   if chromium_utils.IsLinux():
     option_parser.add_option('--cros-board', action='store',
                              help='If building for the ChromeOS Simple Chrome '
