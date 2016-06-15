@@ -28,9 +28,6 @@
       "oak-full": [
         "build323-m2"
       ], 
-      "panther_embedded-minimal-paladin": [
-        "build203-m2"
-      ], 
       "x86-generic-full": [
         "build182-m2"
       ], 
@@ -52,6 +49,7 @@
   }, 
   "unallocated": [
     "cros199-c2", 
+    "build203-m2", 
     "build94-m2"
   ]
 }
