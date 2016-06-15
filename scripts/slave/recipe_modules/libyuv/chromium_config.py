@@ -23,7 +23,8 @@ def libyuv_clang(c):
 
 @CONFIG_CTX(includes=['android'])
 def libyuv_android(c):
-  pass
+  if c.TARGET_ARCH == 'intel' and c.TARGET_BITS == 32:
+    c.gyp_env.GYP_DEFINES['android_full_debug'] = 1
 
 @CONFIG_CTX(includes=['android_clang'])
 def libyuv_android_clang(c):
