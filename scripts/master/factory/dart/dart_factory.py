@@ -334,16 +334,10 @@ class PackageFactory(gclient_factory.GClientFactory):
 class DartUtils(object):
   mac_options = ['--compiler=goma-clang',
                  '--build-tool=ninja',
-                 '--',
                  'dartium_builder']
-  mac_dbg_options = ['--compiler=goma-clang',
-                     '--build-tool=ninja',
-                     '--',
-                     'dartium_builder']
   linux_options = ['--compiler=goma', '--build-tool=ninja', 'dartium_builder']
-  win_options_ninja = ['--build-tool=ninja', 'dartium_builder']
+  win_options = ['--build-tool=ninja', 'dartium_builder']
 
-  win_project = 'all.sln;dartium_builder'
 
   win_rel_factory_properties = {
     'gclient_env': {
@@ -448,7 +442,7 @@ class DartUtils(object):
       'dartium-mac-debug' + postfix: F_MAC_CH(
           target='Debug',
           compile_timeout=3600,
-          options=DartUtils.mac_dbg_options,
+          options=DartUtils.mac_options,
           tests=['annotated_steps'],
           factory_properties=DartUtils.mac_factory_properties),
       'dartium-lucid64-full' + postfix: F_LINUX_CH(
@@ -469,22 +463,22 @@ class DartUtils(object):
           factory_properties=DartUtils.linux_factory_properties),
       'dartium-win-full' + postfix: F_WIN_CH(
           target='Release',
-          project=DartUtils.win_project,
+          options=DartUtils.win_options,
           tests=['annotated_steps'],
           factory_properties=DartUtils.win_rel_factory_properties),
       'dartium-win-inc' + postfix: F_WIN_CH(
           target='Release',
-          project=DartUtils.win_project,
+          options=DartUtils.win_options,
           tests=['annotated_steps'],
           factory_properties=DartUtils.win_rel_factory_properties),
       'dartium-win-inc-ninja' + postfix: F_WIN_CH(
           target='Release',
-          options=DartUtils.win_options_ninja,
+          options=DartUtils.win_options,
           tests=['annotated_steps'],
           factory_properties=DartUtils.win_rel_factory_properties_ninja),
       'dartium-win-debug' + postfix: F_WIN_CH(
           target='Debug',
-          project=DartUtils.win_project,
+          options=DartUtils.win_options,
           tests=['annotated_steps'],
           factory_properties=DartUtils.win_dbg_factory_properties),
       'dartium-lucid32-full' + postfix: F_LINUX_CH(
