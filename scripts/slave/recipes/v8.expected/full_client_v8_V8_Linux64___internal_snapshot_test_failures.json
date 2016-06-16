@@ -141,7 +141,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
+      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -217,28 +217,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -259,7 +237,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
@@ -437,7 +415,7 @@
       "@@@STEP_LOG_LINE@other-test-very-long-..@Command: out/theMode/d8 --other test/other-suite/dir/other-test-very-long-name.js@@@",
       "@@@STEP_LOG_LINE@other-test-very-long-..@@@@",
       "@@@STEP_LOG_LINE@other-test-very-long-..@Build environment:@@@",
-      "@@@STEP_LOG_LINE@other-test-very-long-..@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@other-test-very-long-..@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@other-test-very-long-..@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@other-test-very-long-..@@@@",
       "@@@STEP_LOG_LINE@other-test-very-long-..@Run #1@@@",
@@ -586,7 +564,7 @@
       "@@@STEP_LOG_LINE@test-name0@Command: out/theMode/d8 --other test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name0@@@@",
       "@@@STEP_LOG_LINE@test-name0@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name0@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name0@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name0@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name0@@@@",
       "@@@STEP_LOG_LINE@test-name0@Run #1@@@",
@@ -605,7 +583,7 @@
       "@@@STEP_LOG_LINE@test-name0@Command: out/theMode/d8 --opt42 test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name0@@@@",
       "@@@STEP_LOG_LINE@test-name0@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name0@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name0@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name0@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name0@@@@",
       "@@@STEP_LOG_LINE@test-name0@Run #1@@@",
@@ -626,7 +604,7 @@
       "@@@STEP_LOG_LINE@test-name1@Command: out/theMode/d8 --other test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name1@@@@",
       "@@@STEP_LOG_LINE@test-name1@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name1@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name1@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name1@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name1@@@@",
       "@@@STEP_LOG_LINE@test-name1@Run #1@@@",
@@ -645,7 +623,7 @@
       "@@@STEP_LOG_LINE@test-name1@Command: out/theMode/d8 --opt42 test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name1@@@@",
       "@@@STEP_LOG_LINE@test-name1@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name1@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name1@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name1@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name1@@@@",
       "@@@STEP_LOG_LINE@test-name1@Run #1@@@",
@@ -666,7 +644,7 @@
       "@@@STEP_LOG_LINE@test-name2@Command: out/theMode/d8 --other test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name2@@@@",
       "@@@STEP_LOG_LINE@test-name2@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name2@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name2@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name2@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name2@@@@",
       "@@@STEP_LOG_LINE@test-name2@Run #1@@@",
@@ -685,7 +663,7 @@
       "@@@STEP_LOG_LINE@test-name2@Command: out/theMode/d8 --opt42 test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name2@@@@",
       "@@@STEP_LOG_LINE@test-name2@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name2@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name2@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name2@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name2@@@@",
       "@@@STEP_LOG_LINE@test-name2@Run #1@@@",
@@ -706,7 +684,7 @@
       "@@@STEP_LOG_LINE@test-name3@Command: out/theMode/d8 --other test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name3@@@@",
       "@@@STEP_LOG_LINE@test-name3@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name3@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name3@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name3@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name3@@@@",
       "@@@STEP_LOG_LINE@test-name3@Run #1@@@",
@@ -725,7 +703,7 @@
       "@@@STEP_LOG_LINE@test-name3@Command: out/theMode/d8 --opt42 test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name3@@@@",
       "@@@STEP_LOG_LINE@test-name3@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name3@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name3@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name3@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name3@@@@",
       "@@@STEP_LOG_LINE@test-name3@Run #1@@@",
@@ -746,7 +724,7 @@
       "@@@STEP_LOG_LINE@test-name4@Command: out/theMode/d8 --other test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name4@@@@",
       "@@@STEP_LOG_LINE@test-name4@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name4@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name4@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name4@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name4@@@@",
       "@@@STEP_LOG_LINE@test-name4@Run #1@@@",
@@ -765,7 +743,7 @@
       "@@@STEP_LOG_LINE@test-name4@Command: out/theMode/d8 --opt42 test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name4@@@@",
       "@@@STEP_LOG_LINE@test-name4@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name4@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name4@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name4@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name4@@@@",
       "@@@STEP_LOG_LINE@test-name4@Run #1@@@",
@@ -786,7 +764,7 @@
       "@@@STEP_LOG_LINE@test-name5@Command: out/theMode/d8 --other test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name5@@@@",
       "@@@STEP_LOG_LINE@test-name5@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name5@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name5@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name5@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name5@@@@",
       "@@@STEP_LOG_LINE@test-name5@Run #1@@@",
@@ -805,7 +783,7 @@
       "@@@STEP_LOG_LINE@test-name5@Command: out/theMode/d8 --opt42 test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name5@@@@",
       "@@@STEP_LOG_LINE@test-name5@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name5@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name5@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name5@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name5@@@@",
       "@@@STEP_LOG_LINE@test-name5@Run #1@@@",
@@ -826,7 +804,7 @@
       "@@@STEP_LOG_LINE@test-name6@Command: out/theMode/d8 --other test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name6@@@@",
       "@@@STEP_LOG_LINE@test-name6@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name6@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name6@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name6@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name6@@@@",
       "@@@STEP_LOG_LINE@test-name6@Run #1@@@",
@@ -845,7 +823,7 @@
       "@@@STEP_LOG_LINE@test-name6@Command: out/theMode/d8 --opt42 test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name6@@@@",
       "@@@STEP_LOG_LINE@test-name6@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name6@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name6@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name6@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name6@@@@",
       "@@@STEP_LOG_LINE@test-name6@Run #1@@@",
@@ -866,7 +844,7 @@
       "@@@STEP_LOG_LINE@test-name7@Command: out/theMode/d8 --other test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name7@@@@",
       "@@@STEP_LOG_LINE@test-name7@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name7@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name7@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name7@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name7@@@@",
       "@@@STEP_LOG_LINE@test-name7@Run #1@@@",
@@ -885,7 +863,7 @@
       "@@@STEP_LOG_LINE@test-name7@Command: out/theMode/d8 --opt42 test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name7@@@@",
       "@@@STEP_LOG_LINE@test-name7@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name7@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name7@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name7@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name7@@@@",
       "@@@STEP_LOG_LINE@test-name7@Run #1@@@",
@@ -906,7 +884,7 @@
       "@@@STEP_LOG_LINE@test-name8@Command: out/theMode/d8 --other test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name8@@@@",
       "@@@STEP_LOG_LINE@test-name8@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name8@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name8@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name8@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name8@@@@",
       "@@@STEP_LOG_LINE@test-name8@Run #1@@@",
@@ -925,7 +903,7 @@
       "@@@STEP_LOG_LINE@test-name8@Command: out/theMode/d8 --opt42 test/suite-name/dir/test-name.js@@@",
       "@@@STEP_LOG_LINE@test-name8@@@@",
       "@@@STEP_LOG_LINE@test-name8@Build environment:@@@",
-      "@@@STEP_LOG_LINE@test-name8@ GYP_DEFINES: clang=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
+      "@@@STEP_LOG_LINE@test-name8@ GYP_DEFINES: target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0@@@",
       "@@@STEP_LOG_LINE@test-name8@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@test-name8@@@@",
       "@@@STEP_LOG_LINE@test-name8@Run #1@@@",
@@ -1150,7 +1128,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
+      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1228,29 +1206,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Bisect a0.clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -1271,7 +1226,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
@@ -1593,7 +1548,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
+      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1671,29 +1626,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Bisect a2.clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -1714,7 +1646,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",

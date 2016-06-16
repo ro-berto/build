@@ -141,7 +141,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -157,28 +157,6 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -201,7 +179,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",

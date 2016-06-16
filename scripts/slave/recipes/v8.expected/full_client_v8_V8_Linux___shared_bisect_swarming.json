@@ -141,7 +141,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -217,28 +217,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -259,7 +237,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
@@ -727,7 +705,7 @@
       "@@@STEP_LOG_LINE@fast@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Build environment:@@@",
-      "@@@STEP_LOG_LINE@fast@ GYP_DEFINES: clang=1 component=shared_library target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32@@@",
+      "@@@STEP_LOG_LINE@fast@ GYP_DEFINES: component=shared_library target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32@@@",
       "@@@STEP_LOG_LINE@fast@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Run #1@@@",
@@ -748,7 +726,7 @@
       "@@@STEP_LOG_LINE@slow@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Build environment:@@@",
-      "@@@STEP_LOG_LINE@slow@ GYP_DEFINES: clang=1 component=shared_library target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32@@@",
+      "@@@STEP_LOG_LINE@slow@ GYP_DEFINES: component=shared_library target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32@@@",
       "@@@STEP_LOG_LINE@slow@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Run #1@@@",
@@ -1093,7 +1071,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1171,29 +1149,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Bisect a0.clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -1214,7 +1169,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
@@ -1542,7 +1497,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1620,29 +1575,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Bisect a2.clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -1663,7 +1595,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
@@ -1853,7 +1785,7 @@
       "@@@STEP_LOG_LINE@fast@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Build environment:@@@",
-      "@@@STEP_LOG_LINE@fast@ GYP_DEFINES: clang=1 component=shared_library target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32@@@",
+      "@@@STEP_LOG_LINE@fast@ GYP_DEFINES: component=shared_library target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32@@@",
       "@@@STEP_LOG_LINE@fast@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Run #1@@@",
@@ -1874,7 +1806,7 @@
       "@@@STEP_LOG_LINE@slow@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Build environment:@@@",
-      "@@@STEP_LOG_LINE@slow@ GYP_DEFINES: clang=1 component=shared_library target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32@@@",
+      "@@@STEP_LOG_LINE@slow@ GYP_DEFINES: component=shared_library target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32@@@",
       "@@@STEP_LOG_LINE@slow@ GYP_GENERATORS: ninja@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Run #1@@@",
@@ -2026,7 +1958,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -2104,29 +2036,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Bisect a1.clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -2147,7 +2056,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
