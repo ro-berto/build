@@ -458,11 +458,7 @@
       "[SLAVE_BUILD]/skia/infra/bots/android_sdk_hash",
       "/path/to/tmp/"
     ],
-    "name": "Read android_sdk_hash",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
-    ]
+    "name": "Read android_sdk_hash"
   },
   {
     "cmd": [
