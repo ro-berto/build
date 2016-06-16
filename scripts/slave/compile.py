@@ -559,7 +559,6 @@ def real_main():
                            help='name of solution/sub-project to build')
   option_parser.add_option('--project', default=None,
                            help='name of project to build')
-  option_parser.add_option('--build-dir', help='ignored')
   option_parser.add_option('--src-dir', default=None,
                            help='path to the root of the source tree')
   option_parser.add_option('--mode', default='dev',
