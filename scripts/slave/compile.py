@@ -551,8 +551,6 @@ def real_main():
                            help='delete the output directory before compiling')
   option_parser.add_option('--target', default='Release',
                            help='build target (Debug or Release)')
-  option_parser.add_option('--solution', default=None,
-                           help='name of solution/sub-project to build')
   option_parser.add_option('--project', default=None,
                            help='name of project to build')
   option_parser.add_option('--src-dir', default=None,
@@ -621,10 +619,7 @@ def real_main():
     if chromium_utils.IsWindows():
       main = main_ninja
       options.build_tool = 'ninja'
-      # TODO(thakis): Remove the next two lines and merge this with the linux
-      # branch below.
-      if options.project:
-        args += [options.project]
+      # TODO(thakis): Merge this with the linux branch below.
     elif chromium_utils.IsLinux() or chromium_utils.IsMac():
       main = main_ninja
       options.build_tool = 'ninja'
