@@ -287,6 +287,10 @@ class GClientFactory(object):
     # Add the compile step if needed.
     if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'Indexer',
                       'TrybotBuilder']:
+      if self._target_platform == 'win32':
+        # Look for a solution named for its enclosing directory.
+        project = project or os.path.basename(self._build_dir) + '.sln'
+
       # If we want to confirm that two successive compiles result in a no-op
       # build, tell the compile step to verify that.
       if factory_properties.get('confirm_noop_compile'):
