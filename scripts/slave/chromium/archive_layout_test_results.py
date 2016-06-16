@@ -187,8 +187,15 @@ def archive_layout(options, args):
   print 'build number: %s' % build_number
   print 'host name: %s' % socket.gethostname()
 
-
   if options.gs_bucket:
+    # Create a file containing last_change revision. This file will be uploaded
+    # after all layout test results are uploaded so the client can check this
+    # file to see if the upload for the revision is complete.
+    # See crbug.com/574272 for more details.
+    last_change_file = os.path.join(staging_dir, 'LAST_CHANGE')
+    with open(last_change_file, 'w') as f:
+      f.write(last_change)
+
     # Copy the results to a directory archived by build number.
     gs_base = '/'.join([options.gs_bucket, build_name, build_number])
     gs_acl = options.gs_acl
@@ -206,15 +213,24 @@ def archive_layout(options, args):
     slave_utils.GSUtilCopyFile(failing_results_json, gs_base, gs_acl=gs_acl,
       cache_control=cache_control)
 
+    slave_utils.GSUtilCopyFile(last_change_file,
+      gs_base + '/' + results_dir_basename, gs_acl=gs_acl,
+      cache_control=cache_control)
+
     # And also to the 'results' directory to provide the 'latest' results
     # and make sure they are not cached at all (Cloud Storage defaults to
     # caching w/ a max-age=3600).
     gs_base = '/'.join([options.gs_bucket, build_name, 'results'])
     cache_control = 'no-cache'
-    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_base, gs_acl=gs_acl,
+    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
         cache_control=cache_control)
     slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
         cache_control=cache_control)
+
+    slave_utils.GSUtilCopyFile(last_change_file,
+        gs_base + '/' + results_dir_basename, gs_acl=gs_acl,
+        cache_control=cache_control)
+
   else:
     # Where to save layout test results.
     dest_parent_dir = os.path.join(archive_utils.Config.www_dir_base,
