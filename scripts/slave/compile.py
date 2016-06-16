@@ -11,15 +11,11 @@
   For a list of command-line options, call this script with '--help'.
 """
 
-import datetime
-import errno
 import multiprocessing
 import optparse
 import os
 import re
-import shlex
 import sys
-import time
 
 from common import chromium_utils
 from slave import build_directory
