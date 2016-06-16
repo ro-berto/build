@@ -34,3 +34,18 @@ def GenTests(api):
       api.luci_config.get_projects(['build']) +
       api.luci_config.get_project_config('build', 'recipes.cfg', 'testcontent')
   )
+
+  protobuf_lines = """
+    foo: 1
+    bar: "hi"
+    baz: {
+      the_thing: "hi"
+    }
+  """
+
+  yield (
+      api.test('protobuf') +
+      api.luci_config.get_projects(['build']) +
+      api.luci_config.get_project_config(
+          'build', 'recipes.cfg', '\n'.join(protobuf_lines))
+  )
