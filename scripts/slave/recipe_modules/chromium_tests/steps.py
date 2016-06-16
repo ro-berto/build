@@ -507,7 +507,8 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
     else:
       yield AndroidInstrumentationTest(
           test_name,
-          compile_targets=test.get('override_compile_targets', None))
+          compile_targets=test.get('override_compile_targets'),
+          timeout_scale=test.get('timeout_scale'))
 
 
 def generate_junit_test(api, chromium_tests_api, mastername, buildername,
