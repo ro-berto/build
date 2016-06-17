@@ -4,6 +4,7 @@
 
 import argparse
 import datetime
+import difflib
 import random
 import re
 import urllib
@@ -407,10 +408,58 @@ class V8Api(recipe_api.RecipeApi):
         if self.should_upload_build:
           self.upload_isolated_json()
 
+  def _compare_gyp_defines(self, mb_output):
+    """Compare infra gyp flags with client gyp flags.
+
+    Returns the difference as a list of strings or an empty list if there is
+    none.
+    """
+
+    def gyp_defines_to_dict(gyp_defines):
+      return dict(tuple(x.split('=', 1)) for x in gyp_defines.split())
+
+    infra_flags = gyp_defines_to_dict(
+        self.m.chromium.c.gyp_env.as_jsonish()['GYP_DEFINES'])
+
+    # Get the client's gyp flags from MB's output.
+    match = re.search('^GYP_DEFINES=\'(.*)\'$', mb_output, re.M)
+
+    # This won't match in the gn case.
+    if match:
+      client_flags = gyp_defines_to_dict(match.group(1))
+
+      # Tweak both dictionaries for known differences.
+      if infra_flags.get('target_arch') == infra_flags.get('v8_target_arch'):
+        # We drop the default case target_arch==v8_target_arch in MB and
+        # only specify target_arch.
+        infra_flags.pop('v8_target_arch')  # pragma: no cover
+
+      if 'jsfunfuzz' in infra_flags:
+        # This is for runhooks only. Not used in MB.
+        infra_flags.pop('jsfunfuzz')  # pragma: no cover
+
+      if not 'component' in infra_flags and 'component' in client_flags:
+        # We make this explicit with MB but used the default without. Only
+        # compare if we specified it explicitly in the infrastructure.
+        client_flags.pop('component')  # pragma: no cover
+
+      if infra_flags != client_flags:
+        to_str = lambda x: sorted('%s: %s' % kv for kv in x.iteritems())
+        return list(difflib.ndiff(to_str(infra_flags), to_str(client_flags)))
+    return []  # pragma: no cover
+
   def compile(self, **kwargs):
     if self.m.chromium.c.project_generator.tool == 'mb':
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
+      def step_test_data():
+        # Fake gyp flags. In the expectations, the flag comparison will
+        # complain a lot because the fake data is different.
+        return self.m.raw_io.test_api.stream_output(
+            'some line\n'
+            'GYP_DEFINES=\'target_arch=x64 cool_flag=a=1\'\n'
+            'moar\n'
+        )
       self.m.chromium.run_mb(
           self.m.properties['mastername'],
           self.m.properties['buildername'],
@@ -418,7 +467,22 @@ class V8Api(recipe_api.RecipeApi):
           mb_config_path=self.m.path['checkout'].join(
               'infra', 'mb', 'mb_config.pyl'),
           gyp_script=self.m.path.join('gypfiles', 'gyp_v8'),
+          # TODO(machenbach): Remove the comparison after the mb switch and
+          # once all gyp flags have been verified.
+          stdout=self.m.raw_io.output(),
+          step_test_data=step_test_data,
       )
+      # Log captured output.
+      self.m.step.active_result.presentation.logs['stdout'] = (
+        self.m.step.active_result.stdout.splitlines())
+
+      # Compare infra gyp flags with client gyp flags.
+      diff = self._compare_gyp_defines(self.m.step.active_result.stdout)
+
+      if diff:
+        self.m.step.active_result.presentation.logs['diff'] = diff
+        self.m.step.active_result.presentation.status = self.m.step.WARNING
+
     self.peek_gn()
     self.m.chromium.compile(**kwargs)
     self.isolate_tests()
