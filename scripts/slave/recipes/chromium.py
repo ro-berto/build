@@ -387,6 +387,98 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_swarmed_sharded_passed_isolated_script_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'isolated_scripts': [
+          {
+            'isolate_name': 'telemetry_gpu_unittests',
+            'name': 'telemetry_gpu_unittests',
+            'swarming': {
+              'can_use_on_swarming_builders': True,
+              'shards': 2,
+            },
+          },
+        ],
+      },
+    })) +
+    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True,
+            shards=2, isolated_script_passing=True, valid=True),
+        retcode=0)
+  )
+
+  yield (
+    api.test('dynamic_swarmed_sharded_failed_isolated_script_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'isolated_scripts': [
+          {
+            'isolate_name': 'telemetry_gpu_unittests',
+            'name': 'telemetry_gpu_unittests',
+            'swarming': {
+              'can_use_on_swarming_builders': True,
+              'shards': 2,
+            },
+          },
+        ],
+      },
+    })) +
+    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
+        api.test_utils.canned_isolated_script_output(
+            passing=False, is_win=False, swarming=True,
+            shards=2, isolated_script_passing=False, valid=True),
+            retcode=1)
+  )
+
+  yield (
+    api.test('dynamic_swarmed_sharded_isolated_script_test_missing_shard') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'isolated_scripts': [
+          {
+            'isolate_name': 'telemetry_gpu_unittests',
+            'name': 'telemetry_gpu_unittests',
+            'swarming': {
+              'can_use_on_swarming_builders': True,
+              'shards': 2,
+            },
+          },
+        ],
+      },
+    })) +
+    api.override_step_data(
+      'telemetry_gpu_unittests on Ubuntu-12.04',
+      api.test_utils.canned_isolated_script_output(
+        passing=True, is_win=False, swarming=True,
+        shards=2, isolated_script_passing=True, valid=True,
+        missing_shards=[1]),
+      retcode=1)
+  )
+
+  yield (
     api.test('dynamic_swarmed_isolated_script_test_linux_gpu') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Tests',

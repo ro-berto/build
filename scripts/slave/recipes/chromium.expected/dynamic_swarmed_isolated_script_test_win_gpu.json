@@ -616,10 +616,11 @@
     "name": "telemetry_gpu_unittests on NVIDIA GPU on Windows on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"failures\\\": [], \\\"valid\\\": true}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@"
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -644,10 +645,11 @@
     "name": "telemetry_gpu_unittests on ATI GPU on Windows on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"failures\\\": [], \\\"valid\\\": true}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@"
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -672,10 +674,11 @@
     "name": "telemetry_gpu_unittests on (15ad) GPU on Windows on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"failures\\\": [], \\\"valid\\\": true}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@"
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {

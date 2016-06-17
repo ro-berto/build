@@ -1226,7 +1226,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # TODO(nednguyen): make this configurable in isolated_scripts's spec.
     return api.swarming.isolated_script_task(
         title=self._step_name(suffix), isolated_hash=isolated_hash,
-        idempotent=False, extra_args=args)
+        shards=self._shards, idempotent=False, extra_args=args)
 
   def validate_task_results(self, api, step_result):
     results = getattr(step_result, 'isolated_script_results', None) or {}

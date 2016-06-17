@@ -331,6 +331,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"test1.Test1\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test2.Test2\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"successes\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"valid\": false@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",

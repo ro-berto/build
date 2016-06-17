@@ -415,10 +415,11 @@
       "step returned non-zero exit code: 255",
       "@@@STEP_TEXT@<br/>failures:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"failures\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"valid\\\": true}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [], \\\"failures\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"valid\\\": true}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

@@ -703,6 +703,41 @@ class SwarmingApi(recipe_api.RecipeApi):
             link_name = 'shard #%d isolated out' % index
             p.links[link_name] = outputs_ref['view_url']
 
+
+  def _merge_isolated_script_shards(self, task, step_result):
+    # This code is unfortunately specialized to the "simplified"
+    # JSON format that used to be the standard for recipes. The
+    # isolated scripts should be changed to use the now-standard
+    # Chromium JSON test results format:
+    # https://www.chromium.org/developers/the-json-test-results-format
+    # . Note that gtests, above, don't seem to conform to this
+    # format yet, so it didn't seem like a good prerequisite to
+    # switch the isolated tests over when adding sharding support.
+    #
+    # These are the only keys we pay attention to in the output JSON.
+    merged_results = {
+      'successes': [],
+      'failures': [],
+      'valid': True,
+    }
+    for i in xrange(task.shards):
+      path = self.m.path.join(str(i), 'output.json')
+      if path not in step_result.raw_io.output_dir:
+        raise Exception('no results from shard #%d' % i)
+      results_raw = step_result.raw_io.output_dir[path]
+      results_json = self.m.json.loads(results_raw)
+      for key in merged_results:
+        if key in results_json:
+          if isinstance(merged_results[key], list):
+            merged_results[key].extend(results_json[key])
+          elif isinstance(merged_results[key], bool):
+            merged_results[key] = merged_results[key] and results_json[key]
+          else:
+            raise recipe_api.InfraFailure(
+              'Unknown key type ' + type(merged_results[key]) +
+              ' when handling key ' + key + '.')  # pragma: no cover
+    return merged_results
+
   def _isolated_script_collect_step(self, task, **kwargs):
     step_test_data = kwargs.pop('step_test_data', None)
     if not step_test_data:
@@ -736,12 +771,17 @@ class SwarmingApi(recipe_api.RecipeApi):
         if any(shard['internal_failure'] for shard in summary['shards']):
           raise recipe_api.InfraFailure('Internal swarming failure.')
 
-        # TODO(nednguyen, kbr): Combine isolated script results from multiple
-        # shards rather than assuming that there is always just one shard.
-        assert len(summary['shards']) == 1
-        results_raw = step_result.raw_io.output_dir[
-            self.m.path.join('0', 'output.json')]
-        step_result.isolated_script_results = self.m.json.loads(results_raw)
+        # Always show the shards' links in the collect step. (It looks
+        # like show_isolated_out_in_collect_step is false by default
+        # in recipe runs.)
+        links = step_result.presentation.links
+        for index in xrange(task.shards):
+          url = task.get_shard_view_url(index)
+          if url:
+            links['shard #%d' % index] = url
+
+        step_result.isolated_script_results = \
+          self._merge_isolated_script_shards(task, step_result)
 
         self._display_pending(summary, step_result.presentation)
       except Exception as e:

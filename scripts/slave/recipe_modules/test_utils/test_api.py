@@ -113,31 +113,40 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     return ret
 
   def canned_isolated_script_output(self, passing, is_win, swarming=False,
-                                    swarming_internal_failure=False,
-                                    isolated_script_passing=True, valid=True):
+                                    shards=1, swarming_internal_failure=False,
+                                    isolated_script_passing=True, valid=True,
+                                    missing_shards=[]):
     """Produces a test results' compatible json for isolated script tests. """
-    jsonish_results = {}
-    jsonish_results['valid'] = valid
-    if isolated_script_passing:
-      jsonish_results['failures'] = []
-    else:
-      jsonish_results['failures'] = ['test1.Test1', 'test2.Test2']
-
-    jsonish_summary = {
-      'shards': [
-        {
+    per_shard_results = []
+    for i in xrange(shards):
+      jsonish_results = {}
+      jsonish_results['valid'] = valid
+      # Keep shard 0's results equivalent to the old code to minimize
+      # expectation diffs.
+      idx = 1 + (2 * i)
+      tests_run = ['test%d.Test%d' % (idx, idx),
+                   'test%d.Test%d' % (idx + 1, idx + 1)]
+      if isolated_script_passing:
+        jsonish_results['failures'] = []
+        jsonish_results['successes'] = tests_run
+      else:
+        jsonish_results['failures'] = tests_run
+        jsonish_results['successes'] = []
+      per_shard_results.append(jsonish_results)
+    if swarming:
+      jsonish_shards = []
+      files_dict = {}
+      for i in xrange(shards):
+        jsonish_shards.append({
           'failure': not passing,
           'internal_failure': swarming_internal_failure
-        }
-      ]
-    }
-
-    if swarming:
-      swarming_path = '0\\output.json' if is_win else '0/output.json'
-      files_dict = {
-        swarming_path: json.dumps(jsonish_results),
-        'summary.json': json.dumps(jsonish_summary)
-      }
+        })
+        if not i in missing_shards:
+          swarming_path = str(i)
+          swarming_path += '\\output.json' if is_win else '/output.json'
+          files_dict[swarming_path] = json.dumps(per_shard_results[i])
+      jsonish_summary = {'shards': jsonish_shards}
+      files_dict['summary.json'] = json.dumps(jsonish_summary)
       return self.m.raw_io.output_dir(files_dict)
     else:
-      return self.m.json.output(jsonish_results)
+      return self.m.json.output(per_shard_results[0])

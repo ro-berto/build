@@ -228,12 +228,7 @@
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"dimension_sets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            {@@@",
-      "@@@STEP_LOG_LINE@json.output@              \"gpu\": \"10de:104a\", @@@",
-      "@@@STEP_LOG_LINE@json.output@              \"os\": \"Linux\"@@@",
-      "@@@STEP_LOG_LINE@json.output@            }@@@",
-      "@@@STEP_LOG_LINE@json.output@          ]@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -329,9 +324,9 @@
       "--priority",
       "25",
       "--shards",
-      "1",
+      "2",
       "--task-name",
-      "telemetry_gpu_unittests on NVIDIA GPU on Linux/Linux/eeeeeeeeee/Linux Tests/571",
+      "telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -345,10 +340,10 @@
       "x86-64",
       "--dimension",
       "gpu",
-      "10de:104a",
+      "none",
       "--dimension",
       "os",
-      "Linux",
+      "Ubuntu-12.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -363,7 +358,7 @@
       "--tag",
       "name:telemetry_gpu_unittests",
       "--tag",
-      "os:Linux",
+      "os:Ubuntu-12.04",
       "--tag",
       "project:chromium",
       "--tag",
@@ -373,7 +368,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:telemetry_gpu_unittests on NVIDIA GPU on Linux on Linux",
+      "stepname:telemetry_gpu_unittests on Ubuntu-12.04",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
@@ -381,20 +376,26 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[trigger] telemetry_gpu_unittests on NVIDIA GPU on Linux on Linux",
+    "name": "[trigger] telemetry_gpu_unittests on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Linux/Linux/eeeeeeeeee/Linux Tests/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests on NVIDIA GPU on Linux/Linux/eeeeeeeeee/Linux Tests/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
     ]
   },
   {
@@ -408,27 +409,32 @@
       "--decorate",
       "--print-status-updates",
       "--shards",
-      "1",
-      "telemetry_gpu_unittests on NVIDIA GPU on Linux/Linux/eeeeeeeeee/Linux Tests/571",
+      "2",
+      "telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "telemetry_gpu_unittests on NVIDIA GPU on Linux on Linux",
+    "name": "telemetry_gpu_unittests on Ubuntu-12.04",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>test1.Test1<br/>test2.Test2<br/>test3.Test3<br/>test4.Test4<br/>@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [], \\\"failures\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"valid\\\": true}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"successes\\\": [], \\\"failures\\\": [\\\"test3.Test3\\\", \\\"test4.Test4\\\"], \\\"valid\\\": true}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": true}, {\\\"internal_failure\\\": false, \\\"failure\\\": true}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
     "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "reason": "1 tests failed: ['telemetry_gpu_unittests']",
+    "status_code": 1
   }
 ]
