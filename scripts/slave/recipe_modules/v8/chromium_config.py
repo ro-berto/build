@@ -108,11 +108,6 @@ def jsfunfuzz(c):
   c.gyp_env.GYP_DEFINES['jsfunfuzz'] = 1
 
 
-@CONFIG_CTX(includes=['v8'], group='builder')
-def make(c):
-  c.build_dir = c.CHECKOUT_PATH.join('out')
-  c.compile_py.build_tool = 'make'
-
 
 @CONFIG_CTX(includes=['ninja'])
 def v8_ninja(c):
