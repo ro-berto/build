@@ -141,6 +141,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -157,6 +158,28 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.v8",
+      "-b",
+      "V8 Linux64 - internal snapshot",
+      "--config-file",
+      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--gyp-script=gypfiles/gyp_v8",
+      "//out/Release"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files"
   },
   {
     "cmd": [
@@ -1128,11 +1151,37 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisect a0.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.v8",
+      "-b",
+      "V8 Linux64 - internal snapshot",
+      "--config-file",
+      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--gyp-script=gypfiles/gyp_v8",
+      "//out/Release"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Bisect a0.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1548,11 +1597,37 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisect a2.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.v8",
+      "-b",
+      "V8 Linux64 - internal snapshot",
+      "--config-file",
+      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--gyp-script=gypfiles/gyp_v8",
+      "//out/Release"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Bisect a2.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

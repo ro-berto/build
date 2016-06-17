@@ -337,7 +337,8 @@ BUILDERS = {
       },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
-        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma'],
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -355,7 +356,8 @@ BUILDERS = {
       'V8 Linux64 - debug builder': {
         'gclient_apply_config': ['v8_valgrind'],
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'jsfunfuzz', 'has_valgrind'],
+          'default_compiler', 'v8_ninja', 'goma', 'jsfunfuzz', 'has_valgrind',
+          'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -372,7 +374,8 @@ BUILDERS = {
       },
       'V8 Linux64 - custom snapshot - debug builder': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'embed_script_mjsunit'],
+          'default_compiler', 'v8_ninja', 'goma', 'embed_script_mjsunit',
+          'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -475,7 +478,7 @@ BUILDERS = {
       },
       'V8 Linux64 - internal snapshot': {
         'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'internal_snapshot',
+          'v8_ninja', 'default_compiler', 'goma', 'internal_snapshot', 'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1704,7 +1707,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel_ng': {
-        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma'],
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1738,7 +1742,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_avx2_rel_ng': {
-        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma'],
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1771,7 +1776,8 @@ BUILDERS = {
         },
       },
       'v8_linux64_avx2_dbg': {
-        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma'],
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
