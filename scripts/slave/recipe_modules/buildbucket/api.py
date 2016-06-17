@@ -52,7 +52,7 @@ class BuildbucketApi(recipe_api.RecipeApi):
     if bucket.startswith('master.'):
       new_tags['master'] = bucket[7:]
 
-    new_tags.update(override_tags)
+    new_tags.update(override_tags or {})
     return sorted([':'.join((x, y)) for x, y in new_tags.iteritems()])
 
 
@@ -85,7 +85,7 @@ class BuildbucketApi(recipe_api.RecipeApi):
           'client_operation_id': client_operation_id,
           'tags': self._tags_for_build(build['bucket'],
                                        build['parameters'],
-                                       build['tags'])
+                                       build.get('tags'))
       }, sort_keys=True))
     return self._call_service('put', build_specs, service_account, **kwargs)
 

@@ -33,6 +33,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
   # Email to send on try jobs (for build requests) since git try will not
   # necessarily rely on a local checkout for that information.
   BOT_EMAIL = 'chrome_bot@chromium.org'
+  SERVICE_ACCOUNT = 'chromium_bisect'
 
   def __init__(self, *args, **kwargs):
     super(AutoBisectApi, self).__init__(*args, **kwargs)

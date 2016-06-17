@@ -62,6 +62,7 @@ def GenTests(api):
       'dummy_initial_confidence': '95',
       'poll_sleep': 0,
       'dummy_builds': True,
+      'dummy_tests': True,
       'dummy_job_names': True,
       'bypass_stats_check': True,
   }

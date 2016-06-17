@@ -304,6 +304,7 @@ def Archive(options):
       build_revision, webkit_revision,
       use_try_buildnumber=(not options.append_deps_patch_sha))
 
+  # TODO(robertocn): Remove this if no one other than bisect uses it.
   if options.append_deps_patch_sha:
     deps_sha = os.path.join('src', 'DEPS.sha')
     if os.path.exists(deps_sha):

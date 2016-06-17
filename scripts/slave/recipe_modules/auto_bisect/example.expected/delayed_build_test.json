@@ -31,6 +31,7 @@
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_builds\": null, @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_job_names\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_tests\": \"True\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"good_revision\": \"314015\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"gs_bucket\": \"chrome-perf\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"max_time_minutes\": \"5\", @@@",
@@ -167,24 +168,20 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
-      "try",
-      "--bot",
-      "linux_perf_bisect_builder",
-      "--revision",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222",
-      "--name",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222-build",
-      "--clobber",
-      "--svn_repo",
-      "svn://svn.chromium.org/chrome-try/try-perf",
-      "--diff",
-      "/dev/null"
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Requesting build for a6298e4afedbf2cd461755ea6f45b0ad64222222 via git try."
+    "name": "buildbucket.put",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -205,24 +202,20 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
-      "try",
-      "--bot",
-      "linux_perf_bisect_builder",
-      "--revision",
-      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-      "--name",
-      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-build",
-      "--clobber",
-      "--svn_repo",
-      "svn://svn.chromium.org/chrome-try/try-perf",
-      "--diff",
-      "/dev/null"
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Requesting build for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111 via git try."
+    "name": "buildbucket.put (2)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [

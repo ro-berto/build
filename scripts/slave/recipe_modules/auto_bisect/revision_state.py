@@ -75,9 +75,11 @@ class RevisionState(object):
     self.commit_hash = str(commit_hash)
     self._rev_str = None
     self.base_revision = base_revision
+    self.revision_overrides = {}
     if self.base_revision:
       assert self.base_revision.deps_file_contents
       self.needs_patch = True
+      self.revision_overrides[self.depot_name] = self.commit_hash
       self.deps_patch, self.deps_file_contents = self.bisector.make_deps_patch(
           self.base_revision, self.base_revision.deps_file_contents,
           self.depot, self.commit_hash)
@@ -381,61 +383,44 @@ class RevisionState(object):
       else:
         self.bad = True
 
-  def _write_deps_patch_file(self, build_name):
-    """Saves the DEPS patch in a temp location and returns the file path."""
-    api = self.bisector.api
-    file_name = str(api.m.path['tmp_base'].join(build_name + '.diff'))
-    api.m.file.write('Saving diff patch for ' + self.commit_hash,
-                     file_name, self.deps_patch + self.deps_sha_patch)
-    return file_name
-
   def _request_build(self):
     """Posts a request to buildbot to build this revision and archive it."""
-    # TODO: Rewrite using the trigger module.
     api = self.bisector.api
     bot_name = self.bisector.get_builder_bot_for_this_platform()
-    if self.bisector.bisect_config.get('dummy_job_names'):
-      self.job_name = self.commit_hash + '-build'
-    else:  # pragma: no cover
-      self.job_name = uuid.uuid4().hex
-    if self.needs_patch:
-      self.patch_file = self._write_deps_patch_file(
-          self.job_name)
-    else:
-      self.patch_file = '/dev/null'
 
     # To allow multiple nested levels, we go to the topmost revision.
-    # The patch_file should contain all deps changes.
     top_revision = self
     while top_revision.base_revision:
       top_revision = top_revision.base_revision
-    try_cmd = [
-        'try',
-        '--bot', bot_name,
-        '--revision', top_revision.commit_hash,
-        '--name', self.job_name,
-        '--clobber',
-        '--svn_repo', api.svn_repo_url,
-        '--diff', self.patch_file,
-    ]
+      # We want to carry over any overrides from the base revision(s) without
+      # overwriting any overrides specified at the self level.
+      self.revision_overrides = dict(top_revision.revision_overrides.items() +
+                                     self.revision_overrides.items())
+
+    operation_id = 'dummy' if self.bisector.dummy_tests else uuid.uuid4().hex
+    build_details = {
+        'bucket': 'master.' + api.m.properties['mastername'],
+        'parameters': {
+            'builder_name': bot_name,
+            'properties': {
+                'parent_got_revision': top_revision.commit_hash,
+                'clobber': True,
+                'build_archive_url': self.build_url,
+            },
+        },
+        'client_operation_id': operation_id
+    }
+    if self.revision_overrides:
+      build_details['parameters']['properties']['deps_revision_overrides'] = \
+          self.revision_overrides
+
     try:
-      if not self.bisector.bisect_config.get('skip_gclient_ops'):
-        self.bisector.ensure_sync_master_branch()
-      api.m.git(
-          *try_cmd, name='Requesting build for %s via git try.'
-          % str(self.commit_hash), git_config_options={
-              'user.email': 'FAKE_PERF_PUMPKIN@chromium.org',
-          })
-    except:  # pragma: no cover
+      api.m.buildbucket.put([build_details],
+                            api.m.service_account.get_json_path(
+                                api.SERVICE_ACCOUNT))
+    except api.m.step.StepFailure:  # pragma: no cover
       self.bisector.surface_result('BUILD_FAILURE')
       raise
-    finally:
-      if (self.patch_file != '/dev/null' and
-          'TESTING_SLAVENAME' not in os.environ):
-        try:
-          api.m.file.remove('cleaning up patch', self.patch_file)
-        except api.m.step.StepFailure:  # pragma: no cover
-          print 'Could not clean up ' + self.patch_file
 
   def _get_bisect_config_for_tester(self):
     """Copies the key-value pairs required by a tester bot to a new dict."""

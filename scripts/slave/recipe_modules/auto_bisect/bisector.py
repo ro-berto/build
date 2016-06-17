@@ -89,6 +89,7 @@ class Bisector(object):
     # Test-only properties.
     # TODO: Replace these with proper mod_test_data.
     self.dummy_builds = bisect_config.get('dummy_builds', False)
+    self.dummy_tests = bisect_config.get('dummy_tests', False)
     self.bypass_stats_check = bool(bisect_config.get('bypass_stats_check'))
 
     # Load configuration items.

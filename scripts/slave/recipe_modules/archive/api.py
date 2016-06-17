@@ -101,8 +101,9 @@ class ArchiveApi(recipe_api.RecipeApi):
         self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
         '--target', target,
     ]
-    if build_url:
-      args.extend(['--build-url', build_url])
+    if build_url or 'build_archive_url' in self.m.properties:
+      args.extend(['--build-url',
+                   build_url or self.m.properties['build_archive_url']])
     if build_revision:
       args.extend(['--build_revision', build_revision])
     elif src_dir:

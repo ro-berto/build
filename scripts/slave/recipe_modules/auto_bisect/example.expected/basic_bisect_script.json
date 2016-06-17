@@ -31,6 +31,7 @@
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_builds\": \"True\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_job_names\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_tests\": \"True\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"good_revision\": \"314015\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"gs_bucket\": \"chrome-perf\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"max_time_minutes\": \"5\", @@@",
@@ -168,24 +169,20 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
-      "try",
-      "--bot",
-      "linux_perf_bisect_builder",
-      "--revision",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222",
-      "--name",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222-build",
-      "--clobber",
-      "--svn_repo",
-      "svn://svn.chromium.org/chrome-try/try-perf",
-      "--diff",
-      "/dev/null"
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Requesting build for a6298e4afedbf2cd461755ea6f45b0ad64222222 via git try."
+    "name": "buildbucket.put",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -202,24 +199,20 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
-      "try",
-      "--bot",
-      "linux_perf_bisect_builder",
-      "--revision",
-      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-      "--name",
-      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-build",
-      "--clobber",
-      "--svn_repo",
-      "svn://svn.chromium.org/chrome-try/try-perf",
-      "--diff",
-      "/dev/null"
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Requesting build for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111 via git try."
+    "name": "buildbucket.put (2)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -396,24 +389,20 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
-      "try",
-      "--bot",
-      "linux_perf_bisect_builder",
-      "--revision",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988",
-      "--name",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988-build",
-      "--clobber",
-      "--svn_repo",
-      "svn://svn.chromium.org/chrome-try/try-perf",
-      "--diff",
-      "/dev/null"
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Requesting build for dcdcdc0ff1122212323134879ddceeb1240b0988 via git try."
+    "name": "buildbucket.put (3)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -672,49 +661,19 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "Dummy .diff contents 001 - 003\ndiff --git DEPS.sha DEPS.sha\nnew file mode 100644\n--- /dev/null\n+++ DEPS.sha\n@@ -0,0 +1 @@\n+51e7ed4b63ad81d8b499e42b888149349afaaca1\n",
-      "[TMP_BASE]/003-build.diff"
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_51e7ed4b63ad81d8b499e42b888149349afaaca1.zip\\\", \\\"clobber\\\": true, \\\"deps_revision_overrides\\\": {\\\"v8\\\": \\\"003\\\"}, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
-    "name": "Saving diff patch for 003"
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
-      "try",
-      "--bot",
-      "linux_perf_bisect_builder",
-      "--revision",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222",
-      "--name",
-      "003-build",
-      "--clobber",
-      "--svn_repo",
-      "svn://svn.chromium.org/chrome-try/try-perf",
-      "--diff",
-      "[TMP_BASE]/003-build.diff"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Requesting build for 003 via git try."
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/003-build.diff"
-    ],
-    "name": "cleaning up patch",
+    "name": "buildbucket.put (4)",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@os.remove(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {
@@ -932,9 +891,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Running Bisection",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -949,7 +908,7 @@
       "--path_to_goma",
       "[BUILD]/goma",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}"
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}"
     ],
     "name": "Running Bisection"
   },
