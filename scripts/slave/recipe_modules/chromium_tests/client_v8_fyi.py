@@ -115,6 +115,7 @@ SPEC = {
     },
     'Linux ASAN Builder': {
       'chromium_config': 'chromium_linux_asan',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_bleeding_edge_git',
@@ -159,6 +160,7 @@ SPEC = {
     },
     'Linux Snapshot Builder': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_bleeding_edge_git',
@@ -190,6 +192,7 @@ SPEC = {
         'asan_symbolized',
         'chromium_asan_default_targets',
         'clobber',
+        'mb',
         'sanitizer_coverage',
         'v8_verify_heap',
       ],
@@ -217,6 +220,7 @@ SPEC = {
       'chromium_apply_config': [
         'chromium_asan_default_targets',
         'clobber',
+        'mb',
         'sanitizer_coverage',
         'v8_optimize_medium',
       ],
@@ -241,7 +245,7 @@ SPEC = {
     'Chromium Win SyzyASAN': {
       'chromium_config': 'chromium_no_goma',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['syzyasan', 'clobber'],
+      'chromium_apply_config': ['syzyasan', 'clobber', 'mb'],
       'gclient_apply_config': [
         'v8_bleeding_edge_git',
         'chromium_lkgr',
