@@ -140,12 +140,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
-      "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "arm_float_abi=hard gomadir='[CACHE]/cipd/goma' target_arch=arm test_isolation_mode=prepare use_goma=1 v8_target_arch=arm",
       "GYP_GENERATORS": "ninja",
-      "LINK": "/usr/bin/arm-linux-gnueabihf-g++",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -283,11 +281,9 @@
         "builder_name": "V8 Arm",
         "properties": {
           "parent_build_environment": {
-            "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
             "GYP_CROSSCOMPILE": "1",
             "GYP_DEFINES": "arm_float_abi=hard target_arch=arm test_isolation_mode=prepare use_goma=1 v8_target_arch=arm",
-            "GYP_GENERATORS": "ninja",
-            "LINK": "/usr/bin/arm-linux-gnueabihf-g++"
+            "GYP_GENERATORS": "ninja"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -325,11 +321,9 @@
         "properties": {
           "archive": "gs://chromium-v8/v8-arm-rel",
           "parent_build_environment": {
-            "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
             "GYP_CROSSCOMPILE": "1",
             "GYP_DEFINES": "arm_float_abi=hard target_arch=arm test_isolation_mode=prepare use_goma=1 v8_target_arch=arm",
-            "GYP_GENERATORS": "ninja",
-            "LINK": "/usr/bin/arm-linux-gnueabihf-g++"
+            "GYP_GENERATORS": "ninja"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
