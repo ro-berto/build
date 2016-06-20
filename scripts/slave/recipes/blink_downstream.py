@@ -133,8 +133,13 @@ def RunSteps(api):
 
   step_result = api.bot_update.ensure_checkout(force=True)
 
+  api.chromium.c.project_generator.tool = 'mb'
   api.chromium.runhooks()
-  api.chromium.compile()
+
+  api.chromium_tests.run_mb_and_compile(
+      ['blink_tests'], [],
+      name_suffix=' (with patch)',
+  )
 
   api.chromium.runtest('webkit_unit_tests', xvfb=True)
 
@@ -150,8 +155,10 @@ def RunSteps(api):
     # again confuses the waterfall's console view.
     api.bot_update.ensure_checkout(force=True, update_presentation=False)
 
-    api.chromium.runhooks()
-    api.chromium.compile()
+    api.chromium_tests.run_mb_and_compile(
+        ['blink_tests'], [],
+        name_suffix=' (without patch)',
+    )
 
   extra_args = list(bot_config.get('test_args', []))
   if bot_config.get('additional_expectations'):
