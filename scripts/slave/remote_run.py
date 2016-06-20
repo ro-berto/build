@@ -121,6 +121,7 @@ def main(argv):
     recipe_cmd = [
         sys.executable,
         os.path.join(cipd_path, 'recipes.py'),
+        '--verbose',
         'remote_run',
         '--repository', args.repository,
         '--revision', args.revision,
