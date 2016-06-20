@@ -109,8 +109,8 @@ class FileApi(recipe_api.RecipeApi):
           json.dump(os.listdir(sys.argv[1]), f)
       """,
       args=[path, self.m.json.output()],
-      step_test_data=(step_test_data or
-                      self.test_api.listdir(['file 1', 'file 2'])),
+      step_test_data=(step_test_data or (
+          lambda: self.m.json.test_api.output(['file 1', 'file 2']))),
       **kwargs
     ).json.output
 

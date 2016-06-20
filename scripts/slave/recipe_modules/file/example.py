@@ -30,6 +30,10 @@ def RunSteps(api):
   for element in result:
     api.step('manipulate %s' % str(element), ['some', 'command'])
 
+  result = api.file.listdir('other', '/faker/dir')
+  for element in result:
+    api.step('manipulate %s' % str(element), ['some', 'command'])
+
   # mkdtemp demo.
   for prefix in ('prefix_a', 'prefix_b'):
     # Create temp dir.
@@ -76,5 +80,5 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('file_io')
+  yield api.test('file_io') + api.file.listdir('other', ['aaa'])
 

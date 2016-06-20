@@ -31,7 +31,8 @@ BUILD = os.path.join(_ROOT, 'build')
 BUILD_INTERNAL = os.path.join(_ROOT, 'build_internal')
 
 class FileTestApi(recipe_test_api.RecipeTestApi):
-  def listdir(self, files):
-    def listdir_callback():
-      return self.m.json.output(files)
-    return listdir_callback
+  def listdir(self, dirname, files):
+    return self.step_data(
+      'listdir %s' % dirname,
+      self.m.json.output(files))
+

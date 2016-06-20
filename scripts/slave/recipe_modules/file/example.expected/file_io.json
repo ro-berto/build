@@ -38,6 +38,35 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "/faker/dir",
+      "/path/to/tmp/json"
+    ],
+    "name": "listdir other",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"aaa\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "some",
+      "command"
+    ],
+    "name": "manipulate aaa"
+  },
+  {
+    "cmd": [
       "echo",
       "[TMP_BASE]/prefix_a_tmp_1"
     ],
