@@ -1073,6 +1073,7 @@ BUILDERS = {
       'V8 Arm - builder': {
         'chromium_apply_config': [
             'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float'],
+        'v8_apply_config': ['arm_hard_float'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -1090,6 +1091,7 @@ BUILDERS = {
       'V8 Arm - debug builder': {
         'chromium_apply_config': [
             'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float'],
+        'v8_apply_config': ['arm_hard_float'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',

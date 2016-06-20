@@ -44,6 +44,12 @@ def v8(c):
 
 
 @config_ctx()
+def arm_hard_float(c):
+  c.gyp_env.CXX = '/usr/bin/arm-linux-gnueabihf-g++'
+  c.gyp_env.LINK = '/usr/bin/arm-linux-gnueabihf-g++'
+
+
+@config_ctx()
 def deopt_fuzz_normal(c):
   c.testing.test_args.append('--coverage=0.4')
   c.testing.test_args.append('--distribution-mode=smooth')
