@@ -203,8 +203,12 @@ def setup_target(api,
                               '-j8', '--target'],
              env=env)
 
-    # Mips testing is broken.
+    # Mips64 testing is broken.
     if device == 'mips64_emulator':
+      return
+
+    # Mips32 testing is broken: devices are not reliable.
+    if device == 'mips32':
       return
 
     api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
