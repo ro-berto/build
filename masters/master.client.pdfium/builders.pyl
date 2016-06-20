@@ -225,6 +225,17 @@
         "memory_tool": "drmemory",
       },
     },
+    "android": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["android"],
+      "category": "0main",
+      "properties": {
+        "gn": True,
+        "skip_test": True,
+        "target_os": "android",
+      },
+    },
   },
 
   "schedulers": {
@@ -235,6 +246,16 @@
   },
 
   "slave_pools": {
+    "android": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": [
+        "slave103-c3",
+      ],
+    },
     "linux_trusty": {
       "slave_data": {
         "bits": 64,

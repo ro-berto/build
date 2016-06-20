@@ -169,11 +169,32 @@
         "gn": True,
       }
     },
+
+    "android": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["android_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "0main",
+      "properties": {
+        "gn": True,
+        "skip_test": True,
+        "target_os": "android",
+      },
+    },
   },
 
   "schedulers": {},
 
   "slave_pools": {
+    "android_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave773-c4", "slave774-c4"],
+    },
     "linux_slave_pool": {
       "slave_data": {
         "bits": 64,
