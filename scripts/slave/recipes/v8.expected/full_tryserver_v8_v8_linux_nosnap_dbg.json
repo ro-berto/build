@@ -147,6 +147,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=ia32 v8_use_snapshot=false",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -163,6 +164,50 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.v8",
+      "-b",
+      "v8_linux_nosnap_dbg",
+      "--config-file",
+      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--gyp-script=gypfiles/gyp_v8",
+      "//out/Debug"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@some line@@@",
+      "@@@STEP_LOG_LINE@stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
+      "@@@STEP_LOG_LINE@stdout@moar@@@",
+      "@@@STEP_LOG_END@stdout@@@",
+      "@@@STEP_LOG_LINE@diff@+ cool_flag: a=1@@@",
+      "@@@STEP_LOG_LINE@diff@- dcheck_always_on: 1@@@",
+      "@@@STEP_LOG_LINE@diff@- fastbuild: 1@@@",
+      "@@@STEP_LOG_LINE@diff@- gomadir: '[CACHE]/cipd/goma'@@@",
+      "@@@STEP_LOG_LINE@diff@- target_arch: ia32@@@",
+      "@@@STEP_LOG_LINE@diff@?              ^^^^@@@",
+      "@@@STEP_LOG_LINE@diff@+ target_arch: x64@@@",
+      "@@@STEP_LOG_LINE@diff@?              ^^^@@@",
+      "@@@STEP_LOG_LINE@diff@- test_isolation_mode: prepare@@@",
+      "@@@STEP_LOG_LINE@diff@- use_goma: 1@@@",
+      "@@@STEP_LOG_LINE@diff@- v8_enable_slow_dchecks: 1@@@",
+      "@@@STEP_LOG_LINE@diff@- v8_optimized_debug: 1@@@",
+      "@@@STEP_LOG_LINE@diff@- v8_use_snapshot: false@@@",
+      "@@@STEP_LOG_END@diff@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [
