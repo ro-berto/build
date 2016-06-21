@@ -165,19 +165,6 @@ def isolate_recipes(api):
   return api.skia_swarming.batcharchive(['isolate_recipes'])[0][1]
 
 
-def isolate_gsutil(api):
-  """Isolate gsutil from the depot_tools checkout."""
-  skia_recipes_dir = api.path['build'].join(
-      'scripts', 'slave', 'recipes', 'skia')
-  api.skia_swarming.create_isolated_gen_json(
-      skia_recipes_dir.join('gsutil.isolate'),
-      skia_recipes_dir,
-      'linux',
-      'isolate_gsutil',
-      {})
-  return api.skia_swarming.batcharchive(['isolate_gsutil'])[0][1]
-
-
 def trigger_task(api, task_name, builder, master, slave, buildnumber,
                  builder_spec, got_revision, infrabots_dir, idempotent=False,
                  store_output=True, extra_isolate_hashes=None, expiration=None,
@@ -527,27 +514,6 @@ def upload_coverage_results(api, task, got_revision, is_trybot):
   )
 
 
-def download_asset(api, infrabots_dir, depot_tools_hash, asset):
-  """Trigger a swarming task to download and isolate the given asset."""
-  return api.skia_swarming.isolate_and_trigger_task(
-      infrabots_dir.join('download_asset.isolate'),
-      api.path['slave_build'],
-      'download_%s' % asset,
-      {'ASSET': asset, 'GSUTIL': '../../../../../depot_tools/gsutil.py'},
-      {'pool': 'Skia', 'os': 'Ubuntu'},
-      extra_isolate_hashes=[depot_tools_hash],
-      idempotent=True,
-      isolate_blacklist=['.git', 'out', '*.pyc'],
-      store_output=False,
-  )
-
-
-def collect_hashes(api, tasks):
-  """Collect the isolated hash for each swarming task."""
-  return [
-      api.skia_swarming.collect_swarming_task_isolate_hash(t) for t in tasks]
-
-
 def RunSteps(api):
   got_revision = checkout_steps(api)
   builder_spec = api.skia.get_builder_spec(api.path['checkout'],
@@ -565,53 +531,40 @@ def RunSteps(api):
   recipes_hash = isolate_recipes(api)
   extra_hashes = [recipes_hash]
 
-  # Some tasks only need depot_tools.
-  depot_tools_hash = isolate_gsutil(api)
-
-  # Get ready to compile.
-  compile_deps = []
-  extra_compile_hashes = [recipes_hash]
-
   # Android bots require an SDK.
   if 'Android' in api.properties['buildername']:
-    if api.path.exists(infrabots_dir.join('assets', 'android_sdk')):
-      compile_deps.append(download_asset(
-          api, infrabots_dir, depot_tools_hash, 'android_sdk'))
-    else:
-      # TODO(borenet): Remove this legacy method after 7/1/2016.
-      test_data = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
-      hash_file = infrabots_dir.join('android_sdk_hash')
-      # try/except as a temporary measure to prevent breakages for backfills
-      # and branches.
-      try:
-        h = api.skia._readfile(hash_file,
-                               name='Read android_sdk_hash',
-                               test_data=test_data).rstrip()
-      except api.step.StepFailure:
-        # Just fall back on the original hash.
-        h = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
-      extra_hashes.append(h)
-      extra_compile_hashes.append(h)
+    test_data = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
+    hash_file = infrabots_dir.join('android_sdk_hash')
+    # try/except as a temporary measure to prevent breakages for backfills
+    # and branches.
+    try:
+      h = api.skia._readfile(hash_file,
+                             name='Read android_sdk_hash',
+                             test_data=test_data).rstrip()
+    except api.step.StepFailure:
+      # Just fall back on the original hash.
+      h = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
+    extra_hashes.append(h)
 
-  extra_compile_hashes.extend(collect_hashes(api, compile_deps))
-
-  # Compile.
   do_compile_steps = builder_spec.get('do_compile_steps', True)
+  compile_hash = None
   if do_compile_steps:
-    extra_hashes.append(compile_steps_swarm(
-        api, builder_spec, got_revision, infrabots_dir, extra_compile_hashes))
+    compile_hash = compile_steps_swarm(api, builder_spec, got_revision,
+                                       infrabots_dir, extra_hashes)
 
   if builder_cfg['role'] == 'Housekeeper':
     housekeeper_swarm(api, builder_spec, got_revision, infrabots_dir,
                       extra_hashes)
     return
 
-  # Get ready to test/perf.
   do_test_steps = builder_spec['do_test_steps']
   do_perf_steps = builder_spec['do_perf_steps']
 
   if not (do_test_steps or do_perf_steps):
     return
+
+  if compile_hash:
+    extra_hashes.append(compile_hash)
 
   api.skia.download_skps(api.path['slave_build'].join('tmp'),
                          api.path['slave_build'].join('skps'),
@@ -637,8 +590,7 @@ def RunSteps(api):
                        got_revision, is_trybot)
 
 
-def test_for_bot(api, builder, mastername, slavename, testname=None,
-                 legacy_android_sdk=False):
+def test_for_bot(api, builder, mastername, slavename, testname=None):
   """Generate a test for the given bot."""
   testname = testname or builder
   test = (
@@ -657,13 +609,6 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
     test += api.properties(issue=500,
                            patchset=1,
                            rietveld='https://codereview.chromium.org')
-  if 'Android' in builder:
-    if not legacy_android_sdk:
-      test += api.path.exists(api.path['slave_build'].join(
-          'skia', 'infra', 'bots', 'assets', 'android_sdk'))
-      test += api.step_data(
-          'upload new .isolated file for download_android_sdk',
-          stdout=api.raw_io.output('def456 XYZ.isolated'))
   if 'Coverage' not in builder:
     test += api.step_data(
         'upload new .isolated file for compile_skia',
@@ -714,13 +659,6 @@ def GenTests(api):
   builder = 'Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan'
   master = 'client.skia.compile'
   slave = 'skiabot-linux-compile-000'
-  test = test_for_bot(api, builder, master, slave, 'legacy_android_sdk',
-                      legacy_android_sdk=True)
-  test += api.step_data('Read android_sdk_hash',
-                        stdout=api.raw_io.output('<android_sdk_hash>'))
-  yield test
-
-  test = test_for_bot(api, builder, master, slave, 'Missing_android_sdk_hash',
-                      legacy_android_sdk=True)
+  test = test_for_bot(api, builder, master, slave, 'Missing_android_sdk_hash')
   test += api.step_data('Read android_sdk_hash', retcode=1)
   yield test

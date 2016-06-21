@@ -402,273 +402,11 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
-      "511"
-    ],
-    "name": "makedirs swarming tmp dir (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[BUILD]/scripts/slave/recipes/skia/gsutil.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-isolate_gsutil.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\"\n    ], \n    \"dir\": \"[BUILD]/scripts/slave/recipes/skia\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/isolate_gsutil.isolated.gen.json"
+      "[SLAVE_BUILD]/skia/infra/bots/android_sdk_hash",
+      "/path/to/tmp/"
     ],
-    "name": "Write isolate_gsutil.isolated.gen.json"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/swarming.client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/isolate_gsutil.isolated.gen.json"
-    ],
-    "name": "isolate tests (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"isolate_gsutil\": \"[dummy hash for isolate_gsutil]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"isolate_gsutil\": \"[dummy hash for isolate_gsutil]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
-      "511"
-    ],
-    "name": "makedirs swarming tmp dir (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/download_asset.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-download_android_sdk.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Ubuntu\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"GSUTIL\", \n        \"../../../../../depot_tools/gsutil.py\", \n        \"--extra-variable\", \n        \"ASSET\", \n        \"android_sdk\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/download_android_sdk.isolated.gen.json"
-    ],
-    "name": "Write download_android_sdk.isolated.gen.json"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/swarming.client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/download_android_sdk.isolated.gen.json"
-    ],
-    "name": "isolate tests (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"download_android_sdk\": \"[dummy hash for download_android_sdk]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"download_android_sdk\": \"[dummy hash for download_android_sdk]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-download_android_sdk.isolated",
-      "[dummy hash for isolate_gsutil]"
-    ],
-    "name": "add_isolated_input",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import json@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1]) as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  isolated = json.load(f)@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not isolated.get('includes'):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'] = []@@@",
-      "@@@STEP_LOG_LINE@python.inline@for h in sys.argv[2:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(h)@@@",
-      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  json.dump(isolated, f, sort_keys=True)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/swarming.client/isolateserver.py",
-      "archive",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-download_android_sdk.isolated"
-    ],
-    "name": "upload new .isolated file for download_android_sdk",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
-      "trigger",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--priority",
-      "90",
-      "--shards",
-      "1",
-      "--task-name",
-      "download_android_sdk/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--expiration",
-      "72000",
-      "--io-timeout",
-      "1200",
-      "--hard-timeout",
-      "14400",
-      "--dimension",
-      "os",
-      "Ubuntu",
-      "--dimension",
-      "pool",
-      "Skia",
-      "--tag",
-      "buildername:Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release",
-      "--tag",
-      "buildnumber:5",
-      "--tag",
-      "data:def456",
-      "--tag",
-      "master:client.skia",
-      "--tag",
-      "name:download_android_sdk",
-      "--tag",
-      "os:Ubuntu",
-      "--tag",
-      "slavename:skiabot-linux-swarm-000",
-      "--tag",
-      "stepname:download_android_sdk on Ubuntu",
-      "--idempotent",
-      "def456"
-    ],
-    "name": "[trigger] download_android_sdk on Ubuntu",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"download_android_sdk/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"download_android_sdk/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
-      "collect",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--shards",
-      "1",
-      "download_android_sdk/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5",
-      "--task-summary-json",
-      "/path/to/tmp/json"
-    ],
-    "name": "download_android_sdk on Ubuntu",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@swarming pending 71s@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"abandoned_ts\": null, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"completed_ts\": \"2014-09-25T01:42:00.123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        5.7, @@@",
-      "@@@STEP_LOG_LINE@json.output@        31.5@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"exit_codes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        0, @@@",
-      "@@@STEP_LOG_LINE@json.output@        0@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"id\": \"148aa78d7aa0000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"isolated_out\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"view_url\": \"blah\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"outputs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"Heart beat succeeded on win32.\\n\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"Foo\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": 112, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"try_number\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"user\": \"unknown\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
-    ]
+    "name": "Read android_sdk_hash"
   },
   {
     "cmd": [
@@ -721,7 +459,7 @@
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
-    "name": "makedirs swarming tmp dir (4)",
+    "name": "makedirs swarming tmp dir (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -759,7 +497,7 @@
       "--verbose",
       "[SLAVE_BUILD]/swarming_temp_dir/compile_skia.isolated.gen.json"
     ],
-    "name": "isolate tests (4)",
+    "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_skia\": \"[dummy hash for compile_skia]\"@@@",
@@ -775,9 +513,9 @@
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated",
       "[dummy hash for isolate_recipes]",
-      "abc123"
+      "a27a70d73b85191b9e671ff2a44547c3f7cc15ee"
     ],
-    "name": "add_isolated_input (2)",
+    "name": "add_isolated_input",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import json@@@",
@@ -1015,7 +753,7 @@
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
-    "name": "makedirs swarming tmp dir (5)",
+    "name": "makedirs swarming tmp dir (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -1053,7 +791,7 @@
       "--verbose",
       "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
-    "name": "isolate tests (5)",
+    "name": "isolate tests (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_skia\": \"[dummy hash for test_skia]\"@@@",
@@ -1069,9 +807,10 @@
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated",
       "[dummy hash for isolate_recipes]",
+      "a27a70d73b85191b9e671ff2a44547c3f7cc15ee",
       "abc123"
     ],
-    "name": "add_isolated_input (3)",
+    "name": "add_isolated_input (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import json@@@",

@@ -1,8 +1,0 @@
-{
-  'variables': {
-    'files': [
-      '../../../../../depot_tools/external_bin/gsutil/',
-      '../../../../../depot_tools/gsutil.py',
-    ],
-  },
-}
