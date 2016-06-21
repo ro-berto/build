@@ -14,9 +14,8 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, skia_api):
     super(iOSFlavorUtils, self).__init__(skia_api)
     self.default_env = {}
-    if self._skia_api.running_in_swarming:
-      self.default_env['XCODEBUILD'] = (
-          self._skia_api.slave_dir.join('xcodebuild'))
+    self.default_env['XCODEBUILD'] = (
+        self._skia_api.slave_dir.join('xcodebuild'))
     self.ios_bin = self._skia_api.skia_dir.join(
         'platform_tools', 'ios', 'bin')
 

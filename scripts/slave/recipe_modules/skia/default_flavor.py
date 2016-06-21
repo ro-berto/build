@@ -118,8 +118,7 @@ class DefaultFlavorUtils(object):
 
       # Download the toolchain if necessary.
       if actual_hash != desired_hash:
-        self._skia_api.rmtree(toolchain_dir,
-                              self._skia_api.running_in_swarming)
+        self._skia_api.rmtree(toolchain_dir)
         self._skia_api.m.swarming_client.checkout(revision='')
         self._skia_api.m.swarming.check_client_version()
         isolateserver = (
@@ -149,20 +148,7 @@ class DefaultFlavorUtils(object):
   @property
   def chrome_path(self):
     """Path to a checkout of Chrome on this machine."""
-    if self._chrome_path is None:
-      if self._skia_api.running_in_swarming:
-        self._chrome_path = self._skia_api.slave_dir.join('src')
-        return self._chrome_path
-      if self._skia_api.m.platform.is_win:  # pragma: nocover
-        chrome_path = self.maybe_download_win_toolchain()
-        if chrome_path:
-          self._chrome_path = chrome_path
-          return self._chrome_path
-
-    if self._chrome_path is None:
-      self._chrome_path = self._skia_api.m.path.join(
-          self._skia_api.home_dir, 'src')
-    return self._chrome_path
+    return self._skia_api.slave_dir.join('src')
 
   def bootstrap_win_toolchain(self):
     """Run bootstrapping script for the Windows toolchain."""
@@ -194,15 +180,9 @@ class DefaultFlavorUtils(object):
     env = {'CHROME_PATH': self.chrome_path}
     if self._skia_api.m.platform.is_win:
       make_cmd = ['python', 'make.py']
-      if self._skia_api.running_in_swarming:
-        self._skia_api._run_once(self.bootstrap_win_toolchain)
-        if 'Vulkan' in self._skia_api.builder_name:
-          env['VK_SDK_PATH'] = self._skia_api.slave_dir.join('vulkan_1.0.13.0')
-      else:  # pragma: nocover
-        env['PATH'] = self._skia_api.m.path.pathsep.join([
-            str(self._skia_api.slave_dir.join('win', 'depot_tools')),
-            '%(PATH)s'])
-        env['GYP_MSVS_VERSION'] = '2015'
+      self._skia_api._run_once(self.bootstrap_win_toolchain)
+      if 'Vulkan' in self._skia_api.builder_name:
+        env['VK_SDK_PATH'] = self._skia_api.slave_dir.join('vulkan_1.0.13.0')
     else:
       make_cmd = ['make']
     cmd = make_cmd + [target]
@@ -215,7 +195,7 @@ class DefaultFlavorUtils(object):
     """Copy extra build products to specified directory.
 
     Copy flavor-specific build products to swarming_out_dir for use in test and
-    perf steps. Only called if running_in_swarming."""
+    perf steps."""
     pass
 
   @property
@@ -267,7 +247,7 @@ class DefaultFlavorUtils(object):
 
   def create_clean_host_dir(self, path):
     """Convenience function for creating a clean directory."""
-    self._skia_api.rmtree(path, self._skia_api.running_in_swarming)
+    self._skia_api.rmtree(path)
     self._skia_api.m.file.makedirs(
         self._skia_api.m.path.basename(path), path, infra_step=True)
 

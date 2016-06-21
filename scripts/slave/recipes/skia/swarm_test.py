@@ -33,7 +33,7 @@ TEST_BUILDERS = {
 
 
 def RunSteps(api):
-  api.skia.setup(running_in_swarming=True)
+  api.skia.setup()
   api.skia.test_steps()
   api.skia.cleanup_steps()
   api.skia.check_failure()
@@ -266,35 +266,4 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
-  )
-
-  builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'
-  yield (
-    api.test('missing_SKP_VERSION_host') +
-    api.properties(buildername=builder,
-                   mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
-                   buildnumber=6,
-                   revision='abc123',
-                   swarm_out_dir='[SWARM_OUT_DIR]') +
-    api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
-    ) +
-    api.step_data('Get downloaded SKP_VERSION', retcode=1)
-  )
-
-  yield (
-    api.test('missing_SK_IMAGE_VERSION_host') +
-    api.properties(buildername=builder,
-                   mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
-                   buildnumber=6,
-                   revision='abc123',
-                   swarm_out_dir='[SWARM_OUT_DIR]') +
-    api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
-    ) +
-    api.step_data('Get downloaded SK_IMAGE_VERSION', retcode=1)
   )

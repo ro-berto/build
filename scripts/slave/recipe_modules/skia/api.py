@@ -127,11 +127,6 @@ class SkiaApi(recipe_api.RecipeApi):
     return {'AWS_CREDENTIAL_FILE': boto_path,
             'BOTO_CONFIG': boto_path}
 
-  def gen_steps(self):
-    """Generate all build steps."""
-    self.setup()
-    self.run_steps()
-
   def get_builder_spec(self, skia_dir, builder_name):
     """Obtain the buildbot spec for the given builder."""
     fake_spec = None
@@ -150,7 +145,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.m.path.c.base_paths[key] = tuple(path)
     return self.m.path[key]
 
-  def setup(self, running_in_swarming=False):
+  def setup(self):
     """Prepare the bot to run."""
     # Setup
     self.failed = []
@@ -164,43 +159,34 @@ class SkiaApi(recipe_api.RecipeApi):
     self.default_env = {}
     self.is_compile_bot = self.builder_name.startswith('Build-')
 
-    if running_in_swarming:
-      self.default_env['CHROME_HEADLESS'] = '1'
-      # The 'build' and 'depot_tools' directories are provided through isolate
-      # and aren't in the expected location, so we need to override them.
+    self.default_env['CHROME_HEADLESS'] = '1'
+    # The 'build' and 'depot_tools' directories are provided through isolate
+    # and aren't in the expected location, so we need to override them.
+    self.m.path.c.base_paths['depot_tools'] = (
+        self.m.path.c.base_paths['slave_build'] +
+        ('build', 'scripts', 'slave', '.recipe_deps', 'depot_tools'))
+    if 'Win' in self.builder_name:
       self.m.path.c.base_paths['depot_tools'] = (
-          self.m.path.c.base_paths['slave_build'] +
-          ('build', 'scripts', 'slave', '.recipe_deps', 'depot_tools'))
-      if 'Win' in self.builder_name:
-        self.m.path.c.base_paths['depot_tools'] = (
-            'c:\\', 'Users', 'chrome-bot', 'depot_tools')
-      self.m.path.c.base_paths['build'] = (
-          self.m.path.c.base_paths['slave_build'] + ('build',))
-      self.default_env['PYTHONPATH'] = self.m.path['build'].join('scripts')
+          'c:\\', 'Users', 'chrome-bot', 'depot_tools')
+    self.m.path.c.base_paths['build'] = (
+        self.m.path.c.base_paths['slave_build'] + ('build',))
+    self.default_env['PYTHONPATH'] = self.m.path['build'].join('scripts')
 
-      # Compile bots keep a persistent checkout.
-      if self.is_compile_bot:
-        if 'Win' in self.builder_name:
-          self.checkout_root = self.make_path('C:\\', 'b', 'work')
-          self.gclient_cache = self.make_path('C:\\', 'b', 'cache')
-        else:
-          self.checkout_root = self.make_path('/', 'b', 'work')
-          self.gclient_cache = self.make_path('/', 'b', 'cache')
+    # Compile bots keep a persistent checkout.
+    if self.is_compile_bot:
+      if 'Win' in self.builder_name:
+        self.checkout_root = self.make_path('C:\\', 'b', 'work')
+        self.gclient_cache = self.make_path('C:\\', 'b', 'cache')
+      else:
+        self.checkout_root = self.make_path('/', 'b', 'work')
+        self.gclient_cache = self.make_path('/', 'b', 'cache')
 
     self.skia_dir = self.checkout_root.join('skia')
     self.infrabots_dir = self.skia_dir.join('infra', 'bots')
 
-    # We run through this recipe in one of two ways:
-    # 1. Normal bot: run all of the steps.
-    # 2. Running as a Swarming task: perform the given task only, with
-    #    adaptations for running within Swarming, eg. copying build results
-    #    into the correct output directory.
-    self.running_in_swarming = running_in_swarming
-
     # Some bots also require a checkout of chromium.
     self._need_chromium_checkout = 'CommandBuffer' in self.builder_name
-    if (self.running_in_swarming and
-        self.is_compile_bot and
+    if (self.is_compile_bot and
         'SAN' in self.builder_name):
       self._need_chromium_checkout = True
 
@@ -221,13 +207,10 @@ class SkiaApi(recipe_api.RecipeApi):
     self.resource_dir = self.skia_dir.join('resources')
     self.images_dir = self.slave_dir.join('images')
     self.skia_out = self.skia_dir.join('out', self.builder_name)
-    if self.running_in_swarming:
-      self.swarming_out_dir = self.make_path(self.m.properties['swarm_out_dir'])
-      self.local_skp_dir = self.slave_dir.join('skps')
-      if not self.is_compile_bot:
-        self.skia_out = self.slave_dir.join('out')
-    else:
-      self.local_skp_dir = self.slave_dir.join('playback', 'skps')
+    self.swarming_out_dir = self.make_path(self.m.properties['swarm_out_dir'])
+    self.local_skp_dir = self.slave_dir.join('skps')
+    if not self.is_compile_bot:
+      self.skia_out = self.slave_dir.join('out')
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
 
     self.gsutil_env_chromium_skia_gm = self.gsutil_env(BOTO_CHROMIUM_SKIA_GM)
@@ -246,33 +229,14 @@ class SkiaApi(recipe_api.RecipeApi):
     self.is_trybot = self.builder_cfg['is_trybot']
     self.upload_dm_results = self.builder_spec['upload_dm_results']
     self.upload_perf_results = self.builder_spec['upload_perf_results']
-    if self.running_in_swarming:
-      self.dm_dir = self.m.path.join(
-          self.swarming_out_dir, 'dm')
-      self.perf_data_dir = self.m.path.join(self.swarming_out_dir,
-          'perfdata', self.builder_name, 'data')
-    else:
-      self.dm_dir = self.slave_dir.join('dm')
-      self.perf_data_dir = self.slave_dir.join('perfdata', self.builder_name,
-                                               'data')
+    self.dm_dir = self.m.path.join(
+        self.swarming_out_dir, 'dm')
+    self.perf_data_dir = self.m.path.join(self.swarming_out_dir,
+        'perfdata', self.builder_name, 'data')
     self.dm_flags = self.builder_spec['dm_flags']
     self.nanobench_flags = self.builder_spec['nanobench_flags']
 
     self.flavor = self.get_flavor(self.builder_cfg)
-
-  def run_steps(self):
-    """Compile, run tests, perf, etc."""
-    if self.do_compile_steps:
-      self.compile_steps()
-    if self.do_test_steps:
-      self.test_steps()
-    if self.do_perf_steps:
-      self.perf_steps()
-
-    if self.do_test_steps or self.do_perf_steps:
-      self.cleanup_steps()
-
-    self.check_failure()
 
   def check_failure(self):
     """Raise an exception if any step failed."""
@@ -315,16 +279,15 @@ class SkiaApi(recipe_api.RecipeApi):
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
     cfg_kwargs = {}
-    if self.running_in_swarming:
-      if not self.is_compile_bot:
-        # We should've obtained the Skia checkout through isolates, so we don't
-        # need to perform the checkout ourselves.
-        self.m.path['checkout'] = self.skia_dir
-        self.got_revision = self.m.properties['revision']
-        return
+    if not self.is_compile_bot:
+      # We should've obtained the Skia checkout through isolates, so we don't
+      # need to perform the checkout ourselves.
+      self.m.path['checkout'] = self.skia_dir
+      self.got_revision = self.m.properties['revision']
+      return
 
-      # Use a persistent gclient cache for Swarming.
-      cfg_kwargs['CACHE_DIR'] = self.gclient_cache
+    # Use a persistent gclient cache for Swarming.
+    cfg_kwargs['CACHE_DIR'] = self.gclient_cache
 
     # Create the checkout path if necessary.
     if not self.m.path.exists(self.checkout_root):
@@ -367,8 +330,7 @@ class SkiaApi(recipe_api.RecipeApi):
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
     gclient_cfg.target_os.add('llvm')
     checkout_kwargs = {}
-    if self.running_in_swarming:
-      checkout_kwargs['env'] = self.default_env
+    checkout_kwargs['env'] = self.default_env
     update_step = self.m.gclient.checkout(gclient_config=gclient_cfg,
                                           cwd=self.checkout_root,
                                           **checkout_kwargs)
@@ -416,11 +378,10 @@ for pattern in build_products_whitelist:
     try:
       for target in self.build_targets:
         self.flavor.compile(target)
-      if self.running_in_swarming:
-        self.copy_build_products(
-            self.flavor.out_dir,
-            self.swarming_out_dir.join('out', self.configuration))
-        self.flavor.copy_extra_build_products(self.swarming_out_dir)
+      self.copy_build_products(
+          self.flavor.out_dir,
+          self.swarming_out_dir.join('out', self.configuration))
+      self.flavor.copy_extra_build_products(self.swarming_out_dir)
     finally:
       if 'Win' in self.builder_cfg.get('os', ''):
         self.m.python.inline(
@@ -445,11 +406,10 @@ for p in psutil.process_iter():
     return self.m.file.write('write %s' % self.m.path.basename(filename),
                              filename, contents, infra_step=True)
 
-  def rmtree(self, path, running_in_swarming):
+  def rmtree(self, path):
     """Wrapper around api.file.rmtree with environment fix."""
     env = {}
-    if running_in_swarming:
-      env['PYTHONPATH'] = str(self.m.path.join('build', 'scripts'))
+    env['PYTHONPATH'] = str(self.m.path.join('build', 'scripts'))
     self.m.file.rmtree(self.m.path.basename(path),
                        path,
                        env=env,
@@ -468,60 +428,66 @@ for p in psutil.process_iter():
       if fail_build_on_failure:
         self.failed.append(e)
 
+  def get_actual_version(self, version_file, tmp_dir, test_actual_version):
+    """Find the actually-downloaded version of a versioned dir."""
+    actual_version_file = self.m.path.join(tmp_dir, version_file)
+    try:
+      return self._readfile(actual_version_file,
+                            name='Get downloaded %s' % version_file,
+                            test_data=test_actual_version).rstrip()
+    except self.m.step.StepFailure:
+      return VERSION_NONE
+
+  def check_actual_version(self, version_file, tmp_dir, test_actual_version):
+    """Assert that we have an actually-downloaded version of the dir."""
+    actual_version = self.get_actual_version(
+        version_file, tmp_dir, test_actual_version)
+    assert actual_version != VERSION_NONE
+    return actual_version
+
   def download_dir(self, version_file, gs_path_tmpl, tmp_dir, host_path,
-                   test_expected_version, test_actual_version,
-                   running_in_swarming):
+                   test_expected_version, test_actual_version):
     """Download the given directory from Google Storage if necessary.
 
     Return the downloaded version.
     """
-    actual_version_file = self.m.path.join(tmp_dir, version_file)
-    # If we're running as a Swarming task, we should've received the test inputs
-    # via the isolate server. Only download if we're not running in Swarming.
-    if not running_in_swarming:
-      # Ensure that the tmp_dir exists.
-      self._run_once(self.m.file.makedirs,
-                     'tmp_dir',
-                     tmp_dir,
-                     infra_step=True)
+    # Ensure that the tmp_dir exists.
+    self._run_once(self.m.file.makedirs,
+                   'tmp_dir',
+                   tmp_dir,
+                   infra_step=True)
 
     # Find the actually-downloaded version.
-    try:
-      actual_version = self._readfile(actual_version_file,
-                                      name='Get downloaded %s' % version_file,
-                                      test_data=test_actual_version).rstrip()
-    except self.m.step.StepFailure:
-      if running_in_swarming:
-        raise  # pragma: no cover
-      actual_version = VERSION_NONE
+    actual_version = self.get_actual_version(
+        version_file, tmp_dir, test_actual_version)
 
-    if not running_in_swarming:
-      # Find the expected version and download if needed.
-      expected_version_file = self.m.path['checkout'].join(version_file)
-      expected_version = self._readfile(
-          expected_version_file,
-          name='Get expected %s' % version_file,
-          test_data=test_expected_version).rstrip()
+    # Find the expected version and download if needed.
+    expected_version_file = self.m.path['checkout'].join(version_file)
+    expected_version = self._readfile(
+        expected_version_file,
+        name='Get expected %s' % version_file,
+        test_data=test_expected_version).rstrip()
 
-      # If we don't have the desired version, download it.
-      if actual_version != expected_version:
-        if actual_version != VERSION_NONE:
-          self.m.file.remove('remove actual %s' % version_file,
-                             actual_version_file,
-                             infra_step=True)
+    # If we don't have the desired version, download it.
+    if actual_version != expected_version:
+      actual_version_file = self.m.path.join(tmp_dir, version_file)
+      if actual_version != VERSION_NONE:
+        self.m.file.remove('remove actual %s' % version_file,
+                           actual_version_file,
+                           infra_step=True)
 
-        self.rmtree(host_path, running_in_swarming)
-        self.m.file.makedirs(self.m.path.basename(host_path), host_path,
-                             infra_step=True)
-        self.m.gsutil.download(
-            global_constants.GS_GM_BUCKET,
-            (gs_path_tmpl % expected_version) + '/*',
-            host_path,
-            name='download %s' % self.m.path.basename(host_path),
-            args=['-R'],
-            env=self.gsutil_env(BOTO_CHROMIUM_SKIA_GM))
-        self._writefile(actual_version_file, expected_version)
-        actual_version = expected_version
+      self.rmtree(host_path)
+      self.m.file.makedirs(self.m.path.basename(host_path), host_path,
+                           infra_step=True)
+      self.m.gsutil.download(
+          global_constants.GS_GM_BUCKET,
+          (gs_path_tmpl % expected_version) + '/*',
+          host_path,
+          name='download %s' % self.m.path.basename(host_path),
+          args=['-R'],
+          env=self.gsutil_env(BOTO_CHROMIUM_SKIA_GM))
+      self._writefile(actual_version_file, expected_version)
+      actual_version = expected_version
     return actual_version
 
   def copy_dir(self, host_version, version_file, tmp_dir,
@@ -545,7 +511,7 @@ for p in psutil.process_iter():
         self.flavor.copy_file_to_device(actual_version_file,
                                         device_version_file)
 
-  def download_images(self, tmp_dir, local_images_dir, running_in_swarming):
+  def download_images(self, tmp_dir, local_images_dir):
     """Download test images if needed."""
     return self.download_dir(
         VERSION_FILE_SK_IMAGE,
@@ -555,25 +521,32 @@ for p in psutil.process_iter():
         test_expected_version=TEST_EXPECTED_SK_IMAGE_VERSION,
         test_actual_version=self.m.properties.get(
             'test_downloaded_sk_image_version',
-            TEST_EXPECTED_SK_IMAGE_VERSION),
-        running_in_swarming=running_in_swarming)
+            TEST_EXPECTED_SK_IMAGE_VERSION))
 
-  def _download_and_copy_images(self):
+  def _copy_images(self):
     """Download and copy test images if needed."""
-    version = self.download_images(self.tmp_dir, self.images_dir, self.running_in_swarming)
+    version = self.check_actual_version(
+        VERSION_FILE_SK_IMAGE,
+        self.tmp_dir,
+        test_actual_version=self.m.properties.get(
+            'test_downloaded_sk_image_version',
+            TEST_EXPECTED_SK_IMAGE_VERSION),
+    )
     self.copy_dir(
         version,
         VERSION_FILE_SK_IMAGE,
         self.tmp_dir,
         self.images_dir,
         self.device_dirs.images_dir,
-        test_expected_version=TEST_EXPECTED_SK_IMAGE_VERSION,
+        test_expected_version=self.m.properties.get(
+            'test_downloaded_sk_image_version',
+            TEST_EXPECTED_SK_IMAGE_VERSION),
         test_actual_version=self.m.properties.get(
             'test_downloaded_sk_image_version',
             TEST_EXPECTED_SK_IMAGE_VERSION))
     return version
 
-  def download_skps(self, tmp_dir, local_skp_dir, running_in_swarming):
+  def download_skps(self, tmp_dir, local_skp_dir):
     """Download SKPs if needed."""
     return self.download_dir(
         VERSION_FILE_SKP,
@@ -582,19 +555,25 @@ for p in psutil.process_iter():
         local_skp_dir,
         test_expected_version=TEST_EXPECTED_SKP_VERSION,
         test_actual_version=self.m.properties.get(
-            'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION),
-        running_in_swarming=running_in_swarming)
+            'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION))
 
-  def _download_and_copy_skps(self):
+  def _copy_skps(self):
     """Download and copy the SKPs if needed."""
-    version = self.download_skps(self.tmp_dir, self.local_skp_dir, self.running_in_swarming)
+    version = self.check_actual_version(
+        VERSION_FILE_SKP,
+        self.tmp_dir,
+        test_actual_version=self.m.properties.get(
+            'test_downloaded_skp_version',
+            TEST_EXPECTED_SKP_VERSION),
+    )
     self.copy_dir(
         version,
         VERSION_FILE_SKP,
         self.tmp_dir,
         self.local_skp_dir,
         self.device_dirs.skp_dir,
-        test_expected_version=TEST_EXPECTED_SKP_VERSION,
+        test_expected_version=self.m.properties.get(
+            'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION),
         test_actual_version=self.m.properties.get(
             'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION))
     return version
@@ -651,8 +630,8 @@ print json.dumps({'ccache': ccache})
   def test_steps(self):
     """Run the DM test."""
     self._run_once(self.install)
-    self._run_once(self._download_and_copy_skps)
-    skimage_version = self._run_once(self._download_and_copy_images)
+    self._run_once(self._copy_skps)
+    skimage_version = self._run_once(self._copy_images)
 
     use_hash_file = False
     if self.upload_dm_results:
@@ -771,29 +750,6 @@ print json.dumps({'ccache': ccache})
       self.flavor.copy_directory_contents_to_host(self.device_dirs.dm_dir,
                                                   self.dm_dir)
 
-      if self.running_in_swarming:
-        # If we're running in Swarming, we wrote the output to the swarm out dir
-        # so we don't need to upload.
-        return
-
-      # Upload them to Google Storage.
-      self.run(
-          self.m.python,
-          'Upload DM Results',
-          script=self.resource('upload_dm_results.py'),
-          args=[
-              self.dm_dir,
-              self.got_revision,
-              self.builder_name,
-              self.m.properties['buildnumber'],
-              self.m.properties['issue'] if self.is_trybot else '',
-              self.skia_dir.join('common', 'py', 'utils'),
-          ],
-          cwd=self.m.path['checkout'],
-          env=self.gsutil_env_chromium_skia_gm,
-          abort_on_failure=False,
-          infra_step=True)
-
     # See skia:2789.
     if ('Valgrind' in self.builder_name and
         self.builder_cfg.get('cpu_or_gpu') == 'GPU'):
@@ -810,8 +766,8 @@ print json.dumps({'ccache': ccache})
   def perf_steps(self):
     """Run Skia benchmarks."""
     self._run_once(self.install)
-    self._run_once(self._download_and_copy_skps)
-    self._run_once(self._download_and_copy_images)
+    self._run_once(self._copy_skps)
+    skimage_version = self._run_once(self._copy_images)
 
     if self.upload_perf_results:
       self.flavor.create_clean_device_dir(self.device_dirs.perf_data_dir)
@@ -850,16 +806,9 @@ print json.dumps({'ccache': ccache})
     args.extend(self.nanobench_flags)
 
     if self.upload_perf_results:
-      if self.running_in_swarming:
-        json_path = self.flavor.device_path_join(
-            self.device_dirs.perf_data_dir,
-            'nanobench_%s.json' % self.got_revision)
-      else:  # pragma: nocover
-        git_timestamp = self.m.git.get_timestamp(test_data='1408633190',
-                                                 infra_step=True)
-        json_path = self.flavor.device_path_join(
-            self.device_dirs.perf_data_dir,
-            'nanobench_%s_%s.json' % (self.got_revision, git_timestamp))
+      json_path = self.flavor.device_path_join(
+          self.device_dirs.perf_data_dir,
+          'nanobench_%s.json' % self.got_revision)
       args.extend(['--outResultsFile', json_path])
       args.extend(properties)
 
@@ -886,24 +835,6 @@ print json.dumps({'ccache': ccache})
       self.m.file.makedirs('perf_dir', self.perf_data_dir)
       self.flavor.copy_directory_contents_to_host(
           self.device_dirs.perf_data_dir, self.perf_data_dir)
-
-      # If we're running in Swarming, we wrote the results into the Swarming
-      # out dir, so we don't need to upload.
-      if not self.running_in_swarming:  # pragma: nocover
-        gsutil_path = self.m.path['depot_tools'].join(
-            'third_party', 'gsutil', 'gsutil')
-        upload_args = [self.builder_name, self.m.properties['buildnumber'],
-                       self.perf_data_dir, self.got_revision, gsutil_path]
-        if self.is_trybot:
-          upload_args.append(self.m.properties['issue'])
-        self.run(self.m.python,
-                 'Upload %s Results' % target,
-                 script=self.resource('upload_bench_results.py'),
-                 args=upload_args,
-                 cwd=self.m.path['checkout'],
-                 env=self.gsutil_env_chromium_skia_gm,
-                 abort_on_failure=False,
-                 infra_step=True)
 
   def cleanup_steps(self):
     """Run any cleanup steps."""

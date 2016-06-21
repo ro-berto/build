@@ -19,7 +19,6 @@ import tempfile
 
 
 SKIA_RECIPES = [
-  'skia.py',
   'swarm_compile.py',
   'swarm_housekeeper.py',
   'swarm_perf.py',

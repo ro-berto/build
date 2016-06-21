@@ -27,7 +27,7 @@ TEST_BUILDERS = {
 
 def RunSteps(api):
   # Checkout, compile, etc.
-  api.skia.setup(running_in_swarming=True)
+  api.skia.setup()
 
   cwd = api.path['checkout']
 

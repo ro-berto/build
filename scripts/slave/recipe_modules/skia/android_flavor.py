@@ -68,13 +68,9 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         android_devices.SLAVE_INFO['default'])
     self.android_bin = self._skia_api.skia_dir.join(
         'platform_tools', 'android', 'bin')
-    self._android_sdk_root = slave_info.android_sdk_root
-    self.serial = slave_info.serial
-    self.serial_args = ['-s', slave_info.serial]
-    if self._skia_api.running_in_swarming:
-      self._android_sdk_root = self._skia_api.slave_dir.join('android-sdk')
-      self.serial = None
-      self.serial_args = []
+    self._android_sdk_root = self._skia_api.slave_dir.join('android-sdk')
+    self.serial = None
+    self.serial_args = []
     try:
       path_to_adb = self._skia_api.m.step(
           'which adb',
@@ -275,13 +271,12 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
           cmd=['sleep', '10'],
           infra_step=True)
       self._adb.wait_for_device()
-      if self._skia_api.running_in_swarming:
-        # The ADB binary conflicts with py-adb used by swarming. Kill it
-        # when finished to play nice.
-        self._adb(name='kill-server',
-                  serial=self.serial,
-                  cmd=['kill-server'],
-                  infra_step=True)
+      # The ADB binary conflicts with py-adb used by swarming. Kill it
+      # when finished to play nice.
+      self._adb(name='kill-server',
+                serial=self.serial,
+                cmd=['kill-server'],
+                infra_step=True)
 
   def read_file_on_device(self, path, *args, **kwargs):
     """Read the given file."""

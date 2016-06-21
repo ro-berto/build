@@ -567,11 +567,9 @@ def RunSteps(api):
     extra_hashes.append(compile_hash)
 
   api.skia.download_skps(api.path['slave_build'].join('tmp'),
-                         api.path['slave_build'].join('skps'),
-                         False)
+                         api.path['slave_build'].join('skps'))
   api.skia.download_images(api.path['slave_build'].join('tmp'),
-                           api.path['slave_build'].join('images'),
-                           False)
+                           api.path['slave_build'].join('images'))
 
   test_task = None
   perf_task = None

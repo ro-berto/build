@@ -19,6 +19,7 @@ DEPS = [
 TEST_BUILDERS = {
   'client.skia': {
     'skiabot-linux-swarm-000': [
+      'Perf-Win-MSVC-GCE-CPU-AVX2-x86_64-Release',
       'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot',
       'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
       'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
@@ -29,7 +30,7 @@ TEST_BUILDERS = {
 
 
 def RunSteps(api):
-  api.skia.setup(running_in_swarming=True)
+  api.skia.setup()
   api.skia.perf_steps()
   api.skia.cleanup_steps()
   api.skia.check_failure()

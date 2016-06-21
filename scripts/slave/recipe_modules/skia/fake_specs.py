@@ -700,6 +700,38 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': True,
   },
+  'Perf-Win-MSVC-GCE-CPU-AVX2-x86_64-Release': {
+    'build_targets': [
+      'nanobench',
+    ],
+    'builder_cfg': {
+      'arch': 'x86_64',
+      'compiler': 'MSVC',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'CPU',
+      'cpu_or_gpu_value': 'AVX2',
+      'is_trybot': False,
+      'model': 'GCE',
+      'os': 'Win',
+      'role': 'Perf',
+    },
+    'configuration': 'Release_x64',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': True,
+    'do_test_steps': False,
+    'env': {
+      'GYP_DEFINES':
+          ('qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86_64 skia_gpu=0 skia_warning'
+           's_as_errors=0 skia_win_debuggers_path=c:/DbgHelp'),
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': True,
+  },
   'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot': {
     'build_targets': [
       'nanobench',
