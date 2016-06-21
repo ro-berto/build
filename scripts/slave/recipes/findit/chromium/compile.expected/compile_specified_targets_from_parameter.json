@@ -12,7 +12,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"parameters_json\": \"{}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"parameters_json\": \"{\\\"additional_build_parameters\\\": {\\\"compile_targets\\\": [\\\"target_name\\\"]}}\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -483,43 +483,48 @@
   },
   {
     "cmd": [
-      "git",
-      "diff",
-      "r1~1",
-      "r1",
-      "--name-only"
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Linux Builder",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "test r1.git diff to analyze commit",
-    "stdout": "/path/to/tmp/",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "test r1.generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
+      "RECIPE_MODULE[build::findit]/resources/check_target_existence.py",
+      "--target-build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--target",
+      "target_name",
+      "--json-output",
       "/path/to/tmp/json"
     ],
-    "name": "test r1.read filter exclusion spec",
+    "name": "test r1.check_targets",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ios\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"found\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_name\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"not_found\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -528,40 +533,80 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "test r1.cleanup_temp",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "analyze",
+      "gen",
       "-m",
       "chromium.linux",
       "-b",
       "Linux Builder",
-      "-v",
-      "//out/Release",
-      "{\"additional_compile_targets\": [\"chromium_swarm_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
-      "/path/to/tmp/json"
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "//out/Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "test r1.analyze",
+    "name": "test r1.generate_build_files (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-service-account-json-file",
+      "/creds/service_accounts/service-account-goma-client.json",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--ninja-ensure-up-to-date",
+      "--",
+      "target_name"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "test r1.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@No compile necessary@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependencies\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
-      "@@@STEP_LOG_LINE@analyze_details@}@@@",
-      "@@@STEP_LOG_END@analyze_details@@@"
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {
@@ -574,7 +619,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@report@{@@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@report@    \"r1\": \"skipped\"@@@",
+      "@@@STEP_LOG_LINE@report@    \"r1\": \"passed\"@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"metadata\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"use_bisect\": false, @@@",
@@ -588,7 +633,7 @@
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
       "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1, \"sub_ranges\": [[null, \"r1\"]], \"use_bisect\": false}, \"result\": {\"r1\": \"skipped\"}}@@@"
+      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1, \"sub_ranges\": [[null, \"r1\"]], \"use_bisect\": false}, \"result\": {\"r1\": \"passed\"}}@@@"
     ]
   },
   {

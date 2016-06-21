@@ -10,6 +10,7 @@ from recipe_engine.recipe_api import Property
 
 
 DEPS = [
+    'buildbucket',
     'chromium',
     'chromium_tests',
     'findit',
@@ -37,6 +38,10 @@ PROPERTIES = {
         kind=List(basestring), default=None,
         help='The failed compile targets, eg: browser_tests, '
              'obj/path/to/source.o, gen/path/to/generated.cc, etc.'),
+    'buildbucket': Property(
+        default=None,
+        help='The buildbucket property in which we can find build id. '
+             'We need to use build id to get compile_targets.'),
     'use_analyze': Property(
         kind=Single(bool, empty_val=False, required=False), default=True,
         help='Use analyze to filter out affected targets.'),
@@ -115,8 +120,17 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
 
 
 def RunSteps(api, target_mastername, target_buildername,
-             good_revision, bad_revision,
-             compile_targets, use_analyze, suspected_revisions, use_bisect):
+             good_revision, bad_revision, compile_targets,
+             buildbucket, use_analyze, suspected_revisions, use_bisect):
+  if not compile_targets:
+    # compile_targets could be saved in build parameter.
+    buildbucket_json = json.loads(buildbucket)
+    build_id = buildbucket_json['build']['id']
+    get_build_result = api.buildbucket.get_build(build_id)
+    compile_targets = json.loads(
+        get_build_result.stdout['build']['parameters_json']).get(
+            'additional_build_parameters', {}).get('compile_targets')
+
   bot_config = api.chromium_tests.create_bot_config_object(
       target_mastername, target_buildername)
   api.chromium_tests.configure_build(
@@ -294,7 +308,7 @@ def RunSteps(api, target_mastername, target_buildername,
 def GenTests(api):
   def props(compile_targets=None, use_analyze=False,
             good_revision=None, bad_revision=None,
-            suspected_revisions=None, use_bisect=False):
+            suspected_revisions=None, use_bisect=False, buildbucket=None):
     properties = {
         'mastername': 'tryserver.chromium.linux',
         'buildername': 'linux_variable',
@@ -311,11 +325,38 @@ def GenTests(api):
       properties['compile_targets'] = compile_targets
     if suspected_revisions:
       properties['suspected_revisions'] = suspected_revisions
+    if buildbucket:
+      properties['buildbucket'] = buildbucket
     return api.properties(**properties) + api.platform.name('linux')
+
+  def simulated_buildbucket_output(additional_build_parameters):
+    buildbucket_output = {
+        'build':{
+          'parameters_json': json.dumps(additional_build_parameters)
+        }
+    }
+
+    return api.buildbucket.step_data(
+        'buildbucket.get',
+        stdout=api.raw_io.output(json.dumps(buildbucket_output)))
 
   yield (
       api.test('compile_specified_targets') +
       props(compile_targets=['target_name']) +
+      api.override_step_data('test r1.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             }))
+  )
+
+  yield (
+      api.test('compile_specified_targets_from_parameter') +
+      props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({
+          'additional_build_parameters': {
+              'compile_targets': ['target_name']
+      }}) +
       api.override_step_data('test r1.check_targets',
                              api.json.output({
                                  'found': ['target_name'],
@@ -336,7 +377,11 @@ def GenTests(api):
 
   yield (
       api.test('compile_default_targets') +
-      props() +
+      props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({
+          'additional_build_parameters': {
+              'compile_targets': None
+      }}) +
       api.override_step_data('test r1.read test spec',
                              api.json.output({
                                  'Linux Builder': {
@@ -349,13 +394,15 @@ def GenTests(api):
 
   yield (
       api.test('compile_succeeded') +
-      props() +
+      props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({}) +
       api.override_step_data('test r1.compile', retcode=0)
   )
 
   yield (
       api.test('compile_failed') +
-      props() +
+      props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({}) +
       api.override_step_data('test r1.compile', retcode=1)
   )
 
@@ -426,7 +473,9 @@ def GenTests(api):
 
   yield (
       api.test('compile_skipped') +
-      props(use_analyze=True) +
+      props(use_analyze=True,
+            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({}) +
       api.override_step_data(
           'test r1.analyze',
           api.json.output({
@@ -439,7 +488,9 @@ def GenTests(api):
 
   yield (
       api.test('compile_affected_targets_only') +
-      props(use_analyze=True) +
+      props(use_analyze=True,
+            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({}) +
       api.override_step_data('test r1.read test spec',
                              api.json.output({
                                  'Linux Builder': {
