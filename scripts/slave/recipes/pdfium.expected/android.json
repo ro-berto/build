@@ -69,7 +69,7 @@
       "--root=[SLAVE_BUILD]/pdfium",
       "gen",
       "//out/Debug",
-      "--args=is_debug=true pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true clang_use_chrome_plugins=false target_os=\"android\""
+      "--args=is_debug=true pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true target_os=\"android\""
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "gn gen"

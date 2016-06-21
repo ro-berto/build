@@ -80,7 +80,6 @@ def _GNGenBuilds(api, skia, xfa, v8, rel, target_os, out_dir):
       'pdf_enable_xfa=%s' % gn_bool[xfa],
       'pdf_use_skia=%s' % gn_bool[skia],
       'pdf_is_standalone=true',
-      'clang_use_chrome_plugins=false',
   ]
   if target_os:
     args.append('target_os="%s"' % target_os)

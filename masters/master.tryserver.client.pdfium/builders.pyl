@@ -146,6 +146,16 @@
         "xfa": True,
       }
     },
+    "win_xfa_clang": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["win_slave_pool"],
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "clang": True,
+      },
+    },
     "win_no_v8": {
       "recipe": "pdfium",
       "scheduler": None,
