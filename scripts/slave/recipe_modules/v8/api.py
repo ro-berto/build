@@ -337,11 +337,12 @@ class V8Api(recipe_api.RecipeApi):
                ['tar', 'xf', MIPS_TOOLCHAIN],
                cwd=self.m.path['slave_build'])
 
-    self.c.gyp_env.CC = self.m.path.join(mips_dir, 'mips-linux-gnu-gcc')
-    self.c.gyp_env.CXX = self.m.path.join(mips_dir, 'mips-linux-gnu-g++')
-    self.c.gyp_env.AR = self.m.path.join(mips_dir, 'mips-linux-gnu-ar')
-    self.c.gyp_env.RANLIB = self.m.path.join(mips_dir, 'mips-linux-gnu-ranlib')
-    self.c.gyp_env.LINK = self.m.path.join(mips_dir, 'mips-linux-gnu-g++')
+    self.c.gyp_env.CC = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-gcc')
+    self.c.gyp_env.CXX = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-g++')
+    self.c.gyp_env.AR = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-ar')
+    self.c.gyp_env.RANLIB = self.m.path.join(
+        mips_dir, 'mips-mti-linux-gnu-ranlib')
+    self.c.gyp_env.LINK = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-g++')
 
   @property
   def bot_type(self):
