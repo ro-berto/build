@@ -34,8 +34,9 @@ MAX_FAILURE_LOGS = 10
 # ongoing build's total.
 BISECT_DURATION_FACTOR = 5
 
-MIPS_TOOLCHAIN = 'mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2'
-MIPS_DIR = 'mips-2013.11'
+MIPS_TOOLCHAIN = ('Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux'
+                  '.CentOS-5.x86_64.tar.gz')
+MIPS_DIR = 'mips-2015.01'
 
 TEST_RUNNER_PARSER = argparse.ArgumentParser()
 TEST_RUNNER_PARSER.add_argument('--extra-flags')

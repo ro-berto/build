@@ -65,7 +65,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-v8/mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2",
+      "gs://chromium-v8/Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz",
       "[SLAVE_BUILD]"
     ],
     "name": "gsutil bootstrapping mips toolchain"
@@ -74,7 +74,7 @@
     "cmd": [
       "tar",
       "xf",
-      "mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2"
+      "Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "unzipping"
@@ -88,15 +88,15 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "env": {
-      "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
-      "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
-      "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+      "AR": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-ar",
+      "CC": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-gcc",
+      "CXX": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-g++",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-      "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+      "LINK": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-g++",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
-      "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
+      "RANLIB": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-ranlib"
     },
     "name": "gclient runhooks"
   },
@@ -166,13 +166,13 @@
         "builder_name": "V8 Mips - big endian - nosnap - 1",
         "properties": {
           "parent_build_environment": {
-            "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
-            "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
-            "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "AR": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-ar",
+            "CC": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-gcc",
+            "CXX": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-g++",
             "GYP_CROSSCOMPILE": "1",
             "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-            "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
-            "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
+            "LINK": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-g++",
+            "RANLIB": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-ranlib"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -183,13 +183,13 @@
         "builder_name": "V8 Mips - big endian - nosnap - 2",
         "properties": {
           "parent_build_environment": {
-            "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
-            "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
-            "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "AR": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-ar",
+            "CC": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-gcc",
+            "CXX": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-g++",
             "GYP_CROSSCOMPILE": "1",
             "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-            "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
-            "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
+            "LINK": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-g++",
+            "RANLIB": "[SLAVE_BUILD]/mips-2015.01/bin/mips-linux-gnu-ranlib"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
