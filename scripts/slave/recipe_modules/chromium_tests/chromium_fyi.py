@@ -1392,9 +1392,6 @@ SPEC = {
       ],
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
-      'tests': {
-        steps.SizesStep(RESULTS_URL, 'ClangToTLinuxLLD')
-      },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
