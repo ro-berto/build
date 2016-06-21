@@ -247,85 +247,6 @@ def maybe_set_official_build_envvars(options, env):
     env['CHROME_BUILD_TYPE'] = '_official'
 
 
-def common_make_settings(command, options, env, compiler=None):
-  """
-  Sets desirable environment variables and command-line options that are used
-  in the Make build.
-  """
-  assert compiler in (None, 'clang', 'goma', 'goma-clang')
-  maybe_set_official_build_envvars(options, env)
-
-  # Don't stop at the first error.
-  command.append('-k')
-
-  # Set jobs parallelization based on number of cores.
-  jobs = os.sysconf('SC_NPROCESSORS_ONLN')
-
-  if compiler in ('goma', 'goma-clang'):
-    print 'using', compiler
-    goma_jobs = 50
-    if jobs < goma_jobs:
-      jobs = goma_jobs
-    command.append('-j%d' % jobs)
-    return
-
-  if compiler == 'clang':
-    command.append('-r')
-
-  command.append('-j%d' % jobs)
-
-
-def main_make(options, args):
-  """Interprets options, clobbers object files, and calls make.
-  """
-
-  env = EchoDict(os.environ)
-  goma_ready = goma_setup(options, env)
-  if not goma_ready:
-    assert options.compiler not in ('goma', 'goma-clang')
-    assert options.goma_dir is None
-
-  command = ['make']
-  # Try to build from <build_dir>/Makefile, or if that doesn't exist,
-  # from the top-level Makefile.
-  if os.path.isfile(os.path.join(options.build_dir, 'Makefile')):
-    working_dir = options.build_dir
-  else:
-    working_dir = options.src_dir
-
-  os.chdir(working_dir)
-  common_make_settings(command, options, env, options.compiler)
-
-  # V=1 prints the actual executed command
-  if options.verbose:
-    command.extend(['V=1'])
-  command.extend(options.build_args + args)
-
-  # Run the build.
-  env.print_overrides()
-  result = 0
-
-  def clobber():
-    print 'Removing %s' % options.target_output_dir
-    chromium_utils.RemoveDirectory(options.target_output_dir)
-
-  assert ',' not in options.target, (
-   'Used to allow multiple comma-separated targets for make. This should not be'
-   ' in use any more. Asserting from orbit. It\'s the only way to be sure')
-
-  if options.clobber:
-    clobber()
-
-  target_command = command + ['BUILDTYPE=' + options.target]
-  result = chromium_utils.RunCommand(target_command, env=env)
-  if result and not options.clobber:
-    clobber()
-
-  goma_teardown(options, env, result)
-
-  return result
-
-
 class EnsureUpToDateFilter(chromium_utils.RunCommandFilter):
   """Filter for RunCommand that checks whether the output contains ninja's
   message for a no-op build."""
@@ -533,7 +454,7 @@ def main_ninja(options, args):
 
 def get_target_build_dir(args, options):
   """Keep this function in sync with src/build/landmines.py"""
-  assert options.build_tool in ['make', 'ninja']
+  assert options.build_tool == 'ninja'
   if chromium_utils.IsLinux() and options.cros_board:
     # When building ChromeOS's Simple Chrome workflow, the output directory
     # has a CROS board name suffix.
@@ -560,8 +481,7 @@ def real_main():
   option_parser.add_option('--mode', default='dev',
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')
-  option_parser.add_option('--build-tool', default=None,
-                           help='specify build tool (make, ninja)')
+  option_parser.add_option('--build-tool', default=None, help='ignored')
   option_parser.add_option('--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
   option_parser.add_option('--build-data-dir', action='store',
@@ -632,10 +552,7 @@ def real_main():
       print 'Please specify --build-tool.'
       return 1
   else:
-    build_tool_map = {
-        'make' : main_make,
-        'ninja' : main_ninja,
-    }
+    build_tool_map = { 'ninja' : main_ninja }
     main = build_tool_map.get(options.build_tool)
     if not main:
       sys.stderr.write('Unknown build tool %s.\n' % repr(options.build_tool))
