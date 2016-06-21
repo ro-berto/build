@@ -1182,15 +1182,9 @@ class FactoryCommands(object):
     """Returns a command list to call the _compile_tool in the given build_dir,
     optionally clobbering the build (that is, deleting the build directory)
     first.
-
-    if solution contains a ";", the second part is interpreted as the project.
     """
     cmd = [self._python, self._compile_tool]
-    if solution:
-      split_solution = solution.split(';', 1)
-      cmd.extend(['--solution', split_solution[0]])
-      if len(split_solution) == 2:
-        cmd.extend(['--project', split_solution[1]])
+    assert not solution, 'no bots should still pass in solution'
     cmd.extend(['--target', self._target])
     if self._target_arch:
       cmd.extend(['--arch', self._target_arch])
