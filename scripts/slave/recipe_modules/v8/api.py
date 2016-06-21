@@ -416,7 +416,18 @@ class V8Api(recipe_api.RecipeApi):
     """
 
     def gyp_defines_to_dict(gyp_defines):
-      return dict(tuple(x.split('=', 1)) for x in gyp_defines.split())
+      # Example input: "foo=1 bar='buz bing'". We assume there's no '=' in the
+      # value part.
+      result = []
+      for x in gyp_defines.split():
+        kv = x.split('=', 1)
+        if len(kv) == 1:
+          # No '=' in x. It's part of a quoted string containing a space.
+          # Append it to the last value.
+          result[-1][1] += (' ' + kv[0])
+        else:
+          result.append(kv)
+      return dict(tuple(kv) for kv in result)
 
     infra_flags = gyp_defines_to_dict(
         self.m.chromium.c.gyp_env.as_jsonish()['GYP_DEFINES'])

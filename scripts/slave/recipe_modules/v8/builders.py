@@ -792,7 +792,7 @@ BUILDERS = {
       },
       'V8 Linux64 ASAN': {
         'chromium_apply_config': [
-          'v8_ninja', 'clang', 'asan', 'goma'],
+          'v8_ninja', 'clang', 'asan', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -817,6 +817,7 @@ BUILDERS = {
           'clang',
           'v8_ninja',
           'goma',
+          'mb',
           'asan',
           'asan_symbolized',
           'clobber',
@@ -843,6 +844,7 @@ BUILDERS = {
           'default_target_d8',
           'asan',
           'goma',
+          'mb',
           'sanitizer_coverage',
         ],
         'v8_config_kwargs': {
@@ -864,6 +866,7 @@ BUILDERS = {
           'default_target_d8',
           'asan',
           'goma',
+          'mb',
           'sanitizer_coverage',
           'simulate_arm',
         ],
@@ -886,6 +889,7 @@ BUILDERS = {
           'default_target_d8',
           'asan',
           'goma',
+          'mb',
           'sanitizer_coverage',
           'simulate_arm',
         ],
@@ -908,6 +912,7 @@ BUILDERS = {
           'default_target_d8',
           'asan',
           'goma',
+          'mb',
           'sanitizer_coverage',
           'simulate_mipsel',
         ],
@@ -924,7 +929,7 @@ BUILDERS = {
       },
       'V8 Linux64 TSAN': {
         'chromium_apply_config': [
-          'v8_ninja', 'clang', 'tsan2', 'goma'],
+          'v8_ninja', 'clang', 'tsan2', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -946,6 +951,7 @@ BUILDERS = {
           'msan',
           'simulate_arm',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -961,7 +967,7 @@ BUILDERS = {
       },
       'V8 Linux64 - cfi': {
         'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'cfi'],
+          'v8_ninja', 'default_compiler', 'goma', 'cfi', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1002,7 +1008,7 @@ BUILDERS = {
       'V8 Linux64 - gcov coverage': {
       'v8_apply_config': ['gcov_coverage'],
         'chromium_apply_config': [
-          'clobber', 'v8_ninja', 'gcc', 'coverage', 'goma', 
+          'clobber', 'v8_ninja', 'gcc', 'coverage', 'goma', 'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1818,6 +1824,7 @@ BUILDERS = {
           'clang',
           'asan',
           'goma',
+          'mb',
           'no_dcheck',
         ],
         'v8_config_kwargs': {
@@ -1865,6 +1872,7 @@ BUILDERS = {
           'msan',
           'simulate_arm',
           'goma',
+          'mb',
           'no_dcheck',
         ],
         'v8_config_kwargs': {
@@ -1885,6 +1893,7 @@ BUILDERS = {
           'clang',
           'tsan2',
           'goma',
+          'mb',
           'no_dcheck',
         ],
         'v8_config_kwargs': {
@@ -1907,6 +1916,7 @@ BUILDERS = {
           'coverage',
           'asan',
           'goma',
+          'mb',
           'no_dcheck',
           'sanitizer_bb_coverage',
         ],
