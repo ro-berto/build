@@ -20,7 +20,6 @@ def v8(c):
     c.gyp_env.GYP_DEFINES['OS'] = 'android'
   del c.gyp_env.GYP_DEFINES['component']
   c.build_dir = c.CHECKOUT_PATH.join('out')
-  c.compile_py.build_tool = 'make'
 
   if c.HOST_PLATFORM == 'mac':
     c.compile_py.build_tool = 'xcode'
