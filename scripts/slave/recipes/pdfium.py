@@ -80,7 +80,7 @@ def _GNGenBuilds(api, skia, xfa, v8, rel, target_os, out_dir):
       'clang_use_chrome_plugins=false',
   ]
   if target_os:
-    args.append('target_os=%s' % target_os)
+    args.append('target_os="%s"' % target_os)
 
   api.python('gn gen', gn_cmd,
              ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
