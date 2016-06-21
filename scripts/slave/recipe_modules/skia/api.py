@@ -476,7 +476,7 @@ for p in psutil.process_iter():
                            actual_version_file,
                            infra_step=True)
 
-      self.rmtree(host_path)
+      self.m.file.rmtree(self.m.path.basename(host_path), host_path)
       self.m.file.makedirs(self.m.path.basename(host_path), host_path,
                            infra_step=True)
       self.m.gsutil.download(
