@@ -33,9 +33,12 @@ def _MakeGypDefines(gyp_defines):
                    gyp_defines.iteritems()])
 
 
-def _CheckoutSteps(api, memory_tool, skia, xfa, v8, win64, clang, gn):
+def _CheckoutSteps(api, memory_tool, skia, xfa, v8, win64, clang, gn,
+                   target_os):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
+  if target_os:
+    api.gclient.c.target_os = {target_os}
   api.bot_update.ensure_checkout(force=True)
 
   gyp_defines = {
@@ -162,7 +165,7 @@ def _RunTests(api, memory_tool, v8, out_dir):
 
 def RunSteps(api, memory_tool, skia, xfa, v8, win64, clang, rel, gn, skip_test,
              target_os):
-  _CheckoutSteps(api, memory_tool, skia, xfa, v8, win64, clang, gn)
+  _CheckoutSteps(api, memory_tool, skia, xfa, v8, win64, clang, gn, target_os)
 
   out_dir = 'Release' if rel else 'Debug'
   if win64:
