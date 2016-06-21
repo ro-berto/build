@@ -21,7 +21,6 @@
       '../../../../depot_tools/',
       '../../../site_config/',
       '../../../infra/config/recipes.cfg',
-      '../../../goma/',
       '../../tools/runit.py',
       '../annotation_utils.py',
       '../annotated_run.py',
