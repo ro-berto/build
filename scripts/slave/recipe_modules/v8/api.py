@@ -36,7 +36,7 @@ BISECT_DURATION_FACTOR = 5
 
 MIPS_TOOLCHAIN = ('Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux'
                   '.CentOS-5.x86_64.tar.gz')
-MIPS_DIR = 'mips-2015.01'
+MIPS_DIR = 'mips-mti-linux-gnu/2015.01-7'
 
 TEST_RUNNER_PARSER = argparse.ArgumentParser()
 TEST_RUNNER_PARSER.add_argument('--extra-flags')
