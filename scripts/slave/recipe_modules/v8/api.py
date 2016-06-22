@@ -254,6 +254,7 @@ class V8Api(recipe_api.RecipeApi):
       # that don't support the goma executables.
       self.m.chromium.ensure_goma()
     env = {}
+    # TODO(machenbach): Remove this after mb migration.
     if self.c.gyp_env.AR:
       env['AR'] = self.c.gyp_env.AR
     if self.c.gyp_env.CC:
@@ -264,9 +265,6 @@ class V8Api(recipe_api.RecipeApi):
       env['LINK'] = self.c.gyp_env.LINK
     if self.c.gyp_env.RANLIB:
       env['RANLIB'] = self.c.gyp_env.RANLIB
-    # TODO(machenbach): Make this the default on windows.
-    if self.m.chromium.c.gyp_env.GYP_MSVS_VERSION:
-      env['GYP_MSVS_VERSION'] = self.m.chromium.c.gyp_env.GYP_MSVS_VERSION
     if self.m.chromium.c.project_generator.tool != 'gyp':
       env['GYP_CHROMIUM_NO_ACTION'] = 1
     self.m.chromium.runhooks(env=env, **kwargs)

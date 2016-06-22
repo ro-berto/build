@@ -2496,7 +2496,8 @@ BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
 
 BUILDERS['client.dart.fyi'] = {'builders': {
   'v8-%s-release' % platform: {
-    'chromium_apply_config': ['disassembler'],
+    'chromium_apply_config': [
+        'v8_ninja', 'default_compiler', 'goma', 'disassembler'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_ARCH': 'intel',
@@ -2507,18 +2508,6 @@ BUILDERS['client.dart.fyi'] = {'builders': {
     'testing': {'platform': platform},
   } for platform in ('win', 'linux', 'mac')
 }}
-
-dart_linux_release = (
-  BUILDERS['client.dart.fyi']['builders']['v8-linux-release'])
-dart_linux_release['chromium_apply_config'].extend(
-    ['default_compiler', 'v8_ninja', 'goma'])
-
-dart_mac_release = BUILDERS['client.dart.fyi']['builders']['v8-mac-release']
-dart_mac_release['chromium_apply_config'].extend(
-    ['v8_ninja', 'default_compiler', 'goma'])
-
-dart_win_release = BUILDERS['client.dart.fyi']['builders']['v8-win-release']
-dart_win_release['chromium_apply_config'].extend(['v8_ninja', 'msvs2013'])
 
 BUILDERS = freeze(BUILDERS)
 BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)

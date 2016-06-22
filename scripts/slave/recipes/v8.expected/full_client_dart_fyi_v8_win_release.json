@@ -66,6 +66,60 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::cipd]\\resources\\bootstrap.py",
+      "--platform",
+      "windows-386",
+      "--dest-directory",
+      "[SLAVE_BUILD]\\cipd",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_goma.install cipd",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]\\cipd\\cipd",
+      "ensure",
+      "--root",
+      "[CACHE]\\cipd\\goma",
+      "--list",
+      "infra_internal/goma/client/windows-amd64 release",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--service-account-json",
+      "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    ],
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -75,9 +129,8 @@
     "cwd": "[SLAVE_BUILD]\\v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "target_arch=ia32 v8_enable_disassembler=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "chromium_win_pch=0 fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 use_goma=1 v8_enable_disassembler=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
-      "GYP_MSVS_VERSION": "2013",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -113,12 +166,24 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-service-account-json-file",
+      "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "--goma-dir",
+      "[CACHE]\\cipd\\goma",
       "--"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "compile"
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "allow_subannotations": true,
