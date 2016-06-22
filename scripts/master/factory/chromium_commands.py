@@ -63,7 +63,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._lint_test_files_tool = J(s_dir, 'lint_test_files_wrapper.py')
     self._test_webkitpy_tool = J(s_dir, 'test_webkitpy_wrapper.py')
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
-    self._cf_archive_tool = J(s_dir, 'cf_archive_build.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
     self._windows_syzyasan_tool = J(s_dir, 'win_apply_syzyasan.py')
@@ -167,18 +166,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddArchiveStep(data_description='build', base_url=url, link_text=text,
                         command=cmd, index_suffix=index_suffix)
-
-  def AddCFArchiveBuild(self, factory_properties=None):
-    """Adds a step to the factory to archive a ClusterFuzz build."""
-
-    cmd = [self._python, self._cf_archive_tool,
-           '--target', self._target]
-
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-
-    self.AddTestStep(retcode_command.ReturnCodeCommand,
-                     'ClusterFuzz Archive', cmd)
 
   def GetAnnotatedPerfCmd(self, gtest_filter, log_type, test_name,
                           cmd_name, tool_opts=None,
