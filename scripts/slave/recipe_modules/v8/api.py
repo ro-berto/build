@@ -432,12 +432,20 @@ class V8Api(recipe_api.RecipeApi):
     infra_flags = gyp_defines_to_dict(
         self.m.chromium.c.gyp_env.as_jsonish()['GYP_DEFINES'])
 
-    # Get the client's gyp flags from MB's output.
-    match = re.search('^GYP_DEFINES=\'(.*)\'$', mb_output, re.M)
+    # Get the client's gyp flags from MB's output. Group 1 captures with posix,
+    # group 2 with windows output semantics.
+    #
+    # Posix:
+    # GYP_DEFINES='foo=1 path=a/b/c'
+    #
+    # Windows:
+    # set GYP_DEFINES=foo=1 path='a/b/c'
+    match = re.search(
+        '^(?:set )?GYP_DEFINES=(?:(?:\'(.*)\')|(?:(.*)))$', mb_output, re.M)
 
     # This won't match in the gn case.
     if match:
-      client_flags = gyp_defines_to_dict(match.group(1))
+      client_flags = gyp_defines_to_dict(match.group(1) or match.group(2))
 
       # Tweak both dictionaries for known differences.
       if infra_flags.get('target_arch') == infra_flags.get('v8_target_arch'):
