@@ -46,20 +46,22 @@ def AddFiles(api, pkg, relative_paths):
 
 
 def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
-  with MakeTempDir(api) as temp_dir:
+  dir_label = '%s UploadArtifacts %s' % (platform, archive_name)
+  with MakeTempDir(api, dir_label) as temp_dir:
     local_zip = temp_dir.join('artifacts.zip')
     remote_name = '%s/%s' % (platform, archive_name)
     remote_zip = GetCloudPath(api, remote_name)
     pkg = api.zip.make_package(api.path['checkout'], local_zip)
     AddFiles(api, pkg, file_paths)
 
-    pkg.zip('Zip %s Artifacts' % platform)
+    pkg.zip('Zip %s %s' % (platform, archive_name))
     api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
         name='upload "%s"' % remote_name)
 
 
 def UploadDartPackage(api, package_name):
-  with MakeTempDir(api) as temp_dir:
+  dir_label = 'UploadDartPackage %s' % package_name
+  with MakeTempDir(api, dir_label) as temp_dir:
     local_zip = temp_dir.join('%s.zip' % package_name)
     remote_name = '%s.zip' % package_name
     remote_zip = GetCloudPath(api, remote_name)
@@ -74,12 +76,12 @@ def UploadDartPackage(api, package_name):
 
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
 @contextlib.contextmanager
-def MakeTempDir(api):
+def MakeTempDir(api, label):
   try:
     temp_dir = api.path.mkdtemp('tmp')
     yield temp_dir
   finally:
-    api.file.rmtree('temp dir', temp_dir)
+    api.file.rmtree('temp dir for %s' % label, temp_dir)
 
 
 def AnalyzeDartUI(api):
@@ -95,7 +97,8 @@ def BuildLinuxAndroidx86(api):
     RunGN(api, '--android', '--android-cpu=' + x86_variant)
     out_dir = 'android_debug_' + x86_variant
     Build(api, out_dir)
-    UploadArtifacts(api, 'android-' + x86_variant, [
+    folder = 'android-' + x86_variant
+    UploadArtifacts(api, folder, [
       'build/android/ant/chromium-debug.keystore',
       'out/%s/apks/SkyShell.apk' % out_dir,
       ('out/%s/gen/sky/shell/shell/shell/libs/%s/libsky_shell.so' %
@@ -103,6 +106,9 @@ def BuildLinuxAndroidx86(api):
       'out/%s/icudtl.dat' % out_dir,
       'out/%s/gen/sky/shell/shell/classes.dex.jar' % out_dir,
     ])
+    UploadArtifacts(api, folder, [
+      'out/%s/libsky_shell.so' % out_dir
+    ], archive_name='symbols.zip')
 
 
 def AddPathPrefix(api, prefix, paths):
@@ -123,6 +129,9 @@ def BuildLinuxAndroidArm(api):
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
   ] + AddPathPrefix(api, 'out/android_debug', out_paths))
+  UploadArtifacts(api, 'android-arm', [
+      'out/android_debug/libsky_shell.so'
+  ], archive_name='symbols.zip')
 
   # Build and upload engines for the runtime modes that use AOT compilation.
   for runtime_mode in ['profile', 'release']:
@@ -143,6 +152,9 @@ def BuildLinuxAndroidArm(api):
     UploadArtifacts(api, upload_dir, [
       'out/%s/clang_x86/gen_snapshot' % build_output_dir,
     ], archive_name='linux-x64.zip')
+    UploadArtifacts(api, 'upload_dir', [
+        'out/%s/libsky_shell.so' % build_output_dir
+    ], archive_name='symbols.zip')
 
   UploadDartPackage(api, 'sky_engine')
   UploadDartPackage(api, 'sky_services')
