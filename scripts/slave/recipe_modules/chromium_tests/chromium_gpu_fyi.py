@@ -870,6 +870,29 @@ SPEC = {
       'use_isolate': False,
       'enable_swarming': False,
     },
+    'Android Release (Pixel C)': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'arm64_builder_rel_mb',
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_isolated_script,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'use_isolate': False,
+      'enable_swarming': False,
+    },
 
     'GPU Fake Linux Builder': {
       'chromium_config': 'chromium',
