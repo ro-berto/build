@@ -283,7 +283,20 @@
     "name": "fix_device_file_format.read_device_file",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@file format is compatible@@@"
+      "@@@STEP_TEXT@file format is json, reverting@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "device1\ndevice2",
+      "[BUILD]/site_config/.known_devices"
+    ],
+    "name": "fix_device_file_format.revert_device_file",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -605,8 +618,6 @@
       "-E",
       "FlakyTest",
       "--screenshot",
-      "--json-results-file",
-      "json_results_file",
       "--test-apk",
       "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
       "--apk-under-test",

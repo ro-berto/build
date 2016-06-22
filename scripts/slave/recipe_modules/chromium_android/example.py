@@ -380,3 +380,8 @@ def GenTests(api):
          api.override_step_data('Run CTS', api.raw_io.stream_output(
              'Invalid CTS output here...',
              stream='stdout')))
+
+  yield (api.test('device_file_format_mismatch') +
+         properties_for('tester') +
+         api.override_step_data('fix_device_file_format.read_device_file', 
+             api.raw_io.output('["device1", "device2"]')))
