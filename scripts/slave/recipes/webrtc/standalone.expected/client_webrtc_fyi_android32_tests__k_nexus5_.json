@@ -655,7 +655,7 @@
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "name": "Instrumentation test AppRTCDemoTest"
+    "name": "AppRTCDemoTest"
   },
   {
     "cmd": [
@@ -668,7 +668,7 @@
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "name": "Instrumentation test libjingle_peerconnection_android_unittest"
+    "name": "libjingle_peerconnection_android_unittest"
   },
   {
     "cmd": [

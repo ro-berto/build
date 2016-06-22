@@ -621,7 +621,7 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
     },
-    "name": "Instrumentation test SmallTest"
+    "name": "SmallTest"
   },
   {
     "cmd": [

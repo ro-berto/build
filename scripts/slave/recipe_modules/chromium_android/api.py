@@ -769,8 +769,7 @@ class AndroidApi(recipe_api.RecipeApi):
         args.extend(['--official-build'])
 
     step_result = self.test_runner(
-        'Instrumentation test %s%s' % (annotation or name,
-                                       ' (%s)' % suffix if suffix else ''),
+        '%s%s' % (annotation or name, ' (%s)' % suffix if suffix else ''),
         args=args,
         wrapper_script_suite_name=wrapper_script_suite_name,
         **kwargs)

@@ -579,7 +579,7 @@
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "name": "Instrumentation test cronet_sample_test_apk"
+    "name": "cronet_sample_test_apk"
   },
   {
     "cmd": [
@@ -594,7 +594,7 @@
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "name": "Instrumentation test cronet_test_instrumentation_apk"
+    "name": "cronet_test_instrumentation_apk"
   },
   {
     "cmd": [
