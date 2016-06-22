@@ -37,10 +37,11 @@ class BuildbucketApi(recipe_api.RecipeApi):
       self.set_config('production_buildbucket')
 
   def _tags_for_build(self, bucket, parameters, override_tags=None):
-    original_tags_list = (self.m.properties
-                          .get('buildbucket', {})
-                          .get('build', {})
-                          .get('tags', []))
+    buildbucket_info = self.m.properties.get('buildbucket', {})
+    if isinstance(buildbucket_info, basestring):  # pragma: no cover
+      buildbucket_info = json.loads(buildbucket_info)
+    original_tags_list = buildbucket_info.get('build', {}).get('tags', [])
+
     original_tags = dict(t.split(':', 1) for t in original_tags_list)
     new_tags = {'user_agent': 'recipe'}
 
