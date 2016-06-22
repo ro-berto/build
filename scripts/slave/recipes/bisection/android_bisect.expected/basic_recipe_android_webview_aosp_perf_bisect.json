@@ -817,12 +817,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "name": "get version (3)"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/android/tombstones.py",
       "-a",
       "-s",
-      "-w",
-      "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "-w"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",

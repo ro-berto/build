@@ -883,10 +883,15 @@ class AndroidApi(recipe_api.RecipeApi):
          '--arch', target_arch, '--more-info', log_file],
         env=env,
         infra_step=True)
+    tombstones_cmd = [
+        self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
+        '-a', '-s', '-w',
+    ]
+    if int(self.m.chromium.get_version().get('MAJOR', 0)) > 52:
+      tombstones_cmd += ['--adb-path', self.m.adb.adb_path()]
     self.m.step(
         'stack_tool_for_tombstones',
-        [self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
-         '-a', '-s', '-w', '--adb-path', self.m.adb.adb_path()],
+        tombstones_cmd,
         env=env,
         infra_step=True)
     if self.c.asan_symbolize:
