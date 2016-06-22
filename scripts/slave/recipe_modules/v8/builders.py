@@ -509,6 +509,7 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -527,6 +528,7 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -563,6 +565,7 @@ BUILDERS = {
           'goma',
           'shared_library',
           'no_snapshot',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -597,6 +600,7 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -615,6 +619,7 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -633,6 +638,7 @@ BUILDERS = {
           'clang',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1946,6 +1952,7 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1965,6 +1972,7 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1978,6 +1986,7 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2018,6 +2027,7 @@ BUILDERS = {
           'no_dcheck',
           'no_snapshot',
           'shared_library',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2056,6 +2066,7 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2092,6 +2103,7 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
