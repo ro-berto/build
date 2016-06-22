@@ -22,10 +22,10 @@ builders = {
   'cross-arm-vm-linux-release': {
     'mode': 'release',
     'target_arch': 'arm'},
-  'cross-mips-box-vm-linux-release': {
+  'cross-mips-box-linux-release': {
     'mode': 'release',
     'target_arch': 'mips'},
-  'cross-mips-board-vm-linux-release': {
+  'cross-mips-board-linux-release': {
     'mode': 'release',
     'target_arch': 'mips'},
   'test-coverage': {
