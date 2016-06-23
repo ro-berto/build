@@ -359,7 +359,7 @@ class AndroidApi(recipe_api.RecipeApi):
         # File wasn't json, so no need to revert.
         self.m.step.active_result.presentation.step_text += (
             'file format is compatible')
- 
+
   def device_status_check(self, restart_usb=False, **kwargs):
     # TODO(bpastene): Remove once chromium revisions prior to
     # crrev.com/1faecde0c03013b6cd725da413339c60223f8948 are no longer tested.
@@ -860,7 +860,7 @@ class AndroidApi(recipe_api.RecipeApi):
           infra_step=True,
           )
 
-  def stack_tool_steps(self):
+  def stack_tool_steps(self, force_latest_version=False):
     build_dir = self.m.path['checkout'].join('out',
                                              self.m.chromium.c.BUILD_CONFIG)
     log_file = build_dir.join('full_log')
@@ -886,7 +886,8 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
         '-a', '-s', '-w',
     ]
-    if int(self.m.chromium.get_version().get('MAJOR', 0)) > 52:
+    if (force_latest_version or
+        int(self.m.chromium.get_version().get('MAJOR', 0)) > 52):
       tombstones_cmd += ['--adb-path', self.m.adb.adb_path()]
     self.m.step(
         'stack_tool_for_tombstones',
@@ -1065,7 +1066,7 @@ class AndroidApi(recipe_api.RecipeApi):
                           "android.webkit.cts.ExampleBlacklistedTest":
                             [
                               {
-                                "name": "testA", 
+                                "name": "testA",
                                 "_bug_id": "crbug.com/123"
                               },
                               {"name": "testB"}
@@ -1073,7 +1074,7 @@ class AndroidApi(recipe_api.RecipeApi):
                           }'''
         )
     expected_failure = self.m.json.loads(expected_failure_json)
-    
+
     cts_base_dir = self.m.path['build'].join('site_config', 'cts')
     cts_zip_path = cts_base_dir.join(_cts_file_name)
     cts_extract_dir = cts_base_dir.join('unzipped')
@@ -1131,8 +1132,8 @@ class AndroidApi(recipe_api.RecipeApi):
         if test_method.get('result') == 'notExecuted':
           not_executed_tests.append(method_name)
         elif (test_method.find('./FailedScene') is not None and
-              test_method.get('name') not in 
-                [ t.get('name') for t in 
+              test_method.get('name') not in
+                [ t.get('name') for t in
                   expected_failure.get(class_name, []) ]):
           unexpected_test_failures.append(method_name)
 

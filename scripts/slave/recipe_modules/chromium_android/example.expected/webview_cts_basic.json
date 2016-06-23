@@ -796,7 +796,7 @@
       "@@@STEP_LOG_LINE@disabled_tests@                          \"android.webkit.cts.ExampleBlacklistedTest\":@@@",
       "@@@STEP_LOG_LINE@disabled_tests@                            [@@@",
       "@@@STEP_LOG_LINE@disabled_tests@                              {@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                                \"name\": \"testA\", @@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                                \"name\": \"testA\",@@@",
       "@@@STEP_LOG_LINE@disabled_tests@                                \"_bug_id\": \"crbug.com/123\"@@@",
       "@@@STEP_LOG_LINE@disabled_tests@                              },@@@",
       "@@@STEP_LOG_LINE@disabled_tests@                              {\"name\": \"testB\"}@@@",

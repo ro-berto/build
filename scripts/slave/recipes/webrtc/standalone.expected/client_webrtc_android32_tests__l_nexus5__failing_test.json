@@ -737,20 +737,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "get version"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/src/build/android/tombstones.py",
       "-a",
       "-s",
-      "-w"
+      "-w",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
@@ -780,7 +772,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 17 aggregated steps failed. Failures: Step('tools_unittests') failed with return_code 1",
+    "reason": "1 out of 20 aggregated steps failed. Failures: Step('tools_unittests') failed with return_code 1",
     "status_code": 1
   }
 ]
