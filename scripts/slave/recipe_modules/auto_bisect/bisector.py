@@ -808,7 +808,7 @@ class Bisector(object):
       return 'win_perf_bisect_builder'
 
     if 'android' in bot_name:
-      if 'nexus9' in bot_name:
+      if any(b in bot_name for b in ['arm64', 'nexus9']):
         return 'android_arm64_perf_bisect_builder'
       return 'android_perf_bisect_builder'
 
@@ -836,7 +836,7 @@ class Bisector(object):
       return 'gs://chrome-perf/Win Builder/full-build-win32_'
 
     if 'android' in bot_name:
-      if 'nexus9' in bot_name:
+      if any(b in bot_name for b in ['arm64', 'nexus9']):
         return 'gs://chrome-perf/android_perf_rel_arm64/full-build-linux_'
       return 'gs://chrome-perf/android_perf_rel/full-build-linux_'
 
