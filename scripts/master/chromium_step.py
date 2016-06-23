@@ -47,7 +47,7 @@ def updateText(section):
   else:
     result = []
 
-  section['step'].setText([section['name']] + section['step_text'])
+  section['step'].setText(['<br>'.join(section['step_text'])])
   section['step'].setText2(result + section['step_summary_text'])
 
 
@@ -542,11 +542,11 @@ class AnnotationObserver(buildstep.LogLineObserver):
   @@@STEP_SUMMARY_CLEAR@@@
   Reset the text summary of the current step.
 
-  @@@STEP_TEXT@<msg>@@@
-  Append <msg> to the current step text.
+  @@@STEP_TEXT@<msg line>@@@
+  Append <msg line> to the current step text.
 
-  @@@SEED_STEP_TEXT@step@<msg>@@@
-  Append <msg> to the specified seeded step.
+  @@@SEED_STEP_TEXT@step@<msg line>@@@
+  Append <msg line> to the specified seeded step.
 
   @@@STEP_SUMMARY_TEXT@<msg>@@@
   Append <msg> to the step summary (appears on top of the waterfall).
@@ -945,7 +945,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     """Adds a new section to annotator sections, does not change cursor."""
     if not step:
       step = self.command.step_status.getBuild().addStepWithName(step_name)
-      step.setText([step_name])
+      step.setText([])
     self.sections.append({
         'name': step_name,
         'step': step,
@@ -956,6 +956,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
         'status': builder.SUCCESS,
         'links': [],
         'step_summary_text': [],
+        # step_text is a list of lines that will printed after step name.
         'step_text': [],
         'started': None,
         'async_ops': [],
