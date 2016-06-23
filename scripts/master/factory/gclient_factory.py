@@ -247,8 +247,6 @@ class GClientFactory(object):
       factory_properties = {}
     factory_properties.setdefault('gclient_env', {})
     gclient_env = factory_properties['gclient_env']
-    if options and '--build-tool=ninja' in options:
-      gclient_env['GYP_GENERATORS'] = 'ninja'
 
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec(tests)

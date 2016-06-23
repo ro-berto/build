@@ -332,11 +332,9 @@ class PackageFactory(gclient_factory.GClientFactory):
 
 
 class DartUtils(object):
-  mac_options = ['--compiler=goma-clang',
-                 '--build-tool=ninja',
-                 'dartium_builder']
-  linux_options = ['--compiler=goma', '--build-tool=ninja', 'dartium_builder']
-  win_options = ['--build-tool=ninja', 'dartium_builder']
+  mac_options = ['--compiler=goma', 'dartium_builder']
+  linux_options = ['--compiler=goma', 'dartium_builder']
+  win_options = ['dartium_builder']
 
 
   win_rel_factory_properties = {
