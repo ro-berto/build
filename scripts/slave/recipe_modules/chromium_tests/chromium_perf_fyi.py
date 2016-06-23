@@ -40,24 +40,6 @@ SPEC = {
     'build_gs_bucket': 'chrome-perf',
   },
   'builders': {
-    'Win x64 FYI Builder': {
-      'disable_tests': True,
-      'chromium_config': 'chromium_official',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_builder_perf',
-      ],
-      'testing': {
-        'platform': 'win',
-      },
-      'chromium_apply_config': ['chromium_perf_fyi']
-    },
     'Win Clang Builder': {
       'disable_tests': True,
       'chromium_config': 'chromium_win_clang_official',
