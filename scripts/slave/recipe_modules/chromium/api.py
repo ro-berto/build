@@ -185,8 +185,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if self.c.compile_py.build_args:
       args += ['--build-args', self.c.compile_py.build_args]
-    if self.c.compile_py.build_tool:
-      args += ['--build-tool', self.c.compile_py.build_tool]
+    # TODO(thakis): Stop passing --build-tool, there is just one.
+    args += ['--build-tool', 'ninja']
     if self.m.properties.get('build_data_dir'):
       args += ['--build-data-dir', self.m.properties.get('build_data_dir')]
     if self.c.compile_py.compiler:
@@ -222,11 +222,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     assert not self.c.compile_py.solution
     args.append('--')
-    if self.c.compile_py.build_tool == 'xcode':
-      if self.c.compile_py.xcode_project:  # pragma: no cover
-        args.extend(['-project', self.c.compile_py.xcode_project])
-    else:
-      args.extend(targets)
+    args.extend(targets)
 
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'compile' through 'cros chrome-sdk'

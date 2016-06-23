@@ -21,12 +21,6 @@ def v8(c):
   del c.gyp_env.GYP_DEFINES['component']
   c.build_dir = c.CHECKOUT_PATH.join('out')
 
-  if c.HOST_PLATFORM == 'mac':
-    c.compile_py.build_tool = 'xcode'
-  elif c.HOST_PLATFORM == 'win':
-    c.compile_py.build_tool = 'vs'
-    c.build_dir = c.CHECKOUT_PATH.join('build')
-
   if c.BUILD_CONFIG == 'Debug':
     c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
     c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1

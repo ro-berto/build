@@ -36,7 +36,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     compile_py = ConfigGroup(
       default_targets = Set(basestring),
       build_args = Single(basestring, required=False),
-      build_tool = Single(basestring, required=False),
       compiler = Single(basestring, required=False),
       mode = Single(basestring, required=False),
       goma_dir = Single(Path, required=False),
@@ -230,8 +229,6 @@ def ninja(c):
   if c.TARGET_PLATFORM == 'ios':
     c.gyp_env.GYP_GENERATORS.add('ninja')
 
-  c.compile_py.build_tool = 'ninja'
-
   out_path = 'out'
   if c.TARGET_CROS_BOARD:
     out_path += '_%s' % (c.TARGET_CROS_BOARD,)
@@ -301,9 +298,6 @@ def default_compiler(c):
 
 @config_ctx(deps=['compiler', 'builder'], group='distributor')
 def goma(c):
-  if c.compile_py.build_tool == 'vs':  # pragma: no cover
-    raise BadConf('goma doesn\'t work with msvs')
-
   if not c.compile_py.compiler:
     c.compile_py.compiler = 'goma'
   elif c.compile_py.compiler == 'clang':
@@ -698,12 +692,6 @@ def chromium_clang(c):
 @config_ctx(includes=['ninja', 'clang', 'cfi_vptr'])
 def chromium_cfi(c):
   c.compile_py.default_targets = ['All']
-
-@config_ctx(includes=['xcode', 'static_library'])
-def chromium_xcode(c):  # pragma: no cover
-  c.compile_py.build_tool = 'xcode'
-  c.compile_py.default_targets = ['All']
-  c.compile_py.xcode_project = c.CHECKOUT_PATH.join('build', 'all.xcodeproj')
 
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):

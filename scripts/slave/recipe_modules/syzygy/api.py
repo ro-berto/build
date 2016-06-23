@@ -58,9 +58,7 @@ PATCH=1
   @property
   def build_dir(self):
     """Returns the build directory for the project."""
-    build_tool = self.m.chromium.c.compile_py.build_tool
-    if build_tool == 'ninja':
-      return self.m.path['checkout'].join('out')
+    return self.m.path['checkout'].join('out')
 
   @property
   def output_dir(self):
