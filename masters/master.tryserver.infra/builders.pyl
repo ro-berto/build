@@ -256,7 +256,10 @@
         "os": "linux",
         "version": "precise",
       },
-      "slaves": ["vm252-m4"],
+      "slaves": [
+        "vm252-m4",
+        "vm678-m4"
+      ],
     },
     "trusty64_slave_pool": {
       "slave_data": {
@@ -278,7 +281,10 @@
         "os": "mac",
         "version": "10.9",
       },
-      "slaves": ["vm608-m4"],
+      "slaves": [
+        "vm608-m4", 
+        "vm679-m4"
+      ],
     },
     "win64_slave_pool": {
       "slave_data": {
