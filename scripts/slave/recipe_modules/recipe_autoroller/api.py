@@ -178,8 +178,8 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
       # Use the recipes bootstrap to checkout coverage.
       roll_step = self.m.step(
           'roll',
-          [recipes_dir.join('recipes.py'), '--package', recipes_cfg_path,
-           'autoroll', '--output-json', self.m.json.output()])
+          ['--use_bootstrap', recipes_dir.join('recipes.py'), '--package',
+           recipes_cfg_path, 'autoroll', '--output-json', self.m.json.output()])
       roll_result = roll_step.json.output
 
       if roll_result['success']:

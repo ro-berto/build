@@ -175,6 +175,7 @@
   },
   {
     "cmd": [
+      "--use_bootstrap",
       "[TMP_BASE]/recipes_tmp_1/recipes.py",
       "--package",
       "[TMP_BASE]/roll_build_tmp_2/infra/config/recipes.cfg",
