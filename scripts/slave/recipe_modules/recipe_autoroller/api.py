@@ -116,11 +116,12 @@ def get_commit_message(roll_result):
 
 
 class RecipeAutorollerApi(recipe_api.RecipeApi):
-  def prepare_checkout(self):
+  def prepare_checkout(self): #pragma: no cover
     """Creates a default checkout for the recipe autoroller."""
-    self.m.gclient.set_config('recipes_py')
-    self.m.gclient.checkout()
-    self.m.gclient.runhooks()
+    # Removed, but keep it here so roll succeeds
+    # TODO(martiniss): Delete once safe
+    pass
+
 
   def roll_projects(self, projects):
     """Attempts to roll each project from the provided list.
@@ -129,29 +130,37 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
     projects are not affected.
     """
     project_data = self.m.luci_config.get_projects()
-    results = []
-    with recipe_api.defer_results():
-      for project in projects:
-        with self.m.step.nest(str(project)):
-          results.append(self._roll_project(project_data[project]))
 
-    # We need to unwrap |DeferredResult|s.
-    results = [r.get_result() for r in results]
+    self.m.cipd.install_client()
+    with self.m.tempfile.temp_dir('recipes') as recipes_dir:
+      self.m.cipd.ensure(recipes_dir, {
+          'infra/recipes-py': 'latest',
+      })
 
-    # Failures to roll are OK as long as at least one of the repos is moving
-    # forward. For example, with repos with following dependencies:
-    #
-    #   A    <- B
-    #   A, B <- C
-    #
-    # New commit in A repo will need to get rolled into B first. However,
-    # it'd also appear as a candidate for C roll, leading to a failure there.
-    if ROLL_FAILURE in results and ROLL_SUCCESS not in results:
-      self.m.python.failing_step(
-          'roll result',
-          'manual intervention needed: automated roll attempt failed')
+      results = []
+      with recipe_api.defer_results():
+        for project in projects:
+          with self.m.step.nest(str(project)):
+            results.append(self._roll_project(
+                project_data[project], recipes_dir))
 
-  def _roll_project(self, project_data):
+      # We need to unwrap |DeferredResult|s.
+      results = [r.get_result() for r in results]
+
+      # Failures to roll are OK as long as at least one of the repos is moving
+      # forward. For example, with repos with following dependencies:
+      #
+      #   A    <- B
+      #   A, B <- C
+      #
+      # New commit in A repo will need to get rolled into B first. However,
+      # it'd also appear as a candidate for C roll, leading to a failure there.
+      if ROLL_FAILURE in results and ROLL_SUCCESS not in results:
+        self.m.python.failing_step(
+            'roll result',
+            'manual intervention needed: automated roll attempt failed')
+
+  def _roll_project(self, project_data, recipes_dir):
     with self.m.tempfile.temp_dir('roll_%s' % project_data['id']) as workdir:
       self.m.git.checkout(
           project_data['repo_url'], dir_path=workdir, submodules=False)
@@ -166,13 +175,11 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
 
       recipes_cfg_path = workdir.join('infra', 'config', 'recipes.cfg')
 
-      # It's important we use the infra checkout virtualenv, e.g. for coverage
-      # python module.
-      roll_step = self.m.step('roll',
-          [self.m.path['checkout'].join('ENV', 'bin', 'python'), '-u',
-           self.m.path['checkout'].join('recipes-py', 'recipes.py'),
-           '--package', recipes_cfg_path, 'autoroll',
-           '--output-json', self.m.json.output()])
+      # Use the recipes bootstrap to checkout coverage.
+      roll_step = self.m.step(
+          'roll',
+          [recipes_dir.join('recipes.py'), '--package', recipes_cfg_path,
+           'autoroll', '--output-json', self.m.json.output()])
       roll_result = roll_step.json.output
 
       if roll_result['success']:
