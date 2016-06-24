@@ -5,6 +5,11 @@
   "slave_port": 30103,
   "templates": ["templates", "../master.chromium/templates"],
 
+  "default_remote_run_properties": {
+    "path_config": "kitchen",
+  },
+  "default_remote_run_repository": "https://chromium.googlesource.com/infra/infra.git",
+
   "builders": {
     "v8-linux-end-to-end": {
       "auto_reboot": False,
@@ -17,21 +22,24 @@
     "cipd-test-end-to-end_mac": {
       "auto_reboot": False,
       "category": "cipd",
-      "recipe": "infra/cipd_test",
+      "use_remote_run": True,
+      "recipe": "cipd_test",
       "scheduler": "build",
       "slave_pools": ["mac10.10"],
     },
     "cipd-test-end-to-end_trusty64": {
       "auto_reboot": False,
       "category": "cipd",
-      "recipe": "infra/cipd_test",
+      "use_remote_run": True,
+      "recipe": "cipd_test",
       "scheduler": "build",
       "slave_pools": ["trusty64"],
     },
     "cipd-test-end-to-end_win64": {
       "auto_reboot": False,
       "category": "cipd",
-      "recipe": "infra/cipd_test",
+      "use_remote_run": True,
+      "recipe": "cipd_test",
       "scheduler": "build",
       "slave_pools": ["win64"],
     },
@@ -39,21 +47,24 @@
     "build-repo-real-try_mac": {
       "auto_reboot": False,
       "category": "real-try",
-      "recipe": "infra/build_repo_real_try",
+      "use_remote_run": True,
+      "recipe": "build_repo_real_try",
       "scheduler": "build",
       "slave_pools": ["mac10.10"],
     },
     "build-repo-real-try_trusty64": {
       "auto_reboot": False,
       "category": "real-try",
-      "recipe": "infra/build_repo_real_try",
+      "use_remote_run": True,
+      "recipe": "build_repo_real_try",
       "scheduler": "build",
       "slave_pools": ["trusty64"],
     },
     "build-repo-real-try_win64": {
       "auto_reboot": False,
       "category": "real-try",
-      "recipe": "infra/build_repo_real_try",
+      "use_remote_run": True,
+      "recipe": "build_repo_real_try",
       "scheduler": "build",
       "slave_pools": ["win64"],
     },
@@ -61,14 +72,16 @@
     "recipe-simulation_mac": {
       "auto_reboot": False,
       "category": "simulation",
-      "recipe": "infra/recipe_simulation",
+      "use_remote_run": True,
+      "recipe": "recipe_simulation",
       "scheduler": "build",
       "slave_pools": ["mac10.10"],
     },
     "recipe-simulation_trusty64": {
       "auto_reboot": False,
       "category": "simulation",
-      "recipe": "infra/recipe_simulation",
+      "use_remote_run": True,
+      "recipe": "recipe_simulation",
       "scheduler": "build",
       "slave_pools": ["trusty64"],
     },

@@ -31,7 +31,8 @@
     },
     "Build Try Recipe Test Mac": {
       "category": "Build",
-      "recipe": "infra/build_repo_real_try",
+      "use_remote_run": True,
+      "recipe": "build_repo_real_try",
       "properties": {
         "repo_name": "build",
         "runhooks": True,
@@ -42,7 +43,8 @@
     },
     "Build Try Recipe Test Trusty64": {
       "category": "Build",
-      "recipe": "infra/build_repo_real_try",
+      "use_remote_run": True,
+      "recipe": "build_repo_real_try",
       "properties": {
         "repo_name": "build",
         "runhooks": True,
@@ -53,7 +55,8 @@
     },
     "Build Try Recipe Test Win64": {
       "category": "Build",
-      "recipe": "infra/build_repo_real_try",
+      "use_remote_run": True,
+      "recipe": "build_repo_real_try",
       "properties": {
         "repo_name": "build",
         "runhooks": True,
@@ -76,7 +79,8 @@
 
     "Try Recipe Mac": {
       "category": "Try Recipe",
-      "recipe": "infra/try_recipe",
+      "use_remote_run": True,
+      "recipe": "try_recipe",
       "properties": {
         "repo_name": "build",
         "runhooks": True,
@@ -87,7 +91,8 @@
     },
     "Try Recipe Trusty 64": {
       "category": "Try Recipe",
-      "recipe": "infra/try_recipe",
+      "use_remote_run": True,
+      "recipe": "try_recipe",
       "properties": {
         "repo_name": "build",
         "runhooks": True,
@@ -98,7 +103,8 @@
     },
     "Try Recipe Win 64": {
       "category": "Try Recipe",
-      "recipe": "infra/try_recipe",
+      "use_remote_run": True,
+      "recipe": "try_recipe",
       "properties": {
         "repo_name": "build",
         "runhooks": True,
@@ -121,28 +127,32 @@
     },
     "Infra Linux Precise 32 Tester": {
       "category": "Infra",
-      "recipe": "infra/infra_repo_trybot",
+      "use_remote_run": True,
+      "recipe": "infra_repo_trybot",
       "scheduler": None,
       "slave_pools": ["precise32_slave_pool"],
       "slavebuilddir": "infra",
     },
     "Infra Linux Trusty 64 Tester": {
       "category": "Infra",
-      "recipe": "infra/infra_repo_trybot",
+      "use_remote_run": True,
+      "recipe": "infra_repo_trybot",
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "infra",
     },
     "Infra Mac Tester": {
       "category": "Infra",
-      "recipe": "infra/infra_repo_trybot",
+      "use_remote_run": True,
+      "recipe": "infra_repo_trybot",
       "scheduler": None,
       "slave_pools": ["mac_slave_pool"],
       "slavebuilddir": "Infra",
     },
     "Infra Win Tester": {
       "category": "Infra",
-      "recipe": "infra/infra_repo_trybot",
+      "use_remote_run": True,
+      "recipe": "infra_repo_trybot",
       "scheduler": None,
       "slave_pools": ["win64_slave_pool"],
       "slavebuilddir": "infra",
@@ -232,7 +242,8 @@
 
     "Recipe Roll Downstream Tester": {
       "category": "Recipe Roll Tryjob",
-      "recipe": "infra/recipe_roll_tryjob",
+      "use_remote_run": True,
+      "recipe": "recipe_roll_tryjob",
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "recipe_roll_tryjob",
@@ -240,7 +251,8 @@
 
     "gerrit-test-cq-normal": {
       "category": "Gerrit CQ",
-      "recipe": "infra/gerrit_cq_test",
+      "use_remote_run": True,
+      "recipe": "gerrit_cq_test",
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "gerrit-test-cq-normal",
