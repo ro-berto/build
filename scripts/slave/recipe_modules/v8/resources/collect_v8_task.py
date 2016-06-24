@@ -75,10 +75,6 @@ def merge_shard_results(
         continue
     missing_shards.append(index)
 
-  # Each shard must have used the same arch and mode configuration.
-  assert len(set(archs)) == 1
-  assert len(set(modes)) == 1
-
   # If some shards are missing, make it known. Continue parsing anyway. Step
   # should be red anyway, since swarming.py return non-zero exit code in that
   # case.
@@ -90,6 +86,10 @@ def merge_shard_results(
     # Not all tests run, combined JSON summary can not be trusted.
     # TODO(machenbach): Implement using a tag in the test results that makes
     # the step know they're incomplete.
+
+  # Each shard must have used the same arch and mode configuration.
+  assert len(set(archs)) == 1
+  assert len(set(modes)) == 1
 
   # Merge coverage data if specified.
   if coverage_dir:
