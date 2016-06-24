@@ -222,7 +222,7 @@ SPEC = {
       'gclient_apply_config': ['blink_or_chromium'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
+        'TARGET_BITS': 32,
       },
       'compile_targets': [
         'blink_tests',
