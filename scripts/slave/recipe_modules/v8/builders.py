@@ -649,7 +649,8 @@ BUILDERS = {
       },
 ####### Category: Mac
       'V8 Mac': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -664,7 +665,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac - debug': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -679,7 +681,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -694,7 +697,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - debug': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -709,7 +713,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - xcode': {
-        'chromium_apply_config': ['v8_xcode_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_xcode_ninja', 'default_compiler', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -758,7 +763,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -996,7 +1002,7 @@ BUILDERS = {
       },
       'V8 Mac64 ASAN': {
         'chromium_apply_config': [
-          'v8_ninja', 'clang', 'asan', 'goma'],
+          'v8_ninja', 'clang', 'asan', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2118,7 +2124,8 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel_ng': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -2147,7 +2154,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_mac_dbg': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -2162,7 +2170,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_rel': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2177,7 +2186,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_dbg': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -2192,7 +2202,8 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac_gc_stress_dbg': {
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -2214,6 +2225,7 @@ BUILDERS = {
           'asan',
           'goma',
           'no_dcheck',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
