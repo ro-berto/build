@@ -2206,6 +2206,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
     },
     'Win SyzyAsan (rel)': {
       'chromium_config': 'chromium',
