@@ -258,7 +258,7 @@
       },
       "slaves": [
         "vm252-m4",
-        "vm678-m4"
+        "vm678-m4",
       ],
     },
     "trusty64_slave_pool": {
@@ -272,7 +272,7 @@
         "slave864-c4",
         "slave872-c4",
         "slave912-c4",
-        "slave913-c4"
+        "slave913-c4",
       ],
     },
     "mac_slave_pool": {
@@ -283,7 +283,7 @@
       },
       "slaves": [
         "vm608-m4", 
-        "vm679-m4"
+        "vm679-m4",
       ],
     },
     "win64_slave_pool": {
@@ -292,7 +292,10 @@
         "os": "win",
         "version": "win7",
       },
-      "slaves": ["vm253-m4"],
+      "slaves": [
+        "vm253-m4",
+        "vm712-m4",
+      ],
     },
   },
 }
