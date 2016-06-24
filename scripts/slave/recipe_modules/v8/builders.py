@@ -1090,7 +1090,7 @@ BUILDERS = {
 ####### Category: Arm
       'V8 Arm - builder': {
         'chromium_apply_config': [
-            'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float'],
+            'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -1107,7 +1107,7 @@ BUILDERS = {
       },
       'V8 Arm - debug builder': {
         'chromium_apply_config': [
-            'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float'],
+            'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -1124,7 +1124,8 @@ BUILDERS = {
       },
       'V8 Android Arm - builder': {
         'gclient_apply_config': ['android'],
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -1213,7 +1214,7 @@ BUILDERS = {
       },
       'V8 Linux - arm - sim': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1240,7 +1241,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug': {
-        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1270,7 +1271,8 @@ BUILDERS = {
 ####### Category: ARM64
       'V8 Android Arm64 - builder': {
         'gclient_apply_config': ['android'],
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -1285,7 +1287,7 @@ BUILDERS = {
       },
       'V8 Linux - arm64 - sim': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1305,7 +1307,7 @@ BUILDERS = {
       },
       'V8 Linux - arm64 - sim - debug': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1326,7 +1328,7 @@ BUILDERS = {
       'V8 Linux - arm64 - sim - nosnap - debug': {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'simulate_arm',
-          'no_snapshot'],
+          'no_snapshot', 'mb'],
         'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1343,7 +1345,7 @@ BUILDERS = {
       },
       'V8 Linux - arm64 - sim - gc stress': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1357,6 +1359,7 @@ BUILDERS = {
       },
 ####### Category: MIPS
       'V8 Mips - builder': {
+        # TODO(machenbach): Switch this bot manually to gn.
         'chromium_apply_config': ['no_snapshot', 'no_i18n'],
         'v8_apply_config': ['mips_cross_compile', 'no_snapshot', 'no_i18n'],
         'v8_config_kwargs': {
@@ -1404,7 +1407,7 @@ BUILDERS = {
       },
       'V8 Linux - mipsel - sim - builder': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_mipsel'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_mipsel', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1418,7 +1421,7 @@ BUILDERS = {
       },
       'V8 Linux - mips64el - sim - builder': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_mipsel'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_mipsel', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1442,7 +1445,7 @@ BUILDERS = {
 ####### Category: PPC
       'V8 Linux - ppc - sim': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_ppc'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_ppc', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1453,7 +1456,7 @@ BUILDERS = {
       },
       'V8 Linux - ppc64 - sim': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_ppc'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_ppc', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1465,7 +1468,7 @@ BUILDERS = {
 ####### Category: S390
       'V8 Linux - s390 - sim': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_s390'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_s390', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1476,7 +1479,7 @@ BUILDERS = {
       },
       'V8 Linux - s390x - sim': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_s390'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_s390', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1489,7 +1492,7 @@ BUILDERS = {
       'V8 Linux - x87 - nosnap - debug builder': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot',  'x87'],
+          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot',  'x87', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -2242,7 +2245,7 @@ BUILDERS = {
       },
       'v8_linux_arm_rel_ng': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -2277,7 +2280,7 @@ BUILDERS = {
       },
       'v8_linux_arm_dbg': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -2297,7 +2300,7 @@ BUILDERS = {
       },
       'v8_linux_arm_armv8a_rel': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_apply_config': ['enable_armv8'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2310,7 +2313,7 @@ BUILDERS = {
       },
       'v8_linux_arm_armv8a_dbg': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_apply_config': ['enable_armv8'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -2323,7 +2326,7 @@ BUILDERS = {
       },
       'v8_linux_arm64_rel_ng': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2358,7 +2361,7 @@ BUILDERS = {
       },
       'v8_linux_arm64_dbg': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -2378,7 +2381,7 @@ BUILDERS = {
       },
       'v8_linux_arm64_gc_stress_dbg': {
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm'],
+          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -2396,6 +2399,7 @@ BUILDERS = {
           'default_compiler',
           'goma',
           'no_dcheck',
+          'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2409,7 +2413,7 @@ BUILDERS = {
       'v8_linux_mipsel_compile_rel': {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'simulate_mipsel',
-          'no_dcheck'],
+          'no_dcheck', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -2420,7 +2424,7 @@ BUILDERS = {
       'v8_linux_mips64el_compile_rel': {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'simulate_mipsel',
-          'no_dcheck'],
+          'no_dcheck', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
