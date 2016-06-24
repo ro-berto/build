@@ -3,11 +3,8 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'chromium',
   'file',
-  'depot_tools/gclient',
   'gsutil',
   'recipe_engine/path',
-  'recipe_engine/python',
+  'recipe_engine/step',
 ]

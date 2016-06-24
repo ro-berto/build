@@ -295,7 +295,7 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "build nanobench",
     "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@Location of SKPs@\"https://pantheon.corp.google.com/storage/browser/cluster-telemetry/skps/10k/57259e0-05dcb4c/\"@@@"
+      "@@@SET_BUILD_PROPERTY@Location of SKPs@\"https://pantheon.corp.google.com/storage/browser/cluster-telemetry/swarming/skps/10k/fad657e-276e633/\"@@@"
     ]
   },
   {
@@ -321,11 +321,30 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/skps/slave1"
+    ],
+    "name": "rmtree slave1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/skps/slave1",
       "511"
     ],
-    "name": "makedirs SKPs dir",
+    "name": "makedirs slave1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -343,18 +362,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
+      "--",
       "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave1",
+      "cp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/1/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/2/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/3/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/4/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/5/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/6/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/7/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/8/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/9/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/10/*.skp",
       "[SLAVE_BUILD]/skps/slave1"
     ],
-    "name": "gsutil rsync"
+    "name": "gsutil cp"
   },
   {
     "cmd": [
@@ -392,11 +416,30 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/skps/slave2"
+    ],
+    "name": "rmtree slave2",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/skps/slave2",
       "511"
     ],
-    "name": "makedirs SKPs dir (2)",
+    "name": "makedirs slave2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -414,18 +457,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
+      "--",
       "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave2",
+      "cp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/11/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/12/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/13/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/14/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/15/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/16/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/17/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/18/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/19/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/20/*.skp",
       "[SLAVE_BUILD]/skps/slave2"
     ],
-    "name": "gsutil rsync (2)"
+    "name": "gsutil cp (2)"
   },
   {
     "cmd": [
@@ -463,11 +511,30 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/skps/slave3"
+    ],
+    "name": "rmtree slave3",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/skps/slave3",
       "511"
     ],
-    "name": "makedirs SKPs dir (3)",
+    "name": "makedirs slave3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -485,18 +552,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
+      "--",
       "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave3",
+      "cp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/21/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/22/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/23/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/24/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/25/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/26/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/27/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/28/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/29/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/30/*.skp",
       "[SLAVE_BUILD]/skps/slave3"
     ],
-    "name": "gsutil rsync (3)"
+    "name": "gsutil cp (3)"
   },
   {
     "cmd": [
@@ -534,11 +606,30 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/skps/slave4"
+    ],
+    "name": "rmtree slave4",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/skps/slave4",
       "511"
     ],
-    "name": "makedirs SKPs dir (4)",
+    "name": "makedirs slave4",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -556,18 +647,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
+      "--",
       "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave4",
+      "cp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/31/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/32/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/33/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/34/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/35/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/36/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/37/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/38/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/39/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/40/*.skp",
       "[SLAVE_BUILD]/skps/slave4"
     ],
-    "name": "gsutil rsync (4)"
+    "name": "gsutil cp (4)"
   },
   {
     "cmd": [
@@ -605,11 +701,30 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/skps/slave5"
+    ],
+    "name": "rmtree slave5",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/skps/slave5",
       "511"
     ],
-    "name": "makedirs SKPs dir (5)",
+    "name": "makedirs slave5",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -627,18 +742,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
+      "--",
       "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave5",
+      "cp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/41/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/42/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/43/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/44/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/45/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/46/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/47/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/48/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/49/*.skp",
+      "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/50/*.skp",
       "[SLAVE_BUILD]/skps/slave5"
     ],
-    "name": "gsutil rsync (5)"
+    "name": "gsutil cp (5)"
   },
   {
     "cmd": [
@@ -671,6 +791,16 @@
       "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-5.isolated.gen.json"
     ],
     "name": "Write ct-nanobench-5.isolated.gen.json"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"chromium_build\": \"fad657e-276e633\", \"num_slaves\": 5, \"page_type\": \"10k\"}",
+      "[SLAVE_BUILD]/skps/skps_version"
+    ],
+    "name": "Create [SLAVE_BUILD]/skps/skps_version"
   },
   {
     "cmd": [

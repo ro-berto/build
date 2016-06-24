@@ -10,6 +10,7 @@ DEPS = [
   'file',
   'depot_tools/gclient',
   'gsutil',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
@@ -22,17 +23,21 @@ DEPS = [
 ]
 
 
+SKPS_VERSION_FILE = 'skps_version'
 CT_SKPS_ISOLATE = 'ct_skps.isolate'
 
 # Do not batch archive more slaves than this value. This is used to prevent
 # no output timeouts in the 'isolate tests' step.
 MAX_SLAVES_TO_BATCHARCHIVE = 100
 
-# Number of slaves to shard CT runs to.
-DEFAULT_CT_NUM_SLAVES = 100
+TOOL_TO_DEFAULT_SKPS_PER_SLAVE = {
+    'dm': 10000,
+    'nanobench': 1000,
+    'get_images_from_skps': 10000,
+}
 
 # The SKP repository to use.
-DEFAULT_SKPS_CHROMIUM_BUILD = '57259e0-05dcb4c'
+DEFAULT_SKPS_CHROMIUM_BUILD = 'fad657e-276e633'
 
 
 def RunSteps(api):
@@ -40,8 +45,13 @@ def RunSteps(api):
   buildername = api.properties['buildername']
   if '10k' in buildername:
     ct_page_type = '10k'
+    num_pages = 10000
+  elif '100k' in buildername:
+    ct_page_type = '100k'
+    num_pages = 100000
   elif '1m' in buildername:
     ct_page_type = 'All'
+    num_pages = 1000000
   else:
     raise Exception('Do not recognise the buildername %s.' % buildername)
 
@@ -63,8 +73,6 @@ def RunSteps(api):
     build_target = 'tools'
   else:
     raise Exception('Do not recognise the buildername %s.' % buildername)
-
-  ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
 
   # Checkout Skia and Chromium.
   gclient_cfg = api.gclient.make_config()
@@ -116,17 +124,49 @@ def RunSteps(api):
 
   # Set build property to make finding SKPs convenient.
   api.step.active_result.presentation.properties['Location of SKPs'] = (
-      'https://pantheon.corp.google.com/storage/browser/%s/skps/%s/%s/' % (
-          api.ct.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
+      'https://pantheon.corp.google.com/storage/browser/%s/swarming/skps/%s/%s/'
+          % (api.ct.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
 
   # Delete swarming_temp_dir to ensure it starts from a clean slate.
   api.file.rmtree('swarming temp dir', api.skia_swarming.swarming_temp_dir)
 
+  num_per_slave = api.properties.get(
+      'num_per_slave', TOOL_TO_DEFAULT_SKPS_PER_SLAVE[skia_tool])
+  ct_num_slaves = api.properties.get('ct_num_slaves', num_pages / num_per_slave)
+
+  # Try to figure out if the SKPs we are going to isolate already exist
+  # locally by reading the SKPS_VERSION_FILE.
+  download_skps = True
+  expected_version_contents = {
+      "chromium_build": skps_chromium_build,
+      "page_type": ct_page_type,
+      "num_slaves": ct_num_slaves,
+  }
+  skps_dir = api.path['slave_build'].join('skps')
+  version_file = skps_dir.join(SKPS_VERSION_FILE)
+  if api.path.exists(version_file):  # pragma: nocover
+    version_file_contents = api.file.read(
+        "Read %s" % version_file,
+        version_file,
+        test_data=expected_version_contents,
+        infra_step=True)
+    actual_version_contents = api.json.loads(version_file_contents)
+    differences = (set(expected_version_contents.items()) ^
+                   set(actual_version_contents.items()))
+    download_skps = len(differences) != 0
+    if download_skps:
+      # Delete and recreate the skps dir.
+      api.file.rmtree(api.path.basename(skps_dir), skps_dir)
+      api.file.makedirs(api.path.basename(skps_dir), skps_dir)
+
   for slave_num in range(1, ct_num_slaves + 1):
-    # Download SKPs.
-    api.ct.download_skps(
-        ct_page_type, slave_num, skps_chromium_build,
-        api.path['slave_build'].join('skps'))
+    if download_skps:
+      # Download SKPs.
+      api.ct.download_swarming_skps(
+          ct_page_type, slave_num, skps_chromium_build,
+          api.path['slave_build'].join('skps'),
+          start_range=((slave_num-1)*num_per_slave) + 1,
+          num_skps=num_per_slave)
 
     # Create this slave's isolated.gen.json file to use for batcharchiving.
     isolate_dir = chromium_checkout.join('chrome')
@@ -141,6 +181,13 @@ def RunSteps(api):
     api.skia_swarming.create_isolated_gen_json(
         isolate_path, isolate_dir, 'linux', 'ct-%s-%s' % (skia_tool, slave_num),
         extra_variables)
+
+  if download_skps:
+    # Since we had to download SKPs create an updated version file.
+    api.file.write("Create %s" % version_file,
+                   version_file,
+                   api.json.dumps(expected_version_contents),
+                   infra_step=True)
 
   # Batcharchive everything on the isolate server for efficiency.
   max_slaves_to_batcharchive = MAX_SLAVES_TO_BATCHARCHIVE
@@ -197,6 +244,7 @@ def RunSteps(api):
 
 def GenTests(api):
   ct_num_slaves = 5
+  num_per_slave = 10
   skia_revision = 'abc123'
 
   yield(
@@ -204,6 +252,7 @@ def GenTests(api):
     api.properties(
         buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     )
   )
@@ -214,6 +263,28 @@ def GenTests(api):
         buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_IMG_DECODE_'
                     '10k_SKPs',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
+        revision=skia_revision,
+    )
+  )
+
+  yield(
+    api.test('CT_DM_100k_SKPs') +
+    api.properties(
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_100k_SKPs',
+        ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
+        revision=skia_revision,
+    )
+  )
+
+  yield(
+    api.test('CT_IMG_DECODE_100k_SKPs') +
+    api.properties(
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_IMG_DECODE_'
+                    '100k_SKPs',
+        ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     )
   )
@@ -224,6 +295,7 @@ def GenTests(api):
         buildername=
             'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     ) +
     api.path.exists(
@@ -238,6 +310,7 @@ def GenTests(api):
         buildername=
             'Perf-Ubuntu-GCC-Golo-GPU-GT610-x86_64-Release-CT_BENCH_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     ) +
     api.path.exists(
@@ -251,6 +324,7 @@ def GenTests(api):
     api.properties(
         buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_1m_SKPs',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     )
   )
@@ -261,6 +335,7 @@ def GenTests(api):
         buildername=
             'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_UnknownRepo_SKPs',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     ) +
     api.expect_exception('Exception')
@@ -272,6 +347,7 @@ def GenTests(api):
         buildername=
             'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_UnknownTool_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     ) +
     api.expect_exception('Exception')
@@ -283,6 +359,7 @@ def GenTests(api):
     api.properties(
         buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_1m_SKPs',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     )
   )
@@ -294,6 +371,7 @@ def GenTests(api):
     api.properties(
         buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_1m_SKPs',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     )
   )
@@ -304,6 +382,7 @@ def GenTests(api):
         buildername=
             'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs-Trybot',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         rietveld='codereview.chromium.org',
         issue=1499623002,
         patchset=1,
@@ -316,6 +395,7 @@ def GenTests(api):
         buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_IMG_DECODE_'
                     '10k_SKPs_Trybot',
         ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
         revision=skia_revision,
     )
   )
