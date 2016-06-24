@@ -9,7 +9,7 @@ from master.factory.build_factory import BuildFactory
 
 def RemoteRunFactory(active_master, repository, recipe,
                      revision='origin/master', factory_properties=None,
-                     timeout=1200, max_time=2400):
+                     timeout=1200, max_time=2400, triggers=None):
   """Returns buildbot build factory which runs recipes using recipe engine's
   remote_run command.
 
@@ -32,6 +32,9 @@ def RemoteRunFactory(active_master, repository, recipe,
   |max_time| refers to the maximum number of seconds a build should be allowed
   to run, regardless of output. After |max_time| seconds, the build is
   forcibly killed.
+
+  |triggers| is a list of builders on the same master to trigger
+  after the build.
   """
   factory_properties = factory_properties or {}
 
@@ -54,5 +57,9 @@ def RemoteRunFactory(active_master, repository, recipe,
   cmd = cmd_obj.AddB64GzFactoryProperties(factory_properties, cmd)
 
   cmd_obj.AddAnnotatedScript(cmd, timeout=timeout, max_time=max_time)
+
+  for t in triggers or []:
+    factory.addStep(commands.CreateTriggerStep(
+        t, trigger_copy_properties=['swarm_hashes']))
 
   return factory
