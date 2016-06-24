@@ -249,7 +249,7 @@ def GenTests(api):
           slavename='slavename',
           target='Release') +
       api.override_step_data(
-        'read test spec',
+        'read test spec (chromium.perf.json)',
         api.json.output({
             "Android Nexus5 Perf (1)": {
               "scripts": [

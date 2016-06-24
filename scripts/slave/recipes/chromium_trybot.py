@@ -350,13 +350,14 @@ def GenTests(api):
     api.test('invalid_results') +
     props() +
     api.platform.name('linux') +
-    # TODO(kbr): disambiguate multiple "read test spec" steps better
-    # for trybots which mirror multiple waterfall bots.
-    api.override_step_data('read test spec (2)', api.json.output({
-        'Linux Tests': {
-            'gtest_tests': ['base_unittests'],
-        },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': ['base_unittests'],
+            },
+        })
+    ) +
     suppress_analyze() +
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
@@ -366,44 +367,51 @@ def GenTests(api):
 
   yield (
     api.test('script_test_with_overridden_compile_targets') +
-      props() +
-      api.platform.name('linux') +
-      api.override_step_data('read test spec (2)', api.json.output({
-          'Linux Tests': {
-              'scripts': [
-                  {
-                      'name': 'script_test',
-                      'script': 'fake_script.py',
-                      'override_compile_targets': ['overridden_target']
-                  }
-              ],
-          }}))
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'scripts': [
+                    {
+                        'name': 'script_test',
+                        'script': 'fake_script.py',
+                        'override_compile_targets': ['overridden_target']
+                    }
+                ],
+            }
+        })
+    )
   )
 
   yield (
     api.test('dynamic_isolated_script_test_with_args_on_trybot') +
     props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
     api.platform.name('linux') +
-    api.override_step_data('read test spec (2)', api.json.output({
-        'Linux Tests': {
-            'isolated_scripts': [
-                {
-                  'isolate_name': 'telemetry_gpu_unittests',
-                  'name': 'telemetry_gpu_unittests',
-                  'args': ['--correct-common-arg'],
-                  'non_precommit_args': [
-                    '--SHOULD-NOT-BE-PRESENT-DURING-THE-RUN'
-                  ],
-                  'precommit_args': [
-                    '--these-args-should-be-present',
-                    '--test-machine-name=\"${buildername}\"',
-                    '--build-revision=\"${got_revision}\"',
-                  ],
-                  'swarming': {'can_use_on_swarming_builders': True},
-                },
-            ],
-        },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'args': ['--correct-common-arg'],
+                      'non_precommit_args': [
+                        '--SHOULD-NOT-BE-PRESENT-DURING-THE-RUN'
+                      ],
+                      'precommit_args': [
+                        '--these-args-should-be-present',
+                        '--test-machine-name=\"${buildername}\"',
+                        '--build-revision=\"${got_revision}\"',
+                      ],
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
     suppress_analyze() +
     api.override_step_data(
         'telemetry_gpu_unittests (with patch) on Ubuntu-12.04',
@@ -415,21 +423,24 @@ def GenTests(api):
     api.test('swarming_test_with_priority_expiration_and_timeout') +
     props(extra_swarmed_tests=['gl_tests']) +
     api.platform.name('linux') +
-    api.override_step_data('read test spec (2)', api.json.output({
-        'Linux Tests': {
-            'gtest_tests': [
-                {
-                  'test': 'gl_tests',
-                  'swarming': {
-                    'can_use_on_swarming_builders': True,
-                    'priority_adjustment': 'higher',
-                    'expiration': 7200,
-                    'hard_timeout': 1800,
-                  },
-                },
-            ],
-        },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                      'test': 'gl_tests',
+                      'swarming': {
+                        'can_use_on_swarming_builders': True,
+                        'priority_adjustment': 'higher',
+                        'expiration': 7200,
+                        'hard_timeout': 1800,
+                      },
+                    },
+                ],
+            },
+        })
+    ) +
     suppress_analyze()
   )
 
@@ -437,16 +448,19 @@ def GenTests(api):
     api.test('swarming_trigger_failure') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'Linux Tests': {
-            'gtest_tests': [
-                {
-                  'test': 'base_unittests',
-                  'swarming': {'can_use_on_swarming_builders': True},
-                },
-            ],
-        },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                      'test': 'base_unittests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
     suppress_analyze()
   )
 
@@ -454,16 +468,19 @@ def GenTests(api):
     api.test('swarming_test_failure') +
     props(extra_swarmed_tests=['gl_tests']) +
     api.platform.name('linux') +
-    api.override_step_data('read test spec (2)', api.json.output({
-        'Linux Tests': {
-            'gtest_tests': [
-                {
-                  'test': 'gl_tests',
-                  'swarming': {'can_use_on_swarming_builders': True},
-                },
-            ],
-        },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
     suppress_analyze() +
     api.override_step_data('gl_tests (with patch) on Ubuntu-12.04',
                            canned_test(passing=False))
@@ -473,11 +490,13 @@ def GenTests(api):
     api.test('compile_failure_without_patch_deapply_fn') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('read test spec (2)', api.json.output({
-        'Linux Tests': {
-          'gtest_tests': ['base_unittests'],
-        },
-      })
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+              'gtest_tests': ['base_unittests'],
+            },
+        })
     ) +
     suppress_analyze() +
     api.override_step_data('base_unittests (with patch)',
@@ -489,11 +508,13 @@ def GenTests(api):
     api.test('compile_failure_infra') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'Linux Tests': {
-          'gtest_tests': ['base_unittests'],
-        },
-      })
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+              'gtest_tests': ['base_unittests'],
+            },
+        })
     ) +
     suppress_analyze() +
     api.override_step_data(
@@ -552,11 +573,13 @@ def GenTests(api):
     props(mastername='tryserver.v8',
           buildername='v8_linux_chromium_gn_rel') +
     api.properties(revision='22135') +
-    api.override_step_data('read test spec', api.json.output({
-        'V8 Linux GN': {
-          'additional_compile_targets': ['base_unittests'],
-        },
-      })
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'V8 Linux GN': {
+                'additional_compile_targets': ['base_unittests'],
+            },
+        })
     ) +
     suppress_analyze() +
     api.step_data('compile (with patch)', retcode=1)
@@ -616,11 +639,13 @@ def GenTests(api):
       swarm_hashes={}
     ) +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'Linux ChromiumOS Tests (1)': {
-          'gtest_tests': ['base_unittests'],
-        },
-      })
+    api.override_step_data(
+        'read test spec (chromium.chromiumos.json)',
+        api.json.output({
+            'Linux ChromiumOS Tests (1)': {
+                'gtest_tests': ['base_unittests'],
+            },
+        })
     ) +
     suppress_analyze() +
     api.override_step_data(
@@ -636,7 +661,8 @@ def GenTests(api):
     api.test('no_compile_because_of_analyze') +
     props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({}))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)', api.json.output({}))
   )
 
   # Verifies analyze skips projects other than src.
@@ -645,7 +671,8 @@ def GenTests(api):
     props(buildername='linux_chromium_rel_ng') +
     props(patch_project='v8') +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({}))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)', api.json.output({}))
   )
 
   # This should result in a compile.
@@ -653,7 +680,8 @@ def GenTests(api):
     api.test('compile_because_of_analyze_matching_exclusion') +
     props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({})) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)', api.json.output({})) +
     suppress_analyze()
   )
 
@@ -662,7 +690,8 @@ def GenTests(api):
     api.test('compile_because_of_analyze') +
     props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({})) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)', api.json.output({})) +
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
@@ -712,11 +741,13 @@ def GenTests(api):
       'compile_because_of_analyze_with_filtered_compile_targets_exclude_all') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'Linux Tests': {
-          'gtest_tests': ['base_unittests'],
-        },
-      })
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': ['base_unittests'],
+            },
+        })
     ) +
     api.override_step_data(
       'analyze',
@@ -732,11 +763,13 @@ def GenTests(api):
       'analyze_finds_invalid_target') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'Linux Tests': {
-          'gtest_tests': ['base_unittests'],
-        },
-      })
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': ['base_unittests'],
+            },
+        })
     ) +
     api.override_step_data(
       'analyze',

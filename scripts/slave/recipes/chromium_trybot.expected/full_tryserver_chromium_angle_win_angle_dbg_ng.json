@@ -233,7 +233,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec",
+    "name": "read test spec (chromium.gpu.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",

@@ -132,16 +132,21 @@ def GenTests(api):
         else:
           builders_with_tests = [buildername]
 
-        test += api.override_step_data('read test spec', api.json.output({
-            b: {
-            'gtest_tests': [
-              {
-                'test': 'browser_tests',
-                'swarming': {'can_use_on_swarming_builders': True},
-              },
-            ],
-          } for b in builders_with_tests
-        }))
+        test_spec_name = bot_config.get('testing', {}).get(
+            'test_spec_file', mastername + '.json')
+        test += api.override_step_data(
+            'read test spec (%s)' % test_spec_name,
+            api.json.output({
+                b: {
+                    'gtest_tests': [
+                        {
+                            'test': 'browser_tests',
+                            'swarming': {'can_use_on_swarming_builders': True},
+                        },
+                    ],
+                } for b in builders_with_tests
+          })
+      )
       yield test
 
   yield (
@@ -150,19 +155,22 @@ def GenTests(api):
                            buildername='Linux Tests',
                            parent_buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'gtest_tests': [
-          'base_unittests',
-          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
-          {
-              'test': 'content_unittests',
-              'name': 'renamed_content_unittests',
-              'use_xvfb': False,
-          },
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+              'gtest_tests': [
+                'base_unittests',
+                {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
+                {
+                    'test': 'content_unittests',
+                    'name': 'renamed_content_unittests',
+                    'use_xvfb': False,
+                },
+              ],
+            },
+        })
+    )
   )
 
   yield (
@@ -170,14 +178,17 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'gtest_tests': [
-          {'test': 'browser_tests',
-           'swarming': {'can_use_on_swarming_builders': True}},
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {'test': 'browser_tests',
+                     'swarming': {'can_use_on_swarming_builders': True}},
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -189,29 +200,32 @@ def GenTests(api):
       'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('mac', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Mac10.9 Tests': {
-        'gtest_tests': [
-          {
-            'test': 'gl_tests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'dimension_sets': [
-                {
-                  'gpu': '8086:0a2e',  # Intel Iris
-                  'hidpi': '0',
-                  'os': 'Mac-10.10',
-                }, {
-                  'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
-                  'hidpi': '1',
-                  'os': 'Mac-10.9',
-                },
-              ],
+    api.override_step_data(
+        'read test spec (chromium.mac.json)',
+        api.json.output({
+            'Mac10.9 Tests': {
+                'gtest_tests': [
+                    {
+                        'test': 'gl_tests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    'gpu': '8086:0a2e',  # Intel Iris
+                                    'hidpi': '0',
+                                    'os': 'Mac-10.10',
+                                }, {
+                                    'gpu': '10de:0fe9',  # NVIDIA GeForce GT750M
+                                    'hidpi': '1',
+                                    'os': 'Mac-10.9',
+                                },
+                            ],
+                        },
+                    },
+                ],
             },
-          },
-        ],
-      },
-    }))
+        })
+    )
   )
 
   yield (
@@ -222,19 +236,24 @@ def GenTests(api):
     api.properties(swarm_hashes={
       'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'gtest_tests': [
-          {
-            'test': 'tab_capture_end2end_tests',
-            'override_compile_targets': [ 'tab_capture_end2end_tests_run' ],
-            'swarming': {
-              'can_use_on_swarming_builders': True,
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                        'test': 'tab_capture_end2end_tests',
+                        'override_compile_targets': [
+                            'tab_capture_end2end_tests_run'
+                        ],
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                        },
+                    },
+                ],
             },
-          },
-        ],
-      },
-    }))
+        })
+    )
   )
 
   yield (
@@ -242,16 +261,19 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-          },
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                    },
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -263,23 +285,28 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'args': ['--correct-common-arg'],
-            'precommit_args': ['--SHOULD-NOT-BE-PRESENT-DURING-THE-RUN'],
-            'non_precommit_args': [
-              '--these-args-should-be-present',
-              '--test-machine-name=\"${buildername}\"',
-              '--build-revision=\"${got_revision}\"',
-            ],
-          },
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'args': ['--correct-common-arg'],
+                        'precommit_args': [
+                            '--SHOULD-NOT-BE-PRESENT-DURING-THE-RUN'
+                        ],
+                        'non_precommit_args': [
+                            '--these-args-should-be-present',
+                            '--test-machine-name=\"${buildername}\"',
+                            '--build-revision=\"${got_revision}\"',
+                        ],
+                    },
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -291,16 +318,19 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-          },
-        ],
-      },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                    },
+                ],
+            },
+        })
+    ) +
     api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=False,
@@ -313,17 +343,23 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'override_compile_targets': ['abc', 'telemetry_gpu_unittests_run'],
-          },
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'override_compile_targets': [
+                            'abc',
+                            'telemetry_gpu_unittests_run'
+                        ],
+                    },
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -331,17 +367,20 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -350,18 +389,24 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-            'override_compile_targets': ['telemetry_gpu_unittests_run', 'a'],
-          },
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {'can_use_on_swarming_builders': True},
+                        'override_compile_targets': [
+                            'telemetry_gpu_unittests_run',
+                            'a'
+                        ],
+                    },
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -373,17 +418,20 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -395,20 +443,23 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'shards': 2,
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                        },
+                    },
+                ],
             },
-          },
-        ],
-      },
-    })) +
+        })
+    ) +
     api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
@@ -425,20 +476,23 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'shards': 2,
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                        },
+                    },
+                ],
             },
-          },
-        ],
-      },
-    })) +
+        })
+    ) +
     api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
@@ -455,20 +509,23 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'shards': 2,
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                        },
+                    },
+                ],
             },
-          },
-        ],
-      },
-    })) +
+        })
+    ) +
     api.override_step_data(
       'telemetry_gpu_unittests on Ubuntu-12.04',
       api.test_utils.canned_isolated_script_output(
@@ -487,25 +544,28 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'dimension_sets': [
-                {
-                  'gpu': '10de:104a',  # NVIDIA GeForce GT 610
-                  'os': 'Linux',
-                },
-              ],
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+                                    'os': 'Linux',
+                                },
+                            ],
+                        },
+                    },
+                ],
             },
-          },
-        ],
-      },
-    }))
+        })
+    )
   )
 
   yield (
@@ -517,30 +577,33 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('mac', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Mac10.9 Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'dimension_sets': [
-                {
-                  'gpu': '8086:0a2e',  # Intel Iris
-                  'hidpi': '0',
-                  'os': 'Mac-10.10',
-                }, {
-                  'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
-                  'hidpi': '1',
-                  'os': 'Mac-10.9',
-                },
-              ],
+    api.override_step_data(
+        'read test spec (chromium.mac.json)',
+        api.json.output({
+            'Mac10.9 Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    'gpu': '8086:0a2e',  # Intel Iris
+                                    'hidpi': '0',
+                                    'os': 'Mac-10.10',
+                                }, {
+                                    'gpu': '10de:0fe9',  # NVIDIA GeForce GT750M
+                                    'hidpi': '1',
+                                    'os': 'Mac-10.9',
+                                },
+                            ],
+                        },
+                    },
+                ],
             },
-          },
-        ],
-      },
-    }))
+        })
+    )
   )
 
   yield (
@@ -552,31 +615,37 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('win', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Win7 Tests (1)': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'dimension_sets': [
-                {
-                  'gpu': '10de:104a',  # NVIDIA GeForce GT 610
-                  'os': 'Windows',
-                }, {
-                  'gpu': '1002:6779',  # AMD Radeon HD 6450
-                  'os': 'Windows',
-                }, {
-                  'gpu': '15ad:0405',  # VMWare SVGA II Adapter
-                  'os': 'Windows',
-                },
-              ],
+    api.override_step_data(
+        'read test spec (chromium.win.json)',
+        api.json.output({
+            'Win7 Tests (1)': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    # NVIDIA GeForce GT 610
+                                    'gpu': '10de:104a',
+                                    'os': 'Windows',
+                                }, {
+                                    # AMD Radeon HD 6450
+                                    'gpu': '1002:6779',
+                                    'os': 'Windows',
+                                }, {
+                                    # VMWare SVGA II Adapter
+                                    'gpu': '15ad:0405',
+                                    'os': 'Windows',
+                                },
+                            ],
+                        },
+                    },
+                ],
             },
-          },
-        ],
-      },
-    }))
+        })
+    )
   )
 
   yield (
@@ -588,24 +657,27 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('win', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Win7 Tests (1)': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'dimension_sets': [
-                {
-                  'os': 'Windows',
-                },
-              ],
+    api.override_step_data(
+        'read test spec (chromium.win.json)',
+        api.json.output({
+            'Win7 Tests (1)': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                  'os': 'Windows',
+                                },
+                            ],
+                        },
+                    },
+                ],
             },
-          },
-        ],
-      },
-    }))
+        })
+    )
   )
 
   yield (
@@ -617,17 +689,20 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-        ],
-      },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
     api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
@@ -644,17 +719,20 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-        ],
-      },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
     api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
@@ -672,17 +750,20 @@ def GenTests(api):
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'isolated_scripts': [
-          {
-            'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-        ],
-      },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
     api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
@@ -695,54 +776,64 @@ def GenTests(api):
     api.test('dynamic_android_cloud_gtest') +
     api.properties.generic(mastername='chromium.fyi',
                            buildername='Android Cloud Tests') +
-    api.override_step_data('read test spec', api.json.output({
-      'Android Cloud Tests': {
-        'gtest_tests': [
-          {
-            'args': [
-              '--isolate-file-path=src/base/base_unittests.isolate',
-            ],
-            'test': 'base_unittests',
-          },
-        ],
-      }
-    })))
+    api.override_step_data(
+        'read test spec (chromium.fyi.json)',
+        api.json.output({
+            'Android Cloud Tests': {
+                'gtest_tests': [
+                    {
+                      'args': [
+                          '--isolate-file-path=src/base/base_unittests.isolate',
+                      ],
+                      'test': 'base_unittests',
+                    },
+                ],
+            }
+        })
+    )
+  )
 
   yield (
     api.test('dynamic_instrumentation_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Tests',
                            parent_buildername='Android Builder') +
-    api.override_step_data('read test spec', api.json.output({
-      'Android Tests': {
-        'instrumentation_tests': [
-          {
-            'test': 'ChromePublicTest',
-            'test_apk': 'one_apk',
-            'apk_under_test': 'second_apk',
-            'additional_apks': [
-              'another_apk',
-              'omg_so_many_apks',
-            ]
-          }
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Android Tests': {
+                'instrumentation_tests': [
+                    {
+                        'test': 'ChromePublicTest',
+                        'test_apk': 'one_apk',
+                        'apk_under_test': 'second_apk',
+                        'additional_apks': [
+                            'another_apk',
+                            'omg_so_many_apks',
+                        ]
+                    }
+                ],
+            },
+        })
+    )
   )
 
   yield (
     api.test('dynamic_instrumentation_nodefault_build') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Builder') +
-    api.override_step_data('read test spec', api.json.output({
-      'Android Tests': {
-        'instrumentation_tests': [
-          {
-            'test': 'blimp_test_apk',
-          }
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Android Tests': {
+                'instrumentation_tests': [
+                    {
+                        'test': 'blimp_test_apk',
+                    }
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -750,15 +841,18 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Tests',
                            parent_buildername='Android Builder') +
-    api.override_step_data('read test spec', api.json.output({
-      'Android Tests': {
-        'instrumentation_tests': [
-          {
-            'test': 'blimp_test_apk',
-          }
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Android Tests': {
+                'instrumentation_tests': [
+                    {
+                        'test': 'blimp_test_apk',
+                    }
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -766,50 +860,58 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Tests',
                            parent_buildername='Android Builder') +
-    api.override_step_data('read test spec', api.json.output({
-      'Android Tests': {
-        'instrumentation_tests': [
-          {
-            'test': 'chrome_public_test',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'dimension_sets': [
-                {
-                  'build.id': 'KTU84P',
-                  'product.board': 'hammerhead',
-                },
-              ],
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Android Tests': {
+                'instrumentation_tests': [
+                    {
+                        'test': 'chrome_public_test',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    'build.id': 'KTU84P',
+                                    'product.board': 'hammerhead',
+                                },
+                            ],
+                        },
+                    }
+                ],
             },
-          }
-        ],
-      },
-    }))
+        })
+    )
   )
 
   yield (
     api.test('dynamic_swarmed_gn_instrumentation_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Builder') +
-    api.override_step_data('read test spec', api.json.output({
-      'Android Tests': {
-        'gtest_tests': [
-          {
-            'test': 'chrome_public_test_apk',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'dimension_sets': [
-                {
-                  'build.id': 'KTU84P',
-                  'product.board': 'hammerhead',
-                },
-              ],
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Android Tests': {
+                'gtest_tests': [
+                    {
+                        'test': 'chrome_public_test_apk',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    'build.id': 'KTU84P',
+                                    'product.board': 'hammerhead',
+                                },
+                            ],
+                        },
+                        'override_compile_targets': [
+                            'chrome_public_test_apk'
+                         ],
+                        'override_isolate_target': 'chrome_public_test_apk',
+                    }
+                ],
             },
-            'override_compile_targets': [ 'chrome_public_test_apk' ],
-            'override_isolate_target': 'chrome_public_test_apk',
-          }
-        ],
-      },
-    }))
+        })
+    )
   )
 
   yield (
@@ -817,21 +919,24 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.fyi',
                            buildername='Android Cloud Tests',
                            parent_buildername='Android Builder') +
-    api.override_step_data('read test spec', api.json.output({
-      'Android Cloud Tests': {
-        'instrumentation_tests': [
-          {
-            'test': 'ChromePublicTest',
-            'test_apk': 'one_apk',
-            'apk_under_test': 'second_apk',
-            'additional_apks': [
-              'another_apk',
-              'omg_so_many_apks',
-            ]
-          }
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.fyi.json)',
+        api.json.output({
+            'Android Cloud Tests': {
+                'instrumentation_tests': [
+                    {
+                        'test': 'ChromePublicTest',
+                        'test_apk': 'one_apk',
+                        'apk_under_test': 'second_apk',
+                        'additional_apks': [
+                            'another_apk',
+                            'omg_so_many_apks',
+                        ]
+                    }
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -839,16 +944,19 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.android',
                            buildername='Lollipop Low-end Tester',
                            parent_buildername='Android arm Builder (dbg)') +
-    api.override_step_data('read test spec', api.json.output({
-      'Lollipop Low-end Tester': {
-        'instrumentation_tests': [
-          {
-            'test': 'ChromePublicTest',
-            'timeout_scale': 2,
-          }
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.android.json)',
+        api.json.output({
+            'Lollipop Low-end Tester': {
+                'instrumentation_tests': [
+                    {
+                      'test': 'ChromePublicTest',
+                      'timeout_scale': 2,
+                    }
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -856,15 +964,18 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Tests',
                            parent_buildername='Android Builder') +
-    api.override_step_data('read test spec', api.json.output({
-      'Android Tests': {
-        'junit_tests': [
-          {
-            'test': 'base_junit_tests',
-          },
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Android Tests': {
+                'junit_tests': [
+                    {
+                        'test': 'base_junit_tests',
+                    },
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -872,14 +983,21 @@ def GenTests(api):
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'gtest_tests': [
-          'base_unittests',
-          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    'base_unittests',
+                    {
+                        'test': 'browser_tests',
+                        'shard_index': 0,
+                        'total_shards': 2
+                    },
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -888,14 +1006,21 @@ def GenTests(api):
                            buildername='Win7 Tests (1)',
                            parent_buildername='Win Builder') +
     api.platform('win', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Win7 Tests (1)': {
-        'gtest_tests': [
-          'aura_unittests',
-          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.win.json)',
+        api.json.output({
+            'Win7 Tests (1)': {
+                'gtest_tests': [
+                    'aura_unittests',
+                    {
+                        'test': 'browser_tests',
+                        'shard_index': 0,
+                        'total_shards': 2
+                    },
+                ],
+            },
+        })
+    )
   )
 
   # Tests switching on asan and swiching off lsan for sandbox tester.
@@ -905,13 +1030,16 @@ def GenTests(api):
                            buildername='Linux ASan Tests (sandboxed)',
                            parent_buildername='Linux ASan LSan Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux ASan Tests (sandboxed)': {
-        'gtest_tests': [
-          'browser_tests',
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.memory.json)',
+        api.json.output({
+            'Linux ASan Tests (sandboxed)': {
+                'gtest_tests': [
+                    'browser_tests',
+                ],
+            },
+        })
+    )
   )
 
   # Tests that the memory builder is using the correct compile targets.
@@ -923,13 +1051,16 @@ def GenTests(api):
     api.platform('linux', 64) +
     # The builder should build 'browser_tests', because there exists a child
     # tester that uses that test.
-    api.override_step_data('read test spec', api.json.output({
-      'Linux ASan Tests (sandboxed)': {
-        'gtest_tests': [
-          'browser_tests',
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.memory.json)',
+        api.json.output({
+            'Linux ASan Tests (sandboxed)': {
+                'gtest_tests': [
+                    'browser_tests',
+                ],
+            },
+        })
+    )
   )
 
   # Tests that the memory mac tester is using the correct test flags.
@@ -940,13 +1071,16 @@ def GenTests(api):
         buildername='Mac ASan 64 Tests (1)',
         parent_buildername='Mac ASan 64 Builder') +
     api.platform('mac', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Mac ASan 64 Tests (1)': {
-        'gtest_tests': [
-          'browser_tests',
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.memory.json)',
+        api.json.output({
+            'Mac ASan 64 Tests (1)': {
+                'gtest_tests': [
+                    'browser_tests',
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -955,12 +1089,15 @@ def GenTests(api):
                            buildername='Linux TSan Tests',
                            parent_buildername='Chromium Linux TSan Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux TSan Tests': {
-        'compile_targets': ['base_unittests'],
-        'gtest_tests': ['base_unittests'],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.memory.fyi.json)',
+        api.json.output({
+            'Linux TSan Tests': {
+                'compile_targets': ['base_unittests'],
+                'gtest_tests': ['base_unittests'],
+            },
+        })
+    )
   )
 
   yield (
@@ -969,12 +1106,15 @@ def GenTests(api):
                            buildername='Linux MSan Tests',
                            parent_buildername='Chromium Linux MSan Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux MSan Tests': {
-        'compile_targets': ['base_unittests'],
-        'gtest_tests': ['base_unittests'],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.memory.fyi.json)',
+        api.json.output({
+            'Linux MSan Tests': {
+                'compile_targets': ['base_unittests'],
+                'gtest_tests': ['base_unittests'],
+            },
+        })
+    )
   )
 
   yield (
@@ -984,25 +1124,22 @@ def GenTests(api):
                            parent_buildername='Linux Builder',
                            buildnumber=0) +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'gtest_tests': [
-          'base_unittests',
-          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    'base_unittests',
+                    {
+                        'test': 'browser_tests',
+                        'shard_index': 0,
+                        'total_shards': 2
+                    },
+                ],
+            },
+        })
+    )
   )
-
-  # FIXME(iannucci): Make this test work.
-  #yield (
-  #  api.test('one_failure_keeps_going') +
-  #  api.properties.generic(mastername='chromium.linux',
-  #                         buildername='Linux Tests',
-  #                         parent_buildername='Linux Builder') +
-  #  api.platform('linux', 64) +
-  #  api.step_data('mojo_python_tests', retcode=1)
-  #)
 
   yield (
     api.test('one_failure_keeps_going_dynamic_tests') +
@@ -1010,14 +1147,21 @@ def GenTests(api):
                            buildername='Linux Tests',
                            parent_buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'gtest_tests': [
-          'base_unittests',
-          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
-        ],
-      },
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    'base_unittests',
+                    {
+                        'test': 'browser_tests',
+                        'shard_index': 0,
+                        'total_shards': 2
+                    },
+                ],
+            },
+        })
+    ) +
     api.step_data('base_unittests', retcode=1)
   )
 
@@ -1040,17 +1184,20 @@ def GenTests(api):
                            buildername='Linux Tests',
                            parent_buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'scripts': [
-          {
-            'name': 'media_perftests',
-            'script': 'gtest_perf_test.py',
-            'args': ['media_perftests', '--single-process-tests']
-          },
-        ],
-      },
-    }))
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'scripts': [
+                    {
+                        'name': 'media_perftests',
+                        'script': 'gtest_perf_test.py',
+                        'args': ['media_perftests', '--single-process-tests']
+                    },
+                ],
+            },
+        })
+    )
   )
 
   yield (
@@ -1059,16 +1206,19 @@ def GenTests(api):
                            buildername='Linux Tests',
                            parent_buildername='Linux Builder') +
     api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux Tests': {
-        'scripts': [
-          {
-            'name': 'test_script_with_broken_tests',
-            'script': 'test_script_with_broken_tests.py'
-          }
-        ]
-      }
-    })) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'scripts': [
+                    {
+                      'name': 'test_script_with_broken_tests',
+                      'script': 'test_script_with_broken_tests.py'
+                    }
+                ]
+            }
+        })
+    ) +
     api.override_step_data('test_script_with_broken_tests',
                            api.json.output({
       'valid': True,

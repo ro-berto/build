@@ -239,7 +239,7 @@
       "[BUILDER_CACHE]/checkouts/Linux_Kitchen__kitchen_run_/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec",
+    "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/checkouts/Linux_Kitchen__kitchen_run_/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",

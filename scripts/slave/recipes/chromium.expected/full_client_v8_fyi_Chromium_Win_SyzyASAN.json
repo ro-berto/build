@@ -179,7 +179,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\client.v8.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec",
+    "name": "read test spec (client.v8.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\client.v8.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",

@@ -203,7 +203,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/bot_update.always_on.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec",
+    "name": "read test spec (bot_update.always_on.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/bot_update.always_on.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",

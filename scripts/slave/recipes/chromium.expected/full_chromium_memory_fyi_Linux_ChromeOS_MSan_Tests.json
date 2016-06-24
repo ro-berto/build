@@ -215,7 +215,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec",
+    "name": "read test spec (chromium.memory.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

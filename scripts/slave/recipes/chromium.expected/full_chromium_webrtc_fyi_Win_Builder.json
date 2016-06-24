@@ -233,7 +233,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.webrtc.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec",
+    "name": "read test spec (chromium.webrtc.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.webrtc.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",

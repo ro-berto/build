@@ -382,7 +382,7 @@ def GenTests(api):
           'additional_build_parameters': {
               'compile_targets': None
       }}) +
-      api.override_step_data('test r1.read test spec',
+      api.override_step_data('test r1.read test spec (chromium.linux.json)',
                              api.json.output({
                                  'Linux Builder': {
                                      'additional_compile_targets': [
@@ -491,7 +491,7 @@ def GenTests(api):
       props(use_analyze=True,
             buildbucket=json.dumps({'build': {'id': 'id1'}})) +
       simulated_buildbucket_output({}) +
-      api.override_step_data('test r1.read test spec',
+      api.override_step_data('test r1.read test spec (chromium.linux.json)',
                              api.json.output({
                                  'Linux Builder': {
                                      'additional_compile_targets': [

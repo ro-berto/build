@@ -245,7 +245,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     test_spec_path = api.path['checkout'].join('testing', 'buildbot',
                                                test_spec_file)
     test_spec_result = api.json.read(
-        'read test spec',
+        'read test spec (%s)' % api.path.basename(test_spec_path),
         test_spec_path,
         step_test_data=lambda: api.json.test_api.output({}))
     test_spec_result.presentation.step_text = 'path: %s' % test_spec_path

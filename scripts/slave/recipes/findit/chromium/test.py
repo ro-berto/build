@@ -421,36 +421,42 @@ def GenTests(api):
       api.test('nonexistent_test_step_skipped') +
       props({'newly_added_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Win7 Tests (1)': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      }))
+      api.override_step_data(
+          'test r1.read test spec (chromium.win.json)',
+          api.json.output({
+              'Win7 Tests (1)': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      )
   )
 
   yield (
       api.test('unaffected_test_skipped_by_analyze') +
       props({'affected_tests': ['Test.One'], 'unaffected_tests': ['Test.Two']},
             'win', 'Win7 Tests (1)', use_analyze=True) +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Win7 Tests (1)': {
-              'gtest_tests': [
-                  {
-                    'test': 'affected_tests',
-                    'swarming': {'can_use_on_swarming_builders': True},
-                  },
-                  {
-                    'test': 'unaffected_tests',
-                    'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.win.json)',
+          api.json.output({
+              'Win7 Tests (1)': {
+                  'gtest_tests': [
+                      {
+                        'test': 'affected_tests',
+                        'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                      {
+                        'test': 'unaffected_tests',
+                        'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'test r1.analyze',
           api.json.output({
@@ -469,22 +475,25 @@ def GenTests(api):
       api.test('test_without_targets_not_skipped') +
       props({'unaffected_tests': ['Test.One'], 'checkperms': []},
             'win', 'Win7 Tests (1)', use_analyze=True) +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Win7 Tests (1)': {
-              'gtest_tests': [
-                  {
-                    'test': 'unaffected_tests',
-                    'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-              'scripts': [
-                  {
-                      'name': 'checkperms',
-                      'script': 'checkperms.py'
-                  },
-              ]
-          },
-      })) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.win.json)',
+          api.json.output({
+              'Win7 Tests (1)': {
+                  'gtest_tests': [
+                      {
+                        'test': 'unaffected_tests',
+                        'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+                  'scripts': [
+                      {
+                          'name': 'checkperms',
+                          'script': 'checkperms.py'
+                      },
+                  ]
+              },
+          })
+      ) +
       api.override_step_data(
           'test r1.analyze',
           api.json.output({
@@ -499,16 +508,19 @@ def GenTests(api):
       api.test('all_test_failed') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Win7 Tests (1)': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.win.json)',
+          api.json.output({
+              'Win7 Tests (1)': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'test r1.gl_tests (r1) on Windows-7-SP1',
           simulated_gtest_output(
@@ -520,16 +532,19 @@ def GenTests(api):
       api.test('all_test_passed') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Win7 Tests (1)': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.win.json)',
+          api.json.output({
+              'Win7 Tests (1)': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'test r1.gl_tests (r1) on Windows-7-SP1',
           simulated_gtest_output(
@@ -541,16 +556,19 @@ def GenTests(api):
       api.test('only_one_test_passed') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Win7 Tests (1)': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.win.json)',
+          api.json.output({
+              'Win7 Tests (1)': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'test r1.gl_tests (r1) on Windows-7-SP1',
           simulated_gtest_output(
@@ -562,32 +580,38 @@ def GenTests(api):
   yield (
       api.test('compile_skipped') +
       props({'checkperms': []}, 'win', 'Win7 Tests (1)') +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Win7 Tests (1)': {
-              'scripts': [
-                  {
-                      'name': 'checkperms',
-                      'script': 'checkperms.py'
-                  },
-              ]
-          },
-      }))
+      api.override_step_data(
+          'test r1.read test spec (chromium.win.json)',
+          api.json.output({
+              'Win7 Tests (1)': {
+                  'scripts': [
+                      {
+                          'name': 'checkperms',
+                          'script': 'checkperms.py'
+                      },
+                  ]
+              },
+          })
+      )
   )
 
   yield (
       api.test('none_swarming_tests') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Win7 Tests (1)': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': False},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.win.json)',
+          api.json.output({
+              'Win7 Tests (1)': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': False},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
           simulated_gtest_output(
@@ -599,16 +623,19 @@ def GenTests(api):
   yield (
       api.test('swarming_tests') +
       props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'test r1.gl_tests (r1) on Mac-10.9',
           simulated_gtest_output(passed_test_names=['Test.One'])
@@ -620,26 +647,32 @@ def GenTests(api):
       props(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
-      api.override_step_data('test r2.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r3.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r2.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r3.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -658,46 +691,58 @@ def GenTests(api):
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r6']) +
-      api.override_step_data('test r2.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r3.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r5.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r6.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r2.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r3.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r5.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r6.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -722,36 +767,45 @@ def GenTests(api):
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r6']) +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r5.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r6.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r5.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r6.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -774,62 +828,74 @@ def GenTests(api):
           'mac', 'Mac10.9 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3','r6']) +
-      api.override_step_data('test r2.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-                  {
-                      'test': 'browser_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r3.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-                  {
-                      'test': 'browser_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r5.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-                  {
-                      'test': 'browser_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r6.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-                  {
-                      'test': 'browser_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r2.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                      {
+                          'test': 'browser_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r3.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                      {
+                          'test': 'browser_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r5.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                      {
+                          'test': 'browser_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r6.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                      {
+                          'test': 'browser_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -858,56 +924,70 @@ def GenTests(api):
           'mac', 'Mac10.9 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r5']) +
-      api.override_step_data('test r2.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r3.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r4.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r5.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r6.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r2.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r3.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r4.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r5.read test spec (chromium.mac.json)', api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r6.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -938,36 +1018,45 @@ def GenTests(api):
           'mac', 'Mac10.9 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r4']) +
-      api.override_step_data('test r2.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r3.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r4.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r2.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r3.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r4.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -986,16 +1075,19 @@ def GenTests(api):
   yield (
       api.test('record_infra_failure') +
       props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
-      api.override_step_data('test r1.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'test r1.compile',
           api.json.output({
@@ -1022,36 +1114,45 @@ def GenTests(api):
                   'gl_tests': ['Test.One']
               }
           }}) +
-      api.override_step_data('test r2.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r3.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r4.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r2.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r3.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r4.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -1072,26 +1173,32 @@ def GenTests(api):
       props(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=True,
            good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
-      api.override_step_data('test r2.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
-      api.override_step_data('test r3.read test spec', api.json.output({
-          'Mac10.9 Tests': {
-              'gtest_tests': [
-                  {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                  },
-              ],
-          },
-      })) +
+      api.override_step_data(
+          'test r2.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r3.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(

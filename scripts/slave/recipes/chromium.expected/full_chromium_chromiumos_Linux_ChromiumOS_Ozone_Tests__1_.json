@@ -216,7 +216,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.chromiumos.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec",
+    "name": "read test spec (chromium.chromiumos.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.chromiumos.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

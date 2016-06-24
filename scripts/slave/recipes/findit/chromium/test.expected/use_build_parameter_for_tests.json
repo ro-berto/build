@@ -236,7 +236,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec",
+    "name": "read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -480,7 +480,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
-    "name": "test r2.read test spec",
+    "name": "test r2.read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json@@@",
@@ -1027,7 +1027,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
-    "name": "test r3.read test spec",
+    "name": "test r3.read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json@@@",
@@ -1574,7 +1574,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
-    "name": "test r4.read test spec",
+    "name": "test r4.read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mac.json@@@",
