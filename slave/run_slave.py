@@ -57,7 +57,7 @@ def IssueReboot():
                               'for %s' % sys.platform)
 
 
-def SigTerm(*args):
+def SigTerm(*_args):
   """Receive a SIGTERM and do nothing."""
   Log('SigTerm: Received SIGTERM, doing nothing.')
 
@@ -434,7 +434,6 @@ def main():
   os.environ['PAGER'] = 'cat'
 
   # Platform-specific initialization.
-
   if sys.platform.startswith('win'):
     # list of all variables that we want to keep
     env_var = [
@@ -484,7 +483,8 @@ def main():
 
     remove_all_vars_except(os.environ, env_var)
 
-    # Extend the env variables with the chrome-specific settings.
+    # Extend the env variables with the chrome-specific settings. Tailor the
+    # slave process' (and derivative tasks') PATH environment variable.
     slave_path = [
         depot_tools,
         # Reuse the python executable used to start this script.
@@ -497,6 +497,13 @@ def main():
         # TODO(hinoka): Remove this when its no longer needed crbug.com/481695
         os.path.join(os.environ['SYSTEMDRIVE'], os.sep, 'cmake', 'bin'),
     ]
+
+    # Include Windows PowerShell in PATH, if defined.
+    def which_path(cmd):
+      path = chromium_utils.Which(cmd)
+      return ([os.path.dirname(os.path.abspath(path))] if path else [])
+    slave_path += which_path('powershell.exe')
+
     # build_internal/tools contains tools we can't redistribute.
     tools = os.path.join(ROOT_DIR, 'build_internal', 'tools')
     if os.path.isdir(tools):
