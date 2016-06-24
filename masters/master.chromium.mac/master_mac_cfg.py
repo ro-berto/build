@@ -17,8 +17,8 @@ def Update(config, active_master, c):
                             builderNames=[
           'Mac Builder',
           'Mac Builder (dbg)',
-          'Mac GN',
-          'Mac GN (dbg)',
+          'Mac GYP',
+          'Mac GYP (dbg)',
       ]),
   ])
   specs = [
@@ -28,8 +28,8 @@ def Update(config, active_master, c):
     {'name': 'Mac10.11 Tests'},
     {'name': 'Mac Builder (dbg)'},
     {'name': 'Mac10.9 Tests (dbg)'},
-    {'name': 'Mac GN'},
-    {'name': 'Mac GN (dbg)'},
+    {'name': 'Mac GYP'},
+    {'name': 'Mac GYP (dbg)'},
   ]
 
   c['builders'].extend([

@@ -149,6 +149,7 @@ SPEC = {
       'enable_swarming': True,
     },
     'Win8 Aura': {
+      # TODO(dpranke): Remove after masters have restarted.
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
@@ -171,7 +172,29 @@ SPEC = {
         'platform': 'win',
       },
     },
-
+    'Win8 GYP': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'win',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'cpu': 'x86-64',
+        'os': 'Windows-8.1-SP0',
+      },
+      'testing': {
+        'platform': 'win',
+      },
+    },
     'Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
@@ -230,6 +253,26 @@ SPEC = {
       'enable_swarming': True,
     },
     'Win8 GN (dbg)': {
+      # TODO(dpranke): Remove after masters have restarted.
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'win',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Win8 GYP (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',

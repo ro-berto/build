@@ -102,6 +102,25 @@ SPEC = {
       },
     },
     'Mac GN': {
+      # TODO(dpranke): Remove after builders have restarted.
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'mac',
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+    'Mac GYP': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'force_mac_toolchain'],
       'gclient_config': 'chromium',
@@ -165,6 +184,25 @@ SPEC = {
       },
     },
     'Mac GN (dbg)': {
+      # TODO(dpranke): Remove after builders have restarted.
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'mac',
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+    'Mac GYP (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'force_mac_toolchain'],
       'gclient_config': 'chromium',
