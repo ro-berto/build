@@ -277,3 +277,13 @@ def GenTests(api):
     api.override_step_data('ssl tests',
                            api.test_utils.canned_test_output(False))
   )
+
+  yield (
+    api.test('gerrit_cl') +
+    api.platform('linux', 64) +
+    api.properties.tryserver_gerrit(
+        gerrit_host='boringssl-review.googlesource.com',
+        full_project_name='boringssl',
+        mastername='actually-no-master', buildername='linux',
+        slavename='swarming-slave')
+  )
