@@ -175,8 +175,8 @@
   },
   {
     "cmd": [
-      "--use_bootstrap",
       "[TMP_BASE]/recipes_tmp_1/recipes.py",
+      "--use_bootstrap",
       "--package",
       "[TMP_BASE]/roll_build_tmp_2/infra/config/recipes.cfg",
       "autoroll",
