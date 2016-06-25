@@ -47,7 +47,11 @@ def updateText(section):
   else:
     result = []
 
-  section['step'].setText(['<br>'.join(section['step_text'])])
+  section['step'].setText(['<br>'.join(
+      # Do not exclude step, even though it gets repeated in build view,
+      # because waterfall and console views display only step text.
+      [section['name']] +
+      section['step_text'])])
   section['step'].setText2(result + section['step_summary_text'])
 
 
