@@ -7,9 +7,10 @@ from master.factory import commands
 from master.factory.build_factory import BuildFactory
 
 
+# TODO(nodir): restore timeout=1200, https://crbug.com/593891
 def RemoteRunFactory(active_master, repository, recipe,
                      revision='origin/master', factory_properties=None,
-                     timeout=1200, max_time=2400, triggers=None):
+                     timeout=2400, max_time=None, triggers=None):
   """Returns buildbot build factory which runs recipes using recipe engine's
   remote_run command.
 
