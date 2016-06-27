@@ -281,6 +281,7 @@
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "--",
+      "blink_tests",
       "content_browsertests",
       "content_unittests"
     ],
@@ -292,6 +293,81 @@
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\third_party\\WebKit\\Tools\\Scripts\\run-webkit-tests",
+      "--target",
+      "Release",
+      "--results-directory",
+      "[SLAVE_BUILD]\\layout-test-results",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--json-test-results",
+      "/path/to/tmp/json",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "Site Isolation Win",
+      "--step-name",
+      "webkit_tests",
+      "--additional-driver-flag",
+      "--isolate-sites-for-testing=*.is",
+      "--additional-expectations",
+      "src\\third_party\\WebKit\\LayoutTests\\FlagExpectations\\isolate-extensions",
+      "--master-name",
+      "chromium.fyi",
+      "--debug-rwt-logging"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "webkit_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
+      "--results-dir",
+      "[SLAVE_BUILD]\\layout-test-results",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "Site Isolation Win",
+      "--gs-bucket",
+      "gs://chromium-layout-test-archives"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "archive_webkit_tests_results",
+    "~followup_annotations": [
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/Site_Isolation_Win/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/Site_Isolation_Win/571/layout-test-results.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release_x64"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "process_dumps"
   },
   {
     "name": "$result",
