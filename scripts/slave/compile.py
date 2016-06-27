@@ -454,7 +454,6 @@ def main_ninja(options, args):
 
 def get_target_build_dir(args, options):
   """Keep this function in sync with src/build/landmines.py"""
-  assert options.build_tool == 'ninja'
   if chromium_utils.IsLinux() and options.cros_board:
     # When building ChromeOS's Simple Chrome workflow, the output directory
     # has a CROS board name suffix.
@@ -477,6 +476,7 @@ def real_main():
   option_parser.add_option('--mode', default='dev',
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')
+  # TODO(thakis): Remove this once bots no longer pass it in.
   option_parser.add_option('--build-tool', default=None, help='ignored')
   option_parser.add_option('--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
@@ -530,30 +530,10 @@ def real_main():
     options.src_dir = 'src'
   options.src_dir = os.path.abspath(options.src_dir)
 
-  options.build_dir = os.path.abspath(build_directory.GetBuildOutputDirectory(
-        os.path.basename(options.src_dir)))
-
-  if options.build_tool is None:
-    if chromium_utils.IsWindows():
-      main = main_ninja
-      options.build_tool = 'ninja'
-      # TODO(thakis): Merge this with the branch below and simplify.
-    elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-      main = main_ninja
-      options.build_tool = 'ninja'
-    else:
-      print 'Please specify --build-tool.'
-      return 1
-  else:
-    build_tool_map = { 'ninja' : main_ninja }
-    main = build_tool_map.get(options.build_tool)
-    if not main:
-      sys.stderr.write('Unknown build tool %s.\n' % repr(options.build_tool))
-      return 2
-
   options.target_output_dir = get_target_build_dir(args, options)
 
-  return main(options, args)
+  assert options.build_tool in (None, 'ninja')
+  return main_ninja(options, args)
 
 
 if '__main__' == __name__:
