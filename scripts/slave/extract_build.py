@@ -24,8 +24,13 @@ class ExtractHandler(object):
 
 
 class GSHandler(ExtractHandler):
+  def __init__(self, url, archive_name, gsutil_py_path=None):
+    super(GSHandler, self).__init__(url, archive_name)
+    self.gsutil_py_path = gsutil_py_path
+
   def download(self):
-    status = slave_utils.GSUtilCopy(self.url, '.')
+    status = slave_utils.GSUtilCopy(
+        self.url, '.', override_gsutil=[sys.executable, self.gsutil_py_path])
     if 0 != status:
       return False
     try:
@@ -124,7 +129,9 @@ def real_main(options):
     base_url = '/'.join(url.split('/')[:-1] + [archive_name])
 
   if url.startswith('gs://'):
-    handler = GSHandler(url=url, archive_name=archive_name)
+    handler = GSHandler(
+        url=url, archive_name=archive_name,
+        gsutil_py_path=options.gsutil_py_path)
   else:
     handler = WebHandler(url=url, archive_name=archive_name)
 
@@ -235,6 +242,8 @@ def main():
                                  'the revision number for the archive, '
                                  'relative to the src/ dir.'))
   option_parser.add_option('--build-output-dir', help='ignored')
+  option_parser.add_option('--gsutil-py-path',
+                           help='Specify path to gsutil.py script.')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args()

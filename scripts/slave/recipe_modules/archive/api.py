@@ -308,6 +308,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         '--show-path',
         'python',
         self.package_repo_resource('scripts', 'slave', 'extract_build.py'),
+        '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
         '--target', target,
     ]
     if build_archive_url:
