@@ -163,7 +163,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       sanitized_buildername = ''.join(
           c if c.isalnum() else '_' for c in self.m.properties['buildername'])
       checkout_path = builder_cache.join(
-          'checkouts', sanitized_buildername)
+          bot_config.get('checkout_dir', sanitized_buildername))
       self.m.shutil.makedirs('checkout path', checkout_path)
       kwargs['cwd'] = checkout_path
 
