@@ -280,7 +280,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILD]/site_config/.known_devices",
+      "[CACHE]/known_android_devices",
       "/path/to/tmp/"
     ],
     "name": "fix_device_file_format.read_device_file",
@@ -299,7 +299,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
@@ -432,7 +432,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILD]/site_config/.known_devices",
+      "[CACHE]/known_android_devices",
       "/path/to/tmp/"
     ],
     "name": "fix_device_file_format.read_device_file (2)",
@@ -451,7 +451,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
