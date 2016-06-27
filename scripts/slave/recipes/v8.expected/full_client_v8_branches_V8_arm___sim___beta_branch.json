@@ -142,6 +142,64 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::v8]/resources/patch_mb_config.py",
+      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "/path/to/tmp/"
+    ],
+    "name": "patch mb config (fyi)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.v8.branches",
+      "-b",
+      "V8 arm - sim - beta branch",
+      "--config-file",
+      "[mb config]",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "[TMP_BASE]/v8_gn_tmp_1"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files with gn (fyi)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
+      "[TMP_BASE]/v8_gn_tmp_1",
+      "[SLAVE_BUILD]/v8/out/Release",
+      "all",
+      "all"
+    ],
+    "name": "compare build flags (fyi)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "[TMP_BASE]/v8_gn_tmp_1"
+    ],
+    "name": "rmtree [TMP_BASE]/v8_gn_tmp_1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",

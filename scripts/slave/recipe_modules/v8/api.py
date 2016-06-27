@@ -271,9 +271,6 @@ class V8Api(recipe_api.RecipeApi):
 
   def peek_gn(self):
     """Runs gn and compares flags with gyp (fyi only)."""
-    # TODO(machenbach): Whitelist all builders eventually.
-    if 'linux' not in self.m.properties['buildername'].lower():
-      return
     gyp_build_dir = self.m.chromium.c.build_dir.join(
         self.m.chromium.c.build_config_fs)
     with self.m.tempfile.temp_dir('v8_gn') as gn_build_dir:
