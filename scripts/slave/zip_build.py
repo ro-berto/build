@@ -287,7 +287,8 @@ def Archive(options):
       options.src_dir, options.cros_board)
   build_dir = os.path.abspath(os.path.join(build_dir, options.target))
 
-  staging_dir = slave_utils.GetStagingDir(options.src_dir)
+  staging_dir = (options.staging_dir or
+                 slave_utils.GetStagingDir(options.src_dir))
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
 
   if not options.build_revision:
@@ -435,6 +436,8 @@ def main(argv):
                                  'archive urls. If this is omitted then '
                                  'the urls will be emitted as buildbot '
                                  'annotations.'))
+  option_parser.add_option('--staging-dir',
+                           help='Directory path to use for staging the archive')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
