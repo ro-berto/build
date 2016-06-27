@@ -29,8 +29,11 @@ class GSHandler(ExtractHandler):
     self.gsutil_py_path = gsutil_py_path
 
   def download(self):
+    override_gsutil = None
+    if self.gsutil_py_path:
+      override_gsutil = [sys.executable, self.gsutil_py_path]
     status = slave_utils.GSUtilCopy(
-        self.url, '.', override_gsutil=[sys.executable, self.gsutil_py_path])
+        self.url, '.', override_gsutil=override_gsutil)
     if 0 != status:
       return False
     try:
