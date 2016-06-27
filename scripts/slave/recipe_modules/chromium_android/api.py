@@ -344,21 +344,22 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def revert_device_file_format(self):
     # If current device file is jsonified, revert it back to original format.
-    with self.m.step.nest('fix_device_file_format'):
-      file_contents = self.m.file.read(
-          'read_device_file', self.known_devices_file,
-          test_data='device1\ndevice2\ndevice3')
-      try:
-        devices = json.loads(file_contents)
-        self.m.step.active_result.presentation.step_text += (
-            'file format is json, reverting')
-        old_format = '\n'.join(devices)
-        self.m.file.write(
-            'revert_device_file', self.known_devices_file, old_format)
-      except ValueError:
-        # File wasn't json, so no need to revert.
-        self.m.step.active_result.presentation.step_text += (
-            'file format is compatible')
+    if self.m.path.exists(self.known_devices_file):
+      with self.m.step.nest('fix_device_file_format'):
+        file_contents = self.m.file.read(
+            'read_device_file', self.known_devices_file,
+            test_data='device1\ndevice2\ndevice3')
+        try:
+          devices = json.loads(file_contents)
+          self.m.step.active_result.presentation.step_text += (
+              'file format is json, reverting')
+          old_format = '\n'.join(devices)
+          self.m.file.write(
+              'revert_device_file', self.known_devices_file, old_format)
+        except ValueError:
+          # File wasn't json, so no need to revert.
+          self.m.step.active_result.presentation.step_text += (
+              'file format is compatible')
 
   def device_status_check(self, restart_usb=False, **kwargs):
     # TODO(bpastene): Remove once chromium revisions prior to
