@@ -7,6 +7,11 @@ from recipe_engine import recipe_api
 class GomaApi(recipe_api.RecipeApi):
   """GomaApi contains helper functions for using goma."""
 
+  def __init__(self, **kwargs):
+    super(GomaApi, self).__init__(**kwargs)
+    self._goma_dir = None
+    self._goma_started = False
+
   @property
   def service_account_json_path(self):
     if self.m.platform.is_win:
@@ -28,9 +33,40 @@ class GomaApi(recipe_api.RecipeApi):
         ref='release'
         if canary:
           ref='candidate'
-        goma_dir = self.m.path['cache'].join('cipd', 'goma')
-        self.m.cipd.ensure(goma_dir, {goma_package: ref})
-        return goma_dir
+        self._goma_dir = self.m.path['cache'].join('cipd', 'goma')
+        self.m.cipd.ensure(self._goma_dir, {goma_package: ref})
+        return self._goma_dir
       except self.m.step.StepFailure:  # pragma: no cover
         # TODO(phajdan.jr): make failures fatal after experiment.
         return None
+
+  def start(self, env=None, **kwargs):
+    """Start goma compiler_proxy.
+
+    A user MUST execute ensure_goma beforehand.
+    It is user's responsibility to handle failure of starting compiler_proxy.
+    """
+    assert self._goma_dir
+    assert not self._goma_started
+    if not env:
+      env = {}
+    env.update({'GOMA_SERVICE_ACCOUNT_JSON': self.service_account_json_path})
+    self.m.python(
+        name='start_goma',
+        script=self.m.path.join(self._goma_dir, 'goma_ctl.py'),
+        args=['restart'], env=env, **kwargs)
+    self._goma_started = True
+
+  def stop(self, goma_dir=None, **kwargs):
+    """Stop goma compiler_proxy.
+
+    A user MUST execute start beforehand.
+    It is user's responsibility to handle failure of stopping compiler_proxy.
+    """
+    assert self._goma_dir
+    assert self._goma_started
+    self.m.python(
+        name='stop_goma',
+        script=self.m.path.join(self._goma_dir, 'goma_ctl.py'),
+        args=['stop'], **kwargs)
+    self._goma_started = False
