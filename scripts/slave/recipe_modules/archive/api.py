@@ -99,7 +99,6 @@ class ArchiveApi(recipe_api.RecipeApi):
         '--show-path',
         'python',
         self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
-        '--staging-dir', 'chrome_staging',
         '--target', target,
     ]
     if build_url or 'build_archive_url' in self.m.properties:

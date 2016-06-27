@@ -383,8 +383,6 @@
       "--show-path",
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\zip_build.py",
-      "--staging-dir",
-      "chrome_staging",
       "--target",
       "Debug_x64",
       "--build-url",
