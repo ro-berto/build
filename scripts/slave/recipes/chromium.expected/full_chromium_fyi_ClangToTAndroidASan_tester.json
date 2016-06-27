@@ -353,7 +353,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/known_android_devices",
+      "[BUILD]/site_config/.known_devices",
       "/path/to/tmp/"
     ],
     "env": {
@@ -377,7 +377,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[CACHE]/known_android_devices"
+      "[BUILD]/site_config/.known_devices"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
