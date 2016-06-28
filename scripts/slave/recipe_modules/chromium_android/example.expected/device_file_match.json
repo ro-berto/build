@@ -269,24 +269,6 @@
     "name": "authorize_adb_devices"
   },
   {
-    "cmd": [],
-    "name": "fix_device_file_format"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILD]/site_config/.known_devices",
-      "/path/to/tmp/"
-    ],
-    "name": "fix_device_file_format.read_device_file",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@file format is compatible@@@"
-    ]
-  },
-  {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--adb-path",
@@ -296,7 +278,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -419,24 +401,6 @@
     "name": "provision_devices"
   },
   {
-    "cmd": [],
-    "name": "fix_device_file_format (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILD]/site_config/.known_devices",
-      "/path/to/tmp/"
-    ],
-    "name": "fix_device_file_format.read_device_file (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@file format is compatible@@@"
-    ]
-  },
-  {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--adb-path",
@@ -446,7 +410,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

@@ -389,7 +389,7 @@ def GenTests(api):
   yield (api.test('device_file_format_mismatch') +
          properties_for('tester') +
          api.path.exists(
-             api.path['build'].join('site_config', '.known_devices')) +
+             api.path['cache'].join('known_android_devices')) +
          api.override_step_data('fix_device_file_format.read_device_file', 
              api.raw_io.output('["device1", "device2"]')))
 

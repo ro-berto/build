@@ -201,7 +201,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

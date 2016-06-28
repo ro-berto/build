@@ -277,7 +277,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILD]/site_config/.known_devices",
+      "[CACHE]/known_android_devices",
       "/path/to/tmp/"
     ],
     "name": "fix_device_file_format.read_device_file",
@@ -292,7 +292,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "device1\ndevice2",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "name": "fix_device_file_format.revert_device_file",
     "~followup_annotations": [
@@ -309,7 +309,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -440,7 +440,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILD]/site_config/.known_devices",
+      "[CACHE]/known_android_devices",
       "/path/to/tmp/"
     ],
     "name": "fix_device_file_format.read_device_file (2)",
@@ -459,7 +459,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

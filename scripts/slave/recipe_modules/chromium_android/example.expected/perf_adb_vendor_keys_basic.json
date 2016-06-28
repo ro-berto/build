@@ -281,7 +281,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",
@@ -415,7 +415,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[BUILD]/site_config/.adb_key",

@@ -45,8 +45,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   @property
   def known_devices_file(self):
-    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
-    return self.m.path['build'].join('site_config', '.known_devices')
+    return self.m.path['cache'].join('known_android_devices')
 
   @property
   def file_changes_path(self):
