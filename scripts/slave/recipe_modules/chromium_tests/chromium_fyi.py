@@ -2235,7 +2235,55 @@ SPEC = {
       },
     },
 
-    'Linux Kitchen (kitchen_run)': KITCHEN_TEST_SPEC,
-    'Linux Kitchen (annotated_run)': KITCHEN_TEST_SPEC,
+    'Linux remote_run Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'archive_gpu_tests',
+        'chrome_with_codecs'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+    },
+    'Linux remote_run Tester': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'archive_gpu_tests',
+        'chrome_with_codecs'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Linux remote_run Builder',
+      'tests': [
+        steps.GTestTest('base_unittests'),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+        steps.generate_instrumentation_test,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+    },
   },
 }
