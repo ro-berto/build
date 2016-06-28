@@ -247,7 +247,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -698,8 +698,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"test_skia/Ubuntu/def456/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5\", \"tasks\": {\"test_skia/Ubuntu/def456/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--shards",
+      "1",
+      "test_skia/Ubuntu/def456/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",

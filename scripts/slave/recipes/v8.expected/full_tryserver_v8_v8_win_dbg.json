@@ -88,7 +88,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -670,8 +670,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Check/Windows-7-SP1/[dummy has/v8_win_dbg/571\", \"tasks\": {\"Check/Windows-7-SP1/[dummy has/v8_win_dbg/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Windows-7-SP1/[dummy has/v8_win_dbg/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "--shards",
+      "2",
+      "Check/Windows-7-SP1/[dummy has/v8_win_dbg/571"
     ],
     "name": "Check",
     "~followup_annotations": [
@@ -709,8 +710,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Ignition - turbofan/Windows-7-SP1/[dummy has/v8_win_dbg/571\", \"tasks\": {\"Ignition - turbofan/Windows-7-SP1/[dummy has/v8_win_dbg/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Ignition - turbofan/Windows-7-SP1/[dummy has/v8_win_dbg/571"
     ],
     "name": "Ignition - turbofan",
     "~followup_annotations": [
@@ -748,8 +750,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mozilla/Windows-7-SP1/[dummy has/v8_win_dbg/571\", \"tasks\": {\"Mozilla/Windows-7-SP1/[dummy has/v8_win_dbg/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Mozilla/Windows-7-SP1/[dummy has/v8_win_dbg/571"
     ],
     "name": "Mozilla",
     "~followup_annotations": [

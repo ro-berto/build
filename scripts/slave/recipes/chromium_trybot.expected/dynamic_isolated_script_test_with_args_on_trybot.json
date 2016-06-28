@@ -173,7 +173,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -577,8 +577,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"telemetry_gpu_unittests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571\", \"tasks\": {\"telemetry_gpu_unittests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--shards",
+      "1",
+      "telemetry_gpu_unittests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571",
       "--task-output-dir",
       "/path/to/tmp/"
     ],

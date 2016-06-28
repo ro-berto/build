@@ -186,7 +186,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -768,8 +768,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"gl_tests (r2)/Mac-10.9/[dummy has/mac_chromium_variable/1\", \"tasks\": {\"gl_tests (r2)/Mac-10.9/[dummy has/mac_chromium_variable/1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "gl_tests (r2)/Mac-10.9/[dummy has/mac_chromium_variable/1"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -1314,8 +1315,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"gl_tests (r3)/Mac-10.9/[dummy has/mac_chromium_variable/1\", \"tasks\": {\"gl_tests (r3)/Mac-10.9/[dummy has/mac_chromium_variable/1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "gl_tests (r3)/Mac-10.9/[dummy has/mac_chromium_variable/1"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -1860,8 +1862,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"gl_tests (r4)/Mac-10.9/[dummy has/mac_chromium_variable/1\", \"tasks\": {\"gl_tests (r4)/Mac-10.9/[dummy has/mac_chromium_variable/1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "gl_tests (r4)/Mac-10.9/[dummy has/mac_chromium_variable/1"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",

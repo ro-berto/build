@@ -91,7 +91,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -400,8 +400,9 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--json",
-      "{\"base_task_name\": \"dummy_target_1/Ubuntu/[dummy has/TestBuilder/571\", \"tasks\": {\"dummy_target_1/Ubuntu/[dummy has/TestBuilder/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"dummy_target_1/Ubuntu/[dummy has/TestBuilder/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}"
+      "--shards",
+      "2",
+      "dummy_target_1/Ubuntu/[dummy has/TestBuilder/571"
     ],
     "name": "dummy_target_1 on Ubuntu",
     "~followup_annotations": [
@@ -451,8 +452,9 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--json",
-      "{\"base_task_name\": \"dummy_target_2/Ubuntu/[dummy has/TestBuilder/571\", \"tasks\": {\"dummy_target_2/Ubuntu/[dummy has/TestBuilder/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"dummy_target_2/Ubuntu/[dummy has/TestBuilder/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}"
+      "--shards",
+      "2",
+      "dummy_target_2/Ubuntu/[dummy has/TestBuilder/571"
     ],
     "name": "dummy_target_2 on Ubuntu",
     "~followup_annotations": [

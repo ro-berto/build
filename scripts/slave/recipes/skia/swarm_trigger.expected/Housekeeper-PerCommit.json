@@ -208,7 +208,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -613,8 +613,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"compile_skia/Ubuntu/def456/Housekeeper-PerCommit/5\", \"tasks\": {\"compile_skia/Ubuntu/def456/Housekeeper-PerCommit/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--shards",
+      "1",
+      "compile_skia/Ubuntu/def456/Housekeeper-PerCommit/5",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -842,8 +843,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"housekeeper_skia/Ubuntu/def456/Housekeeper-PerCommit/5\", \"tasks\": {\"housekeeper_skia/Ubuntu/def456/Housekeeper-PerCommit/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--shards",
+      "1",
+      "housekeeper_skia/Ubuntu/def456/Housekeeper-PerCommit/5",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

@@ -89,7 +89,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -205,8 +205,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mjsunit/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571\", \"tasks\": {\"Mjsunit/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Mjsunit/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571"
     ],
     "name": "Mjsunit",
     "~followup_annotations": [
@@ -519,8 +520,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571\", \"tasks\": {\"Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571"
     ],
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
@@ -689,8 +691,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571\", \"tasks\": {\"Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571"
     ],
     "name": "Bisect a1.Retry",
     "~followup_annotations": [

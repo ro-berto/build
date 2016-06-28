@@ -168,7 +168,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -516,8 +516,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"gl_tests on Intel GPU on Mac/Mac-10.10/eeeeeeeeee/Mac10.9 Tests/571\", \"tasks\": {\"gl_tests on Intel GPU on Mac/Mac-10.10/eeeeeeeeee/Mac10.9 Tests/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "gl_tests on Intel GPU on Mac/Mac-10.10/eeeeeeeeee/Mac10.9 Tests/571"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -574,8 +575,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"gl_tests on NVIDIA GPU on Mac Retina/Mac-10.9/eeeeeeeeee/Mac10.9 Tests/571\", \"tasks\": {\"gl_tests on NVIDIA GPU on Mac Retina/Mac-10.9/eeeeeeeeee/Mac10.9 Tests/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "gl_tests on NVIDIA GPU on Mac Retina/Mac-10.9/eeeeeeeeee/Mac10.9 Tests/571"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",

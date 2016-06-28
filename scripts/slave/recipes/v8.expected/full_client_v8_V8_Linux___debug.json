@@ -89,7 +89,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -2237,8 +2237,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Check/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Check/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Check",
     "~followup_annotations": [
@@ -2276,8 +2277,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Benchmarks/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Benchmarks/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Benchmarks/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Benchmarks",
     "~followup_annotations": [
@@ -2315,8 +2317,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Test262/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Test262/Ubuntu-12.04/[dummy has/V8 Linux - debug/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Test262/Ubuntu-12.04/[dummy has/V8 Linux - debug/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Test262/Ubuntu-12.04/[dummy has/V8 Linux - debug/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
+      "--shards",
+      "3",
+      "Test262/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Test262",
     "~followup_annotations": [
@@ -2354,8 +2357,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Mozilla",
     "~followup_annotations": [
@@ -2393,8 +2397,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "SimdJs - all",
     "~followup_annotations": [
@@ -2432,8 +2437,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Ignition - turbofan",
     "~followup_annotations": [
@@ -2471,8 +2477,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Mjsunit - sp frame access",
     "~followup_annotations": [
@@ -2510,8 +2517,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Test262 - ignition - turbofan",
     "~followup_annotations": [
@@ -2549,8 +2557,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Check - isolates/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Check - isolates/Ubuntu-12.04/[dummy has/V8 Linux - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - isolates/Ubuntu-12.04/[dummy has/V8 Linux - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "--shards",
+      "2",
+      "Check - isolates/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Check - isolates",
     "~followup_annotations": [
@@ -2588,8 +2597,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Check - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Check - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Check - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Check - nosse3",
     "~followup_annotations": [
@@ -2627,8 +2637,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Test262 - no variants - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Test262 - no variants - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Test262 - no variants - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Test262 - no variants - nosse3",
     "~followup_annotations": [
@@ -2666,8 +2677,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mozilla - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Mozilla - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Mozilla - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Mozilla - nosse3",
     "~followup_annotations": [
@@ -2705,8 +2717,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"SimdJs - all - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"SimdJs - all - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "SimdJs - all - nosse3/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "SimdJs - all - nosse3",
     "~followup_annotations": [
@@ -2744,8 +2757,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Check - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Check - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Check - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Check - nosse4",
     "~followup_annotations": [
@@ -2783,8 +2797,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Test262 - no variants - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Test262 - no variants - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Test262 - no variants - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Test262 - no variants - nosse4",
     "~followup_annotations": [
@@ -2822,8 +2837,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mozilla - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Mozilla - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Mozilla - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Mozilla - nosse4",
     "~followup_annotations": [
@@ -2861,8 +2877,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"SimdJs - all - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"SimdJs - all - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "SimdJs - all - nosse4/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "SimdJs - all - nosse4",
     "~followup_annotations": [
@@ -2900,8 +2917,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mjsunit - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Mjsunit - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Mjsunit - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Mjsunit - code serializer",
     "~followup_annotations": [
@@ -2939,8 +2957,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mozilla - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Mozilla - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Mozilla - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Mozilla - code serializer",
     "~followup_annotations": [
@@ -2978,8 +2997,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Test262 - no variants - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Test262 - no variants - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Test262 - no variants - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Test262 - no variants - code serializer",
     "~followup_annotations": [
@@ -3017,8 +3037,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Benchmarks - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"Benchmarks - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Benchmarks - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "Benchmarks - code serializer",
     "~followup_annotations": [
@@ -3056,8 +3077,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"SimdJs - all - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\", \"tasks\": {\"SimdJs - all - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "SimdJs - all - code serializer/Ubuntu-12.04/[dummy has/V8 Linux - debug/571"
     ],
     "name": "SimdJs - all - code serializer",
     "~followup_annotations": [

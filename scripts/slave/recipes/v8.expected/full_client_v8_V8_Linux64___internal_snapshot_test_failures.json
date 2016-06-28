@@ -74,7 +74,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
+      "@@@STEP_TEXT@0.4.10@@@"
     ]
   },
   {
@@ -427,8 +427,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571\", \"tasks\": {\"Check/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Check/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571"
     ],
     "name": "Check",
     "~followup_annotations": [
@@ -1459,8 +1460,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571\", \"tasks\": {\"Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571"
     ],
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
@@ -1917,8 +1919,9 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571\", \"tasks\": {\"Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "--shards",
+      "1",
+      "Retry/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571"
     ],
     "name": "Bisect a2.Retry",
     "~followup_annotations": [
