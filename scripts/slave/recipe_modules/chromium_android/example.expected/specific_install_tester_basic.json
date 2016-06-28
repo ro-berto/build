@@ -299,62 +299,21 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--known-devices-file",
-      "[CACHE]/known_android_devices",
-      "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "-v"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "device_recovery"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--output-device-blacklist",
-      "/path/to/tmp/json",
-      "-t",
-      "Release"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "provision_devices"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--known-devices-file",
-      "[CACHE]/known_android_devices",
-      "--buildbot-path",
-      "/home/chrome-bot/.adb_device_info",
-      "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "-v",
-      "--overwrite-known-devices-files"
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "device_status",
+    "name": "device_status_check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -452,42 +411,41 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--known-devices-file",
-      "[CACHE]/known_android_devices",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "-v"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--output-device-blacklist",
+      "/path/to/tmp/json",
+      "-t",
+      "Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "device_recovery (2)"
+    "name": "provision_devices"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_status.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--known-devices-file",
-      "[CACHE]/known_android_devices",
-      "--buildbot-path",
-      "/home/chrome-bot/.adb_device_info",
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "-v",
-      "--overwrite-known-devices-files"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--known-devices-file",
+      "[CACHE]/known_android_devices"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "device_status (2)",
+    "name": "device_status_check (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
