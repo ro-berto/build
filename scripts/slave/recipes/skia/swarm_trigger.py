@@ -285,8 +285,8 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
     hashes = json.loads(j)
     extra_hashes.append(hashes['2015'])
     if 'Vulkan' in builder_name:
-      # Vulkan 1.0.13.0
-      extra_hashes.append('7ed97908c5d208c651419d7bc7e2de5b16e8e3fe')
+      # Vulkan 1.0.17.0
+      extra_hashes.append('cf4ae04080c10367de5a7b8510966dced9c5ef4c')
 
   # Fake these properties for compile tasks so that they can be de-duped.
   master = 'client.skia.compile'

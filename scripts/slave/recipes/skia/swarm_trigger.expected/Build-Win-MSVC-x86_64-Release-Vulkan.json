@@ -467,7 +467,7 @@
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated",
       "[dummy hash for isolate_recipes]",
       "38380d77eec9164e5818ae45e2915a6f22d60e85",
-      "7ed97908c5d208c651419d7bc7e2de5b16e8e3fe"
+      "cf4ae04080c10367de5a7b8510966dced9c5ef4c"
     ],
     "name": "add_isolated_input",
     "~followup_annotations": [
