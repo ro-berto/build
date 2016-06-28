@@ -17,6 +17,10 @@ def RunSteps(api):
   api.cipd.install_client('install cipd', version='deadbeaf')
   assert api.cipd.get_executable()
 
+  # Need to set service account credentials.
+  api.cipd.set_service_account_credentials(
+      api.cipd.default_bot_service_account_credentials)
+
   package_name = 'public/package/%s' % api.cipd.platform_suffix()
   package_instance_id = '7f751b2237df2fdf3c1405be00590fefffbaea2d'
   packages = {package_name: package_instance_id}
@@ -76,6 +80,11 @@ def GenTests(api):
   yield (
     api.test('mac64') +
     api.platform('mac', 64)
+  )
+
+  yield (
+    api.test('win64') +
+    api.platform('win', 64)
   )
 
   yield (

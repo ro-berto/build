@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "RECIPE_MODULE[build::cipd]\\resources\\bootstrap.py",
       "--platform",
-      "linux-amd64",
+      "windows-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[SLAVE_BUILD]\\cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -15,7 +15,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -25,11 +25,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "RECIPE_MODULE[build::cipd]\\resources\\bootstrap.py",
       "--platform",
-      "linux-amd64",
+      "windows-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[SLAVE_BUILD]\\cipd",
       "--json-output",
       "/path/to/tmp/json",
       "--version",
@@ -39,7 +39,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -47,16 +47,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "ensure",
       "--root",
-      "[SLAVE_BUILD]/packages",
+      "[SLAVE_BUILD]\\packages",
       "--list",
-      "public/package/linux-amd64 7f751b2237df2fdf3c1405be00590fefffbaea2d",
+      "public/package/windows-amd64 7f751b2237df2fdf3c1405be00590fefffbaea2d",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
-      "/creds/service_accounts/service-account-cipd-builder.json"
+      "C:\\creds\\service_accounts\\service-account-cipd-builder.json"
     ],
     "name": "ensure_installed",
     "~followup_annotations": [
@@ -64,7 +64,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"7f751b2237df2fdf3c1405be00590fefffbaea2d\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"public/package/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"public/package/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -73,23 +73,23 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "search",
-      "public/package/linux-amd64",
+      "public/package/windows-amd64",
       "--tag",
       "git_revision:40-chars-long-hash",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
-      "/creds/service_accounts/service-account-cipd-builder.json"
+      "C:\\creds\\service_accounts\\service-account-cipd-builder.json"
     ],
-    "name": "cipd search public/package/linux-amd64 git_revision:40-chars-long-hash",
+    "name": "cipd search public/package/windows-amd64 git_revision:40-chars-long-hash",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"public/package/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"public/package/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -98,23 +98,23 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "describe",
-      "public/package/linux-amd64",
+      "public/package/windows-amd64",
       "--version",
       "40-chars-fake-of-the-package-instance_id",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
-      "/creds/service_accounts/service-account-cipd-builder.json"
+      "C:\\creds\\service_accounts\\service-account-cipd-builder.json"
     ],
-    "name": "cipd describe public/package/linux-amd64",
+    "name": "cipd describe public/package/windows-amd64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"pin\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"public/package/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"public/package/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"refs\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
@@ -149,12 +149,12 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "ensure",
       "--root",
-      "[SLAVE_BUILD]/packages",
+      "[SLAVE_BUILD]\\packages",
       "--list",
-      "private/package/linux-amd64 latest\npublic/package/linux-amd64 7f751b2237df2fdf3c1405be00590fefffbaea2d",
+      "private/package/windows-amd64 latest\npublic/package/windows-amd64 7f751b2237df2fdf3c1405be00590fefffbaea2d",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -166,11 +166,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"private/package/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"private/package/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"7f751b2237df2fdf3c1405be00590fefffbaea2d\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"public/package/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"public/package/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -179,9 +179,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "search",
-      "private/package/linux-amd64",
+      "private/package/windows-amd64",
       "--tag",
       "key:value",
       "--json-output",
@@ -189,13 +189,13 @@
       "--service-account-json",
       "fake-credentials.json"
     ],
-    "name": "cipd search private/package/linux-amd64 key:value",
+    "name": "cipd search private/package/windows-amd64 key:value",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"private/package/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"private/package/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -204,9 +204,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "describe",
-      "private/package/linux-amd64",
+      "private/package/windows-amd64",
       "--version",
       "40-chars-fake-of-the-package-instance_id",
       "--json-output",
@@ -214,13 +214,13 @@
       "--service-account-json",
       "fake-credentials.json"
     ],
-    "name": "cipd describe private/package/linux-amd64",
+    "name": "cipd describe private/package/windows-amd64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"pin\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"private/package/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"private/package/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"refs\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
@@ -250,7 +250,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "pkg-build",
       "--in",
       "fake-input-dir",
@@ -274,7 +274,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "pkg-build",
       "--in",
       "fake-input-dir",
@@ -300,7 +300,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "pkg-register",
       "fake-package-path",
       "--json-output",
@@ -329,10 +329,10 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "create",
       "--pkg-def",
-      "[SLAVE_BUILD]/fake-package.yaml",
+      "[SLAVE_BUILD]\\fake-package.yaml",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -354,7 +354,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "set-tag",
       "fake-package",
       "--version",
@@ -384,7 +384,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "set-ref",
       "fake-package",
       "--version",
@@ -414,9 +414,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "search",
-      "fake-package/linux-amd64",
+      "fake-package/windows-amd64",
       "--tag",
       "dead:beaf",
       "--json-output",
@@ -424,13 +424,13 @@
       "--service-account-json",
       "fake-credentials.json"
     ],
-    "name": "cipd search fake-package/linux-amd64 dead:beaf",
+    "name": "cipd search fake-package/windows-amd64 dead:beaf",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"fake-package/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"fake-package/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
