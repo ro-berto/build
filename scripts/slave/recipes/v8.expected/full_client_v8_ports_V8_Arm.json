@@ -89,7 +89,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -680,9 +680,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Check/Ubuntu-14.04/[dummy has/V8 Arm/571"
+      "--json",
+      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Arm/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Arm/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Check",
     "~followup_annotations": [
@@ -720,9 +719,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Benchmarks/Ubuntu-14.04/[dummy has/V8 Arm/571"
+      "--json",
+      "{\"base_task_name\": \"Benchmarks/Ubuntu-14.04/[dummy has/V8 Arm/571\", \"tasks\": {\"Benchmarks/Ubuntu-14.04/[dummy has/V8 Arm/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Benchmarks",
     "~followup_annotations": [
@@ -760,9 +758,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm/571"
+      "--json",
+      "{\"base_task_name\": \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm/571\", \"tasks\": {\"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "OptimizeForSize",
     "~followup_annotations": [
@@ -800,9 +797,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm/571"
+      "--json",
+      "{\"base_task_name\": \"SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm/571\", \"tasks\": {\"SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "SimdJs - all",
     "~followup_annotations": [
@@ -840,9 +836,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Ignition - turbofan/Ubuntu-14.04/[dummy has/V8 Arm/571"
+      "--json",
+      "{\"base_task_name\": \"Ignition - turbofan/Ubuntu-14.04/[dummy has/V8 Arm/571\", \"tasks\": {\"Ignition - turbofan/Ubuntu-14.04/[dummy has/V8 Arm/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Ignition - turbofan",
     "~followup_annotations": [
@@ -880,9 +875,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Test262 - ignition - turbofan/Ubuntu-14.04/[dummy has/V8 Arm/571"
+      "--json",
+      "{\"base_task_name\": \"Test262 - ignition - turbofan/Ubuntu-14.04/[dummy has/V8 Arm/571\", \"tasks\": {\"Test262 - ignition - turbofan/Ubuntu-14.04/[dummy has/V8 Arm/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Test262 - ignition - turbofan",
     "~followup_annotations": [

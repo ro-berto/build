@@ -91,7 +91,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -463,9 +463,8 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--shards",
-      "1",
-      "chrome_public_test_apk/Android/[dummy has/TestBuilder/571",
+      "--json",
+      "{\"base_task_name\": \"chrome_public_test_apk/Android/[dummy has/TestBuilder/571\", \"tasks\": {\"chrome_public_test_apk/Android/[dummy has/TestBuilder/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -524,9 +523,8 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--shards",
-      "1",
-      "dummy_target_1/Android/[dummy has/TestBuilder/571",
+      "--json",
+      "{\"base_task_name\": \"dummy_target_1/Android/[dummy has/TestBuilder/571\", \"tasks\": {\"dummy_target_1/Android/[dummy has/TestBuilder/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -585,9 +583,8 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--shards",
-      "1",
-      "dummy_target_2/Android/[dummy has/TestBuilder/571",
+      "--json",
+      "{\"base_task_name\": \"dummy_target_2/Android/[dummy has/TestBuilder/571\", \"tasks\": {\"dummy_target_2/Android/[dummy has/TestBuilder/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

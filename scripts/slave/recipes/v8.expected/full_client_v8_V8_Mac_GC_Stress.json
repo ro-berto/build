@@ -74,7 +74,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -564,9 +564,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "3",
-      "Mjsunit/Mac-10.9/[dummy has/V8 Mac GC Stress/571"
+      "--json",
+      "{\"base_task_name\": \"Mjsunit/Mac-10.9/[dummy has/V8 Mac GC Stress/571\", \"tasks\": {\"Mjsunit/Mac-10.9/[dummy has/V8 Mac GC Stress/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Mjsunit/Mac-10.9/[dummy has/V8 Mac GC Stress/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Mjsunit/Mac-10.9/[dummy has/V8 Mac GC Stress/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
     ],
     "name": "Mjsunit",
     "~followup_annotations": [
@@ -604,9 +603,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Webkit/Mac-10.9/[dummy has/V8 Mac GC Stress/571"
+      "--json",
+      "{\"base_task_name\": \"Webkit/Mac-10.9/[dummy has/V8 Mac GC Stress/571\", \"tasks\": {\"Webkit/Mac-10.9/[dummy has/V8 Mac GC Stress/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Webkit",
     "~followup_annotations": [

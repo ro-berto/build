@@ -80,7 +80,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -563,9 +563,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "3",
-      "Mjsunit/Ubuntu-12.04/[dummy has/v8_linux_arm64_gc_stress_dbg/571"
+      "--json",
+      "{\"base_task_name\": \"Mjsunit/Ubuntu-12.04/[dummy has/v8_linux_arm64_gc_stress_dbg/571\", \"tasks\": {\"Mjsunit/Ubuntu-12.04/[dummy has/v8_linux_arm64_gc_stress_dbg/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Mjsunit/Ubuntu-12.04/[dummy has/v8_linux_arm64_gc_stress_dbg/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Mjsunit/Ubuntu-12.04/[dummy has/v8_linux_arm64_gc_stress_dbg/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
     ],
     "name": "Mjsunit",
     "~followup_annotations": [
@@ -603,9 +602,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Webkit/Ubuntu-12.04/[dummy has/v8_linux_arm64_gc_stress_dbg/571"
+      "--json",
+      "{\"base_task_name\": \"Webkit/Ubuntu-12.04/[dummy has/v8_linux_arm64_gc_stress_dbg/571\", \"tasks\": {\"Webkit/Ubuntu-12.04/[dummy has/v8_linux_arm64_gc_stress_dbg/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Webkit",
     "~followup_annotations": [

@@ -89,7 +89,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -907,9 +907,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Static-Initializers/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571",
+      "--json",
+      "{\"base_task_name\": \"Static-Initializers/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\", \"tasks\": {\"Static-Initializers/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -975,9 +974,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Check/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571"
+      "--json",
+      "{\"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\", \"tasks\": {\"Check/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Check",
     "~followup_annotations": [
@@ -1015,9 +1013,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571"
+      "--json",
+      "{\"base_task_name\": \"OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\", \"tasks\": {\"OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "OptimizeForSize",
     "~followup_annotations": [
@@ -1055,9 +1052,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "2",
-      "Test262/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571"
+      "--json",
+      "{\"base_task_name\": \"Test262/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\", \"tasks\": {\"Test262/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Test262/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
     "name": "Test262",
     "~followup_annotations": [
@@ -1095,9 +1091,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "SimdJs - all/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571"
+      "--json",
+      "{\"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\", \"tasks\": {\"SimdJs - all/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "SimdJs - all",
     "~followup_annotations": [
@@ -1135,9 +1130,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Ignition - turbofan/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571"
+      "--json",
+      "{\"base_task_name\": \"Ignition - turbofan/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\", \"tasks\": {\"Ignition - turbofan/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Ignition - turbofan",
     "~followup_annotations": [
@@ -1175,9 +1169,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571"
+      "--json",
+      "{\"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\", \"tasks\": {\"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Mjsunit - sp frame access",
     "~followup_annotations": [
@@ -1215,9 +1208,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571"
+      "--json",
+      "{\"base_task_name\": \"Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\", \"tasks\": {\"Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/v8_linux64_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Test262 - ignition - turbofan",
     "~followup_annotations": [

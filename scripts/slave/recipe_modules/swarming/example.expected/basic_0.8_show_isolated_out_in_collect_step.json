@@ -86,7 +86,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -196,11 +196,15 @@
       "--tag",
       "os:win",
       "--tag",
+      "rietveld:https://codereview.chromium.org/123/#ps1001",
+      "--tag",
       "stepname:hello_world on Windows-7-SP1",
       "--verbose",
       "--idempotent",
       "--user",
       "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_win"
     ],
     "name": "[trigger] hello_world on Windows-7-SP1",
@@ -266,11 +270,15 @@
       "--tag",
       "os:linux",
       "--tag",
+      "rietveld:https://codereview.chromium.org/123/#ps1001",
+      "--tag",
       "stepname:hello_world on Ubuntu-12.04",
       "--verbose",
       "--idempotent",
       "--user",
       "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_linux"
     ],
     "name": "[trigger] hello_world on Ubuntu-12.04",
@@ -342,11 +350,15 @@
       "--tag",
       "os:mac",
       "--tag",
+      "rietveld:https://codereview.chromium.org/123/#ps1001",
+      "--tag",
       "stepname:hello_world on Mac-10.9",
       "--verbose",
       "--idempotent",
       "--user",
       "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_mac"
     ],
     "name": "[trigger] hello_world on Mac-10.9",
@@ -383,9 +395,8 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--shards",
-      "1",
-      "hello_world/Windows-7-SP1/hash_for_w",
+      "--json",
+      "{\"base_task_name\": \"hello_world/Windows-7-SP1/hash_for_w\", \"tasks\": {\"hello_world/Windows-7-SP1/hash_for_w\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
@@ -431,8 +442,7 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -446,9 +456,8 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--shards",
-      "2",
-      "hello_world/Ubuntu-12.04/hash_for_l",
+      "--json",
+      "{\"base_task_name\": \"hello_world/Ubuntu-12.04/hash_for_l\", \"tasks\": {\"hello_world/Ubuntu-12.04/hash_for_l:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"hello_world/Ubuntu-12.04/hash_for_l:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
@@ -527,9 +536,7 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 isolated out@blah@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -543,9 +550,8 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--shards",
-      "1",
-      "hello_world/Mac-10.9/hash_for_m",
+      "--json",
+      "{\"base_task_name\": \"hello_world/Mac-10.9/hash_for_m\", \"tasks\": {\"hello_world/Mac-10.9/hash_for_m\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
@@ -591,8 +597,7 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

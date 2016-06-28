@@ -74,7 +74,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -721,9 +721,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Check/Ubuntu-12.04/[dummy has/V8 Linux - shared/571"
+      "--json",
+      "{\"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", \"tasks\": {\"Check/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Check",
     "~followup_annotations": [
@@ -805,9 +804,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - shared/571"
+      "--json",
+      "{\"base_task_name\": \"Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", \"tasks\": {\"Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Test262 - no variants",
     "~followup_annotations": [
@@ -845,9 +843,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - shared/571"
+      "--json",
+      "{\"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", \"tasks\": {\"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Mozilla",
     "~followup_annotations": [
@@ -885,9 +882,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - shared/571"
+      "--json",
+      "{\"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", \"tasks\": {\"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "SimdJs - all",
     "~followup_annotations": [
@@ -1417,9 +1413,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571"
+      "--json",
+      "{\"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", \"tasks\": {\"Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
@@ -1886,9 +1881,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571"
+      "--json",
+      "{\"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", \"tasks\": {\"Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Bisect a2.Retry",
     "~followup_annotations": [
@@ -2390,9 +2384,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571"
+      "--json",
+      "{\"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", \"tasks\": {\"Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Bisect a1.Retry",
     "~followup_annotations": [

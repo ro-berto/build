@@ -86,7 +86,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.5@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -196,13 +196,13 @@
       "--tag",
       "os:win",
       "--tag",
-      "rietveld:https://codereview.chromium.org/123/#ps1001",
-      "--tag",
       "stepname:hello_world on Windows-7-SP1",
       "--verbose",
       "--idempotent",
       "--user",
       "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_win"
     ],
     "name": "[trigger] hello_world on Windows-7-SP1",
@@ -268,13 +268,13 @@
       "--tag",
       "os:linux",
       "--tag",
-      "rietveld:https://codereview.chromium.org/123/#ps1001",
-      "--tag",
       "stepname:hello_world on Ubuntu-12.04",
       "--verbose",
       "--idempotent",
       "--user",
       "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_linux"
     ],
     "name": "[trigger] hello_world on Ubuntu-12.04",
@@ -346,13 +346,13 @@
       "--tag",
       "os:mac",
       "--tag",
-      "rietveld:https://codereview.chromium.org/123/#ps1001",
-      "--tag",
       "stepname:hello_world on Mac-10.9",
       "--verbose",
       "--idempotent",
       "--user",
       "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_mac"
     ],
     "name": "[trigger] hello_world on Mac-10.9",

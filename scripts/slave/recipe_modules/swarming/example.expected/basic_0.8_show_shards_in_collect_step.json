@@ -86,7 +86,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.5@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -203,6 +203,8 @@
       "--idempotent",
       "--user",
       "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_win"
     ],
     "name": "[trigger] hello_world on Windows-7-SP1",
@@ -275,6 +277,8 @@
       "--idempotent",
       "--user",
       "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_linux"
     ],
     "name": "[trigger] hello_world on Ubuntu-12.04",
@@ -353,6 +357,8 @@
       "--idempotent",
       "--user",
       "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_mac"
     ],
     "name": "[trigger] hello_world on Mac-10.9",

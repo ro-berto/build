@@ -10,7 +10,7 @@ from recipe_engine import recipe_api
 
 
 # Minimally supported version of swarming.py script (reported by --version).
-MINIMAL_SWARMING_VERSION = (0, 4, 10)
+MINIMAL_SWARMING_VERSION = (0, 8, 6)
 
 
 def parse_time(value):
@@ -327,7 +327,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     }[platform]
 
   def task(self, title, isolated_hash, shards=1, task_output_dir=None,
-           extra_args=None, idempotent=None):
+           extra_args=None, idempotent=None, cipd_packages=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -347,6 +347,14 @@ class SwarmingApi(recipe_api.RecipeApi):
       extra_args: list of command line arguments to pass to isolated tasks.
       idempotent: whether this task is considered idempotent. Defaults
           to self.default_idempotent if not specified.
+      cipd_packages:  list of 3-tuples corresponding to CIPD packages needed for
+          the task: ('path', 'package_name', 'version'), defined as follows:
+              path: Path relative to the Swarming root dir in which to install
+                  the package.
+              package_name: Name of the package to install,
+                  eg. "infra/tools/authutil/${platform}"
+              version: Version of the package, either a package instance ID,
+                  ref, or tag key/value pair.
     """
     if idempotent is None:
       idempotent = self.default_idempotent
@@ -366,7 +374,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         idempotent=idempotent,
         extra_args=extra_args,
         collect_step=self._default_collect_step,
-        task_output_dir=task_output_dir)
+        task_output_dir=task_output_dir,
+        cipd_packages=cipd_packages)
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
                  extra_args=None, **kwargs):
@@ -506,6 +515,10 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.append('--idempotent')
     if task.user:
       args.extend(['--user', task.user])
+
+    if task.cipd_packages:
+      for path, pkg, version in task.cipd_packages:
+        args.extend(['--cipd-package', '%s:%s:%s' % (path, pkg, version)])
 
     # What isolated command to trigger.
     args.append(task.isolated_hash)
@@ -818,7 +831,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     ]
     if self.verbose:
       args.append('--verbose')
-    if self.m.swarming_client.get_script_version('swarming.py') < (0, 5):
+    script_version = self.m.swarming_client.get_script_version('swarming.py')
+    if script_version < (0, 5):  # pragma: nocover
       args.extend(('--shards', str(task.shards)))
       args.append(task.task_name)
     else:
@@ -891,7 +905,7 @@ class SwarmingTask(object):
   def __init__(self, title, isolated_hash, dimensions, env, priority,
                shards, buildername, buildnumber, expiration, user, io_timeout,
                hard_timeout, idempotent, extra_args, collect_step,
-               task_output_dir):
+               task_output_dir, cipd_packages=None):
     """Configuration of a swarming task.
 
     Args:
@@ -900,6 +914,16 @@ class SwarmingTask(object):
       isolated_hash: hash of isolated file that describes all files needed to
           run the task as well as command line to launch. See 'isolate' recipe
           module.
+      cipd_packages: list of 3-tuples corresponding to CIPD packages needed for
+          the task: ('path', 'package_name', 'version'), defined as follows:
+              path: Path relative to the Swarming root dir in which to install
+                  the package.
+              package_name: Name of the package to install,
+                  eg. "infra/tools/authutil/${platform}"
+              version: Version of the package, either a package instance ID,
+                  ref, or tag key/value pair.
+      collect_step: callback that will be called to collect and processes
+          results of task execution, signature is collect_step(task, **kwargs).
       dimensions: key-value mapping with swarming dimensions that specify
           on what Swarming slaves task can run. One important dimension is 'os',
           which defines platform flavor to run the task on. See Swarming doc.
@@ -924,15 +948,13 @@ class SwarmingTask(object):
       idempotent: True if the results from a previous task can be reused. E.g.
           this task has no side-effects.
       extra_args: list of command line arguments to pass to isolated tasks.
-      collect_step: callback that will be called to collect and processes
-          results of task execution, signature is collect_step(task, **kwargs).
       task_output_dir: if defined, the directory where task results are placed
           during the collect step.
     """
     self._trigger_output = None
     self.buildnumber = buildnumber
     self.buildername = buildername
-    self.task_output_dir = task_output_dir
+    self.cipd_packages = cipd_packages
     self.collect_step = collect_step
     self.dimensions = dimensions.copy()
     self.env = env.copy()
@@ -945,6 +967,7 @@ class SwarmingTask(object):
     self.priority = priority
     self.shards = shards
     self.tags = set()
+    self.task_output_dir = task_output_dir
     self.title = title
     self.user = user
 

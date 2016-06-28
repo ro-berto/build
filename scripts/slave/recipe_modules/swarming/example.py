@@ -91,6 +91,7 @@ def RunSteps(api, simulated_version,
     task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
     task.shards = 2 if platform == 'linux' else 1
     task.tags.add('os:' + platform)
+    task.cipd_packages = [('bin', 'super/awesome/pkg', 'git_revision:deadbeef')]
     tasks.append(task)
 
   # Launch all tasks.
@@ -117,7 +118,7 @@ def RunSteps(api, simulated_version,
 
 def GenTests(api):
   yield (
-      api.test('basic_0.4') +
+      api.test('basic_0.8') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
@@ -127,10 +128,10 @@ def GenTests(api):
       api.step_data(
           'archive for mac',
           stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
-      api.properties(simulated_version=(0, 4, 10)))
+      api.properties(simulated_version=(0, 8, 6)))
 
   yield (
-      api.test('basic_0.5') +
+      api.test('basic_0.8_trybot') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
@@ -144,10 +145,10 @@ def GenTests(api):
           rietveld="https://codereview.chromium.org",
           issue="123",
           patchset="1001",
-          simulated_version=(0, 5)))
+          simulated_version=(0, 8, 6)))
 
   yield (
-      api.test('basic_0.5_show_shards_in_collect_step') +
+      api.test('basic_0.8_show_shards_in_collect_step') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
@@ -161,11 +162,11 @@ def GenTests(api):
           rietveld="https://codereview.chromium.org",
           issue="123",
           patchset="1001",
-          simulated_version=(0, 5),
+          simulated_version=(0, 8, 6),
           show_shards_in_collect_step=True))
 
   yield (
-      api.test('basic_0.5_show_isolated_out_in_collect_step') +
+      api.test('basic_0.8_show_isolated_out_in_collect_step') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
@@ -179,5 +180,5 @@ def GenTests(api):
           rietveld="https://codereview.chromium.org",
           issue="123",
           patchset="1001",
-          simulated_version=(0, 5),
+          simulated_version=(0, 8, 6),
           show_isolated_out_in_collect_step=False))

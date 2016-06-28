@@ -89,7 +89,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -488,9 +488,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Check/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571"
+      "--json",
+      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Check",
     "~followup_annotations": [
@@ -528,9 +527,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Benchmarks/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571"
+      "--json",
+      "{\"base_task_name\": \"Benchmarks/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571\", \"tasks\": {\"Benchmarks/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Benchmarks",
     "~followup_annotations": [
@@ -568,9 +566,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Mozilla/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571"
+      "--json",
+      "{\"base_task_name\": \"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571\", \"tasks\": {\"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Mozilla",
     "~followup_annotations": [
@@ -608,9 +605,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "SimdJs - all/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571"
+      "--json",
+      "{\"base_task_name\": \"SimdJs - all/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571\", \"tasks\": {\"SimdJs - all/Ubuntu-14.04/[dummy has/V8 Linux64 - avx2/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "SimdJs - all",
     "~followup_annotations": [
