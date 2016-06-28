@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'adb',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/json',
@@ -67,21 +68,42 @@ def _BuildSteps(api, buildername, is_debug, is_official):
 
 
 def _DeviceCheckStep(api):
-  devices_path = api.m.path['build'].join('site_config', '.known_devices')
+
+  known_devices_path = api.m.path['build'].join('site_config', '.known_devices')
+  # Device Recovery
   args = [
-      '--json-output', api.json.output(),
-      '--restart-usb',
-      '--known-devices-file', devices_path,
+      '--known-devices-file', known_devices_path,
+      '--adb-path', api.m.adb.adb_path(),
+      '-v'
   ]
+  api.m.step(
+      'device_recovery',
+      [api.m.path['checkout'].join('third_party', 'catapult', 'devil',
+                                    'devil', 'android', 'tools',
+                                    'device_recovery.py')] + args,
+      infra_step=True,)
+  # Device provisioning
+  api.python(
+      'provision_device',
+      api.path['checkout'].join('build', 'android', 'provision_devices.py'),
+      infra_step=True)
+  # Device status check
   try:
+    buildbot_file = '/home/chrome-bot/.adb_device_info'
+    args = [
+        '--json-output', api.m.json.output(),
+        '--known-devices-file', known_devices_path,
+        '--buildbot-path', buildbot_file,
+        '-v', '--overwrite-known-devices-files',
+    ]
+
     result = api.python(
-        'device_status_check',
-        api.path['checkout'].join('build', 'android', 'buildbot',
-                              'bb_device_status_check.py'),
+        'device_status',
+        api.path['checkout'].join('third_party', 'catapult', 'devil', 'devil',
+                                  'android', 'buildbot', 'device_status.py'),
         args=args,
         infra_step=True)
-    devices = [d['serial'] for d in result.json.output]
-    result.presentation.step_text = 'Online devices: %s' % len(devices)
+    return result
   except api.step.InfraFailure as f:
     params = {
       'summary': ('Device Offline on %s %s' %
@@ -96,12 +118,6 @@ def _DeviceCheckStep(api):
       'report a bug': link
     })
     raise
-
-  api.python(
-      'provision_device',
-      api.path['checkout'].join('build', 'android', 'provision_devices.py'),
-      infra_step=True)
-
 
 def _GetTestConfig(api):
   buildername = api.properties.get('buildername')
@@ -222,32 +238,56 @@ def GenTests(api):
   for test_name, buildername in tests:
     test = api.test(test_name) + api.properties.generic(buildername=buildername)
     if 'Android' in buildername and 'Tests' in buildername:
-      test += api.step_data("device_status_check", api.json.output([{
-              "battery": {
-                  "status": "5",
-                  "scale": "100",
-                  "temperature": "249",
-                  "level": "100",
-                  "AC powered": "false",
-                  "health": "2",
-                  "voltage": "4286",
-                  "Wireless powered": "false",
-                  "USB powered": "true",
-                  "technology": "Li-ion",
-                  "present": "true"
-              },
-              "wifi_ip": "",
-              "imei_slice": "Unknown",
-              "build": "LRX21O",
-              "build_detail":
-                  "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
-              "serial": "07a00ca4",
-              "type": "flo"
-          }]))
+      test += api.step_data("device_status", api.json.output([
+          {
+            "battery": {
+                "status": "5",
+                "scale": "100",
+                "temperature": "249",
+                "level": "100",
+                "AC powered": "false",
+                "health": "2",
+                "voltage": "4286",
+                "Wireless powered": "false",
+                "USB powered": "true",
+                "technology": "Li-ion",
+                "present": "true"
+            },
+            "wifi_ip": "",
+            "imei_slice": "Unknown",
+            "build": "LRX21O",
+            "build_detail":
+                "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
+            "serial": "07a00ca4",
+            "type": "flo",
+            "adb_status": "device",
+            "blacklisted": False,
+            "usb_status": True,
+        },
+        {
+          "adb_status": "offline",
+          "blacklisted": True,
+          "serial": "03e0363a003c6ad4",
+          "usb_status": False,
+        },
+        {
+          "adb_status": "unauthorized",
+          "blacklisted": True,
+          "serial": "03e0363a003c6ad5",
+          "usb_status": True,
+        },
+        {
+          "adb_status": "device",
+          "blacklisted": True,
+          "serial": "03e0363a003c6ad6",
+          "usb_status": True,
+        },
+        {}
+      ]))
     yield test
   yield(api.test('mojo_linux_try') +
       api.properties.tryserver(buildername="Mojo Linux Try"))
   yield(api.test('mojo_android_builder_tests_dbg_fail_device_check') +
       api.properties.tryserver(buildername="Mojo Android Builder Tests (dbg)") +
-      api.step_data("device_status_check", retcode=1))
+      api.step_data("device_status", retcode=1))
 

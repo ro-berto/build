@@ -98,16 +98,38 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
+      "--known-devices-file",
+      "[BUILD]/site_config/.known_devices",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "-v"
+    ],
+    "name": "device_recovery"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
+      "[SLAVE_BUILD]/src/build/android/provision_devices.py"
+    ],
+    "name": "provision_device"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/buildbot/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
-      "--restart-usb",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices"
+      "[BUILD]/site_config/.known_devices",
+      "--buildbot-path",
+      "/home/chrome-bot/.adb_device_info",
+      "-v",
+      "--overwrite-known-devices-files"
     ],
-    "name": "device_status_check",
+    "name": "device_status",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
@@ -118,7 +140,7 @@
   },
   {
     "name": "$result",
-    "reason": "Infra Failure: Step('device_status_check') returned 1",
+    "reason": "Infra Failure: Step('device_status') returned 1",
     "status_code": 1
   }
 ]
