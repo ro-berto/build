@@ -103,8 +103,11 @@ class ArchiveApi(recipe_api.RecipeApi):
     ]
     # TODO(phajdan.jr): Enable globally after confirming it works.
     if self.m.properties.get('buildername') == 'Linux remote_run Builder':
+      if not src_dir:
+        src_dir = self.m.path['checkout']
       args.extend([
           '--staging-dir', self.m.path['cache'].join('chrome_staging'),
+          '--src-dir', src_dir
       ])
     if build_url or 'build_archive_url' in self.m.properties:
       args.extend(['--build-url',

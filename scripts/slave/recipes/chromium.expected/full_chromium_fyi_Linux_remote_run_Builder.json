@@ -376,6 +376,8 @@
       "Release",
       "--staging-dir",
       "[CACHE]/chrome_staging",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
       "--build-url",
       "gs://chromium-fyi-archive/chromium.fyi/Linux remote_run Builder",
       "--build_revision",
