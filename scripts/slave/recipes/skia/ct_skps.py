@@ -159,6 +159,19 @@ def RunSteps(api):
       api.file.rmtree(api.path.basename(skps_dir), skps_dir)
       api.file.makedirs(api.path.basename(skps_dir), skps_dir)
 
+  # If a blacklist file exists then specify SKPs to be blacklisted.
+  blacklists_dir = api.path['slave_build'].join(
+      'skia', 'infra', 'bots', 'ct', 'blacklists')
+  blacklist_file = blacklists_dir.join(
+      '%s_%s_%s.json' % (skia_tool, ct_page_type, skps_chromium_build))
+  blacklist_skps = []
+  if api.path.exists(blacklist_file):  # pragma: nocover
+    blacklist_file_contents = api.file.read(
+        "Read %s" % blacklist_file,
+        blacklist_file,
+        infra_step=True)
+    blacklist_skps = api.json.loads(blacklist_file_contents)['blacklisted_skps']
+
   for slave_num in range(1, ct_num_slaves + 1):
     if download_skps:
       # Download SKPs.
@@ -180,7 +193,7 @@ def RunSteps(api):
     }
     api.skia_swarming.create_isolated_gen_json(
         isolate_path, isolate_dir, 'linux', 'ct-%s-%s' % (skia_tool, slave_num),
-        extra_variables)
+        extra_variables, blacklist=blacklist_skps)
 
   if download_skps:
     # Since we had to download SKPs create an updated version file.
@@ -210,7 +223,7 @@ def RunSteps(api):
   if 'GPU' in buildername:
     dimensions['gpu'] = '10de:104a'
   tasks = api.skia_swarming.trigger_swarming_tasks(
-      tasks_to_swarm_hashes, dimensions=dimensions)
+      tasks_to_swarm_hashes, dimensions=dimensions, io_timeout=40*60)
 
   # Now collect all tasks.
   failed_tasks = []
