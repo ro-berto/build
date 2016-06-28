@@ -1899,7 +1899,14 @@ def FileExclusions():
 
 
 def DatabaseSetup(buildmaster_config, require_dbconfig=False):
-  """Read database credentials in the master directory."""
+  """Configure the database settings for the buildbot master."""
+
+  # By default nothing is ever deleted from the database.  We set a
+  # changeHorizon here to put an upper bound on the database size.
+  if 'changeHorizon' not in buildmaster_config:
+    buildmaster_config['changeHorizon'] = 3000
+
+  # Read database credentials in the master directory.
   if os.path.isfile('.dbconfig'):
     values = {}
     execfile('.dbconfig', values)
