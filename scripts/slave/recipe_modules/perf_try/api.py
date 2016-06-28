@@ -10,10 +10,8 @@ platform for any test that can be run via buildbot, perf or otherwise.
 
 import re
 import urllib
-import uuid
 
 from recipe_engine import recipe_api
-from . import build_state
 
 PERF_CONFIG_FILE = 'tools/run-perf-test.cfg'
 WEBKIT_PERF_CONFIG_FILE = 'third_party/WebKit/Tools/run-perf-test.cfg'
@@ -36,7 +34,7 @@ Standard Error: +- %(std_err).05f delta
 
 %(results)s
 """
-SERVICE_ACCOUNT = 'chromium_bisect'
+
 
 class PerfTryJobApi(recipe_api.RecipeApi):
 
@@ -196,7 +194,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
           update_step,
           lambda transform_name: self.m.chromium_tests.run_mb_and_compile(
               compile_targets, None, name_suffix=transform_name('')))
-    else:  # pragma: no cover
+    else:
       self.m.chromium_tests.run_mb_and_compile(
           compile_targets, None, name_suffix=' %s' % name)
 
@@ -215,161 +213,17 @@ class PerfTryJobApi(recipe_api.RecipeApi):
         'output': ''.join(overall_output)
     }
 
-  def _build_and_run_tests(self, cfg, update_step, bot_db, revision_hash,
+  def _build_and_run_tests(self, cfg, update_step, bot_db, revision,
                            **kwargs):
     """Compiles binaries and runs tests for a given a revision."""
-    with_patch = kwargs.get('name') == 'With Patch'
-    update_step = self._checkout_revision(update_step, bot_db, revision_hash)
-    if update_step.presentation.properties:
-      revision_hash = update_step.presentation.properties['got_revision']
-    revision = build_state.BuildState(self, revision_hash, with_patch)
-    # request build and wait for it only when the build is nonexistent
-    if with_patch or not self._gsutil_file_exists(revision.build_file_path):
-      try:
-        self._request_build(revision, with_patch)
-        self._wait_for(revision)
-      except Exception, e:
-        raise self.m.step.StepFailure('Error occurs when building %s: %s' % (
-          revision.build_id, str(e)))
-    self._download_build(update_step, bot_db, revision)
+    update_step = self._checkout_revision(update_step, bot_db, revision)
+    self._compile(kwargs['name'], self.m.properties['mastername'],
+                  self.m.properties['buildername'], update_step, bot_db)
+
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.adb_install_apk('ChromePublic.apk')
 
     return self._run_test(cfg, **kwargs)
-
-  def _gsutil_file_exists(self, path):
-    """Returns True if a file exists at the given GS path."""
-    try:
-      self.m.gsutil(['ls', path], name='exists')
-    except self.m.step.StepFailure:  # pragma: no cover
-      return False
-    return True
-
-  # Duplicate code from auto_bisect.revision_state._request_build
-  def _request_build(self, revision, with_patch):
-    if self.m.chromium.c.TARGET_PLATFORM == 'android':
-      self.m.chromium_android.clean_local_files()
-    else:
-      # Removes any chrome temporary files or build.dead directories.
-      self.m.chromium.cleanup_temp()
-    if with_patch:
-      properties = {
-        'parent_got_revision': revision.commit_hash,
-        'clobber': True,
-        'build_archive_url': revision.build_file_path,
-        'issue': self.m.properties['issue'],
-        'patch_storage': self.m.properties['patch_storage'],
-        'patchset': self.m.properties['patchset'],
-        'rietveld': self.m.properties['rietveld']
-      }
-    else:
-      properties = {
-        'parent_got_revision': revision.commit_hash,
-        'clobber': True,
-        'build_archive_url': revision.build_file_path,
-      }
-    bot_name = self.get_builder_bot_for_this_platform()
-    if self.m.properties.get('is_test'):
-      client_operation_id = '123456'
-    else:
-      client_operation_id = uuid.uuid4().hex # pragma: no cover
-    build_details = {
-      'bucket': 'master.' + self.m.properties['mastername'],
-      'parameters': {
-        'buildername': bot_name,
-        'properties': properties
-      },
-      'client_operation_id': client_operation_id,
-      'tags':{}
-    }
-    result = self.m.buildbucket.put(
-      [build_details],
-      self.m.service_account.get_json_path(SERVICE_ACCOUNT))
-    revision.build_id = result.stdout['results'][0]['build']['id']
-
-
-  def _wait_for(self, revision): # pragma: no cover
-    while True:
-      if revision.is_completed():
-        if revision.is_build_archived:
-            break
-        raise self.m.step.StepFailure('Build %s fails' % revision.build_id)
-      else:
-        self.m.python.inline(
-            'sleeping',
-            """
-            import sys
-            import time
-            time.sleep(20*60)
-            sys.exit(0)
-            """)
-
-  # Duplicate code from auto_bisect.api.start_test_run_for_bisect
-  def _download_build(self, update_step, bot_db,
-                     revision, run_locally=False,
-                     skip_download=False):
-    mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
-    bot_config = bot_db.get_bot_config(mastername, buildername)
-    build_archive_url = revision.build_file_path
-    if not skip_download:
-      if self.m.chromium.c.TARGET_PLATFORM == 'android':
-        # The best way to ensure the old build directory is not used is to
-        # remove it.
-        build_dir = self.m.chromium.c.build_dir.join(
-            self.m.chromium.c.build_config_fs)
-        self.m.file.rmtree('build directory', build_dir)
-
-        # The way android builders on tryserver.chromium.perf are archived is
-        # different from builders on chromium.perf. In order to support both
-        # forms of archives, we added this temporary hack until builders are
-        # fixed. See http://crbug.com/535218.
-        zip_dir = self.m.path.join(self.m.path['checkout'], 'full-build-linux')
-        if self.m.path.exists(zip_dir):  # pragma: no cover
-          self.m.file.rmtree('full-build-linux directory', zip_dir)
-        gs_bucket = 'gs://%s/' % revision.bucket
-        archive_path = build_archive_url[len(gs_bucket):]
-        self.m.chromium_android.download_build(
-            bucket=bot_config['bucket'],
-            path=archive_path)
-
-        # The way android builders on tryserver.chromium.perf are archived is
-        # different from builders on chromium.perf. In order to support both
-        # forms of archives, we added this temporary hack until builders are
-        # fixed. See http://crbug.com/535218.
-        if self.m.path.exists(zip_dir):  # pragma: no cover
-          self.m.python.inline(
-              'moving full-build-linux to out/Release',
-              """
-              import shutil
-              import sys
-              shutil.move(sys.argv[1], sys.argv[2])
-              """,
-              args=[zip_dir, build_dir])
-      else:
-        self.m.chromium_tests.download_and_unzip_build(
-            mastername, buildername, update_step, bot_db,
-            build_archive_url=build_archive_url,
-            build_revision=revision.commit_hash,
-            override_bot_type='tester')
-
-  # Duplicate code from auto_bisect.bisector.get_builder_bot_for_this_platform
-  def get_builder_bot_for_this_platform(self):  # pragma: no cover
-    bot_name = self.m.properties.get('buildername', '')
-    if 'win' in bot_name:
-      if any(b in bot_name for b in ['x64', 'gpu']):
-        return 'winx64_bisect_builder'
-      return 'win_perf_bisect_builder'
-
-    if 'android' in bot_name:
-      if 'nexus9' in bot_name:
-        return 'android_arm64_perf_bisect_builder'
-      return 'android_perf_bisect_builder'
-
-    if 'mac' in bot_name:
-      return 'mac_perf_bisect_builder'
-
-    return 'linux_perf_bisect_builder'
 
   def _load_config_file(self, name, src_path, **kwargs):
     """Attempts to load the specified config file and grab config dict."""

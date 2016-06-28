@@ -19,9 +19,9 @@
       "--git-cache-dir",
       "[GIT_CACHE]",
       "--issue",
-      "12345",
+      "12853011",
       "--patchset",
-      "20001",
+      "1",
       "--rietveld_server",
       "https://codereview.chromium.org",
       "--output_json",
@@ -378,7 +378,6 @@
     "name": "load config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"client_operation_id\": \"12345726327327\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=android-chrome sunspider\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"max_time_minutes\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"metric\": \"dummy/dummy\", @@@",
@@ -418,66 +417,6 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "put",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium_bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"buildername\\\": \\\"android_arm64_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf-tryjob/android_perf_rel_arm64/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9123456.zip\\\", \\\"clobber\\\": true, \\\"issue\\\": \\\"12345\\\", \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"patch_storage\\\": \\\"rietveld\\\", \\\"patchset\\\": \\\"20001\\\", \\\"rietveld\\\": \\\"https://codereview.chromium.org\\\"}}\", \"tags\": [\"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
-    ],
-    "name": "buildbucket.put",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"bucket\": \"user.username\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"created_by\": \"user:username@example.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"created_ts\": \"1459200369835900\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"9016911228971028736\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"parameters_json\": \"{\\\"This_has_been\\\": \\\"removed\\\"}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"result_details_json\": \"null\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"status\": \"SCHEDULED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"status_changed_ts\": \"1459200369835930\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"updated_ts\": \"1459200369835940\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"utcnow_ts\": \"1459200369962370\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"etag\": \"\\\"8uCIh8TRuYs4vPN3iWmly9SJMqw\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"kind\": \"buildbucket#resourcesItem\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "9016911228971028736"
-    ],
-    "name": "buildbucket.get",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bucket\": \"master.tryserver.chromium.perf\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"id\": \"9009962699124567824\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status_changed_utc\": \"Mon Jun 13 19:32:37 2016\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"updated_utc\": \"Mon Jun 13 19:32:37 2016\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"url\": \"http://build.chromium.org/p/tryserver.chromium.perf/builders/linux_perf_bisect/builds/6537\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"utcnow_utc\": \"Tue Jun 21 21:33:56 2016\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
@@ -499,26 +438,64 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--force-version",
-      "4.7",
-      "----",
-      "cp",
-      "gs://chrome-perf/android_perf_rel_arm64/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9123456.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.chromium.perf",
+      "-b",
+      "android_nexus9_perf_bisect",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
     ],
-    "name": "gsutil download_build_product"
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files (with patch)"
   },
   {
     "cmd": [
-      "unzip",
-      "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-service-account-json-file",
+      "/creds/service_accounts/service-account-goma-client.json",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "unzip_build_product"
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -558,9 +535,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus9_perf_bisect\", \"buildnumber\": 571, \"is_test\": true, \"issue\": \"12345\", \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patch_storage\": \"rietveld\", \"patchset\": \"20001\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus9_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus9_perf_bisect\", \"buildnumber\": 571, \"is_test\": true, \"issue\": \"12345\", \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patch_storage\": \"rietveld\", \"patchset\": \"20001\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus9_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test (With Patch) 1 of 1",
       "--builder-name=android_nexus9_perf_bisect",
       "--slave-name=TestSlavename",
@@ -705,23 +682,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/android_perf_rel_arm64/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
-    ],
-    "name": "gsutil exists",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
       "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
       "[SLAVE_BUILD]/src/out/Release/test_logs",
@@ -747,107 +707,66 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "put",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium_bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"buildername\\\": \\\"android_arm64_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/android_perf_rel_arm64/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\"}}\", \"tags\": [\"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.chromium.perf",
+      "-b",
+      "android_nexus9_perf_bisect",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
     ],
-    "name": "buildbucket.put (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"bucket\": \"user.username\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"created_by\": \"user:username@example.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"created_ts\": \"1459200369835900\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"9016911228971028736\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"parameters_json\": \"{\\\"This_has_been\\\": \\\"removed\\\"}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"result_details_json\": \"null\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"status\": \"SCHEDULED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"status_changed_ts\": \"1459200369835930\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"updated_ts\": \"1459200369835940\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"utcnow_ts\": \"1459200369962370\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"etag\": \"\\\"8uCIh8TRuYs4vPN3iWmly9SJMqw\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"kind\": \"buildbucket#resourcesItem\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "9016911228971028736"
-    ],
-    "name": "buildbucket.get (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bucket\": \"master.tryserver.chromium.perf\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"id\": \"9009962699124567824\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status_changed_utc\": \"Mon Jun 13 19:32:37 2016\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"updated_utc\": \"Mon Jun 13 19:32:37 2016\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"url\": \"http://build.chromium.org/p/tryserver.chromium.perf/builders/linux_perf_bisect/builds/6537\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"utcnow_utc\": \"Tue Jun 21 21:33:56 2016\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files Without Patch"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
-    ],
-    "name": "rmtree build directory (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
       "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--force-version",
-      "4.7",
-      "----",
-      "cp",
-      "gs://chrome-perf/android_perf_rel_arm64/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-service-account-json-file",
+      "/creds/service_accounts/service-account-goma-client.json",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--"
     ],
-    "name": "gsutil download_build_product (2)"
-  },
-  {
-    "cmd": [
-      "unzip",
-      "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "unzip_build_product (2)"
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile Without Patch",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -887,9 +806,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus9_perf_bisect\", \"buildnumber\": 571, \"is_test\": true, \"issue\": \"12345\", \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patch_storage\": \"rietveld\", \"patchset\": \"20001\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus9_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus9_perf_bisect\", \"buildnumber\": 571, \"is_test\": true, \"issue\": \"12345\", \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patch_storage\": \"rietveld\", \"patchset\": \"20001\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus9_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test (Without Patch) 1 of 1",
       "--builder-name=android_nexus9_perf_bisect",
       "--slave-name=TestSlavename",
@@ -972,9 +891,9 @@
       "--git-cache-dir",
       "[GIT_CACHE]",
       "--issue",
-      "12345",
+      "12853011",
       "--patchset",
-      "20001",
+      "1",
       "--rietveld_server",
       "https://codereview.chromium.org",
       "--output_json",
