@@ -369,8 +369,6 @@ def main_ninja(options, args):
       # from compile.py, https://crbug.com/574557
       build_directory.RmtreeExceptNinjaOrGomaFiles(options.target_output_dir)
 
-    if options.verbose:
-      command.append('-v')
     command.extend(options.build_args)
     command.extend(args)
 
@@ -514,7 +512,6 @@ def real_main():
   option_parser.add_option('--goma-service-account-json-file',
                            help='Specify a file containing goma service account'
                                 ' credentials')
-  option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--gsutil-py-path',
                            help='Specify path to gsutil.py script.')
   option_parser.add_option('--ninja-path', default='ninja',
