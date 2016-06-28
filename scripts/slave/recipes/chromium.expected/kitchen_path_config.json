@@ -332,6 +332,8 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
       "--target",
       "Release",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
       "--build-url",
       "gs://chromium-fyi-archive/chromium.fyi/Linux remote_run Builder",
       "--build_revision",
