@@ -17,6 +17,8 @@ class BisectTesterApi(recipe_api.RecipeApi):
 
   def __init__(self, **kwargs):
     super(BisectTesterApi, self).__init__(**kwargs)
+    self.device_to_test = None
+    self.devices_tested = []
 
   def local_test_enabled(self):
     buildername = os.environ.get('BUILDBOT_BUILDERNAME')

@@ -40,12 +40,13 @@ class AutoBisectApi(recipe_api.RecipeApi):
     self.override_poll_interval = None
     self.bot_db = None
     # Repo for triggering build jobs.
-    self.svn_repo_url = 'svn://svn.chromium.org/chrome-try/try-perf'    
+    self.svn_repo_url = 'svn://svn.chromium.org/chrome-try/try-perf'
     # The variable below are set and used for the internal bisects.
     self.buildurl_gs_prefix = None
     self.internal_bisect = False
     self.builder_bot = None
     self.full_deploy_script = None
+
 
   def perform_bisect(self, **flags):
     return local_bisect.perform_bisect(self, **flags)
@@ -155,7 +156,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     except self.m.step.StepFailure:  # pragma: no cover
      self.surface_result('BAD_REV')
      raise
-     
+
 
   def run_bisect_script(self, **kwargs):
     """Executes src/tools/run-perf-bisect-regression.py to perform bisection."""
@@ -323,7 +324,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         '-v',
         '--blacklist-file', self.m.chromium_android.blacklist_file,
         '--perfbot',
-        '--release',        
+        '--release',
     ]
     if args:
       full_deploy_flags += args
@@ -333,7 +334,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         full_deploy_flags,
         infra_step=True,
         env=self.m.chromium.get_env())
-  
+
   def start_try_job(self, api, update_step=None, bot_db=None, **kwargs):
     """Starts a recipe bisect job, perf test run, or legacy bisect run.
 

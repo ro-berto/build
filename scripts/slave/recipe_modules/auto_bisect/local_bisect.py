@@ -8,25 +8,42 @@ import json
 
 
 def perform_bisect(api, **flags):  # pragma: no cover
-  bisect_config = api.m.properties.get('bisect_config')
-  assert isinstance(bisect_config, collections.Mapping)
-  bisector = api.create_bisector(bisect_config, **flags)
-  with api.m.step.nest('Gathering reference values'):
-    _gather_reference_range(api, bisector)
-  if (not bisector.failed and bisector.check_improvement_direction() and
-      bisector.check_initial_confidence()):
-    if bisector.check_reach_adjacent_revision(bisector.good_rev):
-      # Only show this step if bisect has reached adjacent revisions.
-      with api.m.step.nest(str('Check bisect finished on revision ' +
-                               bisector.good_rev.revision_string())):
-        if bisector.check_bisect_finished(bisector.good_rev):
-          bisector.bisect_over = True
-    if not bisector.bisect_over:
-      _bisect_main_loop(bisector)
-  else:
-    bisector.bisect_over = True
-  bisector.print_result_debug_info()
-  bisector.post_result(halt_on_failure=True)
+  try:
+      bisect_config = api.m.properties.get('bisect_config')
+      assert isinstance(bisect_config, collections.Mapping)
+      bisector = api.create_bisector(bisect_config, **flags)
+      with api.m.step.nest('Gathering reference values'):
+        _gather_reference_range(api, bisector)
+      if (not bisector.failed and bisector.check_improvement_direction() and
+          bisector.check_initial_confidence()):
+        if bisector.check_reach_adjacent_revision(bisector.good_rev):
+          # Only show this step if bisect has reached adjacent revisions.
+          with api.m.step.nest(str('Check bisect finished on revision ' +
+                                   bisector.good_rev.revision_string())):
+            if bisector.check_bisect_finished(bisector.good_rev):
+              bisector.bisect_over = True
+        if not bisector.bisect_over:
+          _bisect_main_loop(bisector)
+      else:
+        bisector.bisect_over = True
+      bisector.print_result_debug_info()
+      bisector.post_result(halt_on_failure=True)
+  except api.m.step.StepFailure:
+      if api.m.chromium.c.TARGET_PLATFORM == 'android':
+        api.m.chromium_android.device_status_check()
+        connected_devices = api.m.chromium_android.devices()
+        tested_devices = api.m.bisect_tester.devices_tested
+        available_devices = [device for device in connected_devices
+                             if device not in tested_devices]
+        if available_devices:
+          serial_number = available_devices[0]
+          api.m.bisect_tester.device_to_test = serial_number
+          api.m.bisect_tester.devices_tested.append(serial_number)
+          perform_bisect(api,**flags)
+        else:
+          raise
+      else:
+        raise
 
 
 def _gather_reference_range(api, bisector):  # pragma: no cover
