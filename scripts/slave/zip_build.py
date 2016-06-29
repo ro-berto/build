@@ -213,8 +213,13 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
   return (zip_base, zip_ext, versioned_file)
 
 
-def UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl):
-  if slave_utils.GSUtilCopyFile(versioned_file, build_url, gs_acl=gs_acl):
+def UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl,
+                          gsutil_py_path=None):
+  override_gsutil = None
+  if gsutil_py_path:
+    override_gsutil = [sys.executable, gsutil_py_path]
+  if slave_utils.GSUtilCopyFile(versioned_file, build_url, gs_acl=gs_acl,
+                                override_gsutil=override_gsutil):
     raise chromium_utils.ExternalError(
         'gsutil returned non-zero status when uploading %s to %s!' %
         (versioned_file, build_url))
@@ -374,7 +379,8 @@ def Archive(options):
   urls = {}
   if options.build_url.startswith('gs://'):
     zip_url = UploadToGoogleStorage(
-        versioned_file, revision_file, options.build_url, options.gs_acl)
+        versioned_file, revision_file, options.build_url, options.gs_acl,
+        options.gsutil_py_path)
 
     storage_url = ('https://storage.googleapis.com/%s/%s' %
         (options.build_url[len('gs://'):], os.path.basename(versioned_file)))
@@ -442,6 +448,8 @@ def main(argv):
                            help='Directory to use for staging the archives. '
                                 'Default behavior is to automatically detect '
                                 'slave\'s build directory.')
+  option_parser.add_option('--gsutil-py-path',
+                           help='Specify path to gsutil.py script.')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)

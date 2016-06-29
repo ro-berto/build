@@ -424,7 +424,7 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
 
 
 def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
-                   cache_control=None, metadata=None):
+                   cache_control=None, metadata=None, override_gsutil=None):
   """Copy a file to Google Storage.
 
   Runs the following command:
@@ -438,6 +438,7 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
     subdir: optional subdirectory withing the bucket
     mimetype: optional value to add as a Content-Type header
     gs_acl: optional value to add as a canned-acl
+    override_gsutil (list): optional argv to run gsutil
   Returns:
     The status code returned from running the generated gsutil command.
   """
@@ -453,7 +454,7 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
       dest = '/'.join([gs_base, subdir])
   dest = '/'.join([dest, os.path.basename(filename)])
   return GSUtilCopy(source, dest, mimetype, gs_acl, cache_control,
-                    metadata=metadata)
+                    metadata=metadata, override_gsutil=override_gsutil)
 
 
 def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None,

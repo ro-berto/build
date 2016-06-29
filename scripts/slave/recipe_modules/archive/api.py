@@ -106,6 +106,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       if not src_dir:
         src_dir = self.m.path['checkout']
       args.extend([
+          '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
           '--staging-dir', self.m.path['cache'].join('chrome_staging'),
           '--src-dir', src_dir
       ])
