@@ -559,11 +559,6 @@ TRYBOTS = freeze({
             'buildername': 'GPU Win Builder',
             'tester': 'Win7 Release (ATI)',
           },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win Builder',
-            'tester': 'Optional Win7 Release (ATI)',
-          },
         ],
       },
       # Optional Official trybot.
