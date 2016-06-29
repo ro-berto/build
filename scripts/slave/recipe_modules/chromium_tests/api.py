@@ -50,6 +50,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.add_builders(builders.BUILDERS)
     self._precommit_mode = False
 
+    # Keep track of working directory (which contains the checkout).
+    # None means "default value".
+    self._working_dir = None
+
   @property
   def builders(self):
     return self._builders
@@ -166,6 +170,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_config.get('checkout_dir', sanitized_buildername))
       self.m.shutil.makedirs('checkout path', checkout_path)
       kwargs['cwd'] = checkout_path
+      self._working_dir = checkout_path
 
     # Bot Update re-uses the gclient configs.
     update_step = self.m.bot_update.ensure_checkout(
@@ -519,7 +524,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   @contextlib.contextmanager
   def wrap_chromium_tests(self, bot_config, tests=None):
-    with self.m.step.context({'env': self.m.chromium.get_env()}):
+    context = {'env': self.m.chromium.get_env()}
+    # TODO(phajdan.jr): Enable globally after confirming it works.
+    if bot_config.matches_any_bot_id(
+        lambda bot_id: 'remote_run' in bot_id['buildername'] or
+                       'remote_run' in bot_id.get('tester', '')):
+      context['cwd'] = self._working_dir
+    with self.m.step.context(context):
       bot_type = bot_config.get('bot_type', 'builder_tester')
 
       if bot_type in ('tester', 'builder_tester'):

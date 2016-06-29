@@ -320,6 +320,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux_remote_run_Tester",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -396,6 +397,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux_remote_run_Tester",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -438,6 +440,7 @@
       "--build-number=571",
       "base_unittests"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux_remote_run_Tester",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -467,6 +470,7 @@
       "1",
       "browser_tests/Ubuntu-12.04/ffffffffff/Linux remote_run Tester/571"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux_remote_run_Tester",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -495,6 +499,7 @@
       "--chrome-revision",
       "170242"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux_remote_run_Tester",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
