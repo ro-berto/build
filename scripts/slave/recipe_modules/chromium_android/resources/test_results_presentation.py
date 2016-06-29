@@ -9,8 +9,7 @@ import logging
 import os
 import sys
 
-RESULT_DETAILS_TEMPLATE = """
-<!DOCTYPE html>
+RESULT_DETAILS_TEMPLATE = """<!DOCTYPE html>
 <html>
   <head>
     <style>
