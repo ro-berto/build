@@ -498,11 +498,6 @@ TRYBOTS = freeze({
             'buildername': 'GPU Win Builder',
             'tester': 'Win7 Release (NVIDIA)',
           },
-          {
-            'mastername': 'chromium.gpu',
-            'buildername': 'GPU Win Builder',
-            'tester': 'Win7 Release (ATI)',
-          },
         ],
       },
       'win10_chromium_x64_rel_ng': simple_bot({
