@@ -101,6 +101,8 @@ def GenTests(api):
         'parent_buildername': bot_config.get('parent_buildername'),
         'build_data_dir': api.path['root'].join('build_data_dir'),
       }
+      if 'remote_run' in buildername:
+        properties['path_config'] = 'kitchen'
       if mastername == 'chromium.webkit':
         properties['gs_acl'] = 'public-read'
       test = (
