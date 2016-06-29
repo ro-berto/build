@@ -506,7 +506,7 @@
       "--expiration",
       "72000",
       "--io-timeout",
-      "1200",
+      "2400",
       "--hard-timeout",
       "14400",
       "--dimension",
