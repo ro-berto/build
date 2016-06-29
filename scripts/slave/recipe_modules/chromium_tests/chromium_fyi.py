@@ -542,7 +542,7 @@ SPEC = {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'win',
-        'TARGET_BITS': 64,
+        'TARGET_BITS': 32,
       },
       'GYP_DEFINES': {
         'dcheck_always_on': '1',
