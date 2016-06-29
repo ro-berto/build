@@ -218,6 +218,7 @@ def UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl,
   override_gsutil = None
   if gsutil_py_path:
     override_gsutil = [sys.executable, gsutil_py_path]
+
   if slave_utils.GSUtilCopyFile(versioned_file, build_url, gs_acl=gs_acl,
                                 override_gsutil=override_gsutil):
     raise chromium_utils.ExternalError(
@@ -229,7 +230,8 @@ def UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl,
   # locally since that filename is used in the GS bucket as well.
   last_change_file = os.path.join(os.path.dirname(revision_file), 'LAST_CHANGE')
   shutil.copy(revision_file, last_change_file)
-  if slave_utils.GSUtilCopyFile(last_change_file, build_url, gs_acl=gs_acl):
+  if slave_utils.GSUtilCopyFile(last_change_file, build_url, gs_acl=gs_acl,
+                                override_gsutil=override_gsutil):
     raise chromium_utils.ExternalError(
         'gsutil returned non-zero status when uploading %s to %s!' %
         (last_change_file, build_url))
