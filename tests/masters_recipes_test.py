@@ -67,31 +67,6 @@ SUPPRESSIONS = {
         'Win7 (32) Tests',
         'Win x64 Builder (dbg)',
     ],
-
-}
-
-
-# This dict should normally be empty, but may be non-empty when builders
-# are being renamed, so that recipes can continue to refer to builders
-# that are in the process of being removed.
-DEPRECATED_BUILDERS = {
-    # TODO(dpranke): Remove these after the masters have restarted.
-    'master.chromium.mac': [
-        'Mac GN',
-        'Mac GN (dbg)',
-    ],
-    'master.chromium.win': [
-        'Win8 Aura',
-        'Win8 GN (dbg)',
-    ],
-    'master.tryserver.chromium.mac': [
-        'mac_chromium_gn_dbg',
-        'mac_chromium_gn_rel',
-    ],
-    'master.tryserver.chromium.win': [
-        'win8_chromium_gn_dbg',
-        'win8_chromium_ng',
-    ],
 }
 
 
@@ -167,10 +142,8 @@ def main(argv):
   cq_builders = getCQBuilders(args.cq_config) if args.cq_config else None
 
   for master in MAIN_WATERFALL_MASTERS:
-
     builders = getBuildersAndRecipes(master)
     all_builders.update((master, b) for b in builders)
-    deprecated_builders = set(DEPRECATED_BUILDERS.get(master, []))
 
     # We only have a standardized way to mirror builders using the chromium
     # recipe on the tryserver.
@@ -181,17 +154,15 @@ def main(argv):
         master.replace('master.', ''), {}).get('builders')
     if recipe_side_builders is not None:
       bogus_builders = set(recipe_side_builders.keys()).difference(
-          set(builders.keys())).difference(deprecated_builders)
+          set(builders.keys()))
       if bogus_builders:
-        import pdb; pdb.set_trace()
         exit_code = 1
         print 'The following builders from chromium recipe'
         print 'do not exist in master config for %s:' % master
         print '\n'.join('\t%s' % b for b in sorted(bogus_builders))
 
       other_recipe_builders = set(recipe_side_builders.keys()).difference(
-          set(chromium_recipe_builders[master])).difference(
-              deprecated_builders)
+          set(chromium_recipe_builders[master]))
       if other_recipe_builders:
         exit_code = 1
         print 'The following builders from chromium recipe'
@@ -205,10 +176,9 @@ def main(argv):
     builders = getBuildersAndRecipes(master)
     recipe_side_builders = chromium_trybot_BUILDERS[
         short_master]['builders']
-    deprecated_builders = set(DEPRECATED_BUILDERS.get(master, []))
 
     bogus_builders = set(recipe_side_builders.keys()).difference(
-        set(builders.keys())).difference(deprecated_builders)
+        set(builders.keys()))
     if bogus_builders:
       exit_code = 1
       print 'The following builders from chromium_trybot recipe'

@@ -390,19 +390,9 @@ TRYBOTS = freeze({
         'buildername': 'Mac Builder (dbg)',
         'tester': 'Mac10.9 Tests (dbg)',
       }),
-      'mac_chromium_gn_dbg': simple_bot({
-        # TODO(dpranke): Remove after masters have restarted.
-        'mastername': 'chromium.mac',
-        'buildername': 'Mac GN (dbg)',
-      }),
       'mac_chromium_gyp_dbg': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac GYP (dbg)',
-      }),
-      'mac_chromium_gn_rel': simple_bot({
-        # TODO(dpranke): Remove after masters have restarted.
-        'mastername': 'chromium.mac',
-        'buildername': 'Mac GN',
       }),
       'mac_chromium_gyp_rel': simple_bot({
         'mastername': 'chromium.mac',
@@ -523,19 +513,9 @@ TRYBOTS = freeze({
         'buildername': 'Win x64 Builder',
         'tester': 'Win 7 Tests x64 (1)',
       }),
-      'win8_chromium_ng': simple_bot({
-        # TODO(dpranke): Remove after masters have restarted.
-        'mastername': 'chromium.win',
-        'buildername': 'Win8 Aura',
-      }),
       'win8_chromium_gyp_rel': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win8 GYP',
-      }),
-      'win8_chromium_gn_dbg': simple_bot({
-        # TODO(dpranke): Remove after masters have restarted.
-        'mastername': 'chromium.win',
-        'buildername': 'Win8 GYP (dbg)',
       }),
       'win8_chromium_gyp_dbg': simple_bot({
         'mastername': 'chromium.win',
