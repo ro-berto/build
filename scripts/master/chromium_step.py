@@ -58,11 +58,14 @@ def updateText(section):
 # derived from addCompleteLog in process/buildstep.py
 def addLogToStep(step, name, text):
   """Add a complete log to a step."""
-  loog = step.addLog(name)
-  size = loog.chunkSize
-  for start in range(0, len(text), size):
-    loog.addStdout(text[start:start+size])
-  loog.finish()
+  if text and text.startswith('<!DOCTYPE html'):
+    step.addHTMLLog(name, text)
+  else:
+    add_log = step.addLog(name)
+    size = add_log.chunkSize
+    for start in range(0, len(text), size):
+      add_log.addStdout(text[start:start+size])
+    add_log.finish()
 
 
 class GClient(source.Source):
