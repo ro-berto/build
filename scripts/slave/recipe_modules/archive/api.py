@@ -320,6 +320,13 @@ class ArchiveApi(recipe_api.RecipeApi):
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
         '--target', target,
     ]
+    # TODO(phajdan.jr): Enable globally after confirming it works.
+    if self.m.properties.get('buildername') == 'Linux remote_run Tester':
+      if not src_dir:
+        src_dir = self.m.path['checkout']
+      args.extend([
+          '--src-dir', src_dir,
+      ])
     if build_archive_url:
       args.extend(['--build-archive-url', build_archive_url])
     else:
