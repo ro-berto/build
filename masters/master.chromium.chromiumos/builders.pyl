@@ -11,7 +11,7 @@
       "recipe": "chromium",
       "scheduler": "chromium",
       "slave_pools": ["linux_full"],
-      "category": "0default",
+      "category": "1default",
     },
 
     "Linux ChromiumOS Builder": {
