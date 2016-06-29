@@ -500,10 +500,15 @@ class ChromiteFetcher(object):
       # Force no authentication. Chromite is public! By default, 'requests' will
       # use 'netrc' for authentication. This can cause the load to fail if
       # the '.netrc' has an invalid entry, failing authentication.
-      return requests.get(
+      res = requests.get(
           url,
           verify=True,
-          auth=lambda r: r).text
+          auth=lambda r: r)
+      if res.status_code != 200:
+        raise GitilesError(
+            url, 'Unexpected HTTP status code %d; body: %s' % (
+              res.status_code, res.text))
+      return res.text
     except requests.exceptions.RequestException as e:
       raise GitilesError(url, 'Request raised exception: %s' % (e,))
 
