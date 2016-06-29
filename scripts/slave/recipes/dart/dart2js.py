@@ -144,8 +144,10 @@ def RunSteps(api):
       if sharded:
         test_args.extend(['--shards=%s' % num_shards, '--shard=%s' % shard])
 
+      if system in ['win7', 'win8', 'win10']:
+        test_args.append('--builder-tag=%s' % system)
+
       if runtime in ['ie10', 'ie11']:
-        test_args.append('--builder-tag=windows-%s' % runtime)
         test_specs = [{'name': 'dart2js %s tests' % runtime,
                   'tests': ['html', 'pkg', 'samples', 'co19']}]
       else:

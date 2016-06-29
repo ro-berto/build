@@ -100,7 +100,7 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
-      "--builder-tag=windows-ie10",
+      "--builder-tag=win7",
       "html",
       "pkg",
       "samples",
