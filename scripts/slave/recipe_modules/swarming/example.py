@@ -91,6 +91,9 @@ def RunSteps(api, simulated_version,
     task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
     task.shards = 2 if platform == 'linux' else 1
     task.tags.add('os:' + platform)
+    if api.swarming_client.get_script_version('swarming.py') >= (0, 8, 6):
+      task.cipd_packages = [
+          ('bin', 'super/awesome/pkg', 'git_revision:deadbeef')]
     tasks.append(task)
 
   # Launch all tasks.
@@ -181,3 +184,16 @@ def GenTests(api):
           patchset="1001",
           simulated_version=(0, 5),
           show_isolated_out_in_collect_step=False))
+
+  yield (
+      api.test('basic_0.8.6_cipd_packages') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
+      api.properties(simulated_version=(0, 8, 6)))
