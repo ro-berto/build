@@ -151,6 +151,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "1FF17015",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -277,6 +278,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "1FF17015",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -404,6 +406,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "1FF17015",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -530,6 +533,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "1FF17015",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -656,6 +660,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "1FF17015",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -782,6 +787,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "1FF17015",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -909,6 +915,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "1FF17015",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",

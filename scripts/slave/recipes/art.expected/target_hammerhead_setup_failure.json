@@ -163,6 +163,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "06ad0731003b6dbd",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -297,6 +298,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "06ad0731003b6dbd",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -432,6 +434,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "06ad0731003b6dbd",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -566,6 +569,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "06ad0731003b6dbd",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -699,6 +703,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "06ad0731003b6dbd",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -832,6 +837,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "06ad0731003b6dbd",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -966,6 +972,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "06ad0731003b6dbd",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",

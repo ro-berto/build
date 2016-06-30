@@ -231,6 +231,7 @@ def setup_target(api,
 
     test_env = env.copy()
     test_env.update({ 'ART_TEST_NO_SYNC': 'true' })
+    test_env.update({ 'ANDROID_ROOT': android_root })
 
     api.step('test gtest', ['make', '-j%d' % (make_jobs),
       'test-art-target-gtest%d' % bitness], env=test_env)
