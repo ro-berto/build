@@ -2285,5 +2285,43 @@ SPEC = {
       'use_isolate': True,
       'enable_swarming': True,
     },
+    'Mojo ChromiumOS': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos', 'mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'chromeos',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'testing': { 'platform': 'linux', },
+      'use_isolate': True,
+      'enable_swarming': True,
+    },
+    'Mojo Windows': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'win',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder_tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'testing': { 'platform': 'win', },
+      'use_isolate': True,
+      'enable_swarming': True,
+    },
   },
 }

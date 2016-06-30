@@ -5,9 +5,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "chromium.mojo",
+      "chromium.fyi",
       "--builder",
-      "Chromium Mojo Linux",
+      "Mojo ChromiumOS",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -162,6 +162,19 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.4.10@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
@@ -169,7 +182,8 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -187,7 +201,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Chromium Mojo Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Mojo ChromiumOS\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"chromeos\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -200,13 +214,24 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.mojo.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.mojo.json)",
+    "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mojo.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mojo ChromiumOS\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -225,22 +250,39 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.mojo",
+      "chromium.fyi",
       "-b",
-      "Chromium Mojo Linux",
+      "Mojo ChromiumOS",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
+      "--swarming-targets-file",
+      "browser_tests\n",
       "//out/Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
   },
   {
     "cmd": [
@@ -273,8 +315,8 @@
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--",
-      "All",
-      "chromium_builder_tests"
+      "browser_tests",
+      "browser_tests_run"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -283,6 +325,102 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[SLAVE_BUILD]/src/out/Release/browser_tests.isolated.gen.json"
+    ],
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "find isolated tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
+      "browser_tests"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "[error] browser_tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '*.isolated file for target %s is missing' % sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nprint '%s wasn\\'t triggered' % sys.argv[1]\nsys.exit(1)\n",
+      "browser_tests"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "[collect error] browser_tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '%s wasn\\'t triggered' % sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
