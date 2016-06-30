@@ -176,7 +176,7 @@
       "--host",
       "cr-buildbucket.appspot.com",
       "--service-account-json",
-      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"win_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Win Builder/full-build-win32_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:win_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
     "name": "buildbucket.put",
@@ -206,7 +206,7 @@
       "--host",
       "cr-buildbucket.appspot.com",
       "--service-account-json",
-      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"win_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Win Builder/full-build-win32_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\\\"}}\", \"tags\": [\"builder:win_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
     "name": "buildbucket.put (2)",
@@ -396,7 +396,7 @@
       "--host",
       "cr-buildbucket.appspot.com",
       "--service-account-json",
-      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"win_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Win Builder/full-build-win32_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:win_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
     "name": "buildbucket.put (3)",
@@ -668,7 +668,7 @@
       "--host",
       "cr-buildbucket.appspot.com",
       "--service-account-json",
-      "/creds/service_accounts/service-account-chromium_bisect.json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"win_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Win Builder/full-build-win32_a6298e4afedbf2cd461755ea6f45b0ad64222222_51e7ed4b63ad81d8b499e42b888149349afaaca1.zip\\\", \\\"clobber\\\": true, \\\"deps_revision_overrides\\\": {\\\"v8\\\": \\\"003\\\"}, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:win_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
     "name": "buildbucket.put (4)",
