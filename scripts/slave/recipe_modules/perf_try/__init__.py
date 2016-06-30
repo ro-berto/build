@@ -1,7 +1,6 @@
 DEPS = [
     'depot_tools/bot_update',
     'bisect_tester',
-    'buildbucket',
     'chromium',
     'chromium_android',
     'chromium_tests',
@@ -20,8 +19,6 @@ DEPS = [
     'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
-    'service_account',
     'trigger',
-    'url',
     'depot_tools/tryserver',
 ]
