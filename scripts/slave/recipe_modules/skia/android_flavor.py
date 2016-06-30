@@ -68,7 +68,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         android_devices.SLAVE_INFO['default'])
     self.android_bin = self._skia_api.skia_dir.join(
         'platform_tools', 'android', 'bin')
-    self._android_sdk_root = self._skia_api.slave_dir.join('android-sdk')
+    self._android_sdk_root = self._skia_api.slave_dir.join(
+        'android_sdk', 'android-sdk')
     self.serial = None
     self.serial_args = []
     try:

@@ -168,7 +168,7 @@ def isolate_recipes(api):
 def trigger_task(api, task_name, builder, master, slave, buildnumber,
                  builder_spec, got_revision, infrabots_dir, idempotent=False,
                  store_output=True, extra_isolate_hashes=None, expiration=None,
-                 hard_timeout=None, io_timeout=None):
+                 hard_timeout=None, io_timeout=None, cipd_packages=None):
   """Trigger the given bot to run as a Swarming task."""
   # TODO(borenet): We're using Swarming directly to run the recipe through
   # recipes.py. Once it's possible to track the state of a Buildbucket build,
@@ -220,7 +220,8 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
       extra_args=extra_args,
       expiration=expiration,
       hard_timeout=hard_timeout,
-      io_timeout=io_timeout)
+      io_timeout=io_timeout,
+      cipd_packages=cipd_packages)
 
 
 def checkout_steps(api):
@@ -262,7 +263,7 @@ def housekeeper_swarm(api, builder_spec, got_revision, infrabots_dir,
 
 
 def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
-                        extra_isolate_hashes):
+                        extra_isolate_hashes, cipd_packages):
   builder_name = derive_compile_bot_name(api.properties['buildername'],
                                          builder_spec)
   compile_builder_spec = builder_spec
@@ -305,7 +306,8 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
       infrabots_dir,
       idempotent=True,
       store_output=False,
-      extra_isolate_hashes=extra_hashes)
+      extra_isolate_hashes=extra_hashes,
+      cipd_packages=cipd_packages)
 
   # Wait for compile to finish, record the results hash.
   return api.skia_swarming.collect_swarming_task_isolate_hash(task)
@@ -328,7 +330,7 @@ def get_timeouts(builder_cfg):
 
 
 def perf_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
-                       extra_hashes):
+                       extra_hashes, cipd_packages):
   """Trigger perf tests via Swarming."""
 
   expiration, hard_timeout, io_timeout = get_timeouts(
@@ -346,7 +348,8 @@ def perf_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
       extra_isolate_hashes=extra_hashes,
       expiration=expiration,
       hard_timeout=hard_timeout,
-      io_timeout=io_timeout)
+      io_timeout=io_timeout,
+      cipd_packages=cipd_packages)
 
 
 def perf_steps_collect(api, task, upload_perf_results, got_revision,
@@ -388,7 +391,7 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
 
 
 def test_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
-                       extra_hashes):
+                       extra_hashes, cipd_packages):
   """Trigger DM via Swarming."""
   expiration, hard_timeout, io_timeout = get_timeouts(
       builder_spec['builder_cfg'])
@@ -405,7 +408,8 @@ def test_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
       extra_isolate_hashes=extra_hashes,
       expiration=expiration,
       hard_timeout=hard_timeout,
-      io_timeout=io_timeout)
+      io_timeout=io_timeout,
+      cipd_packages=cipd_packages)
 
 
 def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot,
@@ -531,40 +535,59 @@ def RunSteps(api):
   recipes_hash = isolate_recipes(api)
   extra_hashes = [recipes_hash]
 
+  # Get ready to compile.
+  compile_cipd_deps = []
+  extra_compile_hashes = [recipes_hash]
+
   # Android bots require an SDK.
   if 'Android' in api.properties['buildername']:
-    test_data = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
-    hash_file = infrabots_dir.join('android_sdk_hash')
-    # try/except as a temporary measure to prevent breakages for backfills
-    # and branches.
-    try:
-      h = api.skia._readfile(hash_file,
-                             name='Read android_sdk_hash',
-                             test_data=test_data).rstrip()
-    except api.step.StepFailure:
-      # Just fall back on the original hash.
-      h = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
-    extra_hashes.append(h)
+    android_sdk_version_file = infrabots_dir.join(
+        'assets', 'android_sdk', 'VERSION')
+    if api.path.exists(android_sdk_version_file):
+      android_sdk_version = api.skia._readfile(android_sdk_version_file,
+                                               name='read android_sdk VERSION',
+                                               test_data='0').rstrip()
+      android_sdk_version = 'version:%s' % android_sdk_version
+      pkg = ('android_sdk', 'skia/bots/android_sdk', android_sdk_version)
+      compile_cipd_deps.append(pkg)
+    else:
+      # TODO(borenet): Remove this legacy method after 7/1/2016.
+      test_data = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
+      hash_file = infrabots_dir.join('android_sdk_hash')
+      # try/except as a temporary measure to prevent breakages for backfills
+      # and branches.
+      try:
+        h = api.skia._readfile(hash_file,
+                               name='Read android_sdk_hash',
+                               test_data=test_data).rstrip()
+      except api.step.StepFailure:
+        # Just fall back on the original hash.
+        h = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
+      extra_hashes.append(h)
+      extra_compile_hashes.append(h)
 
+  # Compile.
   do_compile_steps = builder_spec.get('do_compile_steps', True)
-  compile_hash = None
   if do_compile_steps:
-    compile_hash = compile_steps_swarm(api, builder_spec, got_revision,
-                                       infrabots_dir, extra_hashes)
+    extra_hashes.append(compile_steps_swarm(
+        api, builder_spec, got_revision, infrabots_dir, extra_compile_hashes,
+        cipd_packages=compile_cipd_deps))
 
   if builder_cfg['role'] == 'Housekeeper':
     housekeeper_swarm(api, builder_spec, got_revision, infrabots_dir,
                       extra_hashes)
     return
 
+  # Get ready to test/perf.
+
+  # CIPD packages needed by test/perf.
+  cipd_packages = []
+
   do_test_steps = builder_spec['do_test_steps']
   do_perf_steps = builder_spec['do_perf_steps']
 
   if not (do_test_steps or do_perf_steps):
     return
-
-  if compile_hash:
-    extra_hashes.append(compile_hash)
 
   api.skia.download_skps(api.path['slave_build'].join('tmp'),
                          api.path['slave_build'].join('skps'))
@@ -575,10 +598,10 @@ def RunSteps(api):
   perf_task = None
   if do_test_steps:
     test_task = test_steps_trigger(api, builder_spec, got_revision,
-                                   infrabots_dir, extra_hashes)
+                                   infrabots_dir, extra_hashes, cipd_packages)
   if do_perf_steps:
     perf_task = perf_steps_trigger(api, builder_spec, got_revision,
-                                   infrabots_dir, extra_hashes)
+                                   infrabots_dir, extra_hashes, cipd_packages)
   is_trybot = builder_cfg['is_trybot']
   if test_task:
     test_steps_collect(api, test_task, builder_spec['upload_dm_results'],
@@ -588,7 +611,8 @@ def RunSteps(api):
                        got_revision, is_trybot)
 
 
-def test_for_bot(api, builder, mastername, slavename, testname=None):
+def test_for_bot(api, builder, mastername, slavename, testname=None,
+                 legacy_android_sdk=False):
   """Generate a test for the given bot."""
   testname = testname or builder
   test = (
@@ -607,6 +631,10 @@ def test_for_bot(api, builder, mastername, slavename, testname=None):
     test += api.properties(issue=500,
                            patchset=1,
                            rietveld='https://codereview.chromium.org')
+  if 'Android' in builder:
+    if not legacy_android_sdk:
+      test += api.path.exists(api.path['slave_build'].join(
+          'skia', 'infra', 'bots', 'assets', 'android_sdk', 'VERSION'))
   if 'Coverage' not in builder:
     test += api.step_data(
         'upload new .isolated file for compile_skia',
@@ -657,6 +685,13 @@ def GenTests(api):
   builder = 'Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan'
   master = 'client.skia.compile'
   slave = 'skiabot-linux-compile-000'
-  test = test_for_bot(api, builder, master, slave, 'Missing_android_sdk_hash')
+  test = test_for_bot(api, builder, master, slave, 'legacy_android_sdk',
+                      legacy_android_sdk=True)
+  test += api.step_data('Read android_sdk_hash',
+                        stdout=api.raw_io.output('<android_sdk_hash>'))
+  yield test
+
+  test = test_for_bot(api, builder, master, slave, 'Missing_android_sdk_hash',
+                      legacy_android_sdk=True)
   test += api.step_data('Read android_sdk_hash', retcode=1)
   yield test

@@ -216,7 +216,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -403,10 +403,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/android_sdk_hash",
+      "[SLAVE_BUILD]/skia/infra/bots/assets/android_sdk/VERSION",
       "/path/to/tmp/"
     ],
-    "name": "Read android_sdk_hash"
+    "name": "read android_sdk VERSION"
   },
   {
     "cmd": [
@@ -512,8 +512,7 @@
       "-u",
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated",
-      "[dummy hash for isolate_recipes]",
-      "a27a70d73b85191b9e671ff2a44547c3f7cc15ee"
+      "[dummy hash for isolate_recipes]"
     ],
     "name": "add_isolated_input",
     "~followup_annotations": [
@@ -594,6 +593,8 @@
       "--tag",
       "stepname:compile_skia on Ubuntu",
       "--idempotent",
+      "--cipd-package",
+      "android_sdk:skia/bots/android_sdk:version:0",
       "def456",
       "--",
       "--workdir",
@@ -633,9 +634,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "compile_skia/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5",
+      "--json",
+      "{\"base_task_name\": \"compile_skia/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5\", \"tasks\": {\"compile_skia/Ubuntu/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -807,7 +807,6 @@
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated",
       "[dummy hash for isolate_recipes]",
-      "a27a70d73b85191b9e671ff2a44547c3f7cc15ee",
       "abc123"
     ],
     "name": "add_isolated_input (2)",
@@ -946,9 +945,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "test_skia/Android/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5",
+      "--json",
+      "{\"base_task_name\": \"test_skia/Android/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5\", \"tasks\": {\"test_skia/Android/def456/Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",

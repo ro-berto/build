@@ -217,7 +217,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -624,9 +624,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "compile_skia/Mac/def456/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release/5",
+      "--json",
+      "{\"base_task_name\": \"compile_skia/Mac/def456/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release/5\", \"tasks\": {\"compile_skia/Mac/def456/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -936,9 +935,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "test_skia/iOS-9.2/def456/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release/5",
+      "--json",
+      "{\"base_task_name\": \"test_skia/iOS-9.2/def456/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release/5\", \"tasks\": {\"test_skia/iOS-9.2/def456/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",

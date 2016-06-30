@@ -32,7 +32,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
   def setup(self, luci_go_dir, swarming_rev=None):
     """Performs setup steps for swarming."""
     self.m.swarming_client.checkout(revision=swarming_rev)
-    self.m.swarming.check_client_version()
+    self.m.swarming.check_client_version(step_test_data=(0, 8, 6))
     self.setup_go_isolate(luci_go_dir)
 
   # TODO(rmistry): Remove once the Go binaries are moved to recipes or buildbot.
@@ -61,7 +61,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       self, isolate_path, isolate_base_dir, task_name, isolate_vars,
       swarm_dimensions, isolate_blacklist=None, extra_isolate_hashes=None,
       idempotent=False, store_output=True, extra_args=None, expiration=None,
-      hard_timeout=None, io_timeout=None):
+      hard_timeout=None, io_timeout=None, cipd_packages=None):
     """Isolate inputs and trigger the task to run."""
     os_type = swarm_dimensions.get('os', 'linux')
     isolated_hash = self.isolate_task(
@@ -74,7 +74,8 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                                         extra_args=extra_args,
                                         expiration=expiration,
                                         hard_timeout=hard_timeout,
-                                        io_timeout=io_timeout)
+                                        io_timeout=io_timeout,
+                                        cipd_packages=cipd_packages)
     assert len(tasks) == 1
     return tasks[0]
 
@@ -178,7 +179,8 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
 
   def trigger_swarming_tasks(
       self, swarm_hashes, dimensions, idempotent=False, store_output=True,
-      extra_args=None, expiration=None, hard_timeout=None, io_timeout=None):
+      extra_args=None, expiration=None, hard_timeout=None, io_timeout=None,
+      cipd_packages=None):
     """Triggers swarming tasks using swarm hashes.
 
     Args:
@@ -194,6 +196,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                     DEFAULT_TASK_TIMEOUT is used if this argument is None.
       io_timeout: int. Task will timeout if there is no output within this time.
                   DEFAULT_IO_TIMEOUT is used if this argument is None.
+      cipd_packages: CIPD packages which these tasks depend on.
 
     Returns:
       List of swarming.SwarmingTask instances.
@@ -202,6 +205,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     for task_name, swarm_hash in swarm_hashes:
       swarming_task = self.m.swarming.task(
           title=task_name,
+          cipd_packages=cipd_packages,
           isolated_hash=swarm_hash)
       if store_output:
         swarming_task.task_output_dir = self.tasks_output_dir.join(task_name)

@@ -208,7 +208,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -613,9 +613,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "compile_skia/Ubuntu/def456/Housekeeper-PerCommit/5",
+      "--json",
+      "{\"base_task_name\": \"compile_skia/Ubuntu/def456/Housekeeper-PerCommit/5\", \"tasks\": {\"compile_skia/Ubuntu/def456/Housekeeper-PerCommit/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -724,7 +723,8 @@
       "-u",
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-housekeeper_skia.isolated",
-      "[dummy hash for isolate_recipes]"
+      "[dummy hash for isolate_recipes]",
+      "abc123"
     ],
     "name": "add_isolated_input (2)",
     "~followup_annotations": [
@@ -843,9 +843,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "housekeeper_skia/Ubuntu/def456/Housekeeper-PerCommit/5",
+      "--json",
+      "{\"base_task_name\": \"housekeeper_skia/Ubuntu/def456/Housekeeper-PerCommit/5\", \"tasks\": {\"housekeeper_skia/Ubuntu/def456/Housekeeper-PerCommit/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
