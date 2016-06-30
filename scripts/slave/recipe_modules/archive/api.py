@@ -133,7 +133,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def _cf_should_package_file(self, filename):
+  def _cf_should_package_file(self, filename, file_filter=None):
     """Returns true if the file should be a part of the resulting archive."""
     if EXCLUDED_FILES_PATTERN[self.m.platform.name].match(filename):
       return False
@@ -142,6 +142,9 @@ class ArchiveApi(recipe_api.RecipeApi):
     if filename in EXCLUDED_FILES[self.m.platform.name]:
       return False
 
+    if file_filter:
+      return file_filter.match(filename)
+    
     return True
 
   def _get_commit_position(self, update_properties, primary_project):
@@ -190,7 +193,7 @@ class ArchiveApi(recipe_api.RecipeApi):
   def clusterfuzz_archive(
       self, build_dir, update_properties, gs_bucket,
       archive_prefix, archive_subdir_suffix='', gs_acl=None,
-      revision_dir=None, primary_project=None,
+      revision_dir=None, primary_project=None, file_filter=None,
       fixed_staging_dir=False, **kwargs):
     # TODO(machenbach): Merge revision_dir and primary_project. The
     # revision_dir is only used for building the archive name while the
@@ -243,7 +246,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     # Build the list of files to archive.
     zip_file_list = [f for f in self.m.file.listdir('build_dir', build_dir)
-                     if self._cf_should_package_file(f)]
+                     if self._cf_should_package_file(f, file_filter=file_filter)]
 
     # Use the legacy platform name as Clusterfuzz has some expectations on
     # this (it only affects Windows, where it replace 'win' by 'win32').
