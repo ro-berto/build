@@ -524,12 +524,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   @contextlib.contextmanager
   def wrap_chromium_tests(self, bot_config, tests=None):
-    context = {'env': self.m.chromium.get_env()}
-    # TODO(phajdan.jr): Enable globally after confirming it works.
-    if bot_config.matches_any_bot_id(
-        lambda bot_id: 'remote_run' in bot_id['buildername'] or
-                       'remote_run' in bot_id.get('tester', '')):
-      context['cwd'] = self._working_dir
+    context = {
+        'cwd': self._working_dir,
+        'env': self.m.chromium.get_env(),
+    }
     with self.m.step.context(context):
       bot_type = bot_config.get('bot_type', 'builder_tester')
 

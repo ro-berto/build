@@ -273,6 +273,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--target",
       "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
       "--build-url",
       "gs://chromium-memory-fyi-archive/chromium.memory.fyi/Chromium Linux TSan Builder/full-build-linux.zip",
       "--build_revision",

@@ -95,28 +95,22 @@ class ArchiveApi(recipe_api.RecipeApi):
       exclude_files=None, **kwargs):
     """Returns a step invoking zip_build.py to zip up a Chromium build.
        If build_url is specified, also uploads the build."""
+    if not src_dir:
+      src_dir = self.m.path['checkout']
     args = [
         '--show-path',
         'python',
         self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
         '--target', target,
+        '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
+        '--staging-dir', self.m.path['cache'].join('chrome_staging'),
+        '--src-dir', src_dir,
     ]
-    # TODO(phajdan.jr): Enable globally after confirming it works.
-    if self.m.properties.get('buildername') == 'Linux remote_run Builder':
-      if not src_dir:
-        src_dir = self.m.path['checkout']
-      args.extend([
-          '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
-          '--staging-dir', self.m.path['cache'].join('chrome_staging'),
-          '--src-dir', src_dir
-      ])
     if build_url or 'build_archive_url' in self.m.properties:
       args.extend(['--build-url',
                    build_url or self.m.properties['build_archive_url']])
     if build_revision:
       args.extend(['--build_revision', build_revision])
-    elif src_dir:
-      args.extend(['--src-dir', src_dir])
     if cros_board:
       args.extend(['--cros-board', cros_board])
     if package_dsym_files:
@@ -313,28 +307,22 @@ class ArchiveApi(recipe_api.RecipeApi):
       build_revision=None, build_archive_url=None, **kwargs):
     """Returns a step invoking extract_build.py to download and unzip
        a Chromium build."""
+    if not src_dir:
+      src_dir = self.m.path['checkout']
     args = [
         '--show-path',
         'python',
         self.package_repo_resource('scripts', 'slave', 'extract_build.py'),
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
         '--target', target,
+        '--src-dir', src_dir,
     ]
-    # TODO(phajdan.jr): Enable globally after confirming it works.
-    if self.m.properties.get('buildername') == 'Linux remote_run Tester':
-      if not src_dir:
-        src_dir = self.m.path['checkout']
-      args.extend([
-          '--src-dir', src_dir,
-      ])
     if build_archive_url:
       args.extend(['--build-archive-url', build_archive_url])
     else:
       args.extend(['--build-url', build_url])
       if build_revision:
         args.extend(['--build_revision', build_revision])
-      elif src_dir:
-        args.extend(['--src-dir', src_dir])
 
     properties = (
       ('mastername', '--master-name'),

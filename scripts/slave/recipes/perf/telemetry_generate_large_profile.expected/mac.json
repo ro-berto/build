@@ -116,6 +116,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--target",
       "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
       "--build-archive-url",
       "gs://chrome-perf/Mac Builder/testbuildurl",
       "--master-name",

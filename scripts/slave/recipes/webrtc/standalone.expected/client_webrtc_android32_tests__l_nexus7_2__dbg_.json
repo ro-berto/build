@@ -192,6 +192,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--target",
       "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
       "--build-url",
       "gs://chromium-webrtc/client.webrtc/Android32 Builder (dbg)/full-build-linux.zip",
       "--build_revision",

@@ -298,6 +298,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--target",
       "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
       "--build-url",
       "gs://chromium-android-archive/chromium.android/Android arm Builder (dbg)/full-build-linux.zip",
       "--build_revision",

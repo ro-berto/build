@@ -260,6 +260,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--target",
       "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",

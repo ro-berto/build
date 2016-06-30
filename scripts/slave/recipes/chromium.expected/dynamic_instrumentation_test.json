@@ -317,6 +317,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--target",
       "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
       "--build-url",
       "gs://chromium-linux-archive/chromium.linux/Android Builder/full-build-linux.zip",
       "--build_revision",
