@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import re
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -136,35 +135,13 @@ def RunSteps(api):
     build_config = config_kwargs.get('BUILD_CONFIG')
 
   api.archive.clusterfuzz_archive(
-      build_dir=api.path['slave_build'].join('src', 'out', build_config),
-      update_properties=checkout_results.json.output['properties'],
-      gs_bucket=bot_config['upload_bucket'],
-      archive_prefix='libfuzzer',
-      archive_subdir_suffix=bot_config['upload_directory'],
-      gs_acl='public-read')
+          build_dir=api.path['slave_build'].join('src', 'out', build_config),
+          update_properties=checkout_results.json.output['properties'],
+          gs_bucket=bot_config['upload_bucket'],
+          archive_prefix='libfuzzer',
+          archive_subdir_suffix=bot_config['upload_directory'],
+          gs_acl='public-read')
 
-  # Zip sources for coverage reports.
-  for target in targets:
-    api.python(
-        "zip_src_%s" % target,
-        api.path['checkout'].join('testing', 'libfuzzer', 'zip_sources.py'),
-        ["--binary",
-         api.path['build'].join(target),
-         "--workdir",
-         api.path['checkout'],
-         "--output",
-         api.path['build'].join(target + ".src.zip")
-        ])
-
-  # Upload sources.
-  api.archive.clusterfuzz_archive(
-      build_dir=api.path['slave_build'].join('src', 'out', build_config),
-      update_properties=checkout_results.json.output['properties'],
-      gs_bucket=bot_config['upload_bucket'],
-      archive_prefix='libfuzzer-src',
-      archive_subdir_suffix=bot_config['upload_directory'],
-      gs_acl='public-read',
-      file_filter=re.compile(r'^.*\.src\.zip$'))
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
