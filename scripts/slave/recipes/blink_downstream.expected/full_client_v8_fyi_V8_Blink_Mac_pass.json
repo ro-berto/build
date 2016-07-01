@@ -241,7 +241,7 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "[BUILD]/scripts/slave/chromium/layout_test_wrapper.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",
       "--target",
       "Release",
       "-o",
@@ -271,7 +271,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/chromium/archive_layout_test_results.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
       "--results-dir",
       "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",

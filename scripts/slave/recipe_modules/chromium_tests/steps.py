@@ -1713,8 +1713,8 @@ class BlinkTest(Test):
               passing=True, minimal=True))
       else:
         step_result = api.chromium.runtest(
-          api.path['build'].join('scripts', 'slave', 'chromium',
-                                 'layout_test_wrapper.py'),
+          api.chromium.package_repo_resource(
+              'scripts', 'slave', 'chromium', 'layout_test_wrapper.py'),
           args, name=step_name,
           # TODO(phajdan.jr): Clean up the runtest.py mess.
           disable_src_side_runtest_py=True,
@@ -1745,7 +1745,7 @@ class BlinkTest(Test):
         buildername = api.properties['buildername']
         buildnumber = api.properties['buildnumber']
 
-        archive_layout_test_results = api.path['build'].join(
+        archive_layout_test_results = api.chromium.package_repo_resource(
             'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
 
         archive_layout_test_args = [

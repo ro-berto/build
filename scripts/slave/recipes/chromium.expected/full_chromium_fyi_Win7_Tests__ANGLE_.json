@@ -11,6 +11,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]\\Win7_Tests__ANGLE_",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "chromium.fyi",
@@ -35,6 +57,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tests__ANGLE_",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -173,7 +196,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -189,7 +212,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
@@ -201,14 +224,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]\\\\Win7_Tests__ANGLE_\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"buildername\": \"Win7 Tests (ANGLE)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
@@ -223,12 +246,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json",
+      "[BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src\\testing\\buildbot\\chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src\\testing\\buildbot\\chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (ANGLE)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -260,7 +283,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src\\out\\Release"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -287,7 +310,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
@@ -303,10 +326,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src\\out\\Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tests__ANGLE_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -324,7 +348,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -383,6 +407,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tests__ANGLE_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -411,7 +436,7 @@
       "python",
       "RECIPE_MODULE[build::swarming]\\resources\\collect_gtest_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "[BUILDER_CACHE]\\Win7_Tests__ANGLE_\\src\\tools\\swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -426,6 +451,7 @@
       "1",
       "browser_tests/Windows-7-SP1/ffffffffff/Win7 Tests (ANGLE)/571"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tests__ANGLE_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -454,6 +480,7 @@
       "--chrome-revision",
       "170242"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tests__ANGLE_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -467,6 +494,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tests__ANGLE_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

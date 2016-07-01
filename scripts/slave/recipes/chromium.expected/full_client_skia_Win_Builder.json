@@ -11,6 +11,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]\\Win_Builder",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "client.skia",
@@ -35,6 +57,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Builder",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -181,7 +204,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[BUILDER_CACHE]\\Win_Builder\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -197,7 +220,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_Builder\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -210,7 +233,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[BUILDER_CACHE]\\Win_Builder\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -218,7 +241,7 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]\\\\Win_Builder\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
@@ -233,12 +256,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
+      "[BUILDER_CACHE]\\Win_Builder\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.win.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\Win_Builder\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (1)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -271,7 +294,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[BUILDER_CACHE]\\Win_Builder\\src\\out\\Release",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -280,14 +303,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "[BUILDER_CACHE]\\Win_Builder\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "client.skia",
       "-b",
       "Win Builder",
       "--config-file",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "[BUILDER_CACHE]\\Win_Builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "--swarming-targets-file",
@@ -318,9 +341,11 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[BUILDER_CACHE]\\Win_Builder\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--goma-deps-cache-dir",
+      "[GOMA_DEPS_CACHE]",
       "--build-tool",
       "ninja",
       "--build-data-dir",
@@ -355,9 +380,9 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[BUILDER_CACHE]\\Win_Builder\\src\\out\\Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src"
+      "[BUILDER_CACHE]\\Win_Builder\\src"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
@@ -367,14 +392,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "[BUILDER_CACHE]\\Win_Builder\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Release\\browser_tests.isolated.gen.json"
+      "[BUILDER_CACHE]\\Win_Builder\\src\\out\\Release\\browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -400,15 +425,15 @@
       "--staging-dir",
       "[CACHE]\\chrome_staging",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[BUILDER_CACHE]\\Win_Builder\\src",
       "--build-url",
       "gs://chromium-skia-gm/client.skia/Win Builder",
       "--build_revision",
       "d9c4a4d173a97ef2832b65636b4200bb93ea8ee1",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   },

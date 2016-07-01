@@ -3,6 +3,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/Linux_Builder",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "chromium.webrtc.fyi",
@@ -29,6 +51,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux_Builder",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -187,7 +210,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Builder/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -200,14 +223,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/Linux_Builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Linux_Builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
@@ -222,12 +245,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json",
+      "[BUILDER_CACHE]/Linux_Builder/src/testing/buildbot/chromium.webrtc.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.webrtc.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Linux_Builder/src/testing/buildbot/chromium.webrtc.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -247,14 +270,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/Linux_Builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.webrtc.fyi",
       "-b",
       "Linux Builder",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Linux_Builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Release"
@@ -279,9 +302,11 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[BUILDER_CACHE]/Linux_Builder/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--goma-deps-cache-dir",
+      "[GOMA_DEPS_CACHE]",
       "--build-tool",
       "ninja",
       "--build-data-dir",
@@ -326,15 +351,15 @@
       "--staging-dir",
       "[CACHE]/chrome_staging",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[BUILDER_CACHE]/Linux_Builder/src",
       "--build-url",
       "gs://chromium-webrtc/chromium.webrtc.fyi/Linux Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   },
