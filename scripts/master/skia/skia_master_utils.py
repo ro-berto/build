@@ -257,7 +257,7 @@ def SetupMaster(ActiveMaster):
   # Buildmaster config dict.
   c = {}
 
-  config.DatabaseSetup(c, require_dbconfig=ActiveMaster.is_production_host)
+  config.DatabaseSetup(c)
 
   ####### CHANGESOURCES
 

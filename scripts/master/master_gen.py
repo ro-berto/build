@@ -40,11 +40,8 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
   c['buildbotURL'] = active_master_cls.buildbot_url
 
   # This sets c['db_url'] to the database connect string in found in
-  # the .dbconfig in the master directory, if it exists. If this is
-  # a production host, it must exist.
-  chromium_utils.DatabaseSetup(
-      c,
-      require_dbconfig=active_master_cls.is_production_host)
+  # the .dbconfig in the master directory, if it exists.
+  chromium_utils.DatabaseSetup(c)
 
   c['builders'] = _ComputeBuilders(builders, m_annotator, active_master_cls)
 
