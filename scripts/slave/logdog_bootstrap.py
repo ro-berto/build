@@ -82,8 +82,8 @@ _PLATFORM_CONFIG = {
     'annotee_relpath': 'logdog_annotee',
   },
   ('mac', 64): {
-    'butler': 'infra/tools/luci/logdog/butler/mac-386',
-    'annotee': 'infra/tools/luci/logdog/annotee/mac-386',
+    'butler': 'infra/tools/luci/logdog/butler/mac-amd64',
+    'annotee': 'infra/tools/luci/logdog/annotee/mac-amd64',
   },
 
   # Windows
@@ -99,8 +99,8 @@ _PLATFORM_CONFIG = {
     'annotee': 'infra/tools/luci/logdog/annotee/windows-386',
   },
   ('win', 64): {
-    'butler': 'infra/tools/luci/logdog/butler/windows-386',
-    'annotee': 'infra/tools/luci/logdog/annotee/windows-386',
+    'butler': 'infra/tools/luci/logdog/butler/windows-amd64',
+    'annotee': 'infra/tools/luci/logdog/annotee/windows-amd64',
   },
 }
 

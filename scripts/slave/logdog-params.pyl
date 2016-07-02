@@ -43,7 +43,11 @@
 #
 {
   'chromium': {
-    'chromium.infra': {},
+    'chromium.infra': {
+      '*': {
+        'cipd_tag': 'git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3',
+      },
+    },
     'chromium.infra.cron': {},
     'tryserver.infra': {},
 
