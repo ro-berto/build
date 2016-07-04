@@ -252,6 +252,7 @@ def GenTests(api):
   def props(config='Release', mastername='tryserver.chromium.linux',
             buildername='linux_chromium_rel_ng', extra_swarmed_tests=None,
             **kwargs):
+    kwargs.setdefault('path_config', 'kitchen')
     kwargs.setdefault('revision', None)
     swarm_hashes = {}
     if extra_swarmed_tests:
