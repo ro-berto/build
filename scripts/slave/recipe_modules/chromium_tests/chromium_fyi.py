@@ -137,7 +137,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb','ninja_confirm_noop'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['blink_or_chromium'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -164,7 +163,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['blink_or_chromium'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -192,7 +190,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb','ninja_confirm_noop'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['blink_or_chromium'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -219,7 +216,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb','ninja_confirm_noop'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['blink_or_chromium'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
