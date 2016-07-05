@@ -1498,6 +1498,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
+        'enable_swarming': True,
         'build_gs_archive': 'linux_x87_nosnap_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -1513,10 +1514,19 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'enable_swarming': True,
         'parent_buildername': 'V8 Linux - x87 - nosnap - debug builder',
         'build_gs_archive': 'linux_x87_nosnap_dbg_archive',
-        'tests': [V8Testing],
+        'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+        },
+        'swarming_properties': {
+          'default_expiration': 2 * 60 * 60,
+          'default_hard_timeout': 2 * 60 * 60,
+          'default_priority': 35,
+        },
       },
     },
   },
