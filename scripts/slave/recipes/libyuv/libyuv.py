@@ -29,6 +29,10 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'libyuv_clang',
     'gclient_config': 'libyuv',
   },
+  'libyuv_gcc': {
+    'chromium_config': 'libyuv_gcc',
+    'gclient_config': 'libyuv',
+  },
   'libyuv_android': {
     'chromium_config': 'libyuv_android',
     'gclient_config': 'libyuv_android',
@@ -331,6 +335,14 @@ BUILDERS = freeze({
       'Linux64 Release (GN)': {
         'recipe_config': 'libyuv',
         'chromium_apply_config': ['gn'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+      },
+      'Linux GCC': {
+        'recipe_config': 'libyuv_gcc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -669,6 +681,14 @@ BUILDERS = freeze({
       'linux_gn_rel': {
         'recipe_config': 'libyuv',
         'chromium_apply_config': ['gn'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+      },
+      'linux_gcc': {
+        'recipe_config': 'libyuv_gcc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
