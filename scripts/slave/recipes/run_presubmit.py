@@ -11,6 +11,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/step',
   'depot_tools/tryserver',
   'depot_tools/rietveld',
   'v8',
@@ -99,7 +100,16 @@ def _RunStepsInternal(api):
     # the scripts from presubmit_build checkout).
     env['PYTHONPATH'] = ''
 
-  api.presubmit(*presubmit_args, env=env)
+  try:
+    api.presubmit(*presubmit_args, env=env)
+  except api.step.StepFailure as step_failure:
+    if step_failure.result and step_failure.result.retcode == 1:
+      api.tryserver.set_test_failure_tryjob_result()
+    else:
+      # Script presubmit_support.py returns 2 on infra failures, but if we get
+      # something else or nothing at all, then it's also an infra failure.
+      api.tryserver.set_invalid_test_results_tryjob_result()
+    raise
 
 
 def RunSteps(api):
@@ -194,4 +204,24 @@ def GenTests(api):
         runhooks=True) +
     api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
+  )
+
+  yield (
+    api.test('presubmit-failure') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        patch_project='chromium') +
+    api.step_data('presubmit', api.json.output({}, retcode=1))
+  )
+
+  yield (
+    api.test('presubmit-infra-failure') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        patch_project='chromium') +
+    api.step_data('presubmit', api.json.output({}, retcode=2))
   )
