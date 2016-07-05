@@ -386,8 +386,7 @@
         "builder_name": "V8 Linux - gc stress",
         "properties": {
           "parent_build_environment": {
-            "GYP_DEFINES": "target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=ia32",
-            "GYP_GENERATORS": "ninja"
+            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -409,8 +408,7 @@
         "builder_name": "V8 Linux - debug",
         "properties": {
           "parent_build_environment": {
-            "GYP_DEFINES": "target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=ia32",
-            "GYP_GENERATORS": "ninja"
+            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -432,8 +430,7 @@
         "builder_name": "V8 Linux - debug - avx2",
         "properties": {
           "parent_build_environment": {
-            "GYP_DEFINES": "target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=ia32",
-            "GYP_GENERATORS": "ninja"
+            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",

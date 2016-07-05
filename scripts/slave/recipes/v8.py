@@ -369,7 +369,6 @@ def GenTests(api):
         'Bisect.Get change range',
         api.v8.example_bisection_range_one_change(),
     ) +
-
     api.time.step(120)
   )
 
@@ -382,6 +381,23 @@ def GenTests(api):
         requester='commit-bot@chromium.org',
         patch_project='v8',
         blamelist=['dude@chromium.org'],
-    ) + api.override_step_data(
+    ) +
+    api.override_step_data(
         'Check', api.v8.output_json(unmarked_slow_test=True))
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Linux64 - builder',
+        'with_gn',
+    ) +
+    api.override_step_data(
+        'generate_build_files', api.raw_io.stream_output(
+            'Writing """\\\n'
+            'goma_dir = "/b/build/slave/cache/cipd/goma"\n'
+            'target_cpu = "x64"\n'
+            'use_goma = true\n'
+            '""" to /path/to/args.gn.\n'
+            'moar\n'))
   )

@@ -7,11 +7,11 @@
       "--master",
       "client.v8",
       "--builder",
-      "V8 Linux64 - debug builder",
+      "V8 Linux64 - builder",
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_deps': {'v8/third_party/valgrind': 'https://chromium.googlesource.com/chromium/deps/valgrind/binaries.git'}, 'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
@@ -142,7 +142,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' has_valgrind=1 jsfunfuzz=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64",
+      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -168,13 +168,13 @@
       "-m",
       "client.v8",
       "-b",
-      "V8 Linux64 - debug builder",
+      "V8 Linux64 - builder",
       "--config-file",
       "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--gyp-script=gypfiles/gyp_v8",
-      "//out/Debug"
+      "//out/Release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -182,20 +182,13 @@
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@stdout@some line@@@",
-      "@@@STEP_LOG_LINE@stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
+      "@@@STEP_LOG_LINE@stdout@Writing \"\"\"\\@@@",
+      "@@@STEP_LOG_LINE@stdout@goma_dir = \"/b/build/slave/cache/cipd/goma\"@@@",
+      "@@@STEP_LOG_LINE@stdout@target_cpu = \"x64\"@@@",
+      "@@@STEP_LOG_LINE@stdout@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@stdout@\"\"\" to /path/to/args.gn.@@@",
       "@@@STEP_LOG_LINE@stdout@moar@@@",
-      "@@@STEP_LOG_END@stdout@@@",
-      "@@@STEP_LOG_LINE@diff@+ cool_flag: a=1@@@",
-      "@@@STEP_LOG_LINE@diff@- gomadir: '[CACHE]/cipd/goma'@@@",
-      "@@@STEP_LOG_LINE@diff@- has_valgrind: 1@@@",
-      "@@@STEP_LOG_LINE@diff@  target_arch: x64@@@",
-      "@@@STEP_LOG_LINE@diff@- test_isolation_mode: prepare@@@",
-      "@@@STEP_LOG_LINE@diff@- use_goma: 1@@@",
-      "@@@STEP_LOG_LINE@diff@- v8_enable_slow_dchecks: 1@@@",
-      "@@@STEP_LOG_LINE@diff@- v8_optimized_debug: 1@@@",
-      "@@@STEP_LOG_END@diff@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_END@stdout@@@"
     ]
   },
   {
@@ -217,7 +210,7 @@
       "-m",
       "client.v8",
       "-b",
-      "V8 Linux64 - debug builder",
+      "V8 Linux64 - builder",
       "--config-file",
       "[mb config]",
       "--goma-dir",
@@ -235,7 +228,7 @@
       "-u",
       "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
       "[TMP_BASE]/v8_gn_tmp_1",
-      "[SLAVE_BUILD]/v8/out/Debug",
+      "[SLAVE_BUILD]/v8/out/Release",
       "all",
       "all"
     ],
@@ -269,7 +262,7 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--goma-cache-dir",
@@ -307,26 +300,28 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Debug/benchmarks.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Debug/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Debug/ignition.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Debug/jsfunfuzz.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Debug/mjsunit.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Debug/mozilla.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Debug/run-valgrind.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Debug/simdjs.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Debug/test262.isolated.gen.json"
+      "[SLAVE_BUILD]/v8/out/Release/benchmarks.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/check-static-initializers.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/ignition.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/mjsunit.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/optimize_for_size.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/perf.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"jsfunfuzz\": \"[dummy hash for jsfunfuzz]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"run-valgrind\": \"[dummy hash for run-valgrind]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -344,12 +339,12 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"ignition\": \"[dummy hash for ignition]\", \"jsfunfuzz\": \"[dummy hash for jsfunfuzz]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"run-valgrind\": \"[dummy hash for run-valgrind]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
-      "gs://chromium-v8/v8-linux64-dbg/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"ignition\": \"[dummy hash for ignition]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
+      "gs://chromium-v8/v8-linux64-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/v8-linux64-dbg/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/v8-linux64-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
     ]
   },
   {
@@ -362,7 +357,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
       "--target",
-      "Debug",
+      "Release",
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--staging-dir",
@@ -370,11 +365,11 @@
       "--src-dir",
       "v8",
       "--build-url",
-      "gs://chromium-v8/v8-linux64-dbg",
+      "gs://chromium-v8/v8-linux64-rel",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Linux64 - debug builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Linux64 - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Linux64 - debug builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Linux64 - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   },
@@ -383,10 +378,10 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "V8 Fuzzer",
+        "builder_name": "V8 Linux64",
         "properties": {
           "parent_build_environment": {
-            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
+            "gn_args": "target_cpu = \"x64\" use_goma = true"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -395,21 +390,22 @@
           "swarm_hashes": {
             "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
+            "check-static-initializers": "[dummy hash for check-static-initializers]",
             "ignition": "[dummy hash for ignition]",
-            "jsfunfuzz": "[dummy hash for jsfunfuzz]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
-            "run-valgrind": "[dummy hash for run-valgrind]",
+            "optimize_for_size": "[dummy hash for optimize_for_size]",
+            "perf": "[dummy hash for perf]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
           }
         }
       },
       {
-        "builder_name": "V8 Linux64 - debug",
+        "builder_name": "V8 Linux64 - avx2",
         "properties": {
           "parent_build_environment": {
-            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
+            "gn_args": "target_cpu = \"x64\" use_goma = true"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -418,34 +414,12 @@
           "swarm_hashes": {
             "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
+            "check-static-initializers": "[dummy hash for check-static-initializers]",
             "ignition": "[dummy hash for ignition]",
-            "jsfunfuzz": "[dummy hash for jsfunfuzz]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
-            "run-valgrind": "[dummy hash for run-valgrind]",
-            "simdjs": "[dummy hash for simdjs]",
-            "test262": "[dummy hash for test262]"
-          }
-        }
-      },
-      {
-        "builder_name": "V8 Linux64 - debug - avx2",
-        "properties": {
-          "parent_build_environment": {
-            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
-          },
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
-            "jsfunfuzz": "[dummy hash for jsfunfuzz]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "mozilla": "[dummy hash for mozilla]",
-            "run-valgrind": "[dummy hash for run-valgrind]",
+            "optimize_for_size": "[dummy hash for optimize_for_size]",
+            "perf": "[dummy hash for perf]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
           }
@@ -453,7 +427,48 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Fuzzer<br />V8 Linux64 - debug<br />V8 Linux64 - debug - avx2@@@"
+      "@@@STEP_TEXT@V8 Linux64<br />V8 Linux64 - avx2@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "bucket": "master.internal.client.v8",
+        "buildbot_changes": [
+          {
+            "author": "trigger_proxy",
+            "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+          }
+        ],
+        "builder_name": "v8_trigger_proxy",
+        "properties": {
+          "archive": "gs://chromium-v8/v8-linux64-rel",
+          "parent_build_environment": {
+            "gn_args": "target_cpu = \"x64\" use_goma = true"
+          },
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "swarm_hashes": {
+            "benchmarks": "[dummy hash for benchmarks]",
+            "bot_default": "[dummy hash for bot_default]",
+            "check-static-initializers": "[dummy hash for check-static-initializers]",
+            "ignition": "[dummy hash for ignition]",
+            "mjsunit": "[dummy hash for mjsunit]",
+            "mozilla": "[dummy hash for mozilla]",
+            "optimize_for_size": "[dummy hash for optimize_for_size]",
+            "perf": "[dummy hash for perf]",
+            "simdjs": "[dummy hash for simdjs]",
+            "test262": "[dummy hash for test262]"
+          }
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@v8_trigger_proxy@@@"
     ]
   },
   {

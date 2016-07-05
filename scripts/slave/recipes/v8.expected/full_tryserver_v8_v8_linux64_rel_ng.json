@@ -347,8 +347,7 @@
           "issue": 12853011,
           "master": "tryserver.v8",
           "parent_build_environment": {
-            "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
-            "GYP_GENERATORS": "ninja"
+            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
