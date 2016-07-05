@@ -15,6 +15,7 @@ import multiprocessing
 import optparse
 import os
 import re
+import subprocess
 import sys
 
 from common import chromium_utils
@@ -75,15 +76,15 @@ def goma_setup(options, env):
   """Sets up goma if necessary.
 
   If using the Goma compiler, first call goma_ctl  to ensure the proxy is
-  available, and returns True.
+  available, and returns (True, instance of cloudtail subprocess).
   If it failed to start up compiler_proxy, modify options.compiler and
-  options.goma_dir and returns False
+  options.goma_dir and returns (False, None)
 
   """
   if options.compiler not in ('goma', 'goma-clang'):
     # Unset goma_dir to make sure we'll not use goma.
     options.goma_dir = None
-    return False
+    return False, None
 
   hostname = goma_utils.GetShortHostname()
   # HACK(shinyak, yyanagisawa, goma): Windows NO_NACL_GOMA (crbug.com/390764)
@@ -168,7 +169,19 @@ def goma_setup(options, env):
   result = chromium_utils.RunCommand(goma_ctl_cmd + goma_start_command, env=env)
   if not result:
     # goma started sucessfully.
-    return True
+    # Making cloudtail to upload the latest log.
+    # TODO(yyanagisawa): install cloudtail from CIPD.
+    cloudtail_path = '/opt/infra-tools/cloudtail'
+    if chromium_utils.IsWindows():
+      cloudtail_path = 'C:\\infra-tools\\cloudtail'
+    try:
+      cloudtail_proc = subprocess.Popen(
+          [cloudtail_path, 'tail', '--log-id', 'goma_compiler_proxy', '--path',
+           goma_utils.GetLatestGomaCompilerProxyInfo()])
+    except Exception as e:
+      print 'failed to invoke cloudtail: %s' % e
+      return True, None
+    return True, cloudtail_proc
 
   if options.goma_jsonstatus:
     chromium_utils.RunCommand(
@@ -207,10 +220,10 @@ def goma_setup(options, env):
   # Reset options.goma_dir.
   options.goma_dir = None
   env['GOMA_DISABLED'] = '1'
-  return False
+  return False, None
 
 
-def goma_teardown(options, env, exit_status):
+def goma_teardown(options, env, exit_status, cloudtail_proc):
   """Tears down goma if necessary. """
   if (options.compiler in ('goma', 'goma-clang') and
       options.goma_dir):
@@ -236,6 +249,9 @@ def goma_teardown(options, env, exit_status):
       goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
                                env.get('GOMACTL_CRASH_REPORT_ID_FILE'),
                                options.build_data_dir)
+  if cloudtail_proc:
+    cloudtail_proc.terminate()
+    cloudtail_proc.wait()
 
 
 def maybe_set_official_build_envvars(options, env):
@@ -334,7 +350,7 @@ def main_ninja(options, args):
 
   # Prepare environment.
   env = EchoDict(os.environ)
-  goma_ready = goma_setup(options, env)
+  goma_ready, goma_cloudtail = goma_setup(options, env)
   exit_status = -1
   try:
     if not goma_ready:
@@ -439,7 +455,7 @@ def main_ninja(options, args):
         return 1
     return exit_status
   finally:
-    goma_teardown(options, env, exit_status)
+    goma_teardown(options, env, exit_status, goma_cloudtail)
 
     override_gsutil = None
     if options.gsutil_py_path:
