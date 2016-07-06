@@ -503,6 +503,19 @@ BUILDERS = {
         'tests': [Mjsunit],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 - gyp': {
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Windows
       'V8 Win32 - builder': {
         'chromium_apply_config': [
@@ -1774,6 +1787,33 @@ BUILDERS = {
           MjsunitSPFrameAccess,
           Test262IgnitionTurbofan,
         ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_gyp_rel_ng': {
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'no_dcheck', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_linux64_gyp_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_gyp_rel_ng_triggered': {
+        'chromium_apply_config': ['no_dcheck'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_linux64_gyp_rel_ng',
+        'enable_swarming': True,
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_avx2_rel_ng': {
