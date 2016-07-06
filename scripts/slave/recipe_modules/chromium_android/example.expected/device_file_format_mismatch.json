@@ -269,37 +269,6 @@
     "name": "authorize_adb_devices"
   },
   {
-    "cmd": [],
-    "name": "fix_device_file_format"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/known_android_devices",
-      "/path/to/tmp/"
-    ],
-    "name": "fix_device_file_format.read_device_file",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@file format is json, reverting@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "device1\ndevice2",
-      "[CACHE]/known_android_devices"
-    ],
-    "name": "fix_device_file_format.revert_device_file",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--adb-path",
@@ -309,7 +278,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[CACHE]/known_android_devices"
+      "[HOME]/.android/known_devices.json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -433,20 +402,33 @@
   },
   {
     "cmd": [],
-    "name": "fix_device_file_format (2)"
+    "name": "fix_device_file_format"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/known_android_devices",
+      "[HOME]/.android/known_devices.json",
       "/path/to/tmp/"
     ],
-    "name": "fix_device_file_format.read_device_file (2)",
+    "name": "fix_device_file_format.read_device_file",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@file format is compatible@@@"
+      "@@@STEP_TEXT@file format is json, reverting@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "device1\ndevice2",
+      "[HOME]/.android/known_devices.json"
+    ],
+    "name": "fix_device_file_format.revert_device_file",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -459,7 +441,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[CACHE]/known_android_devices"
+      "[HOME]/.android/known_devices.json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

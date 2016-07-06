@@ -544,7 +544,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--known-devices-file",
-      "[CACHE]/known_android_devices"
+      "[HOME]/.android/known_devices.json"
     ],
     "cwd": "[BUILDER_CACHE]/android_blink_rel",
     "env": {

@@ -45,7 +45,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   @property
   def known_devices_file(self):
-    return self.m.path['cache'].join('known_android_devices')
+    return self.m.path.join(
+        self.m.path.expanduser('~'), '.android', 'known_devices.json')
 
   @property
   def file_changes_path(self):

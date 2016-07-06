@@ -157,6 +157,7 @@ def RunSteps(api, buildername):
     # TODO(luqui): remove redundant cruft, need one consistent API.
     api.chromium_android.detect_and_setup_devices()
 
+    api.path.mock_add_paths(api.chromium_android.known_devices_file)
     api.chromium_android.device_status_check(
       restart_usb=config.get('restart_usb', False))
 
@@ -381,15 +382,8 @@ def GenTests(api):
              'Invalid CTS output here...',
              stream='stdout')))
 
-  yield (api.test('device_file_match') +
-         properties_for('tester') +
-         api.path.exists(
-             api.path['build'].join('site_config', '.known_devices')))
-
   yield (api.test('device_file_format_mismatch') +
          properties_for('tester') +
-         api.path.exists(
-             api.path['cache'].join('known_android_devices')) +
          api.override_step_data('fix_device_file_format.read_device_file', 
              api.raw_io.output('["device1", "device2"]')))
 
