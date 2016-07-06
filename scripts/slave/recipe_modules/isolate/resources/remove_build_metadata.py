@@ -40,8 +40,7 @@ def get_files_to_clean(build_dir, recursive=False):
   ret_files = set()
   for root, dirs, files in os.walk(build_dir):
     if not recursive:
-      dirs[:] = [d for d in dirs
-                 if d.endswith('_apk') or d == 'apks']
+      dirs[:] = [d for d in dirs if d.endswith('_apk')]
     for f in (f for f in files if check(os.path.join(root, f))):
       ret_files.add(os.path.relpath(os.path.join(root, f), build_dir))
   return ret_files
