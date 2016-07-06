@@ -194,6 +194,19 @@ class StatusLoggerTest(unittest.TestCase):
         parsed = json.loads(content)
         self.assertEqual(parsed['build-event-bbucket-id'], 123)
 
+  def testReportsBuildCategory(self):
+    with _make_logger() as logger:
+      mock_build = Build(properties={'category': 'cq_experimental'})
+      logger.buildFinished('coconuts', mock_build, 0)
+      self.assertTrue(os.path.isdir(logger._event_logging_dir))
+      self.assertTrue(os.path.exists(logger._event_logfile))
+      # Ensure we added valid json
+      with open(logger._event_logfile, 'r') as f:
+        content = f.read()
+        self.assertTrue(content)
+        parsed = json.loads(content)
+        self.assertEqual(parsed['build-event-category'], 'cq_experimental')
+
   def testStopStep(self):
     steps = [Step(step_number=1),
              Step(step_number=2, result=1),

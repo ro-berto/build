@@ -172,7 +172,7 @@ class StatusEventLogger(StatusReceiverMultiService):
                        bot_name, builder_name, build_number, build_scheduled_ts,
                        step_name=None, step_text=None, step_number=None,
                        result=None, extra_result_code=None, patch_url=None,
-                       bbucket_id=None):
+                       bbucket_id=None, category=None):
     """Log a build/step event for event_mon."""
 
     if self._event_logging:
@@ -199,6 +199,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         d['build-event-patch-url'] = patch_url
       if bbucket_id:
         d['build-event-bbucket-id'] = bbucket_id
+      if category:
+        d['build-event-category'] = category
 
       self.event_logger.info(json.dumps(d))
 
@@ -337,7 +339,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         'BEGIN', started * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build),
         patch_url=self._get_patch_url(properties),
-        bbucket_id=self._get_bbucket_id(properties))
+        bbucket_id=self._get_bbucket_id(properties),
+        category=properties.getProperty('category'))
     # Must return self in order to subscribe to stepStarted/Finished events.
     return self
 
@@ -355,7 +358,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         self._get_requested_at_millis(build),
         step_name=step_name, step_text=step_text, step_number=step.step_number,
         patch_url=self._get_patch_url(properties),
-        bbucket_id=self._get_bbucket_id(properties))
+        bbucket_id=self._get_bbucket_id(properties),
+        category=properties.getProperty('category'))
     # Must return self in order to subscribe to logStarted/Finished events.
     return self
 
@@ -374,7 +378,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         step_name=step_name, step_text=step_text, step_number=step.step_number,
         result=buildbot.status.results.Results[results[0]],
         patch_url=self._get_patch_url(properties),
-        bbucket_id=self._get_bbucket_id(properties))
+        bbucket_id=self._get_bbucket_id(properties),
+        category=properties.getProperty('category'))
 
     # Send step result to ts-mon
     properties = build.getProperties()
@@ -411,7 +416,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         result=buildbot.status.results.Results[results],
         extra_result_code=extra_result_code,
         patch_url=self._get_patch_url(properties),
-        bbucket_id=self._get_bbucket_id(properties))
+        bbucket_id=self._get_bbucket_id(properties),
+        category=properties.getProperty('category'))
 
     pre_test_time_s = None
     for step in build.getSteps():
