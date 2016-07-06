@@ -170,19 +170,7 @@
       "@@@STEP_LOG_LINE@stdout@some line@@@",
       "@@@STEP_LOG_LINE@stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
       "@@@STEP_LOG_LINE@stdout@moar@@@",
-      "@@@STEP_LOG_END@stdout@@@",
-      "@@@STEP_LOG_LINE@diff@+ cool_flag: a=1@@@",
-      "@@@STEP_LOG_LINE@diff@- dcheck_always_on: 0@@@",
-      "@@@STEP_LOG_LINE@diff@- fastbuild: 1@@@",
-      "@@@STEP_LOG_LINE@diff@- gomadir: '[CACHE]/cipd/goma'@@@",
-      "@@@STEP_LOG_LINE@diff@- target_arch: ia32@@@",
-      "@@@STEP_LOG_LINE@diff@?              ^^^^@@@",
-      "@@@STEP_LOG_LINE@diff@+ target_arch: x64@@@",
-      "@@@STEP_LOG_LINE@diff@?              ^^^@@@",
-      "@@@STEP_LOG_LINE@diff@- use_goma: 1@@@",
-      "@@@STEP_LOG_LINE@diff@- v8_target_arch: mipsel@@@",
-      "@@@STEP_LOG_END@diff@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_END@stdout@@@"
     ]
   },
   {

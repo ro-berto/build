@@ -392,27 +392,11 @@ class V8Api(recipe_api.RecipeApi):
         if self.should_upload_build:
           self.upload_isolated_json()
 
-
-  def _gyp_defines_to_dict(self, gyp_defines):
-    # Example input: "foo=1 bar='buz bing'". We assume there's no '=' in the
-    # value part.
-    result = []
-    for x in gyp_defines.split():
-      kv = x.split('=', 1)
-      if len(kv) == 1:
-        # No '=' in x. It's part of a quoted string containing a space.
-        # Append it to the last value.
-        result[-1][1] += (' ' + kv[0])
-      else:
-        result.append(kv)
-    return dict(tuple(kv) for kv in result)
-
-  def _infer_build_environment(self, mb_output):
-    """Scans for gyp or gn properties in mb output.
-
-    Returns: dict, where key is e.g. 'GYP_DEFINES' or 'gn_args'.
+  def _update_build_environment(self, mb_output):
+    """Sets the build_environment property based on gyp or gn properties in mb
+    output.
     """
-    result = {}
+    self.build_environment = {}
     # Get the client's gyp flags from MB's output. Group 1 captures with posix,
     # group 2 with windows output semantics.
     #
@@ -426,7 +410,15 @@ class V8Api(recipe_api.RecipeApi):
         '^(?:set )?GYP_([^=]*)=(?:(?:\'(.*)\')|(?:(.*)))$', mb_output, re.M):
       # Yield the property name (e.g. GYP_DEFINES) and the value. Either the
       # windows or the posix group matches.
-      result['GYP_' + match.group(1)] = match.group(2) or match.group(3)
+      self.build_environment['GYP_' + match.group(1)] = (
+          match.group(2) or match.group(3))
+
+    if 'GYP_DEFINES' in self.build_environment:  
+      # Filter out gomadir.
+      self.build_environment['GYP_DEFINES'] = ' '.join(  
+          d for d in self.build_environment['GYP_DEFINES'].split() 
+          if not d.startswith('gomadir')  
+      )
 
     # Check if the output looks like gn. Space-join all gn args, except
     # goma_dir.
@@ -434,62 +426,17 @@ class V8Api(recipe_api.RecipeApi):
     # the gn.args file that was written.
     match = re.search(r'Writing """\\?\s*(.*)""" to ', mb_output, re.S)
     if match:
-      result['gn_args'] = ' '.join(
+      self.build_environment['gn_args'] = ' '.join(
         l for l in match.group(1).strip().splitlines()
         if not l.startswith('goma_dir'))
-
-    return result
-
-  def _compare_gyp_defines(self, mb_output):
-    """Compare infra gyp flags with client gyp flags.
-
-    Returns the difference as a list of strings or an empty list if there is
-    none.
-    """
-    infra_flags = self._gyp_defines_to_dict(
-        self.m.chromium.c.gyp_env.as_jsonish()['GYP_DEFINES'])
-
-    props = self._infer_build_environment(mb_output)
-    if 'GYP_DEFINES' in props:
-      client_flags = self._gyp_defines_to_dict(props['GYP_DEFINES'])
-
-      # Tweak both dictionaries for known differences.
-      if infra_flags.get('target_arch') == infra_flags.get('v8_target_arch'):
-        # We drop the default case target_arch==v8_target_arch in MB and
-        # only specify target_arch.
-        infra_flags.pop('v8_target_arch')  # pragma: no cover
-
-      if 'jsfunfuzz' in infra_flags:
-        # This is for runhooks only. Not used in MB.
-        infra_flags.pop('jsfunfuzz')  # pragma: no cover
-
-      if not 'component' in infra_flags and 'component' in client_flags:
-        # We make this explicit with MB but used the default without. Only
-        # compare if we specified it explicitly in the infrastructure.
-        client_flags.pop('component')  # pragma: no cover
-
-      if infra_flags != client_flags:
-        to_str = lambda x: sorted('%s: %s' % kv for kv in x.iteritems())
-        return list(difflib.ndiff(to_str(infra_flags), to_str(client_flags)))
-    return []  # pragma: no cover
-
-  def _update_build_environment(self, mb_output):
-    build_environment = self._infer_build_environment(mb_output)
-    if 'GYP_DEFINES' in build_environment:  
-      # Filter out gomadir.
-      build_environment['GYP_DEFINES'] = ' '.join(  
-          d for d in build_environment['GYP_DEFINES'].split() 
-          if not d.startswith('gomadir')  
-      )
-    self.build_environment = build_environment
 
   def compile(self, **kwargs):
     if self.m.chromium.c.project_generator.tool == 'mb':
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
       def step_test_data():
-        # Fake gyp flags. In the expectations, the flag comparison will
-        # complain a lot because the fake data is different.
+        # Fake gyp flags.
+        # TODO(machenbach): Replace with gn args after the gn migration.
         return self.m.raw_io.test_api.stream_output(
             'some line\n'
             'GYP_DEFINES=\'target_arch=x64 cool_flag=a=1\'\n'
@@ -502,8 +449,6 @@ class V8Api(recipe_api.RecipeApi):
           mb_config_path=self.m.path['checkout'].join(
               'infra', 'mb', 'mb_config.pyl'),
           gyp_script=self.m.path.join('gypfiles', 'gyp_v8'),
-          # TODO(machenbach): Remove the comparison after the mb switch and
-          # once all gyp flags have been verified.
           stdout=self.m.raw_io.output(),
           step_test_data=step_test_data,
       )
@@ -514,13 +459,6 @@ class V8Api(recipe_api.RecipeApi):
       # Update the build environment dictionary, which is printed to the
       # user on test failures for easier build reproduction.
       self._update_build_environment(self.m.step.active_result.stdout)
-
-      # Compare infra gyp flags with client gyp flags.
-      diff = self._compare_gyp_defines(self.m.step.active_result.stdout)
-
-      if diff:
-        self.m.step.active_result.presentation.logs['diff'] = diff
-        self.m.step.active_result.presentation.status = self.m.step.WARNING
 
     self.peek_gn()
     self.m.chromium.compile(**kwargs)
