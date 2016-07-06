@@ -18,6 +18,11 @@ TEST_COMMIT_POSITON_COMPONENT='refs/heads/master@{#234}'
 
 
 def RunSteps(api):
+  if 'build_archive_url' in api.properties:
+    api.archive.zip_and_upload_build(
+        step_name='zip build',
+        target=api.path['checkout'].join('/Release/out'))
+    return
   api.archive.clusterfuzz_archive(
       build_dir=api.path['slave_build'].join('src', 'out', 'Release'),
       update_properties=api.properties.get('update_properties'),
@@ -111,4 +116,11 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'listdir build_dir', api.json.output(['chrome']))
+  )
+
+  yield(
+      api.test('zip_and_upload_custom_location') +
+      api.platform('linux', 64) +
+      api.properties(
+          build_archive_url='gs://dummy-bucket/Linux Release/full-build.zip')
   )

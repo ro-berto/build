@@ -106,9 +106,11 @@ class ArchiveApi(recipe_api.RecipeApi):
         '--staging-dir', self.m.path['cache'].join('chrome_staging'),
         '--src-dir', src_dir,
     ]
-    if build_url or 'build_archive_url' in self.m.properties:
-      args.extend(['--build-url',
-                   build_url or self.m.properties['build_archive_url']])
+    if 'build_archive_url' in self.m.properties:
+      args.extend(['--use-build-url-name', '--build-url',
+                   self.m.properties['build_archive_url']])
+    elif build_url:
+      args.extend(['--build-url', build_url])
     if build_revision:
       args.extend(['--build_revision', build_revision])
     if cros_board:
@@ -171,7 +173,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       commit = update_properties.get('got_%s_revision' % primary_project)
       if commit and GIT_COMMIT_HASH_RE.match(commit):
         return commit
-    
+
     commit = update_properties.get('got_revision_git')
     if commit:
       return commit

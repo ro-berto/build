@@ -199,6 +199,12 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
   zip_base, zip_ext = os.path.splitext(zip_template)
   # Create a versioned copy of the file.
   versioned_file = zip_file.replace(zip_ext, file_suffix + zip_ext)
+  # Allow for overriding the name of the file based on the given upload url.
+  if options.use_build_url_name:
+    new_build_url, new_archive_name = options.build_url.rsplit('/', 1)
+    if new_archive_name and new_archive_name.endswith('.zip'):
+      options.build_url = new_build_url
+      versioned_file = zip_file.replace(zip_template, new_archive_name)
   if os.path.exists(versioned_file):
     # This file already exists. Maybe we are doing a clobber build at the same
     # revision. We can move this file away.
@@ -433,6 +439,9 @@ def main(argv):
   option_parser.add_option('--build-url', default='',
                            help=('Optional URL to which to upload build '
                                  '(overrides build_url factory property)'))
+  option_parser.add_option('--use-build-url-name', action='store_true',
+                           help=('Use the filename given in --build-url instead'
+                                 'of generating one.'))
   option_parser.add_option('--cros-board',
                            help=('If building for Chrom[e|ium]OS via the '
                                  'simple chrome workflow, the name of the '
