@@ -34,6 +34,8 @@ else:
         'welch_p_value': welch_p_value,
     }
 
+    # TODO(robertocn): It seems we haven't used the results of shapiro test for
+    # normality. We should remove this along with anderson darling and welch's.
     if (results['shapiro_p_value'][0] < significance and
         results['shapiro_p_value'][1] < significance):
       results['normal-y'] = True

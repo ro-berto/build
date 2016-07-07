@@ -9,6 +9,20 @@ class ScipyNotInstalledError(Exception):
   pass
 
 def main(argv, anaconda_path=None):
+  _, list_a, list_b, significance  = argv
+
+  # Do not even test if there's a single repeated value on both samples.
+  if len(set(list_a + list_b)) == 1:
+    return {
+        'first_sample': list_a,
+        'second_sample': list_b,
+        'mann_p_value': None,
+        'anderson_p_value': None,
+        'welch_p_value': None,
+        'normal-y': None,
+        'significantly_different': False
+    }
+
   if not anaconda_path:
     if os.name == 'nt':
       anaconda_path = r'c:\conda-py-scientific\python.exe'
@@ -16,8 +30,6 @@ def main(argv, anaconda_path=None):
       anaconda_path = '/opt/conda-py-scientific/bin/python'
   if not os.path.exists(anaconda_path):
     raise ScipyNotInstalledError()
-
-  _, list_a, list_b, significance  = argv
 
   inner_script_location = os.path.join(os.path.dirname(os.path.realpath(
       __file__)), 'significantly_different_inner.py')
