@@ -413,6 +413,17 @@ BUILDERS = freeze({
           'Android32 Tests (L Nexus7.2)(dbg)',
         ],
       },
+      'Android32 Builder x86': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'Android32 Builder x86 (dbg)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
@@ -1152,6 +1163,17 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'android_compile_x86_rel': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},

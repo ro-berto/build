@@ -16,6 +16,7 @@ def Update(c):
                             builderNames=[
           'Android32 Builder',
           'Android32 Builder (dbg)',
+          'Android32 Builder x86',
           'Android32 Builder x86 (dbg)',
           'Android32 Builder MIPS (dbg)',
           'Android32 Clang (dbg)',
@@ -32,6 +33,7 @@ def Update(c):
   specs = [
     {'name': 'Android32 Builder'},
     {'name': 'Android32 Builder (dbg)'},
+    {'name': 'Android32 Builder x86', 'slavebuilddir': 'android_x86'},
     {'name': 'Android32 Builder x86 (dbg)', 'slavebuilddir': 'android_x86'},
     {'name': 'Android32 Builder MIPS (dbg)', 'slavebuilddir': 'android_mips'},
     {'name': 'Android32 Clang (dbg)', 'slavebuilddir': 'android_clang'},
