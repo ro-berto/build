@@ -187,27 +187,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "",
-      "GYP_GENERATORS": "ninja",
-      "LANDMINES_VERBOSE": "1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "name": "gclient runhooks (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br />GYP_DEFINES:<br /><br />GYP_CHROMIUM_NO_ACTION=1@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -259,6 +238,27 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "",
+      "GYP_GENERATORS": "ninja",
+      "LANDMINES_VERBOSE": "1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br />GYP_DEFINES:<br /><br />GYP_CHROMIUM_NO_ACTION=1@@@"
     ]
   },
   {
@@ -333,7 +333,7 @@
       "-b",
       "ios-simulator-gn",
       "-v",
-      "//out/None",
+      "//out/Release",
       "{\"additional_compile_targets\": [\"All\", \"fake tests\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake tests\"]}",
       "/path/to/tmp/json"
     ],

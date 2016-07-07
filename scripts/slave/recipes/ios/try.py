@@ -220,4 +220,42 @@ def GenTests(api):
     })
   )
 
+  yield (
+    api.test('gyp_goma')
+    + api.platform('mac', 64)
+    + api.properties(patch_url='patch url')
+    + api.properties(
+      buildername='ios-simulator',
+      buildnumber='0',
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      rietveld='fake://rietveld.url',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'GYP_DEFINES': [
+        'OS=ios',
+        'gomadir=$(goma_dir)',
+        'target_subarch=both',
+        'use_goma=1',
+      ],
+      'gn_args': [
+      ],
+      'use_analyze': True,
+      'mb_type': 'gyp',
+      'compiler': 'ninja',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.0',
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+    })
+  )
+
 

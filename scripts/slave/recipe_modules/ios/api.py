@@ -213,8 +213,29 @@ class iOSApi(recipe_api.RecipeApi):
 
     if self.using_gyp:
       cfg.gyp_env.GYP_CROSSCOMPILE = 1
-      cfg.gyp_env.GYP_DEFINES = copy.deepcopy(self.__config['GYP_DEFINES'])
+      if isinstance(self.__config['GYP_DEFINES'], dict):
+        cfg.gyp_env.GYP_DEFINES = copy.deepcopy(self.__config['GYP_DEFINES'])
+      else:
+        cfg.gyp_env.GYP_DEFINES = dict(v.split('=') for
+                                       v in self.__config['GYP_DEFINES'])
     self.m.chromium.c = cfg
+
+    use_goma = (self.compiler == 'ninja' and
+                (cfg.gyp_env.GYP_DEFINES.get('use_goma') == '1' or
+                 'use_goma=true' in self.__config['gn_args']))
+    if use_goma:
+      # Make sure these chromium configs are applied consistently for the
+      # rest of the recipe; they are needed in order for m.chromium.compile()
+      # to work correctly.
+      self.m.chromium.apply_config('ninja')
+      self.m.chromium.apply_config('default_compiler')
+      self.m.chromium.apply_config('goma')
+
+      # apply_config('goma') sets the old (wrong) directory for goma in
+      # chromium.c.compile_py.goma_dir, but calling ensure_goma() after
+      # that fixes things, and makes sure that goma is actually
+      # available as well.
+      self.m.chromium.ensure_goma()
 
   def build(self, mb_config_path=None, suffix=None):
     """Builds from this bot's build config."""
@@ -326,15 +347,6 @@ class iOSApi(recipe_api.RecipeApi):
     use_goma = (self.compiler == 'ninja' and
                 ('use_goma=1' in gyp_defines or 'use_goma=true' in gn_args))
     if use_goma:
-      if 'without patch' not in suffix:
-        # TODO(crbug.com/603641):
-        # Configs aren't deapplied, so we only want to apply these
-        # configs once. Really, we should refactor this so that we're
-        # not applying configs at all in build(), but rather do it
-        # in an earlier step.
-        self.m.chromium.apply_config('ninja')
-        self.m.chromium.apply_config('default_compiler')
-        self.m.chromium.apply_config('goma')
       self.m.chromium.compile(targets=compile_targets,
                               target=build_sub_path,
                               cwd=cwd)
