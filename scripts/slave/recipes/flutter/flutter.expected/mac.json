@@ -253,6 +253,34 @@
   },
   {
     "cmd": [
+      "killall",
+      "Simulator"
+    ],
+    "cwd": "[TMP_BASE]/tmp_tmp_1",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/dev/bots/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "shutdown simulator"
+  },
+  {
+    "cmd": [
+      "/usr/bin/xcrun",
+      "simctl",
+      "erase",
+      "all"
+    ],
+    "cwd": "[TMP_BASE]/tmp_tmp_1",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/dev/bots/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "erase simulator"
+  },
+  {
+    "cmd": [
       "flutter",
       "create",
       "--with-driver-test",

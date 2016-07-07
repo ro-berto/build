@@ -25,6 +25,9 @@ def GetCloudPath(api, git_hash, path):
 
 def TestCreateAndLaunch(api):
   with MakeTempDir(api) as temp_dir:
+    api.step('shutdown simulator', ['killall', 'Simulator'], cwd=temp_dir)
+    api.step('erase simulator', ['/usr/bin/xcrun', 'simctl', 'erase', 'all'],
+        cwd=temp_dir)
     api.step('test create', ['flutter', 'create', '--with-driver-test',
         'sample_app'], cwd=temp_dir)
     app_path = temp_dir.join('sample_app')
