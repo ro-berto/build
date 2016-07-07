@@ -616,7 +616,7 @@ def solutions_to_git(input_solutions):
       )
       solution['deps_file'] = path.join(buildspec.container, buildspec.version,
                                         'DEPS')
-    elif first_solution and solution['url'] == GIT_BUILDSPEC_PATH:
+    elif first_solution and solution['url'].startswith(GIT_BUILDSPEC_PATH):
       # Buildspecs are magic.
       # This is expected to look something like "branches/2785/DEPS"
       container, version, _ = solution['deps_file'].split('/')
