@@ -608,6 +608,7 @@ def solutions_to_git(input_solutions):
     # Rewrite SVN urls into Git urls.
     buildspec_m = re.match(BUILDSPEC_RE, parsed_path)
     if first_solution and buildspec_m:
+      # Buildspecs are magic.
       solution['url'] = GIT_BUILDSPEC_PATH
       buildspec = BUILDSPEC_TYPE(
           container=buildspec_m.group(1),
@@ -615,6 +616,11 @@ def solutions_to_git(input_solutions):
       )
       solution['deps_file'] = path.join(buildspec.container, buildspec.version,
                                         'DEPS')
+    elif first_solution and solution['url'] == GIT_BUILDSPEC_PATH:
+      # Buildspecs are magic.
+      # This is expected to look something like "branches/2785/DEPS"
+      container, version, _ = solution['deps_file'].split('/')
+      buildspec = BUILDSPEC_TYPE(container=container, version=version)
     elif parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
       solution['deps_file'] = '.DEPS.git'
