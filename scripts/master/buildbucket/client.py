@@ -5,18 +5,27 @@
 """This file contains buildbucket service client."""
 
 import datetime
+import json
+import os
+import urlparse
 
 from master import auth
 from master import deferred_resource
 from master.buildbucket import common
+import apiclient
+import httplib2
 
 BUILDBUCKET_HOSTNAME_PRODUCTION = 'cr-buildbucket.appspot.com'
 BUILDBUCKET_HOSTNAME_TESTING = 'cr-buildbucket-test.appspot.com'
 
+THIS_DIR = os.path.dirname(os.path.abspath(os.path.realpath(__file__)))
+DISCOVERY_DOC_PATH = os.path.join(THIS_DIR, 'discovery_doc.json')
 
-def buildbucket_api_discovery_url(hostname=None):
-  return (
-      'https://%s/_ah/api/discovery/v1/apis/{api}/{apiVersion}/rest' % hostname)
+
+# A list of buckets for which we bypass Cloud Endpoints proxy.
+BYPASS_ENDPOINTS_WHITELIST = {
+  'master.tryserver.infra',
+}
 
 
 def get_default_buildbucket_hostname(master):
@@ -25,8 +34,7 @@ def get_default_buildbucket_hostname(master):
       else BUILDBUCKET_HOSTNAME_TESTING)
 
 
-def create_buildbucket_service(
-    master, hostname=None, verbose=None):
+def create_buildbucket_service(master, hostname=None, verbose=None):
   """Asynchronously creates buildbucket API resource.
 
   Returns:
@@ -39,12 +47,30 @@ def create_buildbucket_service(
     ttl=datetime.timedelta(minutes=5),
   )
 
-  return deferred_resource.DeferredResource.build(
-      'buildbucket',
-      'v1',
+  with open(DISCOVERY_DOC_PATH) as f:
+    discovery_doc = json.load(f)
+
+  # This block of code is adapted from
+  # https://chromium.googlesource.com/chromium/tools/build/+/08b404f/third_party/google_api_python_client/googleapiclient/discovery.py#146
+  # https://chromium.googlesource.com/chromium/tools/build/+/08b404f/third_party/google_api_python_client/googleapiclient/discovery.py#218
+  baseUrl = 'https://%s/%sapi/buildbucket/v1/' % (
+    hostname,
+    '' if master.buildbucket_bucket in BYPASS_ENDPOINTS_WHITELIST else '_ah/',
+  )
+  resource = apiclient.discovery.Resource(
+      http=httplib2.Http(),
+      baseUrl=baseUrl,
+      model=apiclient.model.JsonModel(False),
+      requestBuilder=apiclient.http.HttpRequest,
+      developerKey=None,
+      resourceDesc=discovery_doc,
+      rootDesc=discovery_doc,
+      schema=apiclient.schema.Schemas(discovery_doc))
+
+  return deferred_resource.DeferredResource(
+      resource,
       credentials=cred_factory,
       max_concurrent_requests=10,
-      discoveryServiceUrl=buildbucket_api_discovery_url(hostname),
       verbose=verbose or False,
       log_prefix=common.LOG_PREFIX,
       timeout=60,

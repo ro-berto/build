@@ -79,9 +79,8 @@ def setup(
       buckets, build_params_hook=build_params_hook,
       max_lease_count=max_lease_count)
 
-  buildbucket_service_factory = functools.partial(
-      client.create_buildbucket_service, active_master, buildbucket_hostname,
-      verbose)
+  buildbucket_service = client.create_buildbucket_service(
+      active_master, buildbucket_hostname, verbose)
 
   poller = BuildBucketPoller(
       integrator=integrator,
@@ -89,7 +88,7 @@ def setup(
       dry_run=dry_run)
   status = BuildBucketStatus(
       integrator,
-      buildbucket_service_factory=buildbucket_service_factory,
+      buildbucket_service,
       dry_run=dry_run)
   config.setdefault('change_source', []).append(poller)
   config.setdefault('status', []).append(status)

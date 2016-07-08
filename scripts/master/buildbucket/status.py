@@ -23,40 +23,29 @@ BUILD_STATUS_NAMES = {
 class BuildBucketStatus(StatusReceiverMultiService):
   """Updates build status on buildbucket."""
 
-  def __init__(self, integrator, buildbucket_service_factory, dry_run):
+  def __init__(self, integrator, buildbucket_service, dry_run):
     """Creates a new BuildBucketStatus.
 
     Args:
       integrator (BuildBucketIntegrator): integrator to notify about status
         changes.
-      buildbucket_service_factory (function): returns a DeferredResource as
-        Deferred that will be used to access buildbucket service API.
+      buildbucket_service (DeferredResource): buildbucket API client.
       dry_run (bool): if True, do not start integrator.
     """
     StatusReceiverMultiService.__init__(self)
     self.integrator = integrator
-    self.buildbucket_service_factory = buildbucket_service_factory
+    self.buildbucket_service = buildbucket_service
     self.dry_run = dry_run
     self.integrator_starting = None
-
-  @inlineCallbacks
-  def _start_integrator(self):
-    buildbucket_service = yield self.buildbucket_service_factory()
-    buildbot = BuildbotGateway(self.parent)
-    self.integrator.start(buildbot, buildbucket_service)
-
-  def _run_when_started(self, fn, *args):
-    assert self.integrator_starting
-    d = self.integrator_starting.addCallback(lambda _: fn(*args))
-    common.log_on_error(d)
 
   def startService(self):
     StatusReceiverMultiService.startService(self)
     if self.dry_run:
       return
-    self.integrator_starting = self._start_integrator()
-    common.log_on_error(self.integrator_starting, 'Could not start integrator')
-    self._run_when_started(self.integrator.poll_builds)
+
+    buildbot = BuildbotGateway(self.parent)
+    self.integrator.start(buildbot, self.buildbucket_service)
+    self.integrator.poll_builds()
     self.parent.getStatus().subscribe(self)
 
   def stopService(self):
@@ -71,11 +60,11 @@ class BuildBucketStatus(StatusReceiverMultiService):
   def buildStarted(self, builder_name, build):
     if self.dry_run:
       return
-    self._run_when_started(self.integrator.on_build_started, build)
+    self.integrator.on_build_started(build)
 
   def buildFinished(self, builder_name, build, result):
     if self.dry_run:
       return
     assert result in BUILD_STATUS_NAMES
     status = BUILD_STATUS_NAMES[result]
-    self._run_when_started(self.integrator.on_build_finished, build, status)
+    self.integrator.on_build_finished(build, status)
