@@ -22,12 +22,6 @@ THIS_DIR = os.path.dirname(os.path.abspath(os.path.realpath(__file__)))
 DISCOVERY_DOC_PATH = os.path.join(THIS_DIR, 'discovery_doc.json')
 
 
-# A list of buckets for which we bypass Cloud Endpoints proxy.
-BYPASS_ENDPOINTS_WHITELIST = {
-  'master.tryserver.infra',
-}
-
-
 def get_default_buildbucket_hostname(master):
   return (
       BUILDBUCKET_HOSTNAME_PRODUCTION if master.is_production_host
@@ -53,13 +47,14 @@ def create_buildbucket_service(master, hostname=None, verbose=None):
   # This block of code is adapted from
   # https://chromium.googlesource.com/chromium/tools/build/+/08b404f/third_party/google_api_python_client/googleapiclient/discovery.py#146
   # https://chromium.googlesource.com/chromium/tools/build/+/08b404f/third_party/google_api_python_client/googleapiclient/discovery.py#218
-  baseUrl = 'https://%s/%sapi/buildbucket/v1/' % (
-    hostname,
-    '' if master.buildbucket_bucket in BYPASS_ENDPOINTS_WHITELIST else '_ah/',
-  )
   resource = apiclient.discovery.Resource(
       http=httplib2.Http(),
-      baseUrl=baseUrl,
+      # Note that this does not include _ah/ in URL path, which means
+      # we bypass Cloud Endpoints proxy server. See also:
+      # https://bugs.chromium.org/p/chromium/issues/detail?id=626650
+      # https://codereview.chromium.org/2117833003/
+      # https://codereview.chromium.org/2116783003/
+      baseUrl='https://%s/api/buildbucket/v1/' % hostname,
       model=apiclient.model.JsonModel(False),
       requestBuilder=apiclient.http.HttpRequest,
       developerKey=None,
