@@ -107,10 +107,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Android Coverage (dbg)'
       }),
-      'android_swarming_rel': simple_bot({
-        'mastername': 'chromium.android',
-        'buildername': 'Android Swarm Builder',
-      }),
       'android_n5x_swarming_rel': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android N5X Swarm Builder',
