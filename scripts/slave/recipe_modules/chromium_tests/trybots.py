@@ -115,6 +115,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'Android N5X Swarm Builder',
       }),
+      'android_optional_gpu_tests_rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android Release (Nexus 5X)',
+      }),
       'cast_shell_android': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Cast Android (dbg)',
