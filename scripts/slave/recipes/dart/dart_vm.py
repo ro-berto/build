@@ -49,7 +49,7 @@ builders = {
 
 for platform in ['linux', 'mac', 'win']:
   for arch in ['x64', 'ia32']:
-    for mode in ['debug', 'release']:
+    for mode in ['debug', 'release', 'product']:
       builders['vm-%s-%s-%s' % (platform, mode, arch)] = {
         'mode': mode,
         'target_arch': arch,
@@ -127,13 +127,14 @@ def RunSteps(api):
                api.path['checkout'].join('tools', 'test.py'),
                args=test_args,
                cwd=api.path['checkout'])
-    test_args.append('--checked')
-    api.python('checked vm tests',
-               api.path['checkout'].join('tools', 'test.py'),
-               args=test_args,
-               cwd=api.path['checkout'])
-    # TODO(whesse): Add archive coredumps step from dart_factory.py.
+    if b['mode'] != 'product':
+      test_args.append('--checked')
+      api.python('checked vm tests',
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=test_args,
+                 cwd=api.path['checkout'])
 
+    # TODO(whesse): Add archive coredumps step from dart_factory.py.
     api.python('taskkill after testing',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'],
