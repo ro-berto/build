@@ -1076,7 +1076,7 @@ class AndroidApi(recipe_api.RecipeApi):
         )
     expected_failure = self.m.json.loads(expected_failure_json)
 
-    cts_base_dir = self.m.path['build'].join('site_config', 'cts')
+    cts_base_dir = self.m.path['cache'].join('android_cts')
     cts_zip_path = cts_base_dir.join(_cts_file_name)
     cts_extract_dir = cts_base_dir.join('unzipped')
     if not self.m.path.exists(cts_zip_path):

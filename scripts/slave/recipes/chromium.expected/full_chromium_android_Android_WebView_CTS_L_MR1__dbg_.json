@@ -574,7 +574,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILD]/site_config/cts"
+      "[CACHE]/android_cts"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -598,7 +598,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILD]/site_config/cts",
+      "[CACHE]/android_cts",
       "511"
     ],
     "env": {
@@ -630,7 +630,7 @@
       "----",
       "cp",
       "gs://chromium-cts/android-cts-5.1_r5-linux_x86-arm.zip",
-      "[BUILD]/site_config/cts/android-cts-5.1_r5-linux_x86-arm.zip"
+      "[CACHE]/android_cts/android-cts-5.1_r5-linux_x86-arm.zip"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -652,14 +652,14 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "Update CTS.Extract new CTS",
-    "stdin": "{\"output\": \"[BUILD]/site_config/cts/unzipped\", \"zip_file\": \"[BUILD]/site_config/cts/android-cts-5.1_r5-linux_x86-arm.zip\"}",
+    "stdin": "{\"output\": \"[CACHE]/android_cts/unzipped\", \"zip_file\": \"[CACHE]/android_cts/android-cts-5.1_r5-linux_x86-arm.zip\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [
-      "[BUILD]/site_config/cts/unzipped/android-cts/tools/cts-tradefed",
+      "[CACHE]/android_cts/unzipped/android-cts/tools/cts-tradefed",
       "run",
       "cts",
       "-p",
