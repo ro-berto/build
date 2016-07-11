@@ -58,6 +58,10 @@ def RunSteps(api):
                                    'local/path/for/download',
                                    15,
                                    600)
+  api.gsutil.download_latest_file('gs://chromium-recipe-test/foo',
+                                  'gs://chromium-recipe-test/foo/b',
+                                  'local/path/for/download')
+  api.gsutil.list('gs://chromium-recipe-test/foo')
 
 
 def GenTests(api):

@@ -40,6 +40,20 @@ class FileApi(recipe_api.RecipeApi):
         **kwargs
     )
 
+  def move(self, name, source, dest, **kwargs):
+    """Run shutil.move in a step."""
+    return self.m.python.inline(
+        name,
+        """
+        import shutil
+        import sys
+        shutil.move(sys.argv[1], sys.argv[2])
+        """,
+        args=[source, dest],
+        add_python_log=False,
+        **kwargs
+    )
+
   def read(self, name, path, test_data=None, **kwargs):
     """Read a file and return its contents."""
     step_test_data = None

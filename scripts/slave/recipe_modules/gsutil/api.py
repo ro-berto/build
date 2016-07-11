@@ -114,6 +114,13 @@ class GSUtilApi(recipe_api.RecipeApi):
       result.presentation.links[link_name] = self._http_url(
           dest_bucket, dest, unauthenticated_url=unauthenticated_url)
 
+  def list(self, url, args=None, **kwargs):
+    args = args or []
+    url = self._normalize_url(url)
+    cmd = ['ls'] + args + [url]
+    name = kwargs.pop('name', 'list')
+    return self(cmd, name, **kwargs)
+
   def signurl(self, private_key_file, bucket, dest, args=None, **kwargs):
     args = args or []
     full_source = 'gs://%s/%s' % (bucket, dest)
@@ -149,6 +156,26 @@ class GSUtilApi(recipe_api.RecipeApi):
             '--dst', destination,
             '--poll-interval', str(poll_interval),
             '--timeout', str(timeout)]
+    return self.m.python(name,
+                         gsutil_download_path,
+                         args,
+                         cwd=self.m.path['slave_build'])
+
+  def download_latest_file(self, base_url, partial_name, destination,
+                           name='Download latest file from GS'):
+    """Get the latest archived object with the given base url and partial name.
+
+    Args:
+      base_url: Base Google Storage archive URL (gs://...) containing the build.
+      partial_name: Partial name of the archive file to download.
+      destination: Destination file/directory where the file will be downloaded.
+      name: The name of the step.
+    """
+    gsutil_download_path = self.m.path['build'].join(
+        'scripts', 'slave', 'gsutil_download.py')
+    args = ['--url', base_url,
+            '--dst', destination,
+            '--partial-name', partial_name]
     return self.m.python(name,
                          gsutil_download_path,
                          args,
