@@ -82,6 +82,7 @@
   {
     "name": "$result",
     "reason": "Verifier did not match.",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

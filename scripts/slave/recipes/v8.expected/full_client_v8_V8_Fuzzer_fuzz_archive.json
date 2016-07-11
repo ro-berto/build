@@ -218,6 +218,7 @@
   {
     "name": "$result",
     "reason": "1 tests failed: ['jsfunfuzz']",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

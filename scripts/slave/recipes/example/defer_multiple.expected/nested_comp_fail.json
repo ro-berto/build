@@ -54,6 +54,7 @@
   {
     "name": "$result",
     "reason": "Step('composite start') failed with return_code 1",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

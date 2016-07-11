@@ -151,6 +151,7 @@
   {
     "name": "$result",
     "reason": "Encountered 1 bundler failure(s)",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

@@ -117,6 +117,7 @@
   {
     "name": "$result",
     "reason": "Expecting at least v20.0.0, got v0.4.4",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

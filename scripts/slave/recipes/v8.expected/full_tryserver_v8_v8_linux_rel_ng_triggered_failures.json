@@ -2488,6 +2488,7 @@
   {
     "name": "$result",
     "reason": "Failures in tryjob.",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

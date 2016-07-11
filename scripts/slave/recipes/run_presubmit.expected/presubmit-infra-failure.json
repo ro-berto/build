@@ -166,6 +166,7 @@
   {
     "name": "$result",
     "reason": "Step('presubmit') failed with return_code 2",
+    "recipe_result": null,
     "status_code": 2
   }
 ]

@@ -119,6 +119,7 @@
   {
     "name": "$result",
     "reason": "Infra Failure: Step('device_status_check') returned 1",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

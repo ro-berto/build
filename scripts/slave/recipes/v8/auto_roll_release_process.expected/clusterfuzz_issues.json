@@ -247,6 +247,7 @@
   {
     "name": "$result",
     "reason": "Clusterfuzz had issues.",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

@@ -1089,6 +1089,7 @@
   {
     "name": "$result",
     "reason": "4 tests failed: ['AndroidWebViewTest', 'ChromePublicTest', 'ContentShellTest', 'ChromeSyncShellTest']",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

@@ -976,6 +976,7 @@
   {
     "name": "$result",
     "reason": "Error occurs when building None: 'NoneType' object has no attribute '__getitem__'",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

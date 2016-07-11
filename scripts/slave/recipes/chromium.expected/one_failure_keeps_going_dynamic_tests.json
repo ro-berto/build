@@ -363,6 +363,7 @@
   {
     "name": "$result",
     "reason": "1 tests failed: ['base_unittests']",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

@@ -246,6 +246,7 @@
   {
     "name": "$result",
     "reason": "1 out of 2 aggregated steps failed. Failures: Step('ssl tests') failed with return_code 5",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

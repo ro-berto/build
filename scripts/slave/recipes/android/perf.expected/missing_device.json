@@ -729,6 +729,7 @@
   {
     "name": "$result",
     "reason": "sharded perf tests failed [InfraFailure(\"Infra Failure: Step('perf_test.foo') returned 87\",)]",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

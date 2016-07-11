@@ -22,6 +22,7 @@
   {
     "name": "$result",
     "reason": "No commit position for abcdeabcde0123456789abcdeabcde0123456789",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

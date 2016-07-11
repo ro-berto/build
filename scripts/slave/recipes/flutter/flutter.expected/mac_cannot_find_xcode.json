@@ -131,6 +131,7 @@
   {
     "name": "$result",
     "reason": "Xcode version 7 or above not found",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

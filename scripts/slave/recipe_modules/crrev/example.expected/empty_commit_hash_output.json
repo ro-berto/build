@@ -20,6 +20,7 @@
   {
     "name": "$result",
     "reason": "Could not resolve refs/heads/master@{#111}",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

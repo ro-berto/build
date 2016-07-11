@@ -253,6 +253,7 @@
   {
     "name": "$result",
     "reason": "1 out of 10 aggregated steps failed. Failures: Step('test jdwp aot') failed with return_code 1",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

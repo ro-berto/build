@@ -743,6 +743,7 @@
   {
     "name": "$result",
     "reason": "1 tests failed: ['blimp_test_apk']",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

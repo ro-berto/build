@@ -449,6 +449,7 @@
   {
     "name": "$result",
     "reason": "Failed fake tests 2 (fake device iOS 8.1), fake tests 3 (fake device iOS 8.1), fake tests 5 (fake device iOS 8.1).",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

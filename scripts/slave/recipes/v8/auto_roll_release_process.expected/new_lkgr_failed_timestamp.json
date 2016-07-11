@@ -252,6 +252,7 @@
   {
     "name": "$result",
     "reason": "Timestamp file was missing. Starting new candidate cycle.",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

@@ -48,6 +48,7 @@
   {
     "name": "$result",
     "reason": "Invalid tree config. Masters with individually specified builders cannot set tree status. Email infra-dev@chromium.org if you want this feature.",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

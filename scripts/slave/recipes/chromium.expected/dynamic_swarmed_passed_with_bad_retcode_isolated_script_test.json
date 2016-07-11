@@ -429,6 +429,7 @@
   {
     "name": "$result",
     "reason": "1 tests failed: ['telemetry_gpu_unittests']",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

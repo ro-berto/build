@@ -594,6 +594,7 @@
   {
     "name": "$result",
     "reason": "1 out of 12 aggregated steps failed. Failures: Step('android_webview_unittests') failed with return_code 2",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

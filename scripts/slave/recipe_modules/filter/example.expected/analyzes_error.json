@@ -49,6 +49,7 @@
   {
     "name": "$result",
     "reason": "Error: ERROR",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

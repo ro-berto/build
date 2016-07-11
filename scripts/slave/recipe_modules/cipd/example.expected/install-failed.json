@@ -25,6 +25,7 @@
   {
     "name": "$result",
     "reason": "Step('install cipd') failed with return_code 1",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

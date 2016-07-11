@@ -241,6 +241,7 @@
   {
     "name": "$result",
     "reason": "Failed build steps: dm",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

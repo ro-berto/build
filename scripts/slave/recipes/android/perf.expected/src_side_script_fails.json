@@ -762,6 +762,7 @@
   {
     "name": "$result",
     "reason": "src-side perf tests failed [StepFailure(\"1 tests failed: ['host_info']\",)]",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

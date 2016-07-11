@@ -76,6 +76,7 @@
   {
     "name": "$result",
     "reason": "test_run_id not found in trigger_data json",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

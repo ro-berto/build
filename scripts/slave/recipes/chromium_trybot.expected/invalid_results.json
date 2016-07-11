@@ -709,6 +709,7 @@
   {
     "name": "$result",
     "reason": "1 out of 1 aggregated steps failed. Failures: Step('base_unittests') failed with return_code 1",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

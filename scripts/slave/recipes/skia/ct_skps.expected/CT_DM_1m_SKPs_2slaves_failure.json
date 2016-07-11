@@ -1377,6 +1377,7 @@
   {
     "name": "$result",
     "reason": "Failed steps: ct-dm-1 on Ubuntu-14.04, ct-dm-3 on Ubuntu-14.04",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

@@ -487,6 +487,7 @@
   {
     "name": "$result",
     "reason": "Expected revision to check.",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

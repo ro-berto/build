@@ -2,6 +2,7 @@
   {
     "name": "$result",
     "reason": "Failed to parse branch from: refs/heads/master@{#foo}",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

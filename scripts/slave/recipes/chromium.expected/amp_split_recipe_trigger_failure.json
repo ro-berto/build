@@ -2632,6 +2632,7 @@
   {
     "name": "$result",
     "reason": "7 tests failed: ['AndroidWebViewTest', 'ContentShellTest', 'ChromePublicTest', 'ChromeSyncShellTest', 'junit_unit_tests', 'chrome_junit_tests', 'content_junit_tests']",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

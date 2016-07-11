@@ -510,6 +510,7 @@
   {
     "name": "$result",
     "reason": "Failures or flakes in build.",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

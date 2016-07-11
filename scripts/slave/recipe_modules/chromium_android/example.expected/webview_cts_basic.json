@@ -790,6 +790,7 @@
   {
     "name": "$result",
     "reason": "Failed to parse the CTS output for the xml report file location",
+    "recipe_result": null,
     "status_code": 1
   }
 ]

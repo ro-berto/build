@@ -661,6 +661,7 @@
   {
     "name": "$result",
     "reason": "Failed to upload result to Perf Dashboard. Error response: None",
+    "recipe_result": null,
     "status_code": 1
   }
 ]
