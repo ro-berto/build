@@ -18,6 +18,7 @@ BUILD_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(
                              os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(BUILD_ROOT, 'scripts'))
 
+from common import annotator
 from common import chromium_utils
 from common import env
 from slave import cipd
@@ -118,6 +119,7 @@ def main(argv):
 
     monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
+    recipe_result_path = os.path.join(tempdir, 'recipe_result.json')
     recipe_cmd = [
         sys.executable,
         os.path.join(cipd_path, 'recipes.py'),
@@ -131,6 +133,7 @@ def main(argv):
         'run',
         '--properties-file', properties_file,
         '--workdir', os.path.join(tempdir, 'w'),
+        '--output-result-json', recipe_result_path,
         args.recipe,
     ]
     # If we bootstrap through logdog, the recipe command line gets written
@@ -154,6 +157,11 @@ def main(argv):
       if recipe_return_code is None:
         LOGGER.info('Not using LogDog. Invoking `recipes.py` directly.')
         recipe_return_code = _call(recipe_cmd)
+
+      # Try to open recipe result JSON. Any failure will result in an exception
+      # and an infra failure.
+      with open(recipe_result_path) as f:
+        json.load(f)
     return recipe_return_code
 
 
@@ -165,7 +173,9 @@ def shell_main(argv):
     # Re-execute with the updated remote_run.py.
     return _call([sys.executable] + argv)
 
-  return main(argv)
+  stream = annotator.StructuredAnnotationStream()
+  with stream.step('remote_run_result'):
+    return main(argv)
 
 
 if __name__ == '__main__':
