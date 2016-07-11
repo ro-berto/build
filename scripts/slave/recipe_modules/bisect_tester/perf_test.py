@@ -187,10 +187,13 @@ def _rebase_path(api, file_path):
 
   We want to pass to runtest.py an absolute path if possible.
   """
-  if file_path.startswith('src/'):
-    return api.m.path['checkout'].join(*file_path.split('/')[1:])
-  elif file_path.startswith('src\\'):  # pragma: no cover
-    return api.m.path['checkout'].join(*file_path.split('\\')[1:])
+  if (file_path.startswith('src/') or file_path.startswith('./src/')):
+    return api.m.path['checkout'].join(
+        *file_path.split('src', 1)[1].split('/')[1:])
+  elif (file_path.startswith('src\\') or
+        file_path.startswith('.\\src\\')):  # pragma: no cover
+    return api.m.path['checkout'].join(
+        *file_path.split('src', 1)[1].split('\\')[1:])
   return file_path
 
 def _run_command(api, command, step_name):
