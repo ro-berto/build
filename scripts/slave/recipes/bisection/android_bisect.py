@@ -261,7 +261,11 @@ results-without_patch
           api.step_data('gsutil exists', retcode=1) +
           api.step_data('buildbucket.put',
               stdout=api.json.output(buildbucket_put_response)) +
+          api.step_data('buildbucket.put (2)',
+              stdout=api.json.output(buildbucket_put_response)) +
           api.step_data('buildbucket.get',
+                        stdout=api.json.output(buildbucket_get_response)) +
+          api.step_data('buildbucket.get (2)',
                         stdout=api.json.output(buildbucket_get_response)) +
           api.step_data('Performance Test (With Patch) 1 of 1', retcode=1))
       config_json.update({'good_revision': '306475',
