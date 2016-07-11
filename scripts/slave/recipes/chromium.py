@@ -102,7 +102,7 @@ def GenTests(api):
         'build_data_dir': api.path['root'].join('build_data_dir'),
       }
       # TODO(phajdan.jr): test with 'kitchen' path config everywhere.
-      if 'android' not in buildername.lower():
+      if 'amp' not in buildername.lower():
         properties['path_config'] = 'kitchen'
       if mastername == 'chromium.webkit':
         properties['gs_acl'] = 'public-read'
