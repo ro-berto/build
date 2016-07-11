@@ -176,7 +176,6 @@ def RunSteps(api):
         num_device_shards=builder['num_device_shards'],
         num_host_shards=builder.get('num_host_shards', 1),
         shard_index=builder.get('shard_index', 0),
-        known_devices_file=builder.get('known_devices_file', None),
         override_browser_name=builder.get('browser_name'))
     dynamic_perf_tests.run(api, None)
 

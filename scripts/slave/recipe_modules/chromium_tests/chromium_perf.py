@@ -69,8 +69,7 @@ def _BuildSpec(platform, target_bits):
 
 
 def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
-              shard_index, num_host_shards, num_device_shards,
-              known_devices_file):
+              shard_index, num_host_shards, num_device_shards):
   spec = _BaseSpec(
       bot_type='tester',
       chromium_apply_config=['chromium_perf'],
@@ -81,7 +80,7 @@ def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
       tests=[steps.DynamicPerfTests(
         perf_id, platform, target_bits, max_battery_temp=max_battery_temp,
         num_device_shards=num_device_shards, num_host_shards=num_host_shards,
-        shard_index=shard_index, known_devices_file=known_devices_file)],
+        shard_index=shard_index)],
   )
 
   spec['parent_buildername'] = parent_builder
@@ -106,14 +105,13 @@ def _AddBuildSpec(name, platform, target_bits=64):
 
 
 def _AddTestSpec(name, perf_id, platform, target_bits=64,
-                 max_battery_temp=350, num_host_shards=1, num_device_shards=1,
-                 known_devices_file='.known_devices'):
+                 max_battery_temp=350, num_host_shards=1, num_device_shards=1):
   parent_builder = _builders[platform][target_bits]
   for shard_index in xrange(num_host_shards):
     builder_name = '%s (%d)' % (name, shard_index + 1)
     SPEC['builders'][builder_name] = _TestSpec(
         parent_builder, perf_id, platform, target_bits, max_battery_temp,
-        shard_index, num_host_shards, num_device_shards, known_devices_file)
+        shard_index, num_host_shards, num_device_shards)
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)

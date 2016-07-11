@@ -514,7 +514,7 @@
       "--max-battery-temp",
       "350",
       "--known-devices-file",
-      "[BUILD]/site_config/.known_devices",
+      "[HOME]/.android/known_devices.json",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
