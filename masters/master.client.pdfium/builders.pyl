@@ -234,7 +234,6 @@
         "gn": True,
         "skip_test": True,
         "target_os": "android",
-        "v8": False,
       },
     },
   },
