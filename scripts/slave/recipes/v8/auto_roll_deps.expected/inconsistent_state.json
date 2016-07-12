@@ -55,7 +55,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "client.v8.fyi",
+      "client.v8",
       "--builder",
       "TestBuilder",
       "--slave",
@@ -184,29 +184,10 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/v8/tools/release/auto_roll.py",
-      "--chromium",
-      "[SLAVE_BUILD]/src",
-      "--author",
-      "v8-autoroll@chromium.org",
-      "--reviewer",
-      "hablich@chromium.org,machenbach@chromium.org,yangguo@chromium.org,vogelheim@chromium.org",
-      "--roll",
-      "--json-output",
-      "/path/to/tmp/json",
-      "--work-dir",
-      "[SLAVE_BUILD]/workdir"
-    ],
-    "cwd": "[SLAVE_BUILD]/src/v8",
-    "name": "roll deps",
+    "cmd": [],
+    "name": "Local checkout is lagging behind.",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"monitoring_state\": \"success\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -222,7 +203,7 @@
       "--ts-mon-task-job-name",
       "roll",
       "--counter",
-      "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"success\", \"value\": 1}"
+      "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"inconsistent\", \"value\": 1}"
     ],
     "name": "upload stats"
   },

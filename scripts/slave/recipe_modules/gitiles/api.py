@@ -111,7 +111,7 @@ class Gitiles(recipe_api.RecipeApi):
     return step_result.json.output
 
   def download_file(self, repository_url, file_path, branch='master',
-                    step_name=None, attempts=None):
+                    step_name=None, attempts=None, **kwargs):
     """Downloads raw file content from a Gitiles repository.
 
     Args:
@@ -130,5 +130,6 @@ class Gitiles(recipe_api.RecipeApi):
         step_name or 'fetch %s:%s' % (branch, file_path,),
         attempts=attempts,
         fmt='text',
-        add_json_log=False)
+        add_json_log=False,
+        **kwargs)
     return base64.b64decode(step_result.json.output['value'])

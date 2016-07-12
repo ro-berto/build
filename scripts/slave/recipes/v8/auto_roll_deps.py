@@ -2,10 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import base64
+
 DEPS = [
-  'depot_tools/bot_update',
   'chromium',
+  'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/git',
+  'gitiles',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -14,6 +18,18 @@ DEPS = [
   'recipe_engine/step',
   'url',
 ]
+
+TEST_DEPS_FILE = """
+vars = {
+  'chromium_git': 'https://chromium.googlesource.com',
+  'v8_revision': '%s',
+}
+
+deps = {
+  'src/v8':
+    Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),
+}
+"""
 
 # Location of the infra-python package's run script.
 _RUN_PY = '/opt/infra-python/run.py'
@@ -37,6 +53,11 @@ def ResubmitToCQ(issue_id, api):
       'send issue to CQ',
       ['commit_queue', 'set', '-i', issue_id]
   )
+
+def V8RevisionFrom(deps):
+  Var = lambda var: '%s'  # pylint: disable=W0612
+  exec(deps)
+  return vars['v8_revision']
 
 def RunSteps(api):
   monitoring_state = 'failure'
@@ -93,13 +114,39 @@ def RunSteps(api):
 
       return
 
-    # Prevent race with gnumbd by waiting.
+    # Make it more likely to avoid inconsistencies when hitting different
+    # mirrors.
     api.python.inline(
-        'wait for gnumbd',
+        'wait for consistency',
         'import time; time.sleep(20)',
     )
 
     api.bot_update.ensure_checkout(force=True, no_shallow=True)
+
+    # Get deps file from pending ref.
+    pending_deps = api.gitiles.download_file(
+        'https://chromium.googlesource.com/chromium/src',
+        'DEPS',
+        branch='refs/pending/heads/master',
+        step_test_data= lambda: api.json.test_api.output({
+          'value': base64.b64encode(TEST_DEPS_FILE % 'deadbeef'),
+        }),
+    )
+
+    # Get the deps file used by the auto roller.
+    real_deps = api.git(
+        'cat-file', 'blob', 'HEAD:DEPS',
+        stdout=api.raw_io.output(),
+        step_test_data= lambda: api.raw_io.test_api.stream_output(
+            TEST_DEPS_FILE % 'deadbeef'),
+    ).stdout
+
+    # Require HEAD and pending HEAD to be consistent before proceeding.
+    if V8RevisionFrom(pending_deps) != V8RevisionFrom(real_deps):
+      api.step('Local checkout is lagging behind.', cmd=None)
+      api.step.active_result.presentation.status = api.step.WARNING
+      monitoring_state = 'inconsistent'
+      return
 
     result = api.python(
         'roll deps',
@@ -159,5 +206,11 @@ def GenTests(api):
           'check active roll', api.raw_io.output(
               '{"results": [{"subject": "Update V8 to foo",' +
               ' "issue": 123456, "commit": false}]}'))
+    )
+  yield (api.test('inconsistent_state') +
+      api.properties.generic(mastername='client.v8') +
+      api.override_step_data(
+          'git cat-file', api.raw_io.stream_output(
+              TEST_DEPS_FILE % 'beefdead'))
     )
 
