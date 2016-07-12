@@ -45,8 +45,6 @@ def layout_test(options, args):
     'third_party', 'WebKit', 'Tools', 'Scripts')
   run_blink_tests = os.path.join(blink_scripts_dir, 'run-webkit-tests')
 
-  slave_name = slave_utils.SlaveBuildName(build_dir)
-
   command = [run_blink_tests,
              '--no-show-results',
              '--no-new-test-results',
@@ -106,7 +104,6 @@ def layout_test(options, args):
   if options.build_number:
     command.extend(['--build-number', options.build_number])
   command.extend(['--master-name', slave_utils.GetActiveMaster() or ''])
-  command.extend(['--build-name', slave_name])
   if options.step_name:
     command.extend(['--step-name', options.step_name])
   # On Windows, look for the target in an exact location.

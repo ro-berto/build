@@ -261,7 +261,9 @@
       "--builder-name",
       "V8-Blink Linux 64 (dbg)",
       "--gs-bucket",
-      "gs://chromium-layout-test-archives"
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]/chrome_staging"
     ],
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [

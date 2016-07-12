@@ -376,7 +376,9 @@
       "--builder-name",
       "Site Isolation Linux",
       "--gs-bucket",
-      "gs://chromium-layout-test-archives"
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]/chrome_staging"
     ],
     "cwd": "[BUILDER_CACHE]/Site_Isolation_Linux",
     "env": {

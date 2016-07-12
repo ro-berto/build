@@ -511,6 +511,8 @@
       "WebKit Mac10.11 (retina)",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
       "--gs-acl",
       "public-read"
     ],

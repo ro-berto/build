@@ -157,8 +157,10 @@ def archive_layout(options, args):
   else:
     options.results_dir = chromium_utils.FindUpward(chrome_dir, RESULT_DIR)
   print 'Archiving results from %s' % options.results_dir
-  staging_dir = slave_utils.GetStagingDir(chrome_dir)
+  staging_dir = options.staging_dir or slave_utils.GetStagingDir(chrome_dir)
   print 'Staging in %s' % staging_dir
+  if not os.path.exists(staging_dir):
+    os.makedirs(staging_dir)
 
   (actual_file_list, diff_file_list) = _CollectArchiveFiles(options.results_dir)
   zip_file = chromium_utils.MakeZip(staging_dir,
@@ -268,6 +270,10 @@ def main():
   option_parser.add_option('', '--gs-acl',
                            default=None,
                            help=('The ACL of the google storage files.'))
+  option_parser.add_option('--staging-dir',
+                           help='Directory to use for staging the archives. '
+                                'Default behavior is to automatically detect '
+                                'slave\'s build directory.')
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()

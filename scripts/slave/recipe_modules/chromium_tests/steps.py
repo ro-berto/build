@@ -1749,6 +1749,7 @@ class BlinkTest(Test):
           '--build-number', buildnumber,
           '--builder-name', buildername,
           '--gs-bucket', 'gs://chromium-layout-test-archives',
+          '--staging-dir', api.path['cache'].join('chrome_staging'),
         ]
         # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
         if api.properties.get('gs_acl'):

@@ -474,6 +474,8 @@
       "WebKit Win10",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]\\chrome_staging",
       "--gs-acl",
       "public-read"
     ],

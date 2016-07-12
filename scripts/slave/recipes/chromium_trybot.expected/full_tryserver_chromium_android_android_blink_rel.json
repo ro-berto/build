@@ -796,7 +796,9 @@
       "--builder-name",
       "android_blink_rel",
       "--gs-bucket",
-      "gs://chromium-layout-test-archives"
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]/chrome_staging"
     ],
     "cwd": "[BUILDER_CACHE]/android_blink_rel",
     "env": {

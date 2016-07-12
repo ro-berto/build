@@ -459,7 +459,9 @@
       "--builder-name",
       "linux_chromium_browser_side_navigation_rel",
       "--gs-bucket",
-      "gs://chromium-layout-test-archives"
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]/chrome_staging"
     ],
     "cwd": "[BUILDER_CACHE]/linux_chromium_browser_side_navigation_rel",
     "env": {
