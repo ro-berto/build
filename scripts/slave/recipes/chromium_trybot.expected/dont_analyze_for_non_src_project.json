@@ -277,7 +277,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]/src/v8",
+    "cwd": "[BUILDER_CACHE]/linux_chromium_rel_ng/src/v8",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

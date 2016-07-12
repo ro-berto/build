@@ -677,12 +677,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     patch_root = self.m.gclient.calculate_patch_root(
         self.m.properties.get('patch_project'))
-    affected_files = self.m.tryserver.get_files_affected_by_patch(patch_root)
-    for i, path in enumerate(affected_files):
+    cwd = self._working_dir.join(patch_root) if self._working_dir else None
+    files = self.m.tryserver.get_files_affected_by_patch(patch_root, cwd=cwd)
+    for i, path in enumerate(files):
       path = str(path)
       assert path.startswith(relative_to)
-      affected_files[i] = path[len(relative_to):]
-    return affected_files
+      files[i] = path[len(relative_to):]
+    return files
 
   def analyze(self, affected_files, test_targets, additional_compile_targets,
               config_file_name, mb_mastername=None, mb_buildername=None,

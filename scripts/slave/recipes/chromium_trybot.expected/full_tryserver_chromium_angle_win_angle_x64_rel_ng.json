@@ -277,7 +277,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[BUILDER_CACHE]\\win_angle_x64_rel_ng\\src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

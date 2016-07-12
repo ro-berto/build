@@ -279,7 +279,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[BUILDER_CACHE]\\win_chrome_official\\src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

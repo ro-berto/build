@@ -277,7 +277,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]/src/third_party/webrtc",
+    "cwd": "[BUILDER_CACHE]/linux_chromium_rel_ng/src/third_party/webrtc",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
