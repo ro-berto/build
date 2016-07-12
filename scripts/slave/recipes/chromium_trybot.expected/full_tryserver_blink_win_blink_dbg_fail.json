@@ -12,7 +12,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]\\win_blink_dbg",
+      "[BUILDER_CACHE]\\win_layout",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -60,7 +60,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -198,7 +198,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\tools\\swarming_client\\swarming.py",
+      "[BUILDER_CACHE]\\win_layout\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -214,7 +214,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg\\src",
+    "cwd": "[BUILDER_CACHE]\\win_layout\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -227,14 +227,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\testing\\scripts\\get_compile_targets.py",
+      "[BUILDER_CACHE]\\win_layout\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]\\\\win_blink_dbg\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]\\\\win_layout\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"buildername\": \"win_blink_dbg\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
@@ -249,12 +249,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\testing\\buildbot\\chromium.webkit.json",
+      "[BUILDER_CACHE]\\win_layout\\src\\testing\\buildbot\\chromium.webkit.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.webkit.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win_blink_dbg\\src\\testing\\buildbot\\chromium.webkit.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win_layout\\src\\testing\\buildbot\\chromium.webkit.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -287,7 +287,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\testing\\buildbot\\trybot_analyze_config.json",
+      "[BUILDER_CACHE]\\win_layout\\src\\testing\\buildbot\\trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -350,14 +350,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\tools\\mb\\mb.py",
+      "[BUILDER_CACHE]\\win_layout\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.blink",
       "-b",
       "win_blink_dbg",
       "--config-file",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\tools\\mb\\mb_config.pyl",
+      "[BUILDER_CACHE]\\win_layout\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "//out/Debug"
@@ -382,7 +382,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src",
+      "[BUILDER_CACHE]\\win_layout\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
@@ -423,13 +423,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\third_party\\WebKit\\Tools\\Scripts\\run-webkit-tests",
+      "[BUILDER_CACHE]\\win_layout\\src\\third_party\\WebKit\\Tools\\Scripts\\run-webkit-tests",
       "--target",
       "Debug",
       "--results-directory",
       "[SLAVE_BUILD]\\layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\out",
+      "[BUILDER_CACHE]\\win_layout\\src\\out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -444,7 +444,7 @@
       "tryserver.blink",
       "--debug-rwt-logging"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -463,7 +463,7 @@
       "--results-dir",
       "[SLAVE_BUILD]\\layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\out",
+      "[BUILDER_CACHE]\\win_layout\\src\\out",
       "--build-number",
       "571",
       "--builder-name",
@@ -471,7 +471,7 @@
       "--gs-bucket",
       "gs://chromium-layout-test-archives"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -487,7 +487,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -521,7 +521,7 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -595,7 +595,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg\\src",
+    "cwd": "[BUILDER_CACHE]\\win_layout\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -608,19 +608,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\tools\\mb\\mb.py",
+      "[BUILDER_CACHE]\\win_layout\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.blink",
       "-b",
       "win_blink_dbg",
       "--config-file",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\tools\\mb\\mb_config.pyl",
+      "[BUILDER_CACHE]\\win_layout\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "//out/Debug"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -641,7 +641,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src",
+      "[BUILDER_CACHE]\\win_layout\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
@@ -661,7 +661,7 @@
       "--",
       "blink_tests"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -675,13 +675,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\third_party\\WebKit\\Tools\\Scripts\\run-webkit-tests",
+      "[BUILDER_CACHE]\\win_layout\\src\\third_party\\WebKit\\Tools\\Scripts\\run-webkit-tests",
       "--target",
       "Debug",
       "--results-directory",
       "[SLAVE_BUILD]\\layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]\\win_blink_dbg\\src\\out",
+      "[BUILDER_CACHE]\\win_layout\\src\\out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -700,7 +700,7 @@
       "tryserver.blink",
       "--debug-rwt-logging"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -717,7 +717,7 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -735,7 +735,7 @@
       "--target",
       "Debug"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_blink_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

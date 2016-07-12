@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/WebKit_Mac10_11",
+      "[BUILDER_CACHE]/mac_layout",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -47,7 +47,7 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/WebKit_Mac10_11",
+    "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -185,7 +185,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_layout/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -201,7 +201,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/WebKit_Mac10_11/src",
+    "cwd": "[BUILDER_CACHE]/mac_layout/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -214,14 +214,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/mac_layout/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/WebKit_Mac10_11/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/mac_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"buildername\": \"WebKit Mac10.11\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
@@ -236,12 +236,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src/testing/buildbot/chromium.webkit.json",
+      "[BUILDER_CACHE]/mac_layout/src/testing/buildbot/chromium.webkit.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.webkit.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/WebKit_Mac10_11/src/testing/buildbot/chromium.webkit.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac_layout/src/testing/buildbot/chromium.webkit.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"WebKit Mac10.11\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -273,7 +273,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src/out/Release"
+      "[BUILDER_CACHE]/mac_layout/src/out/Release"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -300,7 +300,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src",
+      "[BUILDER_CACHE]/mac_layout/src",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
@@ -316,11 +316,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src/out/Release",
+      "[BUILDER_CACHE]/mac_layout/src/out/Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/WebKit_Mac10_11",
+    "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -338,7 +338,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_layout/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -397,7 +397,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[BUILDER_CACHE]/WebKit_Mac10_11",
+    "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -439,7 +439,7 @@
       "-o",
       "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src/out",
+      "[BUILDER_CACHE]/mac_layout/src/out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -451,7 +451,7 @@
       "--step-name",
       "webkit_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/WebKit_Mac10_11",
+    "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -468,7 +468,7 @@
       "--results-dir",
       "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src/out",
+      "[BUILDER_CACHE]/mac_layout/src/out",
       "--build-number",
       "571",
       "--builder-name",
@@ -478,7 +478,7 @@
       "--gs-acl",
       "public-read"
     ],
-    "cwd": "[BUILDER_CACHE]/WebKit_Mac10_11",
+    "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -497,7 +497,7 @@
       "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
-      "[BUILDER_CACHE]/WebKit_Mac10_11/src/tools/swarming_client",
+      "[BUILDER_CACHE]/mac_layout/src/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -512,7 +512,7 @@
       "1",
       "browser_tests/Mac-10.11/ffffffffff/WebKit Mac10.11/571"
     ],
-    "cwd": "[BUILDER_CACHE]/WebKit_Mac10_11",
+    "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -541,7 +541,7 @@
       "--chrome-revision",
       "170242"
     ],
-    "cwd": "[BUILDER_CACHE]/WebKit_Mac10_11",
+    "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
