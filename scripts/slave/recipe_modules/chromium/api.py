@@ -635,6 +635,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       step_kwargs['env']['FORCE_MAC_TOOLCHAIN'] = (
         self.c.env.FORCE_MAC_TOOLCHAIN)
 
+    if self.c.gyp_env.GYP_MSVS_VERSION:
+      # TODO(machenbach): Remove this as soon as it's not read anymore by
+      # vs_toolchain.py (currently called by gn).
+      step_kwargs['env']['GYP_MSVS_VERSION'] = (
+        self.c.gyp_env.GYP_MSVS_VERSION)
+
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
       step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
