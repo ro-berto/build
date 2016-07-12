@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import argparse
+import contextlib
 import datetime
 import difflib
 import random
@@ -275,11 +276,20 @@ class V8Api(recipe_api.RecipeApi):
       env['GYP_CHROMIUM_NO_ACTION'] = 1
     self.m.chromium.runhooks(env=env, **kwargs)
 
+  @contextlib.contextmanager
+  def _temp_dir(self, path):
+    try:
+      self.m.file.makedirs('for peeking gn', path)
+      yield
+    finally:
+      self.m.shutil.rmtree(path, infra_step=True)
+
   def peek_gn(self):
     """Runs gn and compares flags with gyp (fyi only)."""
     gyp_build_dir = self.m.chromium.c.build_dir.join(
         self.m.chromium.c.build_config_fs)
-    with self.m.tempfile.temp_dir('v8_gn') as gn_build_dir:
+    gn_build_dir = self.m.chromium.c.build_dir.join('gn')
+    with self._temp_dir(gn_build_dir):
       step_result = self.m.python(
           name='patch mb config (fyi)',
           script=self.resource('patch_mb_config.py'),

@@ -199,6 +199,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/v8/out/gn",
+      "511"
+    ],
+    "name": "makedirs for peeking gn",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::v8]/resources/patch_mb_config.py",
       "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
       "/path/to/tmp/"
@@ -219,7 +241,7 @@
       "[mb config]",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "[TMP_BASE]/v8_gn_tmp_1"
+      "[SLAVE_BUILD]/v8/out/gn"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -231,7 +253,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
-      "[TMP_BASE]/v8_gn_tmp_1",
+      "[SLAVE_BUILD]/v8/out/gn",
       "[SLAVE_BUILD]/v8/out/Release",
       "all",
       "all"
@@ -243,9 +265,9 @@
       "python",
       "-u",
       "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
-      "[TMP_BASE]/v8_gn_tmp_1"
+      "[SLAVE_BUILD]/v8/out/gn"
     ],
-    "name": "rmtree [TMP_BASE]/v8_gn_tmp_1",
+    "name": "rmtree [SLAVE_BUILD]/v8/out/gn",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
@@ -340,7 +362,7 @@
       "[SLAVE_BUILD]/v8/out/Release",
       "--capture",
       "--output-file",
-      "[TMP_BASE]/gcov_coverage_tmp_2/app.info"
+      "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
     ],
     "name": "lcov capture"
   },
@@ -350,13 +372,13 @@
       "--directory",
       "[SLAVE_BUILD]/v8/out/Release",
       "--remove",
-      "[TMP_BASE]/gcov_coverage_tmp_2/app.info",
+      "[TMP_BASE]/gcov_coverage_tmp_1/app.info",
       "third_party/*",
       "testing/gtest/*",
       "testing/gmock/*",
       "/usr/include/*",
       "--output-file",
-      "[TMP_BASE]/gcov_coverage_tmp_2/app.info"
+      "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
     ],
     "name": "lcov remove"
   },
@@ -364,8 +386,8 @@
     "cmd": [
       "genhtml",
       "--output-directory",
-      "[TMP_BASE]/gcov_coverage_html_tmp_3",
-      "[TMP_BASE]/gcov_coverage_tmp_2/app.info"
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
     ],
     "name": "genhtml"
   },
@@ -382,7 +404,7 @@
       "-a",
       "public-read",
       "-R",
-      "[TMP_BASE]/gcov_coverage_html_tmp_3",
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
       "gs://chromium-v8/linux64_gcov_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
     ],
     "name": "gsutil coverage report",
