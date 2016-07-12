@@ -1352,6 +1352,7 @@ BUILDERS = {
         'tests': [V8Testing_5, Test262_2, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
         'swarming_properties': {
+          'default_expiration': 2 * 60 * 60,
           'default_hard_timeout': 60 * 60,
           'default_priority': 35,
         },
@@ -1366,7 +1367,10 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_properties': {'default_priority': 35},
+        'swarming_properties': {
+          'default_expiration': 2 * 60 * 60,
+          'default_priority': 35,
+        },
         'tests': [Mjsunit_3, Webkit],
         'testing': {'platform': 'linux'},
       },
