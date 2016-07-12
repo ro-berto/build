@@ -43,19 +43,26 @@ builders = {
   'test-coverage': {
     'mode': 'release',
     'target_arch': 'x64',
-    'env': linux_clang_env,
+    'env': default_envs['linux'],
+    'checked': True,
     'clobber': True},
 }
 
 for platform in ['linux', 'mac', 'win']:
   for arch in ['x64', 'ia32']:
-    for mode in ['debug', 'release', 'product']:
+    for mode in ['debug', 'release']:
       builders['vm-%s-%s-%s' % (platform, mode, arch)] = {
         'mode': mode,
         'target_arch': arch,
         'env': default_envs[platform],
-        'test_args': ['--exclude-suite=pkg'],
+        'checked': True,
       }
+    builders['vm-%s-product-%s' % (platform, arch)] = {
+      'mode': 'product',
+      'target_arch': arch,
+      'env': default_envs[platform],
+      'test_args': ['--builder-tag=no_ipv6'],
+    }
 
 for arch in ['simmips', 'simarm', 'simarm64']:
   for mode in ['debug', 'release']:
@@ -63,24 +70,50 @@ for arch in ['simmips', 'simarm', 'simarm64']:
       'mode': mode,
       'target_arch': arch,
       'env': {},
-      'test_args': ['--exclude-suite=pkg'],
+      'checked': True,
     }
 
 for arch in ['x64', 'ia32']:
   asan = builders['vm-linux-release-%s' % arch].copy()
   asan_args = ['--builder-tag=asan', '--timeout=240']
-  asan_args.extend(asan['test_args'])
+  asan_args.extend(asan.get('test_args', []))
   asan['test_args'] = asan_args
   asan['env'] = linux_asan_env[arch]
   builders['vm-linux-release-%s-asan' % arch] = asan
 
   opt = builders['vm-linux-release-%s' % arch].copy()
   opt_args = ['--vm-options=--optimization-counter-threshold=5']
-  opt_args.extend(opt['test_args'])
+  opt_args.extend(opt.get('test_args', []))
   opt['test_args'] = opt_args
   builders['vm-linux-release-%s-optcounter-threshold' % arch] = opt
 
 builders['vm-win-debug-ia32-russian'] = builders['vm-win-debug-ia32']
+
+for mode in ['debug', 'release', 'product']:
+  builders['app-linux-%s-x64'] = {
+    'mode': mode,
+    'target_arch': 'x64',
+    'env': default_envs['linux'],
+    'test_args': ['-cdart2appjit', '-rdart_app', '--use-blobs',
+                  '--builder-tag=no_ipv6'],
+  }
+  builders['precomp-linux-%s-x64'] = {
+    'mode': mode,
+    'target_arch': 'x64',
+    'env': default_envs['linux'],
+    'test_args': ['-cprecompiler', '-rdart_precompiled', '--use-blobs',
+                  '--builder-tag=no_ipv6'],
+    'build_args': ['runtime_precompiled'],
+  }
+  builders['vm-linux-%s-x64-live-reload' % mode] = {
+    'mode': mode,
+    'target_arch': 'x64',
+    'env': default_envs['linux'],
+    'checked': True,
+    'test_args': ['--hot-reload',
+                  '--builder-tag=no_ipv6'],
+  }
+
 
 def RunSteps(api):
   api.gclient.set_config('dart')
@@ -91,7 +124,6 @@ def RunSteps(api):
   (buildername, _, channel) = buildername.rpartition('-')
   assert channel in ['be', 'dev', 'stable', 'integration']
   b = builders[buildername]
-
 
   if b.get('clobber', False):
       api.python('clobber',
@@ -106,6 +138,7 @@ def RunSteps(api):
              cwd=api.path['checkout'])
 
   build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
+  build_args.extend(b.get('build_args', []))
   api.python('build dart',
              api.path['checkout'].join('tools', 'build.py'),
              args=build_args,
@@ -121,13 +154,14 @@ def RunSteps(api):
                  '--failure-summary',
                  '--write-debug-log',
                  '--write-test-outcome-log',
-                 '--copy-coredumps']
+                 '--copy-coredumps',
+                 '--exclude-suite=pkg']
     test_args.extend(b.get('test_args', []))
     api.python('vm tests',
                api.path['checkout'].join('tools', 'test.py'),
                args=test_args,
                cwd=api.path['checkout'])
-    if b['mode'] != 'product':
+    if b.get('checked', False):
       test_args.append('--checked')
       api.python('checked vm tests',
                  api.path['checkout'].join('tools', 'test.py'),
