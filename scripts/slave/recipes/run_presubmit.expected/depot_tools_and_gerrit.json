@@ -1,0 +1,126 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--master",
+      "tryserver.infra",
+      "--builder",
+      "presubmit_depot_tools",
+      "--slave",
+      "TestSlavename",
+      "--spec",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'depot_tools', 'url': 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'}]",
+      "--root",
+      "depot_tools",
+      "--revision_mapping_file",
+      "{\"depot_tools\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--gerrit_repo",
+      "https://chromium.googlesource.com/chromium/tools/depot_tools",
+      "--gerrit_ref",
+      "refs/changes/11/338811/3",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "depot_tools@HEAD",
+      "--output_manifest"
+    ],
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"depot_tools\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"depot_tools\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/depot_tools.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"59bbfb4465019d8ed83bfe88fef566922953452a\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"depot_tools\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"59bbfb4465019d8ed83bfe88fef566922953452a\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#91780}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"depot_tools\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"59bbfb4465019d8ed83bfe88fef566922953452a\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#91780}\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "-c",
+      "user.email=commit-bot@chromium.org",
+      "-c",
+      "user.name=The Commit Bot",
+      "commit",
+      "-a",
+      "-m",
+      "Committed patch"
+    ],
+    "cwd": "[SLAVE_BUILD]/depot_tools",
+    "name": "commit git patch"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]/depot_tools",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/presubmit_support.py",
+      "--issue",
+      "338811",
+      "--patchset",
+      "3",
+      "--gerrit_url",
+      "https://chromium-review.googlesource.com",
+      "--gerrit_fetch",
+      "--root",
+      "[SLAVE_BUILD]/depot_tools",
+      "--commit",
+      "--verbose",
+      "--verbose",
+      "--skip_canned",
+      "CheckRietveldTryJobExecution",
+      "--skip_canned",
+      "CheckTreeIsOpen",
+      "--skip_canned",
+      "CheckBuildbotPendingBuilds",
+      "--upstream",
+      "59bbfb4465019d8ed83bfe88fef566922953452a"
+    ],
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "presubmit"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

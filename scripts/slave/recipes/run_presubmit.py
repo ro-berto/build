@@ -195,6 +195,18 @@ def GenTests(api):
   )
 
   yield (
+    api.test('depot_tools_and_gerrit') +
+    api.properties.tryserver_gerrit(
+        full_project_name='chromium/tools/depot_tools',
+        repo_name='depot_tools',
+        mastername='tryserver.infra',
+        buildername='presubmit_depot_tools',
+        runhooks=True) +
+    api.step_data('presubmit', api.json.output([['depot_tools_presubmit',
+                                                 ['test']]]))
+  )
+
+  yield (
     api.test('recipes-py') +
     api.properties.tryserver(
         mastername='tryserver.infra',
