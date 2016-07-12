@@ -368,7 +368,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # See crbug.com/619707 for context.
     self.revert_device_file_format()
     self.device_recovery()
-    self.device_status()
+    return self.device_status()
 
   def device_recovery(self, restart_usb=False, **kwargs):
     args = [
