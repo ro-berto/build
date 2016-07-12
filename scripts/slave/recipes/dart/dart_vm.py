@@ -90,14 +90,14 @@ for arch in ['x64', 'ia32']:
 builders['vm-win-debug-ia32-russian'] = builders['vm-win-debug-ia32']
 
 for mode in ['debug', 'release', 'product']:
-  builders['app-linux-%s-x64'] = {
+  builders['app-linux-%s-x64' % mode] = {
     'mode': mode,
     'target_arch': 'x64',
     'env': default_envs['linux'],
     'test_args': ['-cdart2appjit', '-rdart_app', '--use-blobs',
                   '--builder-tag=no_ipv6'],
   }
-  builders['precomp-linux-%s-x64'] = {
+  builders['precomp-linux-%s-x64' % mode] = {
     'mode': mode,
     'target_arch': 'x64',
     'env': default_envs['linux'],
