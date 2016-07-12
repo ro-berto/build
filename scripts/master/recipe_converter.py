@@ -212,14 +212,6 @@ _step_signatures = {
         'workdir': 'build',
       }
     ),
-  'bb_run_bot':   (master.chromium_step.AnnotatedCommand,
-                   {
-                     'command': ['python',
-                       'src/build/android/buildbot/bb_run_bot.py'],
-                     'name': 'slave_steps',
-                     'description': 'slave_steps',
-                   }
-                  ),
   'gclient_runhooks_wrapper': (buildbot.steps.shell.ShellCommand,
       {
         'command': ['python', '../../../scripts/slave/runhooks_wrapper.py'],
@@ -1623,19 +1615,6 @@ def bot_update_converter(step):
   # that is why it is ignored here. (aneeshm)
   return rc
 
-def bb_run_bot_converter(step):
-  rc = recipe_chunk()
-  rc.steps.append('# slave_steps step')
-  rc.deps.add('recipe_engine/python')
-  rc.deps.add('recipe_engine/json')
-  build_properties = "'--build-properties=%s' % " +\
-      "api.json.dumps(build_properties, separators=(',', ':'))"
-  fmtstr = 'api.python("slave_steps", "%s", args=[%s, \'%s\'],' +\
-      ' allow_subannotations=True)'
-  rc.steps.append(fmtstr % (step[1]['command'][1], build_properties,
-                            step[1]['command'][3]))
-  return rc
-
 def gclient_runhooks_wrapper_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/python')
@@ -1724,7 +1703,6 @@ _step_converters_map = {
     'gclient_update': gclient_update_converter,
     'bot_update': bot_update_converter,
     'win_bot_update': bot_update_converter,
-    'bb_run_bot': bb_run_bot_converter,
     'gclient_runhooks_wrapper': gclient_runhooks_wrapper_converter,
     'win_gclient_runhooks_wrapper': gclient_runhooks_wrapper_converter,
     'chromedriver_buildbot_run': chromedriver_buildbot_run_converter,
