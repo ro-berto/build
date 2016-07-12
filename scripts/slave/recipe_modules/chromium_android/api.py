@@ -32,7 +32,7 @@ class AndroidApi(recipe_api.RecipeApi):
   @property
   def devices(self):
     assert self._devices is not None,\
-        'devices is only available after device_status_check()'
+        'devices is only available after device_status()'
     return self._devices
 
   @property
@@ -329,13 +329,14 @@ class AndroidApi(recipe_api.RecipeApi):
                                reboot_timeout=None, max_battery_temp=None,
                                remove_system_webview=False):
     self.authorize_adb_devices()
-    self.device_status_check(restart_usb=restart_usb)
+    self.device_recovery()
     self.provision_devices(
       skip_wipe=skip_wipe, disable_location=disable_location,
       min_battery_level=min_battery_level, disable_network=disable_network,
       disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout,
       max_battery_temp=max_battery_temp,
       remove_system_webview=remove_system_webview)
+    self.device_status()
 
   @property
   def blacklist_file(self):
@@ -366,22 +367,41 @@ class AndroidApi(recipe_api.RecipeApi):
     # crrev.com/1faecde0c03013b6cd725da413339c60223f8948 are no longer tested.
     # See crbug.com/619707 for context.
     self.revert_device_file_format()
+    self.device_recovery()
+    self.device_status()
 
-    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
+  def device_recovery(self, restart_usb=False, **kwargs):
     args = [
-        '--adb-path', self.m.adb.adb_path(),
         '--blacklist-file', self.blacklist_file,
-        '--json-output', self.m.json.output(),
-        '--known-devices-file', self.known_devices_file
+        '--known-devices-file', self.known_devices_file,
+        '--adb-path', self.m.adb.adb_path(),
+        '-v'
     ]
-    if restart_usb:
-      args += ['--restart-usb']
+    self.m.step(
+        'device_recovery',
+        [self.m.path['checkout'].join('third_party', 'catapult', 'devil',
+                                      'devil', 'android', 'tools',
+                                      'device_recovery.py')] + args,
+        env=self.m.chromium.get_env(),
+        infra_step=True,
+        **kwargs)
 
+  def device_status(self, **kwargs):
+    buildbot_file = '/home/chrome-bot/.adb_device_info'
+    args = [
+        '--json-output', self.m.json.output(),
+        '--blacklist-file', self.blacklist_file,
+        '--known-devices-file', self.known_devices_file,
+        '--buildbot-path', buildbot_file,
+        '--adb-path', self.m.adb.adb_path(),
+        '-v', '--overwrite-known-devices-files',
+    ]
     try:
       result = self.m.step(
-          'device_status_check',
-          [self.m.path['checkout'].join('build', 'android', 'buildbot',
-                                'bb_device_status_check.py')] + args,
+          'device_status',
+          [self.m.path['checkout'].join('third_party', 'catapult', 'devil',
+                                        'devil', 'android', 'tools',
+                                        'device_status.py')] + args,
           step_test_data=lambda: self.m.json.test_api.output([
               {
                 "battery": {
@@ -399,11 +419,11 @@ class AndroidApi(recipe_api.RecipeApi):
                 },
                 "wifi_ip": "",
                 "imei_slice": "Unknown",
-                "build": "LRX21O",
+                "ro.build.id": "LRX21O",
+                "ro.build.product": "product_name",
                 "build_detail":
                     "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
                 "serial": "07a00ca4",
-                "type": "flo",
                 "adb_status": "device",
                 "blacklisted": False,
                 "usb_status": True,
@@ -441,7 +461,8 @@ class AndroidApi(recipe_api.RecipeApi):
           elif d['blacklisted']:
             key = '%s: blacklisted' % d['serial']
           else:
-            key = '%s %s %s' % (d['type'], d['build'], d['serial'])
+            key = '%s %s %s' % (d['ro.build.product'], d['ro.build.id'],
+                                d['serial'])
             self._devices.append(d['serial'])
         except KeyError:
           key = 'unknown device %d' % offline_device_index
@@ -464,6 +485,7 @@ class AndroidApi(recipe_api.RecipeApi):
         'report a bug': link
       })
       raise
+
 
   def provision_devices(self, skip_wipe=False, disable_location=False,
                         min_battery_level=None, disable_network=False,
@@ -515,12 +537,6 @@ class AndroidApi(recipe_api.RecipeApi):
       env=self.m.chromium.get_env(),
       infra_step=True,
       **kwargs)
-    blacklisted_devices = result.json.output
-    if blacklisted_devices:
-      result.presentation.status = self.m.step.WARNING
-      for d in blacklisted_devices:
-        key = 'blacklisted %s' % d
-        result.presentation.logs[key] = [d]
 
   def apk_path(self, apk):
     return self.m.chromium.output_dir.join('apks', apk) if apk else None
@@ -934,7 +950,7 @@ class AndroidApi(recipe_api.RecipeApi):
     else:
       self.spawn_logcat_monitor()
       self.authorize_adb_devices()
-      self.device_status_check()
+      self.device_recovery()
       if perf_setup:
         kwargs = {
             'min_battery_level': 95,
@@ -945,6 +961,7 @@ class AndroidApi(recipe_api.RecipeApi):
         kwargs = {}
       self.provision_devices(remove_system_webview=remove_system_webview,
                              **kwargs)
+      self.device_status()
       if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
         self.asan_device_setup()
 
