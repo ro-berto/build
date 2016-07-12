@@ -32,6 +32,7 @@ TEST_BUILDERS = {
       'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
       'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
       'Build-Mac-Clang-x86_64-Release',
+      'Build-Ubuntu-GCC-Arm64-Debug-Android_Vulkan',
       'Build-Ubuntu-GCC-x86_64-Debug',
       'Build-Ubuntu-GCC-x86_64-Release-Trybot',
       'Build-Win-MSVC-x86_64-Release',
@@ -39,6 +40,7 @@ TEST_BUILDERS = {
       'Housekeeper-PerCommit',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot',
       'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release',
+      'Test-Android-GCC-NVIDIA_Shield-GPU-TegraX1-Arm64-Debug-Vulkan',
       'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release',
       'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug',
@@ -58,7 +60,10 @@ def derive_compile_bot_name(builder_name, builder_spec):
     os = builder_cfg['os']
     extra_config = builder_cfg.get('extra_config')
     if os == 'Android':
-      extra_config = os
+      if extra_config == 'Vulkan':
+        extra_config = '%s_%s' % (os, 'Vulkan')
+      else:
+        extra_config = os
       os = 'Ubuntu'
     elif os == 'iOS':
       extra_config = os
