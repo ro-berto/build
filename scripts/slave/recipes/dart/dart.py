@@ -17,7 +17,7 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  buildername = api.properties.get('buildername')
+  buildername = str(api.properties.get('buildername')) # Convert from unicode.
 
   api.gclient.set_config('dart')
 

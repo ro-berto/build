@@ -33,7 +33,7 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(force=True)
 
   api.path['tools'] = api.path['checkout'].join('tools')
-  buildername = api.properties.get('buildername')
+  buildername = str(api.properties.get('buildername')) # Convert from unicode.
   (buildername, _, channel) = buildername.rpartition('-')
   assert channel in ['be', 'dev', 'stable', 'integration']
   buildername = buildername.replace('-recipe', '')

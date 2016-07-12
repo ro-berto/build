@@ -44,7 +44,7 @@ def RunSteps(api):
   revision = update_step.json.output['fixed_revisions']['sdk']
 
   api.path['tools'] = api.path['checkout'].join('tools')
-  buildername = api.properties.get('buildername')
+  buildername = str(api.properties.get('buildername')) # Convert from unicode.
   (buildername, _, channel) = buildername.rpartition('-')
   assert channel in ['be', 'dev', 'stable', 'integration']
   buildername = buildername.replace('-recipe', '')
