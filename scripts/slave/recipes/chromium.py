@@ -4,7 +4,6 @@
 
 DEPS = [
   'adb',
-  'amp',
   'bisect_tester',
   'depot_tools/bot_update',
   'chromium',
@@ -100,10 +99,8 @@ def GenTests(api):
         'buildername': buildername,
         'parent_buildername': bot_config.get('parent_buildername'),
         'build_data_dir': api.path['root'].join('build_data_dir'),
+        'path_config': 'kitchen',
       }
-      # TODO(phajdan.jr): test with 'kitchen' path config everywhere.
-      if 'amp' not in buildername.lower():
-        properties['path_config'] = 'kitchen'
       if mastername == 'chromium.webkit':
         properties['gs_acl'] = 'public-read'
       test = (
@@ -1293,42 +1290,6 @@ def GenTests(api):
         parent_got_webkit_revision='191269',
         revision='1e74b372f951d4491f305ec64f6decfcda739e73') +
     api.platform('win', 32)
-  )
-
-  yield (
-    api.test('amp_split_recipe_trigger_failure') +
-    api.properties(
-        mastername='chromium.fyi',
-        buildername='Android Tests (amp split)',
-        slavename='build1-a1',
-        buildnumber='77457',
-        parent_build_archive_url='gs://test-domain/test-archive.zip'
-    ) +
-    api.override_step_data('[trigger] base_unittests', retcode=1)
-  )
-
-  yield (
-    api.test('amp_split_recipe_instrumentation_trigger_failure') +
-    api.properties(
-        mastername='chromium.fyi',
-        buildername='Android Tests (amp instrumentation test split)',
-        slavename='build1-a1',
-        buildnumber='77457',
-        parent_build_archive_url='gs://test-domain/test-archive.zip'
-    ) +
-    api.override_step_data('[trigger] AndroidWebViewTest', retcode=1)
-  )
-
-  yield (
-    api.test('amp_split_recipe_collect_failure') +
-    api.properties(
-        mastername='chromium.fyi',
-        buildername='Android Tests (amp split)',
-        slavename='build1-a1',
-        buildnumber='77457',
-        parent_build_archive_url='gs://test-domain/test-archive.zip'
-    ) +
-    api.override_step_data('[collect] base_unittests', retcode=1)
   )
 
   yield (

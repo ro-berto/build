@@ -120,9 +120,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_config.get('android_config'),
           **bot_config.get('chromium_config_kwargs', {}))
 
-    if bot_config.get('amp_config'):
-      self.m.amp.set_config(bot_config.get('amp_config'))
-
     for c in bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
 
