@@ -98,3 +98,21 @@ def GenTests(api):
       api.platform('win', 64) +
       api.step_data('build most', retcode=1)
   )
+
+  yield (
+      api.test('big_issue_number') +
+      api.properties(buildername=buildername,
+                     mastername=mastername,
+                     slavename=slavename,
+                     buildnumber=5,
+                     revision='abc123',
+                     swarm_out_dir='[SWARM_OUT_DIR]',
+                     rietveld='https://codereview.chromium.org',
+                     patchset=1,
+                     issue=2147533002L) +
+      api.path.exists(
+          api.path['slave_build'].join('skia'),
+          api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+      ) +
+      api.platform('win', 64)
+  )

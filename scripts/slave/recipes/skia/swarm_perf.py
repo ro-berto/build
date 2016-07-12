@@ -88,3 +88,21 @@ def GenTests(api):
           test += api.platform('win', 64)
 
         yield test
+
+  yield (
+    api.test('big_issue_number') +
+    api.properties(buildername='Build-Win-MSVC-x86-Debug',
+                     mastername='client.skia.compile',
+                     slavename='skiabot-linux-swarm-000',
+                     buildnumber=5,
+                     revision='abc123',
+                     swarm_out_dir='[SWARM_OUT_DIR]',
+                     rietveld='https://codereview.chromium.org',
+                     patchset=1,
+                     issue=2147533002L) +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    ) +
+    api.platform('win', 64)
+  )
