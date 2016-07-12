@@ -156,7 +156,6 @@ def RunSteps(api, buildername):
   try:
     # TODO(luqui): remove redundant cruft, need one consistent API.
     api.chromium_android.detect_and_setup_devices()
-    api.chromium_android.device_status_check()
 
     api.path.mock_add_paths(api.chromium_android.known_devices_file)
     api.chromium_android.device_status_check(
@@ -250,21 +249,13 @@ def GenTests(api):
   for buildername in BUILDERS:
     yield api.test('%s_basic' % buildername) + properties_for(buildername)
 
-  yield (api.test('tester_no_devices_during_recovery') +
+  yield (api.test('tester_no_devices') +
          properties_for('tester') +
-         api.step_data('device_recovery', retcode=1))
+         api.step_data('device_status_check', retcode=1))
 
-  yield (api.test('tester_no_devices_during_status') +
+  yield (api.test('tester_other_device_failure') +
          properties_for('tester') +
-         api.step_data('device_status', retcode=1))
-
-  yield (api.test('tester_other_device_failure_during_recovery') +
-         properties_for('tester') +
-         api.step_data('device_recovery', retcode=2))
-
-  yield (api.test('tester_other_device_failure_during_status') +
-         properties_for('tester') +
-         api.step_data('device_status', retcode=2))
+         api.step_data('device_status_check', retcode=2))
 
   yield (api.test('tester_with_step_warning') +
          properties_for('tester') +
@@ -277,7 +268,7 @@ def GenTests(api):
 
   yield (api.test('tester_offline_devices') +
          properties_for('tester') +
-         api.override_step_data('device_status',
+         api.override_step_data('device_status_check',
                                 api.json.output([{}, {}])))
 
   yield (api.test('perf_tests_failure') +

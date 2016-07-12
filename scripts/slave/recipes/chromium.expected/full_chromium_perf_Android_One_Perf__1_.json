@@ -335,71 +335,22 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android_One_Perf__1_/src/out/bad_devices.json",
-      "--known-devices-file",
-      "[HOME]/.android/known_devices.json",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools/adb",
-      "-v"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_One_Perf__1_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
-    },
-    "name": "device_recovery"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android/buildbot/bb_device_status_check.py",
       "--adb-path",
       "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_One_Perf__1_/src/out/bad_devices.json",
-      "--output-device-blacklist",
-      "/path/to/tmp/json",
-      "-t",
-      "Release",
-      "--min-battery-level",
-      "95",
-      "--disable-network",
-      "--disable-java-debug",
-      "--max-battery-temp",
-      "350"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_One_Perf__1_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
-    },
-    "name": "provision_devices"
-  },
-  {
-    "cmd": [
-      "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android_One_Perf__1_/src/out/bad_devices.json",
       "--known-devices-file",
-      "[HOME]/.android/known_devices.json",
-      "--buildbot-path",
-      "/home/chrome-bot/.adb_device_info",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools/adb",
-      "-v",
-      "--overwrite-known-devices-files"
+      "[HOME]/.android/known_devices.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_One_Perf__1_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
-    "name": "device_status",
+    "name": "device_status_check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -494,6 +445,33 @@
       "@@@STEP_LOG_LINE@03e0363a003c6ad6: blacklisted@}@@@",
       "@@@STEP_LOG_END@03e0363a003c6ad6: blacklisted@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android/provision_devices.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/Android_One_Perf__1_/src/out/bad_devices.json",
+      "--output-device-blacklist",
+      "/path/to/tmp/json",
+      "-t",
+      "Release",
+      "--min-battery-level",
+      "95",
+      "--disable-network",
+      "--disable-java-debug",
+      "--max-battery-temp",
+      "350"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_One_Perf__1_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
+    },
+    "name": "provision_devices"
   },
   {
     "cmd": [
