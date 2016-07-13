@@ -114,11 +114,11 @@
       "-u",
       "[BUILD]/scripts/slave/gsutil_download.py",
       "--url",
-      "chromedriver-data/prebuilts",
+      "gs://chromedriver-data/prebuilts",
       "--dst",
       "[TMP_BASE]/prebuilt_tmp_1/build.zip",
       "--partial-name",
-      "chromedriver-data/prebuilts/r"
+      "gs://chromedriver-data/prebuilts/r"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Download Prebuilts.download latest prebuilt",

@@ -24,10 +24,11 @@ class ChromedriverApi(recipe_api.RecipeApi):
         prebuilt_dir = self.m.path.mkdtemp('prebuilt')
         zipfile = prebuilt_dir.join('build.zip')
         unzip_dir = prebuilt_dir.join('unzipped')
-        self.m.gsutil.download_latest_file(base_url=GS_PREBUILTS_URL,
-                                           partial_name=GS_PREBUILTS_URL + '/r',
-                                           destination=zipfile,
-                                           name='download latest prebuilt')
+        self.m.gsutil.download_latest_file(
+            base_url='gs://%s' % GS_PREBUILTS_URL,
+            partial_name='gs://%s/r' % GS_PREBUILTS_URL,
+            destination=zipfile,
+            name='download latest prebuilt')
         self.m.zip.unzip(step_name='unzip prebuilt',
                          zip_file=zipfile,
                          output=unzip_dir)
