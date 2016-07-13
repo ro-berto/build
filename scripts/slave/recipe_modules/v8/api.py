@@ -284,7 +284,7 @@ class V8Api(recipe_api.RecipeApi):
       self.m.file.makedirs('for peeking gn', path)
       yield
     finally:
-      self.m.shutil.rmtree(path, infra_step=True, flag_smart_rmtree=True)
+      self.m.shutil.rmtree(path, infra_step=True)
 
   def peek_gn(self):
     """Runs gn and compares flags with gyp (fyi only)."""
