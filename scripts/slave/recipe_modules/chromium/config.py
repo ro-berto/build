@@ -311,12 +311,6 @@ def goma(c):
 
   if c.TARGET_PLATFORM == 'win' and c.compile_py.compiler != 'goma-clang':
     fastbuild(c)
-    pch(c, invert=True)
-
-@config_ctx()
-def pch(c, invert=False):
-  if c.TARGET_PLATFORM == 'win':
-    c.gyp_env.GYP_DEFINES['chromium_win_pch'] = int(not invert)
 
 @config_ctx()
 def dcheck(c, invert=False):

@@ -145,7 +145,7 @@
     "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__DELL_\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='RECIPE_PACKAGE_REPO[build]\\goma' target_arch=x64 use_goma=0",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='RECIPE_PACKAGE_REPO[build]\\goma' target_arch=x64 use_goma=0",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
