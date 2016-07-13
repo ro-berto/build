@@ -124,8 +124,8 @@ def BuildLinuxAndroidArm(api):
     'icudtl.dat',
     'gen/sky/shell/shell/classes.dex.jar',
   ]
-  RunGN(api, '--android', '--enable-gcm')
-  Build(api, 'android_debug', ':dist', 'gcm')
+  RunGN(api, '--android')
+  Build(api, 'android_debug', ':dist')
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
   ] + AddPathPrefix(api, 'out/android_debug', out_paths))
@@ -158,22 +158,6 @@ def BuildLinuxAndroidArm(api):
 
   UploadDartPackage(api, 'sky_engine')
   UploadDartPackage(api, 'sky_services')
-
-  def UploadService(name, out_dir):
-    def Upload(from_path, to_path):
-      api.gsutil.upload(from_path, BUCKET_NAME, GetCloudPath(api, to_path),
-          name='upload %s' % api.path.basename(to_path))
-
-    def ServicesOut(path):
-      checkout = api.path['checkout']
-      return checkout.join('%s/%s' % (out_dir, path))
-
-    dex_jar = '%s/%s_lib.dex.jar' % (name, name)
-    interfaces_jar = '%s/interfaces_java.dex.jar' % (name)
-    Upload(ServicesOut(dex_jar), dex_jar)
-    Upload(ServicesOut(interfaces_jar), interfaces_jar)
-
-  UploadService('gcm', 'out/android_debug/gen/third_party')
 
 
 def BuildLinux(api):
