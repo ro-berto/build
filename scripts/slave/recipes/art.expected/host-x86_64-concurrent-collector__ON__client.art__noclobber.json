@@ -38,6 +38,7 @@
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
       "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -65,6 +66,7 @@
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
       "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -94,6 +96,7 @@
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
       "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -122,6 +125,7 @@
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
       "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -150,6 +154,7 @@
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
       "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -178,6 +183,7 @@
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
       "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -206,6 +212,7 @@
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
       "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
@@ -235,6 +242,7 @@
       "JACK_SERVER": "false",
       "LEGACY_USE_JAVA7": "true",
       "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"

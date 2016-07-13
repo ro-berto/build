@@ -67,6 +67,7 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
     env = { 'TARGET_PRODUCT': 'sdk',
             'TARGET_BUILD_VARIANT': 'eng',
             'TARGET_BUILD_TYPE': 'release',
+            'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
             'ANDROID_BUILD_TOP': build_top_dir,
             'LEGACY_USE_JAVA7': 'true',
             'JACK_SERVER': 'false',
@@ -147,6 +148,7 @@ def setup_target(api,
 
   env = {'TARGET_BUILD_VARIANT': 'eng',
          'TARGET_BUILD_TYPE': 'release',
+         'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
          'ANDROID_SERIAL': serial,
          'ANDROID_BUILD_TOP': build_top_dir,
          'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
