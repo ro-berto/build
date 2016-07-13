@@ -68,8 +68,8 @@ def RunSteps(api):
       target=api.chromium.c.BUILD_CONFIG,
       build_url=None,
       build_archive_url=api.properties.get('parent_build_archive_url'))
-  commit_position = api.commit_position.parse_revision(
-      api.properties['got_revision_cp'])
+  revision_cp = api.bot_update.last_returned_properties['got_revision_cp']
+  commit_position = api.commit_position.parse_revision(revision_cp)
 
   api.chromium_android.common_tests_setup_steps()
   if builder['install_apks']:
