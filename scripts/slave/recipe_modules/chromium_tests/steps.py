@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import datetime
 import re
 import string
 
@@ -1696,6 +1697,40 @@ class IncrementalCoverageTest(Test):
     api.chromium_android.get_changed_lines_for_revision()
     api.chromium_android.incremental_coverage_report()
 
+class FindAnnotatedTest(Test):
+  _TEST_APKS = {
+      'android_webview_test_apk': 'AndroidWebViewTest',
+      'blimp_test_apk': 'BlimpTest',
+      'chrome_public_test_apk': 'ChromePublicTest',
+      'chrome_sync_shell_test_apk': 'ChromeSyncShellTest',
+      'content_shell_test_apk': 'ContentShellTest',
+      'system_webview_shell_layout_test_apk': 'SystemWebViewShellLayoutTest',
+  }
+
+  @staticmethod
+  def compile_targets(api):
+    return FindAnnotatedTest._TEST_APKS.keys()
+
+  def run(self, api, suffix, test_filter=None):
+    with api.tempfile.temp_dir('annotated_tests_json') as temp_output_dir:
+      timestamp_string = datetime.datetime.utcnow().strftime('%Y%m%dT%H%M%S')
+      if api.properties.get('buildername') is not None:
+        timestamp_string = api.properties.get('current_time')
+
+      api.python(
+          'run find_annotated_tests.py',
+          api.path['checkout'].join(
+              'tools', 'android', 'find_annotated_tests.py'),
+          args=[
+              '--test-apks', ' '.join(FindAnnotatedTest._TEST_APKS.values()),
+              '--apk-output-dir', api.chromium.output_dir,
+              '--json-output-dir', temp_output_dir,
+              '--timestamp-string', timestamp_string,
+              '-v'])
+      api.gsutil.upload(
+          temp_output_dir.join(
+              '%s-android-chrome.json' % timestamp_string),
+          'chromium-annotated-tests', 'android')
 
 GOMA_TESTS = [
   GTestTest('base_unittests'),

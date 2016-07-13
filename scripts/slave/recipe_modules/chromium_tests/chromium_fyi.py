@@ -2001,6 +2001,26 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Android Find Annotated Test': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'android_config': 'main_builder_mb',
+      'remove_system_webview': True,
+      'tests': [
+        steps.FindAnnotatedTest(),
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+
     'Android Asan Builder Tests (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['mb'],

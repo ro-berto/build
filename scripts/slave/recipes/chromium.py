@@ -13,6 +13,7 @@ DEPS = [
   'commit_position',
   'file',
   'isolate',
+  'gsutil',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -20,6 +21,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
+  'recipe_engine/tempfile',
   'swarming',
   'test_results',
   'test_utils',
@@ -104,6 +106,8 @@ def GenTests(api):
       }
       if mastername == 'chromium.webkit':
         properties['gs_acl'] = 'public-read'
+      if buildername == 'Android Find Annotated Test':
+        properties['current_time'] = '20160101T000000'
       test = (
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                  _sanitize_nonalpha(buildername))) +
