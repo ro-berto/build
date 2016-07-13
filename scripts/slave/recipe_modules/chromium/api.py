@@ -218,7 +218,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.TARGET_CROS_BOARD:
       args += ['--cros-board', self.c.TARGET_CROS_BOARD]
 
-    assert not self.c.compile_py.solution
     args.append('--')
     args.extend(targets)
 

@@ -46,8 +46,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_enable_compiler_info_cache = Single(
           bool, empty_val=False, required=False),
       xcode_sdk = Single(basestring, required=False),
-      xcode_project = Single(Path, required=False),
-      solution = Single(Path, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
     ),
