@@ -100,6 +100,7 @@
       "-DCMAKE_BUILD_TYPE=Release",
       "-DCMAKE_CXX_COMPILER=[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/clang++",
       "-DCMAKE_C_COMPILER=[SLAVE_BUILD]/boringssl/util/bot/llvm-build/bin/clang",
+      "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "[SLAVE_BUILD]/boringssl"
     ],
     "cwd": "[SLAVE_BUILD]/boringssl/build",
@@ -110,7 +111,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[SLAVE_BUILD]/boringssl/build"
     ],

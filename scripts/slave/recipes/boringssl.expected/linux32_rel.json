@@ -101,6 +101,7 @@
       "-DCMAKE_BUILD_TYPE=Release",
       "-DCMAKE_CXX_FLAGS=-m32 -msse2",
       "-DCMAKE_C_FLAGS=-m32 -msse2",
+      "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-DCMAKE_SYSTEM_NAME=Linux",
       "-DCMAKE_SYSTEM_PROCESSOR=x86",
       "[SLAVE_BUILD]/boringssl"
@@ -113,7 +114,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[SLAVE_BUILD]/boringssl/build"
     ],

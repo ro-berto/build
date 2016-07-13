@@ -7,8 +7,9 @@ from recipe_engine.recipe_api import Property
 DEPS = [
   'chromium',
   'depot_tools/bot_update',
-  'file',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -62,9 +63,9 @@ def _AppendFlags(args, key, flags):
     args[key] = flags
 
 
-def _GetTargetCMakeArgs(buildername, checkout):
+def _GetTargetCMakeArgs(buildername, checkout, ninja_path):
   bot_utils = checkout.join('util', 'bot')
-  args = {}
+  args = {'CMAKE_MAKE_PROGRAM': ninja_path}
   if _HasToken(buildername, 'shared'):
     args['BUILD_SHARED_LIBS'] = '1'
   if _HasToken(buildername, 'rel'):
@@ -167,13 +168,15 @@ def RunSteps(api, buildername):
   cmake = bot_utils.join('cmake-' + _GetHostToolSuffix(api.platform), 'bin',
                          'cmake' + _GetHostExeSuffix(api.platform))
   cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
-  cmake_args.update(_GetTargetCMakeArgs(buildername, api.path['checkout']))
+  cmake_args.update(_GetTargetCMakeArgs(buildername, api.path['checkout'],
+                                        api.depot_tools.ninja_path))
   api.python('cmake', go_env,
              msvc_prefix + [cmake, '-GNinja'] +
              ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
              [api.path['checkout']],
              cwd=build_dir)
-  api.python('ninja', go_env, msvc_prefix + ['ninja', '-C', build_dir])
+  api.python('ninja', go_env,
+             msvc_prefix + [api.depot_tools.ninja_path, '-C', build_dir])
 
   with api.step.defer_results():
     env = _GetTargetEnv(buildername, bot_utils)
