@@ -550,16 +550,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_2"
     ],
-    "name": "rmtree [TMP_BASE]/server_log_tmp_2",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree [TMP_BASE]/server_log_tmp_2"
   },
   {
     "cmd": [
@@ -602,16 +596,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_3"
     ],
-    "name": "rmtree [TMP_BASE]/server_log_tmp_3",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree [TMP_BASE]/server_log_tmp_3"
   },
   {
     "cmd": [
@@ -655,16 +643,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_4"
     ],
-    "name": "rmtree [TMP_BASE]/server_log_tmp_4",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree [TMP_BASE]/server_log_tmp_4"
   },
   {
     "cmd": [
@@ -707,16 +689,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_5"
     ],
-    "name": "rmtree [TMP_BASE]/server_log_tmp_5",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree [TMP_BASE]/server_log_tmp_5"
   },
   {
     "cmd": [
@@ -760,16 +736,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_6"
     ],
-    "name": "rmtree [TMP_BASE]/server_log_tmp_6",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree [TMP_BASE]/server_log_tmp_6"
   },
   {
     "cmd": [
@@ -812,16 +782,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_7"
     ],
-    "name": "rmtree [TMP_BASE]/server_log_tmp_7",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree [TMP_BASE]/server_log_tmp_7"
   },
   {
     "cmd": [
@@ -865,16 +829,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_8"
     ],
-    "name": "rmtree [TMP_BASE]/server_log_tmp_8",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree [TMP_BASE]/server_log_tmp_8"
   },
   {
     "cmd": [
@@ -917,16 +875,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_9"
     ],
-    "name": "rmtree [TMP_BASE]/server_log_tmp_9",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree [TMP_BASE]/server_log_tmp_9"
   },
   {
     "cmd": [],
