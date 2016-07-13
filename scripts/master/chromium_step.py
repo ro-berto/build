@@ -58,7 +58,7 @@ def updateText(section):
 # derived from addCompleteLog in process/buildstep.py
 def addLogToStep(step, name, text):
   """Add a complete log to a step."""
-  if text and ('<!DOCTYPE html>' in text):
+  if text and text.startswith('<!DOCTYPE html'):
     step.addHTMLLog(name, text)
   else:
     add_log = step.addLog(name)
