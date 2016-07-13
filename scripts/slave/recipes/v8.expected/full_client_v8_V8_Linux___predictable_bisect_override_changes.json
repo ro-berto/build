@@ -236,16 +236,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[SLAVE_BUILD]/v8/out/gn"
     ],
-    "name": "rmtree [SLAVE_BUILD]/v8/out/gn",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree [SLAVE_BUILD]/v8/out/gn"
   },
   {
     "cmd": [
@@ -803,16 +797,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[SLAVE_BUILD]/v8/out/gn"
     ],
     "name": "Bisect a0.rmtree [SLAVE_BUILD]/v8/out/gn",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1154,16 +1144,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[SLAVE_BUILD]/v8/out/gn"
     ],
     "name": "Bisect a2.rmtree [SLAVE_BUILD]/v8/out/gn",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1538,16 +1524,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys\nshutil.rmtree(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[SLAVE_BUILD]/v8/out/gn"
     ],
     "name": "Bisect a1.rmtree [SLAVE_BUILD]/v8/out/gn",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

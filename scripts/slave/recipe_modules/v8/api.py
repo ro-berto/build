@@ -274,7 +274,7 @@ class V8Api(recipe_api.RecipeApi):
       env['RANLIB'] = self.c.gyp_env.RANLIB
     if self.m.chromium.c.project_generator.tool != 'gyp':
       env['GYP_CHROMIUM_NO_ACTION'] = 1
-    if self.m.chromium.c.gyp_env.GYP_MSVS_VERSION:  
+    if self.m.chromium.c.gyp_env.GYP_MSVS_VERSION:
       env['GYP_MSVS_VERSION'] = self.m.chromium.c.gyp_env.GYP_MSVS_VERSION
     self.m.chromium.runhooks(env=env, **kwargs)
 
@@ -284,7 +284,7 @@ class V8Api(recipe_api.RecipeApi):
       self.m.file.makedirs('for peeking gn', path)
       yield
     finally:
-      self.m.shutil.rmtree(path, infra_step=True)
+      self.m.shutil.rmtree(path, infra_step=True, flag_smart_rmtree=True)
 
   def peek_gn(self):
     """Runs gn and compares flags with gyp (fyi only)."""
@@ -425,11 +425,11 @@ class V8Api(recipe_api.RecipeApi):
       self.build_environment['GYP_' + match.group(1)] = (
           match.group(2) or match.group(3))
 
-    if 'GYP_DEFINES' in self.build_environment:  
+    if 'GYP_DEFINES' in self.build_environment:
       # Filter out gomadir.
-      self.build_environment['GYP_DEFINES'] = ' '.join(  
-          d for d in self.build_environment['GYP_DEFINES'].split() 
-          if not d.startswith('gomadir')  
+      self.build_environment['GYP_DEFINES'] = ' '.join(
+          d for d in self.build_environment['GYP_DEFINES'].split()
+          if not d.startswith('gomadir')
       )
 
     # Check if the output looks like gn. Space-join all gn args, except
