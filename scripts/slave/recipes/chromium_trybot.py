@@ -10,6 +10,7 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'chromium_android',
+  'chromium_swarming',
   'chromium_tests',
   'commit_position',
   'file',
@@ -108,7 +109,7 @@ def _RunStepsInternal(api):
   api.chromium_tests.configure_build(
       bot_config_object, override_bot_type='builder_tester')
 
-  api.chromium_tests.configure_swarming('chromium', precommit=True)
+  api.chromium_swarming.configure_swarming('chromium', precommit=True)
 
   api.chromium.apply_config('trybot_flavor')
 

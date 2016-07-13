@@ -133,7 +133,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.enable_swarming:
-      self.m.chromium_tests.configure_swarming(
+      self.m.chromium_swarming.configure_swarming(
           'webrtc',
           precommit=self.m.tryserver.is_tryserver,
           mastername=mastername)

@@ -17,6 +17,7 @@ DEPS = [
     'depot_tools/bot_update',
     'chromium',
     'chromium_android',
+    'chromium_swarming',
     'chromium_tests',
     'commit_position',
     'findit',
@@ -233,7 +234,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
     for key, value in tester_config.get('swarming_dimensions', {}).iteritems():
       api.swarming.set_default_dimension(key, value)
   # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
-  api.chromium_tests.configure_swarming('chromium', precommit=False)
+  api.chromium_swarming.configure_swarming('chromium', precommit=False)
 
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(

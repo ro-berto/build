@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'chromium_android',
+  'chromium_swarming',
   'chromium_tests',
   'commit_position',
   'file',
@@ -65,8 +66,8 @@ def RunSteps(api):
   if not tests:
     return
 
-  api.chromium_tests.configure_swarming('chromium', precommit=False,
-                                        mastername=mastername)
+  api.chromium_swarming.configure_swarming(
+      'chromium', precommit=False, mastername=mastername)
   test_runner = api.chromium_tests.create_test_runner(api, tests)
   with api.chromium_tests.wrap_chromium_tests(bot_config, tests):
     test_runner()

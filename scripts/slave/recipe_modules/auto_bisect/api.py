@@ -282,7 +282,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
 
     if not tests:  # pragma: no cover
       return
-    self.m.chromium_tests.configure_swarming(  # pragma: no cover
+    self.m.chromium_swarming.configure_swarming(
         'chromium', precommit=False, mastername=mastername)
     test_runner = self.m.chromium_tests.create_test_runner(self.m, tests)
 

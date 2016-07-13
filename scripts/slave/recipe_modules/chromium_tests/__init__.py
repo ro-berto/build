@@ -4,6 +4,7 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'chromium_android',
+  'chromium_swarming',
   'commit_position',
   'file',
   'filter',
