@@ -13,6 +13,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/shutil',
   'recipe_engine/step',
   'test_utils',
 ]
@@ -151,7 +152,9 @@ def RunSteps(api, buildername):
 
   # CMake is stateful, so do a clean build. BoringSSL builds quickly enough that
   # this isn't a concern.
-  api.file.rmtree('clean', build_dir)
+  # TODO(tandrii): remove the flag once transition is over in
+  # http://crbug.com/584783.
+  api.shutil.rmtree(build_dir, name='clean', flag_smart_rmtree=True)
   api.file.makedirs('mkdir', build_dir)
 
   # If building with MSVC, all commands must run with an environment wrapper.
