@@ -323,7 +323,7 @@ class iOSApi(recipe_api.RecipeApi):
       tests = list(set(test['app'] for test in self.__config['tests']))
 
       test_targets, compile_targets = (
-        self.m.chromium_tests.analyze(
+        self.m.filter.analyze(
           affected_files,
           tests,
           self.__config['additional_compile_targets'] + tests,

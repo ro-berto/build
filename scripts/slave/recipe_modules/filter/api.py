@@ -2,10 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
+import json
 import os
 import re
 
 from recipe_engine import recipe_api
+from recipe_engine import util as recipe_util
 
 class FilterApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
@@ -236,3 +239,47 @@ class FilterApi(recipe_api.RecipeApi):
                                          self._test_targets))
     else:
       step_result.presentation.step_text = 'No compile necessary'
+
+  # TODO(phajdan.jr): Merge with does_patch_require_compile.
+  def analyze(self, affected_files, test_targets, additional_compile_targets,
+              config_file_name, mb_mastername=None, mb_buildername=None,
+              additional_names=None):
+    """Runs "analyze" step to determine targets affected by the patch.
+
+    Returns a tuple of:
+      - list of targets that are needed to run tests (see filter recipe module)
+      - list of targets that need to be compiled (see filter recipe module)"""
+
+    if additional_names is None:
+      additional_names = ['chromium']
+
+    use_mb = (self.m.chromium.c.project_generator.tool == 'mb')
+    build_output_dir = '//out/%s' % self.m.chromium.c.build_config_fs
+    self.does_patch_require_compile(
+        affected_files,
+        test_targets=test_targets,
+        additional_compile_targets=additional_compile_targets,
+        additional_names=additional_names,
+        config_file_name=config_file_name,
+        use_mb=use_mb,
+        mb_mastername=mb_mastername,
+        mb_buildername=mb_buildername,
+        build_output_dir=build_output_dir,
+        cros_board=self.m.chromium.c.TARGET_CROS_BOARD)
+
+    compile_targets = self.compile_targets[:]
+
+    # Emit more detailed output useful for debugging.
+    analyze_details = {
+        'test_targets': test_targets,
+        'additional_compile_targets': additional_compile_targets,
+        'self.m.filter.compile_targets': self.compile_targets,
+        'self.m.filter.test_targets': self.test_targets,
+        'compile_targets': compile_targets,
+    }
+    with contextlib.closing(recipe_util.StringListIO()) as listio:
+      json.dump(analyze_details, listio, indent=2, sort_keys=True)
+    step_result = self.m.step.active_result
+    step_result.presentation.logs['analyze_details'] = listio.lines
+
+    return self.test_targets, compile_targets

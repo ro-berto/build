@@ -14,6 +14,7 @@ DEPS = [
   'chromium_tests',
   'commit_position',
   'file',
+  'filter',
   'depot_tools/gclient',
   'isolate',
   'recipe_engine/json',
@@ -168,11 +169,9 @@ def _RunStepsInternal(api):
       all_compile_targets(api, tests + tests_including_triggered)))
   additional_compile_targets = sorted(set(compile_targets) -
                                       set(test_targets))
-  test_targets, compile_targets = \
-      api.chromium_tests.analyze(affected_files,
-                                 test_targets,
-                                 additional_compile_targets,
-                                 'trybot_analyze_config.json')
+  test_targets, compile_targets = api.filter.analyze(
+      affected_files, test_targets, additional_compile_targets,
+      'trybot_analyze_config.json')
 
   if bot_config.get('analyze_mode') == 'compile':
     tests = []

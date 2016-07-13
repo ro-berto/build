@@ -20,6 +20,7 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'commit_position',
+    'filter',
     'findit',
     'depot_tools/gclient',
     'isolate',
@@ -108,7 +109,7 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
       changed_files = api.findit.files_changed_by_revision(revision)
 
       affected_test_targets, actual_compile_targets = (
-          api.chromium_tests.analyze(
+          api.filter.analyze(
               changed_files,
               test_targets=requested_test_targets,
               additional_compile_targets=[],

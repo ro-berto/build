@@ -13,6 +13,7 @@ DEPS = [
     'buildbucket',
     'chromium',
     'chromium_tests',
+    'filter',
     'findit',
     'depot_tools/gclient',
     'recipe_engine/json',
@@ -85,7 +86,7 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
       if use_analyze:
         changed_files = api.findit.files_changed_by_revision(revision)
 
-        _, compile_targets = api.chromium_tests.analyze(
+        _, compile_targets = api.filter.analyze(
             changed_files,
             test_targets=[],
             additional_compile_targets=compile_targets,

@@ -9,7 +9,6 @@ import json
 
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
-from recipe_engine import util as recipe_util
 
 from . import bot_config_and_test_db as bdb_module
 from . import builders
@@ -662,49 +661,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       assert path.startswith(relative_to)
       files[i] = path[len(relative_to):]
     return files
-
-  def analyze(self, affected_files, test_targets, additional_compile_targets,
-              config_file_name, mb_mastername=None, mb_buildername=None,
-              additional_names=None):
-    """Runs "analyze" step to determine targets affected by the patch.
-
-    Returns a tuple of:
-      - list of targets that are needed to run tests (see filter recipe module)
-      - list of targets that need to be compiled (see filter recipe module)"""
-
-    if additional_names is None:
-      additional_names = ['chromium']
-
-    use_mb = (self.m.chromium.c.project_generator.tool == 'mb')
-    build_output_dir = '//out/%s' % self.m.chromium.c.build_config_fs
-    self.m.filter.does_patch_require_compile(
-        affected_files,
-        test_targets=test_targets,
-        additional_compile_targets=additional_compile_targets,
-        additional_names=additional_names,
-        config_file_name=config_file_name,
-        use_mb=use_mb,
-        mb_mastername=mb_mastername,
-        mb_buildername=mb_buildername,
-        build_output_dir=build_output_dir,
-        cros_board=self.m.chromium.c.TARGET_CROS_BOARD)
-
-    compile_targets = self.m.filter.compile_targets[:]
-
-    # Emit more detailed output useful for debugging.
-    analyze_details = {
-        'test_targets': test_targets,
-        'additional_compile_targets': additional_compile_targets,
-        'self.m.filter.compile_targets': self.m.filter.compile_targets,
-        'self.m.filter.test_targets': self.m.filter.test_targets,
-        'compile_targets': compile_targets,
-    }
-    with contextlib.closing(recipe_util.StringListIO()) as listio:
-      json.dump(analyze_details, listio, indent=2, sort_keys=True)
-    step_result = self.m.step.active_result
-    step_result.presentation.logs['analyze_details'] = listio.lines
-
-    return self.m.filter.test_targets, compile_targets
 
   # TODO(phajdan.jr): fix callers and remove chromium_tests.configure_swarming.
   def configure_swarming(self, project_name, precommit, mastername=None):
