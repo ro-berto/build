@@ -205,8 +205,6 @@
       "[GOMA_CACHE]",
       "--build-args",
       "-k 0",
-      "--build-tool",
-      "ninja",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",

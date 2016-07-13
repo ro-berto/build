@@ -185,8 +185,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if self.c.compile_py.build_args:
       args += ['--build-args', self.c.compile_py.build_args]
-    # TODO(thakis): Stop passing --build-tool, there is just one.
-    args += ['--build-tool', 'ninja']
     if self.m.properties.get('build_data_dir'):
       args += ['--build-data-dir', self.m.properties.get('build_data_dir')]
     if self.c.compile_py.compiler:

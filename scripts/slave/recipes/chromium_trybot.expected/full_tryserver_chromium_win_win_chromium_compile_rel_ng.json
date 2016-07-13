@@ -392,8 +392,6 @@
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
       "[GOMA_DEPS_CACHE]",
-      "--build-tool",
-      "ninja",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

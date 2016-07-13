@@ -323,8 +323,6 @@
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
       "[GOMA_DEPS_CACHE]",
-      "--build-tool",
-      "ninja",
       "--build-data-dir",
       "[ROOT]/build_data_dir",
       "--compiler",
