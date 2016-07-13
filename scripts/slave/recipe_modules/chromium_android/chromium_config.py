@@ -86,6 +86,7 @@ def cronet_builder(c):
   # TODO(jbudorick): Remove {cronet,net}_unittests_apk targets after
   # gn switch is finished.
   c.compile_py.default_targets=['cronet_package',
+                                'cronet_perf_test_apk',
                                 'cronet_sample_test_apk',
                                 'cronet_test_instrumentation_apk',
                                 'cronet_unittests',

@@ -295,6 +295,7 @@
       "[CACHE]/cipd/goma",
       "--",
       "cronet_package",
+      "cronet_perf_test_apk",
       "cronet_sample_test_apk",
       "cronet_test_instrumentation_apk",
       "cronet_unittests",
