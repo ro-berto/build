@@ -8,6 +8,7 @@
 DEPS = [
   'chromium',
   'depot_tools/bot_update',
+  'depot_tools/tryserver',
   'depot_tools/gclient',
   'gsutil',
   'recipe_engine/path',
@@ -30,12 +31,25 @@ def RunSteps(api):
   # Generate and upload documentation.
   api.python('generate', go_env, ['go', 'run', 'doc.go', '-out', output],
              cwd=util)
-  api.gsutil(['-m', 'cp', '-a', 'public-read', api.path.join(output, '**'),
-              'gs://chromium-boringssl-docs/'])
+  if not api.tryserver.is_tryserver:
+    # Upload docs only if run after commit, not a tryjob.
+    api.gsutil(['-m', 'cp', '-a', 'public-read', api.path.join(output, '**'),
+                'gs://chromium-boringssl-docs/'])
 
 
 def GenTests(api):
-  yield api.test('boringssl-docs') + \
-        api.properties.generic(mastername='client.boringssl',
-                               buildername='docs',
-                               slavename='slavename')
+  yield (
+    api.test('boringssl-docs') +
+    api.properties.generic(mastername='client.boringssl',
+                           buildername='docs',
+                           slavename='slavename')
+  )
+
+  yield (
+    api.test('boringssl-docs-gerrit') +
+    api.properties.tryserver_gerrit(
+        gerrit_host='boringssl-review.googlesource.com',
+        full_project_name='boringssl',
+        mastername='actually-no-master', buildername='docs',
+        slavename='swarming-slave')
+  )
