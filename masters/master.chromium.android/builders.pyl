@@ -12,6 +12,12 @@
       "slave_pools": ["cronet_common"],
       "category": "0Cronet",
     },
+    "Android Cronet Builder Asan": {
+      "recipe": "cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_common"],
+      "category": "0Cronet",
+    },
     "Android Cronet ARMv6 Builder": {
       "recipe": "cronet",
       "scheduler": "android_commits",

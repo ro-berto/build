@@ -48,6 +48,14 @@ BUILDERS = freeze({
       'PERF_ID': 'android_cronet_builder',
     },
   },
+  'Android Cronet Builder Asan': {
+    'recipe_config': 'main_builder_mb',
+    'run_tests': True,
+    'kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'REPO_NAME': 'src',
+    },
+  },
   'Android Cronet ARMv6 Builder': {
     'recipe_config': 'main_builder_mb',
     'run_tests': True,
