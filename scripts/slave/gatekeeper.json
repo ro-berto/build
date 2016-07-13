@@ -942,6 +942,7 @@
         "*"
       ],
       "excluded_steps": [
+        "Failure reason",
         "update_scripts",
         "steps"
       ],
