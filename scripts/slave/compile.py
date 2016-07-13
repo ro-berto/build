@@ -490,7 +490,7 @@ def real_main():
   option_parser.add_option('--mode', default='dev',
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')
-  # TODO(thakis): Remove this once bots no longer pass it in.
+  # TODO(thakis): Remove this, https://crbug.com/622768
   option_parser.add_option('--build-tool', default=None, help='ignored')
   option_parser.add_option('--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
