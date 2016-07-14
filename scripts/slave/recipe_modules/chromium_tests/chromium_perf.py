@@ -154,8 +154,6 @@ _AddTestSpec('Win 7 Intel GPU Perf', 'chromium-rel-win7-gpu-intel', 'win',
              num_host_shards=5)
 _AddTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia', 'win',
              num_host_shards=5)
-_AddTestSpec('Win 7 Low-End Perf', 'chromium-rel-win7-single', 'win',
-             target_bits=32, num_host_shards=2)
 
 
 _AddTestSpec('Mac 10.11 Perf', 'chromium-rel-mac11', 'mac',
