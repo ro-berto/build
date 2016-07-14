@@ -76,13 +76,6 @@ def RunSteps(api):
       _MASTER_CONFIG_MAP)
   api.chromite.c.cbb.config = cbb_config_name
 
-  repository = api.properties.get('repository')
-  revision = api.properties.get('revision')
-  assert repository, "A repository must be specified."
-  assert revision, "A revision must be specified."
-  assert api.chromite.check_repository('tryjob', repository), (
-      "Refusing to query unknown tryjob repository: %s" % (repository,))
-
   # Load the Chromite configuration for our target.
   api.chromite.checkout_chromite()
   cbb_config = api.chromite.load_config(cbb_config_name)
