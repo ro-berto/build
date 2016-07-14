@@ -87,7 +87,10 @@ class StagerBase(object):
     else:
       raise NotImplementedError(
           'Platform "%s" is not currently supported.' % sys.platform)
-    self._staging_dir = slave_utils.GetStagingDir(self._src_dir)
+    self._staging_dir = (options.staging_dir or
+                         slave_utils.GetStagingDir(self._src_dir))
+    if not os.path.exists(self._staging_dir):
+      os.makedirs(self._staging_dir)
 
     self._symbol_dir_base = options.dirs['symbol_dir_base']
     self._www_dir_base = options.dirs['www_dir_base']
@@ -629,6 +632,10 @@ def main():
                            default=None,
                            help="Name to use for build directory instead of "
                                 "the slave build name")
+  option_parser.add_option('--staging-dir',
+                         help='Directory to use for staging the archives. '
+                              'Default behavior is to automatically detect '
+                              'slave\'s build directory.')
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
   if args:

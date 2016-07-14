@@ -712,6 +712,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       fake_factory_properties['target_os'] = 'android'
 
     args = [
+        '--staging-dir', self.m.path['cache'].join('chrome_staging'),
         '--target', self.c.build_config_fs,
         '--factory-properties', self.m.json.dumps(fake_factory_properties),
     ]

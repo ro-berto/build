@@ -369,6 +369,8 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_build.py",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
       "--target",
       "Release",
       "--factory-properties",
