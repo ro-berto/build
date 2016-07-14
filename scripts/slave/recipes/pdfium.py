@@ -19,7 +19,7 @@ PROPERTIES = {
   'xfa': Property(default=False, kind=bool),
   'memory_tool': Property(default=None, kind=str),
   'v8': Property(default=True, kind=bool),
-  'win32': Property(default=False, kind=bool),
+  'target_cpu': Property(default=None, kind=str),
   'clang': Property(default=False, kind=bool),
   'rel': Property(default=False, kind=bool),
   'gn': Property(default=True, kind=bool),
@@ -27,9 +27,9 @@ PROPERTIES = {
   'target_os': Property(default=None, kind=str),
 }
 
-def _CheckoutSteps(api, memory_tool, skia, xfa, v8, win32, clang, gn,
+def _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, gn,
                    target_os):
-  # Checkout pdfium and its dependencies (specified in DEPS) using gclient
+  # Checkout pdfium and its dependencies (specified in DEPS) using gclient.
   api.gclient.set_config('pdfium')
   if target_os:
     api.gclient.c.target_os = {target_os}
@@ -50,19 +50,20 @@ def _CheckoutSteps(api, memory_tool, skia, xfa, v8, win32, clang, gn,
     gyp_defines.append('clang=1')
 
   if gn:
-    if win32:
+    if target_cpu == 'x86':
       gyp_defines.append('target_arch=ia32')
     env = {'GYP_PDFIUM_NO_ACTION' : '1',
            'GYP_DEFINES': ' '.join(gyp_defines)}
   else:
-    if not win32:
+    # Convert GN target_cpu to GYP target_arch.
+    if target_cpu == 'x64':
       gyp_defines.append('target_arch=x64')
     env = {'GYP_DEFINES': ' '.join(gyp_defines)}
 
   api.gclient.runhooks(env=env)
 
 
-def _GNGenBuilds(api, memory_tool, skia, xfa, v8, win32, clang, rel,
+def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
                  target_os, out_dir):
   gn_bool = {True: 'true', False: 'false'};
   # Generate build files by GN.
@@ -83,8 +84,8 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, win32, clang, rel,
     args.append('is_asan=true')
   if target_os:
     args.append('target_os="%s"' % target_os)
-  if win32:
-    args.append('target_cpu=\"x86\"')
+  if target_cpu == 'x86':
+    args.append('target_cpu="x86"')
 
   api.python('gn gen', gn_cmd,
              ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
@@ -164,17 +165,18 @@ def _RunTests(api, memory_tool, v8, out_dir):
              cwd=api.path['checkout'], env=env)
 
 
-def RunSteps(api, memory_tool, skia, xfa, v8, win32, clang, rel, gn, skip_test,
-             target_os):
-  _CheckoutSteps(api, memory_tool, skia, xfa, v8, win32, clang, gn, target_os)
+def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, gn,
+             skip_test, target_os):
+  _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, gn,
+                 target_os)
 
   out_dir = 'Release' if rel else 'Debug'
-  if win32:
-    out_dir += '_x86'
+  if not gn and target_cpu == 'x64':
+    out_dir += '_x64'
 
   if gn:
-    _GNGenBuilds(api, memory_tool, skia, xfa, v8, win32, clang, rel, target_os,
-                 out_dir)
+    _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
+                 target_os, out_dir)
 
   _BuildSteps(api, out_dir)
 
@@ -239,6 +241,7 @@ def GenTests(api):
       api.properties(skia=True,
                      xfa=True,
                      gn=False,
+                     target_cpu='x64',
                      skip_test=True,
                      mastername="client.pdfium",
                      buildername='windows_skia_gyp',
@@ -260,7 +263,7 @@ def GenTests(api):
       api.test('win_xfa_32') +
       api.platform('win', 64) +
       api.properties(xfa=True,
-                     win32=True,
+                     target_cpu='x86',
                      mastername="client.pdfium",
                      buildername='windows_xfa_32',
                      slavename="test_slave")
@@ -271,6 +274,7 @@ def GenTests(api):
       api.platform('win', 64) +
       api.properties(xfa=True,
                      gn=False,
+                     target_cpu='x64',
                      mastername="client.pdfium",
                      buildername='windows_xfa_gyp',
                      slavename="test_slave")
@@ -281,6 +285,7 @@ def GenTests(api):
       api.platform('win', 64) +
       api.properties(xfa=True,
                      rel=True,
+                     target_cpu='x64',
                      gn=False,
                      mastername="client.pdfium",
                      buildername='windows_xfa_rel_gyp',
@@ -311,7 +316,7 @@ def GenTests(api):
       api.platform('win', 64) +
       api.properties(xfa=True,
                      clang=True,
-                     win32=True,
+                     target_cpu='x86',
                      mastername="client.pdfium",
                      buildername='windows_xfa_clang_32',
                      slavename="test_slave")

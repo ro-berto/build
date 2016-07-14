@@ -187,7 +187,7 @@
       "category": "1xfa",
       "properties": {
         "xfa": True,
-        "win32": True,
+        "target_cpu": "x86",
       },
     },
     "windows_xfa_clang": {
@@ -208,7 +208,7 @@
       "properties": {
         "xfa": True,
         "clang": True,
-        "win32": True,
+        "target_cpu": "x86",
       },
     },
     "windows_xfa_gyp": {
@@ -219,6 +219,7 @@
       "properties": {
         "xfa": True,
         "gn": False,
+        "target_cpu": "x64",
       },
     },
     "windows_xfa_rel": {
@@ -240,6 +241,7 @@
         "xfa": True,
         "rel": True,
         "gn": False,
+        "target_cpu": "x64",
       },
     },
   },

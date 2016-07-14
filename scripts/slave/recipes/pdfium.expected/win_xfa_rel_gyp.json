@@ -64,20 +64,20 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]\\pdfium\\out\\Release"
+      "[SLAVE_BUILD]\\pdfium\\out\\Release_x64"
     ],
     "name": "compile with ninja"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\pdfium\\out\\Release\\pdfium_unittests.exe"
+      "[SLAVE_BUILD]\\pdfium\\out\\Release_x64\\pdfium_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "unittests"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\pdfium\\out\\Release\\pdfium_embeddertests.exe"
+      "[SLAVE_BUILD]\\pdfium\\out\\Release_x64\\pdfium_embeddertests.exe"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "embeddertests"
@@ -88,7 +88,7 @@
       "-u",
       "[SLAVE_BUILD]\\pdfium\\testing\\tools\\run_javascript_tests.py",
       "--build-dir",
-      "out\\Release"
+      "out\\Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "javascript tests"
@@ -99,7 +99,7 @@
       "-u",
       "[SLAVE_BUILD]\\pdfium\\testing\\tools\\run_pixel_tests.py",
       "--build-dir",
-      "out\\Release"
+      "out\\Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "pixel tests"
@@ -110,7 +110,7 @@
       "-u",
       "[SLAVE_BUILD]\\pdfium\\testing\\tools\\run_corpus_tests.py",
       "--build-dir",
-      "out\\Release"
+      "out\\Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "corpus tests"

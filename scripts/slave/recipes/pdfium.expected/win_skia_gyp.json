@@ -64,7 +64,7 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]\\pdfium\\out\\Debug"
+      "[SLAVE_BUILD]\\pdfium\\out\\Debug_x64"
     ],
     "name": "compile with ninja"
   },

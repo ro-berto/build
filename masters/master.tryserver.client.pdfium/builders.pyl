@@ -182,6 +182,7 @@
         "xfa": True,
         "rel": True,
         "gn": False,
+        "target_cpu": "x64",
       }
     },
   },
