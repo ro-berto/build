@@ -55,7 +55,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_PDFIUM_NO_ACTION": "1",
       "GYP_DEFINES": "pdf_enable_v8=1 pdf_enable_xfa=0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

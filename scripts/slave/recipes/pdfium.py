@@ -19,21 +19,15 @@ PROPERTIES = {
   'xfa': Property(default=False, kind=bool),
   'memory_tool': Property(default=None, kind=str),
   'v8': Property(default=True, kind=bool),
-  'win64': Property(default=False, kind=bool),
+  'win32': Property(default=False, kind=bool),
   'clang': Property(default=False, kind=bool),
   'rel': Property(default=False, kind=bool),
-  'gn': Property(default=False, kind=bool),
+  'gn': Property(default=True, kind=bool),
   'skip_test': Property(default=False, kind=bool),
   'target_os': Property(default=None, kind=str),
 }
 
-
-def _MakeGypDefines(gyp_defines):
-  return ' '.join(['%s=%s' % (key, str(value)) for key, value in
-                   gyp_defines.iteritems()])
-
-
-def _CheckoutSteps(api, memory_tool, skia, xfa, v8, win64, clang, gn,
+def _CheckoutSteps(api, memory_tool, skia, xfa, v8, win32, clang, gn,
                    target_os):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
@@ -41,33 +35,35 @@ def _CheckoutSteps(api, memory_tool, skia, xfa, v8, win64, clang, gn,
     api.gclient.c.target_os = {target_os}
   api.bot_update.ensure_checkout(force=True)
 
-  gyp_defines = {
-      'pdf_enable_v8': int(v8),
-      'pdf_enable_xfa': int(xfa),
-  }
+  gyp_defines = [
+      'pdf_enable_v8=%d' % int(v8),
+      'pdf_enable_xfa=%d' % int(xfa),
+  ]
 
   if skia:
-    gyp_defines['pdf_use_skia'] = 1
+    gyp_defines.append('pdf_use_skia=1')
 
   if memory_tool == 'asan':
-    gyp_defines['asan'] = 1
+    gyp_defines.append('asan=1')
 
   if clang:
-    gyp_defines['clang'] = 1
-
-  if win64:
-    gyp_defines['target_arch'] = 'x64'
+    gyp_defines.append('clang=1')
 
   if gn:
-    env = {'GYP_CHROMIUM_NO_ACTION' : '1',
-           'GYP_DEFINES': _MakeGypDefines(gyp_defines)}
+    if win32:
+      gyp_defines.append('target_arch=ia32')
+    env = {'GYP_PDFIUM_NO_ACTION' : '1',
+           'GYP_DEFINES': ' '.join(gyp_defines)}
   else:
-    env = {'GYP_DEFINES': _MakeGypDefines(gyp_defines)}
+    if not win32:
+      gyp_defines.append('target_arch=x64')
+    env = {'GYP_DEFINES': ' '.join(gyp_defines)}
 
   api.gclient.runhooks(env=env)
 
 
-def _GNGenBuilds(api, skia, xfa, v8, rel, target_os, out_dir):
+def _GNGenBuilds(api, memory_tool, skia, xfa, v8, win32, clang, rel,
+                 target_os, out_dir):
   gn_bool = {True: 'true', False: 'false'};
   # Generate build files by GN.
   checkout = api.path['checkout']
@@ -81,8 +77,14 @@ def _GNGenBuilds(api, skia, xfa, v8, rel, target_os, out_dir):
       'pdf_use_skia=%s' % gn_bool[skia],
       'pdf_is_standalone=true',
   ]
+  if clang:
+    args.append('is_clang=true')
+  if memory_tool == 'asan':
+    args.append('is_asan=true')
   if target_os:
     args.append('target_os="%s"' % target_os)
+  if win32:
+    args.append('target_cpu=\"x86\"')
 
   api.python('gn gen', gn_cmd,
              ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
@@ -162,16 +164,17 @@ def _RunTests(api, memory_tool, v8, out_dir):
              cwd=api.path['checkout'], env=env)
 
 
-def RunSteps(api, memory_tool, skia, xfa, v8, win64, clang, rel, gn, skip_test,
+def RunSteps(api, memory_tool, skia, xfa, v8, win32, clang, rel, gn, skip_test,
              target_os):
-  _CheckoutSteps(api, memory_tool, skia, xfa, v8, win64, clang, gn, target_os)
+  _CheckoutSteps(api, memory_tool, skia, xfa, v8, win32, clang, gn, target_os)
 
   out_dir = 'Release' if rel else 'Debug'
-  if win64:
-    out_dir += '_x64'
+  if win32:
+    out_dir += '_x86'
 
   if gn:
-    _GNGenBuilds(api, skia, xfa, v8, rel, target_os, out_dir)
+    _GNGenBuilds(api, memory_tool, skia, xfa, v8, win32, clang, rel, target_os,
+                 out_dir)
 
   _BuildSteps(api, out_dir)
 
@@ -210,7 +213,7 @@ def GenTests(api):
       api.platform('win', 64) +
       api.properties(v8=False,
                      mastername="client.pdfium",
-                     buildername='windows',
+                     buildername='windows_no_v8',
                      slavename="test_slave")
   )
   yield (
@@ -218,7 +221,7 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.properties(v8=False,
                      mastername="client.pdfium",
-                     buildername='linux',
+                     buildername='linux_no_v8',
                      slavename="test_slave")
   )
   yield (
@@ -226,7 +229,19 @@ def GenTests(api):
       api.platform('mac', 64) +
       api.properties(v8=False,
                      mastername="client.pdfium",
-                     buildername='mac',
+                     buildername='mac_no_v8',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('win_skia_gyp') +
+      api.platform('win', 64) +
+      api.properties(skia=True,
+                     xfa=True,
+                     gn=False,
+                     skip_test=True,
+                     mastername="client.pdfium",
+                     buildername='windows_skia_gyp',
                      slavename="test_slave")
   )
 
@@ -242,14 +257,33 @@ def GenTests(api):
   )
 
   yield (
-      api.test('win_skia_gn') +
+      api.test('win_xfa_32') +
       api.platform('win', 64) +
-      api.properties(skia=True,
-                     xfa=True,
-                     gn=True,
-                     skip_test=True,
+      api.properties(xfa=True,
+                     win32=True,
                      mastername="client.pdfium",
-                     buildername='windows_skia_gn',
+                     buildername='windows_xfa_32',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('win_xfa_gyp') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     gn=False,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_gyp',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('win_xfa_rel_gyp') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     rel=True,
+                     gn=False,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_rel_gyp',
                      slavename="test_slave")
   )
 
@@ -263,46 +297,23 @@ def GenTests(api):
   )
 
   yield (
-      api.test('win_xfa_64') +
+      api.test('win_xfa_rel') +
       api.platform('win', 64) +
       api.properties(xfa=True,
-                     win64=True,
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_64',
-                     slavename="test_slave")
-  )
-
-  yield (
-      api.test('win_xfa_64_rel') +
-      api.platform('win', 64) +
-      api.properties(xfa=True,
-                     win64=True,
                      rel=True,
                      mastername="client.pdfium",
-                     buildername='windows_xfa_64_rel',
+                     buildername='windows_xfa_rel',
                      slavename="test_slave")
   )
 
   yield (
-      api.test('win_xfa_64_debug_gn') +
+      api.test('win_xfa_clang_32') +
       api.platform('win', 64) +
       api.properties(xfa=True,
-                     win64=True,
-                     gn=True,
+                     clang=True,
+                     win32=True,
                      mastername="client.pdfium",
-                     buildername='windows_xfa_64_debug_gn',
-                     slavename="test_slave")
-  )
-
-  yield (
-      api.test('win_xfa_64_rel_gn') +
-      api.platform('win', 64) +
-      api.properties(xfa=True,
-                     win64=True,
-                     rel=True,
-                     gn=True,
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_64_rel_gn',
+                     buildername='windows_xfa_clang_32',
                      slavename="test_slave")
   )
 
@@ -317,13 +328,14 @@ def GenTests(api):
   )
 
   yield (
-      api.test('win_xfa_clang_x64') +
-      api.platform('win', 64) +
-      api.properties(xfa=True,
-                     clang=True,
-                     win64=True,
+      api.test('linux_skia_gyp') +
+      api.platform('linux', 64) +
+      api.properties(skia=True,
+                     xfa=True,
+                     gn=False,
+                     skip_test=True,
                      mastername="client.pdfium",
-                     buildername='windows_xfa_clang_x64',
+                     buildername='linux_skia_gyp',
                      slavename="test_slave")
   )
 
@@ -339,14 +351,23 @@ def GenTests(api):
   )
 
   yield (
-      api.test('linux_skia_gn') +
+      api.test('linux_xfa_gyp') +
       api.platform('linux', 64) +
-      api.properties(skia=True,
-                     xfa=True,
-                     gn=True,
-                     skip_test=True,
+      api.properties(xfa=True,
+                     gn=False,
                      mastername="client.pdfium",
-                     buildername='linux_skia_gn',
+                     buildername='linux_xfa_gyp',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('linux_xfa_rel_gyp') +
+      api.platform('linux', 64) +
+      api.properties(xfa=True,
+                     rel=True,
+                     gn=False,
+                     mastername="client.pdfium",
+                     buildername='linux_xfa_rel_gyp',
                      slavename="test_slave")
   )
 
@@ -370,23 +391,14 @@ def GenTests(api):
   )
 
   yield (
-      api.test('linux_xfa_debug_gn') +
-      api.platform('linux', 64) +
-      api.properties(xfa=True,
-                     gn=True,
+      api.test('mac_skia_gyp') +
+      api.platform('mac', 64) +
+      api.properties(skia=True,
+                     xfa=True,
+                     gn=False,
+                     skip_test=True,
                      mastername="client.pdfium",
-                     buildername='linux_xfa_debug_gn',
-                     slavename="test_slave")
-  )
-
-  yield (
-      api.test('linux_xfa_rel_gn') +
-      api.platform('linux', 64) +
-      api.properties(xfa=True,
-                     rel=True,
-                     gn=True,
-                     mastername="client.pdfium",
-                     buildername='linux_xfa_rel_gn',
+                     buildername='mac_skia_gyp',
                      slavename="test_slave")
   )
 
@@ -402,14 +414,12 @@ def GenTests(api):
   )
 
   yield (
-      api.test('mac_skia_gn') +
+      api.test('mac_xfa_gyp') +
       api.platform('mac', 64) +
-      api.properties(skia=True,
-                     xfa=True,
-                     gn=True,
-                     skip_test=True,
+      api.properties(xfa=True,
+                     gn=False,
                      mastername="client.pdfium",
-                     buildername='mac_skia_gn',
+                     buildername='mac_xfa_gyp',
                      slavename="test_slave")
   )
 
@@ -423,23 +433,23 @@ def GenTests(api):
   )
 
   yield (
-      api.test('mac_xfa_debug_gn') +
+      api.test('mac_xfa_rel') +
       api.platform('mac', 64) +
       api.properties(xfa=True,
-                     gn=True,
+                     rel=True,
                      mastername="client.pdfium",
-                     buildername='mac_xfa_debug_gn',
+                     buildername='mac_xfa_rel',
                      slavename="test_slave")
   )
 
   yield (
-      api.test('mac_xfa_rel_gn') +
+      api.test('mac_xfa_rel_gyp') +
       api.platform('mac', 64) +
       api.properties(xfa=True,
                      rel=True,
-                     gn=True,
+                     gn=False,
                      mastername="client.pdfium",
-                     buildername='mac_xfa_rel_gn',
+                     buildername='mac_xfa_rel_gyp',
                      slavename="test_slave")
   )
 
@@ -473,10 +483,12 @@ def GenTests(api):
   )
 
   yield (
-      api.test('try-linux_xfa_asan') +
-      api.platform('linux', 64) +
-      api.properties.tryserver(mastername='tryserver.client.pdfium',
-                               buildername='linux_xfa_asan')
+       api.test('try-linux_xfa_asan') +
+       api.platform('linux', 64) +
+       api.properties.tryserver(xfa=True,
+                                memory_tool='asan',
+                                mastername='tryserver.client.pdfium',
+                                buildername='linux_xfa_asan')
   )
 
   yield (
@@ -486,6 +498,5 @@ def GenTests(api):
                      buildername='android',
                      slavename='test_slave',
                      target_os='android',
-                     gn=True,
                      skip_test=True)
   )

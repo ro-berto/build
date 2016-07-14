@@ -7,7 +7,7 @@
       "--master",
       "client.pdfium",
       "--builder",
-      "mac_xfa_rel_gn",
+      "mac_xfa_gyp",
       "--slave",
       "test_slave",
       "--spec",
@@ -55,43 +55,29 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "pdf_enable_v8=1 pdf_enable_xfa=1",
+      "GYP_DEFINES": "pdf_enable_v8=1 pdf_enable_xfa=1 target_arch=x64",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/pdfium",
-      "gen",
-      "//out/Release",
-      "--args=is_debug=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_is_standalone=true"
-    ],
-    "cwd": "[SLAVE_BUILD]/pdfium",
-    "name": "gn gen"
-  },
-  {
-    "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/pdfium/out/Release"
+      "[SLAVE_BUILD]/pdfium/out/Debug"
     ],
     "name": "compile with ninja"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pdfium/out/Release/pdfium_unittests"
+      "[SLAVE_BUILD]/pdfium/out/Debug/pdfium_unittests"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "unittests"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pdfium/out/Release/pdfium_embeddertests"
+      "[SLAVE_BUILD]/pdfium/out/Debug/pdfium_embeddertests"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "embeddertests"
@@ -102,7 +88,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
-      "out/Release"
+      "out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "javascript tests"
@@ -113,7 +99,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
-      "out/Release"
+      "out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "pixel tests"
@@ -124,7 +110,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
-      "out/Release"
+      "out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "corpus tests"

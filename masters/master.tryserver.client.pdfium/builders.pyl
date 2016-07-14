@@ -10,35 +10,23 @@
   "buildbucket_bucket": "master.tryserver.client.pdfium",
 
   "builders": {
+    "android": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["android_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "0main",
+      "properties": {
+        "skip_test": True,
+        "target_os": "android",
+      },
+    },
     "linux": {
       "recipe": "pdfium",
       "scheduler": None,
       "slave_pools": ["linux_slave_pool"],
       "slavebuilddir": "pdfium",
       "category": "0main",
-    },
-    "linux_xfa": {
-      "recipe": "pdfium",
-      "scheduler": None,
-      "slave_pools": ["linux_slave_pool"],
-      "slavebuilddir": "pdfium",
-      "category": "1xfa",
-      "properties": {
-        "xfa": True,
-      }
-    },
-    "linux_skia": {
-      "recipe": "pdfium",
-      "scheduler": None,
-      "slave_pools": ["linux_slave_pool"],
-      "slavebuilddir": "pdfium",
-      "category": "4skia",
-      "properties": {
-        "skia": True,
-        "xfa": True,
-        "gn": True,
-        "skip_test": True,
-      }
     },
     "linux_no_v8": {
       "recipe": "pdfium",
@@ -50,25 +38,56 @@
         "v8": False,
       }
     },
-    "linux_xfa_rel_gn": {
+    "linux_skia": {
       "recipe": "pdfium",
       "scheduler": None,
       "slave_pools": ["linux_slave_pool"],
       "slavebuilddir": "pdfium",
-      "category": "3xfa_gn",
+      "category": "4skia",
+      "properties": {
+        "skia": True,
+        "xfa": True,
+        "skip_test": True,
+      }
+    },
+    "linux_xfa": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+      }
+    },
+    "linux_xfa_rel_gyp": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "3xfa_gyp",
       "properties": {
         "xfa": True,
         "rel": True,
-        "gn": True,
+        "gn": False,
       }
     },
-
     "mac": {
       "recipe": "pdfium",
       "scheduler": None,
       "slave_pools": ["mac_slave_pool"],
       "slavebuilddir": "pdfium",
       "category": "0main",
+    },
+    "mac_no_v8": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "2no_v8",
+      "properties": {
+        "v8": False,
+      }
     },
     "mac_skia": {
       "recipe": "pdfium",
@@ -79,7 +98,6 @@
       "properties": {
         "skia": True,
         "xfa": True,
-        "gn": True,
         "skip_test": True,
       }
     },
@@ -93,35 +111,34 @@
         "xfa": True,
       }
     },
-    "mac_no_v8": {
+    "mac_xfa_rel_gyp": {
       "recipe": "pdfium",
       "scheduler": None,
       "slave_pools": ["mac_slave_pool"],
       "slavebuilddir": "pdfium",
-      "category": "2no_v8",
-      "properties": {
-        "v8": False,
-      }
-    },
-    "mac_xfa_rel_gn": {
-      "recipe": "pdfium",
-      "scheduler": None,
-      "slave_pools": ["mac_slave_pool"],
-      "slavebuilddir": "pdfium",
-      "category": "3xfa_gn",
+      "category": "3xfa_gyp",
       "properties": {
         "xfa": True,
         "rel": True,
-        "gn": True,
+        "gn": False,
       }
     },
-
     "win": {
       "recipe": "pdfium",
       "scheduler": None,
       "slave_pools": ["win_slave_pool"],
       "slavebuilddir": "pdfium",
       "category": "0main",
+    },
+    "win_no_v8": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["win_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "2no_v8",
+      "properties": {
+        "v8": False,
+      }
     },
     "win_skia": {
       "recipe": "pdfium",
@@ -132,7 +149,6 @@
       "properties": {
         "skia": True,
         "xfa": True,
-        "gn": True,
         "skip_test": True,
       }
     },
@@ -156,41 +172,17 @@
         "clang": True,
       },
     },
-    "win_no_v8": {
+    "win_xfa_rel_gyp": {
       "recipe": "pdfium",
       "scheduler": None,
       "slave_pools": ["win_slave_pool"],
       "slavebuilddir": "pdfium",
-      "category": "2no_v8",
-      "properties": {
-        "v8": False,
-      }
-    },
-    "win_xfa_64_rel_gn": {
-      "recipe": "pdfium",
-      "scheduler": None,
-      "slave_pools": ["win_slave_pool"],
-      "slavebuilddir": "pdfium",
-      "category": "3xfa_gn",
+      "category": "3xfa_gyp",
       "properties": {
         "xfa": True,
-        "win64": True,
         "rel": True,
-        "gn": True,
+        "gn": False,
       }
-    },
-
-    "android": {
-      "recipe": "pdfium",
-      "scheduler": None,
-      "slave_pools": ["android_slave_pool"],
-      "slavebuilddir": "pdfium",
-      "category": "0main",
-      "properties": {
-        "gn": True,
-        "skip_test": True,
-        "target_os": "android",
-      },
     },
   },
 

@@ -55,10 +55,24 @@
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
     "env": {
+      "GYP_PDFIUM_NO_ACTION": "1",
       "GYP_DEFINES": "pdf_enable_v8=1 pdf_enable_xfa=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]\\gn.py",
+      "--root=[SLAVE_BUILD]\\pdfium",
+      "gen",
+      "//out/Debug",
+      "--args=is_debug=true pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_is_standalone=true"
+    ],
+    "cwd": "[SLAVE_BUILD]\\pdfium",
+    "name": "gn gen"
   },
   {
     "cmd": [
