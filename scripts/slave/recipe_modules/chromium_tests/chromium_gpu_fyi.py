@@ -81,6 +81,7 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Win7 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -101,6 +102,7 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Win8 Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -121,6 +123,7 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Win8 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -141,6 +144,7 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Win7 Release (ATI)': {
       'chromium_config': 'chromium',
@@ -161,6 +165,7 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Win7 Debug (ATI)': {
       'chromium_config': 'chromium',
@@ -181,6 +186,7 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Win7 Release (NVIDIA GeForce 730)': {
       'chromium_config': 'chromium',
@@ -316,6 +322,7 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Win7 x64 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -336,6 +343,7 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'GPU Win Clang Builder (dbg)': {
       # This bot is on the chromium.gpu.fyi waterfall to help ensure
@@ -429,6 +437,7 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Linux Release (ATI)': {
       'chromium_config': 'chromium',
@@ -494,6 +503,7 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Linux Release (New Intel)': {
       'chromium_config': 'chromium',
@@ -604,6 +614,7 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Mac 10.10 Debug (Intel)': {
       'chromium_config': 'chromium',
@@ -624,6 +635,7 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Mac 10.10 Release (ATI)': {
       'chromium_config': 'chromium',
@@ -690,6 +702,7 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Mac Retina Debug': {
       'chromium_config': 'chromium',
@@ -710,6 +723,7 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Mac 10.10 Retina Release (AMD)': {
       'chromium_config': 'chromium',
@@ -730,6 +744,7 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Mac 10.10 Retina Debug (AMD)': {
       'chromium_config': 'chromium',
@@ -750,6 +765,7 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Android Release (Nexus 5)': {
       'chromium_config': 'android',

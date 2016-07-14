@@ -70,7 +70,8 @@ def RunSteps(api):
 
   api.chromium_swarming.configure_swarming(
       'chromium', precommit=False, mastername=mastername)
-  test_runner = api.chromium_tests.create_test_runner(api, tests)
+  test_runner = api.chromium_tests.create_test_runner(
+      api, tests, serialize_tests=bot_config.get('serialize_tests'))
   with api.chromium_tests.wrap_chromium_tests(bot_config, tests):
     test_runner()
 
@@ -194,6 +195,56 @@ def GenTests(api):
             },
         })
     )
+  )
+
+  yield (
+    api.test('dynamic_swarmed_serialized_gtests') +
+    # The chromium.gpu.fyi bots use serialize_tests in order to reduce
+    # load on the GPU bots in the Swarming pool.
+    api.properties.generic(mastername='chromium.gpu.fyi',
+                           buildername='Linux Release (NVIDIA)',
+                           parent_buildername='GPU Linux Builder') +
+    api.platform('linux', 64) +
+    api.properties(swarm_hashes={
+      'base_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      'browser_tests': 'ffffffffffffffffffffffffffffff',
+    }) +
+    api.override_step_data(
+        'read test spec (chromium.gpu.fyi.json)',
+        api.json.output({
+            'Linux Release (NVIDIA)': {
+                'gtest_tests': [
+                    {
+                        'test': 'base_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+                                    'os': 'Linux',
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        'test': 'browser_tests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+                                    'os': 'Linux',
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        })
+    ) +
+    # Make one of the tests fail to improve code coverage.
+    api.override_step_data('base_unittests on NVIDIA GPU on Linux on Linux',
+        api.test_utils.canned_gtest_output(False))
   )
 
   yield (
