@@ -5,9 +5,20 @@
 from buildbot.scheduler import Triggerable
 from buildbot.schedulers.basic import SingleBranchScheduler
 
-from master.factory import annotator_factory
+from master.factory import remote_run_factory
 
-m_annotator = annotator_factory.AnnotatorFactory()
+import master_site_config
+ActiveMaster = master_site_config.ChromiumMac
+
+
+def m_remote_run(recipe, **kwargs):
+  return remote_run_factory.RemoteRunFactory(
+      active_master=ActiveMaster,
+      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      recipe=recipe,
+      factory_properties={'path_config': 'kitchen'},
+      **kwargs)
+
 
 def Update(config, active_master, c):
   c['schedulers'].extend([
@@ -35,9 +46,7 @@ def Update(config, active_master, c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(
-            spec.get('recipe', 'chromium'),
-            factory_properties=spec.get('factory_properties')),
+        'factory': m_remote_run('chromium'),
         'notify_on_missing': True,
         'category': '3mac',
       } for spec in specs
