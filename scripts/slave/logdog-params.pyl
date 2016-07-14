@@ -43,6 +43,7 @@
 #
 {
   'chromium': {
+    # Infra
     'chromium.infra': {},
     'chromium.infra.cron': {},
     'tryserver.infra': {},
@@ -54,10 +55,44 @@
     'tryserver.chromium.win': {},
 
     # Chromium continuous waterfalls.
+    'chromium': {},
     'chromium.android': {},
     'chromium.mac': {},
     'chromium.linux': {},
     'chromium.win': {},
+
     'chromium.fyi': {},
+    'chromium.gpu': {},
+    'chromium.perf': {},
+    'chromium.perf.fyi': {},
+    'chromium.webrtc': {},
+    'chromium.webrtc.fyi': {},
+    'chromium.webkit': {},
+
+    # Blink
+    'tryserver.blink': {},
+
+    # V8
+    'client.v8': {},
+    'client.v8.branches': {},
+    'client.v8.fyi': {},
+    'client.v8.ports': {},
+    'tryserver.v8': {},
+
+    # NaCl / WASM
+    'client.nacl': {},
+    'client.nacl.ports': {},
+    'client.wasm.llvm': {},
+    'tryserver.nacl': {},
+
+    # SKIA
+    'client.skia': {},
+    'client.skia.android': {},
+    'client.skia.fyi': {},
+
+    # WebRTC
+    'client.webrtc': {},
+    'client.webrtc.fyi': {},
+    'tryserver.webrtc': {},
   },
 }
