@@ -783,6 +783,10 @@
     "name": "SmallTest"
   },
   {
+    "cmd": [],
+    "name": "process results for SmallTest"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -792,7 +796,10 @@
       "--html-file",
       "[TMP_BASE]/temp_details_tmp_1/details.html"
     ],
-    "name": "Generate Result Details"
+    "name": "process results for SmallTest.Generate Result Details",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -802,8 +809,9 @@
       "[TMP_BASE]/temp_details_tmp_1/details.html",
       "/path/to/tmp/"
     ],
-    "name": "Read detail.html",
+    "name": "process results for SmallTest.Read detail.html",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
       "@@@STEP_LOG_END@result_details@@@"
     ]
@@ -815,8 +823,9 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]/temp_details_tmp_1"
     ],
-    "name": "rmtree Remove details.html tmp files.",
+    "name": "process results for SmallTest.rmtree Remove details.html tmp files.",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
       "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",

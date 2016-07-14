@@ -785,30 +785,34 @@ class AndroidApi(recipe_api.RecipeApi):
       if official_build:
         args.extend(['--official-build'])
 
+    step_name = '%s%s' % (
+        annotation or name, ' (%s)' % suffix if suffix else '')
+
     step_result = self.test_runner(
-        '%s%s' % (annotation or name, ' (%s)' % suffix if suffix else ''),
+        step_name,
         args=args,
         wrapper_script_suite_name=wrapper_script_suite_name,
         **kwargs)
 
     if result_details:
-      try:
-        details_html = details_dir.join('details.html')
-        self.m.python(
-            'Generate Result Details',
-            self.resource('test_results_presentation.py'),
-            args=['--json-file',
-                  json_results_file,
-                  '--html-file',
-                  details_html])
-        details_list = self.m.file.read(
-            'Read detail.html',
-            details_html,
-            test_data="<!DOCTYPE html><html></html>").splitlines()
-        self.m.step.active_result.presentation.logs['result_details'] = (
-            details_list)
-      finally:
-        self.m.file.rmtree('Remove details.html tmp files.', details_dir)
+      with self.m.step.nest('process results for %s' % step_name):
+        try:
+          details_html = details_dir.join('details.html')
+          self.m.python(
+              'Generate Result Details',
+              self.resource('test_results_presentation.py'),
+              args=['--json-file',
+                    json_results_file,
+                    '--html-file',
+                    details_html])
+          details_list = self.m.file.read(
+              'Read detail.html',
+              details_html,
+              test_data="<!DOCTYPE html><html></html>").splitlines()
+          self.m.step.active_result.presentation.logs['result_details'] = (
+              details_list)
+        finally:
+          self.m.file.rmtree('Remove details.html tmp files.', details_dir)
     return step_result
 
   def launch_gce_instances(self, snapshot='clean-17-l-phone-image-no-popups',
