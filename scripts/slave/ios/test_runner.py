@@ -155,6 +155,7 @@ class TestRunner(object):
     self.perf_builder_name = perf_builder_name
     self.perf_x_value = perf_x_value
     self.test_args = test_args or []
+    self.xcode_version = xcode_version
 
     self.summary = {
       'links': collections.OrderedDict(),
@@ -487,6 +488,7 @@ class SimulatorTestRunner(TestRunner):
     self.timeout = '120'
     self.homedir = ''
     self.start_time = None
+    self.xcode_version = xcode_version
 
   def SetStartTime(self):
     """Sets the start time, for finding crash reports during this run."""
@@ -496,13 +498,40 @@ class SimulatorTestRunner(TestRunner):
 
   def CreateNewHomeDirectory(self):
     """Creates a new home directory for the simulator."""
-    self.homedir = tempfile.mkdtemp()
+    if self.xcode_version == '8.0':
+      cmd = [
+        self.iossim_path,
+        '-d', self.platform,
+        '-s', self.version,
+        '-w'
+      ]
+      subprocess.check_output(cmd)
+      cmd = [
+        self.iossim_path,
+        '-d', self.platform,
+        '-s', self.version,
+        '-p'
+      ]
+      self.homedir = subprocess.check_output(cmd)
+    else:
+      self.homedir = tempfile.mkdtemp()
+
 
   def RemoveHomeDirectory(self):
     """Recursively removes the home directory being used by the simulator."""
-    if os.path.exists(self.homedir):
-      shutil.rmtree(self.homedir, ignore_errors=True)
+    if self.xcode_version == '8.0':
+      cmd = [
+        self.iossim_path,
+        '-d', self.platform,
+        '-s', self.version,
+        '-w'
+      ]
+      subprocess.check_output(cmd)
       self.homedir = ''
+    else:
+      if os.path.exists(self.homedir):
+        shutil.rmtree(self.homedir, ignore_errors=True)
+        self.homedir = ''
 
   def KillSimulators(self):
     """Forcibly kills any running iOS simulator instances."""
@@ -682,10 +711,14 @@ class SimulatorTestRunner(TestRunner):
       self.iossim_path,
       '-d', self.platform,
       '-s', self.version,
-      '-t', self.timeout,
-      '-u', self.homedir,
     ]
     args = []
+
+    if self.xcode_version != '8.0':
+      cmd.extend([
+        '-t', self.timeout,
+        '-u', self.homedir
+      ])
 
     if test_filter is not None:
       kif_filter = self.GetKIFTestFilter(test_filter, blacklist)
@@ -694,7 +727,13 @@ class SimulatorTestRunner(TestRunner):
       cmd.extend([
        '-e', 'GKIF_SCENARIO_FILTER=%s' % kif_filter,
       ])
-      args.append('--gtest_filter=%s' % gtest_filter)
+
+      if self.xcode_version == '8.0':
+        cmd.extend([
+         '-c', '--gtest_filter=%s' % gtest_filter,
+        ])
+      else:
+        args.append('--gtest_filter=%s' % gtest_filter)
 
     cmd.append(self.app_path)
     cmd.extend(self.test_args)
