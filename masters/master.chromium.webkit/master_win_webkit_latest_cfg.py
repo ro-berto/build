@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 from master import master_config
-from master.factory import annotator_factory
+from master.factory import remote_run_factory
 
 import master_site_config
 
@@ -17,7 +17,13 @@ F = helper.Factory
 T = helper.Triggerable
 
 
-m_annotator = annotator_factory.AnnotatorFactory()
+def m_remote_run(recipe, **kwargs):
+  return remote_run_factory.RemoteRunFactory(
+      active_master=ActiveMaster,
+      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      recipe=recipe,
+      factory_properties={'path_config': 'kitchen'},
+      **kwargs)
 
 defaults['category'] = 'layout'
 
@@ -40,7 +46,7 @@ T('s4_webkit_rel_trigger')
 B('WebKit Win Builder', 'f_webkit_win_rel',
   scheduler='global_scheduler', builddir='webkit-win-latest-rel',
   auto_reboot=False)
-F('f_webkit_win_rel', m_annotator.BaseFactory(
+F('f_webkit_win_rel', m_remote_run(
     'chromium', triggers=['s4_webkit_rel_trigger']))
 
 #
@@ -48,7 +54,7 @@ F('f_webkit_win_rel', m_annotator.BaseFactory(
 #
 B('WebKit Win7', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
 B('WebKit Win10', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
-F('f_webkit_rel_tests', m_annotator.BaseFactory('chromium'))
+F('f_webkit_rel_tests', m_remote_run('chromium'))
 
 #
 # Win x64 Rel Builder (note: currently no x64 testers)
@@ -56,7 +62,7 @@ F('f_webkit_rel_tests', m_annotator.BaseFactory('chromium'))
 B('WebKit Win x64 Builder', 'f_webkit_win_rel_x64',
   scheduler='global_scheduler', builddir='webkit-win-latest-rel-x64',
   auto_reboot=False)
-F('f_webkit_win_rel_x64', m_annotator.BaseFactory('chromium'))
+F('f_webkit_win_rel_x64', m_remote_run('chromium'))
 
 
 ################################################################################
@@ -73,7 +79,7 @@ T('s4_webkit_dbg_trigger')
 #
 B('WebKit Win Builder (dbg)', 'f_webkit_win_dbg', scheduler='global_scheduler',
   builddir='webkit-win-latest-dbg', auto_reboot=False)
-F('f_webkit_win_dbg', m_annotator.BaseFactory('chromium',
+F('f_webkit_win_dbg', m_remote_run('chromium',
     triggers=['s4_webkit_dbg_trigger']))
 
 #
@@ -82,7 +88,7 @@ F('f_webkit_win_dbg', m_annotator.BaseFactory('chromium',
 
 B('WebKit Win7 (dbg)', 'f_webkit_dbg_tests',
     scheduler='s4_webkit_dbg_trigger')
-F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
+F('f_webkit_dbg_tests', m_remote_run('chromium'))
 
 #
 # Win x64 Dbg Builder (note: currently no x64 testers)
@@ -90,7 +96,7 @@ F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
 B('WebKit Win x64 Builder (dbg)', 'f_webkit_win_dbg_x64',
   scheduler='global_scheduler', builddir='webkit-win-latest-dbg-x64',
   auto_reboot=False)
-F('f_webkit_win_dbg_x64', m_annotator.BaseFactory('chromium'))
+F('f_webkit_win_dbg_x64', m_remote_run('chromium'))
 
 def Update(_config, _active_master, c):
   return helper.Update(c)
