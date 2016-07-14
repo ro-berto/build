@@ -12,7 +12,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]\\Win_Power_Perf__HP_",
+      "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -37,7 +37,7 @@
       "--master",
       "chromium.perf.fyi",
       "--builder",
-      "Win Power Perf (HP)",
+      "Win Power Low-End 4GB Perf",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -55,7 +55,7 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__HP_",
+    "cwd": "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -142,7 +142,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__HP_\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='RECIPE_PACKAGE_REPO[build]\\goma' target_arch=x64 use_goma=0",
@@ -166,7 +166,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILDER_CACHE]\\Win_Power_Perf__HP_\\src\\out\\Release_x64"
+      "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf\\src\\out\\Release_x64"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -193,7 +193,7 @@
       "--target",
       "Release_x64",
       "--src-dir",
-      "[BUILDER_CACHE]\\Win_Power_Perf__HP_\\src",
+      "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf\\src",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
@@ -207,7 +207,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win_Power_Perf__HP_\\src\\tools\\perf\\run_benchmark",
+      "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf\\src\\tools\\perf\\run_benchmark",
       "list",
       "--browser",
       "release_x64",
@@ -216,7 +216,7 @@
       "--num-shards",
       "1"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__HP_",
+    "cwd": "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -263,18 +263,18 @@
       "--target",
       "Release_x64",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=blink_perf.all",
-      "--perf-id=win-power-fyi-hp",
+      "--perf-id=win-power-low-end-4gb",
       "--test-type=blink_perf.all",
       "--step-name=blink_perf.all.exact",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Win Power Perf (HP)",
+      "--builder-name=Win Power Low-End 4GB Perf",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -283,7 +283,7 @@
       "-v",
       "--b=2"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__HP_",
+    "cwd": "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -302,18 +302,18 @@
       "--target",
       "Release_x64",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=blink_perf.all",
-      "--perf-id=win-power-fyi-hp",
+      "--perf-id=win-power-low-end-4gb",
       "--test-type=blink_perf.all",
       "--step-name=blink_perf.all.release",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Win Power Perf (HP)",
+      "--builder-name=Win Power Low-End 4GB Perf",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -322,7 +322,7 @@
       "-v",
       "--b=2"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__HP_",
+    "cwd": "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -341,18 +341,18 @@
       "--target",
       "Release_x64",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=blink_perf.dom",
-      "--perf-id=win-power-fyi-hp",
+      "--perf-id=win-power-low-end-4gb",
       "--test-type=blink_perf.dom",
       "--step-name=blink_perf.dom",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Win Power Perf (HP)",
+      "--builder-name=Win Power Low-End 4GB Perf",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -360,7 +360,7 @@
       "--upload-results",
       "blink_perf.dom"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__HP_",
+    "cwd": "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -379,24 +379,24 @@
       "--target",
       "Release_x64",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.cssqueryjquery",
-      "--perf-id=win-power-fyi-hp",
+      "--perf-id=win-power-low-end-4gb",
       "--test-type=dromaeo.cssqueryjquery",
       "--step-name=dromaeo.cssqueryjquery",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Win Power Perf (HP)",
+      "--builder-name=Win Power Low-End 4GB Perf",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__HP_",
+    "cwd": "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -415,24 +415,24 @@
       "--target",
       "Release_x64",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Perf (HP)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win Power Low-End 4GB Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.cssqueryjquery",
-      "--perf-id=win-power-fyi-hp",
+      "--perf-id=win-power-low-end-4gb",
       "--test-type=dromaeo.cssqueryjquery",
       "--step-name=dromaeo.cssqueryjquery.release",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Win Power Perf (HP)",
+      "--builder-name=Win Power Low-End 4GB Perf",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__HP_",
+    "cwd": "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -450,7 +450,7 @@
       "--target",
       "Release_x64"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_Power_Perf__HP_",
+    "cwd": "[BUILDER_CACHE]\\Win_Power_Low_End_4GB_Perf",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
