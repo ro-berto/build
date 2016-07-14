@@ -38,6 +38,7 @@ TEST_BUILDERS = {
       'Build-Win-MSVC-x86_64-Release',
       'Build-Win-MSVC-x86_64-Release-Vulkan',
       'Housekeeper-PerCommit',
+      'Infra-PerCommit',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot',
       'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release',
       'Test-Android-GCC-NVIDIA_Shield-GPU-TegraX1-Arm64-Debug-Vulkan',
@@ -232,18 +233,21 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
 def checkout_steps(api):
   """Run the steps to obtain a checkout of Skia."""
   gclient_cfg = api.gclient.make_config(CACHE_DIR=None)
-  skia = gclient_cfg.solutions.add()
-  skia.name = 'skia'
-  skia.managed = False
-  skia.url = 'https://skia.googlesource.com/skia.git'
-  skia.revision = api.properties.get('revision') or 'origin/master'
-  api.skia.update_repo(api.path['slave_build'], skia)
+  repo = gclient_cfg.solutions.add()
+  repo.managed = False
+  repo.revision = api.properties.get('revision') or 'origin/master'
+  if 'Infra' in api.properties['buildername']:
+    repo.name = 'infra'
+    repo.url = 'https://skia.googlesource.com/buildbot.git'
+    gclient_cfg.got_revision_mapping['infra'] = 'got_revision'
+  else:
+    repo.name = 'skia'
+    repo.url = 'https://skia.googlesource.com/skia.git'
+    gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
+    gclient_cfg.target_os.add('llvm')
 
-  # Run 'gclient sync'.
-  gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
-  gclient_cfg.target_os.add('llvm')
+  api.skia.update_repo(api.path['slave_build'], repo)
   update_step = api.gclient.checkout(gclient_config=gclient_cfg)
-
   got_revision = update_step.presentation.properties['got_revision']
   api.tryserver.maybe_apply_issue()
   return got_revision
@@ -254,6 +258,30 @@ def housekeeper_swarm(api, builder_spec, got_revision, infrabots_dir,
   task = trigger_task(
       api,
       'housekeeper',
+      api.properties['buildername'],
+      api.properties['mastername'],
+      api.properties['slavename'],
+      api.properties['buildnumber'],
+      builder_spec,
+      got_revision,
+      infrabots_dir,
+      idempotent=False,
+      store_output=False,
+      extra_isolate_hashes=extra_isolate_hashes)
+  return api.skia_swarming.collect_swarming_task(task)
+
+
+def infra_swarm(api, got_revision, infrabots_dir, extra_isolate_hashes):
+  # Fake the builder spec.
+  builder_spec = {
+    'builder_cfg': {
+      'role': 'Infra',
+      'is_trybot': api.properties['buildername'].endswith('-Trybot'),
+    }
+  }
+  task = trigger_task(
+      api,
+      'infra',
       api.properties['buildername'],
       api.properties['mastername'],
       api.properties['slavename'],
@@ -525,11 +553,6 @@ def upload_coverage_results(api, task, got_revision, is_trybot):
 
 def RunSteps(api):
   got_revision = checkout_steps(api)
-  builder_spec = api.skia.get_builder_spec(api.path['checkout'],
-                                           api.properties['buildername'])
-  builder_cfg = builder_spec['builder_cfg']
-  infrabots_dir = api.path['checkout'].join('infra', 'bots')
-
   api.skia_swarming.setup(
       api.path['checkout'].join('infra', 'bots', 'tools', 'luci-go'),
       swarming_rev='')
@@ -543,6 +566,14 @@ def RunSteps(api):
   # Get ready to compile.
   compile_cipd_deps = []
   extra_compile_hashes = [recipes_hash]
+
+  infrabots_dir = api.path['checkout'].join('infra', 'bots')
+  if 'Infra' in api.properties['buildername']:
+    return infra_swarm(api, got_revision, infrabots_dir, extra_hashes)
+
+  builder_spec = api.skia.get_builder_spec(api.path['checkout'],
+                                           api.properties['buildername'])
+  builder_cfg = builder_spec['builder_cfg']
 
   # Android bots require an SDK.
   if 'Android' in api.properties['buildername']:
@@ -640,7 +671,7 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
     if not legacy_android_sdk:
       test += api.path.exists(api.path['slave_build'].join(
           'skia', 'infra', 'bots', 'assets', 'android_sdk', 'VERSION'))
-  if 'Coverage' not in builder:
+  if 'Coverage' not in builder and 'Infra' not in builder:
     test += api.step_data(
         'upload new .isolated file for compile_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
@@ -656,6 +687,10 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
   if 'Housekeeper' in builder:
     test += api.step_data(
         'upload new .isolated file for housekeeper_skia',
+        stdout=api.raw_io.output('def456 XYZ.isolated'))
+  if 'Infra' in builder:
+    test += api.step_data(
+        'upload new .isolated file for infra_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
 
   return test

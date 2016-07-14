@@ -1,51 +1,12 @@
 [
   {
     "cmd": [
-      "git",
-      "remote",
-      "set-url",
-      "origin",
-      "https://skia.googlesource.com/skia.git"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "git remote set-url"
-  },
-  {
-    "cmd": [
-      "git",
-      "fetch"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "git fetch"
-  },
-  {
-    "cmd": [
-      "git",
-      "reset",
-      "--hard",
-      "abc123"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "git reset"
-  },
-  {
-    "cmd": [
-      "git",
-      "clean",
-      "-d",
-      "-f"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "git clean"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['llvm']"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'infra', 'url': 'https://skia.googlesource.com/buildbot.git'}]"
     ],
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -63,7 +24,7 @@
       "--verbose",
       "--delete_unversioned_trees",
       "--revision",
-      "skia@abc123",
+      "infra@abc123",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -74,13 +35,13 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"skia/\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": 164710@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"infra/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 197293@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@164710@@@"
+      "@@@SET_BUILD_PROPERTY@got_revision@197293@@@"
     ]
   },
   {
@@ -182,7 +143,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/linux64"
+      "[SLAVE_BUILD]/infra/infra/bots/tools/luci-go/linux64"
     ],
     "name": "download luci-go linux"
   },
@@ -195,7 +156,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/mac64"
+      "[SLAVE_BUILD]/infra/infra/bots/tools/luci-go/mac64"
     ],
     "name": "download luci-go mac"
   },
@@ -208,7 +169,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/win64"
+      "[SLAVE_BUILD]/infra/infra/bots/tools/luci-go/win64"
     ],
     "name": "download luci-go win"
   },
@@ -236,7 +197,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go",
+      "[SLAVE_BUILD]/infra/infra/bots/tools/luci-go",
       "[SLAVE_BUILD]/luci-go",
       "0"
     ],
@@ -356,47 +317,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
-      "/path/to/tmp/json",
-      "Build-Ubuntu-GCC-x86_64-Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec buildbot_spec.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"most\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"target_arch\": \"x86_64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=x86_64 skia_warnings_as_errors=1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
@@ -420,10 +340,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/compile_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Ubuntu\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/compile_skia.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/infra/infra/bots/infra_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-infra_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Ubuntu\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/infra_skia.isolated.gen.json"
     ],
-    "name": "Write compile_skia.isolated.gen.json"
+    "name": "Write infra_skia.isolated.gen.json"
   },
   {
     "cmd": [
@@ -437,15 +357,15 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/compile_skia.isolated.gen.json"
+      "[SLAVE_BUILD]/swarming_temp_dir/infra_skia.isolated.gen.json"
     ],
     "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_skia\": \"[dummy hash for compile_skia]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"infra_skia\": \"[dummy hash for infra_skia]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"compile_skia\": \"[dummy hash for compile_skia]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"infra_skia\": \"[dummy hash for infra_skia]\"}@@@"
     ]
   },
   {
@@ -453,7 +373,7 @@
       "python",
       "-u",
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated",
+      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-infra_skia.isolated",
       "[dummy hash for isolate_recipes]"
     ],
     "name": "add_isolated_input",
@@ -480,9 +400,9 @@
       "archive",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated"
+      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-infra_skia.isolated"
     ],
-    "name": "upload new .isolated file for compile_skia",
+    "name": "upload new .isolated file for infra_skia",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -500,7 +420,7 @@
       "--shards",
       "1",
       "--task-name",
-      "compile_skia/Ubuntu/def456/Build-Ubuntu-GCC-x86_64-Debug/5",
+      "infra_skia/Ubuntu/def456/Infra-PerCommit/5",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -519,7 +439,7 @@
       "pool",
       "Skia",
       "--tag",
-      "buildername:Build-Ubuntu-GCC-x86_64-Debug",
+      "buildername:Infra-PerCommit",
       "--tag",
       "buildnumber:5",
       "--tag",
@@ -527,33 +447,32 @@
       "--tag",
       "master:client.skia",
       "--tag",
-      "name:compile_skia",
+      "name:infra_skia",
       "--tag",
       "os:Ubuntu",
       "--tag",
       "slavename:skiabot-linux-swarm-000",
       "--tag",
-      "stepname:compile_skia on Ubuntu",
-      "--idempotent",
+      "stepname:infra_skia on Ubuntu",
       "def456",
       "--",
       "--workdir",
       "../../..",
-      "skia/swarm_compile",
-      "buildername=Build-Ubuntu-GCC-x86_64-Debug",
-      "mastername=client.skia.compile",
-      "buildnumber=1",
-      "slavename=skiabot-dummy-compile-slave",
+      "skia/swarm_infra",
+      "buildername=Infra-PerCommit",
+      "mastername=client.skia",
+      "buildnumber=5",
+      "slavename=skiabot-linux-swarm-000",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
-      "revision=164710"
+      "revision=197293"
     ],
-    "name": "[trigger] compile_skia on Ubuntu",
+    "name": "[trigger] infra_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Ubuntu/def456/Build-Ubuntu-GCC-x86_64-Debug/5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"infra_skia/Ubuntu/def456/Infra-PerCommit/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compile_skia/Ubuntu/def456/Build-Ubuntu-GCC-x86_64-Debug/5\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"infra_skia/Ubuntu/def456/Infra-PerCommit/5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -575,11 +494,11 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"compile_skia/Ubuntu/def456/Build-Ubuntu-GCC-x86_64-Debug/5\", \"tasks\": {\"compile_skia/Ubuntu/def456/Build-Ubuntu-GCC-x86_64-Debug/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"infra_skia/Ubuntu/def456/Infra-PerCommit/5\", \"tasks\": {\"infra_skia/Ubuntu/def456/Infra-PerCommit/5\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "compile_skia on Ubuntu",
+    "name": "infra_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

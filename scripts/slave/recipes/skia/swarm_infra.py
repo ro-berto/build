@@ -63,6 +63,14 @@ def git_checkout(api, url, dest, ref=None):
 
 
 def RunSteps(api):
+  # The 'build' and 'depot_tools' directories are provided through isolate
+  # and aren't in the expected location, so we need to override them.
+  api.path.c.base_paths['depot_tools'] = (
+      api.path.c.base_paths['slave_build'] +
+      ('build', 'scripts', 'slave', '.recipe_deps', 'depot_tools'))
+  api.path.c.base_paths['build'] = (
+      api.path.c.base_paths['slave_build'] + ('build',))
+
   go_dir = api.path['slave_build'].join('go')
   go_src = go_dir.join('src')
   api.file.makedirs('makedirs go/src', go_src)
@@ -76,7 +84,8 @@ def RunSteps(api):
       ref=api.properties.get('revision', 'origin/master'))
 
   # Fetch Go dependencies.
-  env = {'GOPATH': go_dir,
+  env = {'CHROME_HEADLESS': '1',
+         'GOPATH': go_dir,
          'GIT_USER_AGENT': 'git/1.9.1', # I don't think this version matters.
          'PATH': api.path.pathsep.join([str(go_dir.join('bin')), '%(PATH)s'])}
   api.step('update_deps', cmd=['go', 'get', '-u', './...'], cwd=infra_dir,
