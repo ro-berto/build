@@ -79,7 +79,7 @@ class RevisionState(object):
     if self.base_revision:
       assert self.base_revision.deps_file_contents
       self.needs_patch = True
-      self.revision_overrides[self.depot_name] = self.commit_hash
+      self.revision_overrides[self.depot['src']] = self.commit_hash
       self.deps_patch, self.deps_file_contents = self.bisector.make_deps_patch(
           self.base_revision, self.base_revision.deps_file_contents,
           self.depot, self.commit_hash)

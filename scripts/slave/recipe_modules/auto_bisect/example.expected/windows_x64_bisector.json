@@ -669,7 +669,7 @@
       "cr-buildbucket.appspot.com",
       "--service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"winx64_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Win x64 Builder/full-build-win32_a6298e4afedbf2cd461755ea6f45b0ad64222222_51e7ed4b63ad81d8b499e42b888149349afaaca1.zip\\\", \\\"clobber\\\": true, \\\"deps_revision_overrides\\\": {\\\"v8\\\": \\\"003\\\"}, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:winx64_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"winx64_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Win x64 Builder/full-build-win32_a6298e4afedbf2cd461755ea6f45b0ad64222222_51e7ed4b63ad81d8b499e42b888149349afaaca1.zip\\\", \\\"clobber\\\": true, \\\"deps_revision_overrides\\\": {\\\"src/v8\\\": \\\"003\\\"}, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:winx64_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
     "name": "buildbucket.put (4)",
     "stdout": "/path/to/tmp/json",
