@@ -5,9 +5,19 @@
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master import master_config
-from master.factory import annotator_factory
+from master.factory import remote_run_factory
 
-m_annotator = annotator_factory.AnnotatorFactory()
+import master_site_config
+ActiveMaster = master_site_config.ChromiumLinux
+
+
+def m_remote_run(recipe, **kwargs):
+  return remote_run_factory.RemoteRunFactory(
+      active_master=ActiveMaster,
+      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      recipe=recipe,
+      factory_properties={'path_config': 'kitchen'},
+      **kwargs)
 
 defaults = {}
 
@@ -41,33 +51,27 @@ T('android_trigger_rel')
 #
 B('Android Arm64 Builder (dbg)', 'f_android_arm64_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
-F('f_android_arm64_dbg',
-  m_annotator.BaseFactory('chromium'))
+F('f_android_arm64_dbg', m_remote_run('chromium'))
 
 B('Android Builder (dbg)', 'f_android_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
-F('f_android_dbg',
-  m_annotator.BaseFactory('chromium'))
+F('f_android_dbg', m_remote_run('chromium'))
 
 B('Android Tests (dbg)', 'f_android_dbg_tests', 'android',
   'android_trigger_dbg', notify_on_missing=True)
-F('f_android_dbg_tests',
-  m_annotator.BaseFactory('chromium'))
+F('f_android_dbg_tests', m_remote_run('chromium'))
 
 B('Android Builder', 'f_android_rel', 'android', 'android',
   notify_on_missing=True)
-F('f_android_rel',
-  m_annotator.BaseFactory('chromium'))
+F('f_android_rel', m_remote_run('chromium'))
 
 B('Android Tests', 'f_android_rel_tests', 'android', 'android_trigger_rel',
   notify_on_missing=True)
-F('f_android_rel_tests',
-  m_annotator.BaseFactory('chromium'))
+F('f_android_rel_tests', m_remote_run('chromium'))
 
 B('Android Clang Builder (dbg)', 'f_android_clang_dbg', 'android', 'android',
   notify_on_missing=True)
-F('f_android_clang_dbg',
-  m_annotator.BaseFactory('chromium'))
+F('f_android_clang_dbg', m_remote_run('chromium'))
 
 def Update(_config_arg, _active_master, c):
   helper.Update(c)
@@ -85,9 +89,7 @@ def Update(_config_arg, _active_master, c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(
-              spec.get('recipe', 'chromium'),
-              factory_properties=spec.get('factory_properties')),
+        'factory': m_remote_run('chromium'),
         'notify_on_missing': True,
         'category': '5android',
       } for spec in specs
