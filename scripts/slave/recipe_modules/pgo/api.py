@@ -29,7 +29,7 @@ _BENCHMARKS_TO_RUN = {
   'dromaeo.jslibtraversejquery',
   'dromaeo.jslibtraverseprototype',
   'indexeddb_perf',
-  'media.tough_videos_cases',
+  'media.tough_video_cases',
   'octane',
   'smoothness.top_25_smooth',
   'speedometer',

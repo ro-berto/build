@@ -376,9 +376,9 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
-      "media.tough_videos_cases"
+      "dromaeo.cssqueryjquery"
     ],
-    "name": "Telemetry benchmark: media.tough_videos_cases"
+    "name": "Telemetry benchmark: dromaeo.cssqueryjquery"
   },
   {
     "cmd": [
@@ -466,9 +466,9 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
-      "dromaeo.cssqueryjquery"
+      "blink_perf.dom"
     ],
-    "name": "Telemetry benchmark: dromaeo.cssqueryjquery"
+    "name": "Telemetry benchmark: blink_perf.dom"
   },
   {
     "cmd": [
@@ -556,9 +556,9 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
-      "blink_perf.dom"
+      "dromaeo.jslibtraversejquery"
     ],
-    "name": "Telemetry benchmark: blink_perf.dom"
+    "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
   },
   {
     "cmd": [
@@ -592,9 +592,9 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
-      "dromaeo.jslibtraversejquery"
+      "media.tough_video_cases"
     ],
-    "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
+    "name": "Telemetry benchmark: media.tough_video_cases"
   },
   {
     "cmd": [
