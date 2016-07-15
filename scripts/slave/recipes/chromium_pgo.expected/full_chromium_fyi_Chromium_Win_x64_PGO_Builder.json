@@ -206,24 +206,6 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
-      "page_cycler.morejs"
-    ],
-    "name": "Telemetry benchmark: page_cycler.morejs"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
-      "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
-      "--browser-type",
-      "release_x64",
-      "--target-bits",
-      "64",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release_x64",
-      "--benchmark",
       "dromaeo.jslibstyleprototype"
     ],
     "name": "Telemetry benchmark: dromaeo.jslibstyleprototype"
@@ -386,9 +368,9 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
-      "blink_perf.dom"
+      "media.tough_videos_cases"
     ],
-    "name": "Telemetry benchmark: blink_perf.dom"
+    "name": "Telemetry benchmark: media.tough_videos_cases"
   },
   {
     "cmd": [
@@ -425,60 +407,6 @@
       "sunspider"
     ],
     "name": "Telemetry benchmark: sunspider"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
-      "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
-      "--browser-type",
-      "release_x64",
-      "--target-bits",
-      "64",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release_x64",
-      "--benchmark",
-      "media.mse_cases"
-    ],
-    "name": "Telemetry benchmark: media.mse_cases"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
-      "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
-      "--browser-type",
-      "release_x64",
-      "--target-bits",
-      "64",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release_x64",
-      "--benchmark",
-      "v8.infinite_scroll"
-    ],
-    "name": "Telemetry benchmark: v8.infinite_scroll"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
-      "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
-      "--browser-type",
-      "release_x64",
-      "--target-bits",
-      "64",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release_x64",
-      "--benchmark",
-      "blink_perf.events"
-    ],
-    "name": "Telemetry benchmark: blink_perf.events"
   },
   {
     "cmd": [
@@ -620,9 +548,9 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
-      "dromaeo.jslibtraversejquery"
+      "blink_perf.dom"
     ],
-    "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
+    "name": "Telemetry benchmark: blink_perf.dom"
   },
   {
     "cmd": [
@@ -641,6 +569,24 @@
       "dromaeo.jslibmodifyprototype"
     ],
     "name": "Telemetry benchmark: dromaeo.jslibmodifyprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
+      "--benchmark",
+      "dromaeo.jslibtraversejquery"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
   },
   {
     "cmd": [

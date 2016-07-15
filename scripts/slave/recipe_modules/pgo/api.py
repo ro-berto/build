@@ -14,7 +14,6 @@ _BENCHMARKS_TO_RUN = {
   'blink_perf.canvas',
   'blink_perf.css',
   'blink_perf.dom',
-  'blink_perf.events',
   'blink_perf.paint',
   'blink_perf.svg',
   'blink_style.top_25',
@@ -30,13 +29,11 @@ _BENCHMARKS_TO_RUN = {
   'dromaeo.jslibtraversejquery',
   'dromaeo.jslibtraverseprototype',
   'indexeddb_perf',
-  'media.mse_cases',
+  'media.tough_videos_cases',
   'octane',
-  'page_cycler.morejs',
   'smoothness.top_25_smooth',
   'speedometer',
   'sunspider',
-  'v8.infinite_scroll',
 }
 
 
