@@ -1053,8 +1053,11 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     _WEBVIEW_COMMAND_LINE = '/data/local/tmp/webview-command-line'
 
-    command_line_script_args = ['--executable', 'webview',
-                                '--device-path', _WEBVIEW_COMMAND_LINE]
+    command_line_script_args = [
+        '--adb-path', self.m.adb.adb_path(),
+        '--device-path', _WEBVIEW_COMMAND_LINE,
+        '--executable', 'webview',
+    ]
     command_line_script_args.extend(command_line_args)
     self.m.python('write webview command line file',
                   self.m.path['checkout'].join(
