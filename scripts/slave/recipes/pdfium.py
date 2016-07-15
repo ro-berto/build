@@ -78,6 +78,8 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
       'pdf_use_skia=%s' % gn_bool[skia],
       'pdf_is_standalone=true',
   ]
+  if api.platform.is_win and not memory_tool:
+    args.append('symbol_level=1')
   if clang:
     args.append('is_clang=true')
   if memory_tool == 'asan':
@@ -472,6 +474,7 @@ def GenTests(api):
       api.platform('win', 64) +
       api.properties(xfa=True,
                      memory_tool='drmemory',
+                     target_cpu='x86',
                      mastername="client.pdfium",
                      buildername='drm_win_xfa',
                      slavename="test_slave")
