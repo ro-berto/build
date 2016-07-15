@@ -743,7 +743,10 @@ class SwarmingApi(recipe_api.RecipeApi):
       if path not in step_result.raw_io.output_dir:
         raise Exception('no results from shard #%d' % i)
       results_raw = step_result.raw_io.output_dir[path]
-      results_json = self.m.json.loads(results_raw)
+      try:
+        results_json = self.m.json.loads(results_raw)
+      except Exception as e:
+        raise Exception('error decoding JSON results from shard #%d' % i)
       for key in merged_results:
         if key in results_json:
           if isinstance(merged_results[key], list):
