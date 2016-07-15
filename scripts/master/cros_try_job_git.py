@@ -32,6 +32,22 @@ from master import gitiles_poller
 from master.try_job_base import BadJobfile
 
 
+def compress_extra_args(extra_args):
+  """Returns (str): Compressed notation for "extra_args" field.
+
+  This notation is implemented in the "cros/cbuildbot_tryjob" recipe. Basically,
+  if the "cbb_extra_args" field begins with "z:", the remainder is a
+  GZIP-compressed string containing the JSON-encoded "extra_args" list.
+
+  The motivation for compressing this parameter is that it will occasionally be
+  too long to store in BulidBot's database.
+
+  Args:
+    extra_args (list): The extra_args parameter.
+  """
+  return 'z:' + base64.b64encode(zlib.compress(json.dumps(extra_args)))
+
+
 class CbuildbotConfigs(object):
 
   # Valid 'etc' builder targets. Specifically, this ensures:
@@ -64,10 +80,10 @@ class CbuildbotConfigs(object):
     - BuildBot changes can be added by including one or more BuildBucket
       `changes` parameters: [{'author': {'email': 'author@google.com'}}].
     - `cbb_config` property must be set to the build's cbuildbot config target.
-    - `extra_args` property (optional) may be a JSON list of additional
-      parameters to pass to the tryjob.
-    - `slaves_request` property (optional) may be a JSON list of slaves on which
-      this build may run.
+    - `cbb_extra_args` property (optional) may be a JSON-encoded list of
+      additional parameters to pass to the tryjob.
+    - `slaves_request` property (optional) may be a JSON-encoded list of slaves
+      on which this build may run.
     - Additional BuildBot properties may be added.
 
     NOTE: Internally, all of these parameters are converted to BuildBot
@@ -76,15 +92,19 @@ class CbuildbotConfigs(object):
     """
     def params_hook(params, _build):
       # Map `cbb_config` to a builder name.
-      properties = params.get('properties', {})
+      properties = params.get('properties', {}).copy()
       config_name = properties.get('cbb_config')
       if not config_name:
         raise ValueError('Missing required `cbb_config` property.')
       params['builder_name'] = self.GetBuilderForConfig(config_name)
 
-      # Validate other fields.
-      if not isinstance(properties.get('extra_args', []), list):
-        raise ValueError('`extra_args` property is not a list.')
+      # If "cbb_extra_args" is present and a list, convert this to a compressed
+      # JSON string for the recipe.
+      extra_args = properties.get('cbb_extra_args')
+      if extra_args and isinstance(extra_args, list):
+        properties['cbb_extra_args'] = compress_extra_args(extra_args)
+
+      # The "slaves_request" field must be a list, if present.
       if not isinstance(properties.get('slaves_request', []), list):
         raise ValueError('`slaves_request` is not a list.')
 
@@ -241,9 +261,7 @@ class CrOSTryJobGit(TryBase):
       # This field can be quite large, and exceed BuildBot property limits.
       # Compress it, Base64 encode it, and prefix it with "z:" so the consumer
       # knows its size.
-      extra_args = 'z:' + base64.b64encode(zlib.compress(json.dumps(
-        extra_args)))
-      props.setProperty('cbb_extra_args', extra_args,
+      props.setProperty('cbb_extra_args', compress_extra_args(extra_args),
                         self._PROPERTY_SOURCE)
     return props
 
