@@ -12,7 +12,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_",
+      "[BUILDER_CACHE]\\win_clang",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -55,7 +55,7 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]\\CrWinClang_dbg_",
+    "cwd": "[BUILDER_CACHE]\\win_clang",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -193,7 +193,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\tools\\swarming_client\\swarming.py",
+      "[BUILDER_CACHE]\\win_clang\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -209,7 +209,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\CrWinClang_dbg_\\src",
+    "cwd": "[BUILDER_CACHE]\\win_clang\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -222,14 +222,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\testing\\scripts\\get_compile_targets.py",
+      "[BUILDER_CACHE]\\win_clang\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]\\\\CrWinClang_dbg_\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]\\\\win_clang\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"buildername\": \"CrWinClang(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
@@ -244,12 +244,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\testing\\buildbot\\chromium.fyi.json",
+      "[BUILDER_CACHE]\\win_clang\\src\\testing\\buildbot\\chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\CrWinClang_dbg_\\src\\testing\\buildbot\\chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win_clang\\src\\testing\\buildbot\\chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"CrWinClang(dbg) tester\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -282,7 +282,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\out\\Debug",
+      "[BUILDER_CACHE]\\win_clang\\src\\out\\Debug",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -291,7 +291,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\tools\\clang\\scripts\\update.py"
+      "[BUILDER_CACHE]\\win_clang\\src\\tools\\clang\\scripts\\update.py"
     ],
     "name": "update_clang"
   },
@@ -299,14 +299,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\tools\\mb\\mb.py",
+      "[BUILDER_CACHE]\\win_clang\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.fyi",
       "-b",
       "CrWinClang(dbg)",
       "--config-file",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\tools\\mb\\mb_config.pyl",
+      "[BUILDER_CACHE]\\win_clang\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "--swarming-targets-file",
@@ -329,7 +329,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src",
+      "[BUILDER_CACHE]\\win_clang\\src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -359,7 +359,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src",
+      "[BUILDER_CACHE]\\win_clang\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
@@ -392,9 +392,9 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\out\\Debug",
+      "[BUILDER_CACHE]\\win_clang\\src\\out\\Debug",
       "--src-dir",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src"
+      "[BUILDER_CACHE]\\win_clang\\src"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
@@ -404,14 +404,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\tools\\swarming_client",
+      "[BUILDER_CACHE]\\win_clang\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src\\out\\Debug\\browser_tests.isolated.gen.json"
+      "[BUILDER_CACHE]\\win_clang\\src\\out\\Debug\\browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -437,7 +437,7 @@
       "--staging-dir",
       "[CACHE]\\chrome_staging",
       "--src-dir",
-      "[BUILDER_CACHE]\\CrWinClang_dbg_\\src",
+      "[BUILDER_CACHE]\\win_clang\\src",
       "--build-url",
       "gs://chromium-fyi-archive/chromium.fyi/CrWinClang(dbg)",
       "--build_revision",

@@ -77,6 +77,7 @@ SPEC = {
       'compile_targets': [
         'chrome_official_builder_no_unittests',
       ],
+      'checkout_dir': 'win_chrome',
       'testing': {
         'platform': 'win',
       },
