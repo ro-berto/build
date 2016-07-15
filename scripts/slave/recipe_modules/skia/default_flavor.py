@@ -70,9 +70,9 @@ class DefaultFlavorUtils(object):
     self._skia_api = skia_api
     self._chrome_path = None
     self._win_toolchain_dir = self._skia_api.slave_dir.join(WIN_TOOLCHAIN_DIR)
-    win_toolchain_asset_dir = self._skia_api.slave_dir.join(
-        'skia', 'infra', 'bots', 'assets', 'win_toolchain', 'VERSION')
-    if not self._skia_api.m.path.exists(win_toolchain_asset_dir):
+    win_toolchain_asset_path = self._skia_api.infrabots_dir.join(
+        'assets', 'win_toolchain', 'VERSION')
+    if not self._skia_api.m.path.exists(win_toolchain_asset_path):
       self._win_toolchain_dir = self._skia_api.slave_dir
 
 
