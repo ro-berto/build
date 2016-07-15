@@ -53,6 +53,7 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
+      'checkout_dir': 'mac',
       'testing': {
         'platform': 'mac',
       },

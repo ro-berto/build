@@ -36,6 +36,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'mac',
     },
     'Mac10.9 Tests': {
       'chromium_config': 'chromium',
@@ -115,6 +116,7 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'enable_swarming': True,
+      'checkout_dir': 'mac_gyp',
       'testing': {
         'platform': 'mac',
       },
@@ -140,6 +142,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'mac',
     },
     'Mac10.9 Tests (dbg)': {
       'chromium_config': 'chromium',
@@ -178,6 +181,7 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'enable_swarming': True,
+      'checkout_dir': 'mac_gyp',
       'testing': {
         'platform': 'mac',
       },

@@ -79,6 +79,7 @@ SPEC = {
       'testing': {'platform': 'mac'},
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'mac_ng',
     },
     'Mac ASan 64 Tests (1)': {
       'chromium_config': 'chromium_mac_asan',

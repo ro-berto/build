@@ -203,6 +203,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'mac',
     },
     'GPU Mac Builder (dbg)': {
       'chromium_config': 'chromium',
