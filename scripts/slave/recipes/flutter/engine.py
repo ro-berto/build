@@ -152,7 +152,7 @@ def BuildLinuxAndroidArm(api):
     UploadArtifacts(api, upload_dir, [
       'out/%s/clang_x86/gen_snapshot' % build_output_dir,
     ], archive_name='linux-x64.zip')
-    UploadArtifacts(api, 'upload_dir', [
+    UploadArtifacts(api, upload_dir, [
         'out/%s/libsky_shell.so' % build_output_dir
     ], archive_name='symbols.zip')
 

@@ -490,7 +490,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip upload_dir symbols.zip",
+    "name": "Zip android-arm-profile symbols.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
@@ -503,14 +503,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_6/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/upload_dir/symbols.zip"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-profile/symbols.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload \"upload_dir/symbols.zip\"",
+    "name": "gsutil upload \"android-arm-profile/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/upload_dir/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-profile/symbols.zip@@@"
     ]
   },
   {
@@ -523,7 +523,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "rmtree temp dir for upload_dir UploadArtifacts symbols.zip",
+    "name": "rmtree temp dir for android-arm-profile UploadArtifacts symbols.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -674,7 +674,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip upload_dir symbols.zip (2)",
+    "name": "Zip android-arm-release symbols.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_9/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
@@ -687,14 +687,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_9/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/upload_dir/symbols.zip"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/symbols.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload \"upload_dir/symbols.zip\" (2)",
+    "name": "gsutil upload \"android-arm-release/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/upload_dir/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/symbols.zip@@@"
     ]
   },
   {
@@ -707,7 +707,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "rmtree temp dir for upload_dir UploadArtifacts symbols.zip (2)",
+    "name": "rmtree temp dir for android-arm-release UploadArtifacts symbols.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
