@@ -711,7 +711,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.TARGET_PLATFORM == 'android':
       fake_factory_properties['target_os'] = 'android'
 
+    sanitized_buildername = ''.join(
+        c if c.isalnum() else '_' for c in self.m.properties['buildername'])
+
     args = [
+        '--build-name', sanitized_buildername,
         '--staging-dir', self.m.path['cache'].join('chrome_staging'),
         '--target', self.c.build_config_fs,
         '--factory-properties', self.m.json.dumps(fake_factory_properties),
