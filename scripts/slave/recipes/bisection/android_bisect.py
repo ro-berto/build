@@ -357,17 +357,310 @@ results-without_patch
           'bug_id': '425582',
           'gs_bucket': 'chrome-perf',
           'builder_host': 'master4.golo.chromium.org',
-          'builder_port': '8341',
+          'builder_port': '8341'
       }
-      yield (api.test('basic_recipe_' + buildername) + api.properties.tryserver(
-          mastername='tryserver.chromium.perf',
-          buildername=buildername) + api.step_data(
+      yield (api.test('basic_recipe_' + buildername) +
+          api.properties.tryserver(
+              mastername='tryserver.chromium.perf',
+              buildername=buildername) +
+          api.step_data(
               'saving url to temp file',
-              stdout=api.raw_io.output('/tmp/dummy1')) + api.step_data(
-                  'saving json to temp file',
-                  stdout=api.raw_io.output('/tmp/dummy2')) + api.properties(
+              stdout=api.raw_io.output('/tmp/dummy1')) +
+          api.step_data(
+              'saving json to temp file',
+              stdout=api.raw_io.output('/tmp/dummy2')) +
+          api.properties(
                       bisect_config=bisect_config) + api.properties(
                           job_name='f7a7b4135624439cbd27fdd5133d74ec') +
              api.bisect_tester(tempfile='/tmp/dummy') +
              api.properties(parent_got_revision='1111111') + api.properties(
                  parent_build_archive_url='gs://test-domain/test-archive.zip'))
+
+      local_bisect_config = {
+          'test_type': 'perf',
+          'command': './tools/perf/run_benchmark -v '
+                     '--browser=android-chromium page_cycler.intl_ar_fa_he',
+          'metric': 'warm_times/page_load_time',
+          'repeat_count': '2',
+          'max_time_minutes': '5',
+          'truncate_percent': '25',
+          'bug_id': '425582',
+          'gs_bucket': 'chrome-perf',
+          'builder_host': 'master4.golo.chromium.org',
+          'builder_port': '8341',
+          'good_revision': '306475',
+          'bad_revision': '306476',
+          'dummy_job_names': True
+      }
+
+  buildername = 'android_one_perf_bisect'
+  good_revision_hash = 'e28dc0d49c331def2a3bbf3ddd0096eb51551155'
+  bad_revision_hash = 'fc6dfc7ff5b1073408499478969261b826441144'
+  working_device = [
+      {
+        "battery": {
+            "status": "5",
+            "scale": "100",
+            "temperature": "249",
+            "level": "100",
+            "AC powered": "false",
+            "health": "2",
+            "voltage": "4286",
+            "Wireless powered": "false",
+            "USB powered": "true",
+            "technology": "Li-ion",
+            "present": "true"
+        },
+        "wifi_ip": "",
+        "imei_slice": "Unknown",
+        "ro.build.id": "LRX21O",
+        "ro.build.product": "product_name",
+        "build_detail":
+            "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
+        "serial": "1111",
+        "adb_status": "device",
+        "blacklisted": False,
+        "usb_status": True,
+    },
+    {
+      "adb_status": "offline",
+      "blacklisted": True,
+      "serial": "03e0363a003c6ad4",
+      "usb_status": False,
+    },
+    {
+      "adb_status": "unauthorized",
+      "blacklisted": True,
+      "serial": "03e0363a003c6ad5",
+      "usb_status": True,
+    },
+    {
+      "adb_status": "device",
+      "blacklisted": True,
+      "serial": "03e0363a003c6ad6",
+      "usb_status": True,
+    }
+  ]
+
+  two_devices = [
+        {
+          "battery": {
+              "status": "5",
+              "scale": "100",
+              "temperature": "249",
+              "level": "100",
+              "AC powered": "false",
+              "health": "2",
+              "voltage": "4286",
+              "Wireless powered": "false",
+              "USB powered": "true",
+              "technology": "Li-ion",
+              "present": "true"
+          },
+          "wifi_ip": "",
+          "imei_slice": "Unknown",
+          "ro.build.id": "LRX21O",
+          "ro.build.product": "product_name",
+          "build_detail":
+              "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
+          "serial": "2222",
+          "adb_status": "device",
+          "blacklisted": False,
+          "usb_status": True,
+      },
+      {
+        "battery": {
+            "status": "5",
+            "scale": "100",
+            "temperature": "249",
+            "level": "100",
+            "AC powered": "false",
+            "health": "2",
+            "voltage": "4286",
+            "Wireless powered": "false",
+            "USB powered": "true",
+            "technology": "Li-ion",
+            "present": "true"
+        },
+        "wifi_ip": "",
+        "imei_slice": "Unknown",
+        "ro.build.id": "LRX21O",
+        "ro.build.product": "product_name",
+        "build_detail":
+            "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
+        "serial": "1111",
+        "adb_status": "device",
+        "blacklisted": False,
+        "usb_status": True,
+    },
+      {
+        "adb_status": "offline",
+        "blacklisted": True,
+        "serial": "03e0363a003c6ad4",
+        "usb_status": False,
+      },
+      {
+        "adb_status": "unauthorized",
+        "blacklisted": True,
+        "serial": "03e0363a003c6ad5",
+        "usb_status": True,
+      },
+      {
+        "adb_status": "device",
+        "blacklisted": True,
+        "serial": "03e0363a003c6ad6",
+        "usb_status": True,
+      }
+    ]
+
+  # simulate the scenario when the first tested device works
+  yield (api.test('local_basic_recipe_basic_device') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.perf', buildername=buildername) +
+    api.properties(
+        bisect_config=local_bisect_config,
+        job_name='f7a7b4135624439cbd27fdd5133d74ec',
+        local_test=True,
+        parent_got_revision='1111111',
+        parent_build_archive_url='gs://test-domain/test-archive.zip') +
+    api.bisect_tester(tempfile='/tmp/dummy') +
+    api.step_data(
+        'Gathering reference values.saving json to temp file',
+        stdout=api.raw_io.output('/tmp/dummy3')) +
+    api.step_data(
+        'Gathering reference values.saving json to temp file (2)',
+        stdout=api.raw_io.output('/tmp/dummy4')) +
+    api.override_step_data('device_status',
+        api.json.output(working_device)) +
+    api.override_step_data('device_status (2)',
+        api.json.output(working_device)) +
+    api.step_data('Resolving reference range.crrev get commit hash for ' +
+        ('refs/heads/master@{#%s}' % local_bisect_config['bad_revision']),
+        stdout=api.json.output(
+            {'git_sha': bad_revision_hash}))+
+    api.step_data('Resolving reference range.crrev get commit hash for ' +
+        ('refs/heads/master@{#%s}' % local_bisect_config[
+            'good_revision']),
+        stdout=api.json.output(
+            {'git_sha': good_revision_hash}))+
+    api.step_data('Expanding revision range.for revisions %s:%s' % (
+        good_revision_hash, bad_revision_hash),
+        stdout=api.json.output([[bad_revision_hash, 'ignored'],
+            [good_revision_hash, 'ignored']])) +
+    api.step_data('Post bisect results',
+        stdout=api.json.output({'status_code': 200})))
+
+  # simulate the scenario when the no device is connected.
+  yield (api.test('local_basic_recipe_no_device') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.perf', buildername=buildername) +
+    api.properties(
+        bisect_config=local_bisect_config,
+        job_name='f7a7b4135624439cbd27fdd5133d74ec',
+        local_test=True,
+        parent_got_revision='1111111',
+        parent_build_archive_url='gs://test-domain/test-archive.zip') +
+    api.bisect_tester(tempfile='/tmp/dummy') +
+    api.override_step_data('device_status', api.json.output([])) +
+    api.override_step_data('device_status (2)', api.json.output([])))
+
+  # simulate the scenario when tests fail not because of device
+  # disconnection.
+  yield (api.test('local_basic_recipe_failed_device') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.perf', buildername=buildername) +
+    api.properties(
+        bisect_config=local_bisect_config,
+        job_name='f7a7b4135624439cbd27fdd5133d74ec',
+        local_test=True,
+        parent_got_revision='1111111',
+        parent_build_archive_url='gs://test-domain/test-archive.zip') +
+    api.bisect_tester(tempfile='/tmp/dummy') +
+    api.step_data(
+        'Gathering reference values.saving json to temp file',
+        stdout=api.raw_io.output('/tmp/dummy3')) +
+    api.step_data(
+        'Gathering reference values.saving json to temp file (2)',
+        stdout=api.raw_io.output('/tmp/dummy4')) +
+    api.override_step_data('device_status',
+        api.json.output(working_device)) +
+    api.override_step_data('device_status (2)',
+        api.json.output(working_device)) +
+    api.step_data('Resolving reference range.crrev get commit hash for ' +
+        ('refs/heads/master@{#%s}' % local_bisect_config['bad_revision']),
+        stdout=api.json.output(
+            {'git_sha': bad_revision_hash}))+
+    api.step_data('Resolving reference range.crrev get commit hash for ' +
+        ('refs/heads/master@{#%s}' % local_bisect_config[
+            'good_revision']),
+          stdout=api.json.output(
+              {'git_sha': good_revision_hash}))+
+    api.step_data('Expanding revision range.for revisions %s:%s' % (
+        good_revision_hash, bad_revision_hash),
+        stdout=api.json.output([[bad_revision_hash, 'ignored'],
+            [good_revision_hash, 'ignored']])) +
+    api.step_data('Post bisect results', retcode=1) +
+    api.override_step_data('device_status (3)',
+        api.json.output(working_device)))
+
+  # simulate the scenario when tests fail because of device disconnection.
+  yield (api.test('local_basic_recipe_disconnected_device') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.perf', buildername=buildername) +
+    api.properties(
+        bisect_config=local_bisect_config,
+        job_name='f7a7b4135624439cbd27fdd5133d74ec',
+        local_test=True,
+        parent_got_revision='1111111',
+        parent_build_archive_url='gs://test-domain/test-archive.zip') +
+    api.bisect_tester(tempfile='/tmp/dummy') +
+    api.step_data(
+        'Gathering reference values.saving json to temp file',
+        stdout=api.raw_io.output('/tmp/dummy3')) +
+    api.step_data(
+        'Gathering reference values.saving json to temp file (2)',
+        stdout=api.raw_io.output('/tmp/dummy4')) +
+    api.step_data(
+        'Gathering reference values.saving json to temp file (3)',
+        stdout=api.raw_io.output('/tmp/dummy5')) +
+    api.step_data(
+        'Gathering reference values.saving json to temp file (4)',
+        stdout=api.raw_io.output('/tmp/dummy6')) +
+    api.override_step_data('device_status',
+        api.json.output(two_devices)) +
+    api.override_step_data('device_status (2)',
+        api.json.output(two_devices)) +
+    api.step_data('Resolving reference range.crrev get commit hash for ' +
+        ('refs/heads/master@{#%s}' % local_bisect_config['bad_revision']),
+        stdout=api.json.output(
+            {'git_sha': bad_revision_hash}))+
+    api.step_data('Resolving reference range.crrev get commit hash for ' +
+        ('refs/heads/master@{#%s}' % local_bisect_config[
+            'good_revision']),
+        stdout=api.json.output(
+            {'git_sha': good_revision_hash}))+
+    api.step_data('Expanding revision range.for revisions %s:%s' % (
+            good_revision_hash, bad_revision_hash),
+        stdout=api.json.output([[bad_revision_hash, 'ignored'], [
+            good_revision_hash, 'ignored']])) +
+    # Simulating disconnect by raising failure and changing the output of
+    # multiple_device_status
+    api.step_data('Post bisect results', retcode=1) +
+    api.override_step_data('device_status (3)',
+        api.json.output(working_device)) +
+    api.step_data('Resolving reference range.crrev get commit hash for ' +
+        ('refs/heads/master@{#%s} (2)' % local_bisect_config[
+            'bad_revision']),
+        stdout=api.json.output(
+            {'git_sha': bad_revision_hash}))+
+    api.step_data('Resolving reference range.crrev get commit hash for ' +
+        ('refs/heads/master@{#%s} (2)' % local_bisect_config[
+            'good_revision']),
+        stdout=api.json.output(
+            {'git_sha': good_revision_hash}))+
+    api.step_data('Expanding revision range.for revisions %s:%s (2)' % (
+            good_revision_hash, bad_revision_hash),
+        stdout=api.json.output([[bad_revision_hash, 'ignored'], [
+            good_revision_hash, 'ignored']])) +
+    api.step_data('Post bisect results (2)',
+        stdout=api.json.output({'status_code': 200})))

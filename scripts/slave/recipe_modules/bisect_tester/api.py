@@ -17,11 +17,21 @@ class BisectTesterApi(recipe_api.RecipeApi):
 
   def __init__(self, **kwargs):
     super(BisectTesterApi, self).__init__(**kwargs)
+    self._device_to_test = None
+
+  @property
+  def device_to_test(self):
+    return self._device_to_test
+
+  @device_to_test.setter
+  def device_to_test(self, value): 
+    self._device_to_test = value
 
   def local_test_enabled(self):
     buildername = os.environ.get('BUILDBOT_BUILDERNAME')
     cr_config = self.m.chromium.c
-    if buildername and buildername.endswith('_bisect') and cr_config:
+    if buildername and buildername.endswith('_bisect') and cr_config or (
+        self.m.properties.get('local_test')):
       return True # pragma: no cover
     return False
 
@@ -61,6 +71,7 @@ class BisectTesterApi(recipe_api.RecipeApi):
                                        stdout=self.m.raw_io.output(),
                                        stdin=self.m.raw_io.input(
                                            contents_json))
+
     local_file = local_save_results.stdout.splitlines()[0].strip()
     # TODO(robertocn): Look into using self.m.json.input(contents) instead of
     # local_file.

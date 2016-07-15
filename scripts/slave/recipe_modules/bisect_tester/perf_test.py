@@ -91,6 +91,12 @@ def run_perf_test(api, test_config, **kwargs):
   use_chartjson = bool('chartjson' in command)
   is_telemetry = _is_telemetry_command(command)
   start_time = time.time()
+
+  if api.m.chromium.c.TARGET_PLATFORM == 'android' and is_telemetry:
+    device_serial_number = api.device_to_test;
+    if device_serial_number:
+      command += ' --device ' + device_serial_number # pragma: no cover
+
   for i in range(repeat_cnt):
     elapsed_minutes = (time.time() - start_time) / 60.0
     # A limit of 0 means 'no timeout set'.

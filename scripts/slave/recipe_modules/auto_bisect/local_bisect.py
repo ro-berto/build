@@ -7,27 +7,52 @@ import collections
 import json
 
 
-def perform_bisect(api, **flags):  # pragma: no cover
-  bisect_config = api.m.properties.get('bisect_config')
-  assert isinstance(bisect_config, collections.Mapping)
-  bisector = api.create_bisector(bisect_config, **flags)
-  with api.m.step.nest('Gathering reference values'):
-    _gather_reference_range(api, bisector)
-  if (not bisector.failed and bisector.check_improvement_direction() and
-      bisector.check_initial_confidence()):
-    if bisector.check_reach_adjacent_revision(bisector.good_rev):
-      # Only show this step if bisect has reached adjacent revisions.
-      with api.m.step.nest(str('Check bisect finished on revision ' +
-                               bisector.good_rev.revision_string())):
-        if bisector.check_bisect_finished(bisector.good_rev):
-          bisector.bisect_over = True
-    if not bisector.bisect_over:
-      _bisect_main_loop(bisector)
+def perform_bisect(api, **flags):
+  if api.m.chromium.c.TARGET_PLATFORM != 'android':
+    _perform_single_bisect(api, **flags)
   else:
-    bisector.bisect_over = True
-  bisector.print_result_debug_info()
-  bisector.post_result(halt_on_failure=True)
+    # pick an available device if targe platform is android
+    connected_devices = _get_connected_devices(api)
+    if not connected_devices:
+      raise api.m.step.StepFailure('No Android test devices are available')
+    for device in connected_devices:
+      api.m.bisect_tester.device_to_test = device
+      try:
+         _perform_single_bisect(api, **flags)
+      except api.m.step.StepFailure:
+        # Redo the bisect job if target platform is android and bisect failed
+        # because the test device disconnected
+        current_connected_devices = _get_connected_devices(api)
+        if api.m.bisect_tester.device_to_test not in current_connected_devices:
+          continue
+        else:
+          raise
 
+def _perform_single_bisect(api, **flags):
+      bisect_config = api.m.properties.get('bisect_config')
+      assert isinstance(bisect_config, collections.Mapping)
+      bisector = api.create_bisector(bisect_config, **flags)
+      with api.m.step.nest('Gathering reference values'):
+        _gather_reference_range(api, bisector)
+      if (not bisector.failed and bisector.check_improvement_direction() and
+          bisector.check_initial_confidence()):
+        if bisector.check_reach_adjacent_revision(
+            bisector.good_rev): # pragma: no cover
+          # Only show this step if bisect has reached adjacent revisions.
+          with api.m.step.nest(str('Check bisect finished on revision ' +
+                                   bisector.good_rev.revision_string())):
+            if bisector.check_bisect_finished(bisector.good_rev):
+              bisector.bisect_over = True
+        if not bisector.bisect_over:
+          _bisect_main_loop(bisector)
+      else:
+        bisector.bisect_over = True
+      bisector.print_result_debug_info()
+      bisector.post_result(halt_on_failure=True)
+
+def _get_connected_devices(api):
+  api.m.chromium_android.device_status()
+  return api.m.chromium_android.devices
 
 def _gather_reference_range(api, bisector):  # pragma: no cover
   bisector.good_rev.start_job()
