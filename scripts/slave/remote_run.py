@@ -32,6 +32,17 @@ from slave import update_scripts
 LOGGER = logging.getLogger('remote_run')
 
 
+# CIPD_PINS is a mapping of master name to pinned recipe engine CIPD package
+# version. If no pin is found, the CIPD pin for "None" will be used.
+_CIPD_PINS = {
+  # Default recipe engine pin.
+  None: 'latest',
+
+  # Custom per-master pins.
+  'chromium.infra': 'canary',
+}
+
+
 def _call(cmd, **kwargs):
   LOGGER.info('Executing command: %s', cmd)
   exit_code = subprocess.call(cmd, **kwargs)
@@ -140,9 +151,17 @@ def main(argv):
         # on optional cleanup.
         LOGGER.exception('Buildbot workdir cleanup failed: %s', e)
 
+    # Should we use a CIPD pin?
+    mastername = properties.get('mastername')
+    cipd_pin = None
+    if mastername:
+      cipd_pin = _CIPD_PINS.get(mastername)
+    if not cipd_pin:
+      cipd_pin = _CIPD_PINS[None]
+
     cipd_path = os.path.join(basedir, '.remote_run_cipd')
     _install_cipd_packages(
-        cipd_path, cipd.CipdPackage('infra/recipes-py', 'latest'))
+        cipd_path, cipd.CipdPackage('infra/recipes-py', cipd_pin))
 
     recipe_result_path = os.path.join(tempdir, 'recipe_result.json')
     recipe_cmd = [
