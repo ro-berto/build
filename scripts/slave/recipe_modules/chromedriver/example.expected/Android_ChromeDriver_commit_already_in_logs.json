@@ -175,7 +175,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "run_py_tests.py",
+      "[SLAVE_BUILD]/src/chrome/test/chromedriver/test/run_py_tests.py",
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
@@ -222,7 +222,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "run_java_tests.py",
+      "[SLAVE_BUILD]/src/chrome/test/chromedriver/test/run_java_tests.py",
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
@@ -268,7 +268,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "run_py_tests.py",
+      "[SLAVE_BUILD]/src/chrome/test/chromedriver/test/run_py_tests.py",
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
@@ -315,7 +315,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "run_java_tests.py",
+      "[SLAVE_BUILD]/src/chrome/test/chromedriver/test/run_java_tests.py",
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
@@ -361,7 +361,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "run_py_tests.py",
+      "[SLAVE_BUILD]/src/chrome/test/chromedriver/test/run_py_tests.py",
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
@@ -408,7 +408,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "run_java_tests.py",
+      "[SLAVE_BUILD]/src/chrome/test/chromedriver/test/run_java_tests.py",
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
@@ -454,7 +454,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "run_py_tests.py",
+      "[SLAVE_BUILD]/src/chrome/test/chromedriver/test/run_py_tests.py",
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
@@ -501,7 +501,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "run_java_tests.py",
+      "[SLAVE_BUILD]/src/chrome/test/chromedriver/test/run_java_tests.py",
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",

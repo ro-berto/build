@@ -147,9 +147,11 @@ class ChromedriverApi(recipe_api.RecipeApi):
       version_info = '(%s)' % chrome_version_name
     with self.m.tempfile.temp_dir('server_log') as log_dir:
       server_log = log_dir.join('server_log')
+      test_script_path = self.m.path['checkout'].join(
+          'chrome', 'test', 'chromedriver', 'test', 'run_py_tests.py')
       self.m.step('python_tests%s' % version_info,
                   self._generate_test_command(
-                      'run_py_tests.py', chromedriver, server_log,
+                      test_script_path, chromedriver, server_log,
                       ref_chromedriver=ref_chromedriver,
                       android_package=android_package,
                       build_type=build_type),
@@ -166,9 +168,11 @@ class ChromedriverApi(recipe_api.RecipeApi):
       version_info = '(%s)' % chrome_version_name
     with self.m.tempfile.temp_dir('server_log') as log_dir:
       server_log = log_dir.join('server_log')
+      test_script_path = self.m.path['checkout'].join(
+          'chrome', 'test', 'chromedriver', 'test', 'run_java_tests.py')
       self.m.step('java_tests%s' % version_info,
                   self._generate_test_command(
-                      'run_java_tests.py', chromedriver, server_log,
+                      test_script_path, chromedriver, server_log,
                       ref_chromedriver=None, android_package=android_package,
                       build_type=build_type, verbose=verbose),
                   **kwargs)
@@ -184,8 +188,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
     platform_name = self.m.platform.name
     if self.m.platform.is_linux and self.m.platform.bits == 64:
       platform_name = 'linux64'
-    ref_chromedriver = self.m.path.join(
-        self.m.path['checkout'],
+    ref_chromedriver = self.m.path['checkout'].join(
         'chrome', 'test', 'chromedriver', 'third_party', 'java_tests',
         'reference_builds', 'chromedriver_%s' % platform_name)
 
