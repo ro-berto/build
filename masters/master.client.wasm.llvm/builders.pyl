@@ -31,7 +31,7 @@
         "os":  "linux",
         "version": "trusty",
       },
-      "slaves": ["slave92-c3", "slave93-c3"],
+      "slaves": ["slave92-c3", "slave93-c3", "slave73-c3", "slave74-c3"],
     },
   },
 }
