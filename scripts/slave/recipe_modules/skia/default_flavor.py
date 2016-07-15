@@ -69,6 +69,12 @@ class DefaultFlavorUtils(object):
   def __init__(self, skia_api, *args, **kwargs):
     self._skia_api = skia_api
     self._chrome_path = None
+    self._win_toolchain_dir = self._skia_api.slave_dir.join(WIN_TOOLCHAIN_DIR)
+    win_toolchain_asset_dir = self._skia_api.slave_dir.join(
+        'skia', 'infra', 'bots', 'assets', 'win_toolchain', 'VERSION')
+    if not self._skia_api.m.path.exists(win_toolchain_asset_dir):
+      self._win_toolchain_dir = self._skia_api.slave_dir
+
 
   def step(self, name, cmd, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
@@ -87,20 +93,20 @@ class DefaultFlavorUtils(object):
   @property
   def chrome_path(self):
     """Path to a checkout of Chrome on this machine."""
-    return self._skia_api.slave_dir.join(WIN_TOOLCHAIN_DIR, 'src')
+    return self._win_toolchain_dir.join('src')
 
   def bootstrap_win_toolchain(self):
     """Run bootstrapping script for the Windows toolchain."""
     bootstrap_script = self._skia_api.infrabots_dir.join(
         'bootstrap_win_toolchain_json.py')
-    win_toolchain_json = self._skia_api.slave_dir.join(
-        WIN_TOOLCHAIN_DIR, 'src', 'build', 'win_toolchain.json')
+    win_toolchain_json = self._win_toolchain_dir.join(
+        'src', 'build', 'win_toolchain.json')
     self._skia_api.m.python(
         'bootstrap win toolchain',
         script=bootstrap_script,
         args=['--win_toolchain_json', win_toolchain_json,
               '--depot_tools_parent_dir',
-              self._skia_api.slave_dir.join(WIN_TOOLCHAIN_DIR)])
+              self._win_toolchain_dir])
 
   def build_command_buffer(self):
     """Build command_buffer."""
