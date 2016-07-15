@@ -74,7 +74,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -757,9 +757,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "5",
-      "Check/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571"
+      "--json",
+      "{\"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571\", \"tasks\": {\"Check/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571:5:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571:5:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571:5:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"Check/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571:5:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"Check/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571:5:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}}}"
     ],
     "name": "Check",
     "~followup_annotations": [
@@ -797,9 +796,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "2",
-      "Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571"
+      "--json",
+      "{\"base_task_name\": \"Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571\", \"tasks\": {\"Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
     "name": "Test262 - no variants",
     "~followup_annotations": [
@@ -837,9 +835,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571"
+      "--json",
+      "{\"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571\", \"tasks\": {\"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Mozilla",
     "~followup_annotations": [
@@ -877,9 +874,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571"
+      "--json",
+      "{\"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571\", \"tasks\": {\"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - arm64 - sim - nosnap - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "SimdJs - all",
     "~followup_annotations": [

@@ -196,7 +196,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {

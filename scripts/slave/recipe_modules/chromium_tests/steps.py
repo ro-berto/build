@@ -440,6 +440,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     swarming_priority = None
     swarming_expiration = None
     swarming_hard_timeout = None
+    cipd_packages = None
     if enable_swarming:
       swarming_spec = test.get('swarming', {})
       if swarming_spec.get('can_use_on_swarming_builders'):
@@ -449,6 +450,12 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
         swarming_priority = swarming_spec.get('priority_adjustment')
         swarming_expiration = swarming_spec.get('expiration')
         swarming_hard_timeout = swarming_spec.get('hard_timeout')
+        packages = swarming_spec.get('cipd_packages')
+        if packages:
+          cipd_packages = [(p['location'],
+                            p['cipd_package'],
+                            p['revision'])
+                           for p in packages]
     override_compile_targets = test.get('override_compile_targets', None)
     override_isolate_target = test.get('override_isolate_target', None)
     target_name = str(test['test'])
@@ -471,7 +478,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                         swarming_hard_timeout=swarming_hard_timeout,
                         override_compile_targets=override_compile_targets,
                         override_isolate_target=override_isolate_target,
-                        use_xvfb=use_xvfb)
+                        use_xvfb=use_xvfb, cipd_packages=cipd_packages)
     else:
       yield GTestTest(name, args=args, target_name=target_name,
                       flakiness_dash=True,
@@ -483,7 +490,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                       swarming_hard_timeout=swarming_hard_timeout,
                       override_compile_targets=override_compile_targets,
                       override_isolate_target=override_isolate_target,
-                      use_xvfb=use_xvfb)
+                      use_xvfb=use_xvfb, cipd_packages=cipd_packages)
 
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,
@@ -826,7 +833,8 @@ class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None, priority=None,
                expiration=None, hard_timeout=None, upload_test_results=True,
-               override_compile_targets=None, override_isolate_target=None):
+               override_compile_targets=None, override_isolate_target=None,
+               cipd_packages=None):
     super(SwarmingGTestTest, self).__init__(name, dimensions, tags, target_name,
                                             extra_suffix, priority, expiration,
                                             hard_timeout)
@@ -835,6 +843,7 @@ class SwarmingGTestTest(SwarmingTest):
     self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
     self._override_isolate_target = override_isolate_target
+    self._cipd_packages = cipd_packages
 
   def compile_targets(self, api):
     # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
@@ -878,7 +887,7 @@ class SwarmingGTestTest(SwarmingTest):
         isolated_hash=isolated_hash,
         shards=self._shards,
         test_launcher_summary_output=api.test_utils.gtest_results(add_json_log=False),
-        extra_args=args)
+        cipd_packages=self._cipd_packages, extra_args=args)
 
   def validate_task_results(self, api, step_result):
     if not hasattr(step_result, 'test_utils'):
@@ -1144,13 +1153,14 @@ class GTestTest(Test):
                swarming_shards=1, swarming_dimensions=None, swarming_tags=None,
                swarming_extra_suffix=None, swarming_priority=None,
                swarming_expiration=None, swarming_hard_timeout=None,
-               **runtest_kwargs):
+               cipd_packages=None, **runtest_kwargs):
     super(GTestTest, self).__init__()
     if enable_swarming:
       self._test = SwarmingGTestTest(
           name, args, target_name, swarming_shards, swarming_dimensions,
           swarming_tags, swarming_extra_suffix, swarming_priority,
           swarming_expiration, swarming_hard_timeout,
+          cipd_packages=cipd_packages,
           override_compile_targets=runtest_kwargs.get(
               'override_compile_targets'),
           override_isolate_target=runtest_kwargs.get(

@@ -89,7 +89,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -306,9 +306,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "2",
-      "Mjsunit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571"
+      "--json",
+      "{\"base_task_name\": \"Mjsunit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571\", \"tasks\": {\"Mjsunit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Mjsunit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
     "name": "Mjsunit",
     "~followup_annotations": [
@@ -346,9 +345,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Webkit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571"
+      "--json",
+      "{\"base_task_name\": \"Webkit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571\", \"tasks\": {\"Webkit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Webkit",
     "~followup_annotations": [

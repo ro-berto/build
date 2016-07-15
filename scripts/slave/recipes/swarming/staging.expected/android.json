@@ -91,7 +91,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -461,9 +461,6 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--shards",
-      "1",
-      "chrome_public_test_apk/Android/[dummy has/TestBuilder/571",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -522,9 +519,6 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--shards",
-      "1",
-      "dummy_target_1/Android/[dummy has/TestBuilder/571",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -583,9 +577,6 @@
       "--decorate",
       "--print-status-updates",
       "--verbose",
-      "--shards",
-      "1",
-      "dummy_target_2/Android/[dummy has/TestBuilder/571",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

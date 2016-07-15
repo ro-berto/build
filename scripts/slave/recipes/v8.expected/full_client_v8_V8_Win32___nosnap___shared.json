@@ -82,7 +82,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -549,9 +549,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "2",
-      "Check/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571"
+      "--json",
+      "{\"base_task_name\": \"Check/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571\", \"tasks\": {\"Check/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
     "name": "Check",
     "~followup_annotations": [
@@ -589,9 +588,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Ignition - turbofan/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571"
+      "--json",
+      "{\"base_task_name\": \"Ignition - turbofan/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571\", \"tasks\": {\"Ignition - turbofan/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Ignition - turbofan",
     "~followup_annotations": [

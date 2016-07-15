@@ -89,7 +89,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -210,9 +210,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "Check/Ubuntu-12.04/[dummy has/v8_linux64_gyp_rel_ng_triggered/571"
+      "--json",
+      "{\"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/v8_linux64_gyp_rel_ng_triggered/571\", \"tasks\": {\"Check/Ubuntu-12.04/[dummy has/v8_linux64_gyp_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Check",
     "~followup_annotations": [

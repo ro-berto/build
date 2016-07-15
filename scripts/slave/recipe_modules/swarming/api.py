@@ -10,10 +10,7 @@ from recipe_engine import recipe_api
 
 
 # Minimally supported version of swarming.py script (reported by --version).
-MINIMAL_SWARMING_VERSION = (0, 4, 10)
-
-# Minimum version of swarming.py script required for specifying CIPD packages.
-CIPD_MINIMAL_SWARMING_VERSION = (0, 8, 6)
+MINIMAL_SWARMING_VERSION = (0, 8, 6)
 
 
 def parse_time(value):
@@ -381,7 +378,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         cipd_packages=cipd_packages)
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
-                 extra_args=None, **kwargs):
+                 extra_args=None, cipd_packages=None, **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
     Swarming recipe module knows how collect and interpret JSON files with test
@@ -405,7 +402,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         '--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json')
 
     # Make a task, configure it to be collected through shim script.
-    task = self.task(title, isolated_hash, extra_args=extra_args, **kwargs)
+    task = self.task(title, isolated_hash, extra_args=extra_args,
+                     cipd_packages=cipd_packages, **kwargs)
     task.collect_step = lambda *args, **kw: (
         self._gtest_collect_step(test_launcher_summary_output, *args, **kw))
     return task
@@ -520,8 +518,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.extend(['--user', task.user])
 
     if task.cipd_packages:
-      self.m.swarming_client.ensure_script_version(
-          'swarming.py', CIPD_MINIMAL_SWARMING_VERSION)
       for path, pkg, version in task.cipd_packages:
         args.extend(['--cipd-package', '%s:%s:%s' % (path, pkg, version)])
 
@@ -839,9 +835,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     ]
     if self.verbose:
       args.append('--verbose')
-    if self.m.swarming_client.get_script_version('swarming.py') < (0, 5):
-      args.extend(('--shards', str(task.shards)))
-      args.append(task.task_name)
     else:
       args.extend(('--json', self.m.json.input(task.trigger_output)))
     return args

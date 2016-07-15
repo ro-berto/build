@@ -91,7 +91,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -397,10 +397,7 @@
       "https://chromium-swarm-dev.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--verbose",
-      "--shards",
-      "2",
-      "dummy_target_1/Ubuntu/[dummy has/TestBuilder/571"
+      "--verbose"
     ],
     "name": "dummy_target_1 on Ubuntu",
     "~followup_annotations": [
@@ -449,10 +446,7 @@
       "https://chromium-swarm-dev.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--verbose",
-      "--shards",
-      "2",
-      "dummy_target_2/Ubuntu/[dummy has/TestBuilder/571"
+      "--verbose"
     ],
     "name": "dummy_target_2 on Ubuntu",
     "~followup_annotations": [

@@ -993,6 +993,13 @@ def GenTests(api):
                                     'product.board': 'hammerhead',
                                 },
                             ],
+                            'cipd_packages': [
+                                {
+                                    'location': '{$HOME}/logdog',
+                                    'cipd_package': 'infra/logdog/linux-386',
+                                    'revision': 'git_revision:deadbeef',
+                                },
+                            ],
                         },
                         'override_compile_targets': [
                             'chrome_public_test_apk'

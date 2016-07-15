@@ -168,7 +168,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -231,6 +231,13 @@
       "@@@STEP_LOG_LINE@json.output@        \"override_isolate_target\": \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"cipd_packages\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            {@@@",
+      "@@@STEP_LOG_LINE@json.output@              \"cipd_package\": \"infra/logdog/linux-386\", @@@",
+      "@@@STEP_LOG_LINE@json.output@              \"location\": \"{$HOME}/logdog\", @@@",
+      "@@@STEP_LOG_LINE@json.output@              \"revision\": \"git_revision:deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            }@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"dimension_sets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            {@@@",
       "@@@STEP_LOG_LINE@json.output@              \"build.id\": \"KTU84P\", @@@",

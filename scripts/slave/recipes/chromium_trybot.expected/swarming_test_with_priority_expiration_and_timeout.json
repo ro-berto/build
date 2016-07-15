@@ -196,7 +196,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -604,9 +604,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "gl_tests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571"
+      "--json",
+      "{\"base_task_name\": \"gl_tests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571\", \"tasks\": {\"gl_tests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_chromium_rel_ng",
     "env": {

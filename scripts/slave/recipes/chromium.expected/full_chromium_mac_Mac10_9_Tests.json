@@ -191,7 +191,7 @@
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -440,9 +440,8 @@
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--shards",
-      "1",
-      "browser_tests/Mac-10.9/ffffffffff/Mac10.9 Tests/571"
+      "--json",
+      "{\"base_task_name\": \"browser_tests/Mac-10.9/ffffffffff/Mac10.9 Tests/571\", \"tasks\": {\"browser_tests/Mac-10.9/ffffffffff/Mac10.9 Tests/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/Mac10_9_Tests",
     "env": {
