@@ -308,16 +308,26 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
 
   # Windows bots require a toolchain.
   if 'Win' in builder_name:
-    test_data = '''{
+    version_file = infrabots_dir.join('assets', 'win_toolchain', 'VERSION')
+    if api.path.exists(version_file):
+      version = api.skia._readfile(version_file,
+                                   name='read win_toolchain VERSION',
+                                   test_data='0').rstrip()
+      version = 'version:%s' % version
+      pkg = ('t', 'skia/bots/win_toolchain', version)
+      cipd_packages.append(pkg)
+    else:
+      test_data = '''{
   "2013": "705384d88f80da637eb367e5acc6f315c0e1db2f",
   "2015": "38380d77eec9164e5818ae45e2915a6f22d60e85"
 }'''
-    hash_file = infrabots_dir.join('win_toolchain_hash.json')
-    j = api.skia._readfile(hash_file,
-                           name='Read win_toolchain_hash.json',
-                           test_data=test_data).rstrip()
-    hashes = json.loads(j)
-    extra_hashes.append(hashes['2015'])
+      hash_file = infrabots_dir.join('win_toolchain_hash.json')
+      j = api.skia._readfile(hash_file,
+                             name='Read win_toolchain_hash.json',
+                             test_data=test_data).rstrip()
+      hashes = json.loads(j)
+      extra_hashes.append(hashes['2015'])
+
     if 'Vulkan' in builder_name:
       # Vulkan 1.0.17.0
       extra_hashes.append('cf4ae04080c10367de5a7b8510966dced9c5ef4c')
@@ -648,7 +658,7 @@ def RunSteps(api):
 
 
 def test_for_bot(api, builder, mastername, slavename, testname=None,
-                 legacy_android_sdk=False):
+                 legacy_android_sdk=False, legacy_win_toolchain=False):
   """Generate a test for the given bot."""
   testname = testname or builder
   test = (
@@ -692,6 +702,10 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
     test += api.step_data(
         'upload new .isolated file for infra_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
+  if 'Win' in builder:
+    if not legacy_win_toolchain:
+      test += api.path.exists(api.path['slave_build'].join(
+          'skia', 'infra', 'bots', 'assets', 'win_toolchain', 'VERSION'))
 
   return test
 
@@ -734,4 +748,10 @@ def GenTests(api):
   test = test_for_bot(api, builder, master, slave, 'Missing_android_sdk_hash',
                       legacy_android_sdk=True)
   test += api.step_data('Read android_sdk_hash', retcode=1)
+  yield test
+
+  builder = 'Build-Win-MSVC-x86_64-Release-Vulkan'
+  master = 'client.skia.compile'
+  test = test_for_bot(api, builder, master, slave, 'legacy_win_toolchain',
+                      legacy_win_toolchain=True)
   yield test

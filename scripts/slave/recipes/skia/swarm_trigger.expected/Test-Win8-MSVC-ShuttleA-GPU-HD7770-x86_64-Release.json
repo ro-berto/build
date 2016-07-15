@@ -442,10 +442,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/win_toolchain_hash.json",
+      "[SLAVE_BUILD]/skia/infra/bots/assets/win_toolchain/VERSION",
       "/path/to/tmp/"
     ],
-    "name": "Read win_toolchain_hash.json"
+    "name": "read win_toolchain VERSION"
   },
   {
     "cmd": [
@@ -508,8 +508,7 @@
       "-u",
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated",
-      "[dummy hash for isolate_recipes]",
-      "38380d77eec9164e5818ae45e2915a6f22d60e85"
+      "[dummy hash for isolate_recipes]"
     ],
     "name": "add_isolated_input",
     "~followup_annotations": [
@@ -590,6 +589,8 @@
       "--tag",
       "stepname:compile_skia on Windows",
       "--idempotent",
+      "--cipd-package",
+      "t:skia/bots/win_toolchain:version:0",
       "def456",
       "--",
       "--workdir",
