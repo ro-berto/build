@@ -83,11 +83,6 @@ def main(argv):
 
   args = parser.parse_args(argv[1:])
 
-  # Keep CIPD directory between builds.
-  cipd_path = os.path.join(os.getcwd(), '.remote_run_cipd')
-  _install_cipd_packages(
-      cipd_path, cipd.CipdPackage('infra/recipes-py', 'latest'))
-
   with robust_tempdir.RobustTempdir(
       prefix='rr', leak=args.leak) as rt:
     try:
@@ -118,6 +113,36 @@ def main(argv):
       json.dump(properties, f)
 
     monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
+
+    # Make switching to remote_run easier: we do not use buildbot workdir,
+    # and it takes disk space leading to out of disk errors.
+    buildbot_workdir = properties.get('workdir')
+    if buildbot_workdir:
+      try:
+        if os.path.exists(buildbot_workdir):
+          buildbot_workdir = os.path.realpath(buildbot_workdir)
+          cwd = os.path.realpath(os.getcwd())
+          if cwd.startswith(buildbot_workdir):
+            buildbot_workdir = cwd
+
+          LOGGER.info('Cleaning up buildbot workdir %r', buildbot_workdir)
+
+          # Buildbot workdir is usually used as current working directory,
+          # so do not remove it, but delete all of the contents. Deleting
+          # current working directory of a running process may cause
+          # confusing errors.
+          for p in (os.path.join(buildbot_workdir, x)
+                    for x in os.listdir(buildbot_workdir)):
+            LOGGER.info('Deleting %r', p)
+            chromium_utils.RemovePath(p)
+      except Exception as e:
+        # It's preferred that we keep going rather than fail the build
+        # on optional cleanup.
+        LOGGER.exception('Buildbot workdir cleanup failed: %s', e)
+
+    cipd_path = os.path.join(basedir, '.remote_run_cipd')
+    _install_cipd_packages(
+        cipd_path, cipd.CipdPackage('infra/recipes-py', 'latest'))
 
     recipe_result_path = os.path.join(tempdir, 'recipe_result.json')
     recipe_cmd = [
