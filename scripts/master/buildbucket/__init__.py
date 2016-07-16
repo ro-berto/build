@@ -25,6 +25,7 @@ from .common import Error
 from .integration import BuildBucketIntegrator, MAX_MAX_BUILDS
 from .poller import BuildBucketPoller
 from .status import BuildBucketStatus
+from . import changestore
 from . import client
 from . import trigger
 
@@ -35,7 +36,7 @@ NO_LEASE_LIMIT = sys.maxint
 def setup(
     config, active_master, buckets, build_params_hook=None,
     poll_interval=10, buildbucket_hostname=None, max_lease_count=None,
-    verbose=None, dry_run=None):
+    verbose=None, dry_run=None, unique_change_urls=False):
   """Configures a master to lease, schedule and update builds on buildbucket.
 
   Requires config to have 'mergeRequests' set to False.
@@ -60,6 +61,9 @@ def setup(
       time. Defaults to the number of connected slaves.
     verbose (bool): log more than usual. Defaults to False.
     dry_run (bool): whether to run buildbucket in a dry-run mode.
+    unique_change_urls (bool): if True, change URLs in builds are treated as
+      change identifiers. This is True on waterfalls and typically False on
+      tryservers.
 
   Raises:
     buildbucket.Error if config['mergeRequests'] is not False.
@@ -77,7 +81,9 @@ def setup(
 
   integrator = BuildBucketIntegrator(
       buckets, build_params_hook=build_params_hook,
-      max_lease_count=max_lease_count)
+      max_lease_count=max_lease_count,
+      change_store_factory=lambda bb: changestore.ChangeStore(
+          bb, unique_urls=unique_change_urls))
 
   buildbucket_service = client.create_buildbucket_service(
       active_master, buildbucket_hostname, verbose)

@@ -505,6 +505,8 @@ def SetupBuildbucket(c, active_master):
       buckets=[active_master.buildbucket_bucket],
       build_params_hook=params_hook,
       max_lease_count=buildbucket.NO_LEASE_LIMIT,
+      unique_change_urls=getattr(
+          active_master, 'buildbucket_unique_change_urls', False),
   )
 
 

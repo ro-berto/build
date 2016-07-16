@@ -90,6 +90,14 @@ class BuildbotGateway(object):
       return [row.changeid for row in conn.execute(q)]
     return self.master.db.pool.do(find)
 
+  def find_changes_by_revlink(self, revlink):
+    """Searches for Changes in database by |revlink| and returns change ids."""
+    def find(conn):
+      table = self.master.db.model.changes
+      q = sa.select([table.c.changeid]).where(table.c.revlink == revlink)
+      return [row.changeid for row in conn.execute(q)]
+    return self.master.db.pool.do(find)
+
   @inlineCallbacks
   def get_change_by_id(self, change_id):
     """Returns buildot.changes.changes.Change as Deferred for |change_id|."""

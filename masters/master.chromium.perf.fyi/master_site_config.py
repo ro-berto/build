@@ -14,3 +14,4 @@ class ChromiumPerfFyi(Master.Master1):
   buildbot_url = 'http://build.chromium.org/p/chromium.perf.fyi/'
   service_account_file = 'service-account-chromium.json'
   buildbucket_bucket = 'master.chromium.perf.fyi'
+  buildbucket_unique_change_urls = True

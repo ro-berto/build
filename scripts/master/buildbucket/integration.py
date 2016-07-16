@@ -5,14 +5,11 @@
 """BuildBucketIntegrator integrates Buildbot and Buildbucket."""
 
 import datetime
-import itertools
 import json
 import logging
-import traceback
 
 from buildbot.util import deferredLocked
-from master.buildbucket import common, changestore
-from master.buildbucket.common import log
+from master.buildbucket import changestore
 from twisted.internet import defer, reactor
 from twisted.internet.defer import inlineCallbacks, returnValue
 
@@ -54,7 +51,7 @@ class BuildBucketIntegrator(object):
 
   def __init__(
       self, buckets, build_params_hook=None, max_lease_count=None,
-      heartbeat_interval=None):
+      heartbeat_interval=None, change_store_factory=None):
     """Creates a BuildBucketIntegrator.
 
     Args:
@@ -70,6 +67,7 @@ class BuildBucketIntegrator(object):
         time. Defaults to the number of connected slaves.
       heartbeat_interval (datetime.timedelta): frequency of build heartbeats.
         Defaults to 1 minute.
+      change_store_factory: function (BuildbotGateway) => ChangeStore.
     """
     assert buckets, 'Buckets not specified'
     assert max_lease_count is None or isinstance(max_lease_count, int)
@@ -86,6 +84,7 @@ class BuildBucketIntegrator(object):
     self._max_lease_count = max_lease_count
     self._leases = None
     self.heartbeat_interval = heartbeat_interval or DEFAULT_HEARTBEAT_INTERVAL
+    self.change_store_factory = change_store_factory or changestore.ChangeStore
 
   def get_max_lease_count(self):
     if self._max_lease_count:
@@ -97,15 +96,14 @@ class BuildBucketIntegrator(object):
   def log(self, message, level=None):
     common.log(message, level)
 
-  def start(self, buildbot, buildbucket_service, change_store_factory=None):
+  def start(self, buildbot, buildbucket_service):
     assert not self.started, 'BuildBucketIntegrator is already started'
     assert buildbot
     assert buildbucket_service
-    change_store_factory = change_store_factory or changestore.ChangeStore
     self.buildbot = buildbot
     self.buildbucket_service = buildbucket_service
     self.buildbucket_service.start()
-    self.changes = change_store_factory(buildbot)
+    self.changes = self.change_store_factory(buildbot)
     self.started = True
     self.log('integrator started')
     self._do_until_stopped(self.heartbeat_interval, self.send_heartbeats)

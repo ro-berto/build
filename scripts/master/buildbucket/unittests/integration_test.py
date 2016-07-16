@@ -122,13 +122,12 @@ class IntegratorTest(unittest.TestCase):
     self.integrator = integration.BuildBucketIntegrator(
         self.buckets, max_lease_count=max_lease_count,
         build_params_hook=build_params_hook,
-        heartbeat_interval=datetime.timedelta(microseconds=1))
+        heartbeat_interval=datetime.timedelta(microseconds=1),
+        change_store_factory=lambda bb: self.changes)
     def log(msg, level=logging.INFO):
       logging.log(level, msg)
     self.integrator.log = log
-    self.integrator.start(
-        self.buildbot, self.buildbucket,
-        change_store_factory=lambda bb: self.changes)
+    self.integrator.start(self.buildbot, self.buildbucket)
     try:
       yield
     finally:

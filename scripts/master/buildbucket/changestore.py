@@ -8,18 +8,26 @@ from master.buildbucket import common
 from twisted.internet import defer
 
 
-CHANGE_CACHE_NAME = 'buildbucket_changes'
-
-
 class ChangeStore(object):
   """Maps buildbucket changes to Buildbot changes."""
 
-  def __init__(self, buildbot_gateway):
+  def __init__(self, buildbot_gateway, unique_urls=False):
+    """Initializes a ChangeStore.
+
+    If unique_urls is True, treats change's non-empty url as change identifier.
+    It should be False on Rietveld-based tryservers because url may mean base
+    revision where a Rietveld patchset must be applied to.
+    """
     assert buildbot_gateway
     self.buildbot = buildbot_gateway
-    self._find_change_cache = self.buildbot.get_cache(
-        CHANGE_CACHE_NAME,
-        self._find_change_in_db
+    self.unique_urls = unique_urls
+    self._find_change_cache_by_id = self.buildbot.get_cache(
+        'buildbucket_changes',
+        self._find_change_in_db_by_id,
+    )
+    self._find_change_cache_by_revlink = self.buildbot.get_cache(
+        'buildbucket_changes_revlink',
+        self._find_change_in_db_by_revlink,
     )
 
   def _insert_change(self, buildbucket_change):
@@ -57,7 +65,7 @@ class ChangeStore(object):
     )
 
   @defer.inlineCallbacks
-  def _find_change_in_db(self, revision_and_id):
+  def _find_change_in_db_by_id(self, revision_and_id):
     """Searches for an existing Change object in the database.
 
     Args:
@@ -88,12 +96,17 @@ class ChangeStore(object):
         defer.returnValue(change)
         return
 
-  def _find_change(self, revision, buildbucket_change_id):
-    """Searches for a Change by revision and change_key. Uses cache."""
-    assert revision
-    assert buildbucket_change_id
-    # Use (revision, buildbucket_change_id) tuple as cache key.
-    return self._find_change_cache.get((revision, buildbucket_change_id))
+  @defer.inlineCallbacks
+  def _find_change_in_db_by_revlink(self, revlink):
+    """Searches for one Change object by revlink in the database.
+
+    Returns:
+      buildbot.changes.change.Change object as Deferred.
+    """
+    buildbot_change_ids = yield self.buildbot.find_changes_by_revlink(revlink)
+    if buildbot_change_ids:
+      change = yield self.buildbot.get_change_by_id(buildbot_change_ids[0])
+      defer.returnValue(change)
 
   @defer.inlineCallbacks
   def get_change(self, buildbucket_change):
@@ -107,9 +120,12 @@ class ChangeStore(object):
     """
     buildbot_change = None
 
-    if buildbucket_change.get('revision') and buildbucket_change.get('id'):
-      buildbot_change = yield self._find_change(
-          buildbucket_change['revision'], buildbucket_change['id'])
+    if self.unique_urls and buildbucket_change.get('url'):
+      buildbot_change = yield self._find_change_cache_by_revlink.get(
+          buildbucket_change.get('url'))
+    elif buildbucket_change.get('revision') and buildbucket_change.get('id'):
+      buildbot_change = yield self._find_change_cache_by_id.get(
+          (buildbucket_change['revision'], buildbucket_change['id']))
 
     if buildbot_change is None:
       change_id = yield self._insert_change(buildbucket_change)
