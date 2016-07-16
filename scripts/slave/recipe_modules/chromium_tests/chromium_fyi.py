@@ -2014,7 +2014,8 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'android',
       },
-      'bot_type': 'builder_tester',
+      'parent_buildername': 'Android Builder (dbg)',
+      'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'remove_system_webview': True,
       'tests': [

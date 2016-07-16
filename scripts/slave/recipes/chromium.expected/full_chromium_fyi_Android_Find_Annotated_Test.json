@@ -43,7 +43,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@1111111",
       "--force",
       "--output_manifest"
     ],
@@ -57,7 +57,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"1111111\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -285,22 +285,20 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_Find_Annotated_Test/src/tools/mb/mb.py",
-      "gen",
-      "-m",
-      "chromium.fyi",
-      "-b",
-      "Android Find Annotated Test",
-      "--config-file",
-      "[BUILDER_CACHE]/Android_Find_Annotated_Test/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "//out/Debug"
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[BUILDER_CACHE]/Android_Find_Annotated_Test/src/out/Debug"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "generate_build_files"
+    "name": "rmtree build directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
@@ -309,46 +307,21 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
       "Debug",
       "--src-dir",
       "[BUILDER_CACHE]/Android_Find_Annotated_Test/src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--goma-deps-cache-dir",
-      "[GOMA_DEPS_CACHE]",
-      "--build-data-dir",
-      "[ROOT]/build_data_dir",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--",
-      "android_webview_test_apk",
-      "blimp_test_apk",
-      "chrome_public_test_apk",
-      "chrome_sync_shell_test_apk",
-      "content_shell_test_apk",
-      "system_webview_shell_layout_test_apk"
+      "--build-archive-url",
+      "gs://test-domain/test-archive.zip",
+      "--master-name",
+      "chromium.fyi",
+      "--build-number",
+      "571"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Find_Annotated_Test/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Find_Annotated_Test/src/build/android:%(PATH)s"
-    },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
+    "name": "extract build"
   },
   {
     "cmd": [
