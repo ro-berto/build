@@ -20,17 +20,58 @@ RESULT_DETAILS_TEMPLATE = """<!DOCTYPE html>
       th, td {
         padding: 5px;
       }
+      th {
+        cursor:pointer;
+      }
     </style>
+    <script type="text/javascript">
+      // Default is sort by test name.
+      var previousClickedColumn = 0;
+      var previousClickedIsAsc = true;
+
+      function sort_table(tbody, col, type) {
+        var rows = tbody.rows,
+            arr = new Array();
+        // fill the array with values from the table
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].cells;
+            arr[i] = new Array();
+            for (var j = 0; j < cells.length; j++) {
+                arr[i][j] = cells[j].innerHTML;
+            }
+        }
+        var asc = (col == previousClickedColumn) ? ((previousClickedIsAsc) ? -1 : 1) : 1; 
+        // sort the array by the specified column number (col) and order (asc)
+        arr.sort(function (a, b) {
+            if (type == "number") {
+                var avalue = Number(a[col]);
+                var bvalue = Number(b[col]);
+            } else if (type == "text") {
+                var avalue = a[col];
+                var bvalue = b[col];
+            }
+            return (avalue == bvalue) ? 0 : ((avalue > bvalue) ? asc : -1 * asc);
+        });
+        // replace existing rows with new rows created from the sorted array
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].innerHTML = "<td>" + arr[i].join("</td><td>") + "</td>";
+        }
+        previousClickedColumn = col;
+        previousClickedIsAsc = (asc == 1) ? true : false;
+      }
+    </script>
   </head>
   <body>
     <table style="width:100%%">
       <tr>
-        <th>test_name</th>
-        <th>status</th>
-        <th>elapsed_time_in_ms</th>
-        <th>output_snippet</th>
+        <th onclick="sort_table(tests, 0, 'text');">test_name</th>
+        <th onclick="sort_table(tests, 1, 'text');">status</th>
+        <th onclick="sort_table(tests, 2, 'number');">elapsed_time_in_ms</th>
+        <th onclick="sort_table(tests, 3, 'text');">output_snippet</th>
       </tr>
+      <tbody id="tests">
       %s
+      </tbody>
     </table>
   </body>
 </html>
