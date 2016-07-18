@@ -6,9 +6,15 @@
   "pubsub_service_account_file": "service-account-luci-milo.json",
   "templates": ["templates", "../master.chromium/templates"],
 
+  "default_remote_run_properties": {
+    "path_config": "kitchen",
+  },
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+
   "builders": {
     "Linux ChromiumOS Full": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "chromium",
       "slave_pools": ["linux_full"],
       "category": "1default",
@@ -16,12 +22,14 @@
 
     "Linux ChromiumOS Builder": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "chromium",
       "slave_pools": ["linux_builder"],
       "category": "1default",
     },
     "Linux ChromiumOS Tests (1)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["linux_tester_1"],
       "category": "1default",
@@ -29,12 +37,14 @@
 
     "Linux ChromiumOS GN": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "chromium",
       "slave_pools": ["linux_gn"],
       "category": "2gn",
     },
     "Linux ChromiumOS GN (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "chromium",
       "slave_pools": ["linux_gn_dbg"],
       "category": "2gn",
@@ -42,12 +52,14 @@
 
     "Linux ChromiumOS Ozone Builder": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "chromium",
       "slave_pools": ["linux_ozone"],
       "category": "3ozone",
     },
     "Linux ChromiumOS Ozone Tests (1)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["linux_ozone_tests_1"],
       "category": "3ozone",
@@ -55,12 +67,14 @@
 
     "Linux ChromiumOS Builder (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "chromium",
       "slave_pools": ["linux_dbg"],
       "category": "4debug",
     },
     "Linux ChromiumOS Tests (dbg)(1)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["linux_dbg_tests_1"],
       "category": "4debug",
@@ -69,18 +83,21 @@
     # Simplechrome CrOS builders.
     "ChromiumOS x86-generic Compile": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "chromium",
       "slave_pools": ["linux_simplechrome_x86_generic"],
       "category": "5simplechrome",
     },
     "ChromiumOS amd64-generic Compile": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "chromium",
       "slave_pools": ["linux_simplechrome_amd64_generic"],
       "category": "5simplechrome",
     },
     "ChromiumOS daisy Compile": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "chromium",
       "slave_pools": ["linux_simplechrome_daisy"],
       "category": "5simplechrome",
