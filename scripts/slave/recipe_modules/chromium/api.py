@@ -224,6 +224,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'compile' through 'cros chrome-sdk'
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
+      kwargs.setdefault('cwd', self.m.path['checkout'])
 
     env = self.get_env()
     env.update(kwargs.pop('env', {}))
