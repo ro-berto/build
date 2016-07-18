@@ -143,9 +143,9 @@ TRYBOTS = freeze({
         'tester': 'Linux Release (NVIDIA)',
       }),
       'linux_angle_dbg_ng': simple_bot({
+        # This bot is compile-only.
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Linux Builder (dbg)',
-        'tester': 'Linux Debug (NVIDIA)',
       }),
       'linux_angle_chromeos_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
@@ -170,25 +170,11 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'mac_angle_dbg_ng': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Mac Builder (dbg)',
-            'tester': 'Mac 10.10 Debug (Intel)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Mac Builder (dbg)',
-            'tester': 'Mac Retina Debug',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Mac Builder (dbg)',
-            'tester': 'Mac 10.10 Retina Debug (AMD)',
-          },
-        ],
-      },
+      'mac_angle_dbg_ng': simple_bot({
+        # This bot is compile-only.
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Mac Builder (dbg)',
+      }),
       'win_angle_rel_ng': {
         'bot_ids': [
           {
@@ -203,29 +189,20 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'win_angle_dbg_ng': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win Builder (dbg)',
-            'tester': 'Win7 Debug (NVIDIA)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win Builder (dbg)',
-            'tester': 'Win7 Debug (ATI)',
-          },
-        ],
-      },
+      'win_angle_dbg_ng': simple_bot({
+        # This bot is compile-only.
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Win Builder (dbg)',
+      }),
       'win_angle_x64_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Win x64 Builder',
         'tester': 'Win7 x64 Release (NVIDIA)',
       }),
       'win_angle_x64_dbg_ng': simple_bot({
+        # This bot is compile-only.
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Win x64 Builder (dbg)',
-        'tester': 'Win7 x64 Debug (NVIDIA)',
       }),
     },
   },
