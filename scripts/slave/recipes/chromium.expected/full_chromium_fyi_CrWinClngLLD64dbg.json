@@ -250,6 +250,7 @@
       "browser_tests\n",
       "//out/Release_x64"
     ],
+    "cwd": "[BUILDER_CACHE]\\CrWinClngLLD64dbg\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

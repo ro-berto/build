@@ -155,6 +155,7 @@
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -215,6 +216,7 @@
       "[CACHE]/cipd/goma",
       "[SLAVE_BUILD]/v8/out/gn"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -703,6 +705,7 @@
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -768,6 +771,7 @@
       "[CACHE]/cipd/goma",
       "[SLAVE_BUILD]/v8/out/gn"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1048,6 +1052,7 @@
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1113,6 +1118,7 @@
       "[CACHE]/cipd/goma",
       "[SLAVE_BUILD]/v8/out/gn"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1426,6 +1432,7 @@
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1491,6 +1498,7 @@
       "[CACHE]/cipd/goma",
       "[SLAVE_BUILD]/v8/out/gn"
     ],
+    "cwd": "[SLAVE_BUILD]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

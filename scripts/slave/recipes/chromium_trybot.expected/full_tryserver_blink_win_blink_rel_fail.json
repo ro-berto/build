@@ -362,6 +362,7 @@
       "[CACHE]\\cipd\\goma",
       "//out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_layout\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -620,7 +621,7 @@
       "[CACHE]\\cipd\\goma",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_layout",
+    "cwd": "[BUILDER_CACHE]\\win_layout\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

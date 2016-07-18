@@ -383,6 +383,7 @@
       "[CACHE]/cipd/goma",
       "//out/Debug"
     ],
+    "cwd": "[BUILDER_CACHE]/android_coverage/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1277,7 +1278,7 @@
       "[CACHE]/cipd/goma",
       "//out/Debug"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android_coverage/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"

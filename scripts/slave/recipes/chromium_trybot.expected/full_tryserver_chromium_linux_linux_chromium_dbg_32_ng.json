@@ -349,6 +349,7 @@
       "[CACHE]/cipd/goma",
       "//out/Debug"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_chromium_dbg_32_ng/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

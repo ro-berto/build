@@ -335,6 +335,7 @@
       "browser_tests_apk\n",
       "//out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Release__Nexus_5X_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

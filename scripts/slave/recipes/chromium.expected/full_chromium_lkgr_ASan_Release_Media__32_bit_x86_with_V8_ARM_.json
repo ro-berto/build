@@ -243,6 +243,7 @@
       "[CACHE]/cipd/goma",
       "//out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/ASan_Release_Media__32_bit_x86_with_V8_ARM_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

@@ -251,6 +251,7 @@
       "[CACHE]\\cipd\\goma",
       "//out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_ASan_Release_Coverage\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

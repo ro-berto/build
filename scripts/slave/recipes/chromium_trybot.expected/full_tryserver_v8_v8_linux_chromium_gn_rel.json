@@ -353,6 +353,7 @@
       "[CACHE]/cipd/goma",
       "//out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

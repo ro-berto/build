@@ -339,6 +339,7 @@
       "browser_tests\n",
       "//out/Debug"
     ],
+    "cwd": "[BUILDER_CACHE]\\GPU_Win_Builder__dbg_\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

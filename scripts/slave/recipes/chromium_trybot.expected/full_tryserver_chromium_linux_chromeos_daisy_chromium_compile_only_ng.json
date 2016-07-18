@@ -352,6 +352,7 @@
       "[CACHE]/cipd/goma",
       "//out_daisy/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/chromeos_daisy_chromium_compile_only_ng/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

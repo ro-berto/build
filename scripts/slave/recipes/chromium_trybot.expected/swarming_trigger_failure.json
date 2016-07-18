@@ -395,6 +395,7 @@
       "base_unittests\n",
       "//out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_chromium_rel_ng/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

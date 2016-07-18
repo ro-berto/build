@@ -218,6 +218,7 @@
       "[BUILDER_CACHE]/ClangToTMac__dbg_/src/tools/mb/mb_config.pyl",
       "//out/Debug"
     ],
+    "cwd": "[BUILDER_CACHE]/ClangToTMac__dbg_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

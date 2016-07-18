@@ -526,6 +526,7 @@
       "gl_tests\n",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1070,6 +1071,7 @@
       "gl_tests\n",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1614,6 +1616,7 @@
       "gl_tests\n",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

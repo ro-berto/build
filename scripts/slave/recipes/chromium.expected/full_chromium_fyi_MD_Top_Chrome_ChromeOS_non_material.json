@@ -261,6 +261,7 @@
       "[CACHE]/cipd/goma",
       "//out/Debug"
     ],
+    "cwd": "[BUILDER_CACHE]/MD_Top_Chrome_ChromeOS_non_material/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

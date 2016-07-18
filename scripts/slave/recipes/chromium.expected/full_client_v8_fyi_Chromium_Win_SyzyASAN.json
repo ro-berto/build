@@ -234,6 +234,7 @@
       "[BUILDER_CACHE]\\Chromium_Win_SyzyASAN\\src\\tools\\mb\\mb_config.pyl",
       "//out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]\\Chromium_Win_SyzyASAN\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

@@ -250,6 +250,7 @@
       "browser_tests\n",
       "//out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]\\ClangToTWin_dll_\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

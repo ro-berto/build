@@ -273,6 +273,7 @@
       "telemetry_gpu_unittests\n",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

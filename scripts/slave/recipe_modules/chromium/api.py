@@ -626,7 +626,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       'args': args,
       'env': {
         'GOMA_SERVICE_ACCOUNT_JSON_FILE': self.m.goma.service_account_json_path,
-      }
+      },
+      'cwd': self.m.path['checkout'],
     }
     if self.c.env.FORCE_MAC_TOOLCHAIN:
       step_kwargs['env']['FORCE_MAC_TOOLCHAIN'] = (

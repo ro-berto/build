@@ -369,6 +369,7 @@
       "[CACHE]\\cipd\\goma",
       "//out/Debug_x64"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_clang\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

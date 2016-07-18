@@ -232,6 +232,7 @@
       "[CACHE]\\cipd\\goma",
       "//out/Release_x64"
     ],
+    "cwd": "[BUILDER_CACHE]\\winx64_10_perf_cq\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
