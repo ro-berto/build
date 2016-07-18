@@ -519,8 +519,6 @@
       "[TMP_BASE]/server_log_tmp_2/server_log",
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
-      "--build-type",
-      "Debug",
       "--android-package",
       "chrome_beta"
     ],
@@ -564,8 +562,6 @@
       "[SLAVE_BUILD]/src/out/Debug/chromedriver",
       "--log-path",
       "[TMP_BASE]/server_log_tmp_3/server_log",
-      "--build-type",
-      "Debug",
       "--verbose",
       "--android-package",
       "chrome_beta"
@@ -612,8 +608,6 @@
       "[TMP_BASE]/server_log_tmp_4/server_log",
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
-      "--build-type",
-      "Debug",
       "--android-package",
       "chrome_public"
     ],
@@ -657,8 +651,6 @@
       "[SLAVE_BUILD]/src/out/Debug/chromedriver",
       "--log-path",
       "[TMP_BASE]/server_log_tmp_5/server_log",
-      "--build-type",
-      "Debug",
       "--verbose",
       "--android-package",
       "chrome_public"
@@ -705,8 +697,6 @@
       "[TMP_BASE]/server_log_tmp_6/server_log",
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
-      "--build-type",
-      "Debug",
       "--android-package",
       "chrome_stable"
     ],
@@ -750,8 +740,6 @@
       "[SLAVE_BUILD]/src/out/Debug/chromedriver",
       "--log-path",
       "[TMP_BASE]/server_log_tmp_7/server_log",
-      "--build-type",
-      "Debug",
       "--verbose",
       "--android-package",
       "chrome_stable"
@@ -798,8 +786,6 @@
       "[TMP_BASE]/server_log_tmp_8/server_log",
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
-      "--build-type",
-      "Debug",
       "--android-package",
       "chromedriver_webview_shell"
     ],
@@ -843,8 +829,6 @@
       "[SLAVE_BUILD]/src/out/Debug/chromedriver",
       "--log-path",
       "[TMP_BASE]/server_log_tmp_9/server_log",
-      "--build-type",
-      "Debug",
       "--verbose",
       "--android-package",
       "chromedriver_webview_shell"

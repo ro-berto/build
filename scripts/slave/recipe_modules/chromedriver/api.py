@@ -120,7 +120,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
 
   def _generate_test_command(self, script, chromedriver, log_path,
                             ref_chromedriver=None, android_package=None,
-                            build_type=None, verbose=None):
+                            verbose=None):
     cmd = [
       script, 
       '--chromedriver', chromedriver,
@@ -128,8 +128,6 @@ class ChromedriverApi(recipe_api.RecipeApi):
     ]
     if ref_chromedriver:
       cmd.extend(['--reference-chromedriver', ref_chromedriver])
-    if build_type:
-      cmd.extend(['--build-type', build_type])
     if verbose:
       cmd.extend(['--verbose'])
     if self.m.platform.is_linux:
@@ -140,7 +138,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
 
   def run_python_tests(self, chromedriver, ref_chromedriver, chrome=None,
                        chrome_version_name=None, android_package=None,
-                       build_type=None, archive_server_log=True, **kwargs):
+                       archive_server_log=True, **kwargs):
     """Run the Chromedriver Python tests."""
     version_info = ''
     if chrome_version_name:
@@ -153,14 +151,13 @@ class ChromedriverApi(recipe_api.RecipeApi):
                   self._generate_test_command(
                       test_script_path, chromedriver, server_log,
                       ref_chromedriver=ref_chromedriver,
-                      android_package=android_package,
-                      build_type=build_type),
+                      android_package=android_package),
                   **kwargs)
       if archive_server_log:
         self.archive_server_log(server_log)
 
   def run_java_tests(self, chromedriver, chrome=None, chrome_version_name=None,
-                     android_package=None, build_type=None, verbose=False,
+                     android_package=None, verbose=False,
                      archive_server_log=True, **kwargs):
     """Run the Chromedriver Java tests."""
     version_info = ''
@@ -174,7 +171,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
                   self._generate_test_command(
                       test_script_path, chromedriver, server_log,
                       ref_chromedriver=None, android_package=android_package,
-                      build_type=build_type, verbose=verbose),
+                      verbose=verbose),
                   **kwargs)
       if archive_server_log:
         self.archive_server_log(server_log)
@@ -183,7 +180,6 @@ class ChromedriverApi(recipe_api.RecipeApi):
     """Run all Chromedriver tests."""
     server_name = 'chromedriver'
     chromedriver = self.m.chromium.output_dir.join(server_name)
-    build_type = self.m.path.basename(self.m.chromium.output_dir)
 
     platform_name = self.m.platform.name
     if self.m.platform.is_linux and self.m.platform.bits == 64:
@@ -203,13 +199,11 @@ class ChromedriverApi(recipe_api.RecipeApi):
                               ref_chromedriver,
                               chrome_version_name=package,
                               android_package=package,
-                              build_type=build_type,
                               env=test_env,
                               archive_server_log=archive_server_logs)
         self.run_java_tests(chromedriver,
                             chrome_version_name=package,
                             android_package=package,
-                            build_type=build_type,
                             verbose=True,
                             env=test_env,
                             archive_server_log=archive_server_logs)
