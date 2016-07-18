@@ -715,6 +715,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         c if c.isalnum() else '_' for c in self.m.properties['buildername'])
 
     args = [
+        '--src-dir', self.m.path['checkout'],
         '--build-name', sanitized_buildername,
         '--staging-dir', self.m.path['cache'].join('chrome_staging'),
         '--target', self.c.build_config_fs,

@@ -340,6 +340,8 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\archive_build.py",
+      "--src-dir",
+      "[BUILDER_CACHE]\\win_archive\\src",
       "--build-name",
       "Win",
       "--staging-dir",

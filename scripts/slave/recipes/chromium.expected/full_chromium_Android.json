@@ -369,6 +369,8 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_build.py",
+      "--src-dir",
+      "[BUILDER_CACHE]/Android/src",
       "--build-name",
       "Android",
       "--staging-dir",

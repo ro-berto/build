@@ -354,6 +354,8 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_build.py",
+      "--src-dir",
+      "[BUILDER_CACHE]/mac_ng/src",
       "--build-name",
       "Mac",
       "--staging-dir",

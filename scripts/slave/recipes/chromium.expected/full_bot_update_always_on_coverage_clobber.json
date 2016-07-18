@@ -292,6 +292,8 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_build.py",
+      "--src-dir",
+      "[BUILDER_CACHE]/coverage_clobber/src",
       "--build-name",
       "coverage_clobber",
       "--staging-dir",

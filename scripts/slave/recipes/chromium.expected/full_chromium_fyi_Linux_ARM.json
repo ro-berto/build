@@ -391,6 +391,8 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_build.py",
+      "--src-dir",
+      "[BUILDER_CACHE]/Linux_ARM/src",
       "--build-name",
       "Linux_ARM",
       "--staging-dir",

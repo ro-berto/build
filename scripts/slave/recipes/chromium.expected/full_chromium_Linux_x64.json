@@ -333,6 +333,8 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_build.py",
+      "--src-dir",
+      "[BUILDER_CACHE]/Linux_x64/src",
       "--build-name",
       "Linux_x64",
       "--staging-dir",
