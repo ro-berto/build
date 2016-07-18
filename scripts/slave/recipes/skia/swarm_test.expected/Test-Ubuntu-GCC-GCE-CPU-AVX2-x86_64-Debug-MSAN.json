@@ -60,20 +60,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "Get downloaded skimage VERSION"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "42",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
-    ],
-    "name": "write SK_IMAGE_VERSION"
+    "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -84,7 +74,7 @@
       "--skps",
       "[SLAVE_BUILD]/skps",
       "--images",
-      "[SLAVE_BUILD]/skimage/dm",
+      "[SLAVE_BUILD]/images/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -96,7 +86,7 @@
       "build_number",
       "5",
       "--colorImages",
-      "[SLAVE_BUILD]/skimage/colorspace",
+      "[SLAVE_BUILD]/images/colorspace",
       "--key",
       "arch",
       "x86_64",

@@ -789,10 +789,20 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "read skimage VERSION"
+    "name": "Get downloaded SK_IMAGE_VERSION"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
+      "/path/to/tmp/"
+    ],
+    "name": "Get expected SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -939,8 +949,6 @@
       "slavename:skiabot-linux-test-000",
       "--tag",
       "stepname:test_skia on Ubuntu",
-      "--cipd-package",
-      "skimage:skia/bots/skimage:version:0",
       "def456",
       "--",
       "--workdir",
@@ -1115,8 +1123,6 @@
       "slavename:skiabot-linux-test-000",
       "--tag",
       "stepname:perf_skia on Ubuntu",
-      "--cipd-package",
-      "skimage:skia/bots/skimage:version:0",
       "def456",
       "--",
       "--workdir",

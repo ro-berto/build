@@ -299,20 +299,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
-    "name": "Get downloaded skimage VERSION"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "42",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
-    ],
-    "name": "write SK_IMAGE_VERSION"
+    "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -410,7 +400,7 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "--verbose",
-      "[SLAVE_BUILD]/skimage",
+      "[SLAVE_BUILD]/images",
       "/storage/emulated/legacy/skiabot/skia_images"
     ],
     "env": {
@@ -423,7 +413,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
-    "name": "push skimage"
+    "name": "push images"
   },
   {
     "cmd": [
