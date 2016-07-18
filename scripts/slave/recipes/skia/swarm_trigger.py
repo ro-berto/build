@@ -561,6 +561,16 @@ def upload_coverage_results(api, task, got_revision, is_trybot):
   )
 
 
+def cipd_pkg(api, infrabots_dir, asset_name):
+  """Find and return the CIPD package info for the given asset."""
+  version_file = infrabots_dir.join('assets', asset_name, 'VERSION')
+  version = api.skia._readfile(version_file,
+                               name='read %s VERSION' % asset_name,
+                               test_data='0').rstrip()
+  version = 'version:%s' % version
+  return (asset_name, 'skia/bots/%s' % asset_name, version)
+
+
 def RunSteps(api):
   got_revision = checkout_steps(api)
   api.skia_swarming.setup(
@@ -590,12 +600,7 @@ def RunSteps(api):
     android_sdk_version_file = infrabots_dir.join(
         'assets', 'android_sdk', 'VERSION')
     if api.path.exists(android_sdk_version_file):
-      android_sdk_version = api.skia._readfile(android_sdk_version_file,
-                                               name='read android_sdk VERSION',
-                                               test_data='0').rstrip()
-      android_sdk_version = 'version:%s' % android_sdk_version
-      pkg = ('android_sdk', 'skia/bots/android_sdk', android_sdk_version)
-      compile_cipd_deps.append(pkg)
+      compile_cipd_deps.append(cipd_pkg(api, infrabots_dir, 'android_sdk'))
     else:
       # TODO(borenet): Remove this legacy method after 7/1/2016.
       test_data = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
@@ -637,8 +642,12 @@ def RunSteps(api):
 
   api.skia.download_skps(api.path['slave_build'].join('tmp'),
                          api.path['slave_build'].join('skps'))
-  api.skia.download_images(api.path['slave_build'].join('tmp'),
-                           api.path['slave_build'].join('images'))
+  if api.path.exists(infrabots_dir.join('assets', 'skimage', 'VERSION')):
+    cipd_packages.append(cipd_pkg(api, infrabots_dir, 'skimage'))
+  else:
+    # TODO(borenet): Remove this once enough time has passed.
+    api.skia.download_images(api.path['slave_build'].join('tmp'),
+                             api.path['slave_build'].join('images'))
 
   test_task = None
   perf_task = None
@@ -658,7 +667,8 @@ def RunSteps(api):
 
 
 def test_for_bot(api, builder, mastername, slavename, testname=None,
-                 legacy_android_sdk=False, legacy_win_toolchain=False):
+                 legacy_android_sdk=False, legacy_win_toolchain=False,
+                 legacy_skimage_version=False):
   """Generate a test for the given bot."""
   testname = testname or builder
   test = (
@@ -667,19 +677,19 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
                    mastername=mastername,
                    slavename=slavename,
                    buildnumber=5,
-                   revision='abc123') +
-    api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
-    )
+                   revision='abc123')
   )
+  paths = [
+      api.path['slave_build'].join('skia'),
+      api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt'),
+  ]
   if 'Trybot' in builder:
     test += api.properties(issue=500,
                            patchset=1,
                            rietveld='https://codereview.chromium.org')
   if 'Android' in builder:
     if not legacy_android_sdk:
-      test += api.path.exists(api.path['slave_build'].join(
+      paths.append(api.path['slave_build'].join(
           'skia', 'infra', 'bots', 'assets', 'android_sdk', 'VERSION'))
   if 'Coverage' not in builder and 'Infra' not in builder:
     test += api.step_data(
@@ -704,8 +714,13 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
         stdout=api.raw_io.output('def456 XYZ.isolated'))
   if 'Win' in builder:
     if not legacy_win_toolchain:
-      test += api.path.exists(api.path['slave_build'].join(
+      paths.append(api.path['slave_build'].join(
           'skia', 'infra', 'bots', 'assets', 'win_toolchain', 'VERSION'))
+  if not legacy_skimage_version:
+    paths.append(api.path['slave_build'].join(
+        'skia', 'infra', 'bots', 'assets', 'skimage', 'VERSION'))
+
+  test += api.path.exists(*paths)
 
   return test
 
@@ -721,19 +736,11 @@ def GenTests(api):
   slave = 'skiabot-linux-test-000'
   test = test_for_bot(api, builder, master, slave, 'No_downloaded_SKP_VERSION')
   test += api.step_data('Get downloaded SKP_VERSION', retcode=1)
-  test += api.path.exists(
-      api.path['slave_build'].join('skia'),
-      api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
-  )
   yield test
 
   test = test_for_bot(api, builder, master, slave,
                       'Wrong_downloaded_SKP_VERSION')
   test += api.properties(test_downloaded_skp_version='999')
-  test += api.path.exists(
-      api.path['slave_build'].join('skia'),
-      api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
-  )
   yield test
 
   builder = 'Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan'
@@ -754,4 +761,11 @@ def GenTests(api):
   master = 'client.skia.compile'
   test = test_for_bot(api, builder, master, slave, 'legacy_win_toolchain',
                       legacy_win_toolchain=True)
+  yield test
+
+  builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'
+  master = 'client.skia'
+  test = test_for_bot(api, builder, master, slave, 'legacy_skimage_version',
+                      legacy_skimage_version=True)
+  test += api.step_data('Get downloaded SK_IMAGE_VERSION', retcode=1)
   yield test

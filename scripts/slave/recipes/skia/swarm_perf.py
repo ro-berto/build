@@ -73,6 +73,8 @@ def GenTests(api):
                          swarm_out_dir='[SWARM_OUT_DIR]') +
           api.path.exists(
               api.path['slave_build'].join('skia'),
+              api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                           'skimage', 'VERSION'),
               api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
           )
         )
@@ -89,19 +91,22 @@ def GenTests(api):
 
         yield test
 
+  builder = 'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot'
   yield (
     api.test('big_issue_number') +
-    api.properties(buildername='Build-Win-MSVC-x86-Debug',
-                     mastername='client.skia.compile',
-                     slavename='skiabot-linux-swarm-000',
-                     buildnumber=5,
-                     revision='abc123',
-                     swarm_out_dir='[SWARM_OUT_DIR]',
-                     rietveld='https://codereview.chromium.org',
-                     patchset=1,
-                     issue=2147533002L) +
+    api.properties(buildername=builder,
+                   mastername='client.skia.compile',
+                   slavename='skiabot-linux-swarm-000',
+                   buildnumber=5,
+                   revision='abc123',
+                   swarm_out_dir='[SWARM_OUT_DIR]',
+                   rietveld='https://codereview.chromium.org',
+                   patchset=1,
+                   issue=2147533002L) +
     api.path.exists(
         api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skimage', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     api.platform('win', 64)
