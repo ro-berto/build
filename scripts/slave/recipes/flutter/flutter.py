@@ -23,25 +23,27 @@ def GetCloudPath(api, git_hash, path):
   return 'flutter/%s/%s' % (git_hash, path)
 
 
-def TestCreateAndLaunch(api):
-  with MakeTempDir(api) as temp_dir:
-    api.step('shutdown simulator', ['killall', 'Simulator'], cwd=temp_dir)
-    api.step('erase simulator', ['/usr/bin/xcrun', 'simctl', 'erase', 'all'],
-        cwd=temp_dir)
-    api.step('test create', ['flutter', 'create', '--with-driver-test',
-        'sample_app'], cwd=temp_dir)
-    app_path = temp_dir.join('sample_app')
-    api.step('drive sample_app', ['flutter', 'drive', '--verbose'],
-        cwd=app_path)
+# def TestCreateAndLaunch(api):
+#   with MakeTempDir(api) as temp_dir:
+#     api.step('shutdown simulator', ['killall', 'Simulator'], cwd=temp_dir)
+#     api.step('erase simulator', ['/usr/bin/xcrun', 'simctl', 'erase', 'all'],
+#         cwd=temp_dir)
+#     api.step('test create', ['flutter', 'create', '--with-driver-test',
+#         'sample_app'], cwd=temp_dir)
+#     app_path = temp_dir.join('sample_app')
+#     api.step('drive sample_app', ['flutter', 'drive', '--verbose'],
+#         cwd=app_path)
+#     api.step('dump logs', ['tail', '-n', '--verbose'],
+#         cwd=app_path)
 
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
-@contextlib.contextmanager
-def MakeTempDir(api):
-  try:
-    temp_dir = api.path.mkdtemp('tmp')
-    yield temp_dir
-  finally:
-    api.file.rmtree('temp dir', temp_dir)
+# @contextlib.contextmanager
+# def MakeTempDir(api):
+#   try:
+#     temp_dir = api.path.mkdtemp('tmp')
+#     yield temp_dir
+#   finally:
+#     api.file.rmtree('temp dir', temp_dir)
 
 
 def GenerateDocs(api):
@@ -146,8 +148,9 @@ def RunSteps(api):
 
     # TODO(yjbanov): we do not yet have Android devices hooked up, nor do we
     # support the Android emulator. For now, only run on iOS Simulator.
-    if api.platform.is_mac:
-      TestCreateAndLaunch(api)
+    #
+    # if api.platform.is_mac:
+    #   TestCreateAndLaunch(api)
 
     # TODO(eseidel): We only want to generate one copy of the docs at a time
     # otherwise multiple rsyncs could race, causing badness. We'll eventually
