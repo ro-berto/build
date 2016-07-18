@@ -5,6 +5,11 @@
   "slave_port": 30101,
   "templates": ["templates", "../master.chromium/templates"],
 
+  "default_remote_run_properties": {
+    "path_config": "kitchen",
+  },
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+
   "builders": {
     "Android Cronet Builder": {
       "recipe": "cronet",
@@ -68,24 +73,28 @@
     },
     "Android WebView CTS L-MR1 (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["webview_cts"],
       "category": "1Webview",
     },
     "Android Webview L (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["webview_l"],
       "category": "1Webview",
     },
     "Android Webview M (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["webview_m"],
       "category": "1Webview",
     },
     "Android MIPS Builder (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["mips_builder"],
       "category": "2Builders",
@@ -93,6 +102,7 @@
     },
     "Android x64 Builder (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
       "category": "2Builders",
@@ -100,6 +110,7 @@
     },
     "Android x86 Builder (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
       "category": "2Builders",
@@ -107,6 +118,7 @@
     },
     "Android arm Builder (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["arm_builder"],
       "category": "2Builders",
@@ -114,6 +126,7 @@
     },
     "Android arm64 Builder (dbg)": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
       "category": "2Builders",
@@ -121,12 +134,14 @@
     },
     "Android Swarm Builder": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
       "category": "4Swarming",
     },
     "Android N5X Swarm Builder": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
       "category": "4Swarming",
@@ -134,6 +149,7 @@
     },
     "Jelly Bean Tester": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["jelly_bean_tester"],
       "category": "3Testers",
@@ -141,6 +157,7 @@
     },
     "KitKat Tablet Tester": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["kit_kat_tablet"],
       "category": "3Testers",
@@ -148,6 +165,7 @@
     },
     "Lollipop Consumer Tester": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["lollipop_consumer"],
       "category": "3Testers",
@@ -155,6 +173,7 @@
     },
     "Lollipop Low-end Tester": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["lollipop_low_end"],
       "category": "3Testers",
@@ -162,6 +181,7 @@
     },
     "Lollipop Phone Tester": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["lollipop_phone"],
       "category": "3Testers",
@@ -169,6 +189,7 @@
     },
     "Lollipop Tablet Tester": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["lollipop_tablet"],
       "category": "3Testers",
@@ -176,6 +197,7 @@
     },
     "Marshmallow 64 bit Tester": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["marshmallow_64"],
       "category": "3Testers",
@@ -183,6 +205,7 @@
     },
     "Marshmallow Tablet Tester": {
       "recipe": "chromium",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["marshmallow_tablet"],
       "category": "3Testers",
