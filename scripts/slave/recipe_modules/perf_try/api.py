@@ -112,8 +112,14 @@ class PerfTryJobApi(recipe_api.RecipeApi):
           'There are no modifications to Telemetry benchmarks,'
           ' aborting the try job.')
       return
-    self._compile('With Patch', self.m.properties['mastername'],
-                  self.m.properties['buildername'], update_step, bot_db)
+    revision_hash = self.m.properties.get('parent_got_revision')
+    update_step = self._checkout_revision(update_step, bot_db, revision_hash)
+    if update_step.presentation.properties:
+      revision_hash = update_step.presentation.properties['got_revision']
+    revision = build_state.BuildState(self, revision_hash, True)
+    revision.request_build()
+    revision.wait_for()
+    revision.download_build(update_step, bot_db)
 
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.adb_install_apk('ChromePublic.apk')
@@ -168,36 +174,6 @@ class PerfTryJobApi(recipe_api.RecipeApi):
       self.m.chromium.runhooks(name='runhooks on %s' % str(revision))
 
     return update_step
-
-  def _compile(self, name, mastername, buildername, update_step, bot_db):
-    """Runs compile and related steps for given builder."""
-    # TODO(phajdan.jr): Change this method to take bot_config as parameter.
-    bot_config = self.m.chromium_tests.create_bot_config_object(
-        mastername, buildername)
-    compile_targets = self.m.chromium_tests.get_compile_targets(
-        bot_config, bot_db, tests=[])
-    if self.m.chromium.c.TARGET_PLATFORM == 'android':
-      self.m.chromium_android.clean_local_files()
-      compile_targets = None
-    else:
-      # Removes any chrome temporary files or build.dead directories.
-      self.m.chromium.cleanup_temp()
-
-    if 'With Patch' in name:
-      # We've had some cases where a stale build directory was used on perf
-      # try job leading to unwanted cache and temp data. The best way to
-      # ensure the old build directory is removed before doing any
-      # compilation.
-      self.m.file.rmtree(
-          'build directory',
-          self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-      self.m.chromium_tests.transient_check(
-          update_step,
-          lambda transform_name: self.m.chromium_tests.run_mb_and_compile(
-              compile_targets, None, name_suffix=transform_name('')))
-    else:  # pragma: no cover
-      self.m.chromium_tests.run_mb_and_compile(
-          compile_targets, None, name_suffix=' %s' % name)
 
   def _run_test(self, cfg, **kwargs):
     """Runs test from config and return results."""
