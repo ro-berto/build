@@ -39,6 +39,7 @@ SUPPRESSIONS = {
         'Google Chrome ChromeOS',
         'Google Chrome Linux x64',
         'Google Chrome Mac',
+        'Google Chrome Win',
     ],
     'master.chromium.chromiumos': [
         'Linux ChromiumOS Full',
