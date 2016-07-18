@@ -65,7 +65,7 @@ class StagerBase(object):
     self._src_dir = os.path.abspath(options.src_dir)
     self._chrome_dir = os.path.join(self._src_dir, 'chrome')
 
-    build_dir = build_directory.GetBuildOutputDirectory()
+    build_dir = build_directory.GetBuildOutputDirectory(self._src_dir or None)
     self._build_dir = os.path.join(build_dir, options.target)
     if chromium_utils.IsWindows():
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'win')
