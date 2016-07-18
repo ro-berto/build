@@ -205,7 +205,10 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Set some important variables.
     self.resource_dir = self.skia_dir.join('resources')
-    self.images_dir = self.slave_dir.join('images')
+    self.images_dir = self.slave_dir.join('skimage')
+    if self.m.path.exists(self.skia_dir.join('SK_IMAGE_VERSION')):
+      # TODO(borenet): Remove this once enough time has passed.
+      self.images_dir = self.slave_dir.join('images')
     self.skia_out = self.skia_dir.join('out', self.builder_name)
     self.swarming_out_dir = self.make_path(self.m.properties['swarm_out_dir'])
     self.local_skp_dir = self.slave_dir.join('skps')
@@ -525,13 +528,24 @@ for p in psutil.process_iter():
 
   def _copy_images(self):
     """Download and copy test images if needed."""
-    version = self.check_actual_version(
-        VERSION_FILE_SK_IMAGE,
-        self.tmp_dir,
-        test_actual_version=self.m.properties.get(
-            'test_downloaded_sk_image_version',
-            TEST_EXPECTED_SK_IMAGE_VERSION),
-    )
+    if self.m.path.exists(self.skia_dir.join(VERSION_FILE_SK_IMAGE)):
+      # TODO(borenet): Remove this once enough time has passed.
+      version = self.check_actual_version(
+          VERSION_FILE_SK_IMAGE,
+          self.tmp_dir,
+          test_actual_version=self.m.properties.get(
+              'test_downloaded_sk_image_version',
+              TEST_EXPECTED_SK_IMAGE_VERSION),
+      )
+    else:
+      version_file = self.infrabots_dir.join('assets', 'skimage', 'VERSION')
+      test_data = self.m.properties.get(
+          'test_actual_skp_version', TEST_EXPECTED_SKP_VERSION)
+      version = self._readfile(version_file,
+                               name='Get downloaded skimage VERSION',
+                               test_data=test_data).rstrip()
+      self._writefile(self.m.path.join(self.tmp_dir, VERSION_FILE_SK_IMAGE),
+                      version)
     self.copy_dir(
         version,
         VERSION_FILE_SK_IMAGE,

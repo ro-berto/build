@@ -200,10 +200,20 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
-    "name": "Get downloaded SK_IMAGE_VERSION"
+    "name": "Get downloaded skimage VERSION"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "42",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
+    ],
+    "name": "write SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -277,7 +287,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_push_if_needed",
-      "[SLAVE_BUILD]/images",
+      "[SLAVE_BUILD]/skimage",
       "skiabot/skia_images"
     ],
     "env": {
@@ -290,7 +300,7 @@
       "SKIA_OUT": "[SLAVE_BUILD]/out",
       "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
     },
-    "name": "push images to skia_images"
+    "name": "push skimage to skia_images"
   },
   {
     "cmd": [

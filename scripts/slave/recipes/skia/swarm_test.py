@@ -285,3 +285,19 @@ def GenTests(api):
     ) +
     api.platform('win', 64)
   )
+
+  builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'
+  yield (
+    api.test('legacy_skimage_version') +
+    api.properties(buildername=builder,
+                   mastername='client.skia',
+                   slavename='skiabot-linux-swarm-000',
+                   buildnumber=6,
+                   revision='abc123',
+                   swarm_out_dir='[SWARM_OUT_DIR]') +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('skia', 'SK_IMAGE_VERSION'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    )
+  )

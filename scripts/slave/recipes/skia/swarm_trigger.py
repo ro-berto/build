@@ -561,6 +561,16 @@ def upload_coverage_results(api, task, got_revision, is_trybot):
   )
 
 
+def cipd_pkg(api, infrabots_dir, asset_name):
+  """Find and return the CIPD package info for the given asset."""
+  version_file = infrabots_dir.join('assets', asset_name, 'VERSION')
+  version = api.skia._readfile(version_file,
+                               name='read %s VERSION' % asset_name,
+                               test_data='0').rstrip()
+  version = 'version:%s' % version
+  return (asset_name, 'skia/bots/%s' % asset_name, version)
+
+
 def RunSteps(api):
   got_revision = checkout_steps(api)
   api.skia_swarming.setup(
@@ -590,12 +600,7 @@ def RunSteps(api):
     android_sdk_version_file = infrabots_dir.join(
         'assets', 'android_sdk', 'VERSION')
     if api.path.exists(android_sdk_version_file):
-      android_sdk_version = api.skia._readfile(android_sdk_version_file,
-                                               name='read android_sdk VERSION',
-                                               test_data='0').rstrip()
-      android_sdk_version = 'version:%s' % android_sdk_version
-      pkg = ('android_sdk', 'skia/bots/android_sdk', android_sdk_version)
-      compile_cipd_deps.append(pkg)
+      compile_cipd_deps.append(cipd_pkg(api, infrabots_dir, 'android_sdk'))
     else:
       # TODO(borenet): Remove this legacy method after 7/1/2016.
       test_data = 'a27a70d73b85191b9e671ff2a44547c3f7cc15ee'
@@ -637,8 +642,12 @@ def RunSteps(api):
 
   api.skia.download_skps(api.path['slave_build'].join('tmp'),
                          api.path['slave_build'].join('skps'))
-  api.skia.download_images(api.path['slave_build'].join('tmp'),
-                           api.path['slave_build'].join('images'))
+  if api.path.exists(api.path['slave_build'].join('skia', 'SK_IMAGE_VERSION')):
+    # TODO(borenet): Remove this once enough time has passed.
+    api.skia.download_images(api.path['slave_build'].join('tmp'),
+                             api.path['slave_build'].join('images'))
+  else:
+    cipd_packages.append(cipd_pkg(api, infrabots_dir, 'skimage'))
 
   test_task = None
   perf_task = None
@@ -754,4 +763,12 @@ def GenTests(api):
   master = 'client.skia.compile'
   test = test_for_bot(api, builder, master, slave, 'legacy_win_toolchain',
                       legacy_win_toolchain=True)
+  yield test
+
+  builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'
+  master = 'client.skia'
+  test = test_for_bot(api, builder, master, slave, 'legacy_skimage_version')
+  test += api.path.exists(
+      api.path['slave_build'].join('skia', 'SK_IMAGE_VERSION'))
+  test += api.step_data('Get downloaded SK_IMAGE_VERSION', retcode=1)
   yield test

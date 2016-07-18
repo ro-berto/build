@@ -212,15 +212,13 @@ class DefaultFlavorUtils(object):
     run, for example, for Android bots these are paths on the Android device
     itself. For desktop bots, these are just local paths.
     """
-    pardir = self._skia_api.m.path.pardir
-    join = self._skia_api.slave_dir.join
     return DeviceDirs(
         dm_dir=self._skia_api.dm_dir,
         perf_data_dir=self._skia_api.perf_data_dir,
         resource_dir=self._skia_api.resource_dir,
-        images_dir=join('images'),
+        images_dir=self._skia_api.images_dir,
         skp_dir=self._skia_api.local_skp_dir,
-        tmp_dir=join('tmp'))
+        tmp_dir=self._skia_api.tmp_dir)
 
   def __repr__(self):
     return '<%s object>' % self.__class__.__name__  # pragma: no cover
