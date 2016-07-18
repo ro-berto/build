@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 from master import master_config
-from master.factory import annotator_factory
+from master.factory import remote_run_factory
 
 import master_site_config
 
@@ -18,7 +18,13 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-m_annotator = annotator_factory.AnnotatorFactory()
+def m_remote_run(recipe, **kwargs):
+  return remote_run_factory.RemoteRunFactory(
+      active_master=ActiveMaster,
+      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      recipe=recipe,
+      factory_properties={'path_config': 'kitchen'},
+      **kwargs)
 
 defaults['category'] = '1clobber'
 
@@ -31,11 +37,11 @@ S('chromium', branch='master', treeStableTimer=60)
 
 B('Win', 'win_clobber', 'compile|windows', 'chromium',
   notify_on_missing=True)
-F('win_clobber', m_annotator.BaseFactory('chromium'))
+F('win_clobber', m_remote_run('chromium'))
 
 B('Win x64', 'win_x64_clobber', 'compile|windows', 'chromium',
   notify_on_missing=True)
-F('win_x64_clobber', m_annotator.BaseFactory('chromium'))
+F('win_x64_clobber', m_remote_run('chromium'))
 
 ################################################################################
 ## Mac
@@ -43,7 +49,7 @@ F('win_x64_clobber', m_annotator.BaseFactory('chromium'))
 
 B('Mac', 'mac_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
-F('mac_clobber', m_annotator.BaseFactory('chromium'))
+F('mac_clobber', m_remote_run('chromium'))
 
 ################################################################################
 ## Linux
@@ -51,7 +57,7 @@ F('mac_clobber', m_annotator.BaseFactory('chromium'))
 
 B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
-F('linux64_clobber', m_annotator.BaseFactory('chromium'))
+F('linux64_clobber', m_remote_run('chromium'))
 
 ################################################################################
 ## Android
@@ -59,7 +65,7 @@ F('linux64_clobber', m_annotator.BaseFactory('chromium'))
 
 B('Android', 'f_android_clobber', None, 'chromium',
   notify_on_missing=True)
-F('f_android_clobber', m_annotator.BaseFactory('chromium'))
+F('f_android_clobber', m_remote_run('chromium'))
 
 
 def Update(_config, active_master, c):
