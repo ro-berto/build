@@ -8,7 +8,7 @@ from config_bootstrap import Master
 
 class ChromiumMemoryFull(Master.Master1):
   project_name = 'Chromium Memory Full'
-  master_port = 20102
-  slave_port = 30102
-  master_port_alt = 25102
+  master_port = 20105
+  slave_port = 30105
+  master_port_alt = 25105
   buildbot_url = 'http://build.chromium.org/p/chromium.memory.full/'
