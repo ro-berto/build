@@ -151,7 +151,7 @@ class BuildState(object):
         gs_bucket = 'gs://%s/' % self.bucket
         archive_path = self.build_file_path[len(gs_bucket):]
         self.api.m.chromium_android.download_build(
-            bucket=bot_config['bucket'],
+            bucket=self.bucket,
             path=archive_path)
 
         # The way android builders on tryserver.chromium.perf are archived is
