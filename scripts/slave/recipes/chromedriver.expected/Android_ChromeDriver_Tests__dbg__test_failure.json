@@ -247,7 +247,8 @@
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
-      "Debug"
+      "Debug",
+      "--skip-wipe"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -609,12 +610,12 @@
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
       "--android-package",
-      "chrome_public"
+      "chrome_stable"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests(chrome_public)"
+    "name": "python_tests(chrome_stable)"
   },
   {
     "cmd": [
@@ -653,28 +654,15 @@
       "[TMP_BASE]/server_log_tmp_5/server_log",
       "--verbose",
       "--android-package",
-      "chrome_public"
+      "chrome_stable"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests(chrome_public)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/server_log_tmp_5/server_log",
-      "gs://chromedriver-data/server_logs/server_log"
-    ],
-    "name": "gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_5/server_log",
+    "name": "java_tests(chrome_stable)",
     "~followup_annotations": [
-      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_5/server_log@https://storage.cloud.google.com/chromedriver-data/server_logs/server_log@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -698,12 +686,12 @@
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
       "--android-package",
-      "chrome_stable"
+      "chromedriver_webview_shell"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests(chrome_stable)"
+    "name": "python_tests(chromedriver_webview_shell)"
   },
   {
     "cmd": [
@@ -742,15 +730,28 @@
       "[TMP_BASE]/server_log_tmp_7/server_log",
       "--verbose",
       "--android-package",
-      "chrome_stable"
+      "chromedriver_webview_shell"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests(chrome_stable)",
+    "name": "java_tests(chromedriver_webview_shell)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/server_log_tmp_7/server_log",
+      "gs://chromedriver-data/server_logs/server_log"
+    ],
+    "name": "gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_7/server_log",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_7/server_log@https://storage.cloud.google.com/chromedriver-data/server_logs/server_log@@@"
     ]
   },
   {
@@ -774,12 +775,12 @@
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
       "--android-package",
-      "chromedriver_webview_shell"
+      "chromium"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests(chromedriver_webview_shell)"
+    "name": "python_tests(chromium)"
   },
   {
     "cmd": [
@@ -818,12 +819,12 @@
       "[TMP_BASE]/server_log_tmp_9/server_log",
       "--verbose",
       "--android-package",
-      "chromedriver_webview_shell"
+      "chromium"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests(chromedriver_webview_shell)"
+    "name": "java_tests(chromium)"
   },
   {
     "cmd": [
@@ -1064,7 +1065,8 @@
   },
   {
     "name": "$result",
+    "reason": "Test failures",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

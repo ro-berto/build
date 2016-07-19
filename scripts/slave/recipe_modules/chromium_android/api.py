@@ -943,7 +943,7 @@ class AndroidApi(recipe_api.RecipeApi):
     )
 
   def common_tests_setup_steps(self, perf_setup=False,
-                               remove_system_webview=False):
+                               remove_system_webview=False, skip_wipe=False):
     self.create_adb_symlink()
     if self.c.gce_setup:
       self.launch_gce_instances(snapshot=self.c.gce_snapshot,
@@ -963,6 +963,8 @@ class AndroidApi(recipe_api.RecipeApi):
             'max_battery_temp': 350}
       else:
         kwargs = {}
+      if skip_wipe:
+        kwargs['skip_wipe'] = True
       self.provision_devices(remove_system_webview=remove_system_webview,
                              **kwargs)
       self.device_status()

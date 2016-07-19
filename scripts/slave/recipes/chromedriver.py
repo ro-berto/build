@@ -28,9 +28,9 @@ BUILDERS = freeze({
       'update_test_log': True,
       'android_packages': [
         'chrome_beta',
-        'chrome_public',
         'chrome_stable',
         'chromedriver_webview_shell',
+        'chromium',
       ],
       'install_apks': [
         'ChromeDriverWebViewShell.apk',
@@ -71,7 +71,7 @@ def RunSteps(api):
   revision_cp = api.bot_update.last_returned_properties['got_revision_cp']
   commit_position = api.commit_position.parse_revision(revision_cp)
 
-  api.chromium_android.common_tests_setup_steps()
+  api.chromium_android.common_tests_setup_steps(skip_wipe=True)
   if builder['install_apks']:
     for apk in builder['install_apks']:
       api.chromium_android.adb_install_apk(apk)
@@ -88,6 +88,9 @@ def RunSteps(api):
     api.chromedriver.update_test_results_log(platform, commit_position, passed)
 
   api.chromium_android.common_tests_final_steps()
+
+  if not passed:
+    raise api.step.StepFailure('Test failures')
 
 def GenTests(api):
   sanitize = lambda s: ''.join(c if c.isalnum() else '_' for c in s)

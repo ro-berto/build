@@ -247,7 +247,8 @@
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
-      "Debug"
+      "Debug",
+      "--skip-wipe"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -609,12 +610,12 @@
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
       "--android-package",
-      "chrome_public"
+      "chrome_stable"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests(chrome_public)"
+    "name": "python_tests(chrome_stable)"
   },
   {
     "cmd": [
@@ -653,12 +654,12 @@
       "[TMP_BASE]/server_log_tmp_5/server_log",
       "--verbose",
       "--android-package",
-      "chrome_public"
+      "chrome_stable"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests(chrome_public)"
+    "name": "java_tests(chrome_stable)"
   },
   {
     "cmd": [
@@ -698,12 +699,12 @@
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
       "--android-package",
-      "chrome_stable"
+      "chromedriver_webview_shell"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests(chrome_stable)"
+    "name": "python_tests(chromedriver_webview_shell)"
   },
   {
     "cmd": [
@@ -742,12 +743,12 @@
       "[TMP_BASE]/server_log_tmp_7/server_log",
       "--verbose",
       "--android-package",
-      "chrome_stable"
+      "chromedriver_webview_shell"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests(chrome_stable)"
+    "name": "java_tests(chromedriver_webview_shell)"
   },
   {
     "cmd": [
@@ -787,12 +788,12 @@
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
       "--android-package",
-      "chromedriver_webview_shell"
+      "chromium"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests(chromedriver_webview_shell)"
+    "name": "python_tests(chromium)"
   },
   {
     "cmd": [
@@ -831,12 +832,12 @@
       "[TMP_BASE]/server_log_tmp_9/server_log",
       "--verbose",
       "--android-package",
-      "chromedriver_webview_shell"
+      "chromium"
     ],
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests(chromedriver_webview_shell)"
+    "name": "java_tests(chromium)"
   },
   {
     "cmd": [
