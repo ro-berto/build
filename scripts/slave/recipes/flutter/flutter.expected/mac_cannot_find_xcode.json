@@ -40,7 +40,7 @@
       "retry",
       "fetch",
       "origin",
-      "master",
+      "1234abcd",
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/flutter",

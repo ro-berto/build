@@ -114,6 +114,7 @@ def RunSteps(api):
 
   git_hash = api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
+      ref=api.properties.get('revision'),
       recursive=True, set_got_revision=True)
   checkout = api.path['checkout']
 
@@ -181,6 +182,7 @@ def GenTests(api):
   yield (
     api.test('mac_cannot_find_xcode') +
     api.platform('mac', 64) +
+    api.properties(revision='1234abcd') +
     api.properties(clobber='') +
     api.step_data('enumerate_xcode_installations', api.json.output({
       'installations': {}
