@@ -52,6 +52,7 @@ class PGOApi(recipe_api.RecipeApi):
     self.m.chromium.set_config(bot_config['chromium_config_instrument'],
                                **bot_config.get('chromium_config_kwargs'))
     self.m.chromium.runhooks(name='Runhooks: Instrumentation phase.')
+    self.m.chromium.run_gyp_chromium()
     # Remove the profile files from the previous builds.
     self.m.file.rmwildcard('*.pg[cd]', str(self.m.chromium.output_dir))
     self.m.chromium.compile(name='Compile: Instrumentation phase.')
@@ -86,6 +87,7 @@ class PGOApi(recipe_api.RecipeApi):
     self.m.chromium.set_config(bot_config['chromium_config_optimize'],
                                **bot_config.get('chromium_config_kwargs'))
     self.m.chromium.runhooks(name='Runhooks: Optimization phase.')
+    self.m.chromium.run_gyp_chromium()
     self.m.chromium.compile(name='Compile: Optimization phase.')
 
   def compile_pgo(self, bot_config):

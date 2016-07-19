@@ -515,6 +515,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
     self.m.gclient.runhooks(**kwargs)
 
+  def run_gyp_chromium(self):
+    gyp_chromium_path = self.m.path['checkout'].join('build', 'gyp_chromium.py')
+    env = self.get_env()
+    env.update(self.c.gyp_env.as_jsonish())
+    self.m.python(name='gyp_chromium', script=gyp_chromium_path, env=env);
+
   def run_gn(self, use_goma=False, gn_path=None, build_dir=None, **kwargs):
     if not gn_path:
       gn_path = self.m.path['depot_tools'].join('gn.py')
