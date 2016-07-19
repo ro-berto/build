@@ -40,6 +40,7 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'isolation_mode_noop',
+        'mb',
         'ninja_confirm_noop',
         'no_dump_symbols',
       ],
