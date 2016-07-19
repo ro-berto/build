@@ -2086,6 +2086,7 @@ SPEC = {
       'parent_buildername': 'Android Builder (dbg)',
       'android_config': 'incremental_coverage_builder_tests',
       'root_devices': True,
+      'checkout_dir': 'android',
       'tests': [
         steps.AndroidInstrumentationTest('AndroidWebViewTest'),
         steps.AndroidInstrumentationTest('ChromePublicTest'),

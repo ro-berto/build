@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/android_coverage",
+      "[BUILDER_CACHE]/android",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -52,7 +52,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -193,13 +193,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 emma_coverage=1 emma_filter='org.chromium.*' fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
   },
@@ -207,14 +207,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/android/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/android_coverage/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/android/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"buildername\": \"android_coverage\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
@@ -229,12 +229,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/android_coverage/src/testing/buildbot/chromium.fyi.json",
+      "[BUILDER_CACHE]/android/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/android_coverage/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/android/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -246,7 +246,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -260,7 +260,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/android_coverage/src/testing/buildbot/trybot_analyze_config.json",
+      "[BUILDER_CACHE]/android/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -336,10 +336,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/debug_info_dumps",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/test_logs",
-      "[BUILDER_CACHE]/android_coverage/src/out/build_product.zip",
-      "[BUILDER_CACHE]/android_coverage/src"
+      "[BUILDER_CACHE]/android/src/out/Debug/debug_info_dumps",
+      "[BUILDER_CACHE]/android/src/out/Debug/test_logs",
+      "[BUILDER_CACHE]/android/src/out/build_product.zip",
+      "[BUILDER_CACHE]/android/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -361,8 +361,8 @@
   {
     "allow_subannotations": false,
     "cmd": [
-      "[BUILDER_CACHE]/android_coverage/src/build/tree_truth.sh",
-      "[BUILDER_CACHE]/android_coverage/src",
+      "[BUILDER_CACHE]/android/src/build/tree_truth.sh",
+      "[BUILDER_CACHE]/android/src",
       "src"
     ],
     "name": "tree truth steps"
@@ -371,19 +371,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/android/src/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.chromium.android",
       "-b",
       "android_coverage",
       "--config-file",
-      "[BUILDER_CACHE]/android_coverage/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/android/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Debug"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -404,7 +404,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[BUILDER_CACHE]/android_coverage/src",
+      "[BUILDER_CACHE]/android/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
@@ -427,7 +427,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "compile (with patch)",
     "~followup_annotations": [
@@ -448,13 +448,13 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::adb]/resources/list_devices.py",
-      "['[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
+      "['[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "List adb devices",
     "~followup_annotations": [
@@ -469,13 +469,13 @@
       "python",
       "-u",
       "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb",
       "014E1F310401C009"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Root devices",
     "~followup_annotations": [
@@ -495,15 +495,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/build/symlink.py",
+      "[BUILDER_CACHE]/android/src/build/symlink.py",
       "-f",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "create adb symlink"
   },
@@ -511,14 +511,14 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
-      "[BUILDER_CACHE]/android_coverage/src/build/android/adb_logcat_monitor.py",
-      "[BUILDER_CACHE]/android_coverage/src/out/logcat",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android/src/out/logcat",
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
   },
@@ -529,30 +529,30 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "authorize_adb_devices"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/android_coverage/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
+      "[BUILDER_CACHE]/android/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "device_recovery"
   },
@@ -560,43 +560,43 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/android/src/build/android/provision_devices.py",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
       "Debug"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/android_coverage/src/third_party/catapult/devil/devil/android/tools/device_status.py",
+      "[BUILDER_CACHE]/android/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "device_status",
     "~followup_annotations": [
@@ -705,15 +705,15 @@
       "/tmp/device_monitor.pid",
       "--",
       "RECIPE_MODULE[build::chromium_android]/resources/spawn_device_monitor.py",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json"
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "spawn_device_monitor"
   },
@@ -721,21 +721,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/bin/run_android_webview_test_apk",
+      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_android_webview_test_apk",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--verbose",
       "--coverage-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "AndroidWebViewTest (with patch)",
     "~followup_annotations": [
@@ -764,10 +764,10 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Upload to test-results [AndroidWebViewTest]"
   },
@@ -775,21 +775,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/bin/run_chrome_public_test_apk",
+      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_chrome_public_test_apk",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--verbose",
       "--coverage-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ChromePublicTest (with patch)",
     "~followup_annotations": [
@@ -818,10 +818,10 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Upload to test-results [ChromePublicTest]"
   },
@@ -829,21 +829,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/bin/run_content_shell_test_apk",
+      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_content_shell_test_apk",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--verbose",
       "--coverage-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ContentShellTest (with patch)",
     "~followup_annotations": [
@@ -872,10 +872,10 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Upload to test-results [ContentShellTest]"
   },
@@ -883,21 +883,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/bin/run_chrome_sync_shell_test_apk",
+      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_chrome_sync_shell_test_apk",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--verbose",
       "--coverage-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ChromeSyncShellTest (with patch)",
     "~followup_annotations": [
@@ -926,10 +926,10 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Upload to test-results [ChromeSyncShellTest]"
   },
@@ -937,19 +937,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/build/android/generate_emma_html.py",
+      "[BUILDER_CACHE]/android/src/build/android/generate_emma_html.py",
       "--coverage-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
       "--metadata-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug",
+      "[BUILDER_CACHE]/android/src/out/Debug",
       "--cleanup",
       "--output",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage/coverage_html/index.html"
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage/coverage_html/index.html"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Generate coverage report"
   },
@@ -962,10 +962,10 @@
       "--diff-filter",
       "A"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Finding changed files matching diff filter: A",
     "stdout": "/path/to/tmp/"
@@ -978,10 +978,10 @@
       "fake/file1.java",
       "/path/to/tmp/"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Finding lines changed in added file fake/file1.java"
   },
@@ -993,10 +993,10 @@
       "fake/file2.java;",
       "/path/to/tmp/"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Finding lines changed in added file fake/file2.java;"
   },
@@ -1008,10 +1008,10 @@
       "fake/file3.java",
       "/path/to/tmp/"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Finding lines changed in added file fake/file3.java"
   },
@@ -1024,10 +1024,10 @@
       "--diff-filter",
       "M"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Finding changed files matching diff filter: M",
     "stdout": "/path/to/tmp/"
@@ -1040,10 +1040,10 @@
       "-s",
       "fake/file1.java"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Finding lines changed in modified file fake/file1.java",
     "stdout": "/path/to/tmp/"
@@ -1056,10 +1056,10 @@
       "-s",
       "fake/file2.java;"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Finding lines changed in modified file fake/file2.java;",
     "stdout": "/path/to/tmp/"
@@ -1072,10 +1072,10 @@
       "-s",
       "fake/file3.java"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Finding lines changed in modified file fake/file3.java",
     "stdout": "/path/to/tmp/"
@@ -1088,10 +1088,10 @@
       "{\"fake/file1.java\": [], \"fake/file2.java;\": [], \"fake/file3.java\": []}",
       "[TMP_BASE]/coverage_tmp_1/file_changes.json"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Saving changed lines for revision."
   },
@@ -1104,14 +1104,14 @@
       "--out",
       "/path/to/tmp/json",
       "--emma-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage/coverage_html",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage/coverage_html",
       "--lines-for-coverage",
       "[TMP_BASE]/coverage_tmp_1/file_changes.json"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Incremental coverage report",
     "~followup_annotations": [
@@ -1178,7 +1178,7 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -1252,13 +1252,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 emma_coverage=1 emma_filter='org.chromium.*' fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (without patch)"
   },
@@ -1266,22 +1266,22 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/android/src/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.chromium.android",
       "-b",
       "android_coverage",
       "--config-file",
-      "[BUILDER_CACHE]/android_coverage/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/android/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Debug"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage/src",
+    "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "generate_build_files (without patch)"
   },
@@ -1300,7 +1300,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[BUILDER_CACHE]/android_coverage/src",
+      "[BUILDER_CACHE]/android/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
@@ -1321,10 +1321,10 @@
       "chrome_sync_shell_test_apk",
       "content_shell_test_apk"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "compile (without patch)",
     "~followup_annotations": [
@@ -1336,21 +1336,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/bin/run_android_webview_test_apk",
+      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_android_webview_test_apk",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--verbose",
       "--coverage-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "AndroidWebViewTest (without patch)",
     "~followup_annotations": [
@@ -1379,10 +1379,10 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Upload to test-results [AndroidWebViewTest] (2)"
   },
@@ -1390,21 +1390,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/bin/run_chrome_public_test_apk",
+      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_chrome_public_test_apk",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--verbose",
       "--coverage-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ChromePublicTest (without patch)",
     "~followup_annotations": [
@@ -1433,10 +1433,10 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Upload to test-results [ChromePublicTest] (2)"
   },
@@ -1444,21 +1444,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/bin/run_content_shell_test_apk",
+      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_content_shell_test_apk",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--verbose",
       "--coverage-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ContentShellTest (without patch)",
     "~followup_annotations": [
@@ -1487,10 +1487,10 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Upload to test-results [ContentShellTest] (2)"
   },
@@ -1498,21 +1498,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/bin/run_chrome_sync_shell_test_apk",
+      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_chrome_sync_shell_test_apk",
       "--blacklist-file",
-      "[BUILDER_CACHE]/android_coverage/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
       "--verbose",
       "--coverage-dir",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/coverage",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ChromeSyncShellTest (without patch)",
     "~followup_annotations": [
@@ -1541,10 +1541,10 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "Upload to test-results [ChromeSyncShellTest] (2)"
   },
@@ -1554,10 +1554,10 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "AndroidWebViewTest (retry summary)",
     "~followup_annotations": [
@@ -1571,10 +1571,10 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ChromePublicTest (retry summary)",
     "~followup_annotations": [
@@ -1588,10 +1588,10 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ContentShellTest (retry summary)",
     "~followup_annotations": [
@@ -1605,10 +1605,10 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ChromeSyncShellTest (retry summary)",
     "~followup_annotations": [
@@ -1626,10 +1626,10 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "shutdown_device_monitor"
   },
@@ -1637,15 +1637,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_coverage/src/build/android/adb_logcat_printer.py",
+      "[BUILDER_CACHE]/android/src/build/android/adb_logcat_printer.py",
       "--output-path",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/full_log",
-      "[BUILDER_CACHE]/android_coverage/src/out/logcat"
+      "[BUILDER_CACHE]/android/src/out/Debug/full_log",
+      "[BUILDER_CACHE]/android/src/out/logcat"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "logcat_dump"
   },
@@ -1664,13 +1664,13 @@
       "cp",
       "-a",
       "public-read",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/full_log",
+      "[BUILDER_CACHE]/android/src/out/Debug/full_log",
       "gs://chromium-android/logcat_dumps/android_coverage/571"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "gsutil upload",
     "~followup_annotations": [
@@ -1679,17 +1679,17 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/android_coverage/src/third_party/android_platform/development/scripts/stack",
+      "[BUILDER_CACHE]/android/src/third_party/android_platform/development/scripts/stack",
       "--arch",
       "arm",
       "--more-info",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/full_log"
+      "[BUILDER_CACHE]/android/src/out/Debug/full_log"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_coverage/src/out/Debug",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android/src/out/Debug",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_with_logcat_dump"
   },
@@ -1698,28 +1698,28 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/android_coverage/src/chrome/VERSION",
+      "[BUILDER_CACHE]/android/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "get version"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/android_coverage/src/build/android/tombstones.py",
+      "[BUILDER_CACHE]/android/src/build/android/tombstones.py",
       "-a",
       "-s",
       "-w"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_coverage/src/out/Debug",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android/src/out/Debug",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"
   },
@@ -1728,12 +1728,12 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[BUILDER_CACHE]/android_coverage/src/out/Debug/test_logs/*.log"
+      "[BUILDER_CACHE]/android/src/out/Debug/test_logs/*.log"
     ],
-    "cwd": "[BUILDER_CACHE]/android_coverage",
+    "cwd": "[BUILDER_CACHE]/android",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_coverage/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_coverage/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "test_report",
     "~followup_annotations": [

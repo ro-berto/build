@@ -12,12 +12,18 @@
     "$recipe_engine": {"mode_flags": {"use_subprocess42": True}}
   },
 
+  "default_remote_run_properties": {
+    "path_config": "kitchen",
+  },
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+
   # This is sorted first alphabetically by slave pool, and then alphabetically
   # by builder name
   "builders": {
     "android_compile_mips_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_optional_bots"],
       "slavebuilddir": "android_compile_mips_dbg",
@@ -25,6 +31,7 @@
     "android_compile_x64_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_optional_bots"],
       "slavebuilddir": "android_compile_x64_dbg",
@@ -32,6 +39,7 @@
     "android_compile_x86_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_optional_bots"],
       "slavebuilddir": "android_compile_x86_dbg",
@@ -39,24 +47,28 @@
     "android_archive_rel_ng": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_arm64_dbg_recipe": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_clang_dbg_recipe": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_compile_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_bots_cq"],
@@ -64,6 +76,7 @@
     "android_compile_rel": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_bots_cq"],
@@ -71,18 +84,21 @@
     "cast_shell_android": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_blink_rel": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["slaves_with_devices"],
     },
     "android_coverage": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android",
       "slave_pools": ["slaves_with_devices"],
@@ -96,6 +112,7 @@
     "linux_android_dbg_ng": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android",
       "slave_pools": ["slaves_with_devices"],
@@ -103,6 +120,7 @@
     "linux_android_rel_ng": {
       "builder_timeout_s": 11400,  # 60 * 190
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_android_launch"],
@@ -110,6 +128,7 @@
     "android_n5x_swarming_rel": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android_arm64",
       "slave_pools": ["ccompute_android_launch"],
@@ -166,6 +185,7 @@
     "android_optional_gpu_tests_rel": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
+      "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_android_launch"],

@@ -168,6 +168,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
+      'checkout_dir': 'android',
     },
     'Android Tests (dbg)': {
       'chromium_config': 'android',
@@ -214,6 +215,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
+      'checkout_dir': 'android',
     },
     'Android Tests': {
       'chromium_config': 'android',

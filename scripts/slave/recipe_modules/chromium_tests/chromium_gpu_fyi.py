@@ -814,6 +814,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
+      'checkout_dir': 'android',
     },
     'Android Release (Nexus 6)': {
       'chromium_config': 'android',
