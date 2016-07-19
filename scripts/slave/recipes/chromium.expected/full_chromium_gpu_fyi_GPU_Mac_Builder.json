@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/GPU_Mac_Builder",
+      "[BUILDER_CACHE]/mac",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -49,7 +49,7 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/GPU_Mac_Builder",
+    "cwd": "[BUILDER_CACHE]/mac",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -188,7 +188,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -204,7 +204,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/GPU_Mac_Builder/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -217,7 +217,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/mac/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -225,7 +225,7 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/GPU_Mac_Builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"buildername\": \"GPU Mac Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
@@ -240,12 +240,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src/testing/buildbot/chromium.gpu.fyi.json",
+      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.gpu.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.gpu.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/GPU_Mac_Builder/src/testing/buildbot/chromium.gpu.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Release (ATI)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -338,7 +338,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src/out/Release",
+      "[BUILDER_CACHE]/mac/src/out/Release",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -347,21 +347,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.gpu.fyi",
       "-b",
       "GPU Mac Builder",
       "--config-file",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--swarming-targets-file",
       "browser_tests\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/GPU_Mac_Builder/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -378,7 +378,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src",
+      "[BUILDER_CACHE]/mac/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -408,7 +408,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src",
+      "[BUILDER_CACHE]/mac/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
@@ -443,9 +443,9 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src/out/Release",
+      "[BUILDER_CACHE]/mac/src/out/Release",
       "--src-dir",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src"
+      "[BUILDER_CACHE]/mac/src"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
@@ -455,14 +455,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src/tools/swarming_client",
+      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src/out/Release/browser_tests.isolated.gen.json"
+      "[BUILDER_CACHE]/mac/src/out/Release/browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -488,7 +488,7 @@
       "--staging-dir",
       "[CACHE]/chrome_staging",
       "--src-dir",
-      "[BUILDER_CACHE]/GPU_Mac_Builder/src",
+      "[BUILDER_CACHE]/mac/src",
       "--build-url",
       "gs://chromium-gpu-fyi-archive/chromium.gpu.fyi/GPU Mac Builder",
       "--build_revision",

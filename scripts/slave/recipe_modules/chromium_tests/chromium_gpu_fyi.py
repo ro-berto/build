@@ -37,6 +37,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'win',
     },
     'GPU Win Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -61,6 +62,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'win',
     },
     'Win7 Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -278,6 +280,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'win',
     },
     'GPU Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -302,6 +305,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'win',
     },
     'Win7 x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -397,6 +401,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
+      'checkout_dir': 'linux',
     },
     'GPU Linux Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -417,6 +422,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
+      'checkout_dir': 'linux',
     },
     'Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -572,6 +578,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'mac',
     },
     'GPU Mac Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -594,6 +601,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'mac',
     },
     'Mac 10.10 Release (Intel)': {
       'chromium_config': 'chromium',
