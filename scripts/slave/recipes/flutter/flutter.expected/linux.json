@@ -134,6 +134,7 @@
   {
     "cmd": [
       "flutter",
+      "-v",
       "build",
       "apk"
     ],
@@ -170,6 +171,7 @@
   {
     "cmd": [
       "flutter",
+      "-v",
       "build",
       "apk"
     ],

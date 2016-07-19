@@ -55,15 +55,15 @@ def BuildExamples(api, git_hash):
   def BuildAndArchive(api, app_dir, apk_name):
     app_path = api.path['checkout'].join(app_dir)
     api.step('flutter build apk %s' % api.path.basename(app_dir),
-        ['flutter', 'build', 'apk'], cwd=app_path)
+        ['flutter', '-v', 'build', 'apk'], cwd=app_path)
 
     if api.platform.is_mac:
       app_name = api.path.basename(app_dir)
       # Disable codesigning since this bot has no developer cert.
       api.step('flutter build ios %s' % app_name,
-        ['flutter', 'build', 'ios', '--no-codesign'], cwd=app_path)
+        ['flutter', '-v', 'build', 'ios', '--no-codesign'], cwd=app_path)
       api.step('flutter build ios simulator %s' % app_name,
-        ['flutter', 'build', 'ios', '--simulator'], cwd=app_path)
+        ['flutter', '-v', 'build', 'ios', '--simulator'], cwd=app_path)
 
     # This is linux just to have only one bot archive at once.
     if api.platform.is_linux:

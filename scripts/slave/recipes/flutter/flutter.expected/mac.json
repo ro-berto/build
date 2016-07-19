@@ -166,6 +166,7 @@
   {
     "cmd": [
       "flutter",
+      "-v",
       "build",
       "apk"
     ],
@@ -180,6 +181,7 @@
   {
     "cmd": [
       "flutter",
+      "-v",
       "build",
       "ios",
       "--no-codesign"
@@ -195,6 +197,7 @@
   {
     "cmd": [
       "flutter",
+      "-v",
       "build",
       "ios",
       "--simulator"
@@ -210,6 +213,7 @@
   {
     "cmd": [
       "flutter",
+      "-v",
       "build",
       "apk"
     ],
@@ -224,6 +228,7 @@
   {
     "cmd": [
       "flutter",
+      "-v",
       "build",
       "ios",
       "--no-codesign"
@@ -239,6 +244,7 @@
   {
     "cmd": [
       "flutter",
+      "-v",
       "build",
       "ios",
       "--simulator"
