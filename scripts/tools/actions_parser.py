@@ -173,8 +173,8 @@ def get_master(checkout_root, name):
   if not name.startswith('master.'):
     name = 'master.%s' % (name,)
 
-  # Identify masters as directories containing 'buildbot.tac' files.
-  glob_path = os.path.join(checkout_root, '*', 'masters', name, 'buildbot.tac')
+  # Identify masters as directories containing 'master.cfg' files.
+  glob_path = os.path.join(checkout_root, '*', 'masters', name, 'master.cfg')
   for candidate in glob.iglob(glob_path):
     return Master.fromdir(os.path.split(candidate)[0])
   return None
@@ -184,8 +184,8 @@ def get_all_masters(checkout_root):
   """Identifies all Master instances by probing a checkout root."""
   masters = []
 
-  # Identify masters as directories containing 'buildbot.tac' files.
-  glob_path = os.path.join(checkout_root, '*', 'masters', '*', 'buildbot.tac')
+  # Identify masters as directories containing 'master.cfg' files.
+  glob_path = os.path.join(checkout_root, '*', 'masters', '*', 'master.cfg')
   for candidate in glob.iglob(glob_path):
     master = Master.fromdir(os.path.split(candidate)[0])
 

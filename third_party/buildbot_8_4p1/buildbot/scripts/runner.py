@@ -47,9 +47,9 @@ def in_reactor(f):
     return wrap
 
 def isBuildmasterDir(dir):
-    buildbot_tac = os.path.join(dir, "buildbot.tac")
+    buildbot_tac = os.path.join(dir, "master.cfg")
     if not os.path.isfile(buildbot_tac):
-        print "no buildbot.tac"
+        print "no master.cfg"
         return False
 
     contents = open(buildbot_tac, "r").read()
@@ -315,8 +315,6 @@ class Maker:
                 else:
                     if not self.quiet:
                         print "%s has old/modified contents" % target
-                        print " writing new contents to %s.new" % target
-                    open(target + ".new", "wt").write(new_contents)
             # otherwise, it's up to date
         else:
             if not self.quiet:

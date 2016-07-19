@@ -48,11 +48,7 @@ notify:
 		/bin/echo ; \
 	fi
 
-ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
 start: notify printstep bootstrap
-else
-start: notify printstep
-endif
 ifndef NO_REVISION_AUDIT
 	@if [ ! -f "$(GCLIENT)" ]; then \
 	    echo "gclient not found.  Add depot_tools to PATH or use DEPS checkout."; \
@@ -70,20 +66,24 @@ ifndef NO_REVISION_AUDIT
   ) 2>&1 | tee -a actions.log
 endif
 ifneq ($(wildcard $(FLOCK)),)
-	PYTHONPATH=$(PYTHONPATH) SCRIPTS_DIR=$(SCRIPTS_DIR) $(FLOCK) -n $(LOCKFILE) $(TOPLEVEL_DIR)/build/masters/start_master.sh || ( \
+	PYTHONPATH=$(PYTHONPATH) \
+	SCRIPTS_DIR=$(SCRIPTS_DIR) \
+	TOPLEVEL_DIR=$(TOPLEVEL_DIR) \
+	$(FLOCK) -n $(LOCKFILE) \
+	$(TOPLEVEL_DIR)/build/masters/start_master.sh || ( \
 	echo "Failure to start master. Check to see if a master is running and" \
 	     "holding the lock on $(LOCKFILE)."; exit 1)
 else
-	PYTHONPATH=$(PYTHONPATH) SCRIPTS_DIR=$(SCRIPTS_DIR) $(TOPLEVEL_DIR)/build/masters/start_master.sh
+	PYTHONPATH=$(PYTHONPATH) \
+	SCRIPTS_DIR=$(SCRIPTS_DIR) \
+	TOPLEVEL_DIR=$(TOPLEVEL_DIR) \
+	$(TOPLEVEL_DIR)/build/masters/start_master.sh
 endif
 
 
-ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
 start-prof: bootstrap
-else
-start-prof:
-endif
-	TWISTD_PROFILE=1 PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
+	TWISTD_PROFILE=1 PYTHONPATH=$(PYTHONPATH) \
+	python $(SCRIPTS_DIR)/common/twistd -y $(TOPLEVEL_DIR)/build/masters/buildbot.tac
 
 stop: notify printstep
 ifndef NO_REVISION_AUDIT
@@ -130,16 +130,10 @@ restart: notify stop wait start log
 
 restart-prof: stop wait start-prof log
 
-# This target is only known to work on 0.8.x masters.
-upgrade: printstep
-	@[ -e '.dbconfig' ] || [ -e 'state.sqlite' ] || \
-	PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
-
-# This target is only known to be useful on 0.8.x masters.
 bootstrap: printstep
 	@[ -e '.dbconfig' ] || [ -e 'state.sqlite' ] || \
-	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/tools/state_create.py \
-	--restore --db='state.sqlite' --txt '../state-template.txt'
+	PYTHONPATH=$(PYTHONPATH) python $(TOPLEVEL_DIR)/build/masters/buildbot \
+	upgrade-master .
 
 setup:
 	@echo export PYTHONPATH=$(PYTHONPATH)

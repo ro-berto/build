@@ -1,4 +1,3 @@
-*.new
 *.pyc
 *.svnrev
 .code_review_password
