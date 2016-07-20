@@ -1725,7 +1725,7 @@ class FindAnnotatedTest(Test):
     with api.tempfile.temp_dir('annotated_tests_json') as temp_output_dir:
       timestamp_string = datetime.datetime.utcnow().strftime('%Y%m%dT%H%M%S')
       if api.properties.get('buildername') is not None:
-        timestamp_string = api.properties.get('current_time')
+        timestamp_string = api.properties.get('current_time', timestamp_string)
 
       api.python(
           'run find_annotated_tests.py',
