@@ -35,6 +35,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'win',
     },
     'Win10 Tests x64': {
       'chromium_config': 'chromium',
@@ -124,6 +125,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'win',
     },
     'Win 7 Tests x64 (1)': {
       'chromium_config': 'chromium',
@@ -163,6 +165,7 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'enable_swarming': True,
+      'checkout_dir': 'win_gyp',
       'swarming_dimensions': {
         'cpu': 'x86-64',
         'os': 'Windows-8.1-SP0',
@@ -207,6 +210,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'win',
     },
     'Win7 Tests (dbg)(1)': {
       'chromium_config': 'chromium',
@@ -243,6 +247,7 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'enable_swarming': True,
+      'checkout_dir': 'win_gyp',
       'testing': {
         'platform': 'win',
       },
@@ -269,6 +274,7 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
+      'checkout_dir': 'win_clang',
     },
   },
 }

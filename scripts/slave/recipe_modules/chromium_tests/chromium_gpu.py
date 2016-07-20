@@ -34,6 +34,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'win',
     },
     'GPU Win Builder (dbg)': {
       'chromium_config': 'chromium',

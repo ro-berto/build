@@ -12,7 +12,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]\\Google_Chrome_Win",
+      "[BUILDER_CACHE]\\win_chrome",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -55,7 +55,7 @@
       "--force",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]\\Google_Chrome_Win",
+    "cwd": "[BUILDER_CACHE]\\win_chrome",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -194,7 +194,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILDER_CACHE]\\Google_Chrome_Win\\src\\out\\Release"
+      "[BUILDER_CACHE]\\win_chrome\\src\\out\\Release"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -215,7 +215,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\Google_Chrome_Win\\src",
+    "cwd": "[BUILDER_CACHE]\\win_chrome\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -228,14 +228,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Google_Chrome_Win\\src\\testing\\scripts\\get_compile_targets.py",
+      "[BUILDER_CACHE]\\win_chrome\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]\\\\Google_Chrome_Win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]\\\\win_chrome\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"buildername\": \"Google Chrome Win\", \"buildnumber\": 571, \"mastername\": \"chromium.chrome\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
@@ -250,12 +250,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\Google_Chrome_Win\\src\\testing\\buildbot\\chromium.chrome.json",
+      "[BUILDER_CACHE]\\win_chrome\\src\\testing\\buildbot\\chromium.chrome.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.chrome.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\Google_Chrome_Win\\src\\testing\\buildbot\\chromium.chrome.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win_chrome\\src\\testing\\buildbot\\chromium.chrome.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -275,19 +275,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Google_Chrome_Win\\src\\tools\\mb\\mb.py",
+      "[BUILDER_CACHE]\\win_chrome\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.chrome",
       "-b",
       "Google Chrome Win",
       "--config-file",
-      "[BUILDER_CACHE]\\Google_Chrome_Win\\src\\tools\\mb\\mb_config.pyl",
+      "[BUILDER_CACHE]\\win_chrome\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]\\Google_Chrome_Win\\src",
+    "cwd": "[BUILDER_CACHE]\\win_chrome\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -308,7 +308,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[BUILDER_CACHE]\\Google_Chrome_Win\\src",
+      "[BUILDER_CACHE]\\win_chrome\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
@@ -366,7 +366,7 @@
       "--platform",
       "win"
     ],
-    "cwd": "[BUILDER_CACHE]\\Google_Chrome_Win",
+    "cwd": "[BUILDER_CACHE]\\win_chrome",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -380,7 +380,7 @@
       "--target",
       "Release"
     ],
-    "cwd": "[BUILDER_CACHE]\\Google_Chrome_Win",
+    "cwd": "[BUILDER_CACHE]\\win_chrome",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

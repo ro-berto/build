@@ -12,7 +12,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]\\win_chromium_rel_ng",
+      "[BUILDER_CACHE]\\win",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -60,7 +60,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_chromium_rel_ng",
+    "cwd": "[BUILDER_CACHE]\\win",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -198,7 +198,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win_chromium_rel_ng\\src\\tools\\swarming_client\\swarming.py",
+      "[BUILDER_CACHE]\\win\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -214,7 +214,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_chromium_rel_ng\\src",
+    "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -335,7 +335,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_chromium_rel_ng\\src",
+    "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",

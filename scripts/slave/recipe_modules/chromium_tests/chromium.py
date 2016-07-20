@@ -31,6 +31,7 @@ SPEC = {
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_acl': 'public-read',
+      'checkout_dir': 'win_archive',
       'testing': {
         'platform': 'win',
       },
@@ -60,6 +61,7 @@ SPEC = {
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_acl': 'public-read',
+      'checkout_dir': 'win_x64_archive',
       'testing': {
         'platform': 'win',
       },
