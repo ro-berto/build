@@ -128,7 +128,11 @@ class DefaultFlavorUtils(object):
       make_cmd = ['python', 'make.py']
       self._skia_api._run_once(self.bootstrap_win_toolchain)
       if 'Vulkan' in self._skia_api.builder_name:
-        env['VK_SDK_PATH'] = self._skia_api.slave_dir.join('vulkan_1.0.17.0')
+        env['VK_SDK_PATH'] = self._skia_api.slave_dir.join('win_vulkan_sdk')
+        if not self._skia_api.m.path.exists(self._skia_api.infrabots_dir.join(
+            'assets', 'win_vulkan_sdk', 'VERSION')):
+          # TODO(kjlubick): Remove this once enough time has passed.
+          env['VK_SDK_PATH'] = self._skia_api.slave_dir.join('vulkan_1.0.17.0')
     else:
       make_cmd = ['make']
     cmd = make_cmd + [target]

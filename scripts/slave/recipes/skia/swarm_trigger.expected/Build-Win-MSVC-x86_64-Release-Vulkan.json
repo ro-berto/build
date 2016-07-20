@@ -408,6 +408,16 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/skia/infra/bots/assets/win_vulkan_sdk/VERSION",
+      "/path/to/tmp/"
+    ],
+    "name": "read win_vulkan_sdk VERSION"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
@@ -465,8 +475,7 @@
       "-u",
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated",
-      "[dummy hash for isolate_recipes]",
-      "cf4ae04080c10367de5a7b8510966dced9c5ef4c"
+      "[dummy hash for isolate_recipes]"
     ],
     "name": "add_isolated_input",
     "~followup_annotations": [
@@ -549,6 +558,8 @@
       "--idempotent",
       "--cipd-package",
       "t:skia/bots/win_toolchain:version:0",
+      "--cipd-package",
+      "win_vulkan_sdk:skia/bots/win_vulkan_sdk:version:0",
       "def456",
       "--",
       "--workdir",

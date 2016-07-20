@@ -350,8 +350,13 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
       extra_hashes.append(hashes['2015'])
 
     if 'Vulkan' in builder_name:
-      # Vulkan 1.0.17.0
-      extra_hashes.append('cf4ae04080c10367de5a7b8510966dced9c5ef4c')
+      version_file = infrabots_dir.join('assets', 'win_vulkan_sdk', 'VERSION')
+      if api.path.exists(version_file):
+        cipd_packages.append(cipd_pkg(api, infrabots_dir, 'win_vulkan_sdk'))
+      else:
+        # Vulkan 1.0.17.0
+        # TODO(kjlubick): Delete this when enough time has passed
+        extra_hashes.append('cf4ae04080c10367de5a7b8510966dced9c5ef4c')
 
   # Fake these properties for compile tasks so that they can be de-duped.
   master = 'client.skia.compile'
@@ -694,7 +699,7 @@ def RunSteps(api):
 
 def test_for_bot(api, builder, mastername, slavename, testname=None,
                  legacy_android_sdk=False, legacy_win_toolchain=False,
-                 legacy_skimage_version=False):
+                 legacy_skimage_version=False, legacy_win_vulkan_sdk=False):
   """Generate a test for the given bot."""
   testname = testname or builder
   test = (
@@ -744,6 +749,9 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
     if not legacy_win_toolchain:
       paths.append(api.path['slave_build'].join(
           'skia', 'infra', 'bots', 'assets', 'win_toolchain', 'VERSION'))
+    if not legacy_win_vulkan_sdk:
+      paths.append(api.path['slave_build'].join(
+          'skia', 'infra', 'bots', 'assets', 'win_vulkan_sdk', 'VERSION'))
   if not legacy_skimage_version:
     paths.append(api.path['slave_build'].join(
         'skia', 'infra', 'bots', 'assets', 'skimage', 'VERSION'))
@@ -792,7 +800,7 @@ def GenTests(api):
   builder = 'Build-Win-MSVC-x86_64-Release-Vulkan'
   master = 'client.skia.compile'
   test = test_for_bot(api, builder, master, slave, 'legacy_win_toolchain',
-                      legacy_win_toolchain=True)
+                      legacy_win_toolchain=True, legacy_win_vulkan_sdk=True)
   yield test
 
   builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'
