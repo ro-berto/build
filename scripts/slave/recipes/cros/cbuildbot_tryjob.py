@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import base64
+import json
 import zlib
 
 
@@ -174,6 +175,23 @@ def GenTests(api):
           cbb_config='xxx-fakeboard-fakebuild',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
+      )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
+  )
+
+  # Test a config with buildbucket properties
+  yield (
+      api.test('pre_cq_buildbucket_config')
+      + api.properties(
+          mastername='chromiumos.tryserver',
+          buildername='pre-cq',
+          slavename='test',
+          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
+          revision=api.gitiles.make_hash('test'),
+          cbb_config='binhost-pre-cq',
+          cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
+                         '"--remote-version=4"]',
+          buildbucket=json.dumps({'build': {'id':'12345'}})
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )

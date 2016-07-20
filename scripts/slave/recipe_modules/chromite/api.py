@@ -69,6 +69,11 @@ class ChromiteApi(recipe_api.RecipeApi):
     }
     if 'buildnumber' in self.m.properties:
       defaults['CBB_BUILD_NUMBER'] = int(self.m.properties['buildnumber'])
+
+    if 'buildbucket' in self.m.properties:
+      buildbucket_json = self.m.json.loads(self.m.properties.get('buildbucket'))
+      defaults['CBB_BUILDBUCKET_ID'] = buildbucket_json['build']['id']
+
     return defaults
 
   def _load_config_dump(self):
@@ -348,6 +353,8 @@ class ChromiteApi(recipe_api.RecipeApi):
       cbb_args.extend(['--chrome_version', self.c.cbb.chrome_version])
     if self.c.cbb.config_repo:
       cbb_args.extend(['--config_repo', self.c.cbb.config_repo])
+    if self.c.cbb.buildbucket_id:
+      cbb_args.extend(['--buildbucket-id', self.c.cbb.buildbucket_id])
     if self.c.repo_cache_dir and self.c.cbb.supports_repo_cache:
       cbb_args.extend(['--repo-cache', self.c.repo_cache_dir])
 

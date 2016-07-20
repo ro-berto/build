@@ -13,7 +13,8 @@ path_api = DEPS['path'].api
 
 
 def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
-               CBB_DEBUG=False, CBB_CLOBBER=False, **_kwargs):
+               CBB_DEBUG=False, CBB_CLOBBER=False, CBB_BUILDBUCKET_ID=None,
+               **_kwargs):
   return ConfigGroup(
     # Base mapping of repository key to repository name.
     repositories = Dict(value_type=Set(basestring)),
@@ -63,6 +64,9 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # Whether this Chromite version supports warm cache.
       # https://chromium-review.googlesource.com/#/c/348011
       supports_repo_cache = Single(bool),
+
+      # If supplied, forward to cbuildbot as '--buildbucket-id'
+      buildbucket_id = Single(basestring, empty_val=CBB_BUILDBUCKET_ID)
     ),
 
     # A list of branches whose Chromite version is "old". Old Chromite
