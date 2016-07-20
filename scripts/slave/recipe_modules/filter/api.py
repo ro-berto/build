@@ -180,6 +180,7 @@ class FilterApi(recipe_api.RecipeApi):
     # to avoid confusing output.
     if cros_board:
       kwargs['wrapper'] = self.m.chromium.get_cros_chrome_sdk_wrapper()
+      kwargs.setdefault('cwd', self.m.path['checkout'])
     elif not use_mb:
       kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
     kwargs['env']['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \

@@ -313,6 +313,7 @@
       "{\"additional_compile_targets\": [\"chromiumos_preflight\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/chromeos_amd64_generic_chromium_compile_only_ng/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
