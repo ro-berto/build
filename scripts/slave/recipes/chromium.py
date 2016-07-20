@@ -45,35 +45,7 @@ def RunSteps(api):
         api.json.dumps(api.chromium_tests.builders, default=ignore_undumpable))
     return
 
-  mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
-
-  bot_config = api.chromium_tests.create_bot_config_object(
-      mastername, buildername)
-  api.chromium_tests.configure_build(bot_config)
-  update_step, bot_db = api.chromium_tests.prepare_checkout(
-      bot_config, force=True)
-  tests, tests_including_triggered = api.chromium_tests.get_tests(
-      bot_config, bot_db)
-  compile_targets = api.chromium_tests.get_compile_targets(
-      bot_config, bot_db, tests_including_triggered)
-  api.chromium_tests.compile_specific_targets(
-      bot_config, update_step, bot_db,
-      compile_targets, tests_including_triggered)
-  api.chromium_tests.archive_build(
-      mastername, buildername, update_step, bot_db)
-  api.chromium_tests.download_and_unzip_build(mastername, buildername,
-                                              update_step, bot_db)
-
-  if not tests:
-    return
-
-  api.chromium_swarming.configure_swarming(
-      'chromium', precommit=False, mastername=mastername)
-  test_runner = api.chromium_tests.create_test_runner(
-      api, tests, serialize_tests=bot_config.get('serialize_tests'))
-  with api.chromium_tests.wrap_chromium_tests(bot_config, tests):
-    test_runner()
+  api.chromium_tests.main_waterfall_steps(api)
 
 
 def _sanitize_nonalpha(text):
