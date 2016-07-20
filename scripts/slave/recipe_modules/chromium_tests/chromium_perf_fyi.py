@@ -76,23 +76,15 @@ _AddBotSpec(
     name='Win Power High-DPI Perf',
     platform='win',
     parent_builder='Win x64 Builder',
-    perf_id='win-power-fyi-dell',
+    perf_id='win-power-high-dpi',
     target_bits=64,
     parent_master='chromium.perf')
 
 _AddBotSpec(
-    name='Win Power Low-End 2GB Perf',
+    name='Win Power Low-End Perf',
     platform='win',
     parent_builder='Win x64 Builder',
-    perf_id='win-power-fyi-hp',
-    target_bits=64,
-    parent_master='chromium.perf')
-
-_AddBotSpec(
-    name='Win Power Low-End 4GB Perf',
-    platform='win',
-    parent_builder='Win x64 Builder',
-    perf_id='win-power-low-end-4gb',
+    perf_id='win-power-low-end',
     target_bits=64,
     parent_master='chromium.perf')
 
@@ -107,7 +99,7 @@ _AddBotSpec(
     name='Mac Power Dual-GPU Perf',
     platform='mac',
     parent_builder='Mac Builder',
-    perf_id='mac-power-high-dpi',
+    perf_id='mac-power-dual-gpu',
     target_bits=64,
     parent_master='chromium.perf')
 
@@ -123,6 +115,6 @@ _AddBotSpec(
     name='Mac Test Retina Perf',
     platform='mac',
     parent_builder='Mac Builder',
-    perf_id='mac-retina-fyi',
+    perf_id='mac-test-retina',
     target_bits=64,
     parent_master='chromium.perf')
