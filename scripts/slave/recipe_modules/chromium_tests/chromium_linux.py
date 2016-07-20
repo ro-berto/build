@@ -35,6 +35,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
+      'checkout_dir': 'linux',
     },
     'Linux Tests': {
       'chromium_config': 'chromium',
@@ -74,6 +75,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
+      'checkout_dir': 'linux',
       # Temporary hack because the binaries are too large to be isolated.
       'GYP_DEFINES': {
         'fastbuild': 2,
@@ -114,6 +116,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
+      'checkout_dir': 'linux',
     },
     'Linux Tests (dbg)(1)': {
       'chromium_config': 'chromium',

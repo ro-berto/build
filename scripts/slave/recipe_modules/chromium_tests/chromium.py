@@ -118,6 +118,7 @@ SPEC = {
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_acl': 'public-read',
+      'checkout_dir': 'linux_clobber',
       'testing': {
         'platform': 'linux',
       },

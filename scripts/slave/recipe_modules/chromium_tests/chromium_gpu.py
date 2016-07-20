@@ -119,6 +119,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
+      'checkout_dir': 'linux',
     },
     'GPU Linux Builder (dbg)': {
       'chromium_config': 'chromium',
