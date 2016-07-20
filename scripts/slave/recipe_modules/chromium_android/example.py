@@ -98,6 +98,10 @@ BUILDERS = freeze({
     },
     'result_details': {
       'result_details': True
+    },
+    'enable_platform_mode': {
+      'perf_config': 'sharded_perf_tests.json',
+      'enable_platform_mode': True
     }
 })
 
@@ -185,7 +189,8 @@ def RunSteps(api, buildername):
           config='fake_config.json',
           flaky_config='flake_fakes.json',
           upload_archives_to_bucket='archives-bucket',
-          known_devices_file=config.get('last_known_devices', None))
+          known_devices_file=config.get('last_known_devices', None),
+          enable_platform_mode=config.get('enable_platform_mode', None))
   except api.step.StepFailure as f:
     failure = f
 

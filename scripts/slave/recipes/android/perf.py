@@ -25,10 +25,12 @@ REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
                     num_host_shards=1, target_bits=64,
-                    browser_name=None, remove_system_webview=False):
+                    browser_name=None, remove_system_webview=False,
+                    enable_platform_mode=False):
   def _CreateShardTestSpec(name, perf_id, required_apks, num_device_shards,
                            num_host_shards, shard_index, target_bits,
-                           browser_name, remove_system_webview):
+                           browser_name, remove_system_webview,
+                           enable_platform_mode):
     spec = {
       'perf_id': perf_id,
       'required_apks': required_apks,
@@ -41,6 +43,7 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
       'known_devices_file': '.known_devices',
       'browser_name': browser_name,
       'remove_system_webview': remove_system_webview,
+      'enable_platform_mode': enable_platform_mode,
     }
     if target_bits == 32:
       builder_name = 'android_perf_rel'
@@ -56,7 +59,8 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
     builder_name = '%s (%d)' % (name, shard_index + 1)
     tester_spec[builder_name] = _CreateShardTestSpec(
         name, perf_id, required_apks, num_device_shards, num_host_shards,
-        shard_index, target_bits, browser_name, remove_system_webview)
+        shard_index, target_bits, browser_name, remove_system_webview,
+        enable_platform_mode)
   return tester_spec
 
 def _ChromiumPerfTesters():
@@ -176,7 +180,8 @@ def RunSteps(api):
         num_device_shards=builder['num_device_shards'],
         num_host_shards=builder.get('num_host_shards', 1),
         shard_index=builder.get('shard_index', 0),
-        override_browser_name=builder.get('browser_name'))
+        override_browser_name=builder.get('browser_name'),
+        enable_platform_mode=builder.get('enable_platform_mode'))
     dynamic_perf_tests.run(api, None)
 
     if failures:

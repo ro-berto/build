@@ -602,6 +602,7 @@ class AndroidApi(recipe_api.RecipeApi):
                          chartjson_output=False,
                          max_battery_temp=None,
                          known_devices_file=None,
+                         enable_platform_mode=False,
                          **kwargs):
     args = [
         'perf',
@@ -618,6 +619,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--max-battery-temp', max_battery_temp])
     if known_devices_file:
       args.extend(['--known-devices-file', known_devices_file])
+    if enable_platform_mode:
+      args.extend(['--enable-platform-mode'])
 
     self.test_runner(
         'Sharded Perf Tests',
@@ -630,7 +633,8 @@ class AndroidApi(recipe_api.RecipeApi):
                              test_type_transform=lambda x: x,
                              chartjson_file=False, max_battery_temp=None,
                              upload_archives_to_bucket=None,
-                             known_devices_file=None, **kwargs):
+                             known_devices_file=None,
+                             enable_platform_mode=False, **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -639,12 +643,15 @@ class AndroidApi(recipe_api.RecipeApi):
     test_type_transform: a lambda transforming the test name to the
       test_type to upload to.
     known_devices_file: Path to file containing serial numbers of known devices.
+    enable_platform_mode: If set, will run using the android test runner's new
+      platform mode.
     """
     # test_runner.py actually runs the tests and records the results
     self._run_sharded_tests(config=config, flaky_config=flaky_config,
                             chartjson_output=chartjson_file,
                             max_battery_temp=max_battery_temp,
-                            known_devices_file=known_devices_file, **kwargs)
+                            known_devices_file=known_devices_file,
+                            enable_platform_mode=enable_platform_mode, **kwargs)
 
     # now obtain the list of tests that were executed.
     result = self.test_runner(
@@ -679,6 +686,8 @@ class AndroidApi(recipe_api.RecipeApi):
                         '--blacklist-file', self.blacklist_file]
       if archive:
         print_step_cmd.extend(['--get-output-dir-archive', archive])
+      if enable_platform_mode:
+        print_step_cmd.extend(['--enable-platform-mode'])
 
       try:
         with self.handle_exit_codes():
