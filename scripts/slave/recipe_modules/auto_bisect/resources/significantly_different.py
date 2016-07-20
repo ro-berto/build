@@ -12,10 +12,10 @@ def main(argv, anaconda_path=None):
   _, list_a, list_b, significance  = argv
 
   # Do not even test if there's a single repeated value on both samples.
-  if len(set(list_a + list_b)) == 1:
+  if len(set(json.loads(list_a) + json.loads(list_b))) == 1:
     return {
-        'first_sample': list_a,
-        'second_sample': list_b,
+        'first_sample': json.loads(list_a),
+        'second_sample': json.loads(list_b),
         'mann_p_value': None,
         'anderson_p_value': None,
         'welch_p_value': None,
