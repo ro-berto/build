@@ -173,7 +173,9 @@ class SkiaApi(recipe_api.RecipeApi):
     self.default_env['PYTHONPATH'] = self.m.path['build'].join('scripts')
 
     # Compile bots keep a persistent checkout.
-    if self.is_compile_bot:
+    self.persistent_checkout = (self.is_compile_bot or
+                                'RecreateSKPs' in self.builder_name)
+    if self.persistent_checkout:
       if 'Win' in self.builder_name:
         self.checkout_root = self.make_path('C:\\', 'b', 'work')
         self.gclient_cache = self.make_path('C:\\', 'b', 'cache')
@@ -186,8 +188,9 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Some bots also require a checkout of chromium.
     self._need_chromium_checkout = 'CommandBuffer' in self.builder_name
-    if (self.is_compile_bot and
-        'SAN' in self.builder_name):
+    if ((self.is_compile_bot and
+         'SAN' in self.builder_name) or
+        'RecreateSKPs' in self.builder_name):
       self._need_chromium_checkout = True
 
     # Some bots also require a checkout of PDFium.
@@ -283,7 +286,7 @@ class SkiaApi(recipe_api.RecipeApi):
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
     cfg_kwargs = {}
-    if not self.is_compile_bot:
+    if not self.persistent_checkout:
       # We should've obtained the Skia checkout through isolates, so we don't
       # need to perform the checkout ourselves.
       self.m.path['checkout'] = self.skia_dir

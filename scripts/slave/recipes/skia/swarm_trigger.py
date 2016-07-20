@@ -38,6 +38,7 @@ TEST_BUILDERS = {
       'Build-Win-MSVC-x86_64-Release',
       'Build-Win-MSVC-x86_64-Release-Vulkan',
       'Housekeeper-PerCommit',
+      'Housekeeper-Nightly-RecreateSKPs_Canary',
       'Infra-PerCommit',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot',
       'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release',
@@ -213,6 +214,8 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
   isolate_file = '%s_skia.isolate' % task_name
   if 'Coverage' == builder_cfg.get('configuration'):
     isolate_file = 'coverage_skia.isolate'
+  if 'RecreateSKPs' in builder:
+    isolate_file = 'compile_skia.isolate'
   return api.skia_swarming.isolate_and_trigger_task(
       infrabots_dir.join(isolate_file),
       isolate_base_dir,
@@ -258,6 +261,24 @@ def housekeeper_swarm(api, builder_spec, got_revision, infrabots_dir,
   task = trigger_task(
       api,
       'housekeeper',
+      api.properties['buildername'],
+      api.properties['mastername'],
+      api.properties['slavename'],
+      api.properties['buildnumber'],
+      builder_spec,
+      got_revision,
+      infrabots_dir,
+      idempotent=False,
+      store_output=False,
+      extra_isolate_hashes=extra_isolate_hashes)
+  return api.skia_swarming.collect_swarming_task(task)
+
+
+def recreate_skps_swarm(api, builder_spec, got_revision, infrabots_dir,
+                        extra_isolate_hashes):
+  task = trigger_task(
+      api,
+      'RecreateSKPs',
       api.properties['buildername'],
       api.properties['mastername'],
       api.properties['slavename'],
@@ -595,6 +616,11 @@ def RunSteps(api):
                                            api.properties['buildername'])
   builder_cfg = builder_spec['builder_cfg']
 
+  if 'RecreateSKPs' in api.properties['buildername']:
+    recreate_skps_swarm(api, builder_spec, got_revision, infrabots_dir,
+                        extra_hashes)
+    return
+
   # Android bots require an SDK.
   if 'Android' in api.properties['buildername']:
     android_sdk_version_file = infrabots_dir.join(
@@ -691,7 +717,9 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
     if not legacy_android_sdk:
       paths.append(api.path['slave_build'].join(
           'skia', 'infra', 'bots', 'assets', 'android_sdk', 'VERSION'))
-  if 'Coverage' not in builder and 'Infra' not in builder:
+  if ('Coverage' not in builder and
+      'Infra' not in builder and
+      'RecreateSKPs' not in builder):
     test += api.step_data(
         'upload new .isolated file for compile_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
@@ -704,7 +732,7 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
     test += api.step_data(
         'upload new .isolated file for perf_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
-  if 'Housekeeper' in builder:
+  if 'Housekeeper' in builder and 'RecreateSKPs' not in builder:
     test += api.step_data(
         'upload new .isolated file for housekeeper_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
@@ -719,6 +747,10 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
   if not legacy_skimage_version:
     paths.append(api.path['slave_build'].join(
         'skia', 'infra', 'bots', 'assets', 'skimage', 'VERSION'))
+  if 'RecreateSKPs' in builder:
+    test += api.step_data(
+        'upload new .isolated file for RecreateSKPs_skia',
+        stdout=api.raw_io.output('def456 XYZ.isolated'))
 
   test += api.path.exists(*paths)
 

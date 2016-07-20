@@ -10,8 +10,6 @@ import os
 import subprocess
 import sys
 
-from common.skia.global_constants import SKIA_REPO
-
 sys.path.insert(0, os.path.join(os.getcwd(), 'common'))
 # pylint:disable=F0401
 from py.utils import git_utils
@@ -28,6 +26,7 @@ NO_MERGE_BUILDS
 '''
 SKIA_COMMITTER_EMAIL = 'skia.buildbots@gmail.com'
 SKIA_COMMITTER_NAME = 'skia.buildbots'
+SKIA_REPO = 'https://skia.googlesource.com/skia.git'
 
 
 def main(chrome_src_path, browser_executable, dry_run=False):
