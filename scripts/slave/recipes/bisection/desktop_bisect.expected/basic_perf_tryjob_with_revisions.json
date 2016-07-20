@@ -735,10 +735,12 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@",
       "===== PERF TRY JOB RESULTS =====",
+      "",
       "Test Command: src/tools/perf/run_benchmark -v --browser=release sunspider",
       "Test Metric: dummy/dummy",
       "Relative Change: 0.00000%",
       "Standard Error: +- 0.18047 delta",
+      "",
       "Revision    Mean        Std.Error",
       "Patch       5.805333333330.127614436662",
       "No Patch    5.805333333330.127614436662",
