@@ -439,6 +439,8 @@
       "pool",
       "Skia",
       "--tag",
+      "allow_milo:1",
+      "--tag",
       "buildername:Infra-PerCommit",
       "--tag",
       "buildnumber:5",

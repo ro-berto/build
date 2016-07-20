@@ -532,6 +532,8 @@
       "pool",
       "Skia",
       "--tag",
+      "allow_milo:1",
+      "--tag",
       "buildername:Build-Win-MSVC-x86_64-Release-Vulkan",
       "--tag",
       "buildnumber:5",

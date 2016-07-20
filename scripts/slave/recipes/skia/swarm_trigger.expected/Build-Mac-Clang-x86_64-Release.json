@@ -521,6 +521,8 @@
       "pool",
       "Skia",
       "--tag",
+      "allow_milo:1",
+      "--tag",
       "buildername:Build-Mac-Clang-x86_64-Release",
       "--tag",
       "buildnumber:5",

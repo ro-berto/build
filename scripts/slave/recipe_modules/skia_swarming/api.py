@@ -34,6 +34,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     self.m.swarming_client.checkout(revision=swarming_rev)
     self.m.swarming.check_client_version(step_test_data=(0, 8, 6))
     self.setup_go_isolate(luci_go_dir)
+    self.m.swarming.add_default_tag('allow_milo:1')
 
   # TODO(rmistry): Remove once the Go binaries are moved to recipes or buildbot.
   def setup_go_isolate(self, luci_go_dir):

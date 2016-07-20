@@ -536,6 +536,8 @@
       "pool",
       "Skia",
       "--tag",
+      "allow_milo:1",
+      "--tag",
       "buildername:Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan",
       "--tag",
       "buildnumber:5",

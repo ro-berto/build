@@ -610,6 +610,8 @@
       "pool",
       "Skia",
       "--tag",
+      "allow_milo:1",
+      "--tag",
       "buildername:Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot",
       "--tag",
       "buildnumber:5",

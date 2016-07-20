@@ -517,6 +517,8 @@
       "pool",
       "Skia",
       "--tag",
+      "allow_milo:1",
+      "--tag",
       "buildername:Housekeeper-Nightly-RecreateSKPs_Canary",
       "--tag",
       "buildnumber:5",

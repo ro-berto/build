@@ -549,6 +549,8 @@
       "pool",
       "Skia",
       "--tag",
+      "allow_milo:1",
+      "--tag",
       "buildername:Build-Ubuntu-GCC-x86_64-Release-Trybot",
       "--tag",
       "buildnumber:5",
