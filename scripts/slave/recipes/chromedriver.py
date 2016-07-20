@@ -118,4 +118,4 @@ def GenTests(api):
           parent_build_archive_url='gs://test-domain/test-archive.zip',
           got_revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
           got_revision_cp='refs/heads/master@{#333333}') +
-      api.step_data('java_tests(chrome_stable)', retcode=1))
+      api.step_data('java_tests chrome_stable', retcode=1))

@@ -20,8 +20,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
   def download_prebuilts(self):
     """Downloads the most recent prebuilts from Google storage."""
     with self.m.step.nest('Download Prebuilts'):
-      try:
-        prebuilt_dir = self.m.path.mkdtemp('prebuilt')
+      with self.m.tempfile.temp_dir('prebuilt') as prebuilt_dir:
         zipfile = prebuilt_dir.join('build.zip')
         unzip_dir = prebuilt_dir.join('unzipped')
         self.m.gsutil.download_latest_file(
@@ -36,8 +35,6 @@ class ChromedriverApi(recipe_api.RecipeApi):
                          source=unzip_dir.join('chromedriver'),
                          dest=self.m.chromium.output_dir,
                          infra_step=False)
-      finally:
-        self.m.file.rmtree(name='remove temp dir', path=prebuilt_dir)
 
   def archive_server_log(self, server_log):
     """Uploads chromedriver server log to Google storage.
@@ -62,30 +59,27 @@ class ChromedriverApi(recipe_api.RecipeApi):
       booleans indicating whether the tests passed.
     """
     with self.m.step.nest('Download Test Results Log'):
-      try:
+      with self.m.tempfile.temp_dir('results_log') as temp_log_dir:
         log_name = TEST_LOG_FORMAT % chromedriver_platform
-        temp_log_dir = self.m.path.mkdtemp('results_log')
         temp_log_file = temp_log_dir.join(log_name)
-        self.m.gsutil.download(name='download results log',
-                               source=log_name,
-                               bucket=GS_CHROMEDRIVER_DATA_BUCKET,
-                               dest=temp_log_file)
-        json_data = self.m.file.read(name='read results log file',
-                                     path=temp_log_file,
-                                     test_data='{}')
-        json_dict = self.m.json.loads(json_data)
-      except self.m.step.StepFailure:
-        json_dict = {}
-      finally:
-        self.m.file.rmtree(name='remove temp dir', path=temp_log_dir)
+        try:
+          self.m.gsutil.download(name='download results log',
+                                 source=log_name,
+                                 bucket=GS_CHROMEDRIVER_DATA_BUCKET,
+                                 dest=temp_log_file)
+          json_data = self.m.file.read(name='read results log file',
+                                       path=temp_log_file,
+                                       test_data='{}')
+          json_dict = self.m.json.loads(json_data)
+        except self.m.step.StepFailure:
+          json_dict = {}
     return {int(k): v for k, v in json_dict.iteritems()}
 
   def upload_test_results_log(self, chromedriver_platform, test_results_log):
     """Uploads the given test results log to Google storage."""
     with self.m.step.nest('Upload Test Results Log'):
-      try:
+      with self.m.tempfile.temp_dir('results_log') as temp_log_dir:
         log_name = TEST_LOG_FORMAT % chromedriver_platform
-        temp_log_dir = self.m.path.mkdtemp('results_log')
         temp_log_file = temp_log_dir.join(log_name)
         self.m.file.write(name='write results log to file %s' % log_name,
                           path=temp_log_file,
@@ -95,8 +89,6 @@ class ChromedriverApi(recipe_api.RecipeApi):
                              bucket=GS_CHROMEDRIVER_DATA_BUCKET,
                              dest=log_name,
                              link_name='results log')
-      finally:
-        self.m.file.rmtree(name='remove temp dir', path=temp_log_dir)
 
   def update_test_results_log(self, chromedriver_platform,
                               commit_position, passed):
@@ -122,7 +114,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
                             ref_chromedriver=None, android_package=None,
                             verbose=None):
     cmd = [
-      script, 
+      script,
       '--chromedriver', chromedriver,
       '--log-path', str(log_path)
     ]
@@ -136,45 +128,54 @@ class ChromedriverApi(recipe_api.RecipeApi):
       cmd.extend(['--android-package', android_package])
     return cmd
 
-  def run_python_tests(self, chromedriver, ref_chromedriver, chrome=None,
+  def _run_test(self, test_name, script_path, chromedriver,
+                ref_chromedriver=None, android_package=None, verbose=False,
+                archive_server_log=True, **kwargs): 
+    with self.m.step.nest(test_name):
+      with self.m.tempfile.temp_dir('server_log') as server_log_dir:
+        build_number = self.m.properties['buildnumber']
+        server_log = server_log_dir.join(
+            ('%s_%s' % (test_name, build_number)).replace(' ', '_'))
+
+        self.m.step('Run test %s' % test_name,
+                    self._generate_test_command(
+                        script_path, chromedriver, server_log,
+                        ref_chromedriver=ref_chromedriver,
+                        android_package=android_package,
+                        verbose=verbose),
+                    **kwargs)
+        if archive_server_log:
+          self.archive_server_log(server_log)
+
+  def run_python_tests(self, chromedriver, ref_chromedriver,
                        chrome_version_name=None, android_package=None,
                        archive_server_log=True, **kwargs):
     """Run the Chromedriver Python tests."""
-    version_info = ''
-    if chrome_version_name:
-      version_info = '(%s)' % chrome_version_name
-    with self.m.tempfile.temp_dir('server_log') as log_dir:
-      server_log = log_dir.join('server_log')
-      test_script_path = self.m.path['checkout'].join(
-          'chrome', 'test', 'chromedriver', 'test', 'run_py_tests.py')
-      self.m.step('python_tests%s' % version_info,
-                  self._generate_test_command(
-                      test_script_path, chromedriver, server_log,
-                      ref_chromedriver=ref_chromedriver,
-                      android_package=android_package),
-                  **kwargs)
-      if archive_server_log:
-        self.archive_server_log(server_log)
+    test_name = 'python_tests%s' % (
+        ' %s' % chrome_version_name if chrome_version_name else '')
+    test_script_path = self.m.path['checkout'].join(
+        'chrome', 'test', 'chromedriver', 'test', 'run_py_tests.py')
+    self._run_test(test_name, test_script_path, chromedriver,
+                   ref_chromedriver=ref_chromedriver,
+                   android_package=android_package,
+                   verbose=False,
+                   archive_server_log=archive_server_log,
+                   **kwargs)
 
-  def run_java_tests(self, chromedriver, chrome=None, chrome_version_name=None,
+  def run_java_tests(self, chromedriver, chrome_version_name=None,
                      android_package=None, verbose=False,
                      archive_server_log=True, **kwargs):
     """Run the Chromedriver Java tests."""
-    version_info = ''
-    if chrome_version_name:
-      version_info = '(%s)' % chrome_version_name
-    with self.m.tempfile.temp_dir('server_log') as log_dir:
-      server_log = log_dir.join('server_log')
-      test_script_path = self.m.path['checkout'].join(
-          'chrome', 'test', 'chromedriver', 'test', 'run_java_tests.py')
-      self.m.step('java_tests%s' % version_info,
-                  self._generate_test_command(
-                      test_script_path, chromedriver, server_log,
-                      ref_chromedriver=None, android_package=android_package,
-                      verbose=verbose),
-                  **kwargs)
-      if archive_server_log:
-        self.archive_server_log(server_log)
+    test_name = 'java_tests%s' % (
+        ' %s' % chrome_version_name if chrome_version_name else '')
+    test_script_path = self.m.path['checkout'].join(
+        'chrome', 'test', 'chromedriver', 'test', 'run_java_tests.py')
+    self._run_test(test_name, test_script_path, chromedriver,
+                   ref_chromedriver=None,
+                   android_package=android_package,
+                   verbose=verbose,
+                   archive_server_log=archive_server_log,
+                   **kwargs)
 
   def run_all_tests(self, android_packages=None, archive_server_logs=True):
     """Run all Chromedriver tests."""

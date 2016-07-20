@@ -83,7 +83,7 @@ def GenTests(api):
       api.properties(
           parent_build_archive_url='gs://test-domain/test-archive.zip',
           got_revision_cp='refs/heads/master@{#3333333333}') +
-      api.step_data('java_tests(chrome_stable)', retcode=1))
+      api.step_data('java_tests chrome_stable', retcode=1))
 
   yield (
       api.test('%s_commit_already_in_logs' % sanitize('Android ChromeDriver')) +
