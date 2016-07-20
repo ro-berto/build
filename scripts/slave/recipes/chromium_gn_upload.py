@@ -68,6 +68,8 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
+  api.chromium.ensure_goma()
+
   api.chromium.runhooks()
 
   api.chromium.run_mb(mastername, buildername)
