@@ -58,6 +58,7 @@ def RunSteps(api):
 
   api.gclient.set_config('chromium')
   api.gclient.apply_config('android')
+  api.gclient.apply_config('chromedriver')
   api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
   api.chromium.runhooks()
