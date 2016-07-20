@@ -54,6 +54,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     'modules_tests',
     'modules_unittests',
     'peerconnection_unittests',
+    'rtc_unittests',
     'system_wrappers_unittests',
     'test_support_unittests',
     'tools_unittests',
