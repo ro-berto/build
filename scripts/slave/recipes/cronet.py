@@ -49,12 +49,14 @@ BUILDERS = freeze({
     },
   },
   'Android Cronet Builder Asan': {
-    'recipe_config': 'main_builder_mb',
+    'recipe_config': 'base_config',
     'run_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Release',
       'REPO_NAME': 'src',
+      'asan_symbolize': True,
     },
+    'chromium_apply_config': ['mb', 'chromium_asan'],
   },
   'Android Cronet ARMv6 Builder': {
     'recipe_config': 'main_builder_mb',
@@ -157,7 +159,9 @@ def RunSteps(api, buildername):
   cronet_kwargs = builder_config.get('cronet_kwargs', {})
   gyp_defs = builder_config.get('gyp_defs', {})
 
-  api.cronet.init_and_sync(recipe_config, kwargs, gyp_defs)
+  api.cronet.init_and_sync(
+      recipe_config, kwargs, gyp_defs,
+      chromium_apply_config=builder_config.get('chromium_apply_config'))
   api.cronet.build()
 
   if cronet_kwargs.get('PERF_ID'):

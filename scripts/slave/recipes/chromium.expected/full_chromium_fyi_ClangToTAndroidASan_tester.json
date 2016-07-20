@@ -538,11 +538,12 @@
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTAndroidASan_tester",
     "env": {
+      "ADB": "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/third_party/android_tools/sdk/platform-tools/adb",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/build/android:%(PATH)s"
     },
-    "name": "asan_device_setup.sh 07a00ca4"
+    "name": "Set up ASAN on device 07a00ca4"
   },
   {
     "cmd": [
@@ -740,6 +741,22 @@
       "PATH": "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_asan"
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/tools/android/asan/third_party/asan_device_setup.sh",
+      "--revert",
+      "--device",
+      "07a00ca4"
+    ],
+    "cwd": "[BUILDER_CACHE]/ClangToTAndroidASan_tester",
+    "env": {
+      "ADB": "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/third_party/android_tools/sdk/platform-tools/adb",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "LLVM_FORCE_HEAD_REVISION": "YES",
+      "PATH": "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/build/android:%(PATH)s"
+    },
+    "name": "Tear down ASAN on device 07a00ca4"
   },
   {
     "cmd": [

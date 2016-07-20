@@ -424,10 +424,11 @@
       "07a00ca4"
     ],
     "env": {
+      "ADB": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "asan_device_setup.sh 07a00ca4"
+    "name": "Set up ASAN on device 07a00ca4"
   },
   {
     "cmd": [

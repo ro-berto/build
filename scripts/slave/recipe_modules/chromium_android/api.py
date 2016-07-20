@@ -561,10 +561,20 @@ class AndroidApi(recipe_api.RecipeApi):
                        infra_step=True,
                        env=self.m.chromium.get_env())
 
+  def _asan_device_setup(self, name, args):
+    script = self.m.path['checkout'].join(
+        'tools', 'android', 'asan', 'third_party', 'asan_device_setup.sh')
+    cmd = [script] + args
+    env = dict(self.m.chromium.get_env())
+    env['ADB'] = self.m.adb.adb_path()
+    for d in self.devices:
+      self.m.step('%s %s' % (name, d),
+                  cmd + ['--device', d],
+                  infra_step=True,
+                  env=env)
+
   def asan_device_setup(self):
-    install_cmd = [
-        self.m.path['checkout'].join('tools', 'android', 'asan', 'third_party',
-                                     'asan_device_setup.sh'),
+    args = [
         '--lib',
         self.m.path['checkout'].join(
             'third_party', 'llvm-build', 'Release+Asserts', 'lib', 'clang',
@@ -575,11 +585,10 @@ class AndroidApi(recipe_api.RecipeApi):
             # in clang rolls, instead of it being both in src/ and build/.
             '3.9.0', 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
     ]
-    for d in self.devices:
-      self.m.step('asan_device_setup.sh %s' % str(d),
-                  install_cmd + ['--device', d],
-                  infra_step=True,
-                  env=self.m.chromium.get_env())
+    self._asan_device_setup('Set up ASAN on device', args)
+
+  def asan_device_teardown(self):
+    self._asan_device_setup('Tear down ASAN on device', ['--revert'])
 
   def monkey_test(self, **kwargs):
     args = [
@@ -987,6 +996,8 @@ class AndroidApi(recipe_api.RecipeApi):
       self.shutdown_device_monitor()
     self.logcat_dump(gs_bucket=logcat_gs_bucket)
     self.stack_tool_steps()
+    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+      self.asan_device_teardown()
     if self.c.gce_setup:
       self.shutdown_gce_instances(count=self.c.gce_count)
     self.test_report()
