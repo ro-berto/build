@@ -37,9 +37,6 @@ LOGGER = logging.getLogger('remote_run')
 _CIPD_PINS = {
   # Default recipe engine pin.
   None: 'latest',
-
-  # Custom per-master pins.
-  'chromium.infra': 'canary',
 }
 
 
