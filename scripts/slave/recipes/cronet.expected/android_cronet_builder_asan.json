@@ -714,6 +714,19 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/build/android/asan_symbolize.py",
+      "-l",
+      "[SLAVE_BUILD]/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "stack_tool_for_asan"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/tools/android/asan/third_party/asan_device_setup.sh",
       "--revert",
       "--device",

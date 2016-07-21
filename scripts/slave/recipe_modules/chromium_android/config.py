@@ -9,7 +9,8 @@ from recipe_engine.config import ConfigList, Dict, List, Single, Static
 from recipe_engine.config_types import Path
 
 def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
-               BUILD_CONFIG='Debug', REVISION='', **_kwargs):
+               BUILD_CONFIG='Debug', REVISION='', asan_symbolize=False,
+               **_kwargs):
   return ConfigGroup(
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
     INTERNAL = Static(INTERNAL),
@@ -18,7 +19,7 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     BUILD_CONFIG = Static(BUILD_CONFIG),
     revision = Single(basestring, empty_val=REVISION),
     revisions = Dict(value_type=(basestring, types.NoneType)),
-    asan_symbolize = Single(bool, required=False, empty_val=False),
+    asan_symbolize = Single(bool, required=False, empty_val=asan_symbolize),
     get_app_manifest_vars = Single(bool, required=False, empty_val=True),
     run_tree_truth = Single(bool, required=False, empty_val=True),
     deps_file = Single(basestring, required=False, empty_val='.DEPS.git'),
