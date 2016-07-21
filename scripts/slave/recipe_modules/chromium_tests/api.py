@@ -644,8 +644,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.gclient.c.revisions[first_solution_name] = str(
         bot_update_json['properties'][rev_property])
     self._resolve_fixed_revisions(bot_update_json)
+
+    kwargs = {}
+    if self._working_dir:
+      kwargs['cwd'] = self._working_dir
+
     self.m.bot_update.ensure_checkout(
-        force=True, patch=False, update_presentation=False)
+        force=True, patch=False, update_presentation=False, **kwargs)
     self.m.chromium.runhooks(name='runhooks (without patch)')
 
   def run_tests_on_tryserver(self, bot_config, api, tests, bot_update_step,

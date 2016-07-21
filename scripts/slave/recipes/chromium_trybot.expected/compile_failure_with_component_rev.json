@@ -452,6 +452,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
