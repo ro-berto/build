@@ -1729,16 +1729,18 @@ class FindAnnotatedTest(Test):
       if api.properties.get('buildername') is not None:
         timestamp_string = api.properties.get('current_time', timestamp_string)
 
+      args = [
+          '--apk-output-dir', api.chromium.output_dir,
+          '--json-output-dir', temp_output_dir,
+          '--timestamp-string', timestamp_string,
+          '-v']
+      args.extend(
+          ['--test-apks'] + [i for i in FindAnnotatedTest._TEST_APKS.values()])
       api.python(
           'run find_annotated_tests.py',
           api.path['checkout'].join(
               'tools', 'android', 'find_annotated_tests.py'),
-          args=[
-              '--test-apks', ' '.join(FindAnnotatedTest._TEST_APKS.values()),
-              '--apk-output-dir', api.chromium.output_dir,
-              '--json-output-dir', temp_output_dir,
-              '--timestamp-string', timestamp_string,
-              '-v'])
+          args=args)
       api.gsutil.upload(
           temp_output_dir.join(
               '%s-android-chrome.json' % timestamp_string),

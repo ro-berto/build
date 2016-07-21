@@ -328,15 +328,20 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/Android_Find_Annotated_Test/src/tools/android/find_annotated_tests.py",
-      "--test-apks",
-      "ContentShellTest SystemWebViewShellLayoutTest ChromePublicTest ChromeSyncShellTest BlimpTest AndroidWebViewTest",
       "--apk-output-dir",
       "[BUILDER_CACHE]/Android_Find_Annotated_Test/src/out/Debug",
       "--json-output-dir",
       "[TMP_BASE]/annotated_tests_json_tmp_1",
       "--timestamp-string",
       "20160101T000000",
-      "-v"
+      "-v",
+      "--test-apks",
+      "ContentShellTest",
+      "SystemWebViewShellLayoutTest",
+      "ChromePublicTest",
+      "ChromeSyncShellTest",
+      "BlimpTest",
+      "AndroidWebViewTest"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Find_Annotated_Test",
     "env": {
