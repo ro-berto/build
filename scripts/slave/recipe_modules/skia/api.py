@@ -34,8 +34,6 @@ BOTO_CHROMIUM_SKIA_GM = 'chromium-skia-gm.boto'
 GS_SUBDIR_TMPL_SK_IMAGE = 'skimage/v%s'
 GS_SUBDIR_TMPL_SKP = 'playback_%s/skps'
 
-MIN_COLORSPACE_SKIMAGE_VERSION = 5
-
 TEST_EXPECTED_SKP_VERSION = '42'
 TEST_EXPECTED_SK_IMAGE_VERSION = '42'
 
@@ -736,14 +734,11 @@ print json.dumps({'ccache': ccache})
       '--skps', self.device_dirs.skp_dir,
       '--images', self.flavor.device_path_join(
           self.device_dirs.images_dir, 'dm'),
+      '--colorImages', self.flavor.device_path_join(self.device_dirs.images_dir,
+                                                    'colorspace'),
       '--nameByHash',
       '--properties'
     ] + properties
-
-    if int(skimage_version) >= MIN_COLORSPACE_SKIMAGE_VERSION:
-      args .extend(['--colorImages',
-                    self.flavor.device_path_join(self.device_dirs.images_dir,
-                                                 'colorspace')])
 
     args.append('--key')
     args.extend(self._KeyParams())
