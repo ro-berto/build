@@ -89,6 +89,7 @@
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
+      "GYP_CHROMIUM_NO_ACTION": "0",
       "GYP_DEFINES": " component=static_library",
       "LANDMINES_VERBOSE": "1"
     },

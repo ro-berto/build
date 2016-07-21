@@ -56,7 +56,8 @@ def Linux32_steps(api):
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
       'DEPOT_TOOLS_UPDATE': '0',
       'GYP_DEFINES':
-      'branding=Chrome buildtype=Official component=static_library'}
+      'branding=Chrome buildtype=Official component=static_library',
+      'GYP_CHROMIUM_NO_ACTION': '0'}
   api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
@@ -119,7 +120,8 @@ def Mac_10_6_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
-      'DEPOT_TOOLS_UPDATE': '0', 'GYP_DEFINES': ' component=static_library'}
+      'DEPOT_TOOLS_UPDATE': '0', 'GYP_DEFINES': ' component=static_library',
+      'GYP_CHROMIUM_NO_ACTION': '0'}
   api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
@@ -183,7 +185,8 @@ def Win7_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
-      'DEPOT_TOOLS_UPDATE': '0','GYP_DEFINES': ' component=static_library'}
+      'DEPOT_TOOLS_UPDATE': '0','GYP_DEFINES': ' component=static_library',
+      'GYP_CHROMIUM_NO_ACTION': '0'}
   api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
@@ -245,7 +248,8 @@ def Linux_steps(api):
   # gclient runhooks wrapper step
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
       'DEPOT_TOOLS_UPDATE': '0', 'GYP_DEFINES':
-      'branding=Chrome buildtype=Official component=static_library'}
+      'branding=Chrome buildtype=Official component=static_library',
+      'GYP_CHROMIUM_NO_ACTION': '0'}
   api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
