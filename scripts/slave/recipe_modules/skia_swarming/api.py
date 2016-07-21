@@ -11,6 +11,8 @@ DEFAULT_TASK_EXPIRATION = 20*60*60
 DEFAULT_TASK_TIMEOUT = 4*60*60
 DEFAULT_IO_TIMEOUT = 40*60
 
+MILO_LOG_LINK = 'https://luci-milo.appspot.com/swarming/task/%s'
+
 
 class SkiaSwarmingApi(recipe_api.RecipeApi):
   """Provides steps to run Skia tasks on swarming bots."""
@@ -222,7 +224,9 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       if extra_args:
         swarming_task.extra_args = extra_args
       swarming_tasks.append(swarming_task)
-    self.m.swarming.trigger(swarming_tasks)
+    step_results = self.m.swarming.trigger(swarming_tasks)
+    for step_result in step_results:
+      self._add_log_links(step_result)
     return swarming_tasks
 
   def collect_swarming_task(self, swarming_task):
@@ -232,7 +236,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       swarming_task: An instance of swarming.SwarmingTask.
     """
     try:
-      return self.m.swarming.collect_task(swarming_task)
+      rv = self.m.swarming.collect_task(swarming_task)
     except self.m.step.StepFailure as e:  # pragma: no cover
       step_result = self.m.step.active_result
       # Change step result to Infra failure if the swarming task failed due to
@@ -245,6 +249,11 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
         step_result.presentation.status = self.m.step.EXCEPTION
         raise self.m.step.InfraFailure(e.name, step_result)
       raise
+    finally:
+      step_result = self.m.step.active_result
+      # Add log link.
+      self._add_log_links(step_result)
+    return rv
 
   def collect_swarming_task_isolate_hash(self, swarming_task):
     """Wait for the given swarming task to finish and return its output hash.
@@ -256,3 +265,21 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     """
     res = self.collect_swarming_task(swarming_task)
     return res.json.output['shards'][0]['isolated_out']['isolated']
+
+  def _add_log_links(self, step_result):
+    """Add Milo log links to all shards in the step."""
+    ids = []
+    shards = step_result.json.output.get('shards')
+    if shards:
+      for shard in shards:
+        ids.append(shard['id'])
+    else:
+      for _, task in step_result.json.output.get('tasks', {}).iteritems():
+        ids.append(task['task_id'])
+    for idx, task_id in enumerate(ids):
+      link = MILO_LOG_LINK % task_id
+      k = 'view steps on Milo'
+      if len(ids) > 1:  # pragma: nocover
+        k += ' (shard index %d, %d total)' % (idx, len(ids))
+      step_result.presentation.links[k] = link
+

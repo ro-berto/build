@@ -565,7 +565,8 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@view steps on Milo@https://luci-milo.appspot.com/swarming/task/10000@@@"
     ]
   },
   {
@@ -624,7 +625,8 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@",
+      "@@@STEP_LINK@view steps on Milo@https://luci-milo.appspot.com/swarming/task/148aa78d7aa0000@@@"
     ]
   },
   {
