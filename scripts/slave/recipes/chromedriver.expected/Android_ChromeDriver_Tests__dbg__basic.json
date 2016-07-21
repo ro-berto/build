@@ -522,7 +522,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests chrome_beta.Run test python_tests chrome_beta",
+    "name": "python_tests chrome_beta.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -577,7 +577,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests chrome_beta.Run test java_tests chrome_beta",
+    "name": "java_tests chrome_beta.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -633,7 +633,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests chrome_stable.Run test python_tests chrome_stable",
+    "name": "python_tests chrome_stable.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -688,7 +688,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests chrome_stable.Run test java_tests chrome_stable",
+    "name": "java_tests chrome_stable.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -744,7 +744,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests chromedriver_webview_shell.Run test python_tests chromedriver_webview_shell",
+    "name": "python_tests chromedriver_webview_shell.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -799,7 +799,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests chromedriver_webview_shell.Run test java_tests chromedriver_webview_shell",
+    "name": "java_tests chromedriver_webview_shell.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -855,7 +855,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests chromium.Run test python_tests chromium",
+    "name": "python_tests chromium.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -910,7 +910,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests chromium.Run test java_tests chromium",
+    "name": "java_tests chromium.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

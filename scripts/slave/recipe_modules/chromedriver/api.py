@@ -131,21 +131,25 @@ class ChromedriverApi(recipe_api.RecipeApi):
   def _run_test(self, test_name, script_path, chromedriver,
                 ref_chromedriver=None, android_package=None, verbose=False,
                 archive_server_log=True, **kwargs): 
-    with self.m.step.nest(test_name):
+    with self.m.step.nest(test_name) as nest_step:
       with self.m.tempfile.temp_dir('server_log') as server_log_dir:
         build_number = self.m.properties['buildnumber']
         server_log = server_log_dir.join(
             ('%s_%s' % (test_name, build_number)).replace(' ', '_'))
-
-        self.m.step('Run test %s' % test_name,
-                    self._generate_test_command(
-                        script_path, chromedriver, server_log,
-                        ref_chromedriver=ref_chromedriver,
-                        android_package=android_package,
-                        verbose=verbose),
-                    **kwargs)
-        if archive_server_log:
-          self.archive_server_log(server_log)
+        try:
+          self.m.step('Run Tests',
+                      self._generate_test_command(
+                          script_path, chromedriver, server_log,
+                          ref_chromedriver=ref_chromedriver,
+                          android_package=android_package,
+                          verbose=verbose),
+                      **kwargs)
+        except self.m.step.StepFailure:
+          nest_step.presentation.status = self.m.step.FAILURE
+          raise
+        finally:
+          if archive_server_log:
+            self.archive_server_log(server_log)
 
   def run_python_tests(self, chromedriver, ref_chromedriver,
                        chrome_version_name=None, android_package=None,

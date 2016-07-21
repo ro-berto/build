@@ -184,7 +184,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests chrome_shell.Run test python_tests chrome_shell",
+    "name": "python_tests chrome_shell.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -239,7 +239,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests chrome_shell.Run test java_tests chrome_shell",
+    "name": "java_tests chrome_shell.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -295,7 +295,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests chrome_stable.Run test python_tests chrome_stable",
+    "name": "python_tests chrome_stable.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -334,8 +334,60 @@
     "cmd": [],
     "name": "java_tests chrome_stable",
     "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "xvfb-run",
+      "-a",
+      "[SLAVE_BUILD]/src/chrome/test/chromedriver/test/run_java_tests.py",
+      "--chromedriver",
+      "[SLAVE_BUILD]/src/out/Release/chromedriver",
+      "--log-path",
+      "[TMP_BASE]/server_log_tmp_5/java_tests_chrome_stable_571",
+      "--verbose",
+      "--android-package",
+      "chrome_stable"
+    ],
+    "env": {
+      "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
+    },
+    "name": "java_tests chrome_stable.Run Tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/server_log_tmp_5/java_tests_chrome_stable_571",
+      "gs://chromedriver-data/server_logs/java_tests_chrome_stable_571"
+    ],
+    "name": "java_tests chrome_stable.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_5/java_tests_chrome_stable_571",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_5/java_tests_chrome_stable_571@https://storage.cloud.google.com/chromedriver-data/server_logs/java_tests_chrome_stable_571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "[TMP_BASE]/server_log_tmp_5"
+    ],
+    "name": "java_tests chrome_stable.rmtree [TMP_BASE]/server_log_tmp_5",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -350,7 +402,7 @@
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
-      "[TMP_BASE]/server_log_tmp_5/python_tests_chrome_beta_571",
+      "[TMP_BASE]/server_log_tmp_6/python_tests_chrome_beta_571",
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
       "--android-package",
@@ -359,7 +411,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests chrome_beta.Run test python_tests chrome_beta",
+    "name": "python_tests chrome_beta.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -373,13 +425,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/server_log_tmp_5/python_tests_chrome_beta_571",
+      "[TMP_BASE]/server_log_tmp_6/python_tests_chrome_beta_571",
       "gs://chromedriver-data/server_logs/python_tests_chrome_beta_571"
     ],
-    "name": "python_tests chrome_beta.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_5/python_tests_chrome_beta_571",
+    "name": "python_tests chrome_beta.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_6/python_tests_chrome_beta_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_5/python_tests_chrome_beta_571@https://storage.cloud.google.com/chromedriver-data/server_logs/python_tests_chrome_beta_571@@@"
+      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_6/python_tests_chrome_beta_571@https://storage.cloud.google.com/chromedriver-data/server_logs/python_tests_chrome_beta_571@@@"
     ]
   },
   {
@@ -387,9 +439,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/server_log_tmp_5"
+      "[TMP_BASE]/server_log_tmp_6"
     ],
-    "name": "python_tests chrome_beta.rmtree [TMP_BASE]/server_log_tmp_5",
+    "name": "python_tests chrome_beta.rmtree [TMP_BASE]/server_log_tmp_6",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -406,7 +458,7 @@
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
-      "[TMP_BASE]/server_log_tmp_6/java_tests_chrome_beta_571",
+      "[TMP_BASE]/server_log_tmp_7/java_tests_chrome_beta_571",
       "--verbose",
       "--android-package",
       "chrome_beta"
@@ -414,7 +466,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests chrome_beta.Run test java_tests chrome_beta",
+    "name": "java_tests chrome_beta.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -428,13 +480,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/server_log_tmp_6/java_tests_chrome_beta_571",
+      "[TMP_BASE]/server_log_tmp_7/java_tests_chrome_beta_571",
       "gs://chromedriver-data/server_logs/java_tests_chrome_beta_571"
     ],
-    "name": "java_tests chrome_beta.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_6/java_tests_chrome_beta_571",
+    "name": "java_tests chrome_beta.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_7/java_tests_chrome_beta_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_6/java_tests_chrome_beta_571@https://storage.cloud.google.com/chromedriver-data/server_logs/java_tests_chrome_beta_571@@@"
+      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_7/java_tests_chrome_beta_571@https://storage.cloud.google.com/chromedriver-data/server_logs/java_tests_chrome_beta_571@@@"
     ]
   },
   {
@@ -442,9 +494,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/server_log_tmp_6"
+      "[TMP_BASE]/server_log_tmp_7"
     ],
-    "name": "java_tests chrome_beta.rmtree [TMP_BASE]/server_log_tmp_6",
+    "name": "java_tests chrome_beta.rmtree [TMP_BASE]/server_log_tmp_7",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -461,7 +513,7 @@
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
-      "[TMP_BASE]/server_log_tmp_7/python_tests_chromedriver_webview_shell_571",
+      "[TMP_BASE]/server_log_tmp_8/python_tests_chromedriver_webview_shell_571",
       "--reference-chromedriver",
       "[SLAVE_BUILD]/src/chrome/test/chromedriver/third_party/java_tests/reference_builds/chromedriver_linux64",
       "--android-package",
@@ -470,7 +522,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "python_tests chromedriver_webview_shell.Run test python_tests chromedriver_webview_shell",
+    "name": "python_tests chromedriver_webview_shell.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -484,13 +536,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/server_log_tmp_7/python_tests_chromedriver_webview_shell_571",
+      "[TMP_BASE]/server_log_tmp_8/python_tests_chromedriver_webview_shell_571",
       "gs://chromedriver-data/server_logs/python_tests_chromedriver_webview_shell_571"
     ],
-    "name": "python_tests chromedriver_webview_shell.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_7/python_tests_chromedriver_webview_shell_571",
+    "name": "python_tests chromedriver_webview_shell.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_8/python_tests_chromedriver_webview_shell_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_7/python_tests_chromedriver_webview_shell_571@https://storage.cloud.google.com/chromedriver-data/server_logs/python_tests_chromedriver_webview_shell_571@@@"
+      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_8/python_tests_chromedriver_webview_shell_571@https://storage.cloud.google.com/chromedriver-data/server_logs/python_tests_chromedriver_webview_shell_571@@@"
     ]
   },
   {
@@ -498,9 +550,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/server_log_tmp_7"
+      "[TMP_BASE]/server_log_tmp_8"
     ],
-    "name": "python_tests chromedriver_webview_shell.rmtree [TMP_BASE]/server_log_tmp_7",
+    "name": "python_tests chromedriver_webview_shell.rmtree [TMP_BASE]/server_log_tmp_8",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -517,7 +569,7 @@
       "--chromedriver",
       "[SLAVE_BUILD]/src/out/Release/chromedriver",
       "--log-path",
-      "[TMP_BASE]/server_log_tmp_8/java_tests_chromedriver_webview_shell_571",
+      "[TMP_BASE]/server_log_tmp_9/java_tests_chromedriver_webview_shell_571",
       "--verbose",
       "--android-package",
       "chromedriver_webview_shell"
@@ -525,7 +577,7 @@
     "env": {
       "PATH": "%(PATH)s:[SLAVE_BUILD]/src/chrome/test/chromedriver/chrome"
     },
-    "name": "java_tests chromedriver_webview_shell.Run test java_tests chromedriver_webview_shell",
+    "name": "java_tests chromedriver_webview_shell.Run Tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -539,13 +591,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/server_log_tmp_8/java_tests_chromedriver_webview_shell_571",
+      "[TMP_BASE]/server_log_tmp_9/java_tests_chromedriver_webview_shell_571",
       "gs://chromedriver-data/server_logs/java_tests_chromedriver_webview_shell_571"
     ],
-    "name": "java_tests chromedriver_webview_shell.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_8/java_tests_chromedriver_webview_shell_571",
+    "name": "java_tests chromedriver_webview_shell.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_9/java_tests_chromedriver_webview_shell_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_8/java_tests_chromedriver_webview_shell_571@https://storage.cloud.google.com/chromedriver-data/server_logs/java_tests_chromedriver_webview_shell_571@@@"
+      "@@@STEP_LINK@server log [TMP_BASE]/server_log_tmp_9/java_tests_chromedriver_webview_shell_571@https://storage.cloud.google.com/chromedriver-data/server_logs/java_tests_chromedriver_webview_shell_571@@@"
     ]
   },
   {
@@ -553,9 +605,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/server_log_tmp_8"
+      "[TMP_BASE]/server_log_tmp_9"
     ],
-    "name": "java_tests chromedriver_webview_shell.rmtree [TMP_BASE]/server_log_tmp_8",
+    "name": "java_tests chromedriver_webview_shell.rmtree [TMP_BASE]/server_log_tmp_9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -574,7 +626,7 @@
       "----",
       "cp",
       "gs://chromedriver-data/android_log.json",
-      "[TMP_BASE]/results_log_tmp_9/android_log.json"
+      "[TMP_BASE]/results_log_tmp_10/android_log.json"
     ],
     "name": "Download Test Results Log.gsutil download results log",
     "~followup_annotations": [
@@ -586,7 +638,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/results_log_tmp_9/android_log.json",
+      "[TMP_BASE]/results_log_tmp_10/android_log.json",
       "/path/to/tmp/"
     ],
     "name": "Download Test Results Log.read results log file",
@@ -599,9 +651,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/results_log_tmp_9"
+      "[TMP_BASE]/results_log_tmp_10"
     ],
-    "name": "Download Test Results Log.rmtree [TMP_BASE]/results_log_tmp_9",
+    "name": "Download Test Results Log.rmtree [TMP_BASE]/results_log_tmp_10",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -616,7 +668,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"3333333333\": false}",
-      "[TMP_BASE]/results_log_tmp_10/android_log.json"
+      "[TMP_BASE]/results_log_tmp_11/android_log.json"
     ],
     "name": "Upload Test Results Log.write results log to file android_log.json",
     "~followup_annotations": [
@@ -632,7 +684,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/results_log_tmp_10/android_log.json",
+      "[TMP_BASE]/results_log_tmp_11/android_log.json",
       "gs://chromedriver-data/android_log.json"
     ],
     "name": "Upload Test Results Log.gsutil upload results log android_log.json",
@@ -646,9 +698,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/results_log_tmp_10"
+      "[TMP_BASE]/results_log_tmp_11"
     ],
-    "name": "Upload Test Results Log.rmtree [TMP_BASE]/results_log_tmp_10",
+    "name": "Upload Test Results Log.rmtree [TMP_BASE]/results_log_tmp_11",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
