@@ -85,6 +85,9 @@ def main(argv):
   parser.add_argument('--leak', action='store_true',
       help='Refrain from cleaning up generated artifacts.')
   parser.add_argument('--verbose', action='store_true')
+  parser.add_argument(
+      '--use-gitiles', action='store_true',
+      help='Use Gitiles-specific way to fetch repo (faster for large repos)')
 
   group = parser.add_argument_group('LogDog Bootstrap')
   logdog_bootstrap.add_arguments(group)
@@ -169,6 +172,10 @@ def main(argv):
         '--repository', args.repository,
         '--revision', args.revision,
         '--workdir', os.path.join(tempdir, 'rw'),
+    ]
+    if args.use_gitiles:
+      recipe_cmd.append('--use-gitiles')
+    recipe_cmd.extend([
         '--',
         '--verbose',
         'run',
@@ -176,7 +183,7 @@ def main(argv):
         '--workdir', os.path.join(tempdir, 'w'),
         '--output-result-json', recipe_result_path,
         args.recipe,
-    ]
+    ])
     # If we bootstrap through logdog, the recipe command line gets written
     # to a temporary file and does not appear in the log.
     LOGGER.info('Recipe command line: %r', recipe_cmd)
