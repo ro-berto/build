@@ -131,50 +131,61 @@ def RunSteps(api):
   # Ensure we remember the chromium revision.
   api.gclient.c.got_revision_mapping['src'] = 'got_cr_revision'
 
-  step_result = api.bot_update.ensure_checkout(force=True)
+  context = {}
+  checkout_dir = api.chromium_tests.get_checkout_dir(bot_config)
+  if checkout_dir:
+    context['cwd'] = checkout_dir
 
-  api.chromium.c.project_generator.tool = 'mb'
-  api.chromium.runhooks()
+  # Run all steps in the checkout dir (consistent with chromium_tests).
+  with api.step.context(context):
+    # TODO(phajdan.jr): remove redundant **context below once we fix things
+    # to behave the same without it.
+    step_result = api.bot_update.ensure_checkout(force=True, **context)
 
-  api.chromium_tests.run_mb_and_compile(
-      ['blink_tests'], [],
-      name_suffix=' (with patch)',
-  )
+    api.chromium.ensure_goma()
 
-  api.chromium.runtest('webkit_unit_tests', xvfb=True)
-
-  def component_pinned_fn(_failing_steps):
-    bot_update_json = step_result.json.output
-    api.gclient.c.revisions['src'] = str(
-        bot_update_json['properties']['got_cr_revision'])
-    # Reset component revision to the pinned revision from chromium's DEPS
-    # for comparison.
-    del api.gclient.c.revisions[bot_config['component']['path']]
-    # Update without changing got_revision. The first sync is the revision
-    # that is tested. The second is just for comparison. Setting got_revision
-    # again confuses the waterfall's console view.
-    api.bot_update.ensure_checkout(force=True, update_presentation=False)
+    api.chromium.c.project_generator.tool = 'mb'
+    api.chromium.runhooks()
 
     api.chromium_tests.run_mb_and_compile(
         ['blink_tests'], [],
-        name_suffix=' (without patch)',
+        name_suffix=' (with patch)',
     )
 
-  extra_args = list(bot_config.get('test_args', []))
-  if bot_config.get('additional_expectations'):
-    extra_args.extend([
-      '--additional-expectations',
-      api.path['checkout'].join(*bot_config['additional_expectations']),
-    ])
+    api.chromium.runtest('webkit_unit_tests', xvfb=True)
 
-  tests = [
-    api.chromium_tests.steps.BlinkTest(extra_args=extra_args),
-  ]
+    def component_pinned_fn(_failing_steps):
+      bot_update_json = step_result.json.output
+      api.gclient.c.revisions['src'] = str(
+          bot_update_json['properties']['got_cr_revision'])
+      # Reset component revision to the pinned revision from chromium's DEPS
+      # for comparison.
+      del api.gclient.c.revisions[bot_config['component']['path']]
+      # Update without changing got_revision. The first sync is the revision
+      # that is tested. The second is just for comparison. Setting got_revision
+      # again confuses the waterfall's console view.
+      api.bot_update.ensure_checkout(force=True, update_presentation=False)
 
-  if 'ignition' in buildername:
-    determine_new_ignition_failures(api, extra_args)
-  else:
-    api.test_utils.determine_new_failures(api, tests, component_pinned_fn)
+      api.chromium_tests.run_mb_and_compile(
+          ['blink_tests'], [],
+          name_suffix=' (without patch)',
+      )
+
+    extra_args = list(bot_config.get('test_args', []))
+    if bot_config.get('additional_expectations'):
+      extra_args.extend([
+        '--additional-expectations',
+        api.path['checkout'].join(*bot_config['additional_expectations']),
+      ])
+
+    tests = [
+      api.chromium_tests.steps.BlinkTest(extra_args=extra_args),
+    ]
+
+    if 'ignition' in buildername:
+      determine_new_ignition_failures(api, extra_args)
+    else:
+      api.test_utils.determine_new_failures(api, tests, component_pinned_fn)
 
 
 def _sanitize_nonalpha(text):
@@ -190,7 +201,8 @@ def GenTests(api):
     return (
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
-                             revision='20123')
+                             revision='20123',
+                             path_config='kitchen')
     )
 
   for mastername, master_config in BUILDERS.iteritems():

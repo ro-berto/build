@@ -130,24 +130,28 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
+  def get_checkout_dir(self, bot_config):
+    try:
+      builder_cache = self.m.path['builder_cache']
+    except KeyError:  # no-op if builder cache is not set up.
+      return None
+    else:
+      sanitized_buildername = ''.join(
+          c if c.isalnum() else '_' for c in self.m.properties['buildername'])
+      checkout_dir = builder_cache.join(
+          bot_config.get('checkout_dir', sanitized_buildername))
+      self.m.shutil.makedirs('checkout path', checkout_dir)
+      return checkout_dir
+
   def ensure_checkout(self, bot_config, root_solution_revision=None,
                       force=False):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
     kwargs = {}
-    try:
-      builder_cache = self.m.path['builder_cache']
-    except KeyError:  # no-op if builder cache is not set up.
-      pass
-    else:
-      sanitized_buildername = ''.join(
-          c if c.isalnum() else '_' for c in self.m.properties['buildername'])
-      checkout_path = builder_cache.join(
-          bot_config.get('checkout_dir', sanitized_buildername))
-      self.m.shutil.makedirs('checkout path', checkout_path)
-      kwargs['cwd'] = checkout_path
-      self._working_dir = checkout_path
+    self._working_dir = self.get_checkout_dir(bot_config)
+    if self._working_dir:
+      kwargs['cwd'] = self._working_dir
 
     # Bot Update re-uses the gclient configs.
     update_step = self.m.bot_update.ensure_checkout(
