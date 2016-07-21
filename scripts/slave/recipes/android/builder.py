@@ -194,6 +194,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
     dep = bot_config.get('set_component_rev')
     api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
+  api.chromium.ensure_goma()
   api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
 
