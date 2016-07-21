@@ -202,6 +202,7 @@ def GenTests(api):
           api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                    _sanitize_nonalpha(buildername))) +
           api.properties.generic(
+              path_config='kitchen',
               repo_name='src',
               repo_url=REPO_URL,
               mastername=mastername,
@@ -214,6 +215,7 @@ def GenTests(api):
               target='Release'))
   yield (api.test('provision_devices') +
       api.properties.generic(
+          path_config='kitchen',
           repo_name='src',
               repo_url=REPO_URL,
               mastername='chromium.perf',
@@ -227,6 +229,7 @@ def GenTests(api):
       + api.step_data('provision_devices', retcode=1))
   yield (api.test('get_perf_test_list_old_data') +
       api.properties.generic(
+          path_config='kitchen',
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
@@ -242,6 +245,7 @@ def GenTests(api):
         api.json.output(['perf_test.foo', 'page_cycler.foo'])))
   yield (api.test('src_side_script_fails') +
       api.properties.generic(
+          path_config='kitchen',
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
@@ -264,6 +268,7 @@ def GenTests(api):
       api.step_data('host_info', retcode=1))
   yield (api.test('test_failure') +
       api.properties.generic(
+          path_config='kitchen',
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
@@ -278,6 +283,7 @@ def GenTests(api):
           'perf_test.foo', retcode=1))
   yield (api.test('missing_device') +
       api.properties.generic(
+          path_config='kitchen',
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
