@@ -501,7 +501,6 @@
       "350",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
-      "--enable-platform-mode",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -583,8 +582,7 @@
       "page_cycler.foo",
       "--verbose",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--enable-platform-mode"
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
@@ -631,8 +629,7 @@
       "perf_test.foo",
       "--verbose",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--enable-platform-mode"
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
