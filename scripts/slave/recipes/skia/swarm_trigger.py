@@ -671,8 +671,13 @@ def RunSteps(api):
   if not (do_test_steps or do_perf_steps):
     return
 
-  api.skia.download_skps(api.path['slave_build'].join('tmp'),
-                         api.path['slave_build'].join('skps'))
+  # SKPs, SkImages.
+  if api.path.exists(infrabots_dir.join('assets', 'skp', 'VERSION')):
+    cipd_packages.append(cipd_pkg(api, infrabots_dir, 'skp'))
+  else:
+    # TODO(borenet): Remove this once enough time has passed.
+    api.skia.download_skps(api.path['slave_build'].join('tmp'),
+                           api.path['slave_build'].join('skps'))
   if api.path.exists(infrabots_dir.join('assets', 'skimage', 'VERSION')):
     cipd_packages.append(cipd_pkg(api, infrabots_dir, 'skimage'))
   else:
@@ -680,6 +685,7 @@ def RunSteps(api):
     api.skia.download_images(api.path['slave_build'].join('tmp'),
                              api.path['slave_build'].join('images'))
 
+  # Trigger test and perf tasks.
   test_task = None
   perf_task = None
   if do_test_steps:
@@ -699,7 +705,8 @@ def RunSteps(api):
 
 def test_for_bot(api, builder, mastername, slavename, testname=None,
                  legacy_android_sdk=False, legacy_win_toolchain=False,
-                 legacy_skimage_version=False, legacy_win_vulkan_sdk=False):
+                 legacy_skimage_version=False, legacy_win_vulkan_sdk=False,
+                 legacy_skp_version=False):
   """Generate a test for the given bot."""
   testname = testname or builder
   test = (
@@ -755,6 +762,9 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
   if not legacy_skimage_version:
     paths.append(api.path['slave_build'].join(
         'skia', 'infra', 'bots', 'assets', 'skimage', 'VERSION'))
+  if not legacy_skp_version:
+    paths.append(api.path['slave_build'].join(
+        'skia', 'infra', 'bots', 'assets', 'skp', 'VERSION'))
   if 'RecreateSKPs' in builder:
     test += api.step_data(
         'upload new .isolated file for RecreateSKPs_skia',
@@ -774,12 +784,13 @@ def GenTests(api):
   builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'
   master = 'client.skia'
   slave = 'skiabot-linux-test-000'
-  test = test_for_bot(api, builder, master, slave, 'No_downloaded_SKP_VERSION')
+  test = test_for_bot(api, builder, master, slave, 'No_downloaded_SKP_VERSION',
+                      legacy_skp_version=True)
   test += api.step_data('Get downloaded SKP_VERSION', retcode=1)
   yield test
 
   test = test_for_bot(api, builder, master, slave,
-                      'Wrong_downloaded_SKP_VERSION')
+                      'Wrong_downloaded_SKP_VERSION', legacy_skp_version=True)
   test += api.properties(test_downloaded_skp_version='999')
   yield test
 
@@ -808,4 +819,9 @@ def GenTests(api):
   test = test_for_bot(api, builder, master, slave, 'legacy_skimage_version',
                       legacy_skimage_version=True)
   test += api.step_data('Get downloaded SK_IMAGE_VERSION', retcode=1)
+  yield test
+
+  test = test_for_bot(api, builder, master, slave, 'legacy_skp_version',
+                      legacy_skp_version=True)
+  test += api.step_data('Get downloaded SKP_VERSION', retcode=1)
   yield test

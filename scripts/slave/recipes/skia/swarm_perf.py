@@ -75,6 +75,8 @@ def GenTests(api):
               api.path['slave_build'].join('skia'),
               api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                            'skimage', 'VERSION'),
+              api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                           'skp', 'VERSION'),
               api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
           )
         )
@@ -107,6 +109,8 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     api.platform('win', 64)

@@ -8,6 +8,7 @@
 
 DEPS = [
   'depot_tools/gclient',
+  'file',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -129,25 +130,48 @@ with open(dest_path, 'w') as f:
   f.write(contents)
         """ % boto_file)
 
+  # Clean up the output dir.
+  output_dir = api.path['slave_build'].join('skp_output')
+  if api.path.exists(output_dir):
+    api.file.rmtree('skp_output', output_dir)
+  api.file.makedirs('skp_output', output_dir)
+
   # Capture the SKPs.
-  with depot_tools_auth(api, UPDATE_SKPS_KEY):
-    cmd = ['python', api.path['build'].join('scripts', 'slave', 'skia',
-                                            'recreate_skps.py'),
-           src_dir,
-           src_dir.join('out', 'Release', 'chrome')]
-    if 'Canary' in api.properties['buildername']:
-      cmd.append('--dry-run')
-    path_var= api.path.pathsep.join([str(api.path['depot_tools']), '%(PATH)s'])
-    api.step('Recreate SKPs',
-             cmd=cmd,
-             cwd=api.skia.checkout_root.join('skia'),
-             env={
-                 'AWS_CREDENTIAL_FILE': boto_file,
-                 'BOTO_CONFIG': boto_file,
-                 'CHROME_HEADLESS': '1',
-                 'PATH': path_var,
-             },
-    )
+  path_var= api.path.pathsep.join([str(api.path['depot_tools']), '%(PATH)s'])
+  env = {
+      'CHROME_HEADLESS': '1',
+      'PATH': path_var,
+  }
+  boto_env = {
+      'AWS_CREDENTIAL_FILE': boto_file,
+      'BOTO_CONFIG': boto_file,
+  }
+  recreate_skps_env = {}
+  recreate_skps_env.update(env)
+  recreate_skps_env.update(boto_env)
+  asset_dir = api.skia.infrabots_dir.join('assets', 'skp')
+  cmd = ['python', asset_dir.join('create.py'),
+         '--chrome_src_path', src_dir,
+         '--browser_executable', src_dir.join('out', 'Release', 'chrome'),
+         '--target_dir', output_dir]
+  if 'Canary' not in api.properties['buildername']:
+    cmd.append('--upload_to_partner_bucket')
+  api.step('Recreate SKPs',
+           cmd=cmd,
+           cwd=api.skia.skia_dir,
+           env=recreate_skps_env)
+
+  # Upload the SKPs.
+  if 'Canary' not in api.properties['buildername']:
+    cmd = ['python',
+           api.path['build'].join('scripts', 'slave', 'skia', 'upload_skps.py'),
+           '--target_dir', output_dir]
+    with depot_tools_auth(api, UPDATE_SKPS_KEY):
+      api.step('Upload SKPs',
+               cmd=cmd,
+               cwd=api.skia.skia_dir,
+               env=env)
+
 
 def GenTests(api):
   for mastername, slaves in TEST_BUILDERS.iteritems():
@@ -160,6 +184,7 @@ def GenTests(api):
                            slavename=slavename,
                            revision='abc123',
                            buildnumber=2,
-                           swarm_out_dir='[SWARM_OUT_DIR]')
+                           swarm_out_dir='[SWARM_OUT_DIR]') +
+            api.path.exists(api.path['slave_build'].join('skp_output'))
         )
         yield test

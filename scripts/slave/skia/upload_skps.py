@@ -29,10 +29,7 @@ SKIA_COMMITTER_NAME = 'skia.buildbots'
 SKIA_REPO = 'https://skia.googlesource.com/skia.git'
 
 
-def main(chrome_src_path, browser_executable, dry_run=False):
-  if dry_run:
-    print 'Not committing results since --dry-run was provided'
-
+def main(target_dir):
   subprocess.check_call(['git', 'config', '--local', 'user.name',
                          SKIA_COMMITTER_NAME])
   subprocess.check_call(['git', 'config', '--local', 'user.email',
@@ -41,18 +38,24 @@ def main(chrome_src_path, browser_executable, dry_run=False):
     subprocess.check_call(['git', 'remote', 'set-url', 'origin', SKIA_REPO,
                            CHROMIUM_SKIA])
 
+  # Download CIPD.
+  cipd_sha1 = os.path.join(os.getcwd(), 'infra', 'bots', 'tools', 'luci-go',
+                           'linux64', 'cipd.sha1')
+  subprocess.check_call(['download_from_google_storage', '-s', cipd_sha1,
+                         '--bucket', 'chromium-luci'])
+
   with git_utils.GitBranch(branch_name='update_skp_version',
                            commit_msg=COMMIT_MSG,
-                           commit_queue=not dry_run):
-    subprocess.check_call(['python', os.path.join('tools', 'skp',
-                                                  'recreate_skps.py'),
-                           chrome_src_path, browser_executable, str(dry_run)])
+                           commit_queue=True):
+    upload_script = os.path.join(
+        os.getcwd(), 'infra', 'bots', 'assets', 'skp', 'upload.py')
+    subprocess.check_call(['python', upload_script, '-t', target_dir])
+
+  # TODO(borenet): Upload to partner GS bucket?
 
 
 if '__main__' == __name__:
   parser = argparse.ArgumentParser()
-  parser.add_argument("chrome_src_path")
-  parser.add_argument("browser_executable")
-  parser.add_argument("--dry-run", action="store_true")
+  parser.add_argument("--target_dir")
   args = parser.parse_args()
-  main(args.chrome_src_path, args.browser_executable, args.dry_run)
+  main(args.target_dir)

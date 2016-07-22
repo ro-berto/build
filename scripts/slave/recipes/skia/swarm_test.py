@@ -85,6 +85,8 @@ def GenTests(api):
               api.path['slave_build'].join('skia'),
               api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                            'skimage', 'VERSION'),
+              api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                           'skp', 'VERSION'),
               api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
           )
         )
@@ -115,6 +117,8 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     api.step_data('dm', retcode=1)
@@ -133,6 +137,8 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
@@ -155,6 +161,8 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
@@ -179,6 +187,8 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
@@ -203,6 +213,8 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
@@ -227,6 +239,8 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
@@ -251,6 +265,8 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder, adb='/usr/bin/adb') +
@@ -276,6 +292,8 @@ def GenTests(api):
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     api.platform('win', 64)
@@ -292,6 +310,24 @@ def GenTests(api):
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
         api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skp', 'VERSION'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    )
+  )
+
+  yield (
+    api.test('legacy_skp_version') +
+    api.properties(buildername=builder,
+                   mastername='client.skia',
+                   slavename='skiabot-linux-swarm-000',
+                   buildnumber=6,
+                   revision='abc123',
+                   swarm_out_dir='[SWARM_OUT_DIR]') +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+                                     'skimage', 'VERSION'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
     )
   )

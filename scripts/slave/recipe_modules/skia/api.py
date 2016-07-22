@@ -213,10 +213,19 @@ class SkiaApi(recipe_api.RecipeApi):
       self.images_dir = self.slave_dir.join('images')
     self.skia_out = self.skia_dir.join('out', self.builder_name)
     self.swarming_out_dir = self.make_path(self.m.properties['swarm_out_dir'])
-    self.local_skp_dir = self.slave_dir.join('skps')
+    self.local_skp_dir = self.slave_dir.join('skp')
+    if not self.m.path.exists(self.infrabots_dir.join(
+        'assets', 'skp', 'VERSION')):
+      # TODO(borenet): Remove this once enough time has passed.
+      self.local_skp_dir = self.slave_dir.join('skps')
     if not self.is_compile_bot:
       self.skia_out = self.slave_dir.join('out')
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
+    if not self.m.path.exists(self.tmp_dir):
+      self._run_once(self.m.file.makedirs,
+                     'tmp_dir',
+                     self.tmp_dir,
+                     infra_step=True)
 
     self.gsutil_env_chromium_skia_gm = self.gsutil_env(BOTO_CHROMIUM_SKIA_GM)
 
@@ -532,9 +541,8 @@ for p in psutil.process_iter():
     """Download and copy test images if needed."""
     version_file = self.infrabots_dir.join('assets', 'skimage', 'VERSION')
     if self.m.path.exists(version_file):
-      version_file = self.infrabots_dir.join('assets', 'skimage', 'VERSION')
       test_data = self.m.properties.get(
-          'test_actual_skp_version', TEST_EXPECTED_SKP_VERSION)
+          'test_downloaded_sk_image_version', TEST_EXPECTED_SK_IMAGE_VERSION)
       version = self._readfile(version_file,
                                name='Get downloaded skimage VERSION',
                                test_data=test_data).rstrip()
@@ -576,13 +584,23 @@ for p in psutil.process_iter():
 
   def _copy_skps(self):
     """Download and copy the SKPs if needed."""
-    version = self.check_actual_version(
-        VERSION_FILE_SKP,
-        self.tmp_dir,
-        test_actual_version=self.m.properties.get(
-            'test_downloaded_skp_version',
-            TEST_EXPECTED_SKP_VERSION),
-    )
+    version_file = self.infrabots_dir.join('assets', 'skp', 'VERSION')
+    if self.m.path.exists(version_file):
+      test_data = self.m.properties.get(
+          'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION)
+      version = self._readfile(version_file,
+                               name='Get downloaded SKP VERSION',
+                               test_data=test_data).rstrip()
+      self._writefile(self.m.path.join(self.tmp_dir, VERSION_FILE_SKP), version)
+    else:
+      # TODO(borenet): Remove this once enough time has passed.
+      version = self.check_actual_version(
+          VERSION_FILE_SKP,
+          self.tmp_dir,
+          test_actual_version=self.m.properties.get(
+              'test_downloaded_skp_version',
+              TEST_EXPECTED_SKP_VERSION),
+      )
     self.copy_dir(
         version,
         VERSION_FILE_SKP,

@@ -676,6 +676,16 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/skia/infra/bots/assets/skp/VERSION",
+      "/path/to/tmp/"
+    ],
+    "name": "read skp VERSION"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/tmp",
       "511"
@@ -693,26 +703,6 @@
       "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "Get downloaded SKP_VERSION"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/SKP_VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "Get expected SKP_VERSION"
   },
   {
     "cmd": [
@@ -955,6 +945,8 @@
       "slavename:skiabot-linux-compile-000",
       "--tag",
       "stepname:test_skia on Ubuntu",
+      "--cipd-package",
+      "skp:skia/bots/skp:version:0",
       "def456",
       "--",
       "--workdir",
@@ -1132,6 +1124,8 @@
       "slavename:skiabot-linux-compile-000",
       "--tag",
       "stepname:perf_skia on Ubuntu",
+      "--cipd-package",
+      "skp:skia/bots/skp:version:0",
       "def456",
       "--",
       "--workdir",
