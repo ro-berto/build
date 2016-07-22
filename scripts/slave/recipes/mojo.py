@@ -6,6 +6,7 @@ DEPS = [
   'adb',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'goma',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -44,7 +45,7 @@ def _BuildSteps(api, buildername, is_debug, is_official):
     # Disable Goma on Windows as it makes the build much slower (> 1 hour vs
     # 15 minutes). Try renabling once we have trybots and the cache would be
     # warm.
-    goma_dir = api.path['build'].join('goma')
+    goma_dir = api.goma.ensure_goma()
   env = {}
 
   if is_debug:
