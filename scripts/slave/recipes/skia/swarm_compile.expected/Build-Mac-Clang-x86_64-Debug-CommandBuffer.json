@@ -86,6 +86,7 @@
     ],
     "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

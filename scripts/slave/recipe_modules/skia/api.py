@@ -155,6 +155,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.slave_dir = self.m.path['slave_build']
     self.checkout_root = self.slave_dir
     self.default_env = {}
+    self.gclient_env = {}
     self.is_compile_bot = self.builder_name.startswith('Build-')
 
     self.default_env['CHROME_HEADLESS'] = '1'
@@ -186,6 +187,8 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Some bots also require a checkout of chromium.
     self._need_chromium_checkout = 'CommandBuffer' in self.builder_name
+    if 'CommandBuffer' in self.builder_name:
+      self.gclient_env['GYP_CHROMIUM_NO_ACTION'] = '0'
     if ((self.is_compile_bot and
          'SAN' in self.builder_name) or
         'RecreateSKPs' in self.builder_name):
@@ -353,7 +356,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.m.tryserver.maybe_apply_issue()
 
     if self._need_chromium_checkout:
-      self.m.gclient.runhooks(cwd=self.checkout_root)
+      self.m.gclient.runhooks(cwd=self.checkout_root, env=self.gclient_env)
 
   def copy_build_products(self, src, dst):
     """Copy whitelisted build products from src to dst."""
