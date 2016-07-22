@@ -103,6 +103,7 @@
         IPHONEOS_DEPLOYMENT_TARGET = 9.0;
         SDKROOT = iphoneos;
         CODE_SIGNING_REQUIRED = NO;
+        PROVISIONING_PROFILE = AUTOMATIC;
       };
       name = Default;
     };
