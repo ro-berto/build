@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'depot_tools/gclient',
+  'goma',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -59,9 +60,11 @@ def Linux32_steps(api):
   # cleanup_temp step
   api.chromium.cleanup_temp()
   # meta build step
+  goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
       args=["gen", "-m", "chromium.chromedriver", "-b",
-          build_properties.get('buildername'), "//out/Default"])
+          build_properties.get('buildername'), "--goma-dir", goma_dir,
+          "//out/Default"])
   # chromedriver compile.py step
   api.python("compile", api.path["build"].join("scripts", "slave",
     "compile.py"), args=['--target', 'Default',
@@ -126,9 +129,11 @@ def Mac_10_6_steps(api):
   # cleanup_temp step
   api.chromium.cleanup_temp()
   # meta build step
+  goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
       args=["gen", "-m", "chromium.chromedriver", "-b",
-          build_properties.get('buildername'), "//out/Default"])
+          build_properties.get('buildername'), "--goma-dir", goma_dir,
+          "//out/Default"])
   # chromedriver compile.py step
   api.python("compile", api.path["build"].join("scripts", "slave",
     "compile.py"), args=['--target', 'Default',
@@ -195,9 +200,11 @@ def Win7_steps(api):
   # cleanup_temp step
   api.chromium.cleanup_temp()
   # meta build step
+  goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
       args=["gen", "-m", "chromium.chromedriver", "-b",
-          build_properties.get('buildername'), "//out/Default"])
+          build_properties.get('buildername'), "--goma-dir", goma_dir,
+          "//out/Default"])
   # chromedriver compile.py step
   api.step("compile", ["python_slave", api.path["build"].join("scripts",
     "slave", "compile.py"), '--target', 'Default',
@@ -258,9 +265,11 @@ def Linux_steps(api):
   # cleanup_temp step
   api.chromium.cleanup_temp()
   # meta build step
+  goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
       args=["gen", "-m", "chromium.chromedriver", "-b",
-          build_properties.get('buildername'), "//out/Default"])
+          build_properties.get('buildername'), "--goma-dir", goma_dir,
+          "//out/Default"])
   # chromedriver compile.py step
   api.python("compile", api.path["build"].join("scripts", "slave",
     "compile.py"), args=['--target', 'Default',
