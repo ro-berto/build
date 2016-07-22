@@ -156,7 +156,7 @@ def RunSteps(api):
          '--author', 'v8-autoroll@chromium.org',
          '--reviewer',
          'hablich@chromium.org,machenbach@chromium.org,'
-         'yangguo@chromium.org,vogelheim@chromium.org',
+         'littledan@chromium.org,vogelheim@chromium.org',
          '--roll',
          '--json-output', api.json.output(),
          '--work-dir', api.path['slave_build'].join('workdir')],
