@@ -569,7 +569,7 @@ class AndroidApi(recipe_api.RecipeApi):
     env['ADB'] = self.m.adb.adb_path()
     for d in self.devices:
       self.m.step('%s %s' % (name, d),
-                  cmd + ['--device', d],
+                  cmd + ['--device', d, '--use-su'],
                   infra_step=True,
                   env=env)
 

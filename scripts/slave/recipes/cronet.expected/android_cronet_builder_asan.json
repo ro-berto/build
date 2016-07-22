@@ -534,7 +534,8 @@
       "--lib",
       "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/lib/clang/3.9.0/lib/linux/libclang_rt.asan-arm-android.so",
       "--device",
-      "07a00ca4"
+      "07a00ca4",
+      "--use-su"
     ],
     "env": {
       "ADB": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
@@ -730,7 +731,8 @@
       "[SLAVE_BUILD]/src/tools/android/asan/third_party/asan_device_setup.sh",
       "--revert",
       "--device",
-      "07a00ca4"
+      "07a00ca4",
+      "--use-su"
     ],
     "env": {
       "ADB": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",

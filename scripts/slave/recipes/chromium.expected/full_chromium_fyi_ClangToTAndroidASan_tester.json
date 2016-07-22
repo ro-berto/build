@@ -534,7 +534,8 @@
       "--lib",
       "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/third_party/llvm-build/Release+Asserts/lib/clang/3.9.0/lib/linux/libclang_rt.asan-arm-android.so",
       "--device",
-      "07a00ca4"
+      "07a00ca4",
+      "--use-su"
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTAndroidASan_tester",
     "env": {
@@ -747,7 +748,8 @@
       "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/tools/android/asan/third_party/asan_device_setup.sh",
       "--revert",
       "--device",
-      "07a00ca4"
+      "07a00ca4",
+      "--use-su"
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTAndroidASan_tester",
     "env": {
