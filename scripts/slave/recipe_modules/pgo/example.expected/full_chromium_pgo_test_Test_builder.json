@@ -151,15 +151,24 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\build\\gyp_chromium.py"
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "gen",
+      "-m",
+      "chromium_pgo.test",
+      "-b",
+      "Test builder",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "--phase",
+      "1",
+      "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=1 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
-      "GYP_MSVS_VERSION": "2015",
-      "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s"
+      "GYP_MSVS_VERSION": "2015"
     },
-    "name": "gyp_chromium"
+    "name": "generate_build_files"
   },
   {
     "cmd": [
@@ -658,14 +667,24 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\build\\gyp_chromium.py"
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "gen",
+      "-m",
+      "chromium_pgo.test",
+      "-b",
+      "Test builder",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "--phase",
+      "2",
+      "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=2 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
       "GYP_MSVS_VERSION": "2015"
     },
-    "name": "gyp_chromium (2)"
+    "name": "generate_build_files (2)"
   },
   {
     "cmd": [
