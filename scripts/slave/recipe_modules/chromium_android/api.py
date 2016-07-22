@@ -561,34 +561,37 @@ class AndroidApi(recipe_api.RecipeApi):
                        infra_step=True,
                        env=self.m.chromium.get_env())
 
-  def _asan_device_setup(self, name, args):
+  def _asan_device_setup(self, args):
     script = self.m.path['checkout'].join(
         'tools', 'android', 'asan', 'third_party', 'asan_device_setup.sh')
     cmd = [script] + args
     env = dict(self.m.chromium.get_env())
     env['ADB'] = self.m.adb.adb_path()
     for d in self.devices:
-      self.m.step('%s %s' % (name, d),
+      self.m.step(d,
                   cmd + ['--device', d],
                   infra_step=True,
                   env=env)
 
   def asan_device_setup(self):
-    args = [
-        '--lib',
-        self.m.path['checkout'].join(
-            'third_party', 'llvm-build', 'Release+Asserts', 'lib', 'clang',
-            # TODO(kjellander): Don't hardcode the clang version number here,
-            # else the bot will break every time it changes.  Instead,
-            # get it from `tools/clang/scripts/update.py --print-clang-version`,
-            # then the version can be updated atomically with a src-side change
-            # in clang rolls, instead of it being both in src/ and build/.
-            '3.9.0', 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
-    ]
-    self._asan_device_setup('Set up ASAN on device', args)
+    with self.m.step.nest('Set up ASAN on devices'):
+      self.m.adb.root_devices()
+      args = [
+          '--lib',
+          self.m.path['checkout'].join(
+              'third_party', 'llvm-build', 'Release+Asserts', 'lib', 'clang',
+              # TODO(kjellander): Don't hardcode the clang version number here,
+              # else the bot will break every time it changes.  Instead,
+              # get it from `tools/clang/scripts/update.py --print-clang-version`,
+              # then the version can be updated atomically with a src-side change
+              # in clang rolls, instead of it being both in src/ and build/.
+              '3.9.0', 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
+      ]
+      self._asan_device_setup(args)
 
   def asan_device_teardown(self):
-    self._asan_device_setup('Tear down ASAN on device', ['--revert'])
+    with self.m.step.nest('Tear down ASAN on devices'):
+      self._asan_device_setup(['--revert'])
 
   def monkey_test(self, **kwargs):
     args = [

@@ -416,6 +416,50 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "Set up ASAN on devices"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::adb]/resources/list_devices.py",
+      "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
+      "/path/to/tmp/json"
+    ],
+    "name": "Set up ASAN on devices.List adb devices",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "014E1F310401C009"
+    ],
+    "name": "Set up ASAN on devices.Root devices",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@for device in sys.argv[2:]:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'Attempting to root device %s ...' % (device)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'root'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'Finished rooting device %s' % (device)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "cmd": [
       "[SLAVE_BUILD]/src/tools/android/asan/third_party/asan_device_setup.sh",
       "--lib",
@@ -428,7 +472,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "Set up ASAN on device 07a00ca4"
+    "name": "Set up ASAN on devices.07a00ca4",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
