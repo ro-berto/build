@@ -87,10 +87,7 @@
       "[BUILD]/scripts/slave/runhooks_wrapper.py"
     ],
     "env": {
-      "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
-      "GYP_CHROMIUM_NO_ACTION": "0",
-      "GYP_DEFINES": " component=static_library",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "gclient runhooks wrapper"
@@ -110,12 +107,35 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.chromedriver",
+      "-b",
+      "Mac 10.6",
+      "//out/Default"
+    ],
+    "name": "meta build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
-      "chromium_builder_chromedriver"
+      "Default",
+      "chromedriver",
+      "chromedriver_tests",
+      "chromedriver_unittests"
     ],
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "strip",
+      "[SLAVE_BUILD]/src/out/Default/chromedriver"
+    ],
+    "name": "strip"
   },
   {
     "allow_subannotations": true,
@@ -124,7 +144,7 @@
       "-u",
       "[BUILD]/scripts/slave/chromium/chromedriver_buildbot_run.py",
       "--build-properties={\"buildername\":\"Mac 10.6\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.chromedriver\",\"recipe\":\"chromium.chromedriver.recipe_autogen\",\"slavename\":\"TestSlave\"}",
-      "--factory-properties={\"annotated_script\":\"chromedriver_buildbot_run.py\",\"blink_config\":\"chromium\",\"gclient_env\":{\"CHROMIUM_GYP_SYNTAX_CHECK\":\"1\",\"DEPOT_TOOLS_UPDATE\":\"0\",\"GYP_DEFINES\":\" component=static_library\",\"LANDMINES_VERBOSE\":\"1\"},\"needs_webdriver_java_tests\":true}"
+      "--factory-properties={\"annotated_script\":\"chromedriver_buildbot_run.py\",\"blink_config\":\"chromium\",\"gclient_env\":{\"DEPOT_TOOLS_UPDATE\":\"0\",\"LANDMINES_VERBOSE\":\"1\"},\"needs_webdriver_java_tests\":true}"
     ],
     "name": "annotated_steps"
   },

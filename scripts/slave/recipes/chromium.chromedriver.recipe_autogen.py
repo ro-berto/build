@@ -53,28 +53,29 @@ def Linux32_steps(api):
   build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
-  env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
-      'DEPOT_TOOLS_UPDATE': '0',
-      'GYP_DEFINES':
-      'branding=Chrome buildtype=Official component=static_library',
-      'GYP_CHROMIUM_NO_ACTION': '0'}
+  env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
   api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
+  # meta build step
+  api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
+      args=["gen", "-m", "chromium.chromedriver", "-b",
+          build_properties.get('buildername'), "//out/Default"])
   # chromedriver compile.py step
   api.python("compile", api.path["build"].join("scripts", "slave",
-    "compile.py"), args=['--target', 'Release',
-      'chromium_builder_chromedriver'])
+    "compile.py"), args=['--target', 'Default',
+      'chromedriver', 'chromedriver_tests', 'chromedriver_unittests'])
+  # strip binary
+  api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
+      'out', 'Default', 'chromedriver'))])
   # annotated_steps step
   api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
     args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":'+\
           '"chromedriver_buildbot_run.py","blink_config":"chromium",'+\
-          '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
-          '"DEPOT_TOOLS_UPDATE"'':"0","GYP_DEFINES":"branding=Chrome '+\
-          'buildtype=Official component=static_library","LANDMINES_VERBOSE":'+\
+          '"gclient_env":{"DEPOT_TOOLS_UPDATE":"0","LANDMINES_VERBOSE":'+\
           '"1"},"needs_webdriver_java_tests":true,"use_xvfb_on_linux":true}'],
     allow_subannotations=True)
 
@@ -119,25 +120,29 @@ def Mac_10_6_steps(api):
   build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
-  env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
-      'DEPOT_TOOLS_UPDATE': '0', 'GYP_DEFINES': ' component=static_library',
-      'GYP_CHROMIUM_NO_ACTION': '0'}
+  env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
   api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
+  # meta build step
+  api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
+      args=["gen", "-m", "chromium.chromedriver", "-b",
+          build_properties.get('buildername'), "//out/Default"])
   # chromedriver compile.py step
   api.python("compile", api.path["build"].join("scripts", "slave",
-    "compile.py"), args=['--target', 'Release',
-      'chromium_builder_chromedriver'])
+    "compile.py"), args=['--target', 'Default',
+      'chromedriver', 'chromedriver_tests', 'chromedriver_unittests'])
+  # strip binary
+  api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
+      'out', 'Default', 'chromedriver'))])
   # annotated_steps step
   api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
     args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"c'+\
           'hromedriver_buildbot_run.py","blink_config":"chromium","gclient_e'+\
-          'nv":{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0","GYP'+\
-          '_DEFINES":" component=static_library","LANDMINES_VERBOSE":"1"},"ne'+\
+          'nv":{"DEPOT_TOOLS_UPDATE":"0","LANDMINES_VERBOSE":"1"},"ne'+\
           'eds_webdriver_java_tests":true}'], allow_subannotations=True)
 
 
@@ -184,25 +189,26 @@ def Win7_steps(api):
   build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
-  env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
-      'DEPOT_TOOLS_UPDATE': '0','GYP_DEFINES': ' component=static_library',
-      'GYP_CHROMIUM_NO_ACTION': '0'}
+  env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
   api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
+  # meta build step
+  api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
+      args=["gen", "-m", "chromium.chromedriver", "-b",
+          build_properties.get('buildername'), "//out/Default"])
   # chromedriver compile.py step
   api.step("compile", ["python_slave", api.path["build"].join("scripts",
-    "slave", "compile.py"), '--target', 'Release',
-    'chromium_builder_chromedriver'])
+    "slave", "compile.py"), '--target', 'Default',
+      'chromedriver', 'chromedriver_tests', 'chromedriver_unittests'])
   # annotated_steps step
   api.step("annotated_steps", ["python_slave", api.path["build"].join("scripts",
     "slave", "chromium", "chromedriver_buildbot_run.py"),
     '--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\
           'medriver_buildbot_run.py","blink_config":"chromium","gclient_env":'+\
-          '{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0","GYP_DEF'+\
-          'INES":" component=static_library","LANDMINES_VERBOSE":"1"},"needs_'+\
+          '{"DEPOT_TOOLS_UPDATE":"0","LANDMINES_VERBOSE":"1"},"needs_'+\
           'webdriver_java_tests":true}'], allow_subannotations=True)
 
 
@@ -246,28 +252,31 @@ def Linux_steps(api):
   build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
-  env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
-      'DEPOT_TOOLS_UPDATE': '0', 'GYP_DEFINES':
-      'branding=Chrome buildtype=Official component=static_library',
-      'GYP_CHROMIUM_NO_ACTION': '0'}
+  env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
   api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
+  # meta build step
+  api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
+      args=["gen", "-m", "chromium.chromedriver", "-b",
+          build_properties.get('buildername'), "//out/Default"])
   # chromedriver compile.py step
   api.python("compile", api.path["build"].join("scripts", "slave",
-    "compile.py"), args=['--target', 'Release',
-      'chromium_builder_chromedriver'])
+    "compile.py"), args=['--target', 'Default',
+      'chromedriver', 'chromedriver_tests', 'chromedriver_unittests'])
+  # strip binary
+  api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
+      'out', 'Default', 'chromedriver'))])
   # annotated_steps step
   api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
     args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\
           'medriver_buildbot_run.py","blink_config":"chromium","gclient_env":'+\
-          '{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0","GYP_DEF'+\
-          'INES":"branding=Chrome buildtype=Official component=static_library'+\
-          '","LANDMINES_VERBOSE":"1"},"needs_webdriver_java_tests":true,"use_'+\
-          'xvfb_on_linux":true}'], allow_subannotations=True)
+          '{"DEPOT_TOOLS_UPDATE":"0","LANDMINES_VERBOSE":"1"},"needs_webdrive'+\
+          'r_java_tests":true,"use_xvfb_on_linux":true}'],
+    allow_subannotations=True)
 
 
 dispatch_directory = {
