@@ -1740,6 +1740,7 @@ class FindAnnotatedTest(Test):
           'run find_annotated_tests.py',
           api.path['checkout'].join(
               'tools', 'android', 'find_annotated_tests.py'),
+          cwd=api.path['checkout'],
           args=args)
       api.gsutil.upload(
           temp_output_dir.join(

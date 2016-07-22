@@ -343,7 +343,7 @@
       "BlimpTest",
       "AndroidWebViewTest"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Find_Annotated_Test",
+    "cwd": "[BUILDER_CACHE]/Android_Find_Annotated_Test/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_Find_Annotated_Test/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Find_Annotated_Test/src/build/android:%(PATH)s"
