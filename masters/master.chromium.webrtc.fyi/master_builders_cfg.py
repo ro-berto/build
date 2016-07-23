@@ -27,13 +27,9 @@ def Update(c):
     'Android Builder ARM64 (dbg)',
     'Linux Builder',
     'Mac Builder',
-    'Mac GN',
-    'Mac GN (dbg)',
   ]
   win_builders = [
     'Win Builder',
-    'Win x64 GN',
-    'Win x64 GN (dbg)',
   ]
   all_builders = hourly_builders + win_builders
 
@@ -55,28 +51,8 @@ def Update(c):
     {'name': 'Win Builder', 'category': 'win'},
     {'name': 'Win7 Tester', 'category': 'win'},
     {'name': 'Win10 Tester', 'category': 'win'},
-    {
-      'name': 'Win x64 GN',
-      'category': 'win',
-      'slavebuilddir': 'win_gn',
-    },
-    {
-      'name': 'Win x64 GN (dbg)',
-      'category': 'win',
-      'slavebuilddir': 'win_gn',
-    },
     {'name': 'Mac Builder', 'category': 'mac'},
     {'name': 'Mac Tester', 'category': 'mac'},
-    {
-      'name': 'Mac GN',
-      'category': 'mac',
-      'slavebuilddir': 'mac_gn',
-    },
-    {
-      'name': 'Mac GN (dbg)',
-      'category': 'mac',
-      'slavebuilddir': 'mac_gn',
-    },
     {'name': 'Linux Builder', 'category': 'linux'},
     {'name': 'Linux Tester', 'category': 'linux'},
     {'name': 'Android Builder (dbg)', 'category': 'android'},
