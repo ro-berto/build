@@ -58,6 +58,7 @@ def RunSteps(api):
   webrtc.apply_bot_config(BUILDERS, webrtc.RECIPE_CONFIGS)
 
   api.webrtc.checkout()
+  api.chromium.ensure_goma()
   api.chromium.runhooks()
 
   api.chromium.run_gn(use_goma=False)
