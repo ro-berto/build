@@ -871,6 +871,7 @@ def RunSteps(api):
     api.chromium.apply_config('trybot_flavor')
 
   api.bot_update.ensure_checkout(force=True)
+  api.chromium.ensure_goma()
   api.chromium.runhooks()
 
   if api.chromium.c.project_generator.tool == 'gn':
