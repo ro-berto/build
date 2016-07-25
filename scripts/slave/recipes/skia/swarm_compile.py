@@ -84,7 +84,7 @@ def GenTests(api):
   slavename = 'skiabot-win-compile-000'
   buildername = 'Build-Win-MSVC-x86-Debug'
   yield (
-      api.test('win_cleanup_after_failed_compile') +
+      api.test('win_retry_failed_compile') +
       api.properties(buildername=buildername,
                      mastername=mastername,
                      slavename=slavename,
