@@ -512,7 +512,7 @@ class SimulatorTestRunner(TestRunner):
         '-s', self.version,
         '-p'
       ]
-      self.homedir = subprocess.check_output(cmd)
+      self.homedir = subprocess.check_output(cmd).strip()
     else:
       self.homedir = tempfile.mkdtemp()
 
@@ -602,44 +602,51 @@ class SimulatorTestRunner(TestRunner):
 
     apps_dir = ''
 
-    # [homedir]/Library/Developers/CoreSimulator/Devices contains UDID
-    # directories for each simulated platform started with this home directory.
-    # We'd expect just one such directory since we generate a unique home
-    # directory for each SimulatorTestRunner instance. Inside the device
-    # UDID directory is where we find the Applications directory.
-    udid_dir = os.path.join(
-      self.homedir,
-      'Library',
-      'Developer',
-      'CoreSimulator',
-      'Devices',
-    )
-
-    if os.path.exists(udid_dir):
-      udids = os.listdir(udid_dir)
-
-      if len(udids) == 1:
-        apps_dir = os.path.join(
-          udid_dir,
-          udids[0],
-          'data',
-        )
-
-        if self.version.startswith('7'):
-          # On iOS 7 the Applications directory is found right here.
-          apps_dir = os.path.join(apps_dir, 'Applications')
-        else:
-          # On iOS 8+ the Application (singular) directory is a little deeper.
-          apps_dir = os.path.join(
-            apps_dir,
+    if self.xcode_version == '8.0':
+      apps_dir = os.path.join(
+            self.homedir,
             'Containers',
             'Data',
             'Application',
           )
-      else:
-        self.Print(
-          'Unexpected number of simulated device UDIDs in %s.' % udid_dir
-        )
+    else:
+      # [homedir]/Library/Developers/CoreSimulator/Devices contains UDID
+      # directories for each simulated platform started with this home dir.
+      # We'd expect just one such directory since we generate a unique home
+      # directory for each SimulatorTestRunner instance. Inside the device
+      # UDID directory is where we find the Applications directory.
+      udid_dir = os.path.join(
+        self.homedir,
+        'Library',
+        'Developer',
+        'CoreSimulator',
+        'Devices',
+      )
+      if os.path.exists(udid_dir):
+        udids = os.listdir(udid_dir)
+
+        if len(udids) == 1:
+          apps_dir = os.path.join(
+            udid_dir,
+            udids[0],
+            'data',
+          )
+
+          if self.version.startswith('7'):
+            # On iOS 7 the Applications directory is found right here.
+            apps_dir = os.path.join(apps_dir, 'Applications')
+          else:
+            # On iOS 8+ the Application (singular) directory is a little deeper.
+            apps_dir = os.path.join(
+              apps_dir,
+              'Containers',
+              'Data',
+              'Application',
+            )
+        else:
+          self.Print(
+            'Unexpected number of simulated device UDIDs in %s.' % udid_dir
+          )
 
     docs_dir = None
 
