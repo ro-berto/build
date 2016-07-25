@@ -400,6 +400,8 @@ def main_ninja(options, args, env):
 
   """
 
+  exit_status = -1
+
   try:
     print 'chdir to %s' % options.src_dir
     os.chdir(options.src_dir)
