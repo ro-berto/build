@@ -76,6 +76,7 @@ def GenTests(api):
                          slavename=slavename,
                          buildnumber=5,
                          revision='abc123',
+                         path_config='kitchen',
                          swarm_out_dir='[SWARM_OUT_DIR]') +
           api.path.exists(api.path['slave_build'])
         )

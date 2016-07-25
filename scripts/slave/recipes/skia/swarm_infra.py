@@ -137,11 +137,13 @@ def GenTests(api):
       api.test('Infra-PerCommit') +
       api.path.exists(api.path['slave_build'].join('go', 'src', INFRA_GO,
                                                    '.git')) +
-      api.properties(slavename='skiabot-linux-infra-001')
+      api.properties(slavename='skiabot-linux-infra-001',
+                     path_config='kitchen')
   )
   yield (
       api.test('Infra-PerCommit_initialcheckout') +
-      api.properties(slavename='skiabot-linux-infra-001')
+      api.properties(slavename='skiabot-linux-infra-001',
+                     path_config='kitchen')
   )
   yield (
       api.test('Infra-PerCommit_try') +
@@ -149,5 +151,6 @@ def GenTests(api):
                      issue=1234,
                      patchset=1,
                      revision=REF_HEAD,
-                     slavename='skiabot-linux-infra-001')
+                     slavename='skiabot-linux-infra-001',
+                     path_config='kitchen')
   )

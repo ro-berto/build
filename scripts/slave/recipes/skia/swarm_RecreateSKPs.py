@@ -184,6 +184,7 @@ def GenTests(api):
                            slavename=slavename,
                            revision='abc123',
                            buildnumber=2,
+                           path_config='kitchen',
                            swarm_out_dir='[SWARM_OUT_DIR]') +
             api.path.exists(api.path['slave_build'].join('skp_output'))
         )

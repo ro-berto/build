@@ -70,6 +70,7 @@ def GenTests(api):
                          slavename=slavename,
                          buildnumber=5,
                          revision='abc123',
+                         path_config='kitchen',
                          swarm_out_dir='[SWARM_OUT_DIR]') +
           api.path.exists(
               api.path['slave_build'].join('skia'),
@@ -101,6 +102,7 @@ def GenTests(api):
                    slavename='skiabot-linux-swarm-000',
                    buildnumber=5,
                    revision='abc123',
+                   path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]',
                    rietveld='https://codereview.chromium.org',
                    patchset=1,

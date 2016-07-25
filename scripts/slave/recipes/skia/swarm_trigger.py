@@ -598,6 +598,12 @@ def cipd_pkg(api, infrabots_dir, asset_name):
 
 
 def RunSteps(api):
+  # Fix some paths.
+  # TODO(borenet): We can remove this after the recipes move into Skia repo.
+  root_path = api.path.c.base_paths['slave_build'][:-4]
+  api.path.c.base_paths['build'] = root_path + ('build',)
+  api.path.c.base_paths['depot_tools'] = root_path + ('depot_tools',)
+
   got_revision = checkout_steps(api)
   api.skia_swarming.setup(
       api.path['checkout'].join('infra', 'bots', 'tools', 'luci-go'),
@@ -715,6 +721,7 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
                    mastername=mastername,
                    slavename=slavename,
                    buildnumber=5,
+                   path_config='kitchen',
                    revision='abc123')
   )
   paths = [
