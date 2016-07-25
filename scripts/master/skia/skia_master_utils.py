@@ -20,6 +20,7 @@ from master import slaves_list
 from master import status_logger
 from master.builders_pools import BuildersPools
 from master.factory import annotator_factory
+from master.factory import remote_run_factory
 from master.gitiles_poller import GitilesPoller
 from master.skia import status_json
 from master.skia import skia_notifier
@@ -33,6 +34,7 @@ import re
 DEFAULT_AUTO_REBOOT = False
 DEFAULT_DO_TRYBOT = True
 DEFAULT_RECIPE = 'skia/swarm_trigger'
+DEFAULT_REMOTE_RUN = False
 DEFAULT_TRYBOT_ONLY = False
 BUILDBUCKET_SCHEDULER_NAME = 'buildbucket'
 MASTER_ONLY_SCHEDULER_NAME = 'skia_master_only'
@@ -146,6 +148,7 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       'slavenames': slaves.GetSlavesName(builder=builder['name']),
       'category': category,
       'recipe': builder.get('recipe', DEFAULT_RECIPE),
+      'remote_run': builder.get('remote_run', DEFAULT_REMOTE_RUN),
       'properties': properties,
       'mergeRequests': builder.get('can_merge_requests', CanMergeBuildRequests),
       'slavebuilddir': SLAVE_WORKDIR,
@@ -243,9 +246,16 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
   annotator = annotator_factory.AnnotatorFactory(ActiveMaster)
 
   for builder_dict in builder_dicts:
-    factory = annotator.BaseFactory(
-        builder_dict['recipe'],
-        timeout=2400)
+    if builder_dict['remote_run']:
+      factory = remote_run_factory.RemoteRunFactory(
+        active_master=ActiveMaster,
+        repository='https://chromium.googlesource.com/chromium/tools/build.git',
+        recipe=builder_dict['recipe'],
+        factory_properties={'path_config': 'kitchen'})
+    else:
+      factory = annotator.BaseFactory(
+          builder_dict['recipe'],
+          timeout=2400)
     factory.properties.update(builder_dict['properties'], 'BuildFactory')
     builder_dict['factory'] = factory
 
