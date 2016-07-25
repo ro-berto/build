@@ -34,6 +34,7 @@ TEST_BUILDERS = {
       'Build-Mac-Clang-x86_64-Release',
       'Build-Ubuntu-GCC-Arm64-Debug-Android_Vulkan',
       'Build-Ubuntu-GCC-x86_64-Debug',
+      'Build-Ubuntu-GCC-x86_64-Release-RemoteRun',
       'Build-Ubuntu-GCC-x86_64-Release-Trybot',
       'Build-Win-MSVC-x86_64-Release',
       'Build-Win-MSVC-x86_64-Release-Vulkan',
@@ -601,8 +602,11 @@ def RunSteps(api):
   # Fix some paths.
   # TODO(borenet): We can remove this after the recipes move into Skia repo.
   root_path = api.path.c.base_paths['root']
-  api.path.c.base_paths['build'] = root_path + ('build',)
   api.path.c.base_paths['depot_tools'] = root_path + ('depot_tools',)
+  if 'RemoteRun' in api.properties['buildername']:
+    api.path.c.base_paths['build'] = root_path + ('checkout',)
+  else:
+    api.path.c.base_paths['build'] = root_path + ('build',)
 
   got_revision = checkout_steps(api)
   api.skia_swarming.setup(
