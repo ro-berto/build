@@ -600,7 +600,7 @@ def cipd_pkg(api, infrabots_dir, asset_name):
 def RunSteps(api):
   # Fix some paths.
   # TODO(borenet): We can remove this after the recipes move into Skia repo.
-  root_path = api.path.c.base_paths['slave_build'][:-4]
+  root_path = api.path.c.base_paths['root']
   api.path.c.base_paths['build'] = root_path + ('build',)
   api.path.c.base_paths['depot_tools'] = root_path + ('depot_tools',)
 
