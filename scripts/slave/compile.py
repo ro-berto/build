@@ -72,6 +72,7 @@ class EchoDict(dict):
     fh.write('\n')
 
 
+# TODO(tikuta): move to goma_utils.py
 def goma_setup(options, env):
   """Sets up goma if necessary.
 
@@ -223,6 +224,7 @@ def goma_setup(options, env):
   return False, None
 
 
+# TODO(tikuta): move to goma_utils.py
 def goma_teardown(options, env, exit_status, cloudtail_proc):
   """Tears down goma if necessary. """
   if (options.compiler in ('goma', 'goma-clang') and
@@ -345,21 +347,60 @@ def UpdateWindowsEnvironment(envfile_dir, env):
       f.write(nul * 2)
 
 
-def main_ninja(options, args):
-  """Interprets options, clobbers object files, and calls ninja."""
-
-  # Prepare environment.
-  env = EchoDict(os.environ)
-  goma_ready, goma_cloudtail = goma_setup(options, env)
-  exit_status = -1
+# TODO(tikuta): move to goma_utils
+def determine_goma_jobs():
+  # We would like to speed up build on Windows a bit, since it is slowest.
+  number_of_processors = 0
   try:
-    if not goma_ready:
-      assert options.compiler not in ('goma', 'goma-clang')
-      assert options.goma_dir is None
+    number_of_processors = multiprocessing.cpu_count()
+  except NotImplementedError:
+    print 'cpu_count() is not implemented, using default value 50.'
+    return 50
 
-    # ninja is different from all the other build systems in that it requires
-    # most configuration to be done at gyp time. This is why this function does
-    # less than the other comparable functions in this file.
+  assert number_of_processors > 0
+
+  # When goma is used, 10 * number_of_processors is basically good in
+  # various situations according to our measurement. Build speed won't
+  # be improved if -j is larger than that.
+  #
+  # Since Mac had process number limitation before, we had to set
+  # the upper limit to 50. Now that the process number limitation is 2000,
+  # so we would be able to use 10 * number_of_processors.
+  # For the safety, we'd like to set the upper limit to 200.
+  #
+  # Note that currently most try-bot build slaves have 8 processors.
+  if chromium_utils.IsMac() or chromium_utils.IsWindows():
+    return min(10 * number_of_processors, 200)
+
+  # For Linux, we also would like to use 10 * cpu. However, not sure
+  # backend resource is enough, so let me set Linux and Linux x64 builder
+  # only for now.
+  hostname = goma_utils.GetShortHostname()
+  if hostname in (
+      ['build14-m1', 'build48-m1'] +
+      # Also increasing cpus for v8/blink trybots.
+      ['build%d-m4' % x for x in xrange(45, 48)] +
+      # Also increasing cpus for LTO buildbots.
+      ['slave%d-c1' % x for x in [20, 33] + range(78, 108)]):
+    return min(10 * number_of_processors, 200)
+
+  return 50
+
+
+def main_ninja(options, args, env):
+  """This function calls ninja.
+
+  Args:
+      options (Option): options for ninja command.
+      args (str): extra args for ninja command.
+      env (dict): Used when ninja command executes.
+
+  Returns:
+      int: ninja command exit status.
+
+  """
+
+  try:
     print 'chdir to %s' % options.src_dir
     os.chdir(options.src_dir)
 
@@ -395,47 +436,8 @@ def main_ninja(options, args):
 
     if options.compiler in ('goma', 'goma-clang'):
       assert options.goma_dir
-
-      def determine_goma_jobs():
-        # We would like to speed up build on Windows a bit, since it is slowest.
-        number_of_processors = 0
-        try:
-          number_of_processors = multiprocessing.cpu_count()
-        except NotImplementedError:
-          print 'cpu_count() is not implemented, using default value 50.'
-          return 50
-
-        assert number_of_processors > 0
-
-        # When goma is used, 10 * number_of_processors is basically good in
-        # various situations according to our measurement. Build speed won't
-        # be improved if -j is larger than that.
-        #
-        # Since Mac had process number limitation before, we had to set
-        # the upper limit to 50. Now that the process number limitation is 2000,
-        # so we would be able to use 10 * number_of_processors.
-        # For the safety, we'd like to set the upper limit to 200.
-        #
-        # Note that currently most try-bot build slaves have 8 processors.
-        if chromium_utils.IsMac() or chromium_utils.IsWindows():
-          return min(10 * number_of_processors, 200)
-
-        # For Linux, we also would like to use 10 * cpu. However, not sure
-        # backend resource is enough, so let me set Linux and Linux x64 builder
-        # only for now.
-        hostname = goma_utils.GetShortHostname()
-        if hostname in (
-            ['build14-m1', 'build48-m1'] +
-            # Also increasing cpus for v8/blink trybots.
-            ['build%d-m4' % x for x in xrange(45, 48)] +
-            # Also increasing cpus for LTO buildbots.
-            ['slave%d-c1' % x for x in [20, 33] + range(78, 108)]):
-          return min(10 * number_of_processors, 200)
-
-        return 50
-
-      goma_jobs = determine_goma_jobs()
-      command.append('-j%d' % goma_jobs)
+      assert options.goma_jobs
+      command.append('-j%d' % options.goma_jobs)
 
     # Run the build.
     env.print_overrides()
@@ -455,8 +457,6 @@ def main_ninja(options, args):
         return 1
     return exit_status
   finally:
-    goma_teardown(options, env, exit_status, goma_cloudtail)
-
     override_gsutil = None
     if options.gsutil_py_path:
       override_gsutil = [sys.executable, options.gsutil_py_path]
@@ -479,7 +479,7 @@ def get_target_build_dir(args, options):
   return os.path.abspath(os.path.join(options.src_dir, outdir, options.target))
 
 
-def real_main():
+def get_parsed_options():
   option_parser = optparse.OptionParser()
   option_parser.add_option('--clobber', action='store_true', default=False,
                            help='delete the output directory before compiling')
@@ -528,6 +528,8 @@ def real_main():
   option_parser.add_option('--goma-service-account-json-file',
                            help='Specify a file containing goma service account'
                                 ' credentials')
+  option_parser.add_option('--goma-jobs', default=None,
+                           help='The number of jobs for ninja -j.')
   option_parser.add_option('--gsutil-py-path',
                            help='Specify path to gsutil.py script.')
   option_parser.add_option('--ninja-path', default='ninja',
@@ -546,7 +548,31 @@ def real_main():
   options.target_output_dir = get_target_build_dir(args, options)
 
   assert options.build_tool in (None, 'ninja')
-  return main_ninja(options, args)
+  return options, args
+
+
+def real_main():
+  options, args = get_parsed_options()
+
+  # Prepare environment.
+  env = EchoDict(os.environ)
+
+  # start goma
+  goma_ready, goma_cloudtail = goma_setup(options, env)
+
+  if not goma_ready:
+    assert options.compiler not in ('goma', 'goma-clang')
+    assert options.goma_dir is None
+  elif options.goma_jobs is None:
+    options.goma_jobs = determine_goma_jobs()
+
+  # build
+  exit_status = main_ninja(options, args, env)
+
+  # stop goma
+  goma_teardown(options, env, exit_status, goma_cloudtail)
+
+  return exit_status
 
 
 if '__main__' == __name__:
