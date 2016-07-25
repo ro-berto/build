@@ -18,6 +18,7 @@
       "scheduler": None,
       "slave_pools": ["linux_slave_pool"],
       "slavebuilddir": "presubmit_catapult",
+      "builder_timeout_s": 300,  # 5 minutes max
     },
     "Catapult Android Tryserver": {
       "recipe": "catapult",
@@ -27,6 +28,7 @@
       "properties": {
         "platform": "android",
       },
+      "builder_timeout_s": 1200,  # 20 minutes max
     },
     "Catapult Linux Tryserver": {
       "recipe": "catapult",
@@ -34,6 +36,7 @@
       "slave_pools": ["linux_slave_pool"],
 
       "slavebuilddir": "catapult",
+      "builder_timeout_s": 1800,  # 30 minutes max
     },
     "Catapult Mac Tryserver": {
       "recipe": "catapult",
@@ -41,6 +44,7 @@
       "slave_pools": ["mac_slave_pool"],
 
       "slavebuilddir": "catapult",
+      "builder_timeout_s": 1800,  # 30 minutes max
     },
     "Catapult Windows Tryserver": {
       "recipe": "catapult",
@@ -48,6 +52,7 @@
       "slave_pools": ["win_slave_pool"],
 
       "slavebuilddir": "catapult",
+      "builder_timeout_s": 2400,  # 40 minutes max
     },
   },
 
