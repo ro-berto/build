@@ -187,6 +187,12 @@
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Default",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--goma-service-account-json-file",
+      "/creds/service_accounts/service-account-goma-client.json",
       "chromedriver",
       "chromedriver_tests",
       "chromedriver_unittests"

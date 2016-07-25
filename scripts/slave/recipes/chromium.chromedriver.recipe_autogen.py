@@ -66,9 +66,16 @@ def Linux32_steps(api):
           build_properties.get('buildername'), "--goma-dir", goma_dir,
           "//out/Default"])
   # chromedriver compile.py step
-  api.python("compile", api.path["build"].join("scripts", "slave",
-    "compile.py"), args=['--target', 'Default',
-      'chromedriver', 'chromedriver_tests', 'chromedriver_unittests'])
+  api.python("compile",
+             api.path["build"].join("scripts", "slave", "compile.py"),
+             args=['--target', 'Default',
+                   '--compiler', 'goma',
+                   '--goma-dir', goma_dir,
+                   '--goma-service-account-json-file',
+                         api.goma.service_account_json_path,
+                   'chromedriver',
+                   'chromedriver_tests',
+                   'chromedriver_unittests'])
   # strip binary
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
@@ -135,9 +142,16 @@ def Mac_10_6_steps(api):
           build_properties.get('buildername'), "--goma-dir", goma_dir,
           "//out/Default"])
   # chromedriver compile.py step
-  api.python("compile", api.path["build"].join("scripts", "slave",
-    "compile.py"), args=['--target', 'Default',
-      'chromedriver', 'chromedriver_tests', 'chromedriver_unittests'])
+  api.python("compile",
+             api.path["build"].join("scripts", "slave", "compile.py"),
+             args=['--target', 'Default',
+                   '--compiler', 'goma',
+                   '--goma-dir', goma_dir,
+                   '--goma-service-account-json-file',
+                         api.goma.service_account_json_path,
+                   'chromedriver',
+                   'chromedriver_tests',
+                   'chromedriver_unittests'])
   # strip binary
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
@@ -206,9 +220,17 @@ def Win7_steps(api):
           build_properties.get('buildername'), "--goma-dir", goma_dir,
           "//out/Default"])
   # chromedriver compile.py step
-  api.step("compile", ["python_slave", api.path["build"].join("scripts",
-    "slave", "compile.py"), '--target', 'Default',
-      'chromedriver', 'chromedriver_tests', 'chromedriver_unittests'])
+  api.step("compile",
+           ["python_slave",
+            api.path["build"].join("scripts", "slave", "compile.py"),
+            '--target', 'Default',
+            '--compiler', 'goma',
+            '--goma-dir', goma_dir,
+            '--goma-service-account-json-file',
+                api.goma.service_account_json_path,
+            'chromedriver',
+            'chromedriver_tests',
+            'chromedriver_unittests'])
   # annotated_steps step
   api.step("annotated_steps", ["python_slave", api.path["build"].join("scripts",
     "slave", "chromium", "chromedriver_buildbot_run.py"),
@@ -271,9 +293,16 @@ def Linux_steps(api):
           build_properties.get('buildername'), "--goma-dir", goma_dir,
           "//out/Default"])
   # chromedriver compile.py step
-  api.python("compile", api.path["build"].join("scripts", "slave",
-    "compile.py"), args=['--target', 'Default',
-      'chromedriver', 'chromedriver_tests', 'chromedriver_unittests'])
+  api.python("compile",
+             api.path["build"].join("scripts", "slave", "compile.py"),
+             args=['--target', 'Default',
+                   '--compiler', 'goma',
+                   '--goma-dir', goma_dir,
+                   '--goma-service-account-json-file',
+                         api.goma.service_account_json_path,
+                   'chromedriver',
+                   'chromedriver_tests',
+                   'chromedriver_unittests'])
   # strip binary
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
