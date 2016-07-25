@@ -604,7 +604,7 @@ def RunSteps(api):
   root_path = api.path.c.base_paths['root']
   api.path.c.base_paths['depot_tools'] = root_path + ('depot_tools',)
   if 'RemoteRun' in api.properties['buildername']:
-    api.path.c.base_paths['build'] = root_path + ('checkout',)
+    api.path.c.base_paths['build'] = root_path[:-1] + ('rw', 'checkout')
   else:
     api.path.c.base_paths['build'] = root_path + ('build',)
 
