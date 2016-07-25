@@ -101,6 +101,9 @@ def _ChromiumPerfFyiTesters():
     _CreateTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5',
         required_apks=['ChromePublic.apk'], num_device_shards=7,
         num_host_shards=1, target_bits=32),
+    _CreateTestSpec('Android Power Nexus 5X Perf', 'android-power-nexus-5x',
+        required_apks=['ChromePublic.apk'], num_device_shards=7,
+        num_host_shards=1),
   ]
 
   master_spec = {}
