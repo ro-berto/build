@@ -391,6 +391,28 @@
     "name": "gclient runhooks (2)"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.swarm",
+      "-b",
+      "Mac deterministic",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "//out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files (2)"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
