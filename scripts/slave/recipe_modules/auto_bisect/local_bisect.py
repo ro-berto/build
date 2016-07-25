@@ -8,30 +8,41 @@ import json
 
 
 def perform_bisect(api, **flags):
-  if api.m.chromium.c.TARGET_PLATFORM != 'android':
-    _perform_single_bisect(api, **flags)
-  else:
-    # pick an available device if targe platform is android
-    connected_devices = _get_connected_devices(api)
-    if not connected_devices:
-      raise api.m.step.StepFailure('No Android test devices are available')
-    for device in connected_devices:
-      api.m.bisect_tester.device_to_test = device
-      try:
-         _perform_single_bisect(api, **flags)
-      except api.m.step.StepFailure:
-        # Redo the bisect job if target platform is android and bisect failed
-        # because the test device disconnected
-        current_connected_devices = _get_connected_devices(api)
-        if api.m.bisect_tester.device_to_test not in current_connected_devices:
-          continue
-        else:
-          raise
+  # Try catch all the exceptions thrown in bisection so that recipe can
+  # post the failed job result to dashboard
+  try:
+    bisect_attempts = []
+    if api.m.chromium.c.TARGET_PLATFORM != 'android':
+      _perform_single_bisect(api, bisect_attempts, **flags)
+    else:
+      # pick an available device if targe platform is android
+      connected_devices = _get_connected_devices(api)
+      if not connected_devices:
+        raise api.m.step.StepFailure(
+            'No Android test devices are available')
+      for device in connected_devices:
+        api.m.bisect_tester.device_to_test = device
+        try:
+          _perform_single_bisect(api, bisect_attempts, **flags)
+        except api.m.step.StepFailure:
+          # Redo the bisect job if target platform is android and bisect
+          # failed because the test device disconnected
+          current_connected_devices = _get_connected_devices(api)
+          if (api.m.bisect_tester.device_to_test not in
+              current_connected_devices):
+            continue
+          else:
+            raise
+  except: # pylint: disable=bare-except
+    if bisect_attempts:
+      bisect_attempts[-1].post_result(halt_on_failure=True)
+    raise
 
-def _perform_single_bisect(api, **flags):
+def _perform_single_bisect(api, bisect_attempts, **flags):
       bisect_config = api.m.properties.get('bisect_config')
       assert isinstance(bisect_config, collections.Mapping)
       bisector = api.create_bisector(bisect_config, **flags)
+      bisect_attempts.append(bisector)
       with api.m.step.nest('Gathering reference values'):
         _gather_reference_range(api, bisector)
       if (not bisector.failed and bisector.check_improvement_direction() and

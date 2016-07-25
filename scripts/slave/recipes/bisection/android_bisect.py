@@ -625,7 +625,9 @@ results-without_patch
         good_revision_hash, bad_revision_hash),
         stdout=api.json.output([[bad_revision_hash, 'ignored'],
             [good_revision_hash, 'ignored']])) +
-    api.step_data('Post bisect results', retcode=1) +
+    api.step_data('Debug Info', retcode=1) +
+    api.step_data('Post bisect results',
+        stdout=api.json.output({'status_code': 200})) +
     api.override_step_data('device_status (3)',
         api.json.output(working_device)))
 
@@ -671,7 +673,7 @@ results-without_patch
             good_revision_hash, 'ignored']])) +
     # Simulating disconnect by raising failure and changing the output of
     # multiple_device_status
-    api.step_data('Post bisect results', retcode=1) +
+    api.step_data('Debug Info', retcode=1) +
     api.override_step_data('device_status (3)',
         api.json.output(working_device)) +
     api.step_data('Resolving reference range.crrev get commit hash for ' +
@@ -688,5 +690,5 @@ results-without_patch
             good_revision_hash, bad_revision_hash),
         stdout=api.json.output([[bad_revision_hash, 'ignored'], [
             good_revision_hash, 'ignored']])) +
-    api.step_data('Post bisect results (2)',
+    api.step_data('Post bisect results',
         stdout=api.json.output({'status_code': 200})))
