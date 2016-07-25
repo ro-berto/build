@@ -46,11 +46,6 @@ def GetCloudPath(api, git_hash, path):
 #     api.file.rmtree('temp dir', temp_dir)
 
 
-def GenerateDocs(api):
-  checkout = api.path['checkout']
-  api.step('dartdoc packages', ['dev/bots/docs.sh', '--upload'], cwd=checkout)
-
-
 def BuildExamples(api, git_hash):
   def BuildAndArchive(api, app_dir, apk_name):
     app_path = api.path['checkout'].join(app_dir)
@@ -152,14 +147,6 @@ def RunSteps(api):
     #
     # if api.platform.is_mac:
     #   TestCreateAndLaunch(api)
-
-    # TODO(eseidel): We only want to generate one copy of the docs at a time
-    # otherwise multiple rsyncs could race, causing badness. We'll eventually
-    # need both a lock on the bucket, as well as some assurance that we're
-    # always moving the docs forward. Possibly by using a separate builder.
-    # Until then, only generate on linux to reduce the chance of race.
-    if api.platform.is_linux:
-      GenerateDocs(api)
 
 
 def GenTests(api):

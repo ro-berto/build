@@ -206,19 +206,6 @@
     ]
   },
   {
-    "cmd": [
-      "dev/bots/docs.sh",
-      "--upload"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/dev/bots/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "dartdoc packages"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
