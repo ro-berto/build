@@ -135,6 +135,7 @@ def RunSteps(api, buildername):
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.ensure_goma()
   api.chromium.runhooks()
+  api.chromium.run_mb(api.properties.get('mastername'), buildername)
   api.chromium.compile(targets, name='First build')
   api.isolate.remove_build_metadata()
   if enable_isolate:
