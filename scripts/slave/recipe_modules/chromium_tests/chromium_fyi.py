@@ -1206,7 +1206,8 @@ SPEC = {
     },
     'CrWinClangGoma': {
       'chromium_config': 'chromium_win_clang',
-      'chromium_apply_config': ['goma_canary', 'clobber', 'shared_library'],
+      'chromium_apply_config': ['goma_canary', 'clobber',
+                                'mb', 'shared_library'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
