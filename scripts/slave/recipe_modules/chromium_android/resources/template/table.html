@@ -1,0 +1,24 @@
+<table id="{{tb_value.table_id}}">
+  <thead class="heads">
+    <tr>
+      {% for item in tb_value.table_headers %}
+        <th class="{{item[0]}}" data-asc-sorted=0>
+          {{item[1]}}
+          <span class="up" style="display:none;"> &#8593</span>
+          <span class="down" style="display:none;"> &#8595</span>
+        </th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody class="body">
+    {% for item in tb_value.table_rows %}
+      <tr align="center">
+        {% for data in item %}
+          <td>
+            {{data}}
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

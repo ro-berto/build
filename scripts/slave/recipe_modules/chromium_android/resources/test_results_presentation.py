@@ -9,141 +9,17 @@ import logging
 import os
 import sys
 
-RESULT_DETAILS_TEMPLATE = """<!DOCTYPE html>
-<html>
-  <head>
-    <style>
-      table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-      }
-      th, td {
-        padding: 5px;
-      }
-      th {
-        cursor:pointer;
-      }
-    </style>
-    <script type="text/javascript">
-      var previousClickedColumn;
-      var previousClickedIsAsc;
+# Load jinja2.
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.abspath(os.path.join(
+    CURRENT_DIR, '..', '..', '..', '..', '..'))
+sys.path.append(os.path.join(BASE_DIR, 'third_party', 'markupsafe'))
+sys.path.append(os.path.join(BASE_DIR, 'third_party', 'jinja2'))
+import jinja2
+jinja_environment = jinja2.Environment(
+    loader = jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
-      function sortByColumn(head, index) {
-        var tbody = head.parentNode.parentNode.nextElementSibling;
-        var rows = tbody.rows,
-            arr = new Array();
-
-        // Fill the array with values from the table.
-        for (var i = 0; i < rows.length; i++) {
-          var cells = rows[i].cells;
-          arr[i] = new Array();
-          for (var j = 0; j < cells.length; j++) {
-            arr[i][j] = cells[j].innerHTML;
-          }
-        }
-
-        // Determine whether to ascend or descend.
-        if (previousClickedColumn != undefined) {
-          var asc = (index == previousClickedColumn) ? ((previousClickedIsAsc) ? -1 : 1) : 1;
-        } else {
-          var asc = 1;
-        }
-
-        // Sort the array by the specified column number (col) and order (asc).
-        arr.sort(function (a, b) {
-          if (head.className == "number") {
-            var avalue = Number(a[index]);
-            var bvalue = Number(b[index]);
-          } else if (head.className == "text") {
-            var avalue = a[index];
-            var bvalue = b[index];
-          }
-          return (avalue == bvalue) ? 0 : ((avalue > bvalue) ? asc : -1 * asc);
-        });
-
-        // Replace existing rows with new rows created from the sorted array.
-        for (var i = 0; i < rows.length; i++) {
-          rows[i].innerHTML = "<td>" + arr[i].join("</td><td>") + "</td>";
-        }
-
-        // Make previous arrow invisible.
-        if (previousClickedColumn != undefined) {
-          if (previousClickedIsAsc == 1) {
-            head.parentNode.getElementsByClassName("up")[previousClickedColumn].style.display = 'none';
-          } else {
-            head.parentNode.getElementsByClassName("down")[previousClickedColumn].style.display = 'none';
-          }
-        }
-
-        // Make current arrow visible.
-        if (asc == 1) {
-          head.getElementsByClassName("up")[0].style.display = "inline";
-        } else {
-          head.getElementsByClassName("down")[0].style.display = "inline";
-        }
-
-        previousClickedColumn = index;
-        previousClickedIsAsc = (asc == 1) ? true : false;
-      }
-    </script>
-  </head>
-  <body>
-    <table id="test_details" style="width:100%%">
-      <thead class="heads">
-        <tr>
-          <th class="text">
-              test_name
-              <span class="up" style="display:none;"> &#8593</span>
-              <span class="down" style="display:none;"> &#8595</span>
-          </th>
-
-          <th class="text">
-              status
-              <span class="up" style="display:none;"> &#8593</span>
-              <span class="down" style="display:none;"> &#8595</span>
-          </th>
-
-          <th class="number">
-              elapsed_time_in_ms
-              <span class="up" style="display:none;"> &#8593</span>
-              <span class="down" style="display:none;"> &#8595</span>
-          </th>
-
-          <th class="text">
-              output_snippet
-              <span class="up" style="display:none;"> &#8593</span>
-              <span class="down" style="display:none;"> &#8595</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="body">
-      %s
-      </tbody>
-    </table>
-  </body>
-  <script>
-    Array.prototype.slice.call(document.getElementsByTagName('th')).forEach(
-        function(head, index) {
-            head.addEventListener(
-                "click",
-                function() { sortByColumn(head, index); },
-                false
-            );
-        }
-    );
-  </script>
-</html>
-"""
-
-ROW_TEMPLATE = """
-    <tr align="center">
-      <td>%s</td>
-      <td>%s</td>
-      <td>%s</td>
-      <td>%s</td>
-    </tr>
-"""
-
+# Get result details from json path and then convert results to html.
 def result_details(json_path):
   with open(json_path) as json_file:
     json_object = json.loads(json_file.read())
@@ -159,20 +35,69 @@ def result_details(json_path):
             } for tr in test_runs])
     return results_to_html(results_list)
 
+# Convert list of test results into html format.
 def results_to_html(results):
-  rows = ''
+  suite_row_dict = {}
+  test_row_list = []
   for result in results:
-    rows += (ROW_TEMPLATE % (result['name'],
-                             result['status'],
-                             result['duration'],
-                             result['output_snippet']))
-  return RESULT_DETAILS_TEMPLATE % rows
+    test_row_list.append([result['name'],
+                      result['status'],
+                      result['duration'],
+                      result['output_snippet']])
+
+    suite_name = result['name'][:result['name'].index('#')]
+
+    # 'suite_row' is [name, success_count, fail_count, all_count, time].
+    SUCCESS_COUNT = 1
+    FAIL_COUNT = 2
+    ALL_COUNT = 3
+    TIME = 4
+
+    if suite_name in suite_row_dict:
+      suite_row = suite_row_dict[suite_name]  
+    else:
+      suite_row = [suite_name, 0, 0, 0, 0]
+      suite_row_dict[suite_name] = suite_row
+
+    suite_row[ALL_COUNT] += 1
+    if result['status'] == 'SUCCESS':
+      suite_row[SUCCESS_COUNT] += 1
+    elif result['status'] == 'FAILURE':
+      suite_row[FAIL_COUNT] += 1
+    suite_row[TIME] += result['duration']
+
+  test_table_values = {
+    'table_id' : 'test_table',
+    'table_headers' : [('text', 'test_name'),
+                       ('text', 'status'),
+                       ('number', 'duration'),
+                       ('text', 'output_snippet'),
+                      ],
+    'table_rows' : test_row_list,
+  }
+
+  suite_table_values = {
+    'table_id' : 'suite_table',
+    'table_headers' : [('text', 'suite_name'),
+                       ('number', 'number_success_tests'),
+                       ('number', 'number_fail_tests'),
+                       ('number', 'all_tests'),
+                       ('number', 'elapsed_time_ms'),
+                      ],
+    'table_rows' : suite_row_dict.values(),
+  }
+
+  main_template = jinja_environment.get_template(
+      os.path.join('template', 'main.html'))
+  return main_template.render(
+      {'tb_values': [suite_table_values, test_table_values]})
 
 def main():
   logging.basicConfig(level=logging.INFO)
   parser = argparse.ArgumentParser()
-  parser.add_argument('--json-file', help='Path of json file.')
-  parser.add_argument('--html-file', help='Path to store html file.')
+  parser.add_argument('--json-file', help='Path of json file.', required=True)
+  parser.add_argument('--html-file', help='Path to store html file.',
+                      required=True)
   args = parser.parse_args()
   if os.path.exists(args.json_file):
     result_html_string = result_details(args.json_file)
