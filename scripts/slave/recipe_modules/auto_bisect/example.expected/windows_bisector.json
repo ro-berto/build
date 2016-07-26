@@ -561,7 +561,7 @@
       "RECIPE_MODULE[build::auto_bisect]/resources/fetch_intervening_revisions.py",
       "001",
       "004",
-      "https://chromium.googlesource.com/v8/v8.git"
+      "https://chromium.googlesource.com/v8/v8"
     ],
     "name": "Expanding revision range for revision 004 on depot v8",
     "stdout": "/path/to/tmp/json",

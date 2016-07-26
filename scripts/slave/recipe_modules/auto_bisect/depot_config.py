@@ -32,7 +32,7 @@ DEPOT_DEPS_NAME = {
         'recurse': True,
         'from': ['chromium'],
         'custom_deps': GCLIENT_CUSTOM_DEPS_V8,
-        'url': 'https://chromium.googlesource.com/v8/v8.git',
+        'url': 'https://chromium.googlesource.com/v8/v8',
         'deps_var': 'v8_revision'
     },
     'skia': {
@@ -46,7 +46,8 @@ DEPOT_DEPS_NAME = {
         'src': 'src/third_party/catapult',
         'recurse': True,
         'from': ['chromium'],
-        'url':'https://github.com/catapult-project/catapult.git',
+        'url': 'https://chromium.googlesource.com/'
+               'external/github.com/catapult-project/catapult',
         'deps_var': 'catapult_revision'
     }
 }
