@@ -387,6 +387,10 @@
     "name": "gclient runhooks"
   },
   {
+    "cmd": [],
+    "name": "***PERF TRYJOB***"
+  },
+  {
     "cmd": [
       "python",
       "-u",

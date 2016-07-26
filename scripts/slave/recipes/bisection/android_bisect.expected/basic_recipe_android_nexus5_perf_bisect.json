@@ -387,6 +387,10 @@
     "name": "gclient runhooks"
   },
   {
+    "cmd": [],
+    "name": "***SINGLE TEST (deprecated)***"
+  },
+  {
     "cmd": [
       "python",
       "-u",

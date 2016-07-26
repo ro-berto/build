@@ -195,6 +195,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "***SINGLE TEST (deprecated)***"
+  },
+  {
     "cmd": [
       "python",
       "-u",

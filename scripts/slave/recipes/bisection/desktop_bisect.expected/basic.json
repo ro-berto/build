@@ -195,6 +195,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "***LEGACY BISECT (deprecated)***"
+  },
+  {
     "cmd": [
       "python",
       "-u",

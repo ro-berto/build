@@ -40,7 +40,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     self.override_poll_interval = None
     self.bot_db = None
     # Repo for triggering build jobs.
-    self.svn_repo_url = 'svn://svn.chromium.org/chrome-try/try-perf'    
+    self.svn_repo_url = 'svn://svn.chromium.org/chrome-try/try-perf'
     # The variable below are set and used for the internal bisects.
     self.buildurl_gs_prefix = None
     self.internal_bisect = False
@@ -155,7 +155,6 @@ class AutoBisectApi(recipe_api.RecipeApi):
     except self.m.step.StepFailure:  # pragma: no cover
      self.surface_result('BAD_REV')
      raise
-     
 
   def run_bisect_script(self, **kwargs):
     """Executes src/tools/run-perf-bisect-regression.py to perform bisection."""
@@ -323,7 +322,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         '-v',
         '--blacklist-file', self.m.chromium_android.blacklist_file,
         '--perfbot',
-        '--release',        
+        '--release',
     ]
     if args:
       full_deploy_flags += args
@@ -333,7 +332,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         full_deploy_flags,
         infra_step=True,
         env=self.m.chromium.get_env())
-  
+
   def start_try_job(self, api, update_step=None, bot_db=None, **kwargs):
     """Starts a recipe bisect job, perf test run, or legacy bisect run.
 
@@ -371,16 +370,20 @@ class AutoBisectApi(recipe_api.RecipeApi):
     try:
       # Run legacy bisect script if the patch contains bisect.cfg.
       if BISECT_CONFIG_FILE in affected_files:
+        api.step('***LEGACY BISECT (deprecated)***', [])
         self.run_bisect_script(**kwargs)
       elif api.properties.get('bisect_config'):
         # We can distinguish between a config for a full bisect vs a single
         # test by checking for the presence of the good_revision key.
         if api.properties.get('bisect_config').get('good_revision'):
+          api.step('***BISECT***', [])
           local_bisect.perform_bisect(self, **flags)  # pragma: no cover
         else:
+          api.step('***SINGLE TEST (deprecated)***', [])
           self.start_test_run_for_bisect(update_step, self.bot_db,
                                          api.properties)
       else:
+        api.step('***PERF TRYJOB***', [])
         self.m.perf_try.start_perf_try_job(
             affected_files, update_step, self.bot_db)
     finally:

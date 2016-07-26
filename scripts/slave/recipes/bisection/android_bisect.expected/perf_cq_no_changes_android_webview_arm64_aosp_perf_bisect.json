@@ -388,6 +388,10 @@
   },
   {
     "cmd": [],
+    "name": "***PERF TRYJOB***"
+  },
+  {
+    "cmd": [],
     "name": "Results",
     "~followup_annotations": [
       "@@@STEP_TEXT@There are no modifications to Telemetry benchmarks, aborting the try job.@@@"

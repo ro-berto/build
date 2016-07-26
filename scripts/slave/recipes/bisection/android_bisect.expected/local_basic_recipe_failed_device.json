@@ -387,6 +387,10 @@
     "name": "gclient runhooks"
   },
   {
+    "cmd": [],
+    "name": "***BISECT***"
+  },
+  {
     "cmd": [
       "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
