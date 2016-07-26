@@ -218,7 +218,7 @@ def incremental_coverage_builder_tests(c):
   c.incremental_coverage = True
 
 @config_ctx()
-def perf(c):
+def chromium_perf(c):
   pass
 
 @config_ctx()

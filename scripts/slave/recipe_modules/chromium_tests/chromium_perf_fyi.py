@@ -18,9 +18,8 @@ def _AddBotSpec(name, platform, parent_builder, perf_id, target_bits,
       'TARGET_BITS': target_bits,
     },
     'parent_buildername': parent_builder,
-    'chromium_config': 'chromium_official',
-    'chromium_apply_config': ['chromium_perf_fyi'],
-    'gclient_config': 'perf',
+    'chromium_config': 'chromium_perf',
+    'gclient_config': 'chromium_perf',
     'testing': {
       'platform': platform,
     },
@@ -43,8 +42,7 @@ SPEC = {
     'Win Clang Builder': {
       'disable_tests': True,
       'chromium_config': 'chromium_win_clang_official',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
+      'gclient_config': 'chromium_perf',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -59,7 +57,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'win-clang-builder')
       },
-      'chromium_apply_config': ['chromium_perf_fyi'],
     },
   },
 }

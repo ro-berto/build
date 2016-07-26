@@ -284,8 +284,6 @@
       "official",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--goma-hermetic",
-      "fallback",
       "--",
       "chrome",
       "chromium_builder_perf"

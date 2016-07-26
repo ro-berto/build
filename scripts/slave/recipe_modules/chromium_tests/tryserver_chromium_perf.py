@@ -12,13 +12,15 @@ SPEC = {
 
 
 def _AddBuildSpec(name, platform, target_bits=64):
-  SPEC['builders'][name] = chromium_perf.BuildSpec(None, platform, target_bits)
+  SPEC['builders'][name] = chromium_perf.BuildSpec(
+      'tryserver_chromium_perf', None, platform, target_bits)
 
 
 def _AddTestSpec(name, platform, target_bits=64):
   # TODO(dtu): Change this to TestSpec after try job builds are all offloaded
   # to builders.
-  spec = chromium_perf.BuildSpec(None, platform, target_bits)
+  spec = chromium_perf.BuildSpec(
+      'tryserver_chromium_perf', None, platform, target_bits)
   del spec['tests']
   SPEC['builders'][name] = spec
 

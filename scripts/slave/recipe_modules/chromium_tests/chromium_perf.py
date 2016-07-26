@@ -18,58 +18,60 @@ SPEC = {
 }
 
 
-def _BaseSpec(bot_type, chromium_apply_config, disable_tests,
-              gclient_config, platform, target_bits, tests):
-  return {
+def _BaseSpec(bot_type, chromium_config, disable_tests,
+              platform, target_bits, tests):
+  spec = {
     'bot_type': bot_type,
-    'chromium_apply_config' : chromium_apply_config,
-    'chromium_config': 'chromium_official',
+    'chromium_config': chromium_config,
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': target_bits,
     },
     'disable_tests': disable_tests,
-    'gclient_config': gclient_config,
+    'gclient_config': 'chromium_perf',
     'testing': {
       'platform': 'linux' if platform == 'android' else platform,
     },
     'tests': tests,
   }
 
-
-def BuildSpec(perf_id, platform, target_bits):
   if platform == 'android':
+    spec['android_config'] = 'chromium_perf'
+    spec['chromium_apply_config'] = ['android']
+    spec['chromium_config_kwargs']['TARGET_ARCH'] = 'arm'
+    spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
+    spec['gclient_apply_config'] = ['android']
+
+  return spec
+
+
+def BuildSpec(chromium_config, perf_id, platform, target_bits):
+  if platform == 'android':
+    # TODO: Run sizes on Android.
     tests = []
   else:
     tests = [steps.SizesStep('https://chromeperf.appspot.com', perf_id)]
 
   spec = _BaseSpec(
       bot_type='builder',
-      chromium_apply_config=['mb', 'chromium_perf', 'goma_hermetic_fallback'],
+      chromium_config=chromium_config,
       disable_tests=True,
-      gclient_config='chromium',
       platform=platform,
       target_bits=target_bits,
       tests=tests)
 
-  if platform == 'android':
-    spec['chromium_apply_config'].append('android')
-    spec['chromium_config_kwargs']['TARGET_ARCH'] = 'arm'
-    spec['gclient_apply_config'] = ['android', 'perf']
-  else:
-    spec['compile_targets'] = ['chromium_builder_perf']
-    spec['gclient_apply_config'] = ['chrome_internal']
+  spec['compile_targets'] = ['chromium_builder_perf']
 
   return spec
 
 
-def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
-              shard_index, num_host_shards, num_device_shards):
+def _TestSpec(chromium_config, parent_builder, perf_id, platform, target_bits,
+              max_battery_temp, shard_index, num_host_shards,
+              num_device_shards):
   spec = _BaseSpec(
       bot_type='tester',
-      chromium_apply_config=['chromium_perf'],
+      chromium_config=chromium_config,
       disable_tests=platform == 'android',
-      gclient_config='perf',
       platform=platform,
       target_bits=target_bits,
       tests=[steps.DynamicPerfTests(
@@ -82,11 +84,8 @@ def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
   spec['perf-id'] = perf_id
   spec['results-url'] = 'https://chromeperf.appspot.com'
 
-  if platform == 'android':
-    spec['android_config'] = 'perf'
-    spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
-    spec['gclient_apply_config'] = ['android']
-  else:
+  if platform != 'android':
+    # TODO: Remove disable_tests and run test_generators on Android.
     spec['test_generators'] = [steps.generate_script]
     spec['test_spec_file'] = 'chromium.perf.json'
 
@@ -99,7 +98,8 @@ def _AddBuildSpec(name, platform, target_bits=64):
   else:
     perf_id = '%s-%d' % (platform, target_bits)
 
-  SPEC['builders'][name] = BuildSpec(perf_id, platform, target_bits)
+  SPEC['builders'][name] = BuildSpec(
+      'chromium_perf', perf_id, platform, target_bits)
   assert target_bits not in _builders[platform]
   _builders[platform][target_bits] = name
 
@@ -110,8 +110,8 @@ def _AddTestSpec(name, perf_id, platform, target_bits=64,
   for shard_index in xrange(num_host_shards):
     builder_name = '%s (%d)' % (name, shard_index + 1)
     SPEC['builders'][builder_name] = _TestSpec(
-        parent_builder, perf_id, platform, target_bits, max_battery_temp,
-        shard_index, num_host_shards, num_device_shards)
+        'chromium_perf', parent_builder, perf_id, platform, target_bits,
+        max_battery_temp, shard_index, num_host_shards, num_device_shards)
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)

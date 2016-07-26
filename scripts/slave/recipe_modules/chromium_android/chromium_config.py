@@ -197,14 +197,6 @@ def incremental_coverage_builder_tests(c):
 def non_device_wipe_provisioning(c):
   pass
 
-# TODO(zty): figure out what perf builder really wants and use that instead.
-# e.g. official
-@CONFIG_CTX(includes=['main_builder'])
-def perf(c):
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['branding'] = 'Chrome'
-  gyp_defs['buildtype'] = 'Official'
-
 @CONFIG_CTX(includes=['main_builder'])
 def cast_builder(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
