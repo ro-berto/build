@@ -34,6 +34,9 @@ def v8(c):
   # them instead of this gclient garbage.
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
+  p = c.patch_projects
+  p['icu'] = ('v8/third_party/icu', 'HEAD')
+
 
 @CONFIG_CTX(includes=['v8'])
 def dynamorio(c):
