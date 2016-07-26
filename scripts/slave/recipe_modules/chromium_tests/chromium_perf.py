@@ -37,12 +37,7 @@ def _BaseSpec(bot_type, chromium_apply_config, disable_tests,
   }
 
 
-def _BuildSpec(platform, target_bits):
-  if target_bits == 64:
-    perf_id = platform
-  else:
-    perf_id = '%s-%d' % (platform, target_bits)
-
+def BuildSpec(perf_id, platform, target_bits):
   if platform == 'android':
     tests = []
   else:
@@ -99,7 +94,12 @@ def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
 
 
 def _AddBuildSpec(name, platform, target_bits=64):
-  SPEC['builders'][name] = _BuildSpec(platform, target_bits)
+  if target_bits == 64:
+    perf_id = platform
+  else:
+    perf_id = '%s-%d' % (platform, target_bits)
+
+  SPEC['builders'][name] = BuildSpec(perf_id, platform, target_bits)
   assert target_bits not in _builders[platform]
   _builders[platform][target_bits] = name
 

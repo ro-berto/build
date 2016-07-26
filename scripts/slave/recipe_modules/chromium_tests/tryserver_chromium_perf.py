@@ -2,61 +2,55 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import copy
-
 from . import chromium_perf
-from . import steps
-
-
-def _Builders():
-  # These should build with the same configs as the main perf builders.
-  builders = {}
-
-  for bisect_bot_name, perf_bot_name in _BUILDER_MAPPINGS.iteritems():
-    config = copy.deepcopy(chromium_perf.SPEC['builders'][perf_bot_name])
-    config['tests'] = [steps.SizesStep(None, None)]
-    builders[bisect_bot_name] = config
-
-  for bisect_bot_name, perf_bot_name in _TESTER_MAPPINGS.iteritems():
-    config = copy.deepcopy(chromium_perf.SPEC['builders'][perf_bot_name])
-    del config['tests']  # Don't run the same tests as the perf waterfall.
-    builders[bisect_bot_name] = config
-
-  return builders
-
-
-_BUILDER_MAPPINGS = {
-    'linux_perf_bisect_builder': 'Linux Builder',
-    'win_perf_bisect_builder': 'Win Builder',
-    'winx64_bisect_builder': 'Win x64 Builder',
-    'mac_perf_bisect_builder': 'Mac Builder',
-}
-
-
-_TESTER_MAPPINGS = {
-    'linux_perf_bisect': 'Linux Builder',
-    'linux_perf_cq': 'Linux Builder',
-    'linux_fyi_perf_bisect': 'Linux Builder',
-    'win_perf_bisect': 'Win Builder',
-    'win_8_perf_bisect': 'Win Builder',
-    'winx64_10_perf_bisect': 'Win x64 Builder',
-    'win_x64_perf_bisect': 'Win x64 Builder',
-    'winx64ati_perf_bisect': 'Win x64 Builder',
-    'winx64nvidia_perf_bisect': 'Win x64 Builder',
-    'winx64intel_perf_bisect': 'Win x64 Builder',
-    'winx64_zen_perf_bisect': 'Win x64 Builder',
-    'winx64_10_perf_cq': 'Win x64 Builder',
-    'win_fyi_perf_bisect': 'Win Builder',
-    'mac_10_11_perf_bisect': 'Mac Builder',
-    'mac_10_10_perf_bisect': 'Mac Builder',
-    'mac_retina_perf_bisect': 'Mac Builder',
-    'mac_hdd_perf_bisect': 'Mac Builder',
-    'mac_retina_perf_cq': 'Mac Builder',
-    'mac_fyi_perf_bisect': 'Mac Builder',
-}
 
 
 SPEC = {
+  'builders': {},
   'settings': chromium_perf.SPEC['settings'],
-  'builders': _Builders(),
 }
+
+
+def _AddBuildSpec(name, platform, target_bits=64):
+  SPEC['builders'][name] = chromium_perf.BuildSpec(None, platform, target_bits)
+
+
+def _AddTestSpec(name, platform, target_bits=64):
+  # TODO(dtu): Change this to TestSpec after try job builds are all offloaded
+  # to builders.
+  spec = chromium_perf.BuildSpec(None, platform, target_bits)
+  del spec['tests']
+  SPEC['builders'][name] = spec
+
+
+_AddBuildSpec('win_perf_bisect_builder', 'win', target_bits=32)
+_AddBuildSpec('winx64_bisect_builder', 'win')
+_AddBuildSpec('mac_perf_bisect_builder', 'mac')
+_AddBuildSpec('linux_perf_bisect_builder', 'linux')
+
+
+_AddTestSpec('winx64_10_perf_cq', 'win')
+_AddTestSpec('mac_retina_perf_cq', 'mac')
+_AddTestSpec('linux_perf_cq', 'linux')
+
+
+_AddTestSpec('win_fyi_perf_bisect', 'win', target_bits=32)
+_AddTestSpec('mac_fyi_perf_bisect', 'mac')
+_AddTestSpec('linux_fyi_perf_bisect', 'linux')
+
+
+_AddTestSpec('winx64_zen_perf_bisect', 'win')
+_AddTestSpec('winx64_10_perf_bisect', 'win')
+_AddTestSpec('win_8_perf_bisect', 'win', target_bits=32)
+_AddTestSpec('win_perf_bisect', 'win', target_bits=32)
+_AddTestSpec('win_x64_perf_bisect', 'win')
+_AddTestSpec('winx64ati_perf_bisect', 'win')
+_AddTestSpec('winx64intel_perf_bisect', 'win')
+_AddTestSpec('winx64nvidia_perf_bisect', 'win')
+
+_AddTestSpec('mac_10_11_perf_bisect', 'mac')
+_AddTestSpec('mac_10_10_perf_bisect', 'mac')
+_AddTestSpec('mac_retina_perf_bisect', 'mac')
+_AddTestSpec('mac_hdd_perf_bisect', 'mac')
+
+_AddTestSpec('linux_perf_bisect', 'linux')
