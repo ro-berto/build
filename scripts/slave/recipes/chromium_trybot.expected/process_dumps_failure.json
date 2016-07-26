@@ -340,17 +340,21 @@
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"next_version_mini_installer\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"next_version_mini_installer\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"next_version_mini_installer\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"next_version_mini_installer\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -422,7 +426,8 @@
       "--ninja-ensure-up-to-date",
       "--",
       "chromium_builder_tests",
-      "mini_installer"
+      "mini_installer",
+      "next_version_mini_installer"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
