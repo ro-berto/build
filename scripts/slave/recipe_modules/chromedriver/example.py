@@ -13,6 +13,7 @@ DEPS = [
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'recipe_engine/json',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
@@ -106,3 +107,15 @@ def GenTests(api):
           got_revision_cp='refs/heads/master@{#3333333333}') +
       api.step_data(
           'Download Test Results Log.gsutil download results log', retcode=1))
+
+  yield (
+      api.test('%s_unexpected_prebuilt' % sanitize('Android ChromeDriver')) +
+      api.properties.generic(
+          buildername='Android ChromeDriver Tests Example',
+          slavename='slavename') +
+      api.properties(
+          parent_build_archive_url='gs://test-domain/test-archive.zip',
+          got_revision_cp='refs/heads/master@{#3333333333}') +
+      api.step_data(
+          'Download Prebuilts.listdir get prebuilt filename',
+          api.json.output(['rNone.zip'])))

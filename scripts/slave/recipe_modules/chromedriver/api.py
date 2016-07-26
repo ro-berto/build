@@ -4,9 +4,13 @@
 
 from recipe_engine import recipe_api
 
+import re
+
 GS_CHROMEDRIVER_DATA_BUCKET = 'chromedriver-data'
 GS_PREBUILTS_URL = GS_CHROMEDRIVER_DATA_BUCKET + '/prebuilts'
 GS_SERVER_LOGS_URL = GS_CHROMEDRIVER_DATA_BUCKET + '/server_logs'
+
+PREBUILT_FILE_RE = re.compile(r'r\d+\.zip')
 
 TEST_LOG_FORMAT = '%s_log.json'
 TEST_LOG_MAX_LENGTH = 500
@@ -21,15 +25,22 @@ class ChromedriverApi(recipe_api.RecipeApi):
     """Downloads the most recent prebuilts from Google storage."""
     with self.m.step.nest('Download Prebuilts'):
       with self.m.tempfile.temp_dir('prebuilt') as prebuilt_dir:
-        zipfile = prebuilt_dir.join('build.zip')
         unzip_dir = prebuilt_dir.join('unzipped')
         self.m.gsutil.download_latest_file(
             base_url='gs://%s' % GS_PREBUILTS_URL,
             partial_name='gs://%s/r' % GS_PREBUILTS_URL,
-            destination=zipfile,
+            destination=prebuilt_dir,
             name='download latest prebuilt')
+        file_list = self.m.file.listdir(
+            name='get prebuilt filename',
+            path=prebuilt_dir,
+            step_test_data=lambda: self.m.json.test_api.output(['r111111.zip']))
+        prebuilt_file = file_list[0]
+        if not PREBUILT_FILE_RE.match(prebuilt_file):
+          raise self.m.step.StepFailure('Unexpected prebuilt filename: %s'
+                                        % prebuilt_file)
         self.m.zip.unzip(step_name='unzip prebuilt',
-                         zip_file=zipfile,
+                         zip_file=prebuilt_dir.join(prebuilt_file),
                          output=unzip_dir)
         self.m.file.move(name='move prebuilt',
                          source=unzip_dir.join('chromedriver'),
