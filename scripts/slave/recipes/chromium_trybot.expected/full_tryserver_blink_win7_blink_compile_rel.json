@@ -37,7 +37,7 @@
       "--master",
       "tryserver.blink",
       "--builder",
-      "win_blink_compile_rel",
+      "win7_blink_compile_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -236,7 +236,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\win_layout\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"win_blink_compile_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"win7_blink_compile_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -356,7 +356,7 @@
       "-m",
       "tryserver.blink",
       "-b",
-      "win_blink_compile_rel",
+      "win7_blink_compile_rel",
       "--config-file",
       "[BUILDER_CACHE]\\win_layout\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
