@@ -598,6 +598,15 @@ def cipd_pkg(api, infrabots_dir, asset_name):
   return (asset_name, 'skia/bots/%s' % asset_name, version)
 
 
+def forward_to_recipe_in_repo(api, recipes_py):
+  cmd = ['python', recipes_py, 'run',
+         '--workdir', api.path['slave_build'],
+         'swarm_trigger', 'path_config=kitchen']
+  for k, v in api.properties.iteritems():
+    cmd.append('%s=%s' % (k, v))
+  api.step('run recipe', cmd=cmd, allow_subannotations=True)
+
+
 def RunSteps(api):
   # Fix some paths.
   # TODO(borenet): We can remove this after the recipes move into Skia repo.
@@ -609,6 +618,13 @@ def RunSteps(api):
     api.path.c.base_paths['build'] = root_path + ('build',)
 
   got_revision = checkout_steps(api)
+
+  infrabots_dir = api.path['checkout'].join('infra', 'bots')
+  recipes_py = infrabots_dir.join('recipes.py')
+  if api.path.exists(recipes_py):
+    forward_to_recipe_in_repo(api, recipes_py)
+    return
+
   api.skia_swarming.setup(
       api.path['checkout'].join('infra', 'bots', 'tools', 'luci-go'),
       swarming_rev='')
@@ -623,7 +639,6 @@ def RunSteps(api):
   compile_cipd_deps = []
   extra_compile_hashes = [recipes_hash]
 
-  infrabots_dir = api.path['checkout'].join('infra', 'bots')
   if 'Infra' in api.properties['buildername']:
     return infra_swarm(api, got_revision, infrabots_dir, extra_hashes)
 
@@ -835,4 +850,19 @@ def GenTests(api):
   test = test_for_bot(api, builder, master, slave, 'legacy_skp_version',
                       legacy_skp_version=True)
   test += api.step_data('Get downloaded SKP_VERSION', retcode=1)
+  yield test
+
+  test = (
+    api.test('recipe_in_skia_repo') +
+    api.properties(buildername=builder,
+                   mastername=master,
+                   slavename=slave,
+                   buildnumber=5,
+                   path_config='kitchen',
+                   revision='abc123') +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'recipes.py'),
+    )
+  )
   yield test
