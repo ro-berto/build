@@ -29,7 +29,7 @@
       "--master",
       "tryserver.blink",
       "--builder",
-      "linux_precise_blink_rel",
+      "linux_blink_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -228,7 +228,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"linux_precise_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"linux_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -340,7 +340,7 @@
       "-m",
       "tryserver.blink",
       "-b",
-      "linux_precise_blink_rel",
+      "linux_blink_rel",
       "--config-file",
       "[BUILDER_CACHE]/linux_layout/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -413,11 +413,11 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_precise_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_precise_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests (with patch)",
-      "--builder-name=linux_precise_blink_rel",
+      "--builder-name=linux_blink_rel",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -435,7 +435,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "linux_precise_blink_rel",
+      "linux_blink_rel",
       "--step-name",
       "webkit_tests (with patch)"
     ],
@@ -462,7 +462,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "linux_precise_blink_rel",
+      "linux_blink_rel",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--staging-dir",
@@ -474,8 +474,8 @@
     },
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/linux_precise_blink_rel/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/linux_precise_blink_rel/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/linux_blink_rel/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/linux_blink_rel/571/layout-test-results.zip@@@"
     ]
   },
   {
@@ -486,7 +486,7 @@
       "--master",
       "tryserver.blink",
       "--builder",
-      "linux_precise_blink_rel",
+      "linux_blink_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -598,7 +598,7 @@
       "-m",
       "tryserver.blink",
       "-b",
-      "linux_precise_blink_rel",
+      "linux_blink_rel",
       "--config-file",
       "[BUILDER_CACHE]/linux_layout/src/tools/mb/mb_config.pyl",
       "--goma-dir",

@@ -15,51 +15,51 @@ def simple_bot(bot_id, analyze_mode=None):
 TRYBOTS = freeze({
   'tryserver.blink': {
     'builders': {
-      'linux_precise_blink_dbg': simple_bot({
+      'linux_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux (dbg)',
       }),
-      'linux_precise_blink_rel': simple_bot({
+      'linux_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
       }),
-      'linux_precise_blink_compile_dbg': simple_bot({
+      'linux_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux (dbg)',
       }, analyze_mode='compile'),
-      'linux_precise_blink_compile_rel': simple_bot({
+      'linux_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
       }, analyze_mode='compile'),
-      'mac10.9_blink_dbg': simple_bot({
+      'mac_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.11 (dbg)',
       }),
-      'mac10.9_blink_rel': simple_bot({
+      'mac_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.9',
       }),
-      'mac10.9_blink_compile_dbg': simple_bot({
+      'mac_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.11 (dbg)',
       }, analyze_mode='compile'),
-      'mac10.9_blink_compile_rel': simple_bot({
+      'mac_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.9',
       }, analyze_mode='compile'),
-      'win7_blink_dbg': simple_bot({
+      'win_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7 (dbg)',
       }),
-      'win7_blink_rel': simple_bot({
+      'win_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7',
       }),
-      'win7_blink_compile_dbg': simple_bot({
+      'win_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7 (dbg)',
       }, analyze_mode='compile'),
-      'win7_blink_compile_rel': simple_bot({
+      'win_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7',
       }, analyze_mode='compile'),

@@ -300,6 +300,28 @@ def GenTests(api):
           buildername='chromeos_amd64-generic_chromium_compile_only_ng')
   )
 
+  # Additional tests for blink trybots.
+  blink_trybots = api.chromium_tests.trybots['tryserver.blink']['builders']
+  for buildername, bot_config in blink_trybots.iteritems():
+    if bot_config.get('analyze_mode') == 'compile':
+      continue
+
+    for pass_first in (True, False):
+      test_name = 'full_%s_%s_%s' % (_sanitize_nonalpha('tryserver.blink'),
+                                     _sanitize_nonalpha(buildername),
+                                     'pass' if pass_first else 'fail')
+      test = (api.test(test_name) +
+              suppress_analyze() +
+              props(mastername='tryserver.blink',
+                    buildername=buildername) +
+              api.chromium_tests.platform(bot_config['bot_ids']) +
+              api.override_step_data('webkit_tests (with patch)',
+                  api.test_utils.canned_test_output(passing=pass_first)))
+      if not pass_first:
+        test += api.override_step_data('webkit_tests (without patch)',
+            api.test_utils.canned_test_output(passing=False, minimal=True))
+      yield test
+
   # Regression test for http://crbug.com/453471#c16
   yield (
     api.test('clobber_analyze') +
@@ -822,7 +844,7 @@ def GenTests(api):
   yield (
     api.test('blink_minimal_pass_continues') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -834,7 +856,7 @@ def GenTests(api):
   yield (
     api.test('blink_compile_without_patch_fails') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -850,7 +872,7 @@ def GenTests(api):
   yield (
     api.test('webkit_tests_unexpected_error') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -865,7 +887,7 @@ def GenTests(api):
   yield (
     api.test('webkit_tests_interrupted') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -879,7 +901,7 @@ def GenTests(api):
   yield (
     api.test('too_many_failures_for_retcode') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -890,20 +912,9 @@ def GenTests(api):
   )
 
   yield (
-    api.test('webkit_tests_with_and_without_patch_fail') +
-    suppress_analyze() +
-    props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
-    api.override_step_data('webkit_tests (with patch)',
-        api.test_utils.canned_test_output(passing=False)) +
-    api.override_step_data('webkit_tests (without patch)',
-        api.test_utils.canned_test_output(passing=False, minimal=True))
-  )
-
-  yield (
     api.test('non_cq_blink_tryjob') +
     props(mastername='tryserver.blink',
-          buildername='win7_blink_rel',
+          buildername='win_blink_rel',
           requester='someone@chromium.org') +
     suppress_analyze() +
     api.platform.name('win') +
@@ -914,7 +925,7 @@ def GenTests(api):
   yield (
     api.test('use_skia_patch_on_blink_trybot') +
     props(mastername='tryserver.blink',
-          buildername='mac10.9_blink_rel',
+          buildername='mac_blink_rel',
           patch_project='skia') +
     api.platform.name('mac')
   )
@@ -922,7 +933,7 @@ def GenTests(api):
   yield (
     api.test('use_v8_patch_on_blink_trybot') +
     props(mastername='tryserver.blink',
-          buildername='mac10.9_blink_rel',
+          buildername='mac_blink_rel',
           patch_project='v8') +
     api.platform.name('mac')
   )

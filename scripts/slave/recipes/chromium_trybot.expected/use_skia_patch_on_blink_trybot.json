@@ -29,7 +29,7 @@
       "--master",
       "tryserver.blink",
       "--builder",
-      "mac10.9_blink_rel",
+      "mac_blink_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -231,7 +231,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/mac_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"mac10.9_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -304,7 +304,7 @@
       "-m",
       "tryserver.blink",
       "-b",
-      "mac10.9_blink_rel",
+      "mac_blink_rel",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"third_party/skia/foo.cc\"], \"test_targets\": [\"blink_tests\"]}",
