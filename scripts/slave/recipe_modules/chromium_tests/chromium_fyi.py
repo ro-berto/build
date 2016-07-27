@@ -134,6 +134,35 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    # There are no slaves for this builder and this builder doesn't
+    # appear on the actual continuous waterfall; this configuration
+    # is here so that a try bot can be added.
+    'WebKit Linux slimming_paint_v2 Dummy Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb','ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'blink_tests',
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'tests': [
+        steps.BlinkTest(extra_args=[
+          '--additional-driver-flag=--enable-slimming-paint-v2',
+        ]),
+      ],
+      'testing': {
+          'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'use_isolate': True,
+    },
     'WebKit Linux - WPTServe':{
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb','ninja_confirm_noop'],
