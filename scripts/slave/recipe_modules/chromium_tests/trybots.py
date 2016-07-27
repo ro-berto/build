@@ -23,6 +23,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
       }),
+      'linux_trusty_blink_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux Trusty',
+      }),
       'linux_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux (dbg)',
@@ -39,6 +43,14 @@ TRYBOTS = freeze({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.9',
       }),
+      'mac10.10_blink_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac10.10',
+      }),
+      'mac10.11_blink_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac10.11',
+      }),
       'mac_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.11 (dbg)',
@@ -54,6 +66,10 @@ TRYBOTS = freeze({
       'win_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7',
+      }),
+      'win10_blink_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win10',
       }),
       'win_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
