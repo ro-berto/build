@@ -8,6 +8,14 @@ from recipe_engine import recipe_api
 
 
 class iOSApi(recipe_api.RecipeApi):
+
+  # Mapping of common names of supported iOS devices to product types
+  # exposed by the Swarming server.
+  PRODUCT_TYPES = {
+    'iPad Air': 'iPad4,1',
+    'iPhone 5s': 'iPhone6,1',
+  }
+
   def __init__(self, *args, **kwargs):
     super(iOSApi, self).__init__(*args, **kwargs)
     self.__config = None
@@ -194,6 +202,13 @@ class iOSApi(recipe_api.RecipeApi):
         expanded_tests_list.append(element)
 
     self.__config['tests'] = expanded_tests_list
+
+    # Generate a unique ID we can use to refer to each test, since the config
+    # may specify to run the exact same test multiple times.
+    i = 0
+    for test in self.__config['tests']:
+      test['id'] = str(i)
+      i += 1
 
     self.m.step('finalize build config', [
       'echo',
@@ -445,6 +460,231 @@ class iOSApi(recipe_api.RecipeApi):
       raise self.m.step.InfraFailure(
         'Failed %s.' % ', '.join(infrastructure_failures)
       )
+
+  def bootstrap_swarming(self):
+    """Bootstraps Swarming."""
+    self.m.swarming.show_isolated_out_in_collect_step = False
+    self.m.swarming.show_shards_in_collect_step = True
+    self.m.swarming_client.checkout('stable')
+    self.m.swarming_client.query_script_version('swarming.py')
+
+  def isolate(self):
+    """Isolates the tests specified in this bot's build config."""
+    assert self.__config
+
+    class Task(object):
+      def __init__(self, isolate_gen_file, step_name, test):
+        self.isolate_gen_file = isolate_gen_file
+        self.isolated_hash = None
+        self.step_name = step_name
+        self.task = None
+        self.test = copy.deepcopy(test)
+        self.tmp_dir = None
+
+    tasks = []
+    failures = []
+
+    cmd = [
+      'src/ios/build/bots/scripts/run.py',
+      '--app', '<(app_path)',
+      '--out-dir', '${ISOLATED_OUTDIR}',
+      '--xcode-version', '<(xcode_version)',
+    ]
+    files = [
+      # .apps are directories. Need the trailing slash to isolate the
+      # contents of a directory.
+      '<(app_path)/',
+    ]
+    if self.platform == 'simulator':
+      iossim = self.m.path.join(self.most_recent_iossim)
+      cmd.extend([
+        '--iossim', iossim,
+        '--platform', '<(platform)',
+        '--version', '<(version)',
+      ])
+      files.append(iossim)
+    isolate_template_contents = {
+      'conditions': [
+        ['OS == "ios"', {
+          'variables': {
+            'command': cmd,
+            'files': files,
+          },
+        }],
+      ],
+    }
+    if self.platform == 'simulator':
+      isolate_template_contents['conditions'][0][1]
+    isolate_template_contents = self.m.json.dumps(
+      isolate_template_contents, indent=2)
+
+    isolate_template = self.m.path['slave_build'].join('template.isolate')
+    step_result = self.m.file.write(
+      'generate template.isolate',
+      isolate_template,
+      isolate_template_contents,
+    )
+    step_result.presentation.logs['template.isolate'] = (
+      isolate_template_contents.splitlines())
+
+    tmp_dir = self.m.path.mkdtemp('isolate')
+
+    for test in self.__config['tests']:
+      app_path = self.m.path.join(
+        self.most_recent_app_dir,
+        '%s.app' % test['app'],
+      )
+      step_name = str('%s (%s iOS %s)' % (
+        test['app'], test['device type'], test['os']))
+      isolate_gen_file = tmp_dir.join('%s.isolate.gen.json' % test['id'])
+
+      try:
+        args = [
+          '--config-variable', 'OS', 'ios',
+          '--config-variable', 'app_path', app_path,
+          '--config-variable', 'xcode_version', test.get(
+            'xcode version', self.__config['xcode version']),
+          '--isolate', isolate_template,
+          '--isolated', tmp_dir.join('%s.isolated' % test['id']),
+        ]
+        if self.platform == 'simulator':
+          args.extend([
+            '--config-variable', 'platform', test['device type'],
+            '--config-variable', 'version', test['os'],
+          ])
+        isolate_gen_file_contents = self.m.json.dumps({
+          'args': args,
+          'dir': self.m.path['slave_build'],
+          'version': 1,
+        }, indent=2)
+        step_result = self.m.file.write(
+          'generate %s.isolate.gen.json' % test['id'],
+          isolate_gen_file,
+          isolate_gen_file_contents,
+        )
+        step_result.presentation.logs['%s.isolate.gen.json' % test['id']] = (
+          isolate_gen_file_contents.splitlines())
+        step_result.presentation.step_text = step_name
+
+        tasks.append(Task(isolate_gen_file, step_name, test))
+      except self.m.step.StepFailure as f:
+        f.result.presentation.status = self.m.step.EXCEPTION
+        failures.append(step_name)
+
+    if not tasks:
+      return tasks, failures
+
+    cmd = [
+      self.m.swarming_client.path.join('isolate.py'),
+      'batcharchive',
+      '--dump-json', self.m.json.output(),
+      '--isolate-server', self.m.isolate.isolate_server,
+    ]
+    for task in tasks:
+      cmd.append(task.isolate_gen_file)
+    step_result = self.m.step(
+      'archive',
+      cmd,
+      infra_step=True,
+      step_test_data=lambda: self.m.json.test_api.output({
+        task.test['id']: 'fake-hash-%s' % task.test['id']
+        for task in tasks
+      }),
+    )
+    for task in tasks:
+      if task.test['id'] in step_result.json.output:
+        task.isolated_hash = step_result.json.output[task.test['id']]
+
+    return tasks, failures
+
+  def trigger(self, tasks):
+    """Triggers the given Swarming tasks."""
+    failures = []
+
+    for task in tasks:
+      if not task.isolated_hash: # pragma: no cover
+        continue
+
+      task.tmp_dir = self.m.path.mkdtemp(task.test['id'])
+      swarming_task = self.m.swarming.task(
+        task.step_name, task.isolated_hash, task_output_dir=task.tmp_dir)
+
+      swarming_task.dimensions = {
+        'pool': 'Chrome',
+        'xcode_version': task.test.get(
+          'xcode version', self.__config['xcode version'])
+      }
+      if self.platform == 'simulator':
+        swarming_task.dimensions['os'] = 'Mac'
+      elif self.platform == 'device':
+        swarming_task.dimensions['os'] = 'iOS-%s' % str(task.test['os'])
+        swarming_task.dimensions['device_status'] = 'available'
+        swarming_task.dimensions['device'] = self.PRODUCT_TYPES.get(
+          task.test['device type'])
+        if not swarming_task.dimensions['device']:
+          failures.append(task.step_name)
+          # Create a dummy step so we can annotate it to explain what
+          # went wrong.
+          step_result = self.m.step('[trigger] %s' % task.step_name, [])
+          step_result.presentation.status = self.m.step.EXCEPTION
+          step_result.presentation.logs['supported devices'] = sorted(
+            self.PRODUCT_TYPES.keys())
+          step_result.presentation.step_text = (
+            'Requested unsupported device type.')
+          continue
+
+      swarming_task.tags.add('device_type:%s' % str(task.test['device type']))
+      swarming_task.tags.add('ios_version:%s' % str(task.test['os']))
+      swarming_task.tags.add('platform:%s' % self.platform)
+      swarming_task.tags.add('test:%s' % str(task.test['app']))
+
+      try:
+        self.m.swarming.trigger_task(swarming_task)
+        task.task = swarming_task
+      except self.m.step.StepFailure as f:
+        f.result.presentation.status = self.m.step.EXCEPTION
+        failures.append(task.step_name)
+
+    return failures
+
+  def test_swarming(self):
+    """Runs tests on Swarming as instructed by this bot's build config."""
+    assert self.__config
+
+    test_failures = []
+    infra_failures = []
+
+    with self.m.step.nest('bootstrap swarming'):
+      self.bootstrap_swarming()
+
+    with self.m.step.nest('isolate'):
+      tasks, failures = self.isolate()
+      infra_failures.extend(failures)
+
+    with self.m.step.nest('trigger'):
+      failures = self.trigger(tasks)
+      infra_failures.extend(failures)
+
+    for task in tasks:
+      if not task.task:
+        # We failed to isolate or trigger this test.
+        # Create a dummy step for it and mark it as failed.
+        step_result = self.m.step(task.step_name, [])
+        step_result.presentation.status = self.m.step.EXCEPTION
+        step_result.presentation.step_text = 'Failed to trigger the test.'
+        continue
+
+      try:
+        # TODO(smut): We need our own script here to interpret the results.
+        self.m.swarming.collect_task(task.task)
+      except self.m.step.StepFailure as f:
+        test_failures.append(task.step_name)
+
+    if test_failures:
+      raise self.m.step.StepFailure(
+        'Failed %s.' % ', '.join(test_failures + infra_failures))
+    elif infra_failures:
+      raise self.m.step.InfraFailure('Failed %s.' % ', '.join(infra_failures))
 
   @property
   def most_recent_app_dir(self):

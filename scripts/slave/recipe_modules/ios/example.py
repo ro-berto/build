@@ -7,13 +7,14 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/raw_io',
 ]
 
 def RunSteps(api):
   api.ios.checkout()
   api.ios.read_build_config()
   api.ios.build()
-  api.ios.test()
+  api.ios.test_swarming()
 
 def GenTests(api):
   yield (
@@ -53,14 +54,99 @@ def GenTests(api):
           'device type': 'fake device 2',
           'os': '7.1',
         },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+  )
+
+  yield (
+    api.test('errors')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': '6.1.1',
+      'GYP_DEFINES': {
+      },
+      'compiler': 'xcodebuild',
+      'configuration': 'Release',
+      'sdk': 'iphoneos8.1',
+      'tests': [
         {
-          'app': 'fake_eg_test_host',
-          'device type': 'fake device 3',
-          'os': '9.3',
-          'xctest': True,
+          'app': 'fake test 1',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+        {
+          'app': 'fake test 2',
+          'device type': 'iPad Air',
+          'os': '8.1',
+        },
+        {
+          'app': 'fake test 3',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+        {
+          'app': 'fake test 4',
+          'device type': 'iPhone 5s',
+          'os': '8.1',
         },
       ],
     })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+    + api.step_data(
+        'isolate.generate 0.isolate.gen.json',
+        retcode=1,
+    )
+    + api.step_data(
+        'trigger.[trigger] fake test 4 (iPhone 5s iOS 8.1) on iOS-8.1',
+        retcode=1,
+    )
+  )
+
+  yield (
+    api.test('test_failure')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': '6.1.1',
+      'GYP_DEFINES': {
+      },
+      'compiler': 'xcodebuild',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.1',
+      'tests': [
+        {
+          'app': 'fake test',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+    + api.step_data(
+        'fake test (fake device iOS 8.1) on Mac',
+        retcode=1,
+    )
   )
 
   yield (
@@ -83,4 +169,8 @@ def GenTests(api):
       'tests': [
       ],
     })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
   )
