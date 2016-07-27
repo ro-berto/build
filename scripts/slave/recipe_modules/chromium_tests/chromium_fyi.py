@@ -1234,20 +1234,28 @@ SPEC = {
       }
     },
     'CrWinClangGoma': {
-      'chromium_config': 'chromium_win_clang',
-      'chromium_apply_config': ['goma_canary', 'clobber',
-                                'mb', 'shared_library'],
+      'chromium_config': 'chromium_win_clang_official',
       'gclient_config': 'chromium',
+      'chromium_apply_config': ['goma_canary', 'mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'compile_targets': [ 'chromium_builder_tests' ],
+      'compile_targets': [
+        'all',
+      ],
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'win',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
-      'testing': {
-        'platform': 'win'
-      }
     },
     'Chromium Linux Goma Canary': {
       'chromium_config': 'chromium',

@@ -193,6 +193,19 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILDER_CACHE]\\CrWinClangGoma\\src\\tools\\swarming_client\\swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILDER_CACHE]\\CrWinClangGoma\\src\\out\\Release"
     ],
@@ -219,7 +232,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -256,7 +269,18 @@
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]\\CrWinClangGoma\\src\\testing\\buildbot\\chromium.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"CrWinClangGoma\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -270,14 +294,6 @@
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
     "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]\\CrWinClangGoma\\src\\tools\\clang\\scripts\\update.py"
-    ],
-    "name": "update_clang"
   },
   {
     "cmd": [
@@ -351,15 +367,15 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "--mode",
+      "official",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "--goma-hermetic",
       "error",
       "--goma-enable-compiler-info-cache",
       "--",
-      "base_unittests",
-      "chromium_builder_tests",
-      "content_unittests"
+      "all"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
