@@ -144,8 +144,7 @@
             "https://build.chromium.org/p/chromium.memory.fyi": ["*"],
             "https://build.chromium.org/p/client.boringssl": ["*"],
             "https://build.chromium.org/p/client.catapult": ["*"],
-            "https://build.chromium.org/p/client.crashpad": ["*"],
-            "https://build.chromium.org/p/client.libvpx": ["*"]
+            "https://build.chromium.org/p/client.crashpad": ["*"]
         }
     }
 }

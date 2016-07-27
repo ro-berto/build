@@ -255,7 +255,6 @@ def main(argv):
       'master.client.flutter': 'ClientFlutter',
       'master.client.gyp': 'GYP',
       'master.client.libyuv': 'Libyuv',
-      'master.client.libvpx': 'Libvpx',
       'master.client.mojo': 'Mojo',
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.ports': 'WebPorts',
