@@ -8,7 +8,7 @@ SPEC = {
  'builders': {
    'Chromium Linux Goma Staging': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_staging', 'clobber'],
+     'chromium_apply_config': ['goma_staging', 'clobber', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
@@ -23,7 +23,7 @@ SPEC = {
    },
    'Chromium Mac Goma Staging': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_staging', 'clobber'],
+     'chromium_apply_config': ['goma_staging', 'clobber', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
@@ -38,7 +38,7 @@ SPEC = {
    },
    'CrWinGomaStaging': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_staging', 'clobber'],
+     'chromium_apply_config': ['goma_staging', 'clobber', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
