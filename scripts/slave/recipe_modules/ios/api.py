@@ -123,8 +123,13 @@ class iOSApi(recipe_api.RecipeApi):
         'compiler',
         'configuration',
         'sdk',
+        'gn_args',
+        'gn_args_file',
+        'additional_compile_targets',
+        'mb_type',
       ):
-        self.__config[key] = parent_config[key]
+        if key in parent_config:
+          self.__config[key] = parent_config[key]
 
     # In the older dict-based bot configs we didn't set these values
     # since they were the same on every bot. In the newer configs they
