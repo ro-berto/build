@@ -209,20 +209,18 @@
             "categories": [
               "chromium_gnumbd_closer"
             ]
-          },
-          "*": {
-            "excluded_builders": [
-              "lkgr-tag-pusher",
-              "builder_alerts",
-              "publish_tarball",
-              "rebaseline-o-matic",
-              "recipe-autoroller-public",
-              "Chromium Linux Codesearch",
-              "ChromiumOS Codesearch",
-              "git-hash-metrics"
-            ]
           }
-        }
+        },
+        "excluded_builders": [
+          "lkgr-tag-pusher",
+          "builder_alerts",
+          "publish_tarball",
+          "rebaseline-o-matic",
+          "recipe-autoroller-public",
+          "Chromium Linux Codesearch",
+          "ChromiumOS Codesearch",
+          "git-hash-metrics"
+        ]
       },
       {
         "close_tree": false,
