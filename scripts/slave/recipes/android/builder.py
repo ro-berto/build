@@ -70,6 +70,10 @@ BUILDERS = freeze({
           'buildername': 'Android Galaxy S5 Perf (1)',
           'mastername': 'chromium.perf.fyi',
         },
+        {
+          'buildername': 'Android Power Nexus 5X Perf (1)',
+          'mastername': 'chromium.perf.fyi',
+        },
       ],
     },
     'Android arm64 Builder': {

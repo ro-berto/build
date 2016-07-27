@@ -315,10 +315,18 @@
           "parent_revision": "267739",
           "revision": "267739"
         }
+      },
+      {
+        "bucket": "master.chromium.perf.fyi",
+        "builder_name": "Android Power Nexus 5X Perf (1)",
+        "properties": {
+          "parent_revision": "267739",
+          "revision": "267739"
+        }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Galaxy S5 Perf (1)@@@"
+      "@@@STEP_TEXT@Android Galaxy S5 Perf (1)<br />Android Power Nexus 5X Perf (1)@@@"
     ]
   },
   {
