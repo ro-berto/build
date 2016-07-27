@@ -2191,7 +2191,11 @@ SPEC = {
     },
     'Win SyzyAsan (rel)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['syzyasan_compile_only', 'shared_library'],
+      'chromium_apply_config': [
+          'mb',
+          'syzyasan_compile_only',
+          'shared_library',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
