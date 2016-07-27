@@ -130,7 +130,8 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
-      "GOMA_DIR": "[CACHE]/cipd/goma"
+      "GOMA_DIR": "[CACHE]/cipd/goma",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "mojob gn"
   },
@@ -144,7 +145,8 @@
       "--dcheck_always_on"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]/cipd/goma"
+      "GOMA_DIR": "[CACHE]/cipd/goma",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "mojob build"
   },

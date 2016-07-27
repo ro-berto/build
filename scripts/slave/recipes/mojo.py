@@ -40,13 +40,15 @@ def _BuildSteps(api, buildername, is_debug, is_official):
   if api.tryserver.is_tryserver:
     args += ['--dcheck_always_on']
 
+  env = {}
+
   goma_dir = ''
   if 'Win' not in buildername:
     # Disable Goma on Windows as it makes the build much slower (> 1 hour vs
     # 15 minutes). Try renabling once we have trybots and the cache would be
     # warm.
     goma_dir = api.goma.ensure_goma()
-  env = {}
+    env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = api.goma.service_account_json_path
 
   if is_debug:
     build_type = "--debug"
@@ -294,4 +296,3 @@ def GenTests(api):
   yield(api.test('mojo_android_builder_tests_dbg_fail_device_check') +
       api.properties.tryserver(buildername="Mojo Android Builder Tests (dbg)") +
       api.step_data("device_status", retcode=1))
-
