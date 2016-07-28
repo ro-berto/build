@@ -79,6 +79,40 @@ def GenTests(api):
     })
   )
 
+  # The same test as above but applying an icu patch.
+  yield (
+    api.test('icu_patch')
+    + api.platform('mac', 64)
+    + api.properties(patch_url='patch url')
+    + api.properties(
+      buildername='ios-simulator',
+      buildnumber='0',
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      patch_project='icu',
+      rietveld='fake://rietveld.url',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'GYP_DEFINES': {
+        'fake gyp define 1': 'fake value 1',
+        'fake gyp define 2': 'fake value 2',
+      },
+      'compiler': 'ninja',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.0',
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+    })
+  )
+
   yield (
     api.test('parent')
     + api.platform('mac', 64)
@@ -257,5 +291,3 @@ def GenTests(api):
       ],
     })
   )
-
-
