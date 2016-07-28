@@ -397,7 +397,9 @@
       "https://chromium-swarm-dev.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--verbose"
+      "--verbose",
+      "--json",
+      "{\"base_task_name\": \"dummy_target_1/Windows/[dummy has/TestBuilder/571\", \"tasks\": {\"dummy_target_1/Windows/[dummy has/TestBuilder/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"dummy_target_1/Windows/[dummy has/TestBuilder/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}"
     ],
     "name": "dummy_target_1 on Windows",
     "~followup_annotations": [
@@ -446,7 +448,9 @@
       "https://chromium-swarm-dev.appspot.com",
       "--decorate",
       "--print-status-updates",
-      "--verbose"
+      "--verbose",
+      "--json",
+      "{\"base_task_name\": \"dummy_target_2/Windows/[dummy has/TestBuilder/571\", \"tasks\": {\"dummy_target_2/Windows/[dummy has/TestBuilder/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"dummy_target_2/Windows/[dummy has/TestBuilder/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}"
     ],
     "name": "dummy_target_2 on Windows",
     "~followup_annotations": [

@@ -5,7 +5,6 @@
 import datetime
 import functools
 
-from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
 
@@ -835,8 +834,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     ]
     if self.verbose:
       args.append('--verbose')
-    else:
-      args.extend(('--json', self.m.json.input(task.trigger_output)))
+    args.extend(('--json', self.m.json.input(task.trigger_output)))
     return args
 
   def _gen_trigger_step_test_data(self, task):
