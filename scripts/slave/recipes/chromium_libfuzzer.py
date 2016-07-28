@@ -26,22 +26,12 @@ BUILDERS = freeze({
       'Libfuzzer Upload Linux ASan': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'proprietary_codecs' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
         'upload_bucket': 'chromium-browser-libfuzzer',
         'upload_directory': 'asan',
       },
       'Libfuzzer Upload Linux ASan Debug': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'proprietary_codecs' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
         'upload_bucket': 'chromium-browser-libfuzzer',
         'upload_directory': 'asan',
       },
@@ -50,33 +40,18 @@ BUILDERS = freeze({
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
                                   'prebuilt_instrumented_libraries',
                                   'proprietary_codecs' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
         'upload_bucket': 'chromium-browser-libfuzzer',
         'upload_directory': 'msan',
       },
       'Libfuzzer Upload Linux UBSan': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'proprietary_codecs' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
         'upload_bucket': 'chromium-browser-libfuzzer',
         'upload_directory': 'ubsan',
       },
       'Libfuzzer Upload Mac ASan': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'proprietary_codecs' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'mac',
-          'TARGET_BITS': 64,
-        },
         'upload_bucket': 'chromium-browser-libfuzzer',
         'upload_directory': 'asan',
       },
@@ -129,14 +104,8 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['targets'] = targets
   api.chromium.compile(targets=targets)
 
-  # Use 'Release' as default value since it has been hardcoded previously.
-  build_config = 'Release'
-  config_kwargs = bot_config.get('chromium_config_kwargs')
-  if config_kwargs and config_kwargs.get('BUILD_CONFIG'):
-    build_config = config_kwargs.get('BUILD_CONFIG')
-
   api.archive.clusterfuzz_archive(
-      build_dir=api.path['slave_build'].join('src', 'out', build_config),
+      build_dir=api.chromium.output_dir,
       update_properties=checkout_results.json.output['properties'],
       gs_bucket=bot_config['upload_bucket'],
       archive_prefix='libfuzzer',
@@ -149,7 +118,7 @@ def RunSteps(api):
         "zip_src_%s" % target,
         api.path['checkout'].join('testing', 'libfuzzer', 'zip_sources.py'),
         ["--binary",
-         api.path['build'].join(target),
+         api.chromium.output_dir.join(target),
          "--workdir",
          api.path['checkout'],
          "--srcdir",
@@ -160,7 +129,7 @@ def RunSteps(api):
 
   # Upload sources.
   api.archive.clusterfuzz_archive(
-      build_dir=api.path['slave_build'].join('src', 'out', build_config),
+      build_dir=api.chromium.output_dir,
       update_properties=checkout_results.json.output['properties'],
       gs_bucket=bot_config['upload_bucket'],
       archive_prefix='libfuzzer-src',
