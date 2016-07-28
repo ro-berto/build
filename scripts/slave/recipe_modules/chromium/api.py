@@ -515,7 +515,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
     self.m.gclient.runhooks(**kwargs)
 
-  def run_gyp_chromium(self):
+  # No cover because internal recipes use this.
+  def run_gyp_chromium(self): # pragma: no cover
     gyp_chromium_path = self.m.path['checkout'].join('build', 'gyp_chromium.py')
     env = self.get_env()
     env.update(self.c.gyp_env.as_jsonish())
@@ -577,7 +578,8 @@ class ChromiumApi(recipe_api.RecipeApi):
   def run_mb(self, mastername, buildername, use_goma=True,
              mb_config_path=None, isolated_targets=None, name=None,
              build_dir=None, android_version_code=None,
-             android_version_name=None, gyp_script=None, **kwargs):
+             android_version_name=None, gyp_script=None, phase=None,
+             **kwargs):
     mb_config_path = (mb_config_path or
                       self.m.path['checkout'].join('tools', 'mb',
                                                    'mb_config.pyl'))
@@ -595,6 +597,9 @@ class ChromiumApi(recipe_api.RecipeApi):
         '-b', buildername,
         '--config-file', mb_config_path,
     ]
+
+    if phase is not None:
+      args += [ '--phase', str(phase) ]
 
     if use_goma:
       goma_dir = self.c.compile_py.goma_dir
