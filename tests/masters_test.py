@@ -286,7 +286,6 @@ def main(argv):
       'master.tryserver.client.pdfium': 'PDFiumTryserver',
       'master.tryserver.client.syzygy': 'SyzygyTryserver',
       'master.tryserver.blink': 'BlinkTryServer',
-      'master.tryserver.infra': 'InfraTryServer',
       'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
       'master.tryserver.v8': 'V8TryServer',
