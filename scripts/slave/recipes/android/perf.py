@@ -166,6 +166,9 @@ def RunSteps(api):
   for apk in required_apks:
     api.chromium_android.adb_install_apk(apk)
 
+  api.chromium_android.host_info(
+      args=api.chromium_tests.get_common_args_for_scripts())
+
   test_runner = api.chromium_tests.create_test_runner(
       api, builder.get('tests', []))
 
@@ -299,3 +302,18 @@ def GenTests(api):
           target='Release') +
       api.override_step_data(
           'perf_test.foo', retcode=87))
+  yield (api.test('host_info_failure') +
+      api.properties.generic(
+          path_config='kitchen',
+          repo_name='src',
+              repo_url=REPO_URL,
+              mastername='chromium.perf',
+              buildername='Android Nexus5 Perf (1)',
+              parent_buildername='parent_buildername',
+              parent_buildnumber='1729',
+              parent_revision='deadbeef',
+              revision='deadbeef',
+              slavename='slavename',
+              target='Release')
+      + api.step_data('Host_Info', retcode=87))
+

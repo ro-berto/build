@@ -370,6 +370,57 @@ class AndroidApi(recipe_api.RecipeApi):
     self.device_recovery()
     return self.device_status()
 
+  def host_info(self, args=[], **kwargs):
+    try:
+      with self.handle_exit_codes():
+        args.extend(['run', '--output', self.m.json.output()])
+        self.m.step(
+            'Host_Info',
+            [self.m.path['checkout'].join('testing', 'scripts',
+                                          'host_info.py')] + args,
+            env=self.m.chromium.get_env(),
+            infra_step=True,
+            step_test_data=lambda: self.m.json.test_api.output({
+                'valid': True,
+                'failures': [],
+                '_host_info': {
+                    'os_system': 'os_system',
+                    'os_release': 'os_release',
+                    'processor': 'processor',
+                    'num_cpus': 'num_cpus',
+                    'free_disk_space': 'free_disk_space',
+                    'python_version': 'python_version',
+                    'python_path': 'python_path',
+                    'devices': [{
+                        "usb_status": True,
+                        "blacklisted": None,
+                        "ro.build.fingerprint": "fingerprint", 
+                        "battery": {
+                            "status": "5",
+                            "scale": "100",
+                            "temperature": "240",
+                            "level": "100",
+                            "technology": "Li-ion",
+                            "AC powered": "false",
+                            "health": "2",
+                            "voltage": "4302",
+                            "Wireless powered": "false",
+                            "USB powered": "true",
+                            "Max charging current": "500000",
+                            "present": "true"
+                        },
+                       "adb_status": "device",
+                       "imei_slice": "",
+                       "ro.build.product": "bullhead",
+                       "ro.build.id": "MDB08Q",
+                       "serial": "00d0d567893340f4",
+                       "wifi_ip": ""
+                    }]
+                }}),
+            **kwargs)
+    except self.m.step.InfraFailure:
+      pass
+
   def device_recovery(self, restart_usb=False, **kwargs):
     args = [
         '--blacklist-file', self.blacklist_file,
