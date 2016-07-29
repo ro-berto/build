@@ -116,6 +116,24 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "[SLAVE_BUILD]/src/out/Release.1"
+    ],
+    "name": "rmtree [SLAVE_BUILD]/src/out/Release.1"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "[SLAVE_BUILD]/src/out/Release.2"
+    ],
+    "name": "rmtree [SLAVE_BUILD]/src/out/Release.2"
+  },
+  {
     "cmd": [],
     "name": "ensure_goma"
   },

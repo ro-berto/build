@@ -22,6 +22,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/shutil',
   'recipe_engine/step',
 ]
 
@@ -131,6 +132,10 @@ def RunSteps(api, buildername):
   if enable_isolate:
     # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
     api.isolate.set_isolate_environment(api.chromium.c)
+
+  # Since disk lacks in Mac, we need to remove files before build.
+  api.shutil.rmtree(str(api.chromium.output_dir).rstrip('\\/') + '.1')
+  api.shutil.rmtree(str(api.chromium.output_dir).rstrip('\\/') + '.2')
 
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.ensure_goma()
