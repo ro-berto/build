@@ -76,27 +76,16 @@ class EchoDict(dict):
 def goma_setup(options, env):
   """Sets up goma if necessary.
 
-  If using the Goma compiler, first call goma_ctl  to ensure the proxy is
+  If using the Goma compiler, first call goma_ctl to ensure the proxy is
   available, and returns (True, instance of cloudtail subprocess).
-  If it failed to start up compiler_proxy, modify options.compiler and
-  options.goma_dir and returns (False, None)
-
+  If it failed to start up compiler_proxy, modify options.compiler
+  and options.goma_dir, modify env to GOMA_DISABLED=true,
+  and returns (False, None).
   """
   if options.compiler not in ('goma', 'goma-clang'):
     # Unset goma_dir to make sure we'll not use goma.
     options.goma_dir = None
     return False, None
-
-  hostname = goma_utils.GetShortHostname()
-  # HACK(shinyak, yyanagisawa, goma): Windows NO_NACL_GOMA (crbug.com/390764)
-  # Building NaCl untrusted code using goma brings large performance
-  # improvement but it sometimes cause build failure by race condition.
-  # Let me enable goma build on goma canary buildslaves to confirm the issue
-  # has been fixed by a workaround.
-  # vm*-m4 are trybots. build*-m1 and vm*-m1 are all goma canary bots.
-  if hostname in ['build28-m1', 'build58-m1', 'vm191-m1', 'vm480-m1',
-                  'vm820-m1', 'vm821-m1', 'vm848-m1']:
-    env['NO_NACL_GOMA'] = 'false'
 
   if options.goma_fail_fast:
     # startup fails when initial ping failed.
@@ -107,26 +96,6 @@ def goma_setup(options, env):
     # compile locally. If goma cannot guarantee that, let it make compile
     # as error.
     env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
-
-  # HACK(yyanagisawa): reduce GOMA_BURST_MAX_PROCS crbug.com/592306
-  # Recently, I sometimes see buildbot slave time out, one possibility I come
-  # up with is burst mode use up resource.
-  # Let me temporary set small values to GOMA_BURST_MAX_PROCS to confirm
-  # the possibility is true or false.
-  max_subprocs = '3'
-  max_heavy_subprocs = '1'
-  number_of_processors = 0
-  try:
-    number_of_processors = multiprocessing.cpu_count()
-  except NotImplementedError:
-    print 'cpu_count() is not implemented, using default value.'
-    number_of_processors = 1
-  if number_of_processors > 3:
-    max_subprocs = str(number_of_processors - 1)
-    max_heavy_subprocs = str(number_of_processors / 2)
-  env['GOMA_BURST_MAX_SUBPROCS'] = max_subprocs
-  env['GOMA_BURST_MAX_SUBPROCS_LOW'] = max_subprocs
-  env['GOMA_BURST_MAX_SUBPROCS_HEAVY'] = max_heavy_subprocs
 
   # Caches CRLs in GOMA_CACHE_DIR.
   # Since downloading CRLs is usually slow, caching them may improves
@@ -141,7 +110,7 @@ def goma_setup(options, env):
   env['GOMA_DEPS_CACHE_DIR'] = (
       options.goma_deps_cache_dir or options.target_output_dir)
 
-  if not env.get('GOMA_HERMETIC'):
+  if options.goma_hermetic:
     env['GOMA_HERMETIC'] = options.goma_hermetic
   if options.goma_enable_remote_link:
     env['GOMA_ENABLE_REMOTE_LINK'] = options.goma_enable_remote_link
@@ -155,15 +124,9 @@ def goma_setup(options, env):
     env['GOMA_DUMP_STATS_FILE'] = os.path.join(options.build_data_dir,
                                                'goma_stats_proto')
 
-  # goma is requested.
-  goma_key = os.path.join(options.goma_dir, 'goma.key')
-  if os.path.exists(goma_key):
-    env['GOMA_API_KEY_FILE'] = goma_key
   if options.goma_service_account_json_file:
     env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
         options.goma_service_account_json_file
-  if chromium_utils.IsWindows():
-    env['GOMA_RPC_EXTRA_PARAMS'] = '?win'
   goma_start_command = ['restart']
   goma_ctl_cmd = [sys.executable,
                   os.path.join(options.goma_dir, 'goma_ctl.py')]
@@ -227,8 +190,7 @@ def goma_setup(options, env):
 # TODO(tikuta): move to goma_utils.py
 def goma_teardown(options, env, exit_status, cloudtail_proc):
   """Tears down goma if necessary. """
-  if (options.compiler in ('goma', 'goma-clang') and
-      options.goma_dir):
+  if options.goma_dir:
     override_gsutil = None
     if options.gsutil_py_path:
       override_gsutil = [sys.executable, options.gsutil_py_path]
@@ -244,7 +206,7 @@ def goma_teardown(options, env, exit_status, cloudtail_proc):
       chromium_utils.RunCommand(
           goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
       goma_utils.SendGomaTsMon(options.goma_jsonstatus, exit_status)
-    # Always stop the proxy for now to allow in-place update.
+    # Always stop the proxy to dump GomaStats.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
     goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil)
     if env.get('GOMA_DUMP_STATS_FILE'):
@@ -468,7 +430,7 @@ def main_ninja(options, args, env):
         override_gsutil=override_gsutil)
 
 
-def get_target_build_dir(args, options):
+def get_target_build_dir(options):
   """Keep this function in sync with src/build/landmines.py"""
   if chromium_utils.IsLinux() and options.cros_board:
     # When building ChromeOS's Simple Chrome workflow, the output directory
@@ -547,7 +509,7 @@ def get_parsed_options():
     options.src_dir = 'src'
   options.src_dir = os.path.abspath(options.src_dir)
 
-  options.target_output_dir = get_target_build_dir(args, options)
+  options.target_output_dir = get_target_build_dir(options)
 
   assert options.build_tool in (None, 'ninja')
   return options, args
