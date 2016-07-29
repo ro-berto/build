@@ -480,7 +480,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "Host_Info",
+    "name": "Host Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"_host_info\": {@@@",
@@ -520,13 +520,16 @@
       "@@@STEP_LOG_LINE@json.output@    \"python_version\": \"python_version\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Device 3208154b735c5117 blacklisted\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Failure A\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Failure B\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@Failures@Device 3208154b735c5117 blacklisted@@@",
-      "@@@STEP_LOG_END@Failures@@@"
+      "@@@STEP_LOG_LINE@Failure A@Failure A@@@",
+      "@@@STEP_LOG_END@Failure A@@@",
+      "@@@STEP_LOG_LINE@Failure B@Failure B@@@",
+      "@@@STEP_LOG_END@Failure B@@@"
     ]
   },
   {

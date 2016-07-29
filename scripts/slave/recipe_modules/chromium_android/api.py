@@ -371,18 +371,19 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.device_status()
 
   def host_info(self, args=[], **kwargs):
+    results = None
     try:
       with self.handle_exit_codes():
         args.extend(['run', '--output', self.m.json.output()])
         results = self.m.step(
-            'Host_Info',
+            'Host Info',
             [self.m.path['checkout'].join('testing', 'scripts',
                                           'host_info.py')] + args,
             env=self.m.chromium.get_env(),
             infra_step=True,
             step_test_data=lambda: self.m.json.test_api.output({
                 'valid': True,
-                'failures': ['Device 3208154b735c5117 blacklisted'],
+                'failures': ['Failure A', 'Failure B'],
                 '_host_info': {
                     'os_system': 'os_system',
                     'os_release': 'os_release',
@@ -418,11 +419,13 @@ class AndroidApi(recipe_api.RecipeApi):
                     }]
                 }}),
             **kwargs)
-      if results.json.output.get('failures'):
-        results.presentation.logs['Failures'] = results.json.output['failures']
       return results
     except self.m.step.InfraFailure:
       pass
+    finally:
+      if results:
+        for failure in results.json.output.get('failures', []):
+          results.presentation.logs[failure] = [failure]
 
   def device_recovery(self, restart_usb=False, **kwargs):
     args = [

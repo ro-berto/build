@@ -315,5 +315,5 @@ def GenTests(api):
               revision='deadbeef',
               slavename='slavename',
               target='Release')
-      + api.step_data('Host_Info', retcode=87))
+      + api.step_data('Host Info', retcode=87))
 
