@@ -326,11 +326,11 @@
       "--binary",
       "[SLAVE_BUILD]/src/out/Release/target2",
       "--workdir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]/src/out/Release",
       "--srcdir",
       "[SLAVE_BUILD]/src",
       "--output",
-      "[BUILD]/target2.src.zip"
+      "[SLAVE_BUILD]/src/out/Release/target2.src.zip"
     ],
     "name": "zip_src_target2"
   },
@@ -342,11 +342,11 @@
       "--binary",
       "[SLAVE_BUILD]/src/out/Release/target3",
       "--workdir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]/src/out/Release",
       "--srcdir",
       "[SLAVE_BUILD]/src",
       "--output",
-      "[BUILD]/target3.src.zip"
+      "[SLAVE_BUILD]/src/out/Release/target3.src.zip"
     ],
     "name": "zip_src_target3"
   },

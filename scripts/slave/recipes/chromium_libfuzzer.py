@@ -120,11 +120,11 @@ def RunSteps(api):
         ["--binary",
          api.chromium.output_dir.join(target),
          "--workdir",
-         api.path['checkout'],
+         api.chromium.output_dir,
          "--srcdir",
          api.path['checkout'],
          "--output",
-         api.path['build'].join(target + ".src.zip")
+         api.chromium.output_dir.join(target + ".src.zip")
         ])
 
   # Upload sources.
