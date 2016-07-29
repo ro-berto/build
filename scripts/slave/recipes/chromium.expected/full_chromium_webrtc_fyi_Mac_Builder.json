@@ -342,6 +342,7 @@
       "[CACHE]/cipd/goma",
       "--",
       "browser_tests",
+      "capture_unittests",
       "content_browsertests",
       "content_unittests",
       "media_unittests",

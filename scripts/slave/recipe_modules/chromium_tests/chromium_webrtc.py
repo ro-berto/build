@@ -116,14 +116,14 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
           # These tests needs --test-launcher-jobs=1 since some of them are
           # not able to run in parallel (due to the usage of the
           # peerconnection server).
-          # TODO(phoglund): increasing timeout for the HD video quality test.
-          # The original timeout was 300000. See http://crbug.com/476865.
           args=['--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*',
                 '--run-manual', '--ui-test-action-max-timeout=350000',
                 '--test-launcher-jobs=1',
                 '--test-launcher-bot-mode',
                 '--test-launcher-print-test-stdio=always'],
           perf_id=perf_id),
+        # Run capture unittests as well since our bots have real webcams.
+        WebRTCTest('capture_unittests'),
         WebRTCTest('content_unittests'),
         WebRTCTest('media_unittests',
                    args=['--gtest_filter=VideoCaptureDeviceTest*',
