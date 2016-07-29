@@ -27,7 +27,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "chromium.memory.fyi",
+      "chromium.memory.full",
       "--builder",
       "Chromium Linux MSan Builder",
       "--slave",
@@ -223,7 +223,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Chromium_Linux_MSan_Builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Chromium Linux MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Chromium Linux MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.full\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -236,12 +236,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Chromium_Linux_MSan_Builder/src/testing/buildbot/chromium.memory.fyi.json",
+      "[BUILDER_CACHE]/Chromium_Linux_MSan_Builder/src/testing/buildbot/chromium.memory.full.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.memory.fyi.json)",
+    "name": "read test spec (chromium.memory.full.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Chromium_Linux_MSan_Builder/src/testing/buildbot/chromium.memory.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Chromium_Linux_MSan_Builder/src/testing/buildbot/chromium.memory.full.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Linux MSan Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -286,7 +286,7 @@
       "[BUILDER_CACHE]/Chromium_Linux_MSan_Builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.memory.fyi",
+      "chromium.memory.full",
       "-b",
       "Chromium Linux MSan Builder",
       "--config-file",
@@ -425,13 +425,13 @@
       "--src-dir",
       "[BUILDER_CACHE]/Chromium_Linux_MSan_Builder/src",
       "--build-url",
-      "gs://chromium-memory-fyi-archive/chromium.memory.fyi/Chromium Linux MSan Builder",
+      "gs://chromium-memory-full-archive/chromium.memory.full/Chromium Linux MSan Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.full\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Linux MSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.full\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   },

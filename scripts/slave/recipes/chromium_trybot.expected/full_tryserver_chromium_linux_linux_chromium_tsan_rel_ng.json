@@ -241,12 +241,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/linux_chromium_tsan_rel_ng/src/testing/buildbot/chromium.memory.fyi.json",
+      "[BUILDER_CACHE]/linux_chromium_tsan_rel_ng/src/testing/buildbot/chromium.memory.full.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.memory.fyi.json)",
+    "name": "read test spec (chromium.memory.full.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux_chromium_tsan_rel_ng/src/testing/buildbot/chromium.memory.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux_chromium_tsan_rel_ng/src/testing/buildbot/chromium.memory.full.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

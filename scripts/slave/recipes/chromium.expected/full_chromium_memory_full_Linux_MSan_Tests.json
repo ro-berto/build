@@ -27,7 +27,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "chromium.memory.fyi",
+      "chromium.memory.full",
       "--builder",
       "Linux MSan Tests",
       "--slave",
@@ -222,7 +222,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Linux_MSan_Tests/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.full\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -235,12 +235,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Linux_MSan_Tests/src/testing/buildbot/chromium.memory.fyi.json",
+      "[BUILDER_CACHE]/Linux_MSan_Tests/src/testing/buildbot/chromium.memory.full.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.memory.fyi.json)",
+    "name": "read test spec (chromium.memory.full.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Linux_MSan_Tests/src/testing/buildbot/chromium.memory.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Linux_MSan_Tests/src/testing/buildbot/chromium.memory.full.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Linux MSan Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -303,7 +303,7 @@
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
-      "chromium.memory.fyi",
+      "chromium.memory.full",
       "--build-number",
       "571"
     ],
@@ -376,7 +376,7 @@
       "--tag",
       "data:ffffffffffffffffffffffffffffffffffffffff",
       "--tag",
-      "master:chromium.memory.fyi",
+      "master:chromium.memory.full",
       "--tag",
       "msan:1",
       "--tag",
@@ -459,7 +459,7 @@
       "--input-gtest-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
-      "chromium.memory.fyi",
+      "chromium.memory.full",
       "--builder-name",
       "Linux MSan Tests",
       "--build-number",

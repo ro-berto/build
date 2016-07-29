@@ -21,7 +21,7 @@ PER_TARGET_SWARMING_DIMS.update({
 MASTER_SWARMING_PRIORITIES = collections.defaultdict(lambda: 25)
 MASTER_SWARMING_PRIORITIES.update({
     'chromium.fyi': 35,  # This should be lower than the CQ.
-    'chromium.memory.fyi': 27,
+    'chromium.memory.full': 27,
 })
 
 

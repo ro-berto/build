@@ -1155,12 +1155,12 @@ def GenTests(api):
 
   yield (
     api.test('tsan') +
-    api.properties.generic(mastername='chromium.memory.fyi',
+    api.properties.generic(mastername='chromium.memory.full',
                            buildername='Linux TSan Tests',
                            parent_buildername='Chromium Linux TSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data(
-        'read test spec (chromium.memory.fyi.json)',
+        'read test spec (chromium.memory.full.json)',
         api.json.output({
             'Linux TSan Tests': {
                 'compile_targets': ['base_unittests'],
@@ -1172,12 +1172,12 @@ def GenTests(api):
 
   yield (
     api.test('msan') +
-    api.properties.generic(mastername='chromium.memory.fyi',
+    api.properties.generic(mastername='chromium.memory.full',
                            buildername='Linux MSan Tests',
                            parent_buildername='Chromium Linux MSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data(
-        'read test spec (chromium.memory.fyi.json)',
+        'read test spec (chromium.memory.full.json)',
         api.json.output({
             'Linux MSan Tests': {
                 'compile_targets': ['base_unittests'],
