@@ -148,7 +148,8 @@ def _RunStepsInternal(api):
 
   # TODO(phajdan.jr): Remove special case for layout tests.
   add_blink_tests = (affects_blink_paths and
-                     buildername in CHROMIUM_BLINK_TESTS_BUILDERS)
+                     (buildername in CHROMIUM_BLINK_TESTS_BUILDERS or
+                      mastername == 'tryserver.blink'))
 
   # Add blink tests that work well with "analyze" here. The tricky ones
   # that bypass it (like the layout tests) are added later.

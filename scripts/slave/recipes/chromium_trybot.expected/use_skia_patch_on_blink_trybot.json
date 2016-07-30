@@ -307,7 +307,7 @@
       "mac10.9_blink_rel",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"third_party/skia/foo.cc\"], \"test_targets\": [\"blink_tests\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"third_party/skia/foo.cc\"], \"test_targets\": [\"blink_heap_unittests\", \"blink_platform_unittests\", \"blink_tests\", \"webkit_unit_tests\", \"wtf_unittests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -328,7 +328,11 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_heap_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_platform_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"webkit_unit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"wtf_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -338,9 +342,233 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/mac_layout/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.blink",
+      "-b",
+      "mac10.9_blink_rel",
+      "--config-file",
+      "[BUILDER_CACHE]/mac_layout/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "//out/Release"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac_layout/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files (with patch)"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[BUILDER_CACHE]/mac_layout/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[BUILDER_CACHE]/mac_layout/src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
+      "--goma-deps-cache-dir",
+      "[GOMA_DEPS_CACHE]",
+      "--compiler",
+      "goma-clang",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-service-account-json-file",
+      "/creds/service_accounts/service-account-goma-client.json",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--",
+      "blink_tests"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "compile (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "import sys; sys.exit(0)"
     ],
     "name": "mark: before_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/mac_layout/src/testing/scripts/webkit_lint.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"checkout\": \"[BUILDER_CACHE]/mac_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "--properties",
+      "{\"buildername\": \"mac10.9_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac_layout",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "webkit_lint (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/mac_layout/src/testing/scripts/webkit_python_tests.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"checkout\": \"[BUILDER_CACHE]/mac_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "--properties",
+      "{\"buildername\": \"mac10.9_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac_layout",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "webkit_python_tests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"mac10.9_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patch_project\": \"skia\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"mac10.9_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patch_project\": \"skia\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--step-name=webkit_tests (with patch)",
+      "--builder-name=mac10.9_blink_rel",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",
+      "--target",
+      "Release",
+      "-o",
+      "[SLAVE_BUILD]/layout-test-results",
+      "--build-dir",
+      "[BUILDER_CACHE]/mac_layout/src/out",
+      "--json-test-results",
+      "/path/to/tmp/json",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "mac10.9_blink_rel",
+      "--step-name",
+      "webkit_tests (with patch)"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac_layout",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "webkit_tests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
+      "--results-dir",
+      "[SLAVE_BUILD]/layout-test-results",
+      "--build-dir",
+      "[BUILDER_CACHE]/mac_layout/src/out",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "mac10.9_blink_rel",
+      "--gs-bucket",
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]/chrome_staging"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac_layout",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "archive_webkit_tests_results",
+    "~followup_annotations": [
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/mac10_9_blink_rel/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/mac10_9_blink_rel/571/layout-test-results.zip@@@"
+    ]
   },
   {
     "name": "$result",
