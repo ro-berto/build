@@ -6,24 +6,14 @@ DEPS = [
   'ios',
   'recipe_engine/platform',
   'recipe_engine/properties',
-  'recipe_engine/raw_io',
 ]
 
 def RunSteps(api):
-  swarm = False
-  if api.properties['mastername'] == 'chromium.fyi':
-    if api.properties['buildername'] == 'ios-simulator':
-      swarm = True
-
   api.ios.host_info()
   api.ios.checkout()
   api.ios.read_build_config()
   api.ios.build()
-
-  if swarm:
-    api.ios.test_swarming()
-  else:
-    api.ios.test()
+  api.ios.test()
 
 def GenTests(api):
   yield (
@@ -67,36 +57,6 @@ def GenTests(api):
         },
       ],
     })
-  )
-
-  yield (
-    api.test('swarming')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios-simulator',
-      buildnumber='0',
-      mastername='chromium.fyi',
-      slavename='fake-vm',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-      },
-      'compiler': 'xcodebuild',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.0',
-      'tests': [
-        {
-          'app': 'fake tests',
-          'device type': 'fake device',
-          'os': '7.1',
-        },
-      ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
-    )
   )
 
   yield (
