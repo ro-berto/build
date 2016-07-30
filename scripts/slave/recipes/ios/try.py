@@ -8,6 +8,7 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/raw_io',
   'recipe_engine/step',
   'depot_tools/tryserver',
 ]
@@ -27,7 +28,10 @@ def RunSteps(api):
       api.ios.checkout(patch=False, update_presentation=False)
       api.ios.build(suffix='without patch')
       raise
-    api.ios.test()
+    if api.properties['buildername'] == 'ios-simulator-swarming':
+      api.ios.test_swarming()
+    else:
+      api.ios.test()
 
 def GenTests(api):
   def suppress_analyze():
@@ -77,6 +81,42 @@ def GenTests(api):
         },
       ],
     })
+  )
+
+  yield (
+    api.test('swarming')
+    + api.platform('mac', 64)
+    + api.properties(patch_url='patch url')
+    + api.properties(
+      buildername='ios-simulator-swarming',
+      buildnumber='0',
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      rietveld='fake://rietveld.url',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'GYP_DEFINES': {
+        'fake gyp define 1': 'fake value 1',
+        'fake gyp define 2': 'fake value 2',
+      },
+      'compiler': 'ninja',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.0',
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
   )
 
   # The same test as above but applying an icu patch.
