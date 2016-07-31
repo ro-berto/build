@@ -67,42 +67,33 @@ CHROMIUM_BLINK_TESTS_PATHS = freeze([
   'v8',
 ])
 
+def RunSteps(api):
+  # build/tests/masters_recipes_tests.py needs to manipulate the BUILDERS
+  # dict, so we provide an API to dump it here.
+  if api.properties.get('dump_builders'):  # pragma: no cover
+    api.file.copy('Dump BUILDERS dict',
+        api.json.input(api.chromium_tests.trybots),
+        api.properties['dump_builders'])
+    return
 
-def tests_in_compile_targets(api, compile_targets, tests):
-  """Returns the tests in |tests| that have at least one of their compile
-  targets in |compile_targets|."""
-  result = []
-  for test in tests:
-    test_compile_targets = test.compile_targets(api)
+  with api.tryserver.set_failure_hash():
+    try:
+      bot_config_object, bot_update_step, affected_files, tests = \
+          _RunStepsInternal(api)
+    finally:
+      api.python.succeeding_step('mark: before_tests', '')
 
-    # Always return tests that don't require compile. Otherwise we'd never
-    # run them.
-    if ((set(compile_targets).intersection(set(test_compile_targets))) or
-        not test_compile_targets):
-      result.append(test)
+    if tests:
+      api.chromium_tests.run_tests_on_tryserver(
+          bot_config_object, api, tests, bot_update_step, affected_files)
 
-  return result
-
-
-def all_compile_targets(api, tests):
-  """Returns the compile_targets for all the Tests in |tests|."""
-  return sorted(set(x
-                    for test in tests
-                    for x in test.compile_targets(api)))
-
-def is_source_file(api, filepath):
-  """Returns true iff the file is a source file."""
-  _, ext = api.path.splitext(filepath)
-  return ext in ['.c', '.cc', '.cpp', '.h', '.java', '.mm']
 
 def _RunStepsInternal(api):
-  def _get_bot_config(mastername, buildername):
-    master_dict = api.chromium_tests.trybots.get(mastername, {})
-    return master_dict.get('builders', {}).get(buildername)
 
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
-  bot_config = _get_bot_config(mastername, buildername)
+  bot_config = api.chromium_tests.trybots.get(mastername, {}).get(
+      'builders', {}).get(buildername)
 
   bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
       bot_config['bot_ids'])
@@ -124,19 +115,18 @@ def _RunStepsInternal(api):
 
   tests, tests_including_triggered = api.chromium_tests.get_tests(
       bot_config_object, bot_db)
+
   def add_tests(additional_tests):
     tests.extend(additional_tests)
     tests_including_triggered.extend(additional_tests)
 
   affected_files = api.chromium_tests.get_files_affected_by_patch('src/')
 
-  affects_blink_paths = False
-  for path in CHROMIUM_BLINK_TESTS_PATHS:
-    if any([f.startswith(path) for f in affected_files]):
-      affects_blink_paths = True
-
-  affects_blink = any([f.startswith('third_party/WebKit')
-                       for f in affected_files])
+  affects_blink_paths = any(
+      f.startswith(path) for f in affected_files
+      for path in CHROMIUM_BLINK_TESTS_PATHS)
+  affects_blink = any(
+      f.startswith('third_party/WebKit') for f in affected_files)
 
   if affects_blink:
     subproject_tag = 'blink'
@@ -144,6 +134,7 @@ def _RunStepsInternal(api):
     subproject_tag = 'blink-paths'
   else:
     subproject_tag = 'chromium'
+
   api.tryserver.set_subproject_tag(subproject_tag)
 
   # TODO(phajdan.jr): Remove special case for layout tests.
@@ -167,9 +158,8 @@ def _RunStepsInternal(api):
       tests_including_triggered)
 
   test_targets = sorted(set(
-      all_compile_targets(api, tests + tests_including_triggered)))
-  additional_compile_targets = sorted(set(compile_targets) -
-                                      set(test_targets))
+      _all_compile_targets(api, tests + tests_including_triggered)))
+  additional_compile_targets = sorted(set(compile_targets) - set(test_targets))
   test_targets, compile_targets = api.filter.analyze(
       affected_files, test_targets, additional_compile_targets,
       'trybot_analyze_config.json')
@@ -180,8 +170,8 @@ def _RunStepsInternal(api):
 
   # Blink tests have to bypass "analyze", see below.
   if compile_targets or add_blink_tests:
-    tests = tests_in_compile_targets(api, test_targets, tests)
-    tests_including_triggered = tests_in_compile_targets(
+    tests = _tests_in_compile_targets(api, test_targets, tests)
+    tests_including_triggered = _tests_in_compile_targets(
         api, test_targets, tests_including_triggered)
 
     # Blink tests are tricky at this moment. We'd like to use "analyze" for
@@ -214,7 +204,7 @@ def _RunStepsInternal(api):
     # we'd still like to run tests not depending on
     # compiled targets (that's obviously not covered by the
     # 'analyze' step) if any source files change.
-    if any([is_source_file(api, f) for f in affected_files]):
+    if any(_is_source_file(api, f) for f in affected_files):
       tests = [t for t in tests if not t.compile_targets(api)]
     else:
       tests = []
@@ -222,29 +212,34 @@ def _RunStepsInternal(api):
   return bot_config_object, bot_update_step, affected_files, tests
 
 
-def RunSteps(api):
-  # build/tests/masters_recipes_tests.py needs to manipulate the BUILDERS
-  # dict, so we provide an API to dump it here.
-  if api.properties.get('dump_builders'):  # pragma: no cover
-    api.file.copy('Dump BUILDERS dict',
-        api.json.input(api.chromium_tests.trybots),
-        api.properties['dump_builders'])
-    return
+def _all_compile_targets(api, tests):
+  """Returns the compile_targets for all the Tests in |tests|."""
+  return sorted(set(x
+                    for test in tests
+                    for x in test.compile_targets(api)))
 
-  with api.tryserver.set_failure_hash():
-    try:
-      bot_config_object, bot_update_step, affected_files, tests = \
-          _RunStepsInternal(api)
-    finally:
-      api.python.succeeding_step('mark: before_tests', '')
-
-    if tests:
-      api.chromium_tests.run_tests_on_tryserver(
-          bot_config_object, api, tests, bot_update_step, affected_files)
+def _is_source_file(api, filepath):
+  """Returns true iff the file is a source file."""
+  _, ext = api.path.splitext(filepath)
+  return ext in ['.c', '.cc', '.cpp', '.h', '.java', '.mm']
 
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
+
+
+def _tests_in_compile_targets(api, compile_targets, tests):
+  """Returns the tests in |tests| that have at least one of their compile
+  targets in |compile_targets|."""
+  result = []
+  for test in tests:
+    test_compile_targets = test.compile_targets(api)
+    # Always return tests that don't require compile. Otherwise we'd never
+    # run them.
+    if ((set(compile_targets) & set(test_compile_targets)) or
+        not test_compile_targets):
+      result.append(test)
+  return result
 
 
 def GenTests(api):
