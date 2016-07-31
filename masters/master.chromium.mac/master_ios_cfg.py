@@ -15,16 +15,12 @@ def Update(config, active_master, c):
                             treeStableTimer=60,
                             builderNames=[
           'ios-device',
-          'ios-device-gn',
           'ios-simulator',
-          'ios-simulator-gn',
       ]),
   ])
   specs = [
     {'name': 'ios-device'},
-    {'name': 'ios-device-gn'},
     {'name': 'ios-simulator'},
-    {'name': 'ios-simulator-gn'},
   ]
 
   c['builders'].extend([

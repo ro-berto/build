@@ -102,25 +102,6 @@ SPEC = {
         'platform': 'mac',
       },
     },
-    'Mac GYP': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'mac',
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'enable_swarming': True,
-      'checkout_dir': 'mac_gyp',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
     'Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -165,25 +146,6 @@ SPEC = {
       'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.9',
-      },
-    },
-    'Mac GYP (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'mac',
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'enable_swarming': True,
-      'checkout_dir': 'mac_gyp',
-      'testing': {
-        'platform': 'mac',
       },
     },
   },

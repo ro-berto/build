@@ -30,9 +30,7 @@ def Update(config, active_master, c):
           'Win x64 Builder',
           'Win x64 Builder (dbg)',
           'Win Builder (dbg)',
-          'Win8 GYP (dbg)',
           'WinClang64 (dbg)',
-          'Win8 GYP',
       ]),
   ])
   specs = [
@@ -44,8 +42,6 @@ def Update(config, active_master, c):
     {'name': 'Win x64 Builder (dbg)'},
     {'name': 'Win Builder (dbg)'},
     {'name': 'Win7 Tests (dbg)(1)'},
-    {'name': 'Win8 GYP'},
-    {'name': 'Win8 GYP (dbg)'},
     {'name': 'WinClang64 (dbg)'},
     {'name': 'Win10 Tests x64'},
   ]
