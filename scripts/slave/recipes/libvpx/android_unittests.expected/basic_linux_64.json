@@ -46,6 +46,9 @@
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/android_tools",
+    "env": {
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+    },
     "name": "git fetch"
   },
   {
@@ -124,6 +127,9 @@
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/libvpx",
+    "env": {
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+    },
     "name": "git fetch (2)"
   },
   {

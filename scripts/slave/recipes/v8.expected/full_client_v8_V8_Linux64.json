@@ -20,6 +20,9 @@
       "[dummy swarming client hash]"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
+    "env": {
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+    },
     "name": "git fetch (swarming_client)"
   },
   {

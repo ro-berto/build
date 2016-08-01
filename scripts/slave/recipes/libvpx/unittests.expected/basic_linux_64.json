@@ -52,6 +52,9 @@
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/libvpx",
+    "env": {
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+    },
     "name": "git fetch"
   },
   {
