@@ -104,6 +104,11 @@ TEST_CONFIGS = freeze({
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
   },
+  'mjsunit_extra': {
+    'name': 'Mjsunit - extra',
+    'tests': ['mjsunit'],
+    'variants': V8Variant('extra'),
+  },
   'mjsunit_ignition_turbofan': {
     'name': 'Mjsunit - ignition - turbofan',
     'tests': ['mjsunit'],
@@ -142,6 +147,12 @@ TEST_CONFIGS = freeze({
     'test_args': ['--download-data'],
     'variants': V8Variant('default'),
   },
+  'test262_extra': {
+    'name': 'Test262 - extra',
+    'tests': ['test262'],
+    'test_args': ['--download-data'],
+    'variants': V8Variant('extra'),
+  },
   'test262_ignition_turbofan': {
     'name': 'Test262 - ignition - turbofan',
     'tests': ['test262'],
@@ -166,6 +177,13 @@ TEST_CONFIGS = freeze({
     'tests': ['bot_default'],
     'suite_mapping': [
         'mjsunit', 'cctest', 'webkit', 'message', 'preparser', 'intl'],
+  },
+  'v8testing_extra': {
+    'name': 'Check - extra',
+    'tests': ['bot_default'],
+    'suite_mapping': [
+        'mjsunit', 'cctest', 'webkit', 'message', 'preparser', 'intl'],
+    'variants': V8Variant('extra'),
   },
   'webkit': {
     'name': 'Webkit',
