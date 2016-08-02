@@ -362,7 +362,7 @@
       "--priority",
       "25",
       "--shards",
-      "1",
+      "3",
       "--task-name",
       "Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571",
       "--dump-json",
@@ -433,15 +433,27 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:3:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:3:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:3:2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@"
     ]
   },
   {
@@ -762,7 +774,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
     ],
     "name": "Check",
     "~followup_annotations": [

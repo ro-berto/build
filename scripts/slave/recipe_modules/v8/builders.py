@@ -1041,7 +1041,7 @@ BUILDERS = {
           'os': 'Ubuntu-14.04',
         },
         'tests': [
-          V8Testing,
+          V8Testing_3,
           V8TestingExtra_2,
           Test262_2,
           IgnitionTurbofan,
@@ -1071,9 +1071,9 @@ BUILDERS = {
           'os': 'Ubuntu-14.04',
         },
         'tests': [
-          V8Testing,
+          V8Testing_4,
           V8TestingExtra_2,
-          Test262_2,
+          Test262,
           IgnitionTurbofan,
         ],
         'testing': {'platform': 'linux'},
@@ -2070,7 +2070,7 @@ BUILDERS = {
           'os': 'Ubuntu-14.04',
         },
         'tests': [
-          V8Testing_2,
+          V8Testing_5,
           V8TestingExtra_2,
           Test262_2,
           IgnitionTurbofan,
@@ -2096,7 +2096,7 @@ BUILDERS = {
           'os': 'Ubuntu-14.04',
         },
         'tests': [
-          V8Testing_2,
+          V8Testing_4,
           V8TestingExtra_2,
           Test262_2,
           IgnitionTurbofan,
