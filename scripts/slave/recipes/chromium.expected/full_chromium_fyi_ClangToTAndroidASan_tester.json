@@ -529,6 +529,20 @@
     ]
   },
   {
+    "cmd": [
+      "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/tools/clang/scripts/update.py",
+      "--print-clang-version"
+    ],
+    "cwd": "[BUILDER_CACHE]/ClangToTAndroidASan_tester",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "LLVM_FORCE_HEAD_REVISION": "YES",
+      "PATH": "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/build/android:%(PATH)s"
+    },
+    "name": "get_clang_version",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/ClangToTAndroidASan_tester",
     "env": {
@@ -594,7 +608,7 @@
     "cmd": [
       "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/tools/android/asan/third_party/asan_device_setup.sh",
       "--lib",
-      "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/third_party/llvm-build/Release+Asserts/lib/clang/3.9.0/lib/linux/libclang_rt.asan-arm-android.so",
+      "[BUILDER_CACHE]/ClangToTAndroidASan_tester/src/third_party/llvm-build/Release+Asserts/lib/clang/1.1.1/lib/linux/libclang_rt.asan-arm-android.so",
       "--device",
       "07a00ca4"
     ],

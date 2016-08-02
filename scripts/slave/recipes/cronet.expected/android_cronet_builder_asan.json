@@ -529,6 +529,14 @@
     ]
   },
   {
+    "cmd": [
+      "[SLAVE_BUILD]/src/tools/clang/scripts/update.py",
+      "--print-clang-version"
+    ],
+    "name": "get_clang_version",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
     "name": "Set up ASAN on devices"
   },
@@ -576,7 +584,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/tools/android/asan/third_party/asan_device_setup.sh",
       "--lib",
-      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/lib/clang/3.9.0/lib/linux/libclang_rt.asan-arm-android.so",
+      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/lib/clang/1.1.1/lib/linux/libclang_rt.asan-arm-android.so",
       "--device",
       "07a00ca4"
     ],

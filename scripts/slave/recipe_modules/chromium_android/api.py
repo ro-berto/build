@@ -631,18 +631,23 @@ class AndroidApi(recipe_api.RecipeApi):
                   env=env)
 
   def asan_device_setup(self):
+    clang_version_cmd = [
+        self.m.path['checkout'].join('tools', 'clang', 'scripts', 'update.py'),
+        '--print-clang-version'
+    ]
+    clang_version_step = self.m.step('get_clang_version',
+        clang_version_cmd,
+        stdout=self.m.raw_io.output(),
+        step_test_data=(
+            lambda: self.m.raw_io.test_api.stream_output('1.1.1')))
+    clang_version = clang_version_step.stdout.strip()
     with self.m.step.nest('Set up ASAN on devices'):
       self.m.adb.root_devices()
       args = [
           '--lib',
           self.m.path['checkout'].join(
               'third_party', 'llvm-build', 'Release+Asserts', 'lib', 'clang',
-              # TODO(kjellander): Don't hardcode the clang version number here,
-              # else the bot will break every time it changes.  Instead,
-              # get it from `tools/clang/scripts/update.py --print-clang-version`,
-              # then the version can be updated atomically with a src-side change
-              # in clang rolls, instead of it being both in src/ and build/.
-              '3.9.0', 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
+              clang_version, 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
       ]
       self._asan_device_setup(args)
 
