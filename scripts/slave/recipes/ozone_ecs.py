@@ -39,7 +39,6 @@ OZONE_TESTS = freeze([
     # 'printing_unittests', Not sensible.
     'sandbox_linux_unittests',
     'sql_unittests',
-    'sync_unit_tests',
     'ui_base_unittests',
     # 'unit_tests',  Not sensible.
     'url_unittests',

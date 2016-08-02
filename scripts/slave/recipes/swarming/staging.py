@@ -106,7 +106,6 @@ def RunSteps(api):
         'net_unittests_apk_run',
         'sandbox_linux_unittests_android_run',
         'sql_unittests_apk_run',
-        'sync_unit_tests_apk_run',
         'ui_android_unittests_apk_run',
         'ui_base_unittests_apk_run',
         'ui_touch_selection_unittests_apk_run',

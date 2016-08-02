@@ -222,7 +222,6 @@
       "ppapi_unittests",
       "sandbox_linux_unittests",
       "sql_unittests",
-      "sync_unit_tests",
       "ui_base_unittests",
       "ui_touch_selection_unittests",
       "url_unittests"
@@ -655,27 +654,6 @@
       "sql_unittests"
     ],
     "name": "sql_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"linux_ecs_ozone\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"chromium.fyi\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"ozone_ecs\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"test_slave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"linux_ecs_ozone\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"chromium.fyi\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"ozone_ecs\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"test_slave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=sync_unit_tests",
-      "--builder-name=linux_ecs_ozone",
-      "--slave-name=test_slave",
-      "--build-number=571",
-      "--no-spawn-dbus",
-      "sync_unit_tests"
-    ],
-    "name": "sync_unit_tests"
   },
   {
     "cmd": [

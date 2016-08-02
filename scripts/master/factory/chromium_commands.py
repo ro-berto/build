@@ -456,7 +456,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddChromeUnitTests(self, factory_properties):
     self.AddGTestTestStep('ipc_tests', factory_properties)
-    self.AddGTestTestStep('sync_unit_tests', factory_properties)
     self.AddGTestTestStep('unit_tests', factory_properties)
     self.AddGTestTestStep('skia_unittests', factory_properties)
     self.AddGTestTestStep('sql_unittests', factory_properties)
@@ -467,7 +466,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddBuildrunnerChromeUnitTests(self, factory_properties):
     self.AddBuildrunnerGTest('ipc_tests', factory_properties)
-    self.AddBuildrunnerGTest('sync_unit_tests', factory_properties)
     self.AddBuildrunnerGTest('unit_tests', factory_properties)
     self.AddBuildrunnerGTest('skia_unittests', factory_properties)
     self.AddBuildrunnerGTest('sql_unittests', factory_properties)

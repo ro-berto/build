@@ -205,7 +205,6 @@
       "ipc_tests_apk",
       "skia_unittests_apk",
       "sql_unittests_apk",
-      "sync_unit_tests_apk",
       "ui_android_unittests_apk",
       "ui_touch_selection_unittests_apk"
     ],
@@ -446,23 +445,6 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "sql_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_sync_unit_tests",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "sync_unit_tests"
   },
   {
     "cmd": [

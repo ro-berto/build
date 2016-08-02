@@ -51,7 +51,6 @@ SPEC = {
         'remoting_unittests',
         'sandbox_linux_unittests',
         'sql_unittests',
-        'sync_unit_tests',
         'ui_base_unittests',
         'unit_tests',
         'url_unittests',

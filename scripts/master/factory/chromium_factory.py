@@ -483,10 +483,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('ipc_tests', fp)
     if R('ipc_tests_br'):
       f.AddBuildrunnerGTest('ipc_tests', fp)
-    if R('unit_sync', 'sync_unit_tests'):
-      f.AddGTestTestStep('sync_unit_tests', fp)
-    if R('unit_sync_br'):
-      f.AddBuildrunnerGTest('sync_unit_tests', fp)
     if R('unit_unit', 'unit_tests'):
       f.AddGTestTestStep('unit_tests', fp)
     if R('unit_unit_br'):
