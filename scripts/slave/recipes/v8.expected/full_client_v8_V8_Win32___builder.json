@@ -325,7 +325,6 @@
       "https://isolateserver.appspot.com",
       "--verbose",
       "[SLAVE_BUILD]\\v8\\out\\Release\\bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]\\v8\\out\\Release\\ignition.isolated.gen.json",
       "[SLAVE_BUILD]\\v8\\out\\Release\\mozilla.isolated.gen.json",
       "[SLAVE_BUILD]\\v8\\out\\Release\\test262.isolated.gen.json"
     ],
@@ -333,7 +332,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -351,7 +349,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"bot_default\": \"[dummy hash for bot_default]\", \"ignition\": \"[dummy hash for ignition]\", \"mozilla\": \"[dummy hash for mozilla]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"bot_default\": \"[dummy hash for bot_default]\", \"mozilla\": \"[dummy hash for mozilla]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/v8-win32-rel/full-build-win32_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "name": "gsutil upload",
@@ -401,7 +399,6 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
             "mozilla": "[dummy hash for mozilla]",
             "test262": "[dummy hash for test262]"
           }

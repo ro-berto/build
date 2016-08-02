@@ -336,14 +336,12 @@
       "https://isolateserver.appspot.com",
       "--verbose",
       "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/ignition.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -419,7 +417,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "--random-seed=1950386076",
+      "--random-seed=831298184",
       "bot_default",
       "--exhaustive-variants",
       "--asan",
@@ -520,7 +518,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "--random-seed=1950386076",
+      "--random-seed=831298184",
       "bot_default",
       "--variants=extra",
       "--asan",
@@ -621,7 +619,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "--random-seed=1950386076",
+      "--random-seed=831298184",
       "test262",
       "--download-data",
       "--variants=default",
@@ -688,7 +686,7 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for ignition]",
+      "data:[dummy hash for bot_default]",
       "--tag",
       "master:client.v8",
       "--tag",
@@ -706,7 +704,7 @@
       "--tag",
       "stepname:Ignition - turbofan on Ubuntu-14.04",
       "--idempotent",
-      "[dummy hash for ignition]",
+      "[dummy hash for bot_default]",
       "--",
       "--progress=verbose",
       "--mode",
@@ -717,8 +715,8 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "--random-seed=1950386076",
-      "ignition",
+      "--random-seed=831298184",
+      "bot_default",
       "--ignition-turbofan",
       "--variants=ignition_turbofan",
       "--asan",
@@ -915,7 +913,6 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
             "test262": "[dummy hash for test262]"
           }
         }
@@ -932,7 +929,6 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
             "test262": "[dummy hash for test262]"
           }
         }
@@ -949,7 +945,6 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
             "test262": "[dummy hash for test262]"
           }
         }
@@ -966,7 +961,6 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
             "test262": "[dummy hash for test262]"
           }
         }
@@ -983,7 +977,6 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
             "test262": "[dummy hash for test262]"
           }
         }

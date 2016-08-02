@@ -344,7 +344,6 @@
       "https://isolateserver.appspot.com",
       "--verbose",
       "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/ignition.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
@@ -353,7 +352,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
@@ -386,7 +384,6 @@
           "rietveld": "https://codereview.chromium.org",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
             "mozilla": "[dummy hash for mozilla]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"

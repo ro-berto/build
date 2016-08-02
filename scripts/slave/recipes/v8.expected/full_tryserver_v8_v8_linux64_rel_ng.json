@@ -323,7 +323,6 @@
       "--verbose",
       "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/check-static-initializers.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/ignition.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/mjsunit.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/optimize_for_size.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
@@ -334,7 +333,6 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
@@ -369,7 +367,6 @@
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
             "check-static-initializers": "[dummy hash for check-static-initializers]",
-            "ignition": "[dummy hash for ignition]",
             "mjsunit": "[dummy hash for mjsunit]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "simdjs": "[dummy hash for simdjs]",

@@ -96,8 +96,10 @@ TEST_CONFIGS = freeze({
   },
   'ignition_turbofan': {
     'name': 'Ignition - turbofan',
-    'tests': ['ignition'],
+    'tests': ['bot_default'],
     'test_args': ['--ignition-turbofan'],
+    'suite_mapping': [
+        'mjsunit', 'cctest', 'webkit', 'message', 'preparser', 'intl'],
     'variants': V8Variant('ignition_turbofan'),
   },
   'mjsunit': {
