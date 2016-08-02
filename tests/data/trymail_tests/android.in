@@ -68,7 +68,6 @@
     step('media_unittests'),
     step('net_unittests'),
     step('sql_unittests'),
-    step('sync_unit_tests'),
     step('ui_unittests'),
     step('unit_tests'),
     step('androidwebview_instrumentation_tests'),

@@ -76,7 +76,6 @@
     step('remoting_unittests', result=results.SKIPPED),
     step('test_shell_tests', result=results.SKIPPED),
     step('ipc_tests', result=results.SKIPPED),
-    step('sync_unit_tests', result=results.SKIPPED),
     step('unit_tests', result=results.SKIPPED),
     step('sql_unittests', result=results.SKIPPED),
     step('ui_unittests', result=results.SKIPPED),

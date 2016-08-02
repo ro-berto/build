@@ -115,31 +115,27 @@ und-color: #8fdf5f; border-color: #4F8530;">sql_unittests<br/><a href=3D"ht=
 tp://build.chromium.org/p/tryserver.chromium/builders/android_dbg_triggered=
 _tests/builds/25183/steps/sql_unittests/logs/stdio">stdio</a></td></tr><tr>=
 <td style=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #4F85=
-30;">sync_unit_tests<br/><a href=3D"http://build.chromium.org/p/tryserver.c=
-hromium/builders/android_dbg_triggered_tests/builds/25183/steps/sync_unit_t=
-ests/logs/stdio">stdio</a></td></tr><tr><td style=3D"color: #FFFFFF; backgr=
-ound-color: #8fdf5f; border-color: #4F8530;">ui_unittests<br/><a href=3D"ht=
-tp://build.chromium.org/p/tryserver.chromium/builders/android_dbg_triggered=
-_tests/builds/25183/steps/ui_unittests/logs/stdio">stdio</a></td></tr><tr><=
-td style=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #4F853=
-0;">unit_tests<br/><a href=3D"http://build.chromium.org/p/tryserver.chromiu=
-m/builders/android_dbg_triggered_tests/builds/25183/steps/unit_tests/logs/s=
-tdio">stdio</a></td></tr><tr><td style=3D"color: #FFFFFF; background-color:=
- #8fdf5f; border-color: #4F8530;">androidwebview_instrumentation_tests<br/>=
-<a href=3D"http://build.chromium.org/p/tryserver.chromium/builders/android_=
-dbg_triggered_tests/builds/25183/steps/androidwebview_instrumentation_tests=
-/logs/stdio">stdio</a></td></tr><tr><td style=3D"color: #FFFFFF; background=
--color: #8fdf5f; border-color: #4F8530;">contentshell_instrumentation_tests=
-<br/><a href=3D"http://build.chromium.org/p/tryserver.chromium/builders/and=
-roid_dbg_triggered_tests/builds/25183/steps/contentshell_instrumentation_te=
-sts/logs/stdio">stdio</a></td></tr><tr><td style=3D"color: #FFFFFF; backgro=
-und-color: #8fdf5f; border-color: #4F8530;">logcat_dump<br/><a href=3D"http=
-://build.chromium.org/p/tryserver.chromium/builders/android_dbg_triggered_t=
-ests/builds/25183/steps/logcat_dump/logs/stdio">stdio</a></td></tr><tr><td =
-style=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #4F8530;"=
->test_report<br/><a href=3D"http://build.chromium.org/p/tryserver.chromium/=
-builders/android_dbg_triggered_tests/builds/25183/steps/test_report/logs/st=
-dio">stdio</a></td></tr></table>
+30;">ui_unittests<br/><a href=3D"http://build.chromium.org/p/tryserver.chro=
+mium/builders/android_dbg_triggered_tests/builds/25183/steps/ui_unittests/l=
+ogs/stdio">stdio</a></td></tr><tr><td style=3D"color: #FFFFFF; background-c=
+olor: #8fdf5f; border-color: #4F8530;">unit_tests<br/><a href=3D"http://bui=
+ld.chromium.org/p/tryserver.chromium/builders/android_dbg_triggered_tests/b=
+uilds/25183/steps/unit_tests/logs/stdio">stdio</a></td></tr><tr><td style=
+=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #4F8530;">andr=
+oidwebview_instrumentation_tests<br/><a href=3D"http://build.chromium.org/p=
+/tryserver.chromium/builders/android_dbg_triggered_tests/builds/25183/steps=
+/androidwebview_instrumentation_tests/logs/stdio">stdio</a></td></tr><tr><t=
+d style=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #4F8530=
+;">contentshell_instrumentation_tests<br/><a href=3D"http://build.chromium.=
+org/p/tryserver.chromium/builders/android_dbg_triggered_tests/builds/25183/=
+steps/contentshell_instrumentation_tests/logs/stdio">stdio</a></td></tr><tr=
+><td style=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #4F8=
+530;">logcat_dump<br/><a href=3D"http://build.chromium.org/p/tryserver.chro=
+mium/builders/android_dbg_triggered_tests/builds/25183/steps/logcat_dump/lo=
+gs/stdio">stdio</a></td></tr><tr><td style=3D"color: #FFFFFF; background-co=
+lor: #8fdf5f; border-color: #4F8530;">test_report<br/><a href=3D"http://bui=
+ld.chromium.org/p/tryserver.chromium/builders/android_dbg_triggered_tests/b=
+uilds/25183/steps/test_report/logs/stdio">stdio</a></td></tr></table>
 <br>
 FAQ: <a href=3D"https://sites.google.com/a/chromium.org/dev/developers/test=
 ing/try-server-usage">
