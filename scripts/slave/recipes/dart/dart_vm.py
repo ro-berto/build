@@ -113,6 +113,14 @@ for mode in ['debug', 'release', 'product']:
     'test_args': ['--hot-reload',
                   '--builder-tag=no_ipv6'],
   }
+  builders['vm-linux-%s-x64-stress-reload' % mode] = {
+    'mode': mode,
+    'target_arch': 'x64',
+    'env': default_envs['linux'],
+    'checked': True,
+    'test_args': ['--hot-reload-rollback',
+                  '--builder-tag=no_ipv6'],
+  }
 
 
 def RunSteps(api):
