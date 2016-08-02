@@ -383,7 +383,7 @@ class AndroidApi(recipe_api.RecipeApi):
             infra_step=True,
             step_test_data=lambda: self.m.json.test_api.output({
                 'valid': True,
-                'failures': ['Failure A', 'Failure B'],
+                'failures': [],
                 '_host_info': {
                     'os_system': 'os_system',
                     'os_release': 'os_release',
@@ -420,12 +420,10 @@ class AndroidApi(recipe_api.RecipeApi):
                 }}),
             **kwargs)
       return results
-    except self.m.step.InfraFailure:
-      pass
-    finally:
-      if results:
-        for failure in results.json.output.get('failures', []):
-          results.presentation.logs[failure] = [failure]
+    except self.m.step.InfraFailure as f:
+      for failure in f.result.json.output.get('failures', []):
+        f.result.presentation.logs[failure] = [failure]
+      f.result.presentation.status = self.m.step.EXCEPTION
 
   def device_recovery(self, restart_usb=False, **kwargs):
     args = [

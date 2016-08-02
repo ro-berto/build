@@ -314,6 +314,45 @@ def GenTests(api):
               parent_revision='deadbeef',
               revision='deadbeef',
               slavename='slavename',
-              target='Release')
-      + api.step_data('Host Info', retcode=87))
+              target='Release') +
+      api.override_step_data(
+          'Host Info',
+          api.json.output({
+                'valid': True,
+                'failures': ['Failure A', 'Failure B'],
+                '_host_info': {
+                    'os_system': 'os_system',
+                    'os_release': 'os_release',
+                    'processor': 'processor',
+                    'num_cpus': 'num_cpus',
+                    'free_disk_space': 'free_disk_space',
+                    'python_version': 'python_version',
+                    'python_path': 'python_path',
+                    'devices': [{
+                        "usb_status": True,
+                        "blacklisted": None,
+                        "ro.build.fingerprint": "fingerprint",
+                        "battery": {
+                            "status": "5",
+                            "scale": "100",
+                            "temperature": "240",
+                            "level": "100",
+                            "technology": "Li-ion",
+                            "AC powered": "false",
+                            "health": "2",
+                            "voltage": "4302",
+                            "Wireless powered": "false",
+                            "USB powered": "true",
+                            "Max charging current": "500000",
+                            "present": "true"
+                        },
+                       "adb_status": "device",
+                       "imei_slice": "",
+                       "ro.build.product": "bullhead",
+                       "ro.build.id": "MDB08Q",
+                       "serial": "00d0d567893340f4",
+                       "wifi_ip": ""
+                    }]
+                }}),
+          retcode=87))
 
