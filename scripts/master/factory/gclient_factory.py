@@ -255,7 +255,8 @@ class GClientFactory(object):
     factory = self.BaseFactory(gclient_spec,
                                factory_properties=factory_properties,
                                slave_type=slave_type,
-                               gclient_deps=gclient_deps, options=options)
+                               gclient_deps=gclient_deps, options=options,
+                               target=target)
 
     # Optional repository root (default: 'src').
     repository_root = factory_properties.get('repository_root', 'src')

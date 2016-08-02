@@ -1073,14 +1073,7 @@ class FactoryCommands(object):
     if '--compiler=goma' in options or '--compiler=goma-clang' in options:
       cmd += ['--goma-dir', self.PathJoin('..', '..', '..', '..', 'goma')]
 
-    # TODO(crbug.com/572694) - I'm not sure why target isn't getting honored
-    # here on the chromium.memory.full builders, but the only non-recipe
-    # builders left on this waterfall are Release, so this is a safe default.
-    # target does get passed correctly on the official builders (which are
-    # the other ones still not on recipes). It's probably not worth tracking
-    # down what's going on otherwise (better to switch to recipes).
-    target = target or 'Release'
-
+    assert(target is not None)
     cmd += ['//out/%s' % target]
 
     self._factory.addStep(
