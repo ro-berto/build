@@ -105,11 +105,6 @@ def _RunStepsInternal(api):
 
   api.chromium.apply_config('trybot_flavor')
 
-  if api.properties.get('patch_project') == 'blink':  # pragma: no cover
-    raise Exception('CLs which use blink project are not supported. '
-                    'Please re-create the CL using fresh checkout after '
-                    'the blink merge.')
-
   bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
       bot_config_object)
 
