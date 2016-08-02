@@ -11,11 +11,15 @@
     </tr>
   </thead>
   <tbody class="body">
-    {% for item in tb_value.table_rows %}
-      <tr align="center">
-        {% for data in item %}
-          <td>
-            {{data}}
+    {% for row in tb_value.table_rows %}
+      <tr>
+        {% for cell in row %}
+          <td class="{{loop.index0}} {{cell.class}}">
+            {% if "is-pre" in cell.class %}
+              <pre>{{cell.data}}</pre>
+            {% else %}
+              {{cell.data}}
+            {% endif %}
           </td>
         {% endfor %}
       </tr>

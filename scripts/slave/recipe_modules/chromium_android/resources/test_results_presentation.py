@@ -40,11 +40,12 @@ def results_to_html(results):
   suite_row_dict = {}
   test_row_list = []
   for result in results:
-    test_row_list.append([result['name'],
-                      result['status'],
-                      result['duration'],
-                      result['output_snippet']])
+    data = [{'data': result['name'], 'class': 'align-left'},
+            {'data': result['status'], 'class': 'align-center'},
+            {'data': result['duration'], 'class': 'align-center'},
+            {'data': result['output_snippet'], 'class': 'align-left is-pre'}]
 
+    test_row_list.append(data)
     suite_name = result['name'][:result['name'].index('#')]
 
     # 'suite_row' is [name, success_count, fail_count, all_count, time].
@@ -56,15 +57,19 @@ def results_to_html(results):
     if suite_name in suite_row_dict:
       suite_row = suite_row_dict[suite_name]  
     else:
-      suite_row = [suite_name, 0, 0, 0, 0]
+      suite_row = [{'data': suite_name, 'class' : 'align-left'},
+                   {'data': 0, 'class': 'align-center'},
+                   {'data': 0, 'class': 'align-center'},
+                   {'data': 0, 'class': 'align-center'},
+                   {'data': 0, 'class': 'align-center'}]
       suite_row_dict[suite_name] = suite_row
 
-    suite_row[ALL_COUNT] += 1
+    suite_row[ALL_COUNT]['data'] += 1
     if result['status'] == 'SUCCESS':
-      suite_row[SUCCESS_COUNT] += 1
+      suite_row[SUCCESS_COUNT]['data'] += 1
     elif result['status'] == 'FAILURE':
-      suite_row[FAIL_COUNT] += 1
-    suite_row[TIME] += result['duration']
+      suite_row[FAIL_COUNT]['data'] += 1
+    suite_row[TIME]['data'] += result['duration']
 
   test_table_values = {
     'table_id' : 'test_table',

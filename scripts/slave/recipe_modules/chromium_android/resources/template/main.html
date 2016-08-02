@@ -15,24 +15,20 @@
       table {
         width: 100%;
       }
-      tr {
-        align: center;
+      .align-center {
+        text-align: center;
+      }
+      .algin-left {
+        text-align: left;
       }
     </style>
     <script type="text/javascript">
       function sortByColumn(head) {
         var tbody = head.parentNode.parentNode.nextElementSibling;
-        var rows = tbody.rows,
-            arr = new Array();
+        var rows = tbody.rows;
 
-        // Fill the array with values from the table.
-        for (var i = 0; i < rows.length; i++) {
-          var cells = rows[i].cells;
-          arr[i] = new Array();
-          for (var j = 0; j < cells.length; j++) {
-            arr[i][j] = cells[j].innerHTML;
-          }
-        }
+        // Put 'tr' in rows to an array.
+        var arr = Array.prototype.slice.call(rows);
 
         // Determine whether to asc or desc and set arrows.
         var headers = head.parentNode.getElementsByTagName('th');
@@ -41,9 +37,11 @@
         for (var i = 0; i < headers.length; i++) {
           if (headers[i].dataset.ascSorted != 0) {
             if (headers[i].dataset.ascSorted == 1) {
-                headers[i].getElementsByClassName('up')[0].style.display = 'none';
+                headers[i].getElementsByClassName('up')[0]
+                    .style.display = 'none';
             } else {
-              headers[i].getElementsByClassName('down')[0].style.display = 'none';
+              headers[i].getElementsByClassName('down')[0]
+                  .style.display = 'none';
             }
             if (headers[i] == head) {
               asc = headers[i].dataset.ascSorted * -1;
@@ -55,27 +53,32 @@
         }
         headers[headIndex].dataset.ascSorted = asc;
         if (asc == 1) {
-            headers[headIndex].getElementsByClassName('up')[0].style.display = 'inline';
+            headers[headIndex].getElementsByClassName('up')[0]
+                .style.display = 'inline';
         } else {
-            headers[headIndex].getElementsByClassName('down')[0].style.display = 'inline';
+            headers[headIndex].getElementsByClassName('down')[0]
+                .style.display = 'inline';
         }
 
         // Sort the array by the specified column number (col) and order (asc).
         arr.sort(function (a, b) {
+          var aInnerHTML = a.getElementsByClassName(headIndex)[0].innerHTML;
+          var bInnerHTML = b.getElementsByClassName(headIndex)[0].innerHTML;
           if (head.className == "number") {
-            var avalue = Number(a[headIndex]);
-            var bvalue = Number(b[headIndex]);
+            var avalue = Number(aInnerHTML);
+            var bvalue = Number(bInnerHTML);
           } else if (head.className == "text") {
-            var avalue = a[headIndex];
-            var bvalue = b[headIndex];
+            var avalue = aInnerHTML;
+            var bvalue = bInnerHTML;
           }
           return (avalue == bvalue) ? 0 : ((avalue > bvalue) ? asc : -1 * asc);
         });
 
-        // Replace existing rows with new rows created from the sorted array.
-        for (var i = 0; i < rows.length; i++) {
-          rows[i].innerHTML = "<td>" + arr[i].join("</td><td>") + "</td>";
+        var tmpBody = "";
+        for (var i = 0; i < arr.length; i++) {
+          tmpBody += arr[i].outerHTML;
         }
+        tbody.innerHTML = tmpBody;
       }
     </script>
   </head>
