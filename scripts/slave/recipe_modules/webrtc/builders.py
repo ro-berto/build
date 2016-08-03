@@ -309,6 +309,16 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
+      'Linux32 ARM': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'Linux Asan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan', 'lsan'],
@@ -625,16 +635,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'use_isolate': True,
         'enable_swarming': True,
-      },
-      'Linux32 ARM': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
       },
       'Linux64 GCC': {
         'recipe_config': 'webrtc_gcc',
@@ -1039,6 +1039,16 @@ BUILDERS = freeze({
         },
         'chromium_apply_config': ['webrtc_gn'],
         'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'linux_arm': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
       'linux_asan': {
