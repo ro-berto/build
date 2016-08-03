@@ -110,6 +110,7 @@ class TestRunner(object):
     perf_revision=None,
     perf_x_value=None,
     test_args=None,
+    env_vars=None,
   ):
     """Initializes a new instance of the TestRunner class.
 
@@ -127,6 +128,7 @@ class TestRunner(object):
       perf_x_value: Value to use on the x axis for all data uploaded to the
       perf dashboard.
       test_args: Arguments to pass when launching the test.
+      env_vars: Environment variables to set when launching the test.
 
     Raises:
       AppNotFoundError: If the specified app cannot be found.
@@ -147,6 +149,7 @@ class TestRunner(object):
       if not xcode_summary['found']:
         raise XcodeVersionNotFoundError(xcode_version)
 
+    self.env_vars = env_vars or []
     self.gs_bucket = gs_bucket
     self.perf_bot_name = perf_bot_name
     self.perf_master_name = perf_master_name
@@ -434,6 +437,7 @@ class SimulatorTestRunner(TestRunner):
     perf_revision=None,
     perf_x_value=None,
     test_args=None,
+    env_vars=None,
   ):
     """Initializes an instance of the SimulatorTestRunner class.
 
@@ -456,13 +460,14 @@ class SimulatorTestRunner(TestRunner):
       perf_x_value: Value to use on the x axis for all data uploaded to the
       perf dashboard.
       test_args: Arguments to pass when launching the test.
+      env_vars: Environment variables to set when launching the test.
 
     Raises:
       SimulatorNotFoundError: If the given iossim path cannot be found.
     """
     super(SimulatorTestRunner, self).__init__(
       app_path,
-      xcode_version=xcode_version,
+      env_vars=env_vars,
       gs_bucket=gs_bucket,
       perf_bot_name=perf_bot_name,
       perf_build_number=perf_build_number,
@@ -471,6 +476,7 @@ class SimulatorTestRunner(TestRunner):
       perf_revision=perf_revision,
       perf_x_value=perf_x_value,
       test_args=test_args,
+      xcode_version=xcode_version,
     )
 
     if not os.path.exists(iossim_path):
@@ -742,6 +748,9 @@ class SimulatorTestRunner(TestRunner):
       else:
         args.append('--gtest_filter=%s' % gtest_filter)
 
+    for env_var in self.env_vars:
+      args.extend(['-e', env_var])
+
     cmd.append(self.app_path)
     cmd.extend(self.test_args)
     cmd.extend(args)
@@ -788,6 +797,7 @@ class XCTestRunner(TestRunner):
     perf_revision=None,
     perf_x_value=None,
     test_args=None,
+    env_vars=None,
   ):
     """Initializes an instance of the SimulatorXCTestRunner class.
 
@@ -807,6 +817,7 @@ class XCTestRunner(TestRunner):
       perf_x_value: Value to use on the x axis for all data uploaded to the
       perf dashboard.
       test_args: Arguments to pass when launching the test.
+      env_vars: Environment variables to set when launching the test.
 
     Raises:
       AppNotFoundError: If the specified app cannot be found.
@@ -814,7 +825,7 @@ class XCTestRunner(TestRunner):
     """
     super(XCTestRunner, self).__init__(
       app_path,
-      xcode_version=xcode_version,
+      env_vars=env_vars,
       gs_bucket=gs_bucket,
       perf_bot_name=perf_bot_name,
       perf_build_number=perf_build_number,
@@ -823,6 +834,7 @@ class XCTestRunner(TestRunner):
       perf_revision=perf_revision,
       perf_x_value=perf_x_value,
       test_args=test_args,
+      xcode_version=xcode_version,
     )
     self.app_path = os.path.abspath(app_path)
     self.test_host_name = test_host
@@ -1020,6 +1032,7 @@ class SimulatorXCTestRunner(XCTestRunner):
     perf_revision=None,
     perf_x_value=None,
     test_args=None,
+    env_vars=None,
   ):
     """Initializes an instance of the SimulatorXCTestRunner class.
 
@@ -1043,6 +1056,7 @@ class SimulatorXCTestRunner(XCTestRunner):
       perf_x_value: Value to use on the x axis for all data uploaded to the
       perf dashboard.
       test_args: Arguments to pass when launching the test.
+      env_vars: Environment variables to set when launching the test.
 
     Raises:
       SimulatorNotFoundError: If the given iossim path cannot be found.
@@ -1051,7 +1065,7 @@ class SimulatorXCTestRunner(XCTestRunner):
       app_path,
       test_host,
       test_project_dir,
-      xcode_version=xcode_version,
+      env_vars=env_vars,
       gs_bucket=gs_bucket,
       perf_bot_name=perf_bot_name,
       perf_build_number=perf_build_number,
@@ -1060,6 +1074,7 @@ class SimulatorXCTestRunner(XCTestRunner):
       perf_revision=perf_revision,
       perf_x_value=perf_x_value,
       test_args=test_args,
+      xcode_version=xcode_version,
     )
     self.platform = platform
     self.version = version
@@ -1288,6 +1303,7 @@ class SimulatorXCTestRunner(XCTestRunner):
 
     return self.RunAllTests(result, *args, **kwargs)
 
+
 class DeviceXCTestRunner(XCTestRunner):
   """Class for running xctests on an iOS device."""
   def __init__(
@@ -1304,6 +1320,7 @@ class DeviceXCTestRunner(XCTestRunner):
     perf_revision=None,
     perf_x_value=None,
     test_args=None,
+    env_vars=None,
   ):
     """Initializes an instance of the SimulatorXCTestRunner class.
 
@@ -1323,6 +1340,7 @@ class DeviceXCTestRunner(XCTestRunner):
       perf_x_value: Value to use on the x axis for all data uploaded to the
       perf dashboard.
       test_args: Arguments to pass when launching the test.
+      env_vars: Environment variables to set when launching the test.
 
     Raises:
       DeviceDetectionError: If this machine does not have exactly one device
@@ -1334,7 +1352,7 @@ class DeviceXCTestRunner(XCTestRunner):
       app_path,
       test_host,
       test_project_dir,
-      xcode_version=xcode_version,
+      env_vars=env_vars,
       gs_bucket=gs_bucket,
       perf_bot_name=perf_bot_name,
       perf_build_number=perf_build_number,
@@ -1343,6 +1361,7 @@ class DeviceXCTestRunner(XCTestRunner):
       perf_revision=perf_revision,
       perf_x_value=perf_x_value,
       test_args=test_args,
+      xcode_version=xcode_version,
     )
     self.cfbundleid = utils.call(
       utils.PLIST_BUDDY,

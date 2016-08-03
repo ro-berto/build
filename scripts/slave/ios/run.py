@@ -39,9 +39,10 @@ def main(args, test_args):
         args.dummyproj,
         args.platform,
         args.version,
-        xcode_version=args.xcode_version,
+        env_vars=args.env_var,
         gs_bucket=args.bucket,
         test_args=test_args,
+        xcode_version=args.xcode_version,
       )
     else:
       test_runner = SimulatorTestRunner(
@@ -49,9 +50,10 @@ def main(args, test_args):
         args.iossim,
         args.platform,
         args.version,
-        xcode_version=args.xcode_version,
+        env_vars=args.env_var,
         gs_bucket=args.bucket,
         test_args=test_args,
+        xcode_version=args.xcode_version,
       )
 
     return 0 if test_runner.Launch() else 1
@@ -95,6 +97,14 @@ if __name__ == '__main__':
     '--dummyproj',
     help='Dummy test project path.',
     metavar='.xcodeproj',
+    type=str,
+  )
+  parser.add_argument(
+    '-e',
+    '--env-var',
+    action='append',
+    help='Environment variable to pass to the test itself.',
+    metavar='ENV=val',
     type=str,
   )
   parser.add_argument(
