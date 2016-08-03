@@ -749,7 +749,7 @@ class SimulatorTestRunner(TestRunner):
         args.append('--gtest_filter=%s' % gtest_filter)
 
     for env_var in self.env_vars:
-      args.extend(['-e', env_var])
+      cmd.extend(['-e', env_var])
 
     cmd.append(self.app_path)
     cmd.extend(self.test_args)
