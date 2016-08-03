@@ -551,6 +551,7 @@ class iOSApi(recipe_api.RecipeApi):
             'xcode version', self.__config['xcode version']),
           '--isolate', isolate_template,
           '--isolated', tmp_dir.join('%s.isolated' % test['id']),
+          '--path-variable', 'app_path', app_path,
         ]
         if self.platform == 'simulator':
           args.extend([
