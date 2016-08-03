@@ -858,7 +858,8 @@ class XCTestRunner(TestRunner):
     """Returns the environment which is used to run the xctest.
     """
     env = dict(os.environ, APP_TARGET_NAME=self.test_host_name,
-               TEST_TARGET_NAME=self.test_target_name)
+               TEST_TARGET_NAME=self.test_target_name,
+               NSUnbufferedIO='YES')
     return env
 
   def GetLaunchCommand(self, test_filter=None, blacklist=False):
@@ -1266,15 +1267,18 @@ class SimulatorXCTestRunner(XCTestRunner):
     """
     built_dir = os.path.split(self.app_path)[0]
 
-    cmd = ['xcodebuild', 'test',
-          'BUILT_PRODUCTS_DIR=%s' % built_dir,
-          '-project', self.test_project_dir,
-          '-scheme','TestProject',
-          '-destination','platform=iOS Simulator,name=%s,OS=%s'
-          % (self.platform, self.version),
-          '-archivePath', self.homedir,
-          'APP_TARGET_NAME=%s' % self.test_host_name,
-          'TEST_TARGET_NAME=%s' % self.test_target_name]
+    cmd = [
+      'xcodebuild', 'test',
+      'BUILT_PRODUCTS_DIR=%s' % built_dir,
+      '-project', self.test_project_dir,
+      '-scheme','TestProject',
+      '-destination','platform=iOS Simulator,name=%s,OS=%s'
+      % (self.platform, self.version),
+      '-archivePath', self.homedir,
+      'APP_TARGET_NAME=%s' % self.test_host_name,
+      'TEST_TARGET_NAME=%s' % self.test_target_name,
+      'NSUnbufferedIO=YES'
+    ]
     return cmd
 
   @TestRunner.RequireTearDown
@@ -1425,15 +1429,18 @@ class DeviceXCTestRunner(XCTestRunner):
     """
     built_dir = os.path.split(self.app_path)[0]
 
-    cmd = ['xcodebuild', 'test-without-building',
-          'BUILT_PRODUCTS_DIR=%s' % built_dir,
-          'CONFIGURATION_BUILD_DIR=%s' % built_dir,
-          '-project', self.test_project_dir,
-          '-configuration', 'iphoneos',
-          '-scheme', 'TestProject',
-          '-destination','id=%s' % self.device_id,
-          'APP_TARGET_NAME=%s' % self.test_host_name,
-          'TEST_TARGET_NAME=%s' % self.test_target_name]
+    cmd = [
+      'xcodebuild', 'test-without-building',
+      'BUILT_PRODUCTS_DIR=%s' % built_dir,
+      'CONFIGURATION_BUILD_DIR=%s' % built_dir,
+      '-project', self.test_project_dir,
+      '-configuration', 'iphoneos',
+      '-scheme', 'TestProject',
+      '-destination','id=%s' % self.device_id,
+      'APP_TARGET_NAME=%s' % self.test_host_name,
+      'TEST_TARGET_NAME=%s' % self.test_target_name,
+      'NSUnbufferedIO=YES'
+    ]
     return cmd
 
   @TestRunner.RequireTearDown
