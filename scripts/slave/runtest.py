@@ -1387,7 +1387,7 @@ def _MainLinux(options, args, extra_env):
 
   if options.generate_json_file:
     if not _GenerateJSONForTestResults(options, log_processor):
-      return 1
+      return result or 1
 
   if options.annotate:
     annotation_utils.annotate(
@@ -1402,7 +1402,7 @@ def _MainLinux(options, args, extra_env):
   if options.results_url:
     if not _SendResultsToDashboard(
         log_processor, _ResultsDashboardDict(options)):
-      return 1
+      return result or 1
 
   return result
 
