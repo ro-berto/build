@@ -115,7 +115,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -132,7 +132,7 @@
       "Libfuzzer Upload Linux ASan Debug",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "//out/Release"
+      "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -147,7 +147,7 @@
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/src",
       "refs",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--all",
       "--type=executable",
       "--as=output",
@@ -163,7 +163,7 @@
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/src",
       "refs",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--all",
       "--type=executable",
       "--as=output",
@@ -218,7 +218,7 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
@@ -249,7 +249,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "/path/to/tmp/json"
     ],
     "name": "listdir build_dir",
@@ -273,9 +273,9 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[TMP_BASE]/chrome_staging_tmp_1",
-      "libfuzzer-linux-release-170242",
+      "libfuzzer-linux-debug-170242",
       "[\"file 1\", \"file 2\"]",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]/src/out/Debug"
     ],
     "name": "zipping"
   },
@@ -294,12 +294,12 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/chrome_staging_tmp_1/libfuzzer-linux-release-170242.zip",
-      "gs://chromium-browser-libfuzzer/linux-release-asan/libfuzzer-linux-release-170242.zip"
+      "[TMP_BASE]/chrome_staging_tmp_1/libfuzzer-linux-debug-170242.zip",
+      "gs://chromium-browser-libfuzzer/linux-debug-asan/libfuzzer-linux-debug-170242.zip"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux-release-asan/libfuzzer-linux-release-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux-debug-asan/libfuzzer-linux-debug-170242.zip@@@"
     ]
   },
   {
@@ -307,9 +307,9 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/chrome_staging_tmp_1/libfuzzer-linux-release-170242.zip"
+      "[TMP_BASE]/chrome_staging_tmp_1/libfuzzer-linux-debug-170242.zip"
     ],
-    "name": "libfuzzer-linux-release-170242.zip",
+    "name": "libfuzzer-linux-debug-170242.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -324,13 +324,13 @@
       "-u",
       "[SLAVE_BUILD]/src/testing/libfuzzer/zip_sources.py",
       "--binary",
-      "[SLAVE_BUILD]/src/out/Release/target2",
+      "[SLAVE_BUILD]/src/out/Debug/target2",
       "--workdir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--srcdir",
       "[SLAVE_BUILD]/src",
       "--output",
-      "[SLAVE_BUILD]/src/out/Release/target2.src.zip"
+      "[SLAVE_BUILD]/src/out/Debug/target2.src.zip"
     ],
     "name": "zip_src_target2"
   },
@@ -340,13 +340,13 @@
       "-u",
       "[SLAVE_BUILD]/src/testing/libfuzzer/zip_sources.py",
       "--binary",
-      "[SLAVE_BUILD]/src/out/Release/target3",
+      "[SLAVE_BUILD]/src/out/Debug/target3",
       "--workdir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--srcdir",
       "[SLAVE_BUILD]/src",
       "--output",
-      "[SLAVE_BUILD]/src/out/Release/target3.src.zip"
+      "[SLAVE_BUILD]/src/out/Debug/target3.src.zip"
     ],
     "name": "zip_src_target3"
   },
@@ -355,7 +355,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "/path/to/tmp/json"
     ],
     "name": "listdir build_dir (2)",
@@ -379,9 +379,9 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[TMP_BASE]/chrome_staging_tmp_2",
-      "libfuzzer-src-linux-release-170242",
+      "libfuzzer-src-linux-debug-170242",
       "[]",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]/src/out/Debug"
     ],
     "name": "zipping (2)"
   },
@@ -400,12 +400,12 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/chrome_staging_tmp_2/libfuzzer-src-linux-release-170242.zip",
-      "gs://chromium-browser-libfuzzer/linux-release-asan/libfuzzer-src-linux-release-170242.zip"
+      "[TMP_BASE]/chrome_staging_tmp_2/libfuzzer-src-linux-debug-170242.zip",
+      "gs://chromium-browser-libfuzzer/linux-debug-asan/libfuzzer-src-linux-debug-170242.zip"
     ],
     "name": "gsutil upload (2)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux-release-asan/libfuzzer-src-linux-release-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux-debug-asan/libfuzzer-src-linux-debug-170242.zip@@@"
     ]
   },
   {
@@ -413,9 +413,9 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/chrome_staging_tmp_2/libfuzzer-src-linux-release-170242.zip"
+      "[TMP_BASE]/chrome_staging_tmp_2/libfuzzer-src-linux-debug-170242.zip"
     ],
-    "name": "libfuzzer-src-linux-release-170242.zip",
+    "name": "libfuzzer-src-linux-debug-170242.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
