@@ -43,7 +43,10 @@ DEFAULT_SKPS_CHROMIUM_BUILD = 'fad657e-276e633'
 def RunSteps(api):
   # Figure out which repository to use.
   buildername = api.properties['buildername']
-  if '10k' in buildername:
+  if '1k' in buildername:
+    ct_page_type = '10k'
+    num_pages = 1000
+  elif '10k' in buildername:
     ct_page_type = '10k'
     num_pages = 10000
   elif '100k' in buildername:
@@ -299,6 +302,21 @@ def GenTests(api):
         ct_num_slaves=ct_num_slaves,
         num_per_slave=num_per_slave,
         revision=skia_revision,
+    )
+  )
+
+  yield(
+    api.test('CT_GPU_BENCH_1k_SKPs') +
+    api.properties(
+        buildername=
+            'Perf-Ubuntu-GCC-Golo-GPU-GT610-x86_64-Release-CT_BENCH_1k_SKPs',
+        ct_num_slaves=ct_num_slaves,
+        num_per_slave=num_per_slave,
+        revision=skia_revision,
+    ) +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('src')
     )
   )
 
