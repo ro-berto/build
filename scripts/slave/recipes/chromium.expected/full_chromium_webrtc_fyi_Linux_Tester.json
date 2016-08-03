@@ -402,7 +402,11 @@
       "--builder-name=Linux Tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "capture_unittests"
+      "capture_unittests",
+      "--enable-logging",
+      "--v=1",
+      "--test-launcher-jobs=1",
+      "--test-launcher-print-test-stdio=always"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Tester",
     "env": {
@@ -438,40 +442,6 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "content_unittests"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=media_unittests",
-      "--step-name=media_unittests",
-      "--test-launcher-summary-output",
-      "/path/to/tmp/json",
-      "--builder-name=Linux Tester",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "media_unittests",
-      "--gtest_filter=VideoCaptureDeviceTest*",
-      "--enable-logging",
-      "--v=1",
-      "--test-launcher-jobs=1",
-      "--test-launcher-print-test-stdio=always"
-    ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tester",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "media_unittests"
   },
   {
     "allow_subannotations": true,

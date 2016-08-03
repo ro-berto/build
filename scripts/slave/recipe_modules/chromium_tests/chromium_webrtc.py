@@ -123,14 +123,12 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                 '--test-launcher-print-test-stdio=always'],
           perf_id=perf_id),
         # Run capture unittests as well since our bots have real webcams.
-        WebRTCTest('capture_unittests'),
-        WebRTCTest('content_unittests'),
-        WebRTCTest('media_unittests',
-                   args=['--gtest_filter=VideoCaptureDeviceTest*',
-                         '--enable-logging',
+        WebRTCTest('capture_unittests',
+                   args=['--enable-logging',
                          '--v=1',
                          '--test-launcher-jobs=1',
                          '--test-launcher-print-test-stdio=always']),
+        WebRTCTest('content_unittests'),
         WebRTCTest('remoting_unittests', args=['--gtest_filter=Webrtc*']),
     ]
   return spec

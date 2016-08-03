@@ -325,7 +325,6 @@
       "capture_unittests",
       "content_browsertests",
       "content_unittests",
-      "media_unittests",
       "remoting_unittests"
     ],
     "env": {
