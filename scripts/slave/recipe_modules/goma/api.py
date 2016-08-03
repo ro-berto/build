@@ -51,7 +51,7 @@ class GomaApi(recipe_api.RecipeApi):
     assert not self._goma_started
     if not env:
       env = {}
-    env.update({'GOMA_SERVICE_ACCOUNT_JSON': self.service_account_json_path})
+    env.update({'GOMA_SERVICE_ACCOUNT_JSON_FILE': self.service_account_json_path})
     self.m.python(
         name='start_goma',
         script=self.m.path.join(self._goma_dir, 'goma_ctl.py'),
