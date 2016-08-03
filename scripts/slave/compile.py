@@ -72,6 +72,39 @@ class EchoDict(dict):
     fh.write('\n')
 
 
+def StopGomaClientAndUploadInfo(options, env, exit_status):
+  """Stop goma compiler_proxy and upload goma-related information.
+
+  Args:
+    options (Option) : options to specify where to store goma-related info.
+    env (dict)       : used when goma_ctl command executes.
+    exit_status (int): exit_status sent to monitoring system.
+  """
+  goma_ctl_cmd = [sys.executable,
+                  os.path.join(options.goma_dir, 'goma_ctl.py')]
+
+  if options.goma_jsonstatus:
+    chromium_utils.RunCommand(
+        goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
+    goma_utils.SendGomaTsMon(options.goma_jsonstatus, exit_status)
+
+  # If goma compiler_proxy crashes, there could be crash dump.
+  if options.build_data_dir:
+    env['GOMACTL_CRASH_REPORT_ID_FILE'] = os.path.join(options.build_data_dir,
+                                                       'crash_report_id_file')
+  # We must stop the proxy to dump GomaStats.
+  chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+  override_gsutil = None
+  if options.gsutil_py_path:
+    override_gsutil = options.gsutil_py_path
+  goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil)
+
+  # Upload GomaStats to make it monitored.
+  if env.get('GOMA_DUMP_STATS_FILE'):
+    goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
+                             env.get('GOMACTL_CRASH_REPORT_ID_FILE'),
+                             options.build_data_dir)
+
 # TODO(tikuta): move to goma_utils.py
 def goma_setup(options, env):
   """Sets up goma if necessary.
@@ -154,30 +187,7 @@ def goma_setup(options, env):
       return True, None
     return True, cloudtail_proc
 
-  if options.goma_jsonstatus:
-    chromium_utils.RunCommand(
-        goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
-    goma_utils.SendGomaTsMon(options.goma_jsonstatus, -1)
-
-  # Try to stop compiler_proxy so that it flushes logs and stores
-  # GomaStats.
-  if options.build_data_dir:
-    env['GOMACTL_CRASH_REPORT_ID_FILE'] = os.path.join(options.build_data_dir,
-                                                       'crash_report_id_file')
-  chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
-
-  override_gsutil = None
-  if options.gsutil_py_path:
-    override_gsutil = [sys.executable, options.gsutil_py_path]
-
-  # Upload compiler_proxy.INFO to investigate the reason of compiler_proxy
-  # start-up failure.
-  goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil)
-  # Upload GomaStats to make it monitored.
-  if env.get('GOMA_DUMP_STATS_FILE'):
-    goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
-                             env.get('GOMACTL_CRASH_REPORT_ID_FILE'),
-                             options.build_data_dir)
+  StopGomaClientAndUploadInfo(options, env, -1)
 
   if options.goma_disable_local_fallback:
     print 'error: failed to start goma; fallback has been disabled'
@@ -198,28 +208,8 @@ def goma_setup(options, env):
 def goma_teardown(options, env, exit_status, cloudtail_proc):
   """Tears down goma if necessary. """
   if options.goma_dir:
-    override_gsutil = None
-    if options.gsutil_py_path:
-      override_gsutil = [sys.executable, options.gsutil_py_path]
+    StopGomaClientAndUploadInfo(options, env, exit_status)
 
-    # If goma compiler_proxy crashes during the build, there could be crash
-    # dump.
-    if options.build_data_dir:
-      env['GOMACTL_CRASH_REPORT_ID_FILE'] = os.path.join(options.build_data_dir,
-                                                         'crash_report_id_file')
-    goma_ctl_cmd = [sys.executable,
-                    os.path.join(options.goma_dir, 'goma_ctl.py')]
-    if options.goma_jsonstatus:
-      chromium_utils.RunCommand(
-          goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
-      goma_utils.SendGomaTsMon(options.goma_jsonstatus, exit_status)
-    # Always stop the proxy to dump GomaStats.
-    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
-    goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil)
-    if env.get('GOMA_DUMP_STATS_FILE'):
-      goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
-                               env.get('GOMACTL_CRASH_REPORT_ID_FILE'),
-                               options.build_data_dir)
   if cloudtail_proc:
     cloudtail_proc.terminate()
     cloudtail_proc.wait()
