@@ -138,7 +138,7 @@ def main(argv):
     print 'Cannot find the src directory ' + options.src_dir
     return 1
 
-  # These two commands are from src/DEPS; please keep them in sync.
+  # These commands are from src/DEPS; please keep them in sync.
   if subprocess.call(['python', 'build/util/lastchange.py', '-o',
                       'build/util/LASTCHANGE'], cwd=options.src_dir) != 0:
     print 'Could not run build/util/lastchange.py to update LASTCHANGE.'
@@ -148,6 +148,13 @@ def main(argv):
                       'build/util/LASTCHANGE.blink'],
                      cwd=options.src_dir) != 0:
     print 'Could not run build/util/lastchange.py to update LASTCHANGE.blink.'
+    return 1
+  if subprocess.call(['python', 'build/util/lastchange.py',
+                      '-s', 'third_party/skia',
+                      '-m', 'SKIA_COMMIT_HASH',
+                      '--header', 'skia/ext/skia_commit_hash.h'],
+                     cwd=options.src_dir) != 0:
+    print 'Could not run build/util/lastchange.py to update skia_commit_hash.h.'
     return 1
 
   output_fullname = args[0] + '.tar'
