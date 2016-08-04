@@ -19,7 +19,7 @@
   "schedulers": {
     "llvm_commits": {
       "type": "git_poller",
-      "git_repo_url": "https://chromium.googlesource.com/external/llvm.org/llvm",
+      "git_repo_url": "https://chromium.googlesource.com/external/github.com/llvm-mirror/llvm",
       "treeStableTimer": 0
     },
   },
