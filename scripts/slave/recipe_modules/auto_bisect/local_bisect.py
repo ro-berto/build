@@ -39,8 +39,10 @@ def perform_bisect(api, **flags):
     raise
 
 def _perform_single_bisect(api, bisect_attempts, **flags):
-      bisect_config = api.m.properties.get('bisect_config')
-      assert isinstance(bisect_config, collections.Mapping)
+      bisect_config = dict(api.m.properties.get('bisect_config'))
+      if bisect_attempts:
+        bisect_config['good_revision'] = bisect_attempts[-1].lkgr.commit_hash
+        bisect_config['bad_revision'] = bisect_attempts[-1].fkbr.commit_hash
       bisector = api.create_bisector(bisect_config, **flags)
       bisect_attempts.append(bisector)
       with api.m.step.nest('Gathering reference values'):

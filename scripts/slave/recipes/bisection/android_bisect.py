@@ -676,16 +676,6 @@ results-without_patch
     api.step_data('Debug Info', retcode=1) +
     api.override_step_data('device_status (3)',
         api.json.output(working_device)) +
-    api.step_data('Resolving reference range.crrev get commit hash for ' +
-        ('refs/heads/master@{#%s} (2)' % local_bisect_config[
-            'bad_revision']),
-        stdout=api.json.output(
-            {'git_sha': bad_revision_hash}))+
-    api.step_data('Resolving reference range.crrev get commit hash for ' +
-        ('refs/heads/master@{#%s} (2)' % local_bisect_config[
-            'good_revision']),
-        stdout=api.json.output(
-            {'git_sha': good_revision_hash}))+
     api.step_data('Expanding revision range.for revisions %s:%s (2)' % (
             good_revision_hash, bad_revision_hash),
         stdout=api.json.output([[bad_revision_hash, 'ignored'], [
