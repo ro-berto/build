@@ -207,6 +207,34 @@ class StatusLoggerTest(unittest.TestCase):
         parsed = json.loads(content)
         self.assertEqual(parsed['build-event-category'], 'cq_experimental')
 
+  def testDoesNotReportGotRevisionFromSVN(self):
+    with _make_logger() as logger:
+      mock_build = Build(properties={'got_revision': '12345'})
+      logger.buildFinished('coconuts', mock_build, 0)
+      self.assertTrue(os.path.isdir(logger._event_logging_dir))
+      self.assertTrue(os.path.exists(logger._event_logfile))
+      # Ensure we added valid json
+      with open(logger._event_logfile, 'r') as f:
+        content = f.read()
+        self.assertTrue(content)
+        parsed = json.loads(content)
+        self.assertNotIn('build-event-head-revision-git-hash', parsed)
+
+  def testReportsGitRevisionHash(self):
+    with _make_logger() as logger:
+      mock_build = Build(properties={
+        'got_revision': '773ceaef513c9e81fde791b6fe4612fd46cfb7fd'})
+      logger.buildFinished('coconuts', mock_build, 0)
+      self.assertTrue(os.path.isdir(logger._event_logging_dir))
+      self.assertTrue(os.path.exists(logger._event_logfile))
+      # Ensure we added valid json
+      with open(logger._event_logfile, 'r') as f:
+        content = f.read()
+        self.assertTrue(content)
+        parsed = json.loads(content)
+        self.assertEqual(parsed['build-event-head-revision-git-hash'],
+                         '773ceaef513c9e81fde791b6fe4612fd46cfb7fd')
+
   def testStopStep(self):
     steps = [Step(step_number=1),
              Step(step_number=2, result=1),

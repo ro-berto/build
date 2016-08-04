@@ -9,6 +9,7 @@ import json
 import logging
 import logging.handlers
 import os
+import re
 import time
 
 from logging.handlers import TimedRotatingFileHandler
@@ -172,7 +173,8 @@ class StatusEventLogger(StatusReceiverMultiService):
                        bot_name, builder_name, build_number, build_scheduled_ts,
                        step_name=None, step_text=None, step_number=None,
                        result=None, extra_result_code=None, patch_url=None,
-                       bbucket_id=None, category=None):
+                       bbucket_id=None, category=None,
+                       head_revision_git_hash=None):
     """Log a build/step event for event_mon."""
 
     if self._event_logging:
@@ -201,6 +203,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         d['build-event-bbucket-id'] = bbucket_id
       if category:
         d['build-event-category'] = category
+      if head_revision_git_hash:
+        d['build-event-head-revision-git-hash'] = head_revision_git_hash
 
       self.event_logger.info(json.dumps(d))
 
@@ -312,6 +316,13 @@ class StatusEventLogger(StatusReceiverMultiService):
     except (ValueError, AssertionError, AttributeError, TypeError) as e:
       twisted_log.msg('Failed to get bbucket ID: %s' % e)
 
+  def _get_head_revision_git_hash(self, build_properties):
+    if 'got_revision' in build_properties:
+      revision = build_properties.getProperty('got_revision').lower()
+      if re.match('^[0-9a-f]{40}$', revision):
+        return revision
+
+
   def startService(self):
     """Start the service and subscribe for updates."""
     twisted_log.msg('status_logger: startService()')
@@ -417,7 +428,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         extra_result_code=extra_result_code,
         patch_url=self._get_patch_url(properties),
         bbucket_id=self._get_bbucket_id(properties),
-        category=properties.getProperty('category'))
+        category=properties.getProperty('category'),
+        head_revision_git_hash=self._get_head_revision_git_hash(properties))
 
     pre_test_time_s = None
     for step in build.getSteps():
