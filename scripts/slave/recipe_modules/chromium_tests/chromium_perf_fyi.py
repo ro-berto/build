@@ -78,14 +78,6 @@ _AddBotSpec(
     parent_master='chromium.perf')
 
 _AddBotSpec(
-    name='Win Power Low-End Perf',
-    platform='win',
-    parent_builder='Win x64 Builder',
-    perf_id='win-power-low-end',
-    target_bits=64,
-    parent_master='chromium.perf')
-
-_AddBotSpec(
     name='Win Clang Perf',
     platform='win',
     parent_builder='Win Clang Builder',
