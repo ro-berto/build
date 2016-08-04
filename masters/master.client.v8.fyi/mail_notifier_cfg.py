@@ -58,6 +58,7 @@ def Update(config, active_master, c):
         extraRecipients=[
           'machenbach@chromium.org',
           'mattloring@google.com',
+          'node-build-notifications@google.com',
           'ofrobots@google.com',
         ],
     ),
