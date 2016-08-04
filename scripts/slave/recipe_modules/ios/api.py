@@ -499,6 +499,7 @@ class iOSApi(recipe_api.RecipeApi):
       # .apps are directories. Need the trailing slash to isolate the
       # contents of a directory.
       '<(app_path)/',
+      'src/ios/build/bots/scripts/',
     ]
     if self.platform == 'simulator':
       iossim = self.m.path.join(self.most_recent_iossim)
