@@ -325,7 +325,6 @@ class StatusEventLogger(StatusReceiverMultiService):
 
   def startService(self):
     """Start the service and subscribe for updates."""
-    twisted_log.msg('status_logger: startService()')
     self._create_event_logger()
     self._create_ts_mon_logger()
 
@@ -335,13 +334,11 @@ class StatusEventLogger(StatusReceiverMultiService):
 
   # Unused, but is required by the API to enable other events.
   def builderAdded(self, builderName, builder):
-    twisted_log.msg('status_logger: builderAdded()')
     # Must return self in order to subscribe to builderChangedState and
     # buildStarted/Finished events.
     return self
 
   def buildStarted(self, builderName, build):
-    twisted_log.msg('status_logger: buildStarted()')
     build_number = build.getNumber()
     bot = build.getSlavename()
     started, _ = build.getTimes()
@@ -356,7 +353,6 @@ class StatusEventLogger(StatusReceiverMultiService):
     return self
 
   def stepStarted(self, build, step):
-    twisted_log.msg('status_logger: stepStarted()')
     bot = build.getSlavename()
     builder_name = build.getBuilder().name
     build_number = build.getNumber()
@@ -375,7 +371,6 @@ class StatusEventLogger(StatusReceiverMultiService):
     return self
 
   def stepFinished(self, build, step, results):
-    twisted_log.msg('status_logger: stepFinished()')
     builder_name = build.getBuilder().name
     build_number = build.getNumber()
     bot = build.getSlavename()
@@ -406,7 +401,6 @@ class StatusEventLogger(StatusReceiverMultiService):
       subproject_tag)
 
   def buildFinished(self, builderName, build, results):
-    twisted_log.msg('status_logger: buildFinished()')
     build_number = build.getNumber()
     bot = build.getSlavename()
     started, finished = build.getTimes()
