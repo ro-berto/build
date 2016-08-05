@@ -58,7 +58,7 @@ class XCTestLogParser(object):
     self._test_fail = re.compile(
         r'Test Case \'' + test_name_regexp +
           '\' failed\s+\(\d+\.\d+\s+seconds\)?.')
-    self._test_passed = re.compile(r'\*\*\s+TEST\s+SUCCEEDED\s+\*\*')
+    self._test_passed = re.compile(r'\*\*\s+TEST\s+EXECUTE\s+SUCCEEDED\s+\*\*')
     self._retry_message = re.compile('RETRYING FAILED TESTS:')
     self.retrying_failed = False
 

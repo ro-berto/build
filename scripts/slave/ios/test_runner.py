@@ -1268,7 +1268,7 @@ class SimulatorXCTestRunner(XCTestRunner):
     built_dir = os.path.split(self.app_path)[0]
 
     cmd = [
-      'xcodebuild', 'test',
+      'xcodebuild', 'test-without-building',
       'BUILT_PRODUCTS_DIR=%s' % built_dir,
       '-project', self.test_project_dir,
       '-scheme','TestProject',
