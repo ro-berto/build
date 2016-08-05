@@ -801,6 +801,25 @@ class AndroidApi(recipe_api.RecipeApi):
     if failures:
       raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
 
+  def run_telemetry_browser_test(self, test_name, browser='android-chromium'):
+    """Run a telemetry browser test."""
+    try:
+      self.m.python(
+          name='Run telemetry browser_test %s' % test_name,
+          script=self.m.path['checkout'].join(
+              'chrome', 'test', 'android', 'telemetry_tests',
+              'run_chrome_browser_tests.py'),
+          args=['--browser=%s' % browser,
+                '--write-abbreviated-json-results-to', self.m.json.output(),
+                test_name],
+          step_test_data=lambda: self.m.json.test_api.output(
+              {'successes': ['passed_test1']}))
+    finally:
+      test_failures = self.m.step.active_result.json.output.get('failures', [])
+      self.m.step.active_result.presentation.step_text += (
+          self.m.test_utils.format_step_text(
+              [['failures:', test_failures]]))
+
   def run_instrumentation_suite(self,
                                 name,
                                 test_apk=None,

@@ -84,24 +84,27 @@ BUILDERS = freeze({
         'run_webview_cts': True,
     },
     'last_known_devices': {
-      'perf_config': 'sharded_perf_tests.json',
-      'last_known_devices': '.last_devices',
+        'perf_config': 'sharded_perf_tests.json',
+        'last_known_devices': '.last_devices',
     },
     'device_flags_builder': {
-      'device_flags': 'device_flags_file',
+        'device_flags': 'device_flags_file',
     },
     'no_cache_builder': {
-      'use_git_cache': False,
+        'use_git_cache': False,
     },
     'json_results_file': {
-      'json_results_file': 'json_results_file'
+        'json_results_file': 'json_results_file'
     },
     'result_details': {
-      'result_details': True
+        'result_details': True,
     },
     'enable_platform_mode': {
-      'perf_config': 'sharded_perf_tests.json',
-      'enable_platform_mode': True
+        'perf_config': 'sharded_perf_tests.json',
+        'enable_platform_mode': True
+    },
+    'telemetry_browser_tests_tester': {
+        'run_telemetry_browser_tests': True,
     }
 })
 
@@ -232,6 +235,9 @@ def RunSteps(api, buildername):
   if config.get('run_webview_cts'):
     api.chromium_android.run_webview_cts(command_line_args=[
         '--webview_arg_1', '--webview_arg_2'])
+
+  if config.get('run_telemetry_browser_tests'):
+    api.chromium_android.run_telemetry_browser_test('PopularUrlsTest')
 
   api.chromium_android.logcat_dump()
   api.chromium_android.stack_tool_steps()
@@ -409,3 +415,10 @@ def GenTests(api):
          properties_for('tester') +
          api.override_step_data('get version (2)',
              api.raw_io.output('MAJOR=53\nMINOR=0\nBUILD=2800\nPATCH=0\n')))
+
+  yield (api.test('telemetry_browser_tests_failures') +
+         properties_for('telemetry_browser_tests_tester') +
+         api.override_step_data('Run telemetry browser_test PopularUrlsTest',
+             api.json.output({'successes': ['passed_test1', 'passed_test2'],
+                              'failures': ['failed_test_1', 'failed_test_2']}),
+             retcode=1))
