@@ -307,14 +307,24 @@ class StatusEventLogger(StatusReceiverMultiService):
 
     Returns None when buildbucket properties are missing or malformed.
     """
+    if 'buildbucket' not in build_properties:
+      return
+
     try:
-      assert 'buildbucket' in build_properties
       bbucket_props = json.loads(
           build_properties.getProperty('buildbucket'))
-      assert isinstance(bbucket_props, dict)
-      return bbucket_props.get('build', {}).get('id')
-    except (ValueError, AssertionError, AttributeError, TypeError) as e:
-      twisted_log.msg('Failed to get bbucket ID: %s' % e)
+    except (ValueError, TypeError) as e:
+      twisted_log.msg('Failed to parse buildbucket property as JSON: %s' % e)
+      return
+
+    if isinstance(bbucket_props, dict):
+      build = bbucket_props.get('build', {})
+      if isinstance(build, dict):
+        return build.get('id')
+      else:
+        twisted_log.msg('Build inside buildbucket property is not a dict')
+    else:
+      twisted_log.msg('Buildbucket property is not a dict')
 
   def _get_head_revision_git_hash(self, build_properties):
     if 'got_revision' in build_properties:
