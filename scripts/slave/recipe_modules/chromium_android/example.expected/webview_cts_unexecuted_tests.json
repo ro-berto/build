@@ -841,14 +841,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/android_webview/tools/cts_config/webview_cts_gcs_path.txt",
+      "[SLAVE_BUILD]/src/android_webview/tools/cts_config/webview_cts_gcs_path.json",
       "/path/to/tmp/"
     ],
-    "name": "Fetch for the name of the cts file",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@cts_file_name@android-cts-5.1_r5-linux_x86-arm.zip@@@",
-      "@@@STEP_LOG_END@cts_file_name@@@"
-    ]
+    "name": "Fetch CTS filename data"
   },
   {
     "cmd": [
@@ -858,7 +854,7 @@
       "[SLAVE_BUILD]/src/android_webview/tools/cts_config/expected_failure_on_bot.json",
       "/path/to/tmp/"
     ],
-    "name": "Fetch the expected failures tests for CTS from chromium checkout"
+    "name": "Fetch expected failures data"
   },
   {
     "cmd": [],
@@ -916,8 +912,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-cts/android-cts-5.1_r5-linux_x86-arm.zip",
-      "[CACHE]/android_cts/android-cts-5.1_r5-linux_x86-arm.zip"
+      "gs://chromium-cts/cts_arm64_L.zip",
+      "[CACHE]/android_cts/cts_arm64_L.zip"
     ],
     "name": "Update CTS.gsutil Download new CTS",
     "~followup_annotations": [
@@ -931,7 +927,7 @@
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
     "name": "Update CTS.Extract new CTS",
-    "stdin": "{\"output\": \"[CACHE]/android_cts/unzipped\", \"zip_file\": \"[CACHE]/android_cts/android-cts-5.1_r5-linux_x86-arm.zip\"}",
+    "stdin": "{\"output\": \"[CACHE]/android_cts/unzipped\", \"zip_file\": \"[CACHE]/android_cts/cts_arm64_L.zip\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

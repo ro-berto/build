@@ -1172,27 +1172,33 @@ class AndroidApi(recipe_api.RecipeApi):
                       'build', 'android', 'adb_command_line.py'),
                   command_line_script_args)
 
-  def run_webview_cts(self, command_line_args=None, suffix=None):
+  def run_webview_cts(self, command_line_args=None, suffix=None,
+                      android_platform='L', arch='arm_64'):
     suffix = ' (%s)' % suffix if suffix else ''
     if command_line_args:
       self._set_webview_command_line(command_line_args)
 
     _CTS_CONFIG_SRC_PATH = self.m.path['checkout'].join(
         'android_webview', 'tools', 'cts_config')
-    _cts_file_name = self.m.file.read(
-        'Fetch for the name of the cts file',
-        _CTS_CONFIG_SRC_PATH.join('webview_cts_gcs_path.txt'),
-        test_data='android-cts-5.1_r5-linux_x86-arm.zip')
-    _CTS_XML_TESTCASE_ELEMENTS = ('./TestPackage/TestSuite[@name="android"]/'
-                                  'TestSuite[@name="webkit"]/'
-                                  'TestSuite[@name="cts"]/TestCase')
-    self_result = self.m.step.active_result
-    self_result.presentation.logs['cts_file_name'] = [_cts_file_name]
-    _cts_file_name = _cts_file_name.strip()
-    # WebView user agent is changed, and new CTS hasn't been published to
-    # reflect that.
+    cts_filenames_json = self.m.file.read(
+        'Fetch CTS filename data',
+        _CTS_CONFIG_SRC_PATH.join('webview_cts_gcs_path.json'),
+        test_data='''
+                      {
+                        "arm_64": {
+                          "L": "cts_arm64_L.zip"
+                        }
+                      }''')
+    cts_filenames = self.m.json.loads(cts_filenames_json)
+    try:
+      cts_filename = cts_filenames[arch][android_platform]
+    except KeyError:
+      raise self.m.step.StepFailure(
+          'No CTS test found to use for arch:%s android:%s' % (
+              arch, android_platform))
+
     expected_failure_json = self.m.file.read(
-        'Fetch the expected failures tests for CTS from chromium checkout',
+        'Fetch expected failures data',
         _CTS_CONFIG_SRC_PATH.join('expected_failure_on_bot.json'),
         test_data = '''
                         {
@@ -1204,12 +1210,11 @@ class AndroidApi(recipe_api.RecipeApi):
                               },
                               {"name": "testB"}
                             ]
-                          }'''
-        )
+                          }''')
     expected_failure = self.m.json.loads(expected_failure_json)
 
     cts_base_dir = self.m.path['cache'].join('android_cts')
-    cts_zip_path = cts_base_dir.join(_cts_file_name)
+    cts_zip_path = cts_base_dir.join(cts_filename)
     cts_extract_dir = cts_base_dir.join('unzipped')
     if not self.m.path.exists(cts_zip_path):
       with self.m.step.nest('Update CTS'):
@@ -1218,7 +1223,7 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.file.makedirs('Create CTS dir', cts_base_dir)
         self.m.gsutil.download(name='Download new CTS',
                                bucket='chromium-cts',
-                               source=_cts_file_name,
+                               source=cts_filename,
                                dest=cts_zip_path)
         self.m.zip.unzip(step_name='Extract new CTS',
                          zip_file=cts_zip_path,
@@ -1254,6 +1259,10 @@ class AndroidApi(recipe_api.RecipeApi):
     root = ElementTree.fromstring(report_xml)
     not_executed_tests = []
     unexpected_test_failures = []
+
+    _CTS_XML_TESTCASE_ELEMENTS = ('./TestPackage/TestSuite[@name="android"]/'
+                                  'TestSuite[@name="webkit"]/'
+                                  'TestSuite[@name="cts"]/TestCase')
     test_classes = root.findall(_CTS_XML_TESTCASE_ELEMENTS)
 
     for test_class in test_classes:

@@ -406,6 +406,19 @@ def GenTests(api):
              'Invalid CTS output here...',
              stream='stdout')))
 
+  yield (api.test('webview_cts_invalid_platform') +
+         properties_for('webview_cts') +
+         api.override_step_data('Fetch CTS filename data',
+             api.raw_io.output(
+                 '''
+                     {
+                       "arm_63": {
+                         "L": "cts_arm63_L.zip"
+                       }
+                     }
+                 '''),
+                 stream='stdout'))
+
   yield (api.test('device_file_format_mismatch') +
          properties_for('tester') +
          api.override_step_data('fix_device_file_format.read_device_file', 
