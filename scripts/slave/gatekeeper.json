@@ -251,6 +251,7 @@
           "recipe-autoroller-public": {
             "tree_notify": [
               "martiniss@chromium.org",
+              "phajdan.jr@chromium.org",
               "estaab@chromium.org"
             ],
             "forgiving_optional": [ "*" ]
