@@ -257,8 +257,32 @@
     },
     "name": "device_status",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Online devices: 1@@@",
+      "@@@STEP_TEXT@Online devices: 2@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"adb_status\": \"device\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"battery\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"AC powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"USB powered\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Wireless powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"health\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"level\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"present\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"scale\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"status\": \"5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"technology\": \"Li-ion\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"temperature\": \"249\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"voltage\": \"4286\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blacklisted\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build_detail\": \"google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"imei_slice\": \"Unknown\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ro.build.id\": \"LRX21O\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ro.build.product\": \"product_name\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"serial\": \"2222\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"usb_status\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"wifi_ip\": \"\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"adb_status\": \"device\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"battery\": {@@@",
@@ -303,6 +327,31 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@{@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"adb_status\": \"device\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"battery\": {@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"AC powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"USB powered\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"Wireless powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"health\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"level\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"present\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"scale\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"status\": \"5\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"technology\": \"Li-ion\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"temperature\": \"249\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"voltage\": \"4286\"@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  }, @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"blacklisted\": false, @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"build_detail\": \"google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"imei_slice\": \"Unknown\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"ro.build.id\": \"LRX21O\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"ro.build.product\": \"product_name\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"serial\": \"2222\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"usb_status\": true, @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"wifi_ip\": \"\"@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@}@@@",
+      "@@@STEP_LOG_END@product_name LRX21O 2222@@@",
       "@@@STEP_LOG_LINE@product_name LRX21O 1111@{@@@",
       "@@@STEP_LOG_LINE@product_name LRX21O 1111@  \"adb_status\": \"device\", @@@",
       "@@@STEP_LOG_LINE@product_name LRX21O 1111@  \"battery\": {@@@",
@@ -363,7 +412,7 @@
       "--",
       "RECIPE_MODULE[build::chromium_android]/resources/spawn_device_monitor.py",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "[\"1111\"]",
+      "[\"2222\", \"1111\"]",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
@@ -412,8 +461,32 @@
     },
     "name": "device_status (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Online devices: 1@@@",
+      "@@@STEP_TEXT@Online devices: 2@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"adb_status\": \"device\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"battery\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"AC powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"USB powered\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Wireless powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"health\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"level\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"present\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"scale\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"status\": \"5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"technology\": \"Li-ion\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"temperature\": \"249\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"voltage\": \"4286\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blacklisted\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build_detail\": \"google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"imei_slice\": \"Unknown\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ro.build.id\": \"LRX21O\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ro.build.product\": \"product_name\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"serial\": \"2222\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"usb_status\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"wifi_ip\": \"\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"adb_status\": \"device\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"battery\": {@@@",
@@ -458,6 +531,31 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@{@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"adb_status\": \"device\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"battery\": {@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"AC powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"USB powered\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"Wireless powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"health\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"level\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"present\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"scale\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"status\": \"5\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"technology\": \"Li-ion\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"temperature\": \"249\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@    \"voltage\": \"4286\"@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  }, @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"blacklisted\": false, @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"build_detail\": \"google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"imei_slice\": \"Unknown\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"ro.build.id\": \"LRX21O\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"ro.build.product\": \"product_name\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"serial\": \"2222\", @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"usb_status\": true, @@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@  \"wifi_ip\": \"\"@@@",
+      "@@@STEP_LOG_LINE@product_name LRX21O 2222@}@@@",
+      "@@@STEP_LOG_END@product_name LRX21O 2222@@@",
       "@@@STEP_LOG_LINE@product_name LRX21O 1111@{@@@",
       "@@@STEP_LOG_LINE@product_name LRX21O 1111@  \"adb_status\": \"device\", @@@",
       "@@@STEP_LOG_LINE@product_name LRX21O 1111@  \"battery\": {@@@",
@@ -904,7 +1002,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -942,7 +1040,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -980,7 +1078,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1018,7 +1116,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1056,7 +1154,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1372,7 +1470,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1410,7 +1508,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1448,7 +1546,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1486,7 +1584,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1524,7 +1622,7 @@
       "--browser=android-chromium",
       "page_cycler.intl_ar_fa_he",
       "--device",
-      "1111"
+      "2222"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

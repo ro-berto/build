@@ -557,9 +557,9 @@ results-without_patch
         'Gathering reference values.saving json to temp file (2)',
         stdout=api.raw_io.output('/tmp/dummy4')) +
     api.override_step_data('device_status',
-        api.json.output(working_device)) +
+        api.json.output(two_devices)) +
     api.override_step_data('device_status (2)',
-        api.json.output(working_device)) +
+        api.json.output(two_devices)) +
     api.step_data('Resolving reference range.crrev get commit hash for ' +
         ('refs/heads/master@{#%s}' % local_bisect_config['bad_revision']),
         stdout=api.json.output(

@@ -24,6 +24,7 @@ def perform_bisect(api, **flags):
         api.m.bisect_tester.device_to_test = device
         try:
           _perform_single_bisect(api, bisect_attempts, **flags)
+          break
         except api.m.step.StepFailure:
           # Redo the bisect job if target platform is android and bisect
           # failed because the test device disconnected
