@@ -37,8 +37,30 @@ BUILDERS = freeze({
       'PERF_ID': 'android_cronet_builder_dbg',
     },
   },
-  'Android Cronet Builder': {
+  'Android Cronet KitKat Builder': {
     'recipe_config': 'main_builder_mb',
+    'run_tests': True,
+    'kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'REPO_NAME': 'src',
+    },
+    'cronet_kwargs': {
+      'PERF_ID': 'android_cronet_builder',
+    },
+  },
+  'Android Cronet Lollipop Builder': {
+    'recipe_config': 'main_builder_mb',
+    'run_tests': True,
+    'kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'REPO_NAME': 'src',
+    },
+    'cronet_kwargs': {
+      'PERF_ID': 'android_cronet_builder',
+    },
+  },
+  'Android Cronet Marshmallow 64bit Builder': {
+    'recipe_config': 'arm64_builder_mb',
     'run_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -143,6 +165,17 @@ BUILDERS = freeze({
     'gyp_defs': {
       'enable_data_reduction_proxy_support': 1,
     }
+  },
+  'Android Cronet Marshmallow 64bit Perf': {
+    'recipe_config': 'arm64_builder_mb',
+    'run_tests': True,
+    'kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'REPO_NAME': 'src',
+    },
+    'cronet_kwargs': {
+      'PERF_ID': 'android_cronet_builder',
+    },
   },
 })
 

@@ -30,7 +30,7 @@
       "--master",
       "chromium.testing.master",
       "--builder",
-      "Android Cronet Builder",
+      "Android Cronet Lollipop Builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -253,7 +253,7 @@
       "-m",
       "chromium.testing.master",
       "-b",
-      "Android Cronet Builder",
+      "Android Cronet Lollipop Builder",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -322,11 +322,11 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"Android Cronet Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"Android Cronet Lollipop Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"Android Cronet Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"Android Cronet Lollipop Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--test-type=sizes",
-      "--builder-name=Android Cronet Builder",
+      "--builder-name=Android Cronet Lollipop Builder",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -658,11 +658,11 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/Android Cronet Builder/571"
+      "gs://chromium-android/logcat_dumps/Android Cronet Lollipop Builder/571"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Cronet Builder/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Cronet Lollipop Builder/571@@@"
     ]
   },
   {
