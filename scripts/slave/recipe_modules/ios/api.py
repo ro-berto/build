@@ -488,6 +488,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     tasks = []
     failures = []
+    skipped = []
 
     cmd = [
       'src/ios/build/bots/scripts/run.py',
@@ -536,12 +537,17 @@ class iOSApi(recipe_api.RecipeApi):
     tmp_dir = self.m.path.mkdtemp('isolate')
 
     for test in self.__config['tests']:
+      step_name = str('%s (%s iOS %s)' % (
+        test['app'], test['device type'], test['os']))
+
+      if test.get('skip'):
+        skipped.append(step_name)
+        continue
+
       app_path = self.m.path.join(
         self.most_recent_app_dir,
         '%s.app' % test['app'],
       )
-      step_name = str('%s (%s iOS %s)' % (
-        test['app'], test['device type'], test['os']))
       isolate_gen_file = tmp_dir.join('%s.isolate.gen.json' % test['id'])
 
       try:
@@ -579,7 +585,7 @@ class iOSApi(recipe_api.RecipeApi):
         failures.append(step_name)
 
     if not tasks:
-      return tasks, failures
+      return tasks, failures, skipped
 
     cmd = [
       self.m.swarming_client.path.join('isolate.py'),
@@ -602,7 +608,7 @@ class iOSApi(recipe_api.RecipeApi):
       if task.test['id'] in step_result.json.output:
         task.isolated_hash = step_result.json.output[task.test['id']]
 
-    return tasks, failures
+    return tasks, failures, skipped
 
   def trigger(self, tasks):
     """Triggers the given Swarming tasks."""
@@ -665,8 +671,17 @@ class iOSApi(recipe_api.RecipeApi):
       self.bootstrap_swarming()
 
     with self.m.step.nest('isolate'):
-      tasks, failures = self.isolate()
+      tasks, failures, skipped = self.isolate()
       infra_failures.extend(failures)
+
+    if skipped:
+      with self.m.step.nest('skipped'):
+        for step_name in skipped:
+          # Create a dummy step to indicate we skipped this test.
+          step_result = self.m.step('[skipped] %s' % step_name, [])
+          step_result.presentation.step_text = (
+            'This test was skipped because it was not affected.'
+          )
 
     with self.m.step.nest('trigger'):
       failures = self.trigger(tasks)
