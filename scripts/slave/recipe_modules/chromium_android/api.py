@@ -374,6 +374,9 @@ class AndroidApi(recipe_api.RecipeApi):
     results = None
     try:
       with self.handle_exit_codes():
+        if self.known_devices_file:
+          known_devices_arg = ['--known-devices-path', self.known_devices_file]
+          args.extend(['--args', self.m.json.input(known_devices_arg)])
         args.extend(['run', '--output', self.m.json.output()])
         results = self.m.step(
             'Host Info',
