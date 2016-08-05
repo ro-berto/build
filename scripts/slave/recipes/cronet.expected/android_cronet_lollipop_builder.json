@@ -333,7 +333,7 @@
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=sizes",
-      "--perf-id=android_cronet_builder",
+      "--perf-id=android_cronet_l_builder",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
       "--target",
       "Release",

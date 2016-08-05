@@ -56,7 +56,7 @@ BUILDERS = freeze({
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
-      'PERF_ID': 'android_cronet_builder',
+      'PERF_ID': 'android_cronet_l_builder',
     },
   },
   'Android Cronet Marshmallow 64bit Builder': {
@@ -67,7 +67,7 @@ BUILDERS = freeze({
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
-      'PERF_ID': 'android_cronet_builder',
+      'PERF_ID': 'android_cronet_m64_builder',
     },
   },
   'Android Cronet Builder Asan': {
@@ -174,7 +174,7 @@ BUILDERS = freeze({
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
-      'PERF_ID': 'android_cronet_builder',
+      'PERF_ID': 'android_cronet_m64_perf',
     },
   },
 })
