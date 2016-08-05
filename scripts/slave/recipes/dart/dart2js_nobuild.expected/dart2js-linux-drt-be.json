@@ -1,0 +1,256 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--master",
+      "client.dart",
+      "--builder",
+      "dart2js-linux-drt-93-105-dev",
+      "--slave",
+      "TestSlavename",
+      "--spec",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
+      "--root",
+      "sdk",
+      "--revision_mapping_file",
+      "{}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "sdk@hash_of_revision",
+      "--force",
+      "--output_manifest"
+    ],
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"hash_of_revision\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "--kill_browsers=True"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "taskkill before building"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/sdk/tools/build.py",
+      "-mrelease",
+      "--arch=x64",
+      "packages"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "build dart"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-archive/channels/dev/raw/hash/hash_of_revision/sdk/dartsdk-linux-x64-release.zip",
+      "sdk.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "gsutil download sdk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/unzip.py"
+    ],
+    "name": "unzipping sdk",
+    "stdin": "{\"output\": \"out/ReleaseX64\", \"zip_file\": \"sdk.zip\"}"
+  },
+  {
+    "cmd": [
+      "xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
+      "./tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=drt",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=105",
+      "--shard=93"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "dart2js drt tests"
+  },
+  {
+    "cmd": [
+      "xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
+      "./tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=drt",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=105",
+      "--shard=93",
+      "--append_logs",
+      "dart2js_extra",
+      "dart2js_native"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "dart2js drt extra tests"
+  },
+  {
+    "cmd": [
+      "xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
+      "./tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=drt",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=105",
+      "--shard=93",
+      "--checked",
+      "--append_logs"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "dart2js drt checked tests"
+  },
+  {
+    "cmd": [
+      "xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
+      "./tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=drt",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=105",
+      "--shard=93",
+      "--checked",
+      "--append_logs",
+      "dart2js_extra",
+      "dart2js_native"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "dart2js drt extra checked tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "--kill_browsers=True"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "taskkill after testing"
+  },
+  {
+    "cmd": [
+      "cat",
+      ".debug.log"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "debug log"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
