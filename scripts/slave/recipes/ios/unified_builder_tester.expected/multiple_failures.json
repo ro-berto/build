@@ -25,6 +25,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/ios",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "chromium.fake",
@@ -47,6 +69,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/ios",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -131,7 +154,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/ios/build/bots/chromium.fake/ios.json",
+      "[BUILDER_CACHE]/ios/src/ios/build/bots/chromium.fake/ios.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -210,7 +233,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "env": {
       "GYP_DEFINES": "fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",
@@ -229,11 +252,11 @@
       "-configuration",
       "Debug",
       "-project",
-      "[SLAVE_BUILD]/src/build/all.xcodeproj",
+      "[BUILDER_CACHE]/ios/src/build/all.xcodeproj",
       "-sdk",
       "iphonesimulator7.1"
     ],
-    "cwd": "[SLAVE_BUILD]/src/xcodebuild",
+    "cwd": "[BUILDER_CACHE]/ios/src/xcodebuild",
     "name": "compile"
   },
   {

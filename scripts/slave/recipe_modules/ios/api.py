@@ -40,9 +40,12 @@ class iOSApi(recipe_api.RecipeApi):
     """Checks out Chromium."""
     kwargs.setdefault('force', True)
     self.m.gclient.set_config('ios')
-    update_step = self.m.bot_update.ensure_checkout(**kwargs)
-    self.m.path['checkout'] = self.m.path['slave_build'].join('src')
-    return update_step
+
+    checkout_dir = self.m.chromium_tests.get_checkout_dir({})
+    if checkout_dir:
+      kwargs.setdefault('cwd', checkout_dir)
+
+    return self.m.bot_update.ensure_checkout(**kwargs)
 
   @property
   def compiler(self):

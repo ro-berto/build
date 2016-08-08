@@ -63,6 +63,7 @@ def GenTests(api):
       patchset=1,
       rietveld='fake://rietveld.url',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -95,6 +96,7 @@ def GenTests(api):
       patchset=1,
       rietveld='fake://rietveld.url',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -132,6 +134,7 @@ def GenTests(api):
       patchset=1,
       rietveld='fake://rietveld.url',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -170,6 +173,7 @@ def GenTests(api):
       patch_project='icu',
       rietveld='fake://rietveld.url',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -202,6 +206,7 @@ def GenTests(api):
       patchset=1,
       rietveld='fake://rietveld.url',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'triggered by': 'parent',
@@ -238,6 +243,7 @@ def GenTests(api):
       patchset=1,
       rietveld='fake://rietveld.url',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -272,6 +278,7 @@ def GenTests(api):
       patchset=1,
       rietveld='fake://rietveld.url',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -307,6 +314,7 @@ def GenTests(api):
       patchset=1,
       rietveld='fake://rietveld.url',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -343,6 +351,7 @@ def GenTests(api):
       patchset=1,
       rietveld='fake://rietveld.url',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',

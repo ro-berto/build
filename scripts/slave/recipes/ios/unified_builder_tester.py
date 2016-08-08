@@ -24,6 +24,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -67,6 +68,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -90,6 +92,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -115,6 +118,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -152,6 +156,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -189,6 +194,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
