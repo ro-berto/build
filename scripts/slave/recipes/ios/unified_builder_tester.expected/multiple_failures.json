@@ -263,7 +263,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 1.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 1.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
@@ -297,7 +297,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 2.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 2.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
@@ -333,7 +333,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 3.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 3.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
@@ -369,7 +369,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 4.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 4.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
@@ -403,7 +403,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 5.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 5.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
@@ -439,7 +439,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 6.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 6.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",

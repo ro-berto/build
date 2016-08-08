@@ -390,7 +390,7 @@ class iOSApi(recipe_api.RecipeApi):
       cmd = [
         self.package_repo_resource(
           'scripts', 'slave', 'ios', 'run.py'),
-        '--app', self.m.path['slave_build'].join(
+        '--app', self.m.path.join(
           self.most_recent_app_dir,
           '%s.app' % test['app'],
         ),
@@ -724,8 +724,7 @@ class iOSApi(recipe_api.RecipeApi):
       'simulator': 'iphonesimulator',
     }[self.platform]
 
-    return self.m.path.join(
-      'src',
+    return self.m.path['checkout'].join(
       build_dir,
       '%s-%s' % (self.configuration, platform),
     )

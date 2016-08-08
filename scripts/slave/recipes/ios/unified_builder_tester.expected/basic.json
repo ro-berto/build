@@ -255,7 +255,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 1.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 1.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
@@ -289,7 +289,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 2.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 2.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
@@ -323,7 +323,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake_eg_test_host.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake_eg_test_host.app",
       "--json_file",
       "/path/to/tmp/json",
       "--test-host",
