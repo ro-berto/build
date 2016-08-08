@@ -95,10 +95,19 @@ def RunSteps(api):
 
   api.gclient.runhooks()
 
-  api.python('taskkill before building',
-             api.path['checkout'].join('tools', 'task_kill.py'),
-             args=['--kill_browsers=True'],
-             cwd=api.path['checkout'])
+  with api.step.defer_results():
+    api.python('taskkill before building',
+               api.path['checkout'].join('tools', 'task_kill.py'),
+               args=['--kill_browsers=True'],
+               cwd=api.path['checkout'])
+    zipfile = api.path.abspath(api.path['checkout'].join('sdk.zip'))
+    url = sdk_url(channel, api.platform.name, 'x64', 'release', revision)
+    api.gsutil(['cp', url, zipfile], name='Download sdk',
+               cwd=api.path['checkout'])
+    build_dir = api.path.abspath(api.path['checkout'].join('out/ReleaseX64'))
+    api.file.makedirs('Create build directory', build_dir)
+    api.file.rmcontents('Clean build directory', build_dir)
+    api.zip.unzip('Unzip sdk', zipfile, build_dir)
 
   # Build only the package links. Once we remove this target, build nothing.
   build_args = ['-mrelease', '--arch=x64', 'packages']
@@ -106,11 +115,6 @@ def RunSteps(api):
              api.path['checkout'].join('tools', 'build.py'),
              args=build_args,
              cwd=api.path['checkout'])
-  url = sdk_url(channel, api.platform.name, 'x64', 'release', revision)
-  zipfile = 'sdk.zip'
-  api.gsutil(['cp', url, zipfile], name='download sdk',
-             cwd=api.path['checkout'])
-  api.zip.unzip('unzipping sdk', zipfile, 'out/ReleaseX64')
 
   with api.step.defer_results():
     # Special hard-coded steps with compiler=none, run on selected runtimes
