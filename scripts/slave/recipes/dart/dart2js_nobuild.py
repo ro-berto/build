@@ -106,7 +106,7 @@ def RunSteps(api):
                cwd=api.path['checkout'])
     build_dir = api.path.abspath(api.path['checkout'].join('out/ReleaseX64'))
     api.file.makedirs('Create build directory', build_dir)
-    api.file.rmcontents('Clean build directory', build_dir)
+    api.file.rmtree('Clean build directory', build_dir)
     api.zip.unzip('Unzip sdk', zipfile, build_dir)
 
   # Build only the package links. Once we remove this target, build nothing.
