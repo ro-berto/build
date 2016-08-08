@@ -51,6 +51,12 @@ class AutoBisectApi(recipe_api.RecipeApi):
     # None means "default value".
     self._working_dir = None
 
+  @property
+  def working_dir(self):
+   if not self._working_dir:
+     self._working_dir = self.m.chromium_tests.get_checkout_dir({})
+   return self._working_dir
+
   def perform_bisect(self, **flags):
     return local_bisect.perform_bisect(self, **flags)
 
@@ -211,9 +217,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
                                    skip_download=skip_download)
 
   def ensure_checkout(self, *args, **kwargs):
-    self._working_dir = self.m.chromium_tests.get_checkout_dir({})
-    if self._working_dir:
-      kwargs.setdefault('cwd', self._working_dir)
+    if self.working_dir:
+      kwargs.setdefault('cwd', self.working_dir)
 
     return self.m.bot_update.ensure_checkout(*args, **kwargs)
 
@@ -373,8 +378,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
       self.bot_db = bot_db
 
     context = {}
-    if self._working_dir:
-      context['cwd'] = self._working_dir
+    if self.working_dir:
+      context['cwd'] = self.working_dir
 
     with api.step.context(context):
       affected_files = self.m.tryserver.get_files_affected_by_patch()

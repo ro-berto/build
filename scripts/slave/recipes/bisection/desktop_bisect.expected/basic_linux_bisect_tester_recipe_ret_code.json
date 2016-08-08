@@ -204,6 +204,28 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/linux_perf_bisect",
+      "511"
+    ],
+    "name": "makedirs checkout path (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "diff",
       "--cached",
@@ -219,6 +241,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "***SINGLE TEST (deprecated)***"
   },
   {
@@ -227,6 +250,7 @@
       "-u",
       "RECIPE_MODULE[build::bisect_tester]/resources/put_temp.py"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "saving url to temp file",
     "stdin": "http://build.chromium.org/p/tryserver.chromium.perf/json/builders/linux_perf_bisect/builds/571",
     "stdout": "/path/to/tmp/"
@@ -243,6 +267,7 @@
       "/tmp/dummy1",
       "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "gsutil bisect-results/f7a7b4135624439cbd27fdd5133d74ec",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec@@@"
@@ -255,6 +280,7 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILDER_CACHE]/linux_perf_bisect/src/out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -288,6 +314,7 @@
       "--build-number",
       "571"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "extract build"
   },
   {

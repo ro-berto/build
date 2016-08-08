@@ -204,6 +204,28 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/linux_perf_bisect",
+      "511"
+    ],
+    "name": "makedirs checkout path (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "diff",
       "--cached",
@@ -219,6 +241,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "***PERF TRYJOB***"
   },
   {
@@ -231,6 +254,7 @@
       "--output_json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "load config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -302,6 +326,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -394,6 +419,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linuxbad49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "gsutil exists",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -409,6 +435,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "cleanup_temp"
   },
   {
@@ -421,6 +448,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linuxbad49c331def2a3bbf3ddd0096eb51551155.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"bad49c331def2a3bbf3ddd0096eb51551155\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -455,6 +483,7 @@
       "cr-buildbucket.appspot.com",
       "9016911228971028736"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -480,6 +509,7 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILDER_CACHE]/linux_perf_bisect/src/out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -513,6 +543,7 @@
       "--build-number",
       "571"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "extract build"
   },
   {
@@ -540,6 +571,7 @@
       "--upload-results",
       "--results-label=bad49c331def2a3bbf3ddd0096eb51551155"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
@@ -582,6 +614,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -674,6 +707,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linuxd49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "gsutil exists (2)"
   },
   {
@@ -683,6 +717,7 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILDER_CACHE]/linux_perf_bisect/src/out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -716,6 +751,7 @@
       "--build-number",
       "571"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "extract build (2)"
   },
   {
@@ -742,6 +778,7 @@
       "--upload-results",
       "--results-label=d49c331def2a3bbf3ddd0096eb51551155"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
@@ -758,6 +795,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Results",
     "~followup_annotations": [
       "@@@STEP_TEXT@",
@@ -781,6 +819,7 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Post bisect results",
     "stdin": "{\"data\": {\"bisect_bot\": \"linux_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\", \"change\": 0.0, \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release sunspider\", \"metric\": \"dummy/dummy\", \"profiler_links\": [], \"result\": \"Revision    Mean        Std.Error\\nPatch       5.805333333330.127614436662\\nNo Patch    5.805333333330.127614436662\", \"status\": \"completed\", \"std_err\": 0.1804740670813644, \"try_job_id\": null}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
