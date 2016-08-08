@@ -47,6 +47,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
     self.builder_bot = None
     self.full_deploy_script = None
 
+    # Keep track of working directory (which contains the checkout).
+    # None means "default value".
+    self._working_dir = None
+
   def perform_bisect(self, **flags):
     return local_bisect.perform_bisect(self, **flags)
 
@@ -207,9 +211,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
                                    skip_download=skip_download)
 
   def ensure_checkout(self, *args, **kwargs):
-    checkout_dir = self.m.chromium_tests.get_checkout_dir({})
-    if checkout_dir:
-      kwargs.setdefault('cwd', checkout_dir)
+    self._working_dir = self.m.chromium_tests.get_checkout_dir({})
+    if self._working_dir:
+      kwargs.setdefault('cwd', self._working_dir)
 
     return self.m.bot_update.ensure_checkout(*args, **kwargs)
 
@@ -367,38 +371,45 @@ class AutoBisectApi(recipe_api.RecipeApi):
           '', None, None)
     else:
       self.bot_db = bot_db
-    affected_files = self.m.tryserver.get_files_affected_by_patch()
-    # Skip device setup for internal bisect as it is taken care in
-    # internal recipes.
-    if api.chromium.c.TARGET_PLATFORM == 'android' and not self.internal_bisect:
-      api.chromium_android.common_tests_setup_steps(
-          perf_setup=True, remove_system_webview=True)
-      api.chromium.runhooks()
-    try:
-      # Run legacy bisect script if the patch contains bisect.cfg.
-      if BISECT_CONFIG_FILE in affected_files:
-        api.step('***LEGACY BISECT (deprecated)***', [])
-        self.run_bisect_script(**kwargs)
-      elif api.properties.get('bisect_config'):
-        # We can distinguish between a config for a full bisect vs a single
-        # test by checking for the presence of the good_revision key.
-        if api.properties.get('bisect_config').get('good_revision'):
-          api.step('***BISECT***', [])
-          local_bisect.perform_bisect(self, **flags)  # pragma: no cover
+
+    context = {}
+    if self._working_dir:
+      context['cwd'] = self._working_dir
+
+    with api.step.context(context):
+      affected_files = self.m.tryserver.get_files_affected_by_patch()
+      # Skip device setup for internal bisect as it is taken care in
+      # internal recipes.
+      if (api.chromium.c.TARGET_PLATFORM == 'android' and
+          not self.internal_bisect):
+        api.chromium_android.common_tests_setup_steps(
+            perf_setup=True, remove_system_webview=True)
+        api.chromium.runhooks()
+      try:
+        # Run legacy bisect script if the patch contains bisect.cfg.
+        if BISECT_CONFIG_FILE in affected_files:
+          api.step('***LEGACY BISECT (deprecated)***', [])
+          self.run_bisect_script(**kwargs)
+        elif api.properties.get('bisect_config'):
+          # We can distinguish between a config for a full bisect vs a single
+          # test by checking for the presence of the good_revision key.
+          if api.properties.get('bisect_config').get('good_revision'):
+            api.step('***BISECT***', [])
+            local_bisect.perform_bisect(self, **flags)  # pragma: no cover
+          else:
+            api.step('***SINGLE TEST (deprecated)***', [])
+            self.start_test_run_for_bisect(update_step, self.bot_db,
+                                           api.properties)
         else:
-          api.step('***SINGLE TEST (deprecated)***', [])
-          self.start_test_run_for_bisect(update_step, self.bot_db,
-                                         api.properties)
-      else:
-        api.step('***PERF TRYJOB***', [])
-        self.m.perf_try.start_perf_try_job(
-            affected_files, update_step, self.bot_db)
-    finally:
-      if api.chromium.c.TARGET_PLATFORM == 'android':
-        if self.internal_bisect:  # pragma: no cover
-          api.chromium_android.init_and_sync(
-              gclient_config=api.chromium_android.c.internal_dir_name,
-              use_bot_update=True)
-        else:
-          self.ensure_checkout()
-        api.chromium_android.common_tests_final_steps()
+          api.step('***PERF TRYJOB***', [])
+          self.m.perf_try.start_perf_try_job(
+              affected_files, update_step, self.bot_db)
+      finally:
+        if api.chromium.c.TARGET_PLATFORM == 'android':
+          if self.internal_bisect:  # pragma: no cover
+            api.chromium_android.init_and_sync(
+                gclient_config=api.chromium_android.c.internal_dir_name,
+                use_bot_update=True)
+          else:
+            self.ensure_checkout()
+          api.chromium_android.common_tests_final_steps()

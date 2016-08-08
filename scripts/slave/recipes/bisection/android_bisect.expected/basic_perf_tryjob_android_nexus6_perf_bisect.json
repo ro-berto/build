@@ -183,6 +183,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "create adb symlink"
   },
   {
@@ -193,6 +194,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/logcat",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -208,6 +210,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -225,6 +228,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -252,6 +256,7 @@
       "350",
       "--remove-system-webview"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -274,6 +279,7 @@
       "-v",
       "--overwrite-known-devices-files"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -390,6 +396,7 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/bad_devices.json"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "spawn_device_monitor"
   },
   {
@@ -411,6 +418,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "***PERF TRYJOB***"
   },
   {
@@ -423,6 +431,7 @@
       "--output_json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "load config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -446,6 +455,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/build_product.zip",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "clean local files (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -473,6 +483,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf-tryjob/android_perf_rel/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_123456.zip\\\", \\\"clobber\\\": true, \\\"issue\\\": \\\"12345\\\", \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"patch_storage\\\": \\\"rietveld\\\", \\\"patchset\\\": \\\"20001\\\", \\\"rietveld\\\": \\\"https://codereview.chromium.org\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -507,6 +518,7 @@
       "cr-buildbucket.appspot.com",
       "9016911228971028736"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -532,6 +544,7 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -558,6 +571,7 @@
       "gs://chrome-perf-tryjob/android_perf_rel/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_123456.zip",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/build_product.zip"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "gsutil download_build_product"
   },
   {
@@ -577,6 +591,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "get version"
   },
   {
@@ -590,6 +605,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "--release"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -623,6 +639,7 @@
       "--upload-results",
       "--results-label=Patch"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release"
     },
@@ -668,6 +685,7 @@
       "--force",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -761,6 +779,7 @@
       "ls",
       "gs://chrome-perf/android_perf_rel/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "gsutil exists",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -777,6 +796,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/build_product.zip",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "clean local files (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -804,6 +824,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/android_perf_rel/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "buildbucket.put (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -838,6 +859,7 @@
       "cr-buildbucket.appspot.com",
       "9016911228971028736"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -863,6 +885,7 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -889,6 +912,7 @@
       "gs://chrome-perf/android_perf_rel/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/build_product.zip"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "gsutil download_build_product (2)"
   },
   {
@@ -908,6 +932,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "get version (2)"
   },
   {
@@ -921,6 +946,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "--release"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -953,6 +979,7 @@
       "--upload-results",
       "--results-label=TOT"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release"
     },
@@ -972,6 +999,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "Results",
     "~followup_annotations": [
       "@@@STEP_TEXT@No values from test with patch, or none from test without patch.",
@@ -1003,6 +1031,7 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "Post bisect results",
     "stdin": "{\"data\": {\"bisect_bot\": \"android_nexus6_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_nexus6_perf_bisect/builds/571\", \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome sunspider\", \"metric\": null, \"status\": \"completed\", \"try_job_id\": null, \"warnings\": [\"No values from test with patch, or none from test without patch.\\n Output with patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\n\\n\\nOutput without patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\n\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
@@ -1021,6 +1050,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "makedirs checkout path (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1156,6 +1186,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "shutdown_device_monitor"
   },
   {
@@ -1167,6 +1198,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release/full_log",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/logcat"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "logcat_dump"
   },
   {
@@ -1187,6 +1219,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/android_nexus6_perf_bisect/571"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_nexus6_perf_bisect/571@@@"
@@ -1200,6 +1233,7 @@
       "--more-info",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release/full_log"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1215,6 +1249,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "get version (3)"
   },
   {
@@ -1224,6 +1259,7 @@
       "-s",
       "-w"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1238,6 +1274,7 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release/test_logs/*.log"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

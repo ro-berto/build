@@ -183,6 +183,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "create adb symlink"
   },
   {
@@ -193,6 +194,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/logcat",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -208,6 +210,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -225,6 +228,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -252,6 +256,7 @@
       "350",
       "--remove-system-webview"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -274,6 +279,7 @@
       "-v",
       "--overwrite-known-devices-files"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
@@ -390,6 +396,7 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/bad_devices.json"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "spawn_device_monitor"
   },
   {
@@ -411,6 +418,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "***PERF TRYJOB***"
   },
   {
@@ -423,6 +431,7 @@
       "--output_json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "load config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -440,6 +449,7 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "Recipe failed. Reason: Could not load config file. Double check your changes to config files for syntax errors.",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
@@ -454,6 +464,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "makedirs checkout path (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -589,6 +600,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "shutdown_device_monitor"
   },
   {
@@ -600,6 +612,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release/full_log",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/logcat"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "logcat_dump"
   },
   {
@@ -620,6 +633,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/android_nexus6_perf_bisect/571"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_nexus6_perf_bisect/571@@@"
@@ -633,6 +647,7 @@
       "--more-info",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release/full_log"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -648,6 +663,7 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "get version"
   },
   {
@@ -657,6 +673,7 @@
       "-s",
       "-w"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -671,6 +688,7 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release/test_logs/*.log"
     ],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

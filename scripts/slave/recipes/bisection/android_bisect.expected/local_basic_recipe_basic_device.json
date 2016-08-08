@@ -183,6 +183,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "create adb symlink"
   },
   {
@@ -193,6 +194,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
@@ -208,6 +210,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
@@ -225,6 +228,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
@@ -252,6 +256,7 @@
       "350",
       "--remove-system-webview"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
@@ -274,6 +279,7 @@
       "-v",
       "--overwrite-known-devices-files"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
@@ -439,6 +445,7 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "spawn_device_monitor"
   },
   {
@@ -460,6 +467,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "***BISECT***"
   },
   {
@@ -478,6 +486,7 @@
       "-v",
       "--overwrite-known-devices-files"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
@@ -648,6 +657,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -670,6 +680,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Resolving reference range"
   },
   {
@@ -683,6 +694,7 @@
       "--attempts",
       "3"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306476}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -704,6 +716,7 @@
       "--attempts",
       "3"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306475}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -723,6 +736,7 @@
       "--commit",
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Resolving reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -742,6 +756,7 @@
       "--commit",
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Resolving reference range.fetch file e28dc0d49c331def2a3bbf3ddd0096eb51551155:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -754,6 +769,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Expanding revision range"
   },
   {
@@ -765,6 +781,7 @@
       "fc6dfc7ff5b1073408499478969261b826441144",
       "https://chromium.googlesource.com/chromium/src"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Expanding revision range.for revisions e28dc0d49c331def2a3bbf3ddd0096eb51551155:fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -784,6 +801,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values"
   },
   {
@@ -797,6 +815,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -810,6 +829,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.makedirs checkout path",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -944,6 +964,7 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -971,6 +992,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.gsutil download_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1289,6 +1311,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1302,6 +1325,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.makedirs checkout path (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1436,6 +1460,7 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1463,6 +1488,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.gsutil download_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1786,6 +1812,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.Waiting for chromium@e28dc0d49c",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1802,6 +1829,7 @@
       "ls",
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1818,6 +1846,7 @@
       "cat",
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil Get test results for build e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1841,6 +1870,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.Waiting for chromium@fc6dfc7ff5",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1857,6 +1887,7 @@
       "ls",
       "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.Waiting for chromium@fc6dfc7ff5.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1873,6 +1904,7 @@
       "cat",
       "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.Waiting for chromium@fc6dfc7ff5.gsutil Get test results for build fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1886,6 +1918,7 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values.Recipe failed. Reason: Testing the \"good\" revision failed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1917,6 +1950,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, values=[], mean_value=None, std_dev=None)@@@",
@@ -1936,6 +1970,7 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Post bisect results",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", \"change\": null, \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [], \"score\": 0, \"status\": \"failed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
@@ -1954,6 +1989,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "makedirs checkout path (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2089,6 +2125,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "shutdown_device_monitor"
   },
   {
@@ -2100,6 +2137,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "logcat_dump"
   },
   {
@@ -2120,6 +2158,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
@@ -2133,6 +2172,7 @@
       "--more-info",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2148,6 +2188,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "get version"
   },
   {
@@ -2157,6 +2198,7 @@
       "-s",
       "-w"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2171,6 +2213,7 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
