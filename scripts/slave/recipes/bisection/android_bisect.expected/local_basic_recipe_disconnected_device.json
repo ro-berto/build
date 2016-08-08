@@ -3,6 +3,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
@@ -30,6 +52,7 @@
       "src@1111111",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -114,10 +137,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Release/test_logs",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "[SLAVE_BUILD]/src"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/debug_info_dumps",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -143,7 +166,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -155,9 +178,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/symlink.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/symlink.py",
       "-f",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
     "name": "create adb symlink"
@@ -166,13 +189,13 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
-      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
-      "[SLAVE_BUILD]/src/out/logcat",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
   },
@@ -183,28 +206,28 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "authorize_adb_devices"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "device_recovery"
   },
@@ -212,11 +235,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/provision_devices.py",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
@@ -231,29 +254,29 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_status.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "device_status",
     "~followup_annotations": [
@@ -411,10 +434,10 @@
       "/tmp/device_monitor.pid",
       "--",
       "RECIPE_MODULE[build::chromium_android]/resources/spawn_device_monitor.py",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"2222\", \"1111\"]",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
     ],
     "name": "spawn_device_monitor"
   },
@@ -425,13 +448,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='RECIPE_PACKAGE_REPO[build]/goma' target_arch=arm use_goma=1",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -441,23 +464,23 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_status.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "device_status (2)",
     "~followup_annotations": [
@@ -611,7 +634,7 @@
       "refs/heads/master",
       "refs/remotes/origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "git update-ref"
   },
   {
@@ -620,7 +643,7 @@
       "checkout",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "git checkout"
   },
   {
@@ -783,6 +806,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect",
+      "511"
+    ],
+    "name": "Gathering reference values.makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
@@ -810,6 +856,7 @@
       "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -895,7 +942,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "name": "Gathering reference values.rmtree build directory",
     "~followup_annotations": [
@@ -922,7 +969,7 @@
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "name": "Gathering reference values.gsutil download_build_product",
     "~followup_annotations": [
@@ -933,9 +980,9 @@
     "cmd": [
       "unzip",
       "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Gathering reference values.unzip_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -946,12 +993,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/chrome/VERSION",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.get version",
     "~followup_annotations": [
@@ -960,18 +1007,18 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "--release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.install ChromePublic.apk",
     "~followup_annotations": [
@@ -989,9 +1036,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 1 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1006,7 +1053,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
@@ -1027,9 +1074,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 2 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1044,7 +1091,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
@@ -1065,9 +1112,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 3 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1082,7 +1129,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
@@ -1103,9 +1150,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 4 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1120,7 +1167,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
@@ -1141,9 +1188,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 5 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1158,7 +1205,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
@@ -1176,7 +1223,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.saving json to temp file",
     "stdin": "{\"output\": [], \"results\": {\"values\": [0, 0, 0, 0, 0]}, \"retcodes\": [0, 0, 0, 0, 0]}",
@@ -1199,7 +1246,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.gsutil upload",
     "~followup_annotations": [
@@ -1212,11 +1259,11 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.test_report",
     "~followup_annotations": [
@@ -1251,6 +1298,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect",
+      "511"
+    ],
+    "name": "Gathering reference values.makedirs checkout path (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
@@ -1278,6 +1348,7 @@
       "src@fc6dfc7ff5b1073408499478969261b826441144",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1363,7 +1434,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "name": "Gathering reference values.rmtree build directory (2)",
     "~followup_annotations": [
@@ -1390,7 +1461,7 @@
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "name": "Gathering reference values.gsutil download_build_product (2)",
     "~followup_annotations": [
@@ -1401,9 +1472,9 @@
     "cmd": [
       "unzip",
       "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Gathering reference values.unzip_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1414,12 +1485,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/chrome/VERSION",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.get version (2)",
     "~followup_annotations": [
@@ -1428,18 +1499,18 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "--release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.install ChromePublic.apk (2)",
     "~followup_annotations": [
@@ -1457,9 +1528,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 1 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1474,7 +1545,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 1 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -1495,9 +1566,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 2 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1512,7 +1583,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 2 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -1533,9 +1604,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 3 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1550,7 +1621,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 3 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -1571,9 +1642,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 4 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1588,7 +1659,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 4 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -1609,9 +1680,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 5 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -1626,7 +1697,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 5 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -1644,7 +1715,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.saving json to temp file (2)",
     "stdin": "{\"output\": [], \"results\": {\"values\": [0, 0, 0, 0, 0]}, \"retcodes\": [0, 0, 0, 0, 0]}",
@@ -1667,7 +1738,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.gsutil upload (2)",
     "~followup_annotations": [
@@ -1680,11 +1751,11 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.test_report (2)",
     "~followup_annotations": [
@@ -1706,7 +1777,7 @@
       "--position",
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Gathering reference values.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1761,7 +1832,7 @@
       "--position",
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Gathering reference values.resolving hash fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1829,7 +1900,7 @@
       "--position",
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "resolving hash fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/"
   },
@@ -1840,7 +1911,7 @@
       "--position",
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "stdout": "/path/to/tmp/"
   },
@@ -1854,23 +1925,23 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_status.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "device_status (3)",
     "~followup_annotations": [
@@ -1975,7 +2046,7 @@
       "refs/heads/master",
       "refs/remotes/origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "git update-ref (2)"
   },
   {
@@ -1984,7 +2055,7 @@
       "checkout",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "git checkout (2)"
   },
   {
@@ -2105,6 +2176,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect",
+      "511"
+    ],
+    "name": "Gathering reference values.makedirs checkout path (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
@@ -2132,6 +2226,7 @@
       "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -2217,7 +2312,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "name": "Gathering reference values.rmtree build directory (3)",
     "~followup_annotations": [
@@ -2244,7 +2339,7 @@
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "name": "Gathering reference values.gsutil download_build_product (3)",
     "~followup_annotations": [
@@ -2255,9 +2350,9 @@
     "cmd": [
       "unzip",
       "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Gathering reference values.unzip_build_product (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2268,12 +2363,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/chrome/VERSION",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.get version (3)",
     "~followup_annotations": [
@@ -2282,18 +2377,18 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "--release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.install ChromePublic.apk (3)",
     "~followup_annotations": [
@@ -2311,9 +2406,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 1 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2328,7 +2423,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 1 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -2349,9 +2444,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 2 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2366,7 +2461,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 2 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -2387,9 +2482,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 3 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2404,7 +2499,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 3 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -2425,9 +2520,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 4 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2442,7 +2537,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 4 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -2463,9 +2558,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 5 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2480,7 +2575,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 5 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -2498,7 +2593,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.saving json to temp file (3)",
     "stdin": "{\"output\": [], \"results\": {\"values\": [0, 0, 0, 0, 0]}, \"retcodes\": [0, 0, 0, 0, 0]}",
@@ -2521,7 +2616,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.gsutil upload (3)",
     "~followup_annotations": [
@@ -2534,11 +2629,11 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.test_report (3)",
     "~followup_annotations": [
@@ -2573,6 +2668,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect",
+      "511"
+    ],
+    "name": "Gathering reference values.makedirs checkout path (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
@@ -2600,6 +2718,7 @@
       "src@fc6dfc7ff5b1073408499478969261b826441144",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -2685,7 +2804,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "name": "Gathering reference values.rmtree build directory (4)",
     "~followup_annotations": [
@@ -2712,7 +2831,7 @@
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "name": "Gathering reference values.gsutil download_build_product (4)",
     "~followup_annotations": [
@@ -2723,9 +2842,9 @@
     "cmd": [
       "unzip",
       "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Gathering reference values.unzip_build_product (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2736,12 +2855,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/chrome/VERSION",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.get version (4)",
     "~followup_annotations": [
@@ -2750,18 +2869,18 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
       "--release"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.install ChromePublic.apk (4)",
     "~followup_annotations": [
@@ -2779,9 +2898,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 1 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2796,7 +2915,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 1 of 5 (4)",
     "stderr": "/path/to/tmp/",
@@ -2817,9 +2936,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 2 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2834,7 +2953,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 2 of 5 (4)",
     "stderr": "/path/to/tmp/",
@@ -2855,9 +2974,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 3 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2872,7 +2991,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 3 of 5 (4)",
     "stderr": "/path/to/tmp/",
@@ -2893,9 +3012,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 4 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2910,7 +3029,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 4 of 5 (4)",
     "stderr": "/path/to/tmp/",
@@ -2931,9 +3050,9 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"306476\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium page_cycler.intl_ar_fa_he\", \"dummy_job_names\": true, \"good_revision\": \"306475\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"local_test\": true, \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_got_revision\": \"1111111\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test 5 of 5",
       "--builder-name=android_one_perf_bisect",
       "--slave-name=TestSlavename",
@@ -2948,7 +3067,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.Performance Test 5 of 5 (4)",
     "stderr": "/path/to/tmp/",
@@ -2966,7 +3085,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.saving json to temp file (4)",
     "stdin": "{\"output\": [], \"results\": {\"values\": [0, 0, 0, 0, 0]}, \"retcodes\": [0, 0, 0, 0, 0]}",
@@ -2989,7 +3108,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.gsutil upload (4)",
     "~followup_annotations": [
@@ -3002,11 +3121,11 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "Gathering reference values.test_report (4)",
     "~followup_annotations": [
@@ -3028,7 +3147,7 @@
       "--position",
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Gathering reference values.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155 (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -3083,7 +3202,7 @@
       "--position",
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Gathering reference values.resolving hash fc6dfc7ff5b1073408499478969261b826441144 (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -3151,7 +3270,7 @@
       "--position",
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "resolving hash fc6dfc7ff5b1073408499478969261b826441144 (2)",
     "stdout": "/path/to/tmp/"
   },
@@ -3162,7 +3281,7 @@
       "--position",
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155 (2)",
     "stdout": "/path/to/tmp/"
   },
@@ -3201,6 +3320,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect",
+      "511"
+    ],
+    "name": "makedirs checkout path (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
@@ -3228,6 +3369,7 @@
       "src@1111111",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -3323,10 +3465,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
       "--output-path",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
     ],
     "name": "logcat_dump"
   },
@@ -3345,7 +3487,7 @@
       "cp",
       "-a",
       "public-read",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
     ],
     "name": "gsutil upload",
@@ -3355,16 +3497,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
       "--arch",
       "arm",
       "--more-info",
-      "[SLAVE_BUILD]/src/out/Release/full_log"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_with_logcat_dump"
   },
@@ -3373,22 +3515,22 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/chrome/VERSION",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "name": "get version"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/tombstones.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
       "-a",
       "-s",
       "-w"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"
   },
@@ -3397,7 +3539,7 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
     "name": "test_report",
     "~followup_annotations": [

@@ -162,7 +162,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         'Preparing for Bisection',
         script=self.m.path['checkout'].join(
             'tools', 'prepare-bisect-perf-regression.py'),
-        args=['-w', self.m.path['slave_build']])
+        args=['-w', self.m.path['cache'].join('bisect')])
     args = []
 
     kwargs['allow_subannotations'] = True
@@ -177,15 +177,15 @@ class AutoBisectApi(recipe_api.RecipeApi):
     if kwargs.get('path_to_config'):
       args = args + ['--path_to_config', kwargs.pop('path_to_config')]
     if self.m.chromium.c.TARGET_PLATFORM != 'android':
-      # TODO(phajdan.jr): update for swarming, http://crbug.com/585401 .
-      args += ['--path_to_goma', self.m.path['build'].join('goma')]
+      goma_dir = self.m.goma.ensure_goma()
+      args += ['--path_to_goma', goma_dir]
     args += [
         '--build-properties',
         self.m.json.dumps(dict(self.m.properties.legacy())),
     ]
     self.m.chromium.runtest(
         self.m.path['checkout'].join('tools', 'run-bisect-perf-regression.py'),
-        ['-w', self.m.path['slave_build']] + args,
+        ['-w', self.m.path['cache'].join('bisect')] + args,
         name='Running Bisection',
         xvfb=True, **kwargs)
 
@@ -206,9 +206,16 @@ class AutoBisectApi(recipe_api.RecipeApi):
                                    test_config_params, run_locally=True,
                                    skip_download=skip_download)
 
+  def ensure_checkout(self, *args, **kwargs):
+    checkout_dir = self.m.chromium_tests.get_checkout_dir({})
+    if checkout_dir:
+      kwargs.setdefault('cwd', checkout_dir)
+
+    return self.m.bot_update.ensure_checkout(*args, **kwargs)
+
   def _SyncRevisionToTest(self, test_config_params):  # pragma: no cover
     if not self.internal_bisect:
-      return self.m.bot_update.ensure_checkout(
+      return self.ensure_checkout(
           root_solution_revision=test_config_params['revision'])
     else:
       return self._SyncRevisionsForAndroidChrome(
@@ -393,5 +400,5 @@ class AutoBisectApi(recipe_api.RecipeApi):
               gclient_config=api.chromium_android.c.internal_dir_name,
               use_bot_update=True)
         else:
-          api.bot_update.ensure_checkout()
+          self.ensure_checkout()
         api.chromium_android.common_tests_final_steps()

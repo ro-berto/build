@@ -13,6 +13,7 @@ DEPS = [
     'depot_tools/tryserver',
     'file',
     'gitiles',
+    'goma',
     'gsutil',
     'halt',
     'math_utils',

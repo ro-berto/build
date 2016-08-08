@@ -877,9 +877,63 @@
       "-u",
       "[TMP_BASE]/fake_checkout_tmp_1/tools/prepare-bisect-perf-regression.py",
       "-w",
-      "[SLAVE_BUILD]"
+      "[CACHE]/bisect"
     ],
     "name": "Preparing for Bisection"
+  },
+  {
+    "cmd": [],
+    "name": "ensure_goma (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "--platform",
+      "linux-amd64",
+      "--dest-directory",
+      "[SLAVE_BUILD]/cipd",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_goma.install cipd (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "ensure",
+      "--root",
+      "[CACHE]/cipd/goma",
+      "--list",
+      "infra_internal/goma/client/linux-amd64 release",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "name": "ensure_goma.ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -900,13 +954,13 @@
       "--run-python-script",
       "[TMP_BASE]/fake_checkout_tmp_1/tools/run-bisect-perf-regression.py",
       "-w",
-      "[SLAVE_BUILD]",
+      "[CACHE]/bisect",
       "--extra_src",
       "dummy_extra_src",
       "--path_to_config",
       "/dummy/path/",
       "--path_to_goma",
-      "[BUILD]/goma",
+      "[CACHE]/cipd/goma",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"chromium_rel_mac\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}"
     ],

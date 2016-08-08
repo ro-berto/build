@@ -35,6 +35,7 @@ def RunSteps(api):
 
 def GenTests(api):
   yield (api.test('basic') + api.properties.tryserver(
+      path_config='kitchen',
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect') + api.override_step_data(
           'git diff to analyze patch',
@@ -101,6 +102,7 @@ results-without_patch
 }
 
   yield (api.test('basic_perf_tryjob') + api.properties.tryserver(
+      path_config='kitchen',
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect',
       patch_storage='rietveld',
@@ -130,6 +132,7 @@ results-without_patch
   config_json.update({'metric': 'dummy/dummy'})
 
   yield (api.test('basic_perf_tryjob_with_metric') + api.properties.tryserver(
+      path_config='kitchen',
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect',
       patch_storage='rietveld',
@@ -158,6 +161,7 @@ results-without_patch
 
 
   yield (api.test('perf_tryjob_failed_test') + api.properties.tryserver(
+      path_config='kitchen',
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect',
       patch_storage='rietveld',
@@ -184,6 +188,7 @@ results-without_patch
 
   yield (
       api.test('basic_perf_tryjob_with_revisions') + api.properties.tryserver(
+          path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect',
           patch_storage='rietveld',
@@ -223,6 +228,7 @@ results-without_patch
   }
 
   yield (api.test('perf_tryjob_config_error') + api.properties.tryserver(
+      path_config='kitchen',
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect') + api.properties(
           requester='abcdxyz@chromium.org') + api.override_step_data(
@@ -232,6 +238,7 @@ results-without_patch
 
   yield (api.test('perf_cq_run_benchmark') +
       api.properties.tryserver(
+          path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect',
           patch_storage='rietveld',
@@ -250,6 +257,7 @@ results-without_patch
 
   yield (api.test('perf_cq_no_changes') +
       api.properties.tryserver(
+          path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect',
           patch_storage='rietveld',
@@ -264,6 +272,7 @@ results-without_patch
 
   yield (api.test('perf_cq_no_benchmark_to_run') +
       api.properties.tryserver(
+          path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect',
           patch_storage='rietveld',
@@ -295,6 +304,7 @@ results-without_patch
   }
   yield (
       api.test('basic_linux_bisect_tester_recipe') + api.properties.tryserver(
+          path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect') + api.step_data(
               'saving url to temp file',
@@ -321,7 +331,8 @@ results-without_patch
       'builder_port': '8341',
   }
   yield (api.test('basic_linux_bisect_tester_recipe_ret_code') +
-         api.properties.tryserver(mastername='tryserver.chromium.perf',
+         api.properties.tryserver(path_config='kitchen',
+                                  mastername='tryserver.chromium.perf',
                                   buildername='linux_perf_bisect') +
          api.step_data('saving url to temp file',
                        stdout=api.raw_io.output('/tmp/dummy1')) + api.step_data(

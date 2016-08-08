@@ -103,7 +103,7 @@ def RunSteps(api, mastername, buildername):
   api.gclient.set_config('chromium')
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
-  update_step = api.bot_update.ensure_checkout()
+  update_step = api.auto_bisect.ensure_checkout()
   api.chromium_android.clean_local_files()
 
   bot_db = api.chromium_tests.create_bot_db_from_master_dict(mastername,
@@ -179,6 +179,7 @@ results-without_patch
     for buildername in master_dict.get('builders', {}):
       config_json = config_json_main.copy()
       yield (api.test('basic_' + buildername) + api.properties.tryserver(
+        path_config='kitchen',
         mastername='tryserver.chromium.perf',
         buildername=buildername,
         patch_storage='rietveld',
@@ -192,6 +193,7 @@ results-without_patch
       yield (
           api.test('basic_perf_tryjob_' + buildername) +
           api.properties.tryserver(
+        path_config='kitchen',
         mastername='tryserver.chromium.perf',
         buildername=buildername,
         patch_storage='rietveld',
@@ -219,6 +221,7 @@ results-without_patch
 
       yield (api.test('basic_perf_tryjob_with_metric_' + buildername) +
              api.properties.tryserver(
+          path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername=buildername,
           patch_storage='rietveld',
@@ -246,6 +249,7 @@ results-without_patch
 
       yield (api.test('perf_tryjob_failed_test_' + buildername) +
           api.properties.tryserver(
+              path_config='kitchen',
               mastername='tryserver.chromium.perf',
               buildername=buildername,
               patch_storage='rietveld',
@@ -274,6 +278,7 @@ results-without_patch
       yield (
           api.test('basic_perf_tryjob_with_revisions_' + buildername) +
           api.properties.tryserver(
+              path_config='kitchen',
               mastername='tryserver.chromium.perf',
               buildername=buildername,
               patch_storage='rietveld',
@@ -313,6 +318,7 @@ results-without_patch
       yield (
           api.test('perf_tryjob_config_error_' + buildername) +
           api.properties.tryserver(
+              path_config='kitchen',
               mastername='tryserver.chromium.perf',
               buildername=buildername) + api.properties(
                   requester='abcdxyz@chromium.org') + api.override_step_data(
@@ -323,6 +329,7 @@ results-without_patch
       yield (
           api.test('perf_cq_run_benchmark_' + buildername) +
           api.properties.tryserver(
+                path_config='kitchen',
                 mastername='tryserver.chromium.perf',
                 buildername=buildername,
                 patch_storage='rietveld',
@@ -341,6 +348,7 @@ results-without_patch
 
       yield (api.test('perf_cq_no_changes_' + buildername) +
           api.properties.tryserver(
+                path_config='kitchen',
                 mastername='tryserver.chromium.perf',
                 buildername=buildername,
                 patch_storage='rietveld',
@@ -356,6 +364,7 @@ results-without_patch
       yield (
           api.test('perf_cq_no_benchmark_to_run_' + buildername) +
           api.properties.tryserver(
+                path_config='kitchen',
                 mastername='tryserver.chromium.perf',
                 buildername=buildername,
                 patch_storage='rietveld',
@@ -387,6 +396,7 @@ results-without_patch
       }
       yield (api.test('basic_recipe_' + buildername) +
           api.properties.tryserver(
+              path_config='kitchen',
               mastername='tryserver.chromium.perf',
               buildername=buildername) +
           api.step_data(
@@ -544,6 +554,7 @@ results-without_patch
     api.properties.tryserver(
         mastername='tryserver.chromium.perf', buildername=buildername) +
     api.properties(
+        path_config='kitchen',
         bisect_config=local_bisect_config,
         job_name='f7a7b4135624439cbd27fdd5133d74ec',
         local_test=True,
@@ -581,6 +592,7 @@ results-without_patch
     api.properties.tryserver(
         mastername='tryserver.chromium.perf', buildername=buildername) +
     api.properties(
+        path_config='kitchen',
         bisect_config=local_bisect_config,
         job_name='f7a7b4135624439cbd27fdd5133d74ec',
         local_test=True,
@@ -596,6 +608,7 @@ results-without_patch
     api.properties.tryserver(
         mastername='tryserver.chromium.perf', buildername=buildername) +
     api.properties(
+        path_config='kitchen',
         bisect_config=local_bisect_config,
         job_name='f7a7b4135624439cbd27fdd5133d74ec',
         local_test=True,
@@ -636,6 +649,7 @@ results-without_patch
     api.properties.tryserver(
         mastername='tryserver.chromium.perf', buildername=buildername) +
     api.properties(
+        path_config='kitchen',
         bisect_config=local_bisect_config,
         job_name='f7a7b4135624439cbd27fdd5133d74ec',
         local_test=True,
