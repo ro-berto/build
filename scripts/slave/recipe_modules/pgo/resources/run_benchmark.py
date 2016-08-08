@@ -81,6 +81,11 @@ def main():
   env['PATH'] = str(os.pathsep.join([pgo_sweep_dir, options.build_dir,
                                      os.environ['PATH']]))
   env['PogoSafeMode'] = '1'
+  # Apply a scaling factor of 0.5 to the PGO profiling buffers for the 32-bit
+  # builds, without this the buffers will be too large and the process will
+  # fail to start. See crbug.com/632864#c22.
+  if options.target_bits == 32:
+    env['VCPROFILE_ALLOC_SCALE'] = '0.5'
 
   benchmark_command = [
       sys.executable,
