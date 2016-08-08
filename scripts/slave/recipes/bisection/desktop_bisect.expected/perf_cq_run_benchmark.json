@@ -322,6 +322,26 @@
   },
   {
     "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "get",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "9016911228971028736"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "buildbucket.get (2)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",

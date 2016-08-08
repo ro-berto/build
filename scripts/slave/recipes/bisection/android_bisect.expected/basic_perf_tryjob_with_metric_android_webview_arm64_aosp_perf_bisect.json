@@ -540,6 +540,33 @@
   },
   {
     "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "get",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "9016911228971028736"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
+    "name": "buildbucket.get (2)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"bucket\": \"master.tryserver.chromium.perf\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"id\": \"9009962699124567824\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status_changed_utc\": \"Mon Jun 13 19:32:37 2016\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"updated_utc\": \"Mon Jun 13 19:32:37 2016\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"url\": \"http://build.chromium.org/p/tryserver.chromium.perf/builders/linux_perf_bisect/builds/6537\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"utcnow_utc\": \"Tue Jun 21 21:33:56 2016\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
@@ -861,19 +888,32 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
-    "name": "buildbucket.get (2)",
+    "name": "buildbucket.get (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"bucket\": \"master.tryserver.chromium.perf\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"id\": \"9009962699124567824\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status_changed_utc\": \"Mon Jun 13 19:32:37 2016\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"updated_utc\": \"Mon Jun 13 19:32:37 2016\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"url\": \"http://build.chromium.org/p/tryserver.chromium.perf/builders/linux_perf_bisect/builds/6537\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"utcnow_utc\": \"Tue Jun 21 21:33:56 2016\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "get",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "9016911228971028736"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
+    "name": "buildbucket.get (4)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

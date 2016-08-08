@@ -48,11 +48,19 @@ class BuildState(object):
     return 'gs://%s/Linux Builder/full-build-linux' % self.bucket
 
   def _is_completed(self):
-    result = self.api.m.buildbucket.get_build(self.build_id)
+    result = self.api.m.buildbucket.get_build(
+        self.build_id,
+        step_test_data=lambda: self.api.m.json.test_api.output_stream(
+            {'build': {'status': 'COMPLETED'}}
+        ))
     return result.stdout['build']['status'] == 'COMPLETED'
 
   def _is_build_archived(self): # pragma: no cover
-    result = self.api.m.buildbucket.get_build(self.build_id)
+    result = self.api.m.buildbucket.get_build(
+        self.build_id,
+        step_test_data=lambda: self.api.m.json.test_api.output_stream(
+            {'build': {'result': 'SUCCESS'}}
+        ))
     return result.stdout['build']['result'] == 'SUCCESS'
 
   # Duplicate code from auto_bisect.bisector.get_builder_bot_for_this_platform
@@ -113,7 +121,7 @@ class BuildState(object):
   def wait_for(self): # pragma: no cover
     while True:
       if self._is_completed():
-        if self._is_build_archived:
+        if self._is_build_archived():
             break
         raise self.api.m.step.StepFailure('Build %s fails' % self.build_id)
       else:
