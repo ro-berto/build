@@ -740,7 +740,6 @@
       "--timeout=200",
       "--random-seed=-1847850043",
       "bot_default",
-      "--ignition-turbofan",
       "--variants=ignition_turbofan",
       "--dcheck-always-on",
       "--rerun-failures-count=2",

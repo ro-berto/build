@@ -1080,7 +1080,6 @@
       "--timeout=200",
       "--random-seed=-1728130205",
       "bot_default",
-      "--ignition-turbofan",
       "--variants=ignition_turbofan",
       "--cfi-vptr",
       "--rerun-failures-count=2",

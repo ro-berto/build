@@ -476,7 +476,6 @@
       "--timeout=200",
       "--random-seed=-2135455718",
       "mjsunit",
-      "--ignition-turbofan",
       "--gc-stress",
       "--variants=ignition_turbofan",
       "--rerun-failures-count=2",

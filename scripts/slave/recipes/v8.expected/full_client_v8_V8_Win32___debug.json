@@ -556,7 +556,6 @@
       "--timeout=200",
       "--random-seed=-275937916",
       "bot_default",
-      "--ignition-turbofan",
       "--variants=ignition_turbofan",
       "--rerun-failures-count=2",
       "--swarming",
