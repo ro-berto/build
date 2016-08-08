@@ -836,27 +836,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('dynamic_android_cloud_gtest') +
-    api.properties.generic(mastername='chromium.fyi',
-                           buildername='Android Cloud Tests') +
-    api.override_step_data(
-        'read test spec (chromium.fyi.json)',
-        api.json.output({
-            'Android Cloud Tests': {
-                'gtest_tests': [
-                    {
-                      'args': [
-                          '--isolate-file-path=src/base/base_unittests.isolate',
-                      ],
-                      'test': 'base_unittests',
-                    },
-                ],
-            }
-        })
-    )
-  )
-
-  yield (
     api.test('dynamic_instrumentation_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Tests',
@@ -977,31 +956,6 @@ def GenTests(api):
                             'chrome_public_test_apk'
                          ],
                         'override_isolate_target': 'chrome_public_test_apk',
-                    }
-                ],
-            },
-        })
-    )
-  )
-
-  yield (
-    api.test('dynamic_instrumentation_cloud_test') +
-    api.properties.generic(mastername='chromium.fyi',
-                           buildername='Android Cloud Tests',
-                           parent_buildername='Android Builder') +
-    api.override_step_data(
-        'read test spec (chromium.fyi.json)',
-        api.json.output({
-            'Android Cloud Tests': {
-                'instrumentation_tests': [
-                    {
-                        'test': 'ChromePublicTest',
-                        'test_apk': 'one_apk',
-                        'apk_under_test': 'second_apk',
-                        'additional_apks': [
-                            'another_apk',
-                            'omg_so_many_apks',
-                        ]
                     }
                 ],
             },

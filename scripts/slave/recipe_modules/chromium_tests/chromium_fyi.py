@@ -2150,7 +2150,6 @@ SPEC = {
     },
     'Android Cloud Tests': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -2159,7 +2158,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'bot_type': 'builder_tester',
-      'android_config': 'gce_builder',
+      'android_config': 'x86_builder_mb',
       'tests': [],
       'test_generators': [
         steps.generate_gtest,

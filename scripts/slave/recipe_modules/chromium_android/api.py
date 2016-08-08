@@ -926,36 +926,6 @@ class AndroidApi(recipe_api.RecipeApi):
             self.m.file.rmtree('Remove details.html tmp files.', details_dir)
     return step_result
 
-  def launch_gce_instances(self, snapshot='clean-17-l-phone-image-no-popups',
-                           count=6):
-    args = [
-        self.m.properties['slavename'],
-        self.m.adb.adb_path(),
-        '--n', count,
-        'launch',
-        '--snapshot', snapshot,
-    ]
-    self.m.python(
-        'launch_instances',
-        self.resource('gce_manager.py'),
-        args,
-        infra_step=True,
-    )
-
-  def shutdown_gce_instances(self, count=6):
-    args = [
-        self.m.properties['slavename'],
-        self.m.adb.adb_path(),
-        '--n', count,
-        'shutdown',
-    ]
-    self.m.python(
-        'shutdown_instances',
-        self.resource('gce_manager.py'),
-        args,
-        infra_step=True,
-    )
-
   def logcat_dump(self, gs_bucket=None):
     if gs_bucket:
       log_path = self.m.chromium.output_dir.join('full_log')
@@ -1056,43 +1026,33 @@ class AndroidApi(recipe_api.RecipeApi):
   def common_tests_setup_steps(self, perf_setup=False,
                                remove_system_webview=False, skip_wipe=False):
     self.create_adb_symlink()
-    if self.c.gce_setup:
-      self.launch_gce_instances(snapshot=self.c.gce_snapshot,
-                                count=self.c.gce_count)
-      self.spawn_logcat_monitor()
-      self.provision_devices(emulators=True,
-                             remove_system_webview=remove_system_webview)
+    self.spawn_logcat_monitor()
+    self.authorize_adb_devices()
+    self.device_recovery()
+    if perf_setup:
+      kwargs = {
+          'min_battery_level': 95,
+          'disable_network': True,
+          'disable_java_debug': True,
+          'max_battery_temp': 350}
     else:
-      self.spawn_logcat_monitor()
-      self.authorize_adb_devices()
-      self.device_recovery()
-      if perf_setup:
-        kwargs = {
-            'min_battery_level': 95,
-            'disable_network': True,
-            'disable_java_debug': True,
-            'max_battery_temp': 350}
-      else:
-        kwargs = {}
-      if skip_wipe:
-        kwargs['skip_wipe'] = True
-      self.provision_devices(remove_system_webview=remove_system_webview,
-                             **kwargs)
-      self.device_status()
-      if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
-        self.asan_device_setup()
+      kwargs = {}
+    if skip_wipe:
+      kwargs['skip_wipe'] = True
+    self.provision_devices(remove_system_webview=remove_system_webview,
+                           **kwargs)
+    self.device_status()
+    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+      self.asan_device_setup()
 
-      self.spawn_device_monitor()
+    self.spawn_device_monitor()
 
   def common_tests_final_steps(self, logcat_gs_bucket='chromium-android'):
-    if not self.c.gce_setup:
-      self.shutdown_device_monitor()
+    self.shutdown_device_monitor()
     self.logcat_dump(gs_bucket=logcat_gs_bucket)
     self.stack_tool_steps()
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
       self.asan_device_teardown()
-    if self.c.gce_setup:
-      self.shutdown_gce_instances(count=self.c.gce_count)
     self.test_report()
 
   def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):

@@ -224,9 +224,3 @@ def chromium_perf(c):
 @config_ctx()
 def cast_builder(c):
   pass
-
-@config_ctx(includes=['x86_builder'])
-def gce_builder(c):
-  c.gce_setup = True
-  c.gce_snapshot = 'clean-22-l-phone-snapshot'
-  c.gce_count = 6
