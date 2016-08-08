@@ -473,7 +473,7 @@
       "--properties",
       "{\"buildername\": \"Android Nexus5X WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}",
       "--args",
-      "[\"--known-devices-path\", \"[HOME]/.android/known_devices.json\"]",
+      "[\"--known-devices-file\", \"[HOME]/.android/known_devices.json\"]",
       "run",
       "--output",
       "/path/to/tmp/json"

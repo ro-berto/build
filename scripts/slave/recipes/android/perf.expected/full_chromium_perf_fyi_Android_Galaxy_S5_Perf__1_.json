@@ -445,7 +445,7 @@
       "--properties",
       "{\"buildername\": \"Android Galaxy S5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}",
       "--args",
-      "[\"--known-devices-path\", \"[HOME]/.android/known_devices.json\"]",
+      "[\"--known-devices-file\", \"[HOME]/.android/known_devices.json\"]",
       "run",
       "--output",
       "/path/to/tmp/json"

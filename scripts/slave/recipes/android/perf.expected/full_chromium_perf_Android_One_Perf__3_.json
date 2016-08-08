@@ -445,7 +445,7 @@
       "--properties",
       "{\"buildername\": \"Android One Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-one\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}",
       "--args",
-      "[\"--known-devices-path\", \"[HOME]/.android/known_devices.json\"]",
+      "[\"--known-devices-file\", \"[HOME]/.android/known_devices.json\"]",
       "run",
       "--output",
       "/path/to/tmp/json"
