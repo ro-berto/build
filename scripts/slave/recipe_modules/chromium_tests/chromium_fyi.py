@@ -1591,25 +1591,12 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'android_config': 'clang_asan_tot_release_builder',
       'testing': { 'platform': 'linux', },
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'ClangToTAndroidASan tester': {
-      'chromium_config': 'clang_tot_android_asan',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'ClangToTAndroidASan',
-      'android_config': 'clang_asan_tot_release_builder',
       'root_devices': True,
       'test_generators': [
         steps.generate_gtest,
@@ -1622,9 +1609,6 @@ SPEC = {
             android_tool='asan'),
         steps.GTestTest('gfx_unittests', android_tool='asan'),
       ],
-      'testing': {
-        'platform': 'linux',
-      },
     },
     'ClangToTMac': {
       'chromium_config': 'clang_tot_mac',
