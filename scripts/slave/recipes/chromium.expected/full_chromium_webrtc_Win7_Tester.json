@@ -345,6 +345,32 @@
     "name": "content_browsertests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.webrtc",
+      "--builder-name",
+      "Win7 Tester",
+      "--build-number",
+      "571",
+      "--test-type",
+      "content_browsertests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tester",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [content_browsertests]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -382,6 +408,32 @@
     "name": "browser_tests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.webrtc",
+      "--builder-name",
+      "Win7 Tester",
+      "--build-number",
+      "571",
+      "--test-type",
+      "browser_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tester",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [browser_tests]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -414,6 +466,32 @@
     "name": "capture_unittests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.webrtc",
+      "--builder-name",
+      "Win7 Tester",
+      "--build-number",
+      "571",
+      "--test-type",
+      "capture_unittests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tester",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [capture_unittests]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -440,6 +518,32 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "content_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.webrtc",
+      "--builder-name",
+      "Win7 Tester",
+      "--build-number",
+      "571",
+      "--test-type",
+      "content_unittests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tester",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [content_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -469,6 +573,32 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "remoting_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.webrtc",
+      "--builder-name",
+      "Win7 Tester",
+      "--build-number",
+      "571",
+      "--test-type",
+      "remoting_unittests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win7_Tester",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [remoting_unittests]"
   },
   {
     "cmd": [

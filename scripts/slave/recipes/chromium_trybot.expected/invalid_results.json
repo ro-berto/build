@@ -473,6 +473,32 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
+      "--master-name",
+      "tryserver.chromium.linux",
+      "--builder-name",
+      "linux_chromium_rel_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "base_unittests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [base_unittests]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.linux",
@@ -681,7 +707,35 @@
     "name": "base_unittests (without patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{}",
+      "--master-name",
+      "tryserver.chromium.linux",
+      "--builder-name",
+      "linux_chromium_rel_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "base_unittests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [base_unittests] (2)",
+    "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
