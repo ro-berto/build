@@ -398,7 +398,7 @@ class AndroidApi(recipe_api.RecipeApi):
                     'devices': [{
                         "usb_status": True,
                         "blacklisted": None,
-                        "ro.build.fingerprint": "fingerprint", 
+                        "ro.build.fingerprint": "fingerprint",
                         "battery": {
                             "status": "5",
                             "scale": "100",
@@ -709,7 +709,8 @@ class AndroidApi(recipe_api.RecipeApi):
                              chartjson_file=False, max_battery_temp=None,
                              upload_archives_to_bucket=None,
                              known_devices_file=None,
-                             enable_platform_mode=False, **kwargs):
+                             enable_platform_mode=False,
+                             timestamp_as_point_id=False, **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -720,6 +721,9 @@ class AndroidApi(recipe_api.RecipeApi):
     known_devices_file: Path to file containing serial numbers of known devices.
     enable_platform_mode: If set, will run using the android test runner's new
       platform mode.
+    timestamp_as_point_id: If True, will use a unix timestamp as a point_id to
+      identify values in the perf dashboard; otherwise the default (commit
+      position) is used.
     """
     # test_runner.py actually runs the tests and records the results
     self._run_sharded_tests(config=config, flaky_config=flaky_config,
@@ -736,7 +740,8 @@ class AndroidApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output([
             {'test': 'perf_test.foo', 'device_affinity': 0,
              'end_time': 1443438432.949711, 'has_archive': True},
-            {'test': 'page_cycler.foo', 'device_affinity': 0}]),
+            {'test': 'page_cycler.foo', 'device_affinity': 0,
+             'end_time': 1470050195.193213}]),
         env=self.m.chromium.get_env()
     )
     perf_tests = result.json.output
@@ -752,6 +757,7 @@ class AndroidApi(recipe_api.RecipeApi):
       test_name = str(test_data['test'])  # un-unicode
       test_type = test_type_transform(test_name)
       annotate = self.m.chromium.get_annotate_by_test_name(test_name)
+      point_id = int(test_data['end_time']) if timestamp_as_point_id else None
 
       if upload_archives_to_bucket and test_data.get('has_archive'):
         archive = self.m.path.mkdtemp('perf_archives').join('output_dir.zip')
@@ -773,6 +779,7 @@ class AndroidApi(recipe_api.RecipeApi):
             print_step_cmd,
             name=test_name,
             perf_dashboard_id=test_type,
+            point_id=point_id,
             test_type=test_type,
             annotate=annotate,
             results_url='https://chromeperf.appspot.com',

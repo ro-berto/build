@@ -304,7 +304,7 @@ def _GetTimestamp():
 
 
 def _RevisionNumberColumns(data, prefix):
-  """Get the revision number and revision-related columns from the given data.
+  """Get the point id and revision-related columns from the given data.
 
   Args:
     data: A dict of information from one line of the log file.
@@ -332,6 +332,10 @@ def _RevisionNumberColumns(data, prefix):
     # is not an integer, assume it's a git hash and send a timestamp.
     revision = _GetTimestamp()
     revision_supplemental_columns[prefix + 'chromium'] = data['rev']
+
+  # An explicit data['point_id'] overrides the default behavior.
+  if 'point_id' in data:
+    revision = int(data['point_id'])
 
   # For other revision data, add it if it's present and not undefined:
   for key in ['webkit_rev', 'webrtc_rev', 'v8_rev']:

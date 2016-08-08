@@ -272,7 +272,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
               results_url=None, perf_dashboard_id=None, test_type=None,
               python_mode=False, spawn_dbus=True, parallel=False,
-              revision=None, webkit_revision=None,
+              point_id=None, revision=None, webkit_revision=None,
               test_launcher_summary_output=None, flakiness_dash=None,
               perf_id=None, perf_config=None, chartjson_file=False,
               disable_src_side_runtest_py=False, **kwargs):
@@ -343,6 +343,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--run-python-script')
     if not spawn_dbus:
       full_args.append('--no-spawn-dbus')
+    if point_id:
+      full_args.append('--point-id=%d' % point_id)
     if revision:
       full_args.append('--revision=%s' % revision)
     if webkit_revision:

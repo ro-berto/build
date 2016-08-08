@@ -530,6 +530,7 @@ def _GetTelemetryRevisions(options):
   versions['v8_rev'] = options.build_properties.get('got_v8_revision')
   versions['ver'] = options.build_properties.get('version')
   versions['git_revision'] = options.build_properties.get('git_revision')
+  versions['point_id'] = options.point_id
   # There are a lot of "bad" revisions to check for, so clean them all up here.
   for key in versions.keys():
     if not versions[key] or versions[key] == 'undefined':
@@ -1744,10 +1745,14 @@ def main():
                            help='A file containing a JSON blob with a dict '
                                 'that will be uploaded to the results '
                                 'dashboard as supplemental columns.')
+  option_parser.add_option('--point-id', type='int', default=None,
+                           help='Number used as primary key by the dashboard. '
+                                'If ommited the value of --revision is used '
+                                'instead.')
   option_parser.add_option('--revision',
-                           help='The revision number which will be is used as '
-                                'primary key by the dashboard. If omitted it '
-                                'is automatically extracted from the checkout.')
+                           help='The revision number of the system tested. If '
+                                'omitted it is automatically extracted from '
+                                'the checkout.')
   option_parser.add_option('--webkit-revision',
                            help='See --revision.')
   option_parser.add_option('--enable-asan', action='store_true', default=False,

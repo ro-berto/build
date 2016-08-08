@@ -103,9 +103,13 @@ BUILDERS = freeze({
         'perf_config': 'sharded_perf_tests.json',
         'enable_platform_mode': True
     },
+    'timestamp_as_point_id': {
+      'perf_config': 'sharded_perf_tests.json',
+      'timestamp_as_point_id': True
+    },
     'telemetry_browser_tests_tester': {
         'run_telemetry_browser_tests': True,
-    }
+    },
 })
 
 from recipe_engine.recipe_api import Property
@@ -193,7 +197,8 @@ def RunSteps(api, buildername):
           flaky_config='flake_fakes.json',
           upload_archives_to_bucket='archives-bucket',
           known_devices_file=config.get('last_known_devices', None),
-          enable_platform_mode=config.get('enable_platform_mode', None))
+          enable_platform_mode=config.get('enable_platform_mode', None),
+          timestamp_as_point_id=config.get('timestamp_as_point_id', False))
   except api.step.StepFailure as f:
     failure = f
 
@@ -421,7 +426,7 @@ def GenTests(api):
 
   yield (api.test('device_file_format_mismatch') +
          properties_for('tester') +
-         api.override_step_data('fix_device_file_format.read_device_file', 
+         api.override_step_data('fix_device_file_format.read_device_file',
              api.raw_io.output('["device1", "device2"]')))
 
   yield (api.test('tombstones_m53') +

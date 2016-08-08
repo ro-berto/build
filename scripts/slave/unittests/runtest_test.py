@@ -234,6 +234,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
 
   def test_GetTelemetryRevisions(self):
     options = mock.MagicMock()
+    options.point_id = 1470050195
     options.revision = '294850'
     options.webkit_revision = '34f9d01'
     options.build_properties = {
@@ -243,7 +244,8 @@ class SendResultsToDashboardTest(unittest.TestCase):
     }
     versions = runtest._GetTelemetryRevisions(options)
     self.assertEqual(
-        {'rev': '294850', 'webkit_rev': '34f9d01', 'git_revision': '9a7b354'},
+        {'rev': '294850', 'webkit_rev': '34f9d01', 'git_revision': '9a7b354',
+         'point_id': 1470050195},
         versions)
 
 if __name__ == '__main__':
