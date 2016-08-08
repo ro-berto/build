@@ -1898,7 +1898,7 @@ def FileExclusions():
   return all_platforms
 
 
-def DatabaseSetup(buildmaster_config, require_dbconfig=False):
+def DatabaseSetup(buildmaster_config):
   """Configure the database settings for the buildbot master."""
 
   # By default nothing is ever deleted from the database.  We set a
@@ -1916,8 +1916,6 @@ def DatabaseSetup(buildmaster_config, require_dbconfig=False):
     buildmaster_config['db_url'] = 'postgresql://%s:%s@%s/%s' % (
         values['username'], values['password'],
         values.get('hostname', 'localhost'), values['dbname'])
-  else:
-    assert not require_dbconfig
 
 
 def ReadBuildersFile(builders_path):
