@@ -110,13 +110,6 @@ def goma_setup(options, env):
   env['GOMA_DEPS_CACHE_DIR'] = (
       options.goma_deps_cache_dir or options.target_output_dir)
 
-  # HACK(shinyak): Workaround for crbug.com/630502. Compiling
-  # tools/ipc_fuzzer/message_lib/message_names.cc is always slow on Mac.
-  # TODO(shinyak): Remove this when gn configuration is fixed.
-  if chromium_utils.IsMac():
-    env['GOMA_FALLBACK_INPUT_FILES'] = (
-        '../../tools/ipc_fuzzer/message_lib/message_names.cc')
-
   if options.goma_hermetic:
     env['GOMA_HERMETIC'] = options.goma_hermetic
   if options.goma_enable_remote_link:
