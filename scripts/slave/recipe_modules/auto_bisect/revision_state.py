@@ -186,7 +186,7 @@ class RevisionState(object):
       return self.bisector.api.m.gitiles.download_file(
           repository_url=url, file_path=file_name, branch=branch)
     except TypeError:
-      print 'Could not read content for %s/%s/%s' % (url, file_name, branch) 
+      print 'Could not read content for %s/%s/%s' % (url, file_name, branch)
       return None
 
   def read_deps(self, recipe_tester_name):
@@ -356,6 +356,17 @@ class RevisionState(object):
         self.bisector.surface_result('MISSING_METRIC')
       return
     self.values += results['values']
+    api = self.bisector.api
+    if test_results.get('retcodes') and test_results['retcodes'][-1] != 0 and (
+        api.m.chromium.c.TARGET_PLATFORM == 'android'): #pragma: no cover
+      api.m.chromium_android.device_status()
+      current_connected_devices = api.m.chromium_android.devices
+      current_device = api.m.bisect_tester.device_to_test
+      if current_device not in current_connected_devices:
+        # We need to manually raise step failure here because we are catching
+        # them further down the line to enable return_code bisects and bisecting
+        # on benchmarks that are a little flaky.
+        raise api.m.step.StepFailure('Test device disconnected.')
     if self.bisector.is_return_code_mode():
       retcodes = test_results['retcodes']
       self.overall_return_code = 0 if all(v == 0 for v in retcodes) else 1
