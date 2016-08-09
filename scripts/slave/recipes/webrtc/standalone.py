@@ -33,8 +33,6 @@ def RunSteps(api):
   webrtc.check_swarming_version()
 
   if webrtc.should_build:
-    if api.chromium.c.project_generator.tool == 'gn':
-      api.chromium.run_gn(use_goma=True)
     webrtc.compile()
 
     if api.chromium.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
@@ -126,12 +124,3 @@ def GenTests(api):
                          suffix='_forced_invalid')
   yield generate_builder(mastername, buildername, revision='12345',
                          failing_test='tools_unittests', suffix='_failing_test')
-
-  # GN trybot running tests (during the GN migration work).
-  mastername = 'tryserver.webrtc'
-  yield (
-    generate_builder(mastername, 'linux_gn_dbg', revision='12345',
-                     suffix='_running_tests') +
-    api.properties(run_tests=1)
-  )
-

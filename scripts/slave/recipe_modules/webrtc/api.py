@@ -16,7 +16,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
-  NORMAL_TESTS_GYP = (
+  NORMAL_TESTS = (
     'audio_decoder_unittests',
     'common_audio_unittests',
     'common_video_unittests',
@@ -32,18 +32,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     'video_engine_tests',
     'voice_engine_unittests',
     'xmllite_xmpp_unittests',
-  )
-
-  NORMAL_TESTS_GN = (
-    'common_audio_unittests',
-    'common_video_unittests',
-    'modules_unittests',
-    'rtc_media_unittests',
-    'rtc_pc_unittests',
-    'rtc_unittests',
-    'system_wrappers_unittests',
-    'test_support_unittests',
-    'tools_unittests',
   )
 
   # Android APK tests.
@@ -125,6 +113,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     for c in self.recipe_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
+    # Apply MB config (to avoid heavy duplication in builders.py). See
+    # crbug.com/589510 for more info.
+    if (mastername in ('client.webrtc', 'tryserver.webrtc') and
+        buildername.lower().startswith('linux')):
+      self.m.chromium.apply_config('mb')
+
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
@@ -163,8 +157,19 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.swarming.check_client_version()
 
   def compile(self):
-    compile_targets = self.recipe_config.get('compile_targets', [])
-    self.m.chromium.compile(targets=compile_targets)
+    if self.m.chromium.c.project_generator.tool == 'mb':
+      mastername = self.m.properties.get('mastername')
+      buildername = self.m.properties.get('buildername')
+      self.m.chromium.run_mb(
+        mastername, buildername, use_goma=True,
+        mb_config_path=self.m.path['checkout'].join('webrtc', 'build',
+                                                    'mb_config.pyl'),
+        gyp_script=self.m.path['checkout'].join('webrtc', 'build',
+                                                'gyp_webrtc.py'))
+    elif self.m.chromium.c.project_generator.tool == 'gn':
+      self.m.chromium.run_gn(use_goma=True)
+
+    self.m.chromium.compile()
 
   def runtests(self):
     """Add a suite of test steps.
@@ -175,7 +180,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.c.use_isolate:
       self.m.isolate.remove_build_metadata()
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
-                                   targets=self.NORMAL_TESTS_GYP)
+                                   targets=self.NORMAL_TESTS)
 
     tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
                                  self.c.enable_swarming)

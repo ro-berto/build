@@ -102,7 +102,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'win'},
       },
       'Win64 Release (GN)': {
@@ -112,7 +112,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'win'},
       },
       'Win32 Debug (Clang)': {
@@ -218,7 +218,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
       'Mac64 Release (GN)': {
@@ -228,7 +228,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
       'Mac Asan': {
@@ -296,7 +296,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
       'Linux64 Release (GN)': {
@@ -306,7 +306,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
       'Linux32 ARM': {
@@ -800,7 +800,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'win'},
       },
       'win_x64_gn_rel': {
@@ -810,7 +810,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'win'},
       },
       'win_clang_dbg': {
@@ -942,7 +942,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
       'mac_gn_rel': {
@@ -952,7 +952,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
       'mac_asan': {
@@ -1028,7 +1028,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
       'linux_gn_rel': {
@@ -1038,7 +1038,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
       'linux_arm': {
