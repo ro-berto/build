@@ -627,7 +627,6 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Tests__dbg___K_Nexus5_/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[BUILDER_CACHE]/Android_Tests__dbg___K_Nexus5_/src/content/content_browsertests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json",

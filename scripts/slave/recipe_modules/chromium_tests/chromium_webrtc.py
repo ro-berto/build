@@ -101,8 +101,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
     spec['tests'] = [
       steps.GTestTest(
           'content_browsertests',
-          args=['--gtest_filter=WebRtc*'],
-          android_isolate_path='content/content_browsertests.isolate'),
+          args=['--gtest_filter=WebRtc*']),
     ]
   else:
     spec['gclient_apply_config'].append('webrtc_test_resources')
