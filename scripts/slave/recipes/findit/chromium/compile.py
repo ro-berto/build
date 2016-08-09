@@ -311,6 +311,7 @@ def GenTests(api):
             good_revision=None, bad_revision=None,
             suspected_revisions=None, use_bisect=False, buildbucket=None):
     properties = {
+        'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.linux',
         'buildername': 'linux_variable',
         'slavename': 'build1-a1',

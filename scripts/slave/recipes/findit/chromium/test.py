@@ -368,6 +368,7 @@ def GenTests(api):
       tests, platform_name, tester_name, use_analyze=False, good_revision=None,
       bad_revision=None, suspected_revisions=None, buildbucket=None):
     properties = {
+        'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.%s' % platform_name,
         'buildername': '%s_chromium_variable' % platform_name,
         'slavename': 'build1-a1',
