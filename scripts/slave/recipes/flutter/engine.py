@@ -89,7 +89,8 @@ def AnalyzeDartUI(api):
   Build(api, 'host_debug_unopt', 'generate_dart_ui')
 
   checkout = api.path['slave_build'].join('src')
-  api.step('analyze dart_ui', ['/bin/sh', 'travis/analyze.sh'], cwd=checkout)
+  api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'],
+           cwd=checkout)
 
 
 def BuildLinuxAndroidx86(api):

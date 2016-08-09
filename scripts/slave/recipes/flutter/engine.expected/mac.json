@@ -117,7 +117,7 @@
   {
     "cmd": [
       "/bin/sh",
-      "travis/analyze.sh"
+      "flutter/travis/analyze.sh"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
