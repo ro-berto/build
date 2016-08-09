@@ -23,12 +23,17 @@ def _RunStepsInternal(api):
   repo_name = api.properties['repo_name']
   codereview_auth = api.properties.get('codereview_auth', False)
   force_checkout = api.properties.get('force_checkout', False)
+  patch_storage = api.properties.get('patch_storage', 'rietveld')
 
   api.gclient.set_config(repo_name)
 
+  kwargs = {}
+  if patch_storage == 'gerrit':
+    kwargs['gerrit_rebase_patch_ref'] = True
   bot_update_step = api.bot_update.ensure_checkout(
       force=force_checkout,
-      patch_oauth2=codereview_auth)
+      patch_oauth2=codereview_auth,
+      **kwargs)
   relative_root = api.gclient.calculate_patch_root(
       api.properties['patch_project']).rstrip('/')
   got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
@@ -51,7 +56,6 @@ def _RunStepsInternal(api):
   if api.properties.get('runhooks'):
     api.gclient.runhooks()
 
-  patch_storage = api.properties.get('patch_storage', 'rietveld')
   if patch_storage == 'rietveld':
     presubmit_args = [
       '--issue', api.properties['issue'],
