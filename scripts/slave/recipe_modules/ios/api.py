@@ -407,7 +407,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       if self.platform == 'simulator':
         cmd.extend([
-          '--iossim', self.m.path['slave_build'].join(self.most_recent_iossim),
+          '--iossim', self.most_recent_iossim,
           '--platform', test['device type'],
           '--version', test['os'],
         ])
@@ -506,7 +506,7 @@ class iOSApi(recipe_api.RecipeApi):
       'src/ios/build/bots/scripts/',
     ]
     if self.platform == 'simulator':
-      iossim = self.m.path.join(self.most_recent_iossim)
+      iossim = self.most_recent_iossim
       cmd.extend([
         '--iossim', iossim,
         '--platform', '<(platform)',
@@ -756,14 +756,12 @@ class iOSApi(recipe_api.RecipeApi):
     }[self.platform]
 
     return {
-      'xcodebuild': self.m.path.join(
-        'src',
+      'xcodebuild': self.m.path['checkout'].join(
         build_dir,
         self.configuration,
         'iossim',
       ),
-      'ninja': self.m.path.join(
-        'src',
+      'ninja': self.m.path['checkout'].join(
          build_dir,
          '%s-%s' % (self.configuration, platform),
          'iossim',
