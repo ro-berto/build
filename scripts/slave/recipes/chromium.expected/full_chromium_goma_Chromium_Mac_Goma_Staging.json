@@ -384,33 +384,6 @@
     "name": "base_unittests"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
-      "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "chromium.goma",
-      "--builder-name",
-      "Chromium Mac Goma Staging",
-      "--build-number",
-      "571",
-      "--test-type",
-      "base_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}"
-    ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Staging",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
-    },
-    "name": "Upload to test-results [base_unittests]"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -438,33 +411,6 @@
       "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
     },
     "name": "content_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
-      "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "chromium.goma",
-      "--builder-name",
-      "Chromium Mac Goma Staging",
-      "--build-number",
-      "571",
-      "--test-type",
-      "content_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}"
-    ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Staging",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
-    },
-    "name": "Upload to test-results [content_unittests]"
   },
   {
     "name": "$result",

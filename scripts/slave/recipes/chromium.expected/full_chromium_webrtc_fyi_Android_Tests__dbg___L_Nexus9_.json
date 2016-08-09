@@ -645,33 +645,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
-      "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "chromium.webrtc.fyi",
-      "--builder-name",
-      "Android Tests (dbg) (L Nexus9)",
-      "--build-number",
-      "571",
-      "--test-type",
-      "content_browsertests",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_Tests__dbg___L_Nexus9_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Tests__dbg___L_Nexus9_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Tests__dbg___L_Nexus9_/src/build/android:%(PATH)s"
-    },
-    "name": "Upload to test-results [content_browsertests]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--action",
       "stop",
