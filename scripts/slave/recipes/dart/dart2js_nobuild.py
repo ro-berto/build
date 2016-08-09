@@ -28,6 +28,9 @@ all_options = {'hostchecked': '--host-checked',
                'minified': '--minified',
                'cps': '--cps-ir',
                'csp': '--csp'}
+build_directories= {'linux': 'out/ReleaseX64',
+                    'win': 'out/ReleaseX64',
+                    'mac': 'xcodebuild/ReleaseX64'}
 
 IsFirstTestStep = True
 def RunTests(api, test_args, test_specs, use_xvfb=False):
@@ -104,7 +107,8 @@ def RunSteps(api):
     url = sdk_url(channel, api.platform.name, 'x64', 'release', revision)
     api.gsutil(['cp', url, zipfile], name='Download sdk',
                cwd=api.path['checkout'])
-    build_dir = api.path.abspath(api.path['checkout'].join('out/ReleaseX64'))
+    build_dir = api.path['checkout'].join(build_directories[api.platform.name])
+    build_dir = api.path.abspath(build_dir)
     api.file.makedirs('Create build directory', build_dir)
     api.file.rmtree('Clean build directory', build_dir)
     api.zip.unzip('Unzip sdk', zipfile, build_dir)
@@ -208,4 +212,10 @@ def GenTests(api):
       api.properties.generic(
         mastername='client.dart',
         buildername='dart2js-linux-drt-93-105-dev',
+        revision='hash_of_revision'))
+   yield (
+      api.test('dart2js-mac10.11-safari-1-3-be') + api.platform('mac', 64) +
+      api.properties.generic(
+        mastername='client.dart',
+        buildername='dart2js-mac10.11-safari-1-3-be',
         revision='hash_of_revision'))
