@@ -254,6 +254,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/audio_decoder_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "audio_decoder_unittests"
   },
   {
@@ -279,6 +280,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/common_audio_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "common_audio_unittests"
   },
   {
@@ -304,6 +306,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/common_video_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "common_video_unittests"
   },
   {
@@ -329,6 +332,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/modules_tests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "modules_tests"
   },
   {
@@ -354,6 +358,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/modules_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "modules_unittests"
   },
   {
@@ -379,6 +384,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/peerconnection_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "peerconnection_unittests"
   },
   {
@@ -404,6 +410,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/rtc_media_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "rtc_media_unittests"
   },
   {
@@ -429,6 +436,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/rtc_pc_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "rtc_pc_unittests"
   },
   {
@@ -454,6 +462,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/rtc_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "rtc_unittests"
   },
   {
@@ -479,6 +488,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/system_wrappers_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "system_wrappers_unittests"
   },
   {
@@ -504,6 +514,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/test_support_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "test_support_unittests"
   },
   {
@@ -529,6 +540,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/tools_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "tools_unittests"
   },
   {
@@ -554,6 +566,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/video_engine_tests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "video_engine_tests"
   },
   {
@@ -579,6 +592,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/voice_engine_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "voice_engine_unittests"
   },
   {
@@ -604,6 +618,7 @@
       "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/xmllite_xmpp_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -631,6 +646,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_nonparallel_tests"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "webrtc_nonparallel_tests"
   },
   {

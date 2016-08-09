@@ -213,6 +213,7 @@
       "-u",
       "RECIPE_MODULE[build::webrtc]\\resources\\ensure_webcam_is_running.py"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
     "name": "webcam_check"
   },
   {
@@ -239,6 +240,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "audio_device_tests.exe"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
     "name": "audio_device_tests"
   },
   {
@@ -266,6 +268,7 @@
       "voe_auto_test.exe",
       "--automated"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
     "name": "voe_auto_test"
   },
   {
@@ -292,6 +295,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_capture_tests.exe"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
     "name": "video_capture_tests"
   },
   {
@@ -320,6 +324,7 @@
       "--revision=170242",
       "webrtc_perf_tests.exe"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
     "name": "webrtc_perf_tests"
   },
   {

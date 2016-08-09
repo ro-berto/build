@@ -271,6 +271,7 @@
       "[BUILDER_CACHE]/Linux64_Release__swarming_/src/out/Release/voice_engine_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/Linux64_Release__swarming_/src/out/Release/xmllite_xmpp_unittests.isolated.gen.json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -355,6 +356,7 @@
       "--idempotent",
       "[dummy hash for audio_decoder_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] audio_decoder_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -432,6 +434,7 @@
       "--idempotent",
       "[dummy hash for common_audio_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] common_audio_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -509,6 +512,7 @@
       "--idempotent",
       "[dummy hash for common_video_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] common_video_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -586,6 +590,7 @@
       "--idempotent",
       "[dummy hash for modules_tests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] modules_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -663,6 +668,7 @@
       "--idempotent",
       "[dummy hash for modules_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] modules_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -740,6 +746,7 @@
       "--idempotent",
       "[dummy hash for peerconnection_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] peerconnection_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -817,6 +824,7 @@
       "--idempotent",
       "[dummy hash for rtc_media_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] rtc_media_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -894,6 +902,7 @@
       "--idempotent",
       "[dummy hash for rtc_pc_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] rtc_pc_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -971,6 +980,7 @@
       "--idempotent",
       "[dummy hash for rtc_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] rtc_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1048,6 +1058,7 @@
       "--idempotent",
       "[dummy hash for system_wrappers_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] system_wrappers_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1125,6 +1136,7 @@
       "--idempotent",
       "[dummy hash for test_support_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] test_support_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1202,6 +1214,7 @@
       "--idempotent",
       "[dummy hash for tools_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] tools_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1279,6 +1292,7 @@
       "--idempotent",
       "[dummy hash for video_engine_tests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] video_engine_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1356,6 +1370,7 @@
       "--idempotent",
       "[dummy hash for voice_engine_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] voice_engine_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1433,6 +1448,7 @@
       "--idempotent",
       "[dummy hash for xmllite_xmpp_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "[trigger] xmllite_xmpp_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1474,6 +1490,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_nonparallel_tests"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "webrtc_nonparallel_tests"
   },
   {
@@ -1491,6 +1508,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "audio_decoder_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1550,6 +1568,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "common_audio_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1609,6 +1628,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "common_video_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1668,6 +1688,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "modules_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1727,6 +1748,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "modules_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1786,6 +1808,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "peerconnection_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1845,6 +1868,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "rtc_media_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1904,6 +1928,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "rtc_pc_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1963,6 +1988,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "rtc_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2022,6 +2048,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "system_wrappers_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2081,6 +2108,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "test_support_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2140,6 +2168,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "tools_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2199,6 +2228,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "video_engine_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2258,6 +2288,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "voice_engine_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2317,6 +2348,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__swarming_",
     "name": "xmllite_xmpp_unittests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",

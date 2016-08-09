@@ -284,6 +284,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/audio_decoder_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "audio_decoder_unittests"
   },
   {
@@ -309,6 +310,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/common_audio_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "common_audio_unittests"
   },
   {
@@ -334,6 +336,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/common_video_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "common_video_unittests"
   },
   {
@@ -359,6 +362,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/modules_tests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "modules_tests"
   },
   {
@@ -384,6 +388,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/modules_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "modules_unittests"
   },
   {
@@ -409,6 +414,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/peerconnection_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "peerconnection_unittests"
   },
   {
@@ -434,6 +440,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/rtc_media_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "rtc_media_unittests"
   },
   {
@@ -459,6 +466,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/rtc_pc_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "rtc_pc_unittests"
   },
   {
@@ -484,6 +492,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/rtc_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "rtc_unittests"
   },
   {
@@ -509,6 +518,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/system_wrappers_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "system_wrappers_unittests"
   },
   {
@@ -534,6 +544,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/test_support_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "test_support_unittests"
   },
   {
@@ -559,6 +570,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/tools_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "tools_unittests"
   },
   {
@@ -584,6 +596,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/video_engine_tests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "video_engine_tests"
   },
   {
@@ -609,6 +622,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/voice_engine_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "voice_engine_unittests"
   },
   {
@@ -634,6 +648,7 @@
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release/xmllite_xmpp_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -658,6 +673,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_nonparallel_tests"
     ],
+    "cwd": "[BUILDER_CACHE]/linux_ubsan",
     "name": "webrtc_nonparallel_tests"
   },
   {

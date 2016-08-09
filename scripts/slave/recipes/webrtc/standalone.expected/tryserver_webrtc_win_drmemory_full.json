@@ -243,6 +243,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "audio_decoder_unittests"
   },
   {
@@ -273,6 +274,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "common_audio_unittests"
   },
   {
@@ -303,6 +305,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "common_video_unittests"
   },
   {
@@ -333,6 +336,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "modules_tests"
   },
   {
@@ -363,6 +367,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "modules_unittests"
   },
   {
@@ -393,6 +398,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "peerconnection_unittests"
   },
   {
@@ -423,6 +429,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "rtc_media_unittests"
   },
   {
@@ -453,6 +460,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "rtc_pc_unittests"
   },
   {
@@ -483,6 +491,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "rtc_unittests"
   },
   {
@@ -513,6 +522,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "system_wrappers_unittests"
   },
   {
@@ -543,6 +553,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "test_support_unittests"
   },
   {
@@ -573,6 +584,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "tools_unittests"
   },
   {
@@ -603,6 +615,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "video_engine_tests"
   },
   {
@@ -633,6 +646,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "voice_engine_unittests"
   },
   {
@@ -663,6 +677,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -693,6 +708,7 @@
       "--tool",
       "drmemory_full"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_drmemory_full",
     "name": "webrtc_nonparallel_tests"
   },
   {

@@ -13,6 +13,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     super(WebRTCApi, self).__init__(**kwargs)
     self._env = {}
 
+    # Keep track of working directory (which contains the checkout).
+    # None means "default value".
+    self._working_dir = None
+
   BUILDERS = builders.BUILDERS
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
@@ -138,9 +142,9 @@ class WebRTCApi(recipe_api.RecipeApi):
               self.m.platform.name).split('-', 1)[0])
 
   def checkout(self, **kwargs):
-    checkout_dir = self.m.chromium_tests.get_checkout_dir({})
-    if checkout_dir:
-      kwargs.setdefault('cwd', checkout_dir)
+    self._working_dir = self.m.chromium_tests.get_checkout_dir({})
+    if self._working_dir:
+      kwargs.setdefault('cwd', self._working_dir)
 
     update_step = self.m.bot_update.ensure_checkout(**kwargs)
     assert update_step.json.output['did_run']
@@ -177,31 +181,36 @@ class WebRTCApi(recipe_api.RecipeApi):
     Args:
       test_suite: The name of the test suite.
     """
-    if self.c.use_isolate:
-      self.m.isolate.remove_build_metadata()
-      self.m.isolate.isolate_tests(self.m.chromium.output_dir,
-                                   targets=self.NORMAL_TESTS)
+    context = {}
+    if self._working_dir:
+      context['cwd'] = self._working_dir
 
-    tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
-                                 self.c.enable_swarming)
-    with self.m.step.defer_results():
-      if tests:
-        if self.m.chromium.c.TARGET_PLATFORM == 'android':
-          self.m.chromium_android.common_tests_setup_steps()
+    with self.m.step.context(context):
+      if self.c.use_isolate:
+        self.m.isolate.remove_build_metadata()
+        self.m.isolate.isolate_tests(self.m.chromium.output_dir,
+                                     targets=self.NORMAL_TESTS)
 
+      tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
+                                   self.c.enable_swarming)
+      with self.m.step.defer_results():
+        if tests:
+          if self.m.chromium.c.TARGET_PLATFORM == 'android':
+            self.m.chromium_android.common_tests_setup_steps()
+
+          for test in tests:
+            test.run(self, suffix='')
+
+          if self.m.chromium.c.TARGET_PLATFORM == 'android':
+            self.m.chromium_android.shutdown_device_monitor()
+            self.m.chromium_android.logcat_dump(gs_bucket='chromium-android')
+            self.m.chromium_android.stack_tool_steps(force_latest_version=True)
+            self.m.chromium_android.test_report()
+
+      with self.m.step.defer_results():
         for test in tests:
-          test.run(self, suffix='')
-
-        if self.m.chromium.c.TARGET_PLATFORM == 'android':
-          self.m.chromium_android.shutdown_device_monitor()
-          self.m.chromium_android.logcat_dump(gs_bucket='chromium-android')
-          self.m.chromium_android.stack_tool_steps(force_latest_version=True)
-          self.m.chromium_android.test_report()
-
-    with self.m.step.defer_results():
-      for test in tests:
-        if test.enable_swarming:
-          self.m.swarming.collect_task(test.swarming_task)
+          if test.enable_swarming:
+            self.m.swarming.collect_task(test.swarming_task)
 
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,

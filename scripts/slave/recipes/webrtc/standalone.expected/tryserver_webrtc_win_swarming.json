@@ -279,6 +279,7 @@
       "[BUILDER_CACHE]\\win_swarming\\src\\out\\Debug\\voice_engine_unittests.isolated.gen.json",
       "[BUILDER_CACHE]\\win_swarming\\src\\out\\Debug\\xmllite_xmpp_unittests.isolated.gen.json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -365,6 +366,7 @@
       "--idempotent",
       "[dummy hash for audio_decoder_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] audio_decoder_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -444,6 +446,7 @@
       "--idempotent",
       "[dummy hash for common_audio_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] common_audio_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -523,6 +526,7 @@
       "--idempotent",
       "[dummy hash for common_video_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] common_video_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -602,6 +606,7 @@
       "--idempotent",
       "[dummy hash for modules_tests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] modules_tests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -681,6 +686,7 @@
       "--idempotent",
       "[dummy hash for modules_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] modules_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -760,6 +766,7 @@
       "--idempotent",
       "[dummy hash for peerconnection_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] peerconnection_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -839,6 +846,7 @@
       "--idempotent",
       "[dummy hash for rtc_media_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] rtc_media_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -918,6 +926,7 @@
       "--idempotent",
       "[dummy hash for rtc_pc_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] rtc_pc_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -997,6 +1006,7 @@
       "--idempotent",
       "[dummy hash for rtc_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] rtc_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1076,6 +1086,7 @@
       "--idempotent",
       "[dummy hash for system_wrappers_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] system_wrappers_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1155,6 +1166,7 @@
       "--idempotent",
       "[dummy hash for test_support_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] test_support_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1234,6 +1246,7 @@
       "--idempotent",
       "[dummy hash for tools_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] tools_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1313,6 +1326,7 @@
       "--idempotent",
       "[dummy hash for video_engine_tests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] video_engine_tests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1392,6 +1406,7 @@
       "--idempotent",
       "[dummy hash for voice_engine_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] voice_engine_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1471,6 +1486,7 @@
       "--idempotent",
       "[dummy hash for xmllite_xmpp_unittests]"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "[trigger] xmllite_xmpp_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1508,6 +1524,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_nonparallel_tests.exe"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "webrtc_nonparallel_tests"
   },
   {
@@ -1525,6 +1542,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "audio_decoder_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1584,6 +1602,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "common_audio_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1643,6 +1662,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "common_video_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1702,6 +1722,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "modules_tests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1761,6 +1782,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "modules_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1820,6 +1842,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "peerconnection_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1879,6 +1902,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "rtc_media_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1938,6 +1962,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "rtc_pc_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1997,6 +2022,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "rtc_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2056,6 +2082,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "system_wrappers_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2115,6 +2142,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "test_support_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2174,6 +2202,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "tools_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2233,6 +2262,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "video_engine_tests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2292,6 +2322,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "voice_engine_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -2351,6 +2382,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win_swarming",
     "name": "xmllite_xmpp_unittests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",

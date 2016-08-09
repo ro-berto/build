@@ -281,6 +281,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/audio_decoder_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "audio_decoder_unittests"
   },
   {
@@ -305,6 +306,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/common_audio_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "common_audio_unittests"
   },
   {
@@ -329,6 +331,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/common_video_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "common_video_unittests"
   },
   {
@@ -353,6 +356,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/modules_tests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "modules_tests"
   },
   {
@@ -377,6 +381,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/modules_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "modules_unittests"
   },
   {
@@ -401,6 +406,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/peerconnection_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "peerconnection_unittests"
   },
   {
@@ -425,6 +431,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/rtc_media_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "rtc_media_unittests"
   },
   {
@@ -449,6 +456,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/rtc_pc_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "rtc_pc_unittests"
   },
   {
@@ -473,6 +481,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/rtc_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "rtc_unittests"
   },
   {
@@ -497,6 +506,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/system_wrappers_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "system_wrappers_unittests"
   },
   {
@@ -521,6 +531,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/test_support_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "test_support_unittests"
   },
   {
@@ -545,6 +556,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/tools_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "tools_unittests"
   },
   {
@@ -569,6 +581,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/video_engine_tests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "video_engine_tests"
   },
   {
@@ -593,6 +606,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/voice_engine_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "voice_engine_unittests"
   },
   {
@@ -617,6 +631,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/xmllite_xmpp_unittests",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -641,6 +656,7 @@
       "[BUILDER_CACHE]/mac_dbg/src/out/Debug/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
       "--"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "libjingle_peerconnection_objc_test"
   },
   {
@@ -664,6 +680,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_nonparallel_tests"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "webrtc_nonparallel_tests"
   },
   {

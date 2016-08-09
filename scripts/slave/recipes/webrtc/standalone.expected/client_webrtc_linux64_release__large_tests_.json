@@ -237,6 +237,7 @@
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/ensure_webcam_is_running.py"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__large_tests_",
     "name": "webcam_check"
   },
   {
@@ -273,6 +274,7 @@
       "-pb",
       "[BUILDER_CACHE]/Linux64_Release__large_tests_/src/resources/audioproc.aecdump"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__large_tests_",
     "name": "audioproc"
   },
   {
@@ -305,6 +307,7 @@
       "[BUILDER_CACHE]/Linux64_Release__large_tests_/src/resources/speech_and_misc_wb.pcm",
       "isac_speech_and_misc_wb.pcm"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__large_tests_",
     "name": "isac_fix_test"
   },
   {
@@ -333,6 +336,7 @@
       "voe_auto_test",
       "--automated"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__large_tests_",
     "name": "voe_auto_test"
   },
   {
@@ -360,6 +364,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_capture_tests"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__large_tests_",
     "name": "video_capture_tests"
   },
   {
@@ -389,6 +394,7 @@
       "--revision=170242",
       "webrtc_perf_tests"
     ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Release__large_tests_",
     "name": "webrtc_perf_tests"
   },
   {
