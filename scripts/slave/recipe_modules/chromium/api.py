@@ -524,7 +524,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def run_gn(self, use_goma=False, gn_path=None, build_dir=None, **kwargs):
     if not gn_path:
-      gn_path = self.m.path['depot_tools'].join('gn.py')
+      gn_path = self.m.depot_tools.gn_py_path
 
     gn_args = list(self.c.gn_args)
 

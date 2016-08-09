@@ -77,6 +77,7 @@ def GenTests(api):
       api.properties(mastername=mastername,
                      buildername=buildername,
                      slavename='slavename',
+                     path_config='kitchen',
                      BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']) +
       api.platform(bot_config['testing']['platform'],
                    chromium_kwargs.get('TARGET_BITS', 64))

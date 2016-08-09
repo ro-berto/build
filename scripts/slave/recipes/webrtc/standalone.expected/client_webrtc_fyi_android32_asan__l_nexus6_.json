@@ -3,6 +3,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "client.webrtc.fyi",
@@ -24,6 +46,7 @@
       "src@12345",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -60,7 +83,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[SLAVE_BUILD]/src/out"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out"
     ],
     "name": "clean test output files"
   },
@@ -69,10 +92,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Release/test_logs",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "[SLAVE_BUILD]/src"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/debug_info_dumps",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/test_logs",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/build_product.zip",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -152,12 +175,12 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android asan=1 clang=1 component=shared_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -168,13 +191,13 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -199,9 +222,11 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--goma-deps-cache-dir",
+      "[GOMA_DEPS_CACHE]",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",
@@ -214,7 +239,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "compile",
     "~followup_annotations": [
@@ -226,9 +251,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/symlink.py",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/symlink.py",
       "-f",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
     "name": "create adb symlink"
@@ -237,13 +262,13 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
-      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
-      "[SLAVE_BUILD]/src/out/logcat",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/logcat",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
   },
@@ -254,28 +279,28 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "authorize_adb_devices"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "device_recovery"
   },
@@ -283,11 +308,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android/provision_devices.py",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
@@ -295,29 +320,29 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/device_status.py",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "device_status",
     "~followup_annotations": [
@@ -417,7 +442,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/tools/clang/scripts/update.py",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/tools/clang/scripts/update.py",
       "--print-clang-version"
     ],
     "name": "get_clang_version",
@@ -432,7 +457,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::adb]/resources/list_devices.py",
-      "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
+      "['[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "Set up ASAN on devices.List adb devices",
@@ -449,7 +474,7 @@
       "python",
       "-u",
       "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
       "014E1F310401C009"
     ],
     "name": "Set up ASAN on devices.Root devices",
@@ -469,16 +494,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/asan/third_party/asan_device_setup.sh",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/tools/android/asan/third_party/asan_device_setup.sh",
       "--lib",
-      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/lib/clang/1.1.1/lib/linux/libclang_rt.asan-arm-android.so",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/llvm-build/Release+Asserts/lib/clang/1.1.1/lib/linux/libclang_rt.asan-arm-android.so",
       "--device",
       "07a00ca4"
     ],
     "env": {
-      "ADB": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "ADB": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "Set up ASAN on devices.07a00ca4",
     "~followup_annotations": [
@@ -496,10 +521,10 @@
       "/tmp/device_monitor.pid",
       "--",
       "RECIPE_MODULE[build::chromium_android]/resources/spawn_device_monitor.py",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json"
     ],
     "name": "spawn_device_monitor"
   },
@@ -507,17 +532,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_audio_decoder_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_audio_decoder_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "audio_decoder_unittests"
   },
@@ -525,17 +550,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_common_audio_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_common_audio_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "common_audio_unittests"
   },
@@ -543,17 +568,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_common_video_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_common_video_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "common_video_unittests"
   },
@@ -561,17 +586,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_modules_tests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_modules_tests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "modules_tests"
   },
@@ -579,17 +604,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_modules_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_modules_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "modules_unittests"
   },
@@ -597,17 +622,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_peerconnection_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_peerconnection_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "peerconnection_unittests"
   },
@@ -615,17 +640,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_rtc_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_rtc_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "rtc_unittests"
   },
@@ -633,17 +658,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_system_wrappers_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_system_wrappers_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "system_wrappers_unittests"
   },
@@ -651,17 +676,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_test_support_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_test_support_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "test_support_unittests"
   },
@@ -669,17 +694,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_tools_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_tools_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "tools_unittests"
   },
@@ -687,17 +712,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_video_engine_tests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_video_engine_tests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "video_engine_tests"
   },
@@ -705,17 +730,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_voice_engine_unittests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_voice_engine_unittests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "voice_engine_unittests"
   },
@@ -723,17 +748,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_webrtc_nonparallel_tests",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_webrtc_nonparallel_tests",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "webrtc_nonparallel_tests"
   },
@@ -741,13 +766,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_AppRTCDemoTest",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_AppRTCDemoTest",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--tool=asan",
       "--verbose",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "name": "AppRTCDemoTest"
   },
@@ -755,13 +780,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_libjingle_peerconnection_android_unittest",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_libjingle_peerconnection_android_unittest",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--tool=asan",
       "--verbose",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "name": "libjingle_peerconnection_android_unittest"
   },
@@ -781,10 +806,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android/adb_logcat_printer.py",
       "--output-path",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/full_log",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/logcat"
     ],
     "name": "logcat_dump"
   },
@@ -801,7 +826,7 @@
       "GSUtil:parallel_composite_upload_threshold=50M",
       "----",
       "cp",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/Android32 ASan (L Nexus6)/1337"
     ],
     "name": "gsutil upload",
@@ -811,32 +836,32 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_platform/development/scripts/stack",
       "--arch",
       "arm",
       "--more-info",
-      "[SLAVE_BUILD]/src/out/Release/full_log"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/full_log"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_with_logcat_dump"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/tombstones.py",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android/tombstones.py",
       "-a",
       "-s",
       "-w",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"
   },
@@ -845,7 +870,7 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/test_logs/*.log"
     ],
     "name": "test_report",
     "~followup_annotations": [

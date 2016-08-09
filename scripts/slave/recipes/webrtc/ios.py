@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'chromium_tests',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'ios',
@@ -17,8 +18,12 @@ def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
 
   api.ios.host_info()
-  api.bot_update.ensure_checkout()
-  api.path['checkout'] = api.path['slave_build'].join('src')
+
+  checkout_kwargs = {'force': True}
+  checkout_dir = api.chromium_tests.get_checkout_dir({})
+  if checkout_dir:
+    checkout_kwargs['cwd'] = checkout_dir
+  api.bot_update.ensure_checkout(**checkout_kwargs)
 
   build_config_base_dir = api.path['checkout'].join(
       'webrtc',
@@ -46,6 +51,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -80,6 +86,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -105,6 +112,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -129,6 +137,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -155,6 +164,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -192,6 +202,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
+      path_config='kitchen',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',

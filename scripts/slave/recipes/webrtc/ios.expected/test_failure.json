@@ -25,6 +25,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/ios",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "chromium.fake",
@@ -46,18 +68,39 @@
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
+      "--force",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/ios",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"did_run\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#170242}\"@@@"
     ]
   },
   {
@@ -65,7 +108,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/webrtc/build/ios/chromium.fake/ios.json",
+      "[BUILDER_CACHE]/ios/src/webrtc/build/ios/chromium.fake/ios.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -124,7 +167,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "env": {
       "GYP_DEFINES": "fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",
@@ -143,22 +186,22 @@
       "-configuration",
       "Debug",
       "-project",
-      "[SLAVE_BUILD]/src/build/all.xcodeproj",
+      "[BUILDER_CACHE]/ios/src/build/all.xcodeproj",
       "-sdk",
       "iphonesimulator8.0"
     ],
-    "cwd": "[SLAVE_BUILD]/src/xcodebuild",
+    "cwd": "[BUILDER_CACHE]/ios/src/xcodebuild",
     "name": "compile"
   },
   {
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 1.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 1.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/ninja-iossim/Debug/iossim",
       "--platform",
       "fake device",
       "--version",
@@ -190,11 +233,11 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 2.app",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake tests 2.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/ninja-iossim/Debug/iossim",
       "--platform",
       "fake device",
       "--version",

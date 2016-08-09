@@ -4,6 +4,7 @@
 
 DEPS = [
   'archive',
+  'chromium_tests',
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -23,7 +24,13 @@ def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
 
   api.ios.host_info()
-  update_step = api.bot_update.ensure_checkout()
+
+  checkout_kwargs = {}
+  checkout_dir = api.chromium_tests.get_checkout_dir({})
+  if checkout_dir:
+    checkout_kwargs['cwd'] = checkout_dir
+  update_step = api.bot_update.ensure_checkout(**checkout_kwargs)
+
   revs = update_step.presentation.properties
   commit_pos = api.commit_position.parse_revision(revs['got_revision_cp'])
   api.gclient.runhooks()
@@ -56,18 +63,21 @@ def GenTests(api):
   yield (
     api.test('build_ok') +
     api.properties.generic(mastername='client.webrtc',
-                           buildername='iOS API Framework Builder')
+                           buildername='iOS API Framework Builder',
+                           path_config='kitchen')
   )
 
   yield (
     api.test('build_failure') +
     api.properties.generic(mastername='client.webrtc',
-                           buildername='iOS API Framework Builder') +
+                           buildername='iOS API Framework Builder',
+                           path_config='kitchen') +
     api.step_data('build', retcode=1)
   )
 
   yield (
     api.test('trybot_build') +
     api.properties.tryserver(mastername='tryserver.webrtc',
-                             buildername='ios_api_framework')
+                             buildername='ios_api_framework',
+                             path_config='kitchen')
   )

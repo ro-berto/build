@@ -4,6 +4,7 @@ DEPS = [
   'chromium',
   'chromium_android',
   'chromium_swarming',
+  'chromium_tests',
   'commit_position',
   'file',
   'depot_tools/gclient',

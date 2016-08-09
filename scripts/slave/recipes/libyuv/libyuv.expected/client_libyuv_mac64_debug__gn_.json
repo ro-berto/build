@@ -120,7 +120,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Debug",

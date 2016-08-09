@@ -25,6 +25,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/mac_swarming",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.webrtc",
@@ -52,6 +74,7 @@
       "src@12345",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/mac_swarming",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -88,7 +111,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[SLAVE_BUILD]/src/out"
+      "[BUILDER_CACHE]/mac_swarming/src/out"
     ],
     "name": "clean test output files"
   },
@@ -109,7 +132,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Debug",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -175,7 +198,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/mac_swarming/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' rtc_use_h264=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
@@ -187,7 +210,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -203,7 +226,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[BUILDER_CACHE]/mac_swarming/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -233,9 +256,11 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[BUILDER_CACHE]/mac_swarming/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--goma-deps-cache-dir",
+      "[GOMA_DEPS_CACHE]",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",
@@ -264,9 +289,9 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Debug",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug",
       "--src-dir",
-      "[SLAVE_BUILD]/src"
+      "[BUILDER_CACHE]/mac_swarming/src"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
@@ -276,27 +301,27 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/src/out/Debug/audio_decoder_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/common_audio_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/common_video_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/modules_tests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/modules_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/peerconnection_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/rtc_media_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/rtc_pc_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/rtc_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/system_wrappers_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/test_support_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/tools_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/video_engine_tests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/voice_engine_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/xmllite_xmpp_unittests.isolated.gen.json"
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/audio_decoder_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/common_audio_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/common_video_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/modules_tests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/modules_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/peerconnection_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/rtc_media_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/rtc_pc_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/rtc_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/system_wrappers_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/test_support_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/tools_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/video_engine_tests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/voice_engine_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/xmllite_xmpp_unittests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -325,7 +350,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -404,7 +429,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -483,7 +508,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -562,7 +587,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -641,7 +666,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -720,7 +745,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -799,7 +824,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -878,7 +903,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -957,7 +982,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1036,7 +1061,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1115,7 +1140,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1194,7 +1219,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1273,7 +1298,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1352,7 +1377,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1431,7 +1456,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1514,9 +1539,9 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_swarming\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_swarming\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_swarming\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_swarming\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--test-type=libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
       "--step-name=libjingle_peerconnection_objc_test",
       "--builder-name=mac_swarming",
@@ -1524,8 +1549,8 @@
       "--build-number=1337",
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Debug/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
+      "[BUILDER_CACHE]/mac_swarming/src/third_party/gtest-parallel/gtest-parallel",
+      "[BUILDER_CACHE]/mac_swarming/src/out/Debug/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
       "--"
     ],
     "name": "libjingle_peerconnection_objc_test"
@@ -1539,9 +1564,9 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_swarming\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_swarming\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_swarming\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_swarming\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=webrtc_nonparallel_tests",
       "--step-name=webrtc_nonparallel_tests",
@@ -1557,7 +1582,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1616,7 +1641,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1675,7 +1700,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1734,7 +1759,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1793,7 +1818,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1852,7 +1877,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1911,7 +1936,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1970,7 +1995,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2029,7 +2054,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2088,7 +2113,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2147,7 +2172,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2206,7 +2231,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2265,7 +2290,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2324,7 +2349,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2383,7 +2408,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac_swarming/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",

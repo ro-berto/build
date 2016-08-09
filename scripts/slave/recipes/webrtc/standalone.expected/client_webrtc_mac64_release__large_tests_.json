@@ -25,6 +25,28 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/Mac64_Release__large_tests_",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "client.webrtc",
@@ -46,6 +68,7 @@
       "src@12345",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/Mac64_Release__large_tests_",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -82,7 +105,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[SLAVE_BUILD]/src/out"
+      "[BUILDER_CACHE]/Mac64_Release__large_tests_/src/out"
     ],
     "name": "clean test output files"
   },
@@ -158,7 +181,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[BUILDER_CACHE]/Mac64_Release__large_tests_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
@@ -173,7 +196,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[BUILDER_CACHE]/Mac64_Release__large_tests_/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -203,9 +226,11 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[BUILDER_CACHE]/Mac64_Release__large_tests_/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--goma-deps-cache-dir",
+      "[GOMA_DEPS_CACHE]",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",
@@ -243,9 +268,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=audio_device_tests",
       "--step-name=audio_device_tests",
@@ -269,9 +294,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=voe_auto_test",
       "--step-name=voe_auto_test",
@@ -296,9 +321,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=video_capture_tests",
       "--step-name=video_capture_tests",
@@ -322,9 +347,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=webrtc_perf_tests",

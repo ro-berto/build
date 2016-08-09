@@ -144,6 +144,10 @@ class WebRTCApi(recipe_api.RecipeApi):
               self.m.platform.name).split('-', 1)[0])
 
   def checkout(self, **kwargs):
+    checkout_dir = self.m.chromium_tests.get_checkout_dir({})
+    if checkout_dir:
+      kwargs.setdefault('cwd', checkout_dir)
+
     update_step = self.m.bot_update.ensure_checkout(**kwargs)
     assert update_step.json.output['did_run']
 
