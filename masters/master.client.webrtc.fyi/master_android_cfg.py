@@ -4,9 +4,20 @@
 
 from buildbot.schedulers.basic import SingleBranchScheduler
 
-from master.factory import annotator_factory
+from master.factory import remote_run_factory
 
-m_annotator = annotator_factory.AnnotatorFactory()
+import master_site_config
+ActiveMaster = master_site_config.WebRTCFYI
+
+
+def m_remote_run(recipe, **kwargs):
+  return remote_run_factory.RemoteRunFactory(
+      active_master=ActiveMaster,
+      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      recipe=recipe,
+      factory_properties={'path_config': 'kitchen'},
+      **kwargs)
+
 
 def Update(c):
   c['schedulers'].extend([
@@ -30,7 +41,7 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory('webrtc/standalone'),
+        'factory': m_remote_run('webrtc/standalone'),
         'notify_on_missing': True,
         'category': 'android',
         'slavebuilddir': spec.get('slavebuilddir', 'android'),

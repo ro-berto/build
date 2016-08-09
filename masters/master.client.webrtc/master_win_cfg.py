@@ -4,9 +4,20 @@
 
 from buildbot.schedulers.basic import SingleBranchScheduler
 
-from master.factory import annotator_factory
+from master.factory import remote_run_factory
 
-m_annotator = annotator_factory.AnnotatorFactory()
+import master_site_config
+ActiveMaster = master_site_config.WebRTC
+
+
+def m_remote_run(recipe, **kwargs):
+  return remote_run_factory.RemoteRunFactory(
+      active_master=ActiveMaster,
+      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      recipe=recipe,
+      factory_properties={'path_config': 'kitchen'},
+      **kwargs)
+
 
 def Update(c):
   c['schedulers'].extend([
@@ -67,7 +78,7 @@ def Update(c):
         'name': spec['name'],
         # TODO(sergiyb): Remove the timeout below after all bots have synched
         # past Blink merge commit.
-        'factory': m_annotator.BaseFactory('webrtc/standalone', timeout=3600),
+        'factory': m_remote_run('webrtc/standalone', timeout=3600),
         'notify_on_missing': True,
         'category': spec.get('category', 'compile|testers|windows'),
         'slavebuilddir': spec.get('slavebuilddir', 'win'),
