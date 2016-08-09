@@ -15,6 +15,7 @@ import multiprocessing
 import optparse
 import os
 import re
+import signal
 import subprocess
 import sys
 
@@ -82,6 +83,11 @@ def goma_setup(options, env):
   and options.goma_dir, modify env to GOMA_DISABLED=true,
   and returns (False, None).
   """
+  cloudtail_pid_file = options.cloudtail_pid_file
+
+  if cloudtail_pid_file and os.path.exists(cloudtail_pid_file):
+    os.remove(cloudtail_pid_file)
+
   if options.compiler not in ('goma', 'goma-clang'):
     # Unset goma_dir to make sure we'll not use goma.
     options.goma_dir = None
@@ -142,6 +148,10 @@ def goma_setup(options, env):
       cloudtail_proc = subprocess.Popen(
           [cloudtail_path, 'tail', '--log-id', 'goma_compiler_proxy', '--path',
            goma_utils.GetLatestGomaCompilerProxyInfo()])
+
+      if cloudtail_pid_file:
+        with open(cloudtail_pid_file,'w') as f:
+          f.write('%d' % cloudtail_proc.pid)
     except Exception as e:
       print 'failed to invoke cloudtail: %s' % e
       return True, None
@@ -190,6 +200,8 @@ def goma_setup(options, env):
 # TODO(tikuta): move to goma_utils.py
 def goma_teardown(options, env, exit_status, cloudtail_proc):
   """Tears down goma if necessary. """
+  cloudtail_pid_file = options.cloudtail_pid_file
+
   if options.goma_dir:
     override_gsutil = None
     if options.gsutil_py_path:
@@ -213,9 +225,15 @@ def goma_teardown(options, env, exit_status, cloudtail_proc):
       goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
                                env.get('GOMACTL_CRASH_REPORT_ID_FILE'),
                                options.build_data_dir)
+
   if cloudtail_proc:
     cloudtail_proc.terminate()
     cloudtail_proc.wait()
+  elif cloudtail_pid_file:
+    with open(cloudtail_pid_file) as f:
+      pid = int(f.read())
+      os.kill(pid, signal.SIGTERM)
+    os.remove(cloudtail_pid_file)
 
 
 def maybe_set_official_build_envvars(options, env):
@@ -502,6 +520,8 @@ def get_parsed_options():
                            help='Checks the output of the ninja builder to '
                                 'confirm that a second compile immediately '
                                 'the first is a no-op.')
+  option_parser.add_option('--cloudtail-pid-file', default=None,
+                           help='Specify a file to store pid of cloudtail')
 
   options, args = option_parser.parse_args()
 
