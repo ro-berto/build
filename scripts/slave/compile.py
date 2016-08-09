@@ -155,9 +155,6 @@ def goma_setup(options, env):
     env['GOMA_ENABLE_REMOTE_LINK'] = options.goma_enable_remote_link
   if options.goma_store_local_run_output:
     env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = options.goma_store_local_run_output
-  if options.goma_enable_compiler_info_cache:
-    # Will be stored in GOMA_CACHE_DIR.
-    env['GOMA_COMPILER_INFO_CACHE_FILE'] = 'goma-compiler-info.cache'
 
   if options.build_data_dir:
     env['GOMA_DUMP_STATS_FILE'] = os.path.join(options.build_data_dir,
@@ -487,9 +484,6 @@ def get_parsed_options():
                            help='Set goma hermetic mode')
   option_parser.add_option('--goma-enable-remote-link', default=None,
                            help='Enable goma remote link.')
-  option_parser.add_option('--goma-enable-compiler-info-cache',
-                           action='store_true',
-                           help='Enable goma CompilerInfo cache')
   option_parser.add_option('--goma-store-local-run-output', default=None,
                            help='Store local run output to goma servers.')
   option_parser.add_option('--goma-fail-fast', action='store_true')

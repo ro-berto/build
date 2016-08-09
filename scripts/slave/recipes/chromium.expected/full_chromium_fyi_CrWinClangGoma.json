@@ -373,7 +373,6 @@
       "[CACHE]\\cipd\\goma",
       "--goma-hermetic",
       "error",
-      "--goma-enable-compiler-info-cache",
       "--",
       "all"
     ],

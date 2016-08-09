@@ -43,8 +43,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_hermetic = Single(basestring, required=False),
       goma_enable_remote_link = Single(bool, empty_val=False, required=False),
       goma_store_local_run_output = Single(bool, empty_val=False, required=False),
-      goma_enable_compiler_info_cache = Single(
-          bool, empty_val=False, required=False),
       xcode_sdk = Single(basestring, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
@@ -252,7 +250,6 @@ def msvs2015(c):
 def goma_canary(c):
   c.compile_py.goma_canary = True
   c.compile_py.goma_hermetic = 'error'
-  c.compile_py.goma_enable_compiler_info_cache = True
 
 @config_ctx()
 def goma_staging(c):

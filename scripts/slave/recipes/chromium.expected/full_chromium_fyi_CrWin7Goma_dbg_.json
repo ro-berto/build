@@ -306,7 +306,6 @@
       "[CACHE]\\cipd\\goma",
       "--goma-hermetic",
       "error",
-      "--goma-enable-compiler-info-cache",
       "--",
       "base_unittests",
       "chromium_builder_tests",
