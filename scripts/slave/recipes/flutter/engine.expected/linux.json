@@ -34,17 +34,17 @@
       "--slave",
       "fake-m1",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]\ntarget_os = ['android']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/flutter', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]\ntarget_os = ['android']",
       "--root",
-      "src",
+      "src/flutter",
       "--revision_mapping_file",
-      "{\"src\": \"got_engine_revision\"}",
+      "{\"src/flutter\": \"got_engine_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src/flutter@HEAD",
       "--force",
       "--output_manifest"
     ],
@@ -57,26 +57,26 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/flutter\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/flutter\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/flutter.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"9221bca00ddbd888260084def81f09543281b952\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src/flutter\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_engine_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_engine_revision_cp\": \"refs/heads/master@{#170242}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_engine_revision\": \"9221bca00ddbd888260084def81f09543281b952\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_engine_revision_cp\": \"refs/heads/master@{#84512}\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src/flutter\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_engine_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_engine_revision_cp@\"refs/heads/master@{#170242}\"@@@"
+      "@@@SET_BUILD_PROPERTY@got_engine_revision@\"9221bca00ddbd888260084def81f09543281b952\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_engine_revision_cp@\"refs/heads/master@{#84512}\"@@@"
     ]
   },
   {
@@ -86,7 +86,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]/src/flutter",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -94,7 +94,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/flutter/tools/gn",
       "--unoptimized"
     ],
     "env": {
@@ -136,7 +136,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/sky/tools/gn"
+      "[SLAVE_BUILD]/src/flutter/tools/gn"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
@@ -176,14 +176,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_1/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/linux-x64/artifacts.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/linux-x64/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"linux-x64/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/linux-x64/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/linux-x64/artifacts.zip@@@"
     ]
   },
   {
@@ -211,9 +211,9 @@
   {
     "cmd": [
       "dart",
-      "[SLAVE_BUILD]/src/sky/shell/testing/observatory/test.dart",
+      "[SLAVE_BUILD]/src/flutter/sky/shell/testing/observatory/test.dart",
       "[SLAVE_BUILD]/src/out/host_debug/sky_shell",
-      "[SLAVE_BUILD]/src/sky/shell/testing/observatory/empty_main.dart"
+      "[SLAVE_BUILD]/src/flutter/sky/shell/testing/observatory/empty_main.dart"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -223,7 +223,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/flutter/tools/gn",
       "--android"
     ],
     "env": {
@@ -253,7 +253,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-arm artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"flutter.mojo\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/flutter.mojo\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"flutter.mojo\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/flutter.mojo\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/gen/flutter/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug/gen/flutter/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -265,14 +265,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_2/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/artifacts.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-arm/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm/artifacts.zip@@@"
     ]
   },
   {
@@ -319,14 +319,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_3/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/symbols.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm/symbols.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-arm/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm/symbols.zip@@@"
     ]
   },
   {
@@ -353,7 +353,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/flutter/tools/gn",
       "--android",
       "--runtime-mode=profile"
     ],
@@ -383,7 +383,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-arm-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points_android.txt\", \"path\": \"[SLAVE_BUILD]/src/sky/engine/bindings/dart_vm_entry_points_android.txt\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"flutter.mojo\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/flutter.mojo\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points_android.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points_android.txt\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"flutter.mojo\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/flutter.mojo\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/gen/flutter/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_profile/gen/flutter/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -395,14 +395,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_4/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-profile/artifacts.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-arm-profile/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-profile/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/artifacts.zip@@@"
     ]
   },
   {
@@ -449,14 +449,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_5/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-profile/linux-x64.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/linux-x64.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-arm-profile/linux-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-profile/linux-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/linux-x64.zip@@@"
     ]
   },
   {
@@ -503,14 +503,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_6/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-profile/symbols.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/symbols.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-arm-profile/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-profile/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/symbols.zip@@@"
     ]
   },
   {
@@ -537,7 +537,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/flutter/tools/gn",
       "--android",
       "--runtime-mode=release"
     ],
@@ -567,7 +567,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-arm-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points_android.txt\", \"path\": \"[SLAVE_BUILD]/src/sky/engine/bindings/dart_vm_entry_points_android.txt\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"flutter.mojo\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/flutter.mojo\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_7/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points_android.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points_android.txt\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"flutter.mojo\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/flutter.mojo\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/gen/flutter/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_release/gen/flutter/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_7/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -579,14 +579,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_7/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/artifacts.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-arm-release/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/artifacts.zip@@@"
     ]
   },
   {
@@ -633,14 +633,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_8/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/linux-x64.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/linux-x64.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-arm-release/linux-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/linux-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/linux-x64.zip@@@"
     ]
   },
   {
@@ -687,14 +687,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_9/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/symbols.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/symbols.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-arm-release/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/symbols.zip@@@"
     ]
   },
   {
@@ -741,14 +741,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_10/sky_engine.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_engine.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/sky_engine.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload sky_engine.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_engine.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/sky_engine.zip@@@"
     ]
   },
   {
@@ -795,14 +795,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_11/sky_services.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_services.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/sky_services.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload sky_services.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_services.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/sky_services.zip@@@"
     ]
   },
   {
@@ -829,7 +829,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/flutter/tools/gn",
       "--android",
       "--android-cpu=x64"
     ],
@@ -859,7 +859,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/gen/sky/shell/shell/shell/libs/x86_64/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_12/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/gen/flutter/sky/shell/shell/shell/libs/x86_64/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/gen/flutter/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_12/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -871,14 +871,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_12/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x64/artifacts.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-x64/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x64/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/artifacts.zip@@@"
     ]
   },
   {
@@ -925,14 +925,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_13/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x64/symbols.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/symbols.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-x64/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x64/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/symbols.zip@@@"
     ]
   },
   {
@@ -959,7 +959,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "[SLAVE_BUILD]/src/flutter/tools/gn",
       "--android",
       "--android-cpu=x86"
     ],
@@ -989,7 +989,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x86 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/gen/sky/shell/shell/shell/libs/x86/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_14/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/gen/flutter/sky/shell/shell/shell/libs/x86/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/gen/flutter/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_14/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -1001,14 +1001,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_14/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x86/artifacts.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/artifacts.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-x86/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x86/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/artifacts.zip@@@"
     ]
   },
   {
@@ -1055,14 +1055,14 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_15/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x86/symbols.zip"
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/symbols.zip"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "gsutil upload \"android-x86/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x86/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/symbols.zip@@@"
     ]
   },
   {

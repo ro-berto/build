@@ -26,7 +26,7 @@ def GetCloudPath(api, path):
 
 
 def Build(api, config, *targets):
-  checkout = api.path['checkout']
+  checkout = api.path['slave_build'].join('src')
   build_dir = checkout.join('out/%s' % config)
   ninja_args = ['ninja', '-C', build_dir]
   ninja_args.extend(targets)
@@ -34,8 +34,8 @@ def Build(api, config, *targets):
 
 
 def RunGN(api, *args):
-  checkout = api.path['checkout']
-  gn_cmd = [checkout.join('sky/tools/gn')]
+  checkout = api.path['slave_build'].join('src')
+  gn_cmd = [checkout.join('flutter/tools/gn')]
   gn_cmd.extend(args)
   api.step('gn %s' % ' '.join(args), gn_cmd)
 
@@ -51,7 +51,7 @@ def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
     local_zip = temp_dir.join('artifacts.zip')
     remote_name = '%s/%s' % (platform, archive_name)
     remote_zip = GetCloudPath(api, remote_name)
-    pkg = api.zip.make_package(api.path['checkout'], local_zip)
+    pkg = api.zip.make_package(api.path['slave_build'].join('src'), local_zip)
     AddFiles(api, pkg, file_paths)
 
     pkg.zip('Zip %s %s' % (platform, archive_name))
@@ -65,8 +65,8 @@ def UploadDartPackage(api, package_name):
     local_zip = temp_dir.join('%s.zip' % package_name)
     remote_name = '%s.zip' % package_name
     remote_zip = GetCloudPath(api, remote_name)
-    parent_dir = api.path['checkout'].join(
-        'out/android_debug/dist/packages')
+    parent_dir = api.path['slave_build'].join(
+        'src/out/android_debug/dist/packages')
     pkg = api.zip.make_package(parent_dir, local_zip)
     pkg.add_directory(parent_dir.join(package_name))
     pkg.zip('Zip %s Package' % package_name)
@@ -88,7 +88,7 @@ def AnalyzeDartUI(api):
   RunGN(api, '--unoptimized')
   Build(api, 'host_debug_unopt', 'generate_dart_ui')
 
-  checkout = api.path['checkout']
+  checkout = api.path['slave_build'].join('src')
   api.step('analyze dart_ui', ['/bin/sh', 'travis/analyze.sh'], cwd=checkout)
 
 
@@ -101,10 +101,10 @@ def BuildLinuxAndroidx86(api):
     UploadArtifacts(api, folder, [
       'build/android/ant/chromium-debug.keystore',
       'out/%s/apks/SkyShell.apk' % out_dir,
-      ('out/%s/gen/sky/shell/shell/shell/libs/%s/libsky_shell.so' %
+      ('out/%s/gen/flutter/sky/shell/shell/shell/libs/%s/libsky_shell.so' %
        (out_dir, abi)),
       'out/%s/icudtl.dat' % out_dir,
-      'out/%s/gen/sky/shell/shell/classes.dex.jar' % out_dir,
+      'out/%s/gen/flutter/sky/shell/shell/classes.dex.jar' % out_dir,
     ])
     UploadArtifacts(api, folder, [
       'out/%s/libsky_shell.so' % out_dir
@@ -120,9 +120,9 @@ def BuildLinuxAndroidArm(api):
     'apks/SkyShell.apk',
     'flutter.jar',
     'flutter.mojo',
-    'gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so',
+    'gen/flutter/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so',
     'icudtl.dat',
-    'gen/sky/shell/shell/classes.dex.jar',
+    'gen/flutter/sky/shell/shell/classes.dex.jar',
   ]
   RunGN(api, '--android')
   Build(api, 'android_debug', ':dist')
@@ -144,8 +144,8 @@ def BuildLinuxAndroidArm(api):
     UploadArtifacts(api, upload_dir, [
       'build/android/ant/chromium-debug.keystore',
       'dart/runtime/bin/dart_io_entries.txt',
-      'sky/engine/bindings/dart_vm_entry_points.txt',
-      'sky/engine/bindings/dart_vm_entry_points_android.txt',
+      'flutter/sky/engine/bindings/dart_vm_entry_points.txt',
+      'flutter/sky/engine/bindings/dart_vm_entry_points_android.txt',
     ] + AddPathPrefix(api, 'out/%s' % build_output_dir, out_paths))
 
     # Upload artifacts used for AOT compilation on Linux hosts.
@@ -172,11 +172,11 @@ def BuildLinux(api):
 
 
 def TestObservatory(api):
-  checkout = api.path['checkout']
+  checkout = api.path['slave_build'].join('src')
   sky_shell_path = checkout.join('out/host_debug/sky_shell')
   empty_main_path = \
-      checkout.join('sky/shell/testing/observatory/empty_main.dart')
-  test_path = checkout.join('sky/shell/testing/observatory/test.dart')
+      checkout.join('flutter/sky/shell/testing/observatory/empty_main.dart')
+  test_path = checkout.join('flutter/sky/shell/testing/observatory/test.dart')
   test_cmd = ['dart', test_path, sky_shell_path, empty_main_path]
   api.step('test observatory and service protocol', test_cmd, cwd=checkout)
 
@@ -187,8 +187,8 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
 
   Build(api, 'host_debug')
-  Build(api, 'android_profile', 'sky/engine/bindings:snapshot_cc')
-  Build(api, 'android_release', 'sky/engine/bindings:snapshot_cc')
+  Build(api, 'android_profile', 'flutter/sky/engine/bindings:snapshot_cc')
+  Build(api, 'android_release', 'flutter/sky/engine/bindings:snapshot_cc')
 
   UploadArtifacts(api, 'darwin-x64', [
     'out/host_debug/sky_snapshot',
@@ -206,12 +206,12 @@ def BuildMac(api):
 
 
 def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
-  checkout = api.path['checkout']
+  checkout = api.path['slave_build'].join('src')
   out_dir = checkout.join('out')
 
   label_dir = out_dir.join(label)
   create_ios_framework_cmd = [
-    checkout.join('sky/tools/create_ios_framework.py'),
+    checkout.join('flutter/sky/tools/create_ios_framework.py'),
     '--dst',
     label_dir,
     '--device-out-dir',
@@ -261,14 +261,14 @@ def BuildIOS(api):
 def GetCheckout(api):
   src_cfg = api.gclient.make_config(GIT_MODE=True)
   soln = src_cfg.solutions.add()
-  soln.name = 'src'
+  soln.name = 'src/flutter'
   soln.url = \
       'https://chromium.googlesource.com/external/github.com/flutter/engine'
   # TODO(eseidel): What does parent_got_revision_mapping do?  Do I care?
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
   src_cfg.target_os = set(['android'])
   api.gclient.c = src_cfg
-  api.gclient.c.got_revision_mapping['src'] = 'got_engine_revision'
+  api.gclient.c.got_revision_mapping['src/flutter'] = 'got_engine_revision'
   # TODO(eseidel): According to iannucci force=True is required.
   # See https://codereview.chromium.org/1690713003#msg6
   api.bot_update.ensure_checkout(force=True)
@@ -282,7 +282,7 @@ def RunSteps(api):
 
   GetCheckout(api)
 
-  checkout = api.path['checkout']
+  checkout = api.path['slave_build'].join('src')
   dart_bin = checkout.join('third_party', 'dart-sdk', 'dart-sdk', 'bin')
   env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
 
