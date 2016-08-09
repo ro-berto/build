@@ -764,6 +764,7 @@ class AndroidApi(recipe_api.RecipeApi):
       else:
         archive = None
       print_step_cmd = ['perf', '--print-step', test_name, '--verbose',
+                        '--adb-path', self.m.adb.adb_path(),
                         '--blacklist-file', self.blacklist_file]
       if archive:
         print_step_cmd.extend(['--get-output-dir-archive', archive])

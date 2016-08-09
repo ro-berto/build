@@ -647,6 +647,8 @@
       "--print-step",
       "page_cycler.foo",
       "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--enable-platform-mode"
@@ -695,6 +697,8 @@
       "--print-step",
       "perf_test.foo",
       "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--enable-platform-mode"
