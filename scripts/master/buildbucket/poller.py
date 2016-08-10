@@ -35,6 +35,9 @@ class BuildBucketPoller(PollingChangeSource):
       self.pollInterval = poll_interval
     self.dry_run = dry_run
 
+  def describe(self):
+    return 'BuildBucketPoller'
+
   @inlineCallbacks
   def poll(self):
     # Do not schedule multiple polling processes at a time.
