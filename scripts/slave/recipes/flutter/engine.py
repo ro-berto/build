@@ -230,8 +230,8 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
 
   UploadArtifacts(api, bucket_name, [
     'dart/runtime/bin/dart_io_entries.txt',
-    'sky/engine/bindings/dart_vm_entry_points.txt',
-    'sky/engine/bindings/snapshot.dart',
+    'flutter/sky/engine/bindings/dart_vm_entry_points.txt',
+    'flutter/sky/engine/bindings/snapshot.dart',
     'out/%s/clang_x64/gen_snapshot' % device_out,
     'out/%s/Flutter.framework.zip' % label,
   ])
