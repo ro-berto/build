@@ -265,7 +265,7 @@
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/ensure_webcam_is_running.py"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_baremetal",
+    "cwd": "[BUILDER_CACHE]/mac_baremetal/src",
     "name": "webcam_check"
   },
   {
@@ -289,7 +289,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "audio_device_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_baremetal",
+    "cwd": "[BUILDER_CACHE]/mac_baremetal/src",
     "name": "audio_device_tests"
   },
   {
@@ -314,7 +314,7 @@
       "voe_auto_test",
       "--automated"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_baremetal",
+    "cwd": "[BUILDER_CACHE]/mac_baremetal/src",
     "name": "voe_auto_test"
   },
   {
@@ -338,7 +338,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_capture_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_baremetal",
+    "cwd": "[BUILDER_CACHE]/mac_baremetal/src",
     "name": "video_capture_tests"
   },
   {

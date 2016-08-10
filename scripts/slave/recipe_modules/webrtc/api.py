@@ -181,11 +181,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     Args:
       test_suite: The name of the test suite.
     """
-    context = {}
-    if self._working_dir:
-      context['cwd'] = self._working_dir
-
-    with self.m.step.context(context):
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
       if self.c.use_isolate:
         self.m.isolate.remove_build_metadata()
         self.m.isolate.isolate_tests(self.m.chromium.output_dir,

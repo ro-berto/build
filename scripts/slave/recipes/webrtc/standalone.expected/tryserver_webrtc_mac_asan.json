@@ -282,7 +282,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/audio_decoder_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "audio_decoder_unittests"
   },
   {
@@ -308,7 +308,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/common_audio_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "common_audio_unittests"
   },
   {
@@ -334,7 +334,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/common_video_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "common_video_unittests"
   },
   {
@@ -360,7 +360,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/modules_tests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "modules_tests"
   },
   {
@@ -386,7 +386,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/modules_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "modules_unittests"
   },
   {
@@ -412,7 +412,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/peerconnection_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "peerconnection_unittests"
   },
   {
@@ -438,7 +438,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/rtc_media_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "rtc_media_unittests"
   },
   {
@@ -464,7 +464,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/rtc_pc_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "rtc_pc_unittests"
   },
   {
@@ -490,7 +490,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/rtc_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "rtc_unittests"
   },
   {
@@ -516,7 +516,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/system_wrappers_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "system_wrappers_unittests"
   },
   {
@@ -542,7 +542,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/test_support_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "test_support_unittests"
   },
   {
@@ -568,7 +568,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/tools_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "tools_unittests"
   },
   {
@@ -594,7 +594,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/video_engine_tests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "video_engine_tests"
   },
   {
@@ -620,7 +620,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/voice_engine_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "voice_engine_unittests"
   },
   {
@@ -646,7 +646,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/xmllite_xmpp_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -672,7 +672,7 @@
       "[BUILDER_CACHE]/mac_asan/src/out/Release/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "libjingle_peerconnection_objc_test"
   },
   {
@@ -697,7 +697,7 @@
       "--enable-asan",
       "webrtc_nonparallel_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_asan",
+    "cwd": "[BUILDER_CACHE]/mac_asan/src",
     "name": "webrtc_nonparallel_tests"
   },
   {

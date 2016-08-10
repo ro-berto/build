@@ -237,7 +237,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\audio_decoder_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "audio_decoder_unittests"
   },
   {
@@ -262,7 +262,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\common_audio_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "common_audio_unittests"
   },
   {
@@ -287,7 +287,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\common_video_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "common_video_unittests"
   },
   {
@@ -312,7 +312,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\modules_tests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "modules_tests"
   },
   {
@@ -337,7 +337,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\modules_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "modules_unittests"
   },
   {
@@ -362,7 +362,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\peerconnection_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "peerconnection_unittests"
   },
   {
@@ -387,7 +387,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\rtc_media_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "rtc_media_unittests"
   },
   {
@@ -412,7 +412,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\rtc_pc_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "rtc_pc_unittests"
   },
   {
@@ -437,7 +437,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\rtc_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "rtc_unittests"
   },
   {
@@ -462,7 +462,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\system_wrappers_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "system_wrappers_unittests"
   },
   {
@@ -487,7 +487,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\test_support_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "test_support_unittests"
   },
   {
@@ -512,7 +512,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\tools_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "tools_unittests"
   },
   {
@@ -537,7 +537,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\video_engine_tests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "video_engine_tests"
   },
   {
@@ -562,7 +562,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\voice_engine_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "voice_engine_unittests"
   },
   {
@@ -587,7 +587,7 @@
       "[BUILDER_CACHE]\\win_dbg\\src\\out\\Debug\\xmllite_xmpp_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -611,7 +611,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_nonparallel_tests.exe"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_dbg",
+    "cwd": "[BUILDER_CACHE]\\win_dbg\\src",
     "name": "webrtc_nonparallel_tests"
   },
   {
