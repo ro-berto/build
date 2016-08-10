@@ -340,7 +340,8 @@ class iOSApi(recipe_api.RecipeApi):
         self.compiler == 'ninja' and
         self.m.tryserver.is_tryserver and
         'without patch' not in suffix):
-      affected_files = self.m.chromium_tests.get_files_affected_by_patch()
+      affected_files = self.m.chromium_tests.get_files_affected_by_patch(
+          cwd=self.m.path['checkout'])
       # The same test may be configured to run on multiple simulators.
       # Only specify each test once for the analyzer.
       tests = list(set(test['app'] for test in self.__config['tests']))

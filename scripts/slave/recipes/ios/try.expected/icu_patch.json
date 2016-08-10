@@ -235,7 +235,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]/src/third_party/icu",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

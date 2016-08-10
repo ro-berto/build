@@ -694,14 +694,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               'TESTS FAILED; retries without patch disabled (%s)'
                   % deapply_patch_reason)
 
-  def get_files_affected_by_patch(self, relative_to='src/'):
+  def get_files_affected_by_patch(self, relative_to='src/', cwd=None):
     """Returns list of POSIX paths of files affected by patch for "analyze".
 
     Paths are relative to `relative_to` which for analyze should be 'src/'.
     """
     patch_root = self.m.gclient.calculate_patch_root(
         self.m.properties.get('patch_project'))
-    cwd = self._working_dir.join(patch_root) if self._working_dir else None
+    if not cwd:
+      cwd = self._working_dir.join(patch_root) if self._working_dir else None
     files = self.m.tryserver.get_files_affected_by_patch(patch_root, cwd=cwd)
     for i, path in enumerate(files):
       path = str(path)
