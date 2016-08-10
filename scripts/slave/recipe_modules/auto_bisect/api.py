@@ -109,6 +109,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
     try:
       self.m.gsutil(['ls', path])
     except self.m.step.StepFailure:  # pragma: no cover
+      # A step failure here simply means that the file does not exist, and
+      # should not be treated as an error.
+      self.m.step.active_result.presentation.status = self.m.step.SUCCESS
       return False
     return True
 

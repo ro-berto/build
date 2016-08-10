@@ -162,8 +162,7 @@
     ],
     "name": "gsutil ls",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
+      "step returned non-zero exit code: 1"
     ]
   },
   {
@@ -196,8 +195,7 @@
     ],
     "name": "gsutil ls (2)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
+      "step returned non-zero exit code: 1"
     ]
   },
   {
@@ -230,8 +228,7 @@
     ],
     "name": "gsutil ls (3)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
+      "step returned non-zero exit code: 1"
     ]
   },
   {
