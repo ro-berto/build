@@ -356,7 +356,7 @@ class GatekeeperTest(unittest.TestCase):
             for section in master]
     return sections
 
-  def _url_handler(self, req, params=None):
+  def _url_handler(self, req, params=None, timeout=None):
     """Used by the mocked urlopen to respond to different URLs."""
     if isinstance(req, urllib2.Request):
       url = req.get_full_url()
@@ -367,6 +367,9 @@ class GatekeeperTest(unittest.TestCase):
     call = {'url': url}
     if params:
       call['params'] = params
+    if timeout:
+      call['timeout'] = timeout
+
     self.url_calls.append(call)
 
     if url in self.urls:

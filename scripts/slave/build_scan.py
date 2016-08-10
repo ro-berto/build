@@ -11,6 +11,7 @@ import logging
 import optparse
 import os
 import sys
+import time
 import urllib
 import urllib2
 
@@ -23,12 +24,28 @@ SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 # Buildbot status enum.
 SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
 
+MAX_ATTEMPTS = 4
+URL_TIMEOUT = 30
+
+def _url_open_json(url):
+  attempts = 0
+  while True:
+    try:
+      with closing(urllib2.urlopen(url, timeout=URL_TIMEOUT)) as f:
+        return json.load(f)
+    except urllib2.URLError as f:
+      if attempts > MAX_ATTEMPTS:
+        raise
+
+      attempts += 1
+      time.sleep(2 ** attempts)
+
 
 def get_root_json(master_url):
   """Pull down root JSON which contains builder and build info."""
-  logging.info('opening %s' % (master_url + '/json'))
-  with closing(urllib2.urlopen(master_url + '/json')) as f:
-    return json.load(f)
+  url = master_url + '/json'
+  logging.info('opening %s' % url)
+  return _url_open_json(url)
 
 
 def find_new_builds(master_url, root_json, build_db):
@@ -102,8 +119,7 @@ def get_build_json(url_tuple):
   """Downloads the json of a specific build."""
   url, master, builder, buildnum = url_tuple
   logging.debug('opening %s...' % url)
-  with closing(urllib2.urlopen(url)) as f:
-    return json.load(f), master, builder, buildnum
+  return _url_open_json(url), master, builder, buildnum
 
 
 def get_build_jsons(master_builds, processes):
