@@ -24,12 +24,6 @@ def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
-  # TODO(kjellander): Remove when crbug.com/636080 is fixed.
-  if api.properties['buildername'] in ('Linux32 Debug', 'Linux32 Release'):
-    step_result = api.step('Disabled: see http://crbug.com/636080 ', cmd=None)
-    step_result.presentation.status = api.step.WARNING
-    return
-
   if api.platform.is_mac:
     api.ios.host_info()
   webrtc.checkout()
