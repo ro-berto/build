@@ -18,17 +18,17 @@ SPEC = {
 }
 
 
-def _BaseSpec(bot_type, chromium_config, disable_tests,
+def _BaseSpec(bot_type, config_name, disable_tests,
               platform, target_bits, tests):
   spec = {
     'bot_type': bot_type,
-    'chromium_config': chromium_config,
+    'chromium_config': config_name,
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': target_bits,
     },
     'disable_tests': disable_tests,
-    'gclient_config': 'chromium_perf',
+    'gclient_config': config_name,
     'testing': {
       'platform': 'linux' if platform == 'android' else platform,
     },
@@ -45,7 +45,7 @@ def _BaseSpec(bot_type, chromium_config, disable_tests,
   return spec
 
 
-def BuildSpec(chromium_config, perf_id, platform, target_bits):
+def BuildSpec(config_name, perf_id, platform, target_bits):
   if platform == 'android':
     # TODO: Run sizes on Android.
     tests = []
@@ -54,23 +54,24 @@ def BuildSpec(chromium_config, perf_id, platform, target_bits):
 
   spec = _BaseSpec(
       bot_type='builder',
-      chromium_config=chromium_config,
+      config_name=config_name,
       disable_tests=True,
       platform=platform,
       target_bits=target_bits,
-      tests=tests)
+      tests=tests,
+  )
 
   spec['compile_targets'] = ['chromium_builder_perf']
 
   return spec
 
 
-def _TestSpec(chromium_config, parent_builder, perf_id, platform, target_bits,
+def _TestSpec(config_name, parent_builder, perf_id, platform, target_bits,
               max_battery_temp, shard_index, num_host_shards,
               num_device_shards):
   spec = _BaseSpec(
       bot_type='tester',
-      chromium_config=chromium_config,
+      config_name=config_name,
       disable_tests=platform == 'android',
       platform=platform,
       target_bits=target_bits,

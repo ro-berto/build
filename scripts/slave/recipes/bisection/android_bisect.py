@@ -104,6 +104,8 @@ def RunSteps(api, mastername, buildername):
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
   update_step = api.auto_bisect.ensure_checkout()
+  api.path.c.dynamic_paths['catapult'] = api.m.auto_bisect.working_dir.join(
+      'catapult')
   api.chromium_android.clean_local_files()
 
   bot_db = api.chromium_tests.create_bot_db_from_master_dict(mastername,

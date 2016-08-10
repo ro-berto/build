@@ -29,6 +29,8 @@ def RunSteps(api):
   # TODO(robertocn): remove do_not_nest_wait_for_revision once downstream
   # expectations have been fixed, and make it behave like this by default.
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
+  api.path.c.dynamic_paths['catapult'] = api.path['slave_build'].join(
+      'catapult')
   api.auto_bisect.start_try_job(api, update_step=update_step, bot_db=bot_db,
                                 do_not_nest_wait_for_revision=True)
 

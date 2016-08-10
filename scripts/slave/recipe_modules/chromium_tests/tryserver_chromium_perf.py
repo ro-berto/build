@@ -4,6 +4,15 @@
 
 from . import chromium_perf
 
+import DEPS
+CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
+
+@CONFIG_CTX(includes=['chromium_perf'])
+def tryserver_chromium_perf(c):
+  soln = c.solutions.add()
+  soln.name = 'catapult'
+  soln.url = ('https://chromium.googlesource.com/external/github.com/'
+              'catapult-project/catapult.git')
 
 SPEC = {
   'builders': {},
