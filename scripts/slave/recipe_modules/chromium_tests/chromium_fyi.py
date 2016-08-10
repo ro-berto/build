@@ -1603,10 +1603,7 @@ SPEC = {
         steps.generate_junit_test,
       ],
       'tests': [
-        steps.GTestTest(
-            'components_browsertests',
-            android_isolate_path='components/components_browsertests.isolate',
-            android_tool='asan'),
+        steps.GTestTest('components_browsertests', android_tool='asan'),
         steps.GTestTest('gfx_unittests', android_tool='asan'),
       ],
     },

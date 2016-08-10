@@ -227,7 +227,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
 class LocalGTestTest(Test):
   def __init__(self, name, args=None, target_name=None, use_isolate=False,
-               revision=None, webkit_revision=None, android_isolate_path=None,
+               revision=None, webkit_revision=None,
                android_shard_timeout=None, android_tool=None,
                override_compile_targets=None, override_isolate_target=None,
                use_xvfb=True, **runtest_kwargs):
@@ -258,7 +258,6 @@ class LocalGTestTest(Test):
     self._use_isolate = use_isolate
     self._revision = revision
     self._webkit_revision = webkit_revision
-    self._android_isolate_path = android_isolate_path
     self._android_shard_timeout = android_shard_timeout
     self._android_tool = android_tool
     self._override_compile_targets = override_compile_targets
@@ -319,12 +318,6 @@ class LocalGTestTest(Test):
     kwargs['step_test_data'] = step_test_data
 
     if is_android:
-      # TODO(sergiyb): Figure out if we can reuse isolate module for running
-      # isolated Android tests, rather than using custom solution in Android
-      # test launcher.
-      if self._android_isolate_path:
-        isolate_path = api.path['checkout'].join(self._android_isolate_path)
-        kwargs['isolate_file_path'] = isolate_path
       kwargs['json_results_file'] = gtest_results_file
       kwargs['flakiness_dashboard'] = 'test-results.appspot.com'
       kwargs['shard_timeout'] = self._android_shard_timeout

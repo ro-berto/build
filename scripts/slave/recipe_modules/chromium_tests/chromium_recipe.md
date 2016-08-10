@@ -163,25 +163,7 @@ they take effect and build still passes.
 
 ### Add a new non gtest-based test
 Generally, look at [steps.py](https://code.google.com/p/chromium/codesearch#chromium/build/scripts/slave/recipe_modules/chromium_tests/steps.py)
-, and either use an existing class there, or add a new one. For example, look at
-the Android Tests (amp split) [recipe](https://code.google.com/p/chromium/codesearch#chromium/build/scripts/slave/recipe_modules/chromium_tests/chromium_fyi.py)
-, which uses a special step to talk to an external service:
-
-```
-'Android Tests (amp split)': {
-  ...
-  'tests': [
-    steps.AndroidInstrumentationTest('AndroidWebViewTest'),
-    steps.AndroidInstrumentationTest('ContentShellTest'),
-    steps.AMPGTestTest('android_webview_unittests',
-        device_name=['Nexus 5'], device_os=['4.4.2']),
-    steps.AMPGTestTest('base_unittests',
-        device_name=['Nexus 5'], device_os=['4.4.2'],
-        android_isolate_path='base/base_unittests.isolate'),
-    ...
-  ]
-}
-```
+, and either use an existing class there, or add a new one.
 
 ## Background
 Chromium tests are currently run on buildbot, and are organized by builders.
