@@ -128,6 +128,7 @@
       "//out/Release_x64",
       "--args=is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\cipd\\goma\""
     ],
+    "cwd": "[SLAVE_BUILD]\\src",
     "name": "gn"
   },
   {

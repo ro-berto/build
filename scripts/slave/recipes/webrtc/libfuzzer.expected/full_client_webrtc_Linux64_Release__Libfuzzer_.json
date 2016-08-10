@@ -135,6 +135,7 @@
       "//out/Release",
       "--args=ffmpeg_branding=\"Chrome\" rtc_use_h264=true use_libfuzzer=true is_asan=true is_debug=false target_cpu=\"x64\""
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "gn"
   },
   {

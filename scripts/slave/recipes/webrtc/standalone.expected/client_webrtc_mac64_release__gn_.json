@@ -200,6 +200,7 @@
       "//out/Release",
       "--args=ffmpeg_branding=\"Chrome\" rtc_use_h264=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
     ],
+    "cwd": "[BUILDER_CACHE]/Mac64_Release__GN_/src",
     "name": "gn"
   },
   {

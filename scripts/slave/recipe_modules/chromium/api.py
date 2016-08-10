@@ -526,6 +526,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not gn_path:
       gn_path = self.m.depot_tools.gn_py_path
 
+    kwargs.setdefault('cwd', self.m.path['checkout'])
+
     gn_args = list(self.c.gn_args)
 
     # TODO(dpranke): Figure out if we should use the '_x64' thing to

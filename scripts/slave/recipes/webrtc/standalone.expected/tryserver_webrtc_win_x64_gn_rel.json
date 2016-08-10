@@ -184,6 +184,7 @@
       "//out/Release_x64",
       "--args=ffmpeg_branding=\"Chrome\" rtc_use_h264=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\cipd\\goma\""
     ],
+    "cwd": "[BUILDER_CACHE]\\win_x64_gn_rel\\src",
     "name": "gn"
   },
   {
