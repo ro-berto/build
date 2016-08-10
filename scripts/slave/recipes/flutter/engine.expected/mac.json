@@ -185,24 +185,24 @@
       "ninja",
       "-C",
       "[SLAVE_BUILD]/src/out/android_profile",
-      "flutter/sky/engine/bindings:snapshot_cc"
+      "flutter/lib/snapshot"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "build android_profile flutter/sky/engine/bindings:snapshot_cc"
+    "name": "build android_profile flutter/lib/snapshot"
   },
   {
     "cmd": [
       "ninja",
       "-C",
       "[SLAVE_BUILD]/src/out/android_release",
-      "flutter/sky/engine/bindings:snapshot_cc"
+      "flutter/lib/snapshot"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "build android_release flutter/sky/engine/bindings:snapshot_cc"
+    "name": "build android_release flutter/lib/snapshot"
   },
   {
     "cmd": [
@@ -497,7 +497,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip ios artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/ios_debug/clang_x64/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[SLAVE_BUILD]/src/out/debug/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[SLAVE_BUILD]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/ios_debug/clang_x64/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[SLAVE_BUILD]/src/out/debug/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -579,7 +579,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip ios-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/ios_profile/clang_x64/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[SLAVE_BUILD]/src/out/profile/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_5/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[SLAVE_BUILD]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/ios_profile/clang_x64/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[SLAVE_BUILD]/src/out/profile/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_5/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -661,7 +661,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip ios-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/ios_release/clang_x64/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[SLAVE_BUILD]/src/out/release/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[SLAVE_BUILD]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[SLAVE_BUILD]/src/flutter/sky/engine/bindings/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[SLAVE_BUILD]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/ios_release/clang_x64/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[SLAVE_BUILD]/src/out/release/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [

@@ -188,8 +188,8 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
 
   Build(api, 'host_debug')
-  Build(api, 'android_profile', 'flutter/sky/engine/bindings:snapshot_cc')
-  Build(api, 'android_release', 'flutter/sky/engine/bindings:snapshot_cc')
+  Build(api, 'android_profile', 'flutter/lib/snapshot')
+  Build(api, 'android_release', 'flutter/lib/snapshot')
 
   UploadArtifacts(api, 'darwin-x64', [
     'out/host_debug/sky_snapshot',
@@ -231,7 +231,7 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
   UploadArtifacts(api, bucket_name, [
     'dart/runtime/bin/dart_io_entries.txt',
     'flutter/sky/engine/bindings/dart_vm_entry_points.txt',
-    'flutter/sky/engine/bindings/snapshot.dart',
+    'flutter/lib/snapshot/snapshot.dart',
     'out/%s/clang_x64/gen_snapshot' % device_out,
     'out/%s/Flutter.framework.zip' % label,
   ])
