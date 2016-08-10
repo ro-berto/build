@@ -54,7 +54,7 @@ def GenTests(api):
           'app': 'fake_eg_test_host',
           'device type': 'fake device 3',
           'os': '9.3',
-          'xctest': 'fake_eg_test',
+          'xctest': True,
         },
       ],
     })

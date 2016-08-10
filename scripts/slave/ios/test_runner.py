@@ -91,13 +91,6 @@ class SimulatorNotFoundError(TestRunnerError):
       'Simulator does not exist: %s.' % iossim_path)
 
 
-class XctestNotFoundError(TestRunnerError):
-  """The xctest intended to be run was not found."""
-  def __init__(self, xctest_path):
-    super(XctestNotFoundError, self).__init__(
-      'Xctest does not exist: %s.' % xctest_path)
-
-
 class AppLaunchError(TestRunnerError):
   """There was an error launching the app."""
   pass
@@ -793,6 +786,8 @@ class XCTestRunner(TestRunner):
   def __init__(
     self,
     app_path,
+    test_host,
+    test_project_dir,
     xcode_version=None,
     gs_bucket=None,
     perf_bot_name=None,
@@ -808,6 +803,8 @@ class XCTestRunner(TestRunner):
 
     Args:
       app_path: Full path to the compiled app to run.
+      test_host: Name of the compiled test host app to run tests.
+      test_project_dir: Directory of the dummy test project.
       xcode_version: Version of Xcode to use.
       gs_bucket: Google Storage bucket to upload test data to, or None if the
       test data should not be uploaded.
@@ -840,6 +837,10 @@ class XCTestRunner(TestRunner):
       xcode_version=xcode_version,
     )
     self.app_path = os.path.abspath(app_path)
+    self.test_host_name = test_host
+    # Test target name is its host name without '_host' suffix.
+    self.test_target_name = test_host.rsplit('_', 1)[0]
+    self.test_project_dir = test_project_dir
     self.timeout = '120'
     self.homedir = ''
     self.start_time = None
@@ -856,7 +857,8 @@ class XCTestRunner(TestRunner):
   def GetLaunchEnvironment(self):
     """Returns the environment which is used to run the xctest.
     """
-    env = dict(os.environ,
+    env = dict(os.environ, APP_TARGET_NAME=self.test_host_name,
+               TEST_TARGET_NAME=self.test_target_name,
                NSUnbufferedIO='YES')
     return env
 
@@ -1018,8 +1020,8 @@ class SimulatorXCTestRunner(XCTestRunner):
   def __init__(
     self,
     app_path,
-    xctest_path,
-    iossim_path,
+    test_host,
+    test_project_dir,
     platform,
     version,
     xcode_version=None,
@@ -1037,8 +1039,8 @@ class SimulatorXCTestRunner(XCTestRunner):
 
     Args:
       app_path: Full path to the compiled app to run.
-      iossim_path: Full path to the iossim executable to launch.
-      xctest_path: Full path to the compiled test bundle.
+      test_host: Name of the compiled test host app to run tests.
+      test_project_dir: Directory of the dummy test project.
       platform: The platform to simulate. Supported values can be found by
       running 'xcodebuild -list'. e.g. 'iPhone 5', 'iPhone 5s'.
       version: The iOS version the simulator should be running. Supported values
@@ -1062,6 +1064,8 @@ class SimulatorXCTestRunner(XCTestRunner):
     """
     super(SimulatorXCTestRunner, self).__init__(
       app_path,
+      test_host,
+      test_project_dir,
       env_vars=env_vars,
       gs_bucket=gs_bucket,
       perf_bot_name=perf_bot_name,
@@ -1073,15 +1077,6 @@ class SimulatorXCTestRunner(XCTestRunner):
       test_args=test_args,
       xcode_version=xcode_version,
     )
-
-    if not os.path.exists(iossim_path):
-      raise SimulatorNotFoundError(iossim_path)
-
-    if not os.path.exists(xctest_path):
-      raise XctestNotFoundError(xctest_path)
-
-    self.iossim_path = iossim_path
-    self.xctest_path = xctest_path
     self.platform = platform
     self.version = version
 
@@ -1270,12 +1265,19 @@ class SimulatorXCTestRunner(XCTestRunner):
     Returns:
       A list whose elements are the args representing the command.
     """
+    built_dir = os.path.split(self.app_path)[0]
+
     cmd = [
-      self.iossim_path,
-      '-d', self.platform,
-      '-s', self.version,
-      self.app_path,
-      self.xctest_path
+      'xcodebuild', 'test-without-building',
+      'BUILT_PRODUCTS_DIR=%s' % built_dir,
+      '-project', self.test_project_dir,
+      '-scheme','TestProject',
+      '-destination','platform=iOS Simulator,name=%s,OS=%s'
+      % (self.platform, self.version),
+      '-archivePath', self.homedir,
+      'APP_TARGET_NAME=%s' % self.test_host_name,
+      'TEST_TARGET_NAME=%s' % self.test_target_name,
+      'NSUnbufferedIO=YES'
     ]
     return cmd
 
@@ -1311,8 +1313,8 @@ class DeviceXCTestRunner(XCTestRunner):
   def __init__(
     self,
     app_path,
-    xctest_path,
-    xcodeproj_path,
+    test_host,
+    test_project_dir,
     xcode_version=None,
     gs_bucket=None,
     perf_bot_name=None,
@@ -1352,6 +1354,8 @@ class DeviceXCTestRunner(XCTestRunner):
     """
     super(DeviceXCTestRunner, self).__init__(
       app_path,
+      test_host,
+      test_project_dir,
       env_vars=env_vars,
       gs_bucket=gs_bucket,
       perf_bot_name=perf_bot_name,
@@ -1363,10 +1367,6 @@ class DeviceXCTestRunner(XCTestRunner):
       test_args=test_args,
       xcode_version=xcode_version,
     )
-    # The scheme name is the app name without the '.app' suffix.
-    app_name = os.path.split(self.app_path)[1]
-    self.scheme_name = app_name.split('.', 1)[0]
-    self.xcodeproj_path = xcodeproj_path
     self.cfbundleid = utils.call(
       utils.PLIST_BUDDY,
       '-c', 'Print:CFBundleIdentifier',
@@ -1427,11 +1427,19 @@ class DeviceXCTestRunner(XCTestRunner):
     Returns:
       A list whose elements are the args representing the command.
     """
+    built_dir = os.path.split(self.app_path)[0]
+
     cmd = [
       'xcodebuild', 'test-without-building',
-      '-project', self.xcodeproj_path,
-      '-scheme', self.scheme_name,
-      '-destination', 'id=%s' % self.device_id
+      'BUILT_PRODUCTS_DIR=%s' % built_dir,
+      'CONFIGURATION_BUILD_DIR=%s' % built_dir,
+      '-project', self.test_project_dir,
+      '-configuration', 'iphoneos',
+      '-scheme', 'TestProject',
+      '-destination','id=%s' % self.device_id,
+      'APP_TARGET_NAME=%s' % self.test_host_name,
+      'TEST_TARGET_NAME=%s' % self.test_target_name,
+      'NSUnbufferedIO=YES'
     ]
     return cmd
 
