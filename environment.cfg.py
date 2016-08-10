@@ -21,24 +21,26 @@ def Extend(pythonpath, cwd):
   ]
 
   # Add 'BUILD/third_party' paths.
-  build_path += [os.path.join(third_party_base, *parts) for parts in (
-      ('buildbot_8_4p1',),
-      ('buildbot_slave_8_4',),
-      ('jinja2',),
-      ('markupsafe',),
-      ('mock-1.0.1',),
-      ('coverage-3.7.1',),
-      ('twisted_10_2',),
-      ('requests_2_10_0',),
-      ('sqlalchemy_0_7_1',),
-      ('sqlalchemy_migrate_0_7_1',),
-      ('tempita_0_5',),
-      ('decorator_3_3_1',),
-      ('setuptools-0.6c11',),
-      ('httplib2', 'python2',),
-      ('oauth2client',),
-      ('uritemplate',),
-      ('google_api_python_client',),
-      ('site-packages',),
+  build_path += [os.path.join(third_party_base, path) for path in (
+      'buildbot_8_4p1',
+      'buildbot_slave_8_4',
+      'coverage-3.7.1',
+      'decorator_3_3_1',
+      'google_api_python_client',
+      'httplib2/python2',
+      'infra_libs',
+      'jinja2',
+      'markupsafe',
+      'mock-1.0.1',
+      'oauth2client',
+      'requests_2_10_0',
+      'setuptools-0.6c11',
+      'sqlalchemy_0_7_1',
+      'sqlalchemy_migrate_0_7_1',
+      'tempita_0_5',
+      'twisted_10_2',
+      'uritemplate',
+
+      'site-packages',
   )]
   return pythonpath.Append(*build_path)
