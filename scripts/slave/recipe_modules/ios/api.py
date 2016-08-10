@@ -398,9 +398,12 @@ class iOSApi(recipe_api.RecipeApi):
       ]
       if test.get('xctest'):
         cmd.extend([
-          '--test-host', test['app'],
-          '--dummyproj', self.package_repo_resource(
-            'scripts', 'slave', 'ios', 'TestProject', 'TestProject.xcodeproj'),
+          '--xctest', self.m.path.join(
+            self.most_recent_app_dir,
+            '%s.app' % test['app'],
+            'PlugIns',
+            '%s.xctest' % test['xctest'],
+          ),
         ])
 
       step_name = test['app']

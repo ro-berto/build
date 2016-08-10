@@ -186,7 +186,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake_eg_test_host\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device 3\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os\": \"9.3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"xctest\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"xctest\": \"fake_eg_test\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
@@ -198,7 +198,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"env\": {\n    \"fake env var 1\": \"fake env value 1\", \n    \"fake env var 2\": \"fake env value 2\"\n  }, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.0\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"id\": \"1\", \n      \"os\": \"7.1\"\n    }, \n    {\n      \"app\": \"fake_eg_test_host\", \n      \"device type\": \"fake device 3\", \n      \"id\": \"2\", \n      \"os\": \"9.3\", \n      \"xctest\": true\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"env\": {\n    \"fake env var 1\": \"fake env value 1\", \n    \"fake env var 2\": \"fake env value 2\"\n  }, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.0\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"id\": \"1\", \n      \"os\": \"7.1\"\n    }, \n    {\n      \"app\": \"fake_eg_test_host\", \n      \"device type\": \"fake device 3\", \n      \"id\": \"2\", \n      \"os\": \"9.3\", \n      \"xctest\": \"fake_eg_test\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -326,10 +326,8 @@
       "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake_eg_test_host.app",
       "--json_file",
       "/path/to/tmp/json",
-      "--test-host",
-      "fake_eg_test_host",
-      "--dummyproj",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/TestProject/TestProject.xcodeproj",
+      "--xctest",
+      "[BUILDER_CACHE]/ios/src/xcodebuild/Debug-iphonesimulator/fake_eg_test_host.app/PlugIns/fake_eg_test.xctest",
       "--iossim",
       "[BUILDER_CACHE]/ios/src/xcodebuild/ninja-iossim/Debug/iossim",
       "--platform",

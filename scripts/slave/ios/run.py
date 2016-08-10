@@ -32,11 +32,11 @@ def main(args, test_args):
   test_runner = None
 
   try:
-    if args.test_host:
+    if args.xctest:
       test_runner = SimulatorXCTestRunner(
         args.app,
-        args.test_host,
-        args.dummyproj,
+        args.xctest,
+        args.iossim,
         args.platform,
         args.version,
         env_vars=args.env_var,
@@ -93,13 +93,6 @@ if __name__ == '__main__':
     type=str,
   )
   parser.add_argument(
-    '-d',
-    '--dummyproj',
-    help='Dummy test project path.',
-    metavar='.xcodeproj',
-    type=str,
-  )
-  parser.add_argument(
     '-e',
     '--env-var',
     action='append',
@@ -130,13 +123,6 @@ if __name__ == '__main__':
     type=str,
   )
   parser.add_argument(
-    '-t',
-    '--test-host',
-    help='Compiled test host to run tests.',
-    metavar='host',
-    type=str,
-  )
-  parser.add_argument(
     '-v',
     '--version',
     help='Version of iOS the simulator should run.',
@@ -151,4 +137,11 @@ if __name__ == '__main__':
     metavar='ver',
     type=str,
   )
+  parser.add_argument(
+    '--xctest',
+    help='Compiled xctest to run.',
+    metavar='xctest',
+    type=str,
+  )
+
   sys.exit(main(*parser.parse_known_args()))
