@@ -120,7 +120,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     # Apply MB config (to avoid heavy duplication in builders.py). See
     # crbug.com/589510 for more info.
     if (mastername in ('client.webrtc', 'tryserver.webrtc') and
-        buildername.lower().startswith('linux')):
+        (buildername.lower().startswith('linux') or
+         buildername.lower().startswith('android'))):
       self.m.chromium.apply_config('mb')
 
     if self.m.tryserver.is_tryserver:
