@@ -239,7 +239,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\audio_decoder_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "audio_decoder_unittests"
   },
   {
@@ -264,7 +264,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\common_audio_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "common_audio_unittests"
   },
   {
@@ -289,7 +289,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\common_video_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "common_video_unittests"
   },
   {
@@ -314,7 +314,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\modules_tests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "modules_tests"
   },
   {
@@ -339,7 +339,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\modules_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "modules_unittests"
   },
   {
@@ -364,7 +364,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\peerconnection_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "peerconnection_unittests"
   },
   {
@@ -389,7 +389,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_media_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "rtc_media_unittests"
   },
   {
@@ -414,7 +414,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_pc_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "rtc_pc_unittests"
   },
   {
@@ -439,7 +439,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "rtc_unittests"
   },
   {
@@ -464,7 +464,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\system_wrappers_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "system_wrappers_unittests"
   },
   {
@@ -489,7 +489,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\test_support_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "test_support_unittests"
   },
   {
@@ -514,7 +514,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\tools_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "tools_unittests"
   },
   {
@@ -539,7 +539,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\video_engine_tests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "video_engine_tests"
   },
   {
@@ -564,7 +564,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\voice_engine_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "voice_engine_unittests"
   },
   {
@@ -589,7 +589,7 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\xmllite_xmpp_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -616,7 +616,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_nonparallel_tests.exe"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "webrtc_nonparallel_tests"
   },
   {

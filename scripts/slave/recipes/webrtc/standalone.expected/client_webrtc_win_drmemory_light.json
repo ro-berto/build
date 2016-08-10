@@ -235,7 +235,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "audio_decoder_unittests"
   },
   {
@@ -266,7 +266,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "common_audio_unittests"
   },
   {
@@ -297,7 +297,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "common_video_unittests"
   },
   {
@@ -328,7 +328,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "modules_tests"
   },
   {
@@ -359,7 +359,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "modules_unittests"
   },
   {
@@ -390,7 +390,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "peerconnection_unittests"
   },
   {
@@ -421,7 +421,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "rtc_media_unittests"
   },
   {
@@ -452,7 +452,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "rtc_pc_unittests"
   },
   {
@@ -483,7 +483,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "rtc_unittests"
   },
   {
@@ -514,7 +514,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "system_wrappers_unittests"
   },
   {
@@ -545,7 +545,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "test_support_unittests"
   },
   {
@@ -576,7 +576,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "tools_unittests"
   },
   {
@@ -607,7 +607,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "video_engine_tests"
   },
   {
@@ -638,7 +638,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "voice_engine_unittests"
   },
   {
@@ -669,7 +669,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -700,7 +700,7 @@
       "--tool",
       "drmemory_light"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light\\src",
+    "cwd": "[BUILDER_CACHE]\\Win_DrMemory_Light",
     "name": "webrtc_nonparallel_tests"
   },
   {

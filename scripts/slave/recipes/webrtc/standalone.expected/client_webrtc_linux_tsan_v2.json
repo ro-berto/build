@@ -277,7 +277,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/audio_decoder_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "audio_decoder_unittests"
   },
   {
@@ -304,7 +304,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/common_audio_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "common_audio_unittests"
   },
   {
@@ -331,7 +331,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/common_video_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "common_video_unittests"
   },
   {
@@ -358,7 +358,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/modules_tests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "modules_tests"
   },
   {
@@ -385,7 +385,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/modules_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "modules_unittests"
   },
   {
@@ -412,7 +412,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/peerconnection_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "peerconnection_unittests"
   },
   {
@@ -439,7 +439,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/rtc_media_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "rtc_media_unittests"
   },
   {
@@ -466,7 +466,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/rtc_pc_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "rtc_pc_unittests"
   },
   {
@@ -493,7 +493,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/rtc_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "rtc_unittests"
   },
   {
@@ -520,7 +520,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/system_wrappers_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "system_wrappers_unittests"
   },
   {
@@ -547,7 +547,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/test_support_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "test_support_unittests"
   },
   {
@@ -574,7 +574,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/tools_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "tools_unittests"
   },
   {
@@ -601,7 +601,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/video_engine_tests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "video_engine_tests"
   },
   {
@@ -628,7 +628,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/voice_engine_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "voice_engine_unittests"
   },
   {
@@ -655,7 +655,7 @@
       "[BUILDER_CACHE]/Linux_Tsan_v2/src/out/Release/xmllite_xmpp_unittests",
       "--"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -684,7 +684,7 @@
       "--enable-tsan",
       "webrtc_nonparallel_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Tsan_v2",
     "name": "webrtc_nonparallel_tests"
   },
   {

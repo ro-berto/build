@@ -221,7 +221,7 @@
       "-u",
       "RECIPE_MODULE[build::webrtc]\\resources\\ensure_webcam_is_running.py"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_baremetal\\src",
+    "cwd": "[BUILDER_CACHE]\\win_baremetal",
     "name": "webcam_check"
   },
   {
@@ -245,7 +245,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "audio_device_tests.exe"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_baremetal\\src",
+    "cwd": "[BUILDER_CACHE]\\win_baremetal",
     "name": "audio_device_tests"
   },
   {
@@ -270,7 +270,7 @@
       "voe_auto_test.exe",
       "--automated"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_baremetal\\src",
+    "cwd": "[BUILDER_CACHE]\\win_baremetal",
     "name": "voe_auto_test"
   },
   {
@@ -294,7 +294,7 @@
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_capture_tests.exe"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_baremetal\\src",
+    "cwd": "[BUILDER_CACHE]\\win_baremetal",
     "name": "video_capture_tests"
   },
   {

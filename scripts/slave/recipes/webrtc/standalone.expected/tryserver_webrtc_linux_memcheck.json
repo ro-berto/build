@@ -268,7 +268,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "audio_decoder_unittests"
   },
   {
@@ -300,7 +300,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "common_audio_unittests"
   },
   {
@@ -332,7 +332,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "common_video_unittests"
   },
   {
@@ -364,7 +364,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "modules_tests"
   },
   {
@@ -396,7 +396,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "modules_unittests"
   },
   {
@@ -428,7 +428,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "peerconnection_unittests"
   },
   {
@@ -460,7 +460,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "rtc_media_unittests"
   },
   {
@@ -492,7 +492,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "rtc_pc_unittests"
   },
   {
@@ -524,7 +524,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "rtc_unittests"
   },
   {
@@ -556,7 +556,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "system_wrappers_unittests"
   },
   {
@@ -588,7 +588,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "test_support_unittests"
   },
   {
@@ -620,7 +620,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "tools_unittests"
   },
   {
@@ -652,7 +652,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "video_engine_tests"
   },
   {
@@ -684,7 +684,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "voice_engine_unittests"
   },
   {
@@ -716,7 +716,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "xmllite_xmpp_unittests"
   },
   {
@@ -748,7 +748,7 @@
       "--tool",
       "memcheck"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_memcheck/src",
+    "cwd": "[BUILDER_CACHE]/linux_memcheck",
     "name": "webrtc_nonparallel_tests"
   },
   {

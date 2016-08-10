@@ -237,7 +237,7 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "name": "create adb symlink"
   },
   {
@@ -248,7 +248,7 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/logcat",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -264,7 +264,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -282,7 +282,7 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -303,7 +303,7 @@
       "-t",
       "Release"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -326,7 +326,7 @@
       "-v",
       "--overwrite-known-devices-files"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -443,7 +443,7 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/bad_devices.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "name": "spawn_device_monitor"
   },
   {
@@ -457,7 +457,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -475,7 +475,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -493,7 +493,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -511,7 +511,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -529,7 +529,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -547,7 +547,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -565,7 +565,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -583,7 +583,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -601,7 +601,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -619,7 +619,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -637,7 +637,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -655,7 +655,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -673,7 +673,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
@@ -711,7 +711,7 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/Release/bin/run_webrtc_perf_tests",
       "--verbose"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "name": "webrtc_perf_tests"
   },
   {
@@ -725,7 +725,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "name": "AppRTCDemoTest"
   },
   {
@@ -739,7 +739,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "name": "libjingle_peerconnection_android_unittest"
   },
   {
@@ -752,7 +752,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "name": "shutdown_device_monitor"
   },
   {
@@ -764,7 +764,7 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/Release/full_log",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/logcat"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "name": "logcat_dump"
   },
   {
@@ -783,7 +783,7 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/Android32 Tests (L Nexus7.2)/1337"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android32 Tests (L Nexus7.2)/1337@@@"
@@ -797,7 +797,7 @@
       "--more-info",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/Release/full_log"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -814,7 +814,7 @@
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -829,7 +829,7 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/Release/test_logs/*.log"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
