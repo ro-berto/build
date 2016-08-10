@@ -156,7 +156,7 @@ class RevisionState(object):
     if self.needs_patch:  # pragma: no cover
       return False
     api = self.bisector.api
-    working_dir = api.working_dir or api.m.path['slave_build']
+    working_dir = api.working_dir
     cwd = working_dir.join(
         depot_config.DEPOT_DEPS_NAME[self.depot_name]['src'])
     name = 'Checking DEPS for ' + self.commit_hash
