@@ -218,8 +218,10 @@ def main():
       '--runtime_path', default=default_runtime_path,
       help='Specify the path to the ASAN runtime DLL relative to '
            'build-dir (%default).')
+  parser.add_option('--src-dir', help='path to the top-level sources directory')
   options, args = parser.parse_args()
-  options.build_dir = build_directory.GetBuildOutputDirectory()
+  options.build_dir = build_directory.GetBuildOutputDirectory(
+      src_dir=options.src_dir)
 
   options.build_dir = os.path.abspath(options.build_dir)
 

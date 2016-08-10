@@ -704,7 +704,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       pass
 
   def apply_syzyasan(self):
-    args = ['--target', self.c.BUILD_CONFIG]
+    args = [
+        '--src-dir', self.m.path['checkout'],
+        '--target', self.c.BUILD_CONFIG,
+    ]
     self.m.python(
       'apply_syzyasan',
       self.package_repo_resource(

@@ -220,6 +220,8 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\win_apply_syzyasan.py",
+      "--src-dir",
+      "[BUILDER_CACHE]\\win_asan\\src",
       "--target",
       "Release"
     ],
