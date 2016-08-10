@@ -1602,10 +1602,6 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_junit_test,
       ],
-      'tests': [
-        steps.GTestTest('components_browsertests', android_tool='asan'),
-        steps.GTestTest('gfx_unittests', android_tool='asan'),
-      ],
     },
     'ClangToTMac': {
       'chromium_config': 'clang_tot_mac',
