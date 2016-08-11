@@ -121,6 +121,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     # crbug.com/589510 for more info.
     if (mastername in ('client.webrtc', 'tryserver.webrtc') and
         (buildername.lower().startswith('linux') or
+         buildername.lower().startswith('mac') or
          buildername.lower().startswith('win') or
          buildername.lower().startswith('android'))):
       self.m.chromium.apply_config('mb')
@@ -163,6 +164,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.swarming.check_client_version()
 
   def compile(self):
+    # TODO(kjellander); Clean up the rest of the mb configs once we've got the
+    # last builders switched over (iOS).
     if self.m.chromium.c.project_generator.tool == 'mb':
       mastername = self.m.properties.get('mastername')
       buildername = self.m.properties.get('buildername')
@@ -172,9 +175,6 @@ class WebRTCApi(recipe_api.RecipeApi):
                                                     'mb_config.pyl'),
         gyp_script=self.m.path['checkout'].join('webrtc', 'build',
                                                 'gyp_webrtc.py'))
-    elif self.m.chromium.c.project_generator.tool == 'gn':
-      self.m.chromium.run_gn(use_goma=True)
-
     self.m.chromium.compile()
 
   def runtests(self):
