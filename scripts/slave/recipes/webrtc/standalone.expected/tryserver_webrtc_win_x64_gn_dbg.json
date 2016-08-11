@@ -178,14 +178,24 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
-      "--root=[BUILDER_CACHE]\\win_x64_gn_dbg\\src",
+      "[BUILDER_CACHE]\\win_x64_gn_dbg\\src\\tools\\mb\\mb.py",
       "gen",
-      "//out/Debug_x64",
-      "--args=ffmpeg_branding=\"Chrome\" rtc_use_h264=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\cipd\\goma\""
+      "-m",
+      "tryserver.webrtc",
+      "-b",
+      "win_x64_gn_dbg",
+      "--config-file",
+      "[BUILDER_CACHE]\\win_x64_gn_dbg\\src\\webrtc\\build\\mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]\\cipd\\goma",
+      "--gyp-script=[BUILDER_CACHE]\\win_x64_gn_dbg\\src\\webrtc\\build\\gyp_webrtc.py",
+      "//out/Debug_x64"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_gn_dbg\\src",
-    "name": "gn"
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "generate_build_files"
   },
   {
     "cmd": [

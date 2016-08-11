@@ -121,6 +121,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     # crbug.com/589510 for more info.
     if (mastername in ('client.webrtc', 'tryserver.webrtc') and
         (buildername.lower().startswith('linux') or
+         buildername.lower().startswith('win') or
          buildername.lower().startswith('android'))):
       self.m.chromium.apply_config('mb')
 

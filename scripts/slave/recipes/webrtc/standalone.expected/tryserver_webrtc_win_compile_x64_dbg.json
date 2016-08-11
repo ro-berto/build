@@ -168,10 +168,34 @@
     "cwd": "[BUILDER_CACHE]\\win_compile_x64_dbg\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\cipd\\goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]\\win_compile_x64_dbg\\src\\tools\\mb\\mb.py",
+      "gen",
+      "-m",
+      "tryserver.webrtc",
+      "-b",
+      "win_compile_x64_dbg",
+      "--config-file",
+      "[BUILDER_CACHE]\\win_compile_x64_dbg\\src\\webrtc\\build\\mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]\\cipd\\goma",
+      "--gyp-script=[BUILDER_CACHE]\\win_compile_x64_dbg\\src\\webrtc\\build\\gyp_webrtc.py",
+      "//out/Debug_x64"
+    ],
+    "cwd": "[BUILDER_CACHE]\\win_compile_x64_dbg\\src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "generate_build_files"
   },
   {
     "cmd": [
