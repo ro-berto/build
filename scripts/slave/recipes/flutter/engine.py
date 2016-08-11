@@ -101,7 +101,6 @@ def BuildLinuxAndroidx86(api):
     folder = 'android-' + x86_variant
     UploadArtifacts(api, folder, [
       'build/android/ant/chromium-debug.keystore',
-      'out/%s/apks/SkyShell.apk' % out_dir,
       ('out/%s/gen/flutter/sky/shell/shell/shell/libs/%s/libsky_shell.so' %
        (out_dir, abi)),
       'out/%s/icudtl.dat' % out_dir,
@@ -118,9 +117,7 @@ def AddPathPrefix(api, prefix, paths):
 
 def BuildLinuxAndroidArm(api):
   out_paths = [
-    'apks/SkyShell.apk',
     'flutter.jar',
-    'flutter.mojo',
     'gen/flutter/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so',
     'icudtl.dat',
     'gen/flutter/sky/shell/shell/classes.dex.jar',
@@ -165,7 +162,6 @@ def BuildLinux(api):
   RunGN(api)
   Build(api, 'host_debug')
   UploadArtifacts(api, 'linux-x64', [
-    'out/host_debug/flutter.mojo',
     'out/host_debug/icudtl.dat',
     'out/host_debug/sky_shell',
     'out/host_debug/sky_snapshot',
