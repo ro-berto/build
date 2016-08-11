@@ -1267,17 +1267,16 @@ class SimulatorXCTestRunner(XCTestRunner):
     """
     built_dir = os.path.split(self.app_path)[0]
 
+    app_path = os.path.join(built_dir, self.test_host_name + '.app/')
+    xctests_fullname = self.test_target_name + '.xctest'
+    xctest_path = os.path.join(app_path, 'PlugIns', xctests_fullname)
+
     cmd = [
-      'xcodebuild', 'test-without-building',
-      'BUILT_PRODUCTS_DIR=%s' % built_dir,
-      '-project', self.test_project_dir,
-      '-scheme','TestProject',
-      '-destination','platform=iOS Simulator,name=%s,OS=%s'
-      % (self.platform, self.version),
-      '-archivePath', self.homedir,
-      'APP_TARGET_NAME=%s' % self.test_host_name,
-      'TEST_TARGET_NAME=%s' % self.test_target_name,
-      'NSUnbufferedIO=YES'
+      os.path.join(built_dir, 'iossim'),
+      '-d', self.platform,
+      '-s', self.version,
+      app_path,
+      xctest_path
     ]
     return cmd
 
