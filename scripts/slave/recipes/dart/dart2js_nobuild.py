@@ -117,7 +117,8 @@ def RunSteps(api):
   if api.platform.name == 'mac':
     api.file.remove('Mark package links as out-of-date',
       api.path.abspath(api.path['checkout'].join(
-        'xcodebuild', 'DerivedSources', 'ReleaseX64', 'packages.stamp')))
+        'xcodebuild', 'DerivedSources', 'ReleaseX64', 'packages.stamp')),
+      ok_ret='any')
   build_args = ['-mrelease', '--arch=x64', 'packages']
   api.python('build dart',
              api.path['checkout'].join('tools', 'build.py'),
