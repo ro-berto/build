@@ -38,7 +38,12 @@ def RunSteps(api):
       'build',
       'mb_config.pyl',
   )
-  api.ios.build(mb_config_path=mb_config_path)
+  gyp_script = api.path['checkout'].join(
+      'webrtc',
+      'build',
+      'gyp_webrtc.py',
+  )
+  api.ios.build(mb_config_path=mb_config_path, gyp_script=gyp_script)
   api.ios.test()
 
 
@@ -60,6 +65,7 @@ def GenTests(api):
         'fake gyp define 2': 'fake value 2',
         'use_goma': '1',
       },
+      'mb_type': 'gyp',
       'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
@@ -121,6 +127,7 @@ def GenTests(api):
         'fake gyp define 2': 'fake value 2',
         'use_goma': '1',
       },
+      'mb_type': 'gyp',
       'compiler': 'ninja',
       'configuration': 'Release',
       'sdk': 'iphoneos8.0',
@@ -147,6 +154,7 @@ def GenTests(api):
         'use_goma': '1',
       },
       'use_analyze': 'false',
+      'mb_type': 'gyp',
       'compiler': 'ninja',
       'configuration': 'Release',
       'sdk': 'iphoneos8.0',
@@ -172,6 +180,7 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
+      'mb_type': 'gyp',
       'compiler': 'xcodebuild',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
@@ -210,6 +219,7 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
+      'mb_type': 'gyp',
       'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',

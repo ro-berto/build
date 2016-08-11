@@ -260,7 +260,7 @@ class iOSApi(recipe_api.RecipeApi):
       # available as well.
       self.m.chromium.ensure_goma()
 
-  def build(self, mb_config_path=None, suffix=None):
+  def build(self, mb_config_path=None, gyp_script=None, suffix=None):
     """Builds from this bot's build config."""
     assert self.__config is not None
 
@@ -333,6 +333,7 @@ class iOSApi(recipe_api.RecipeApi):
                              self.m.properties['buildername'],
                              name='generate_build_files' + suffix,
                              mb_config_path=mb_config_path,
+                             gyp_script=gyp_script,
                              build_dir='//out/' + build_sub_path)
 
     use_analyze = self.__config['use_analyze']

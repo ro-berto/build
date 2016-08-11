@@ -237,6 +237,7 @@
       "[BUILDER_CACHE]/ios/src/webrtc/build/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
+      "--gyp-script=[BUILDER_CACHE]/ios/src/webrtc/build/gyp_webrtc.py",
       "//out/Debug-iphoneos"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
