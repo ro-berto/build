@@ -33,7 +33,7 @@ def _url_open_json(url):
     try:
       with closing(urllib2.urlopen(url, timeout=URL_TIMEOUT)) as f:
         return json.load(f)
-    except urllib2.URLError as f:
+    except (urllib2.URLError, IOError) as f:
       if attempts > MAX_ATTEMPTS:
         raise
 
