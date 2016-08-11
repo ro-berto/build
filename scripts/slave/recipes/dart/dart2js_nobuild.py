@@ -114,6 +114,10 @@ def RunSteps(api):
     api.zip.unzip('Unzip sdk', zipfile, build_dir)
 
   # Build only the package links. Once we remove this target, build nothing.
+  if api.platform.name == 'mac':
+    api.file.remove('Mark package links as out-of-date',
+      api.path.abspath(api.path['checkout'].join(
+        'xcodebuild', 'DerivedSources', 'ReleaseX64', 'packages.stamp')))
   build_args = ['-mrelease', '--arch=x64', 'packages']
   api.python('build dart',
              api.path['checkout'].join('tools', 'build.py'),
