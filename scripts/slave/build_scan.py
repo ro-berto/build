@@ -38,7 +38,12 @@ def _url_open_json(url):
         raise
 
       attempts += 1
-      time.sleep(2 ** attempts)
+      time_to_sleep = 2 ** attempts
+      logging.info(
+        "url fetch encountered %s, sleeping for %d seconds and retrying..." % (
+            f, time_to_sleep))
+
+      time.sleep(time_to_sleep)
 
 
 def get_root_json(master_url):
