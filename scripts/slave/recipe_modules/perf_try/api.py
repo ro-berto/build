@@ -42,9 +42,9 @@ class PerfTryJobApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(PerfTryJobApi, self).__init__(*args, **kwargs)
 
-  def start_perf_try_job(self, affected_files, bot_update_step, bot_db):
+  def start_perf_try_job(self, api, affected_files, bot_update_step, bot_db):
     """Entry point pert tryjob or CQ tryjob."""
-    perf_config = self._get_perf_config(affected_files)
+    perf_config = self._get_perf_config(api, affected_files)
     if perf_config:
       self._run_perf_job(perf_config, bot_update_step, bot_db)
     elif (not perf_config and
@@ -228,15 +228,19 @@ class PerfTryJobApi(recipe_api.RecipeApi):
                                     src_path)
     return step_result.json.output
 
-  def _get_perf_config(self, affected_files):
+  def _get_perf_config(self, api, affected_files):
     """Checks affected config file and loads the config params to a dict."""
     perf_cfg_files = [PERF_CONFIG_FILE, WEBKIT_PERF_CONFIG_FILE]
     cfg_file = [f for f in perf_cfg_files if str(f) in affected_files]
-    if not cfg_file:  # pragma: no cover
+    if cfg_file:  # pragma: no cover
+      # Try reading any possible perf test config files.
+      cfg_content = self._load_config_file(
+          'load config', self.m.path['checkout'].join(cfg_file[0]))
+    elif api.properties.get('perf_try_config'):  # pragma: no cover
+      cfg_content = dict(api.m.properties.get('perf_try_config'))
+    else:
       return None
-    # Try reading any possible perf test config files.
-    cfg_content = self._load_config_file(
-        'load config', self.m.path['checkout'].join(cfg_file[0]))
+
     cfg_is_valid = _validate_perf_config(
         cfg_content, required_parameters=['command'])
     if cfg_content and cfg_is_valid:

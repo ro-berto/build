@@ -411,7 +411,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         else:
           api.step('***PERF TRYJOB***', [])
           self.m.perf_try.start_perf_try_job(
-              affected_files, update_step, self.bot_db)
+              api, affected_files, update_step, self.bot_db)
       finally:
         if api.chromium.c.TARGET_PLATFORM == 'android':
           if self.internal_bisect:  # pragma: no cover
