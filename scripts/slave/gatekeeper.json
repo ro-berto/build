@@ -79,6 +79,38 @@
               "*"
             ]
           },
+          "Android Cronet KitKat Builder": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ],
+            "closing_optional": [
+              "*"
+            ]
+          },
+          "Android Cronet Lollipop Builder": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ],
+            "closing_optional": [
+              "*"
+            ]
+          },
+          "Android Cronet Marshmallow 64bit Builder": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ],
+            "closing_optional": [
+              "*"
+            ]
+          },
+          "Android Cronet Marshmallow 64bit Perf": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ],
+            "closing_optional": [
+              "*"
+            ]
+          },
           "Android Cronet MIPS Builder": {
             "tree_notify": [
               "cronet-team+build@google.com"
