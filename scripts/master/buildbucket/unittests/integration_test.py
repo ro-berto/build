@@ -423,6 +423,7 @@ class IntegratorTest(unittest.TestCase):
     build = Mock()
     build.id = '123321'
     build.getNumber.return_value = 42
+    build.getSlavename.return_value = 'bot42'
     build.isFinished.return_value = False
     info = json.dumps({
        'build': {
@@ -580,6 +581,7 @@ class IntegratorTest(unittest.TestCase):
           body={
               'lease_key': LEASE_KEY,
               'result_details_json': build.expected_result_details_json,
+              'new_tags': ['bot_id:bot42'],
           }
       )
 
@@ -597,6 +599,7 @@ class IntegratorTest(unittest.TestCase):
               'lease_key': LEASE_KEY,
               'failure_reason': 'BUILD_FAILURE',
               'result_details_json': build.expected_result_details_json,
+              'new_tags': ['bot_id:bot42'],
           }
       )
 

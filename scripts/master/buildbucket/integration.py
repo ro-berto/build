@@ -640,6 +640,9 @@ class BuildBucketIntegrator(object):
         'result_details_json': json.dumps({
             'properties': properties_to_send,
         }, sort_keys=True),
+        'new_tags': [
+          'bot_id:%s' % build.getSlavename(),
+        ],
     }
     if status == 'SUCCESS':
       yield self._leased_build_call('succeed', build, body)
