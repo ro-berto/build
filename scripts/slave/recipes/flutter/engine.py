@@ -142,8 +142,8 @@ def BuildLinuxAndroidArm(api):
     UploadArtifacts(api, upload_dir, [
       'build/android/ant/chromium-debug.keystore',
       'dart/runtime/bin/dart_io_entries.txt',
-      'flutter/sky/engine/bindings/dart_vm_entry_points.txt',
-      'flutter/sky/engine/bindings/dart_vm_entry_points_android.txt',
+      'flutter/runtime/dart_vm_entry_points.txt',
+      'flutter/runtime/dart_vm_entry_points_android.txt',
     ] + AddPathPrefix(api, 'out/%s' % build_output_dir, out_paths))
 
     # Upload artifacts used for AOT compilation on Linux hosts.
@@ -226,7 +226,7 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
 
   UploadArtifacts(api, bucket_name, [
     'dart/runtime/bin/dart_io_entries.txt',
-    'flutter/sky/engine/bindings/dart_vm_entry_points.txt',
+    'flutter/runtime/dart_vm_entry_points.txt',
     'flutter/lib/snapshot/snapshot.dart',
     'out/%s/clang_x64/gen_snapshot' % device_out,
     'out/%s/Flutter.framework.zip' % label,
