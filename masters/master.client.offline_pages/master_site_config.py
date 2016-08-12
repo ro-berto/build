@@ -12,7 +12,7 @@
 
 from config_bootstrap import Master
 
-class ClientOffline_pages(Master.Master3):
+class ClientOffline_pages(Master.Master3a):
   project_name = 'ClientOffline_pages'
   master_port = 20313
   slave_port = 30313

@@ -1,5 +1,5 @@
 {
-  "master_base_class": "Master3",
+  "master_base_class": "Master3a",
   "master_port": 20313,
   "master_port_alt": 25313,
   "slave_port": 30313,
