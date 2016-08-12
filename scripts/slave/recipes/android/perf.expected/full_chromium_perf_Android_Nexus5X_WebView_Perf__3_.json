@@ -635,7 +635,6 @@
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"end_time\": 1470050195.193213, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test\": \"page_cycler.foo\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",

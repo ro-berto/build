@@ -740,8 +740,7 @@ class AndroidApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output([
             {'test': 'perf_test.foo', 'device_affinity': 0,
              'end_time': 1443438432.949711, 'has_archive': True},
-            {'test': 'page_cycler.foo', 'device_affinity': 0,
-             'end_time': 1470050195.193213}]),
+            {'test': 'page_cycler.foo', 'device_affinity': 0}]),
         env=self.m.chromium.get_env()
     )
     perf_tests = result.json.output
@@ -757,7 +756,10 @@ class AndroidApi(recipe_api.RecipeApi):
       test_name = str(test_data['test'])  # un-unicode
       test_type = test_type_transform(test_name)
       annotate = self.m.chromium.get_annotate_by_test_name(test_name)
-      point_id = int(test_data['end_time']) if timestamp_as_point_id else None
+      test_end_time = int(test_data.get('end_time', 0))
+      if not test_end_time:
+        test_end_time = int(self.m.time.time())
+      point_id = test_end_time if timestamp_as_point_id else None
 
       if upload_archives_to_bucket and test_data.get('has_archive'):
         archive = self.m.path.mkdtemp('perf_archives').join('output_dir.zip')
@@ -800,7 +802,7 @@ class AndroidApi(recipe_api.RecipeApi):
         dest = '{builder}/{test}/{timestamp}_build_{buildno}.zip'.format(
           builder=self.m.properties['buildername'],
           test=test_name,
-          timestamp=_TimestampToIsoFormat(test_data['end_time']),
+          timestamp=_TimestampToIsoFormat(test_end_time),
           buildno=self.m.properties['buildnumber'])
         self.m.gsutil.upload(
           name='upload %s output dir archive' % test_name,
