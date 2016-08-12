@@ -72,7 +72,19 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "stop_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info"
+    ],
+    "name": "upload_log"
   },
   {
     "name": "$result",

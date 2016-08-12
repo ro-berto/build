@@ -7,11 +7,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::cipd]\\resources\\bootstrap.py",
+      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
       "--platform",
-      "windows-amd64",
+      "mac-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]\\cipd",
+      "[SLAVE_BUILD]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -20,7 +20,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -28,16 +28,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\cipd\\cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "ensure",
       "--root",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]/cipd/goma",
       "--list",
-      "infra_internal/goma/client/windows-amd64 release",
+      "infra_internal/goma/client/mac-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "/creds/service_accounts/service-account-goma-client.json"
     ],
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -46,7 +46,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -57,11 +57,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "start_goma"
   },
@@ -69,11 +71,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "stop_goma"
   },
@@ -81,8 +85,22 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
-      "--upload-compiler-proxy-info"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--ninja-log-outdir",
+      "build_data_dir",
+      "--ninja-log-compiler",
+      "goma",
+      "--ninja-log-command",
+      "ninja -j 500",
+      "--ninja-log-exit-status",
+      "0",
+      "--goma-stats-file",
+      "build_data_dir/goma_stats_proto",
+      "--goma-crash-report-id-file",
+      "build_data_dir/crash_report_id_file",
+      "--build-data-dir",
+      "build_data_dir"
     ],
     "name": "upload_log"
   },
