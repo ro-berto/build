@@ -946,8 +946,112 @@ def GenTests(api):
                             ],
                             'cipd_packages': [
                                 {
-                                    'location': '{$HOME}/logdog',
-                                    'cipd_package': 'infra/logdog/linux-386',
+                                    'location': 'bin',
+                                    'cipd_package': 'logdog/butler/linux-386',
+                                    'revision': 'git_revision:deadbeef',
+                                },
+                            ],
+                        },
+                        'override_compile_targets': [
+                            'chrome_public_test_apk'
+                         ],
+                        'override_isolate_target': 'chrome_public_test_apk',
+                    }
+                ],
+            },
+        })
+    )
+  )
+
+  yield (
+    api.test('dynamic_swarmed_output_links_trigger_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Android Tests',
+                           parent_buildername='Android Builder') +
+    api.properties(swarm_hashes={
+      'chrome_public_test_apk': 'cccccccccccccccccc',
+    }) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Android Tests': {
+                'gtest_tests': [
+                    {
+                        'test': 'chrome_public_test_apk',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    'build.id': 'KTU84P',
+                                    'product.board': 'hammerhead',
+                                },
+                            ],
+                            'cipd_packages': [
+                                {
+                                    'location': 'bin',
+                                    'cipd_package': 'logdog/butler/linux-386',
+                                    'revision': 'git_revision:deadbeef',
+                                },
+                                {
+                                    'location': 'bin',
+                                    'cipd_package': 'some/other/package',
+                                    'revision': 'git_revision:deadbeef',
+                                },
+                            ],
+                            'output_links': [
+                                {
+                                    'name': 'shard_index:${SHARD_INDEX}logcats',
+                                    'link': [
+                                        'https://luci-logdog.appspot.com/v/?s',
+                                        '=android%2Fswarming%2Flogcats%2F',
+                                        '${TASK_ID}%2F%2B%2Funified_logcats',
+                                    ],
+                                },
+                            ],
+                        },
+                        'override_compile_targets': [
+                            'chrome_public_test_apk'
+                         ],
+                        'override_isolate_target': 'chrome_public_test_apk',
+                    }
+                ],
+            },
+        })
+    )
+  )
+
+  yield (
+    api.test('dynamic_swarmed_no_output_trigger_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Android Tests',
+                           parent_buildername='Android Builder') +
+    api.properties(swarm_hashes={
+      'chrome_public_test_apk': 'cccccccccccccccccc',
+    }) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Android Tests': {
+                'gtest_tests': [
+                    {
+                        'test': 'chrome_public_test_apk',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'dimension_sets': [
+                                {
+                                    'build.id': 'KTU84P',
+                                    'product.board': 'hammerhead',
+                                },
+                            ],
+                            'cipd_packages': [
+                                {
+                                    'location': 'bin',
+                                    'cipd_package': 'some/other/package',
+                                    'revision': 'git_revision:deadbeef',
+                                },
+                                {
+                                    'location': 'bin',
+                                    'cipd_package': 'another/package',
                                     'revision': 'git_revision:deadbeef',
                                 },
                             ],
