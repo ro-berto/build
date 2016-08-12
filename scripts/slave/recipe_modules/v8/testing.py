@@ -498,6 +498,7 @@ class V8SwarmingTest(V8Test):
         script=self.v8.resource('collect_v8_task.py'),
         args=args,
         allow_subannotations=True,
+        infra_step=True,
         step_test_data=kwargs.pop('step_test_data', None),
         **kwargs)
 
@@ -548,17 +549,18 @@ class V8SwarmingTest(V8Test):
     # TODO(machenbach): Soften this when softening 'assert isolated_hash'
     # above.
     assert self.task
+    result = TestResults.empty()
     try:
       # Collect swarming results. Use the same test simulation data for the
       # swarming collect step like for local testing.
-      result = self.api.swarming.collect_task(
+      self.api.swarming.collect_task(
         self.task,
         step_test_data=lambda: self.v8.test_api.output_json(),
       )
-    finally:
-      # Note: Exceptions from post_run might hide a pending exception from the
-      # try block.
-      return self.post_run(self.test, coverage_context)
+    except self.api.step.InfraFailure as e:
+      result += TestResults.infra_failure(e)
+
+    return result + self.post_run(self.test, coverage_context)
 
   def rerun(self, failure_dict, **kwargs):
     self.pre_run(test=self._setup_rerun_config(failure_dict), **kwargs)
@@ -763,6 +765,10 @@ class TestResults(object):
   @staticmethod
   def empty():
     return TestResults([], [], [])
+
+  @staticmethod
+  def infra_failure(exception):
+    return TestResults([], [], [exception])
 
   @property
   def is_negative(self):

@@ -115,6 +115,15 @@ def GenTests(api):
     api.step_data('bot_update', retcode=1)
   )
 
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Linux',
+        'swarming_collect_failure',
+    ) +
+    api.step_data('Check', retcode=1)
+  )
+
   # Simulate a tryjob triggered by the CQ for setting up different swarming
   # default tags.
   yield (
