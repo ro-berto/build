@@ -549,6 +549,8 @@ class SimulatorTestRunner(TestRunner):
       'iPhone Simulator',  # Xcode 5
       'iOS Simulator',  # Xcode 6
       'Simulator',  # Xcode 7
+      # The simctl tool invoked by iossim may hang. https://crbug.com/637429.
+      'simctl',
     ]
 
     # If a signal was sent, wait for the simulator to actually be killed.
@@ -1183,6 +1185,8 @@ class SimulatorXCTestRunner(XCTestRunner):
       'iPhone Simulator',  # Xcode 5
       'iOS Simulator',  # Xcode 6
       'Simulator',  # Xcode 7
+      # The simctl tool invoked by iossim may hang. https://crbug.com/637429.
+      'simctl',
     ]
 
     # If a signal was sent, wait for the simulator to actually be killed.
