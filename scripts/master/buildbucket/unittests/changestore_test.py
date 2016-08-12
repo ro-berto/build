@@ -50,20 +50,13 @@ class ChangeStoreTest(unittest.TestCase):
     self.buildbot.find_changes_by_revision.return_value = [change.changeid]
 
     result = run_deferred(
-        self.store._find_change_in_db((rev, change_id))
+        self.store._find_change_in_db_by_id((rev, change_id)),
     )
 
     self.assertEqual(result, change)
     change.properties.getProperty.assert_any_call(common.INFO_PROPERTY)
     self.buildbot.find_changes_by_revision.assert_called_once_with(rev)
     self.buildbot.get_change_by_id.assert_called_once_with(change.changeid)
-
-  def test_find_change(self):
-    m = Mock()
-    change = self.store._find_change(m.revision, m.change_id)
-    cache = self.buildbot.change_cache
-    cache.get.assert_called_once_with((m.revision, m.change_id))
-    self.assertEqual(change, cache.get.return_value)
 
   def test_get_change(self):
     cache = self.buildbot.change_cache
