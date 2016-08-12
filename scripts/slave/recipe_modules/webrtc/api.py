@@ -145,7 +145,7 @@ class WebRTCApi(recipe_api.RecipeApi):
               self.m.platform.name).split('-', 1)[0])
 
   def checkout(self, **kwargs):
-    self._working_dir = self.m.chromium_tests.get_checkout_dir({})
+    self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
     if self._working_dir:
       kwargs.setdefault('cwd', self._working_dir)
 

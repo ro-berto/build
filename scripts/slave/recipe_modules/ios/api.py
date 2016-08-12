@@ -41,7 +41,7 @@ class iOSApi(recipe_api.RecipeApi):
     kwargs.setdefault('force', True)
     self.m.gclient.set_config('ios')
 
-    checkout_dir = self.m.chromium_tests.get_checkout_dir({})
+    checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
     if checkout_dir:
       kwargs.setdefault('cwd', checkout_dir)
 
@@ -341,7 +341,7 @@ class iOSApi(recipe_api.RecipeApi):
         self.compiler == 'ninja' and
         self.m.tryserver.is_tryserver and
         'without patch' not in suffix):
-      affected_files = self.m.chromium_tests.get_files_affected_by_patch(
+      affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
           cwd=self.m.path['checkout'])
       # The same test may be configured to run on multiple simulators.
       # Only specify each test once for the analyzer.

@@ -54,7 +54,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
   @property
   def working_dir(self):
    if not self._working_dir:
-     self._working_dir = self.m.chromium_tests.get_checkout_dir({})
+     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
    return self._working_dir or self.m.path['slave_build']
 
   def perform_bisect(self, **flags):

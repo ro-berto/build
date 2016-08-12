@@ -4,7 +4,7 @@
 
 DEPS = [
   'archive',
-  'chromium_tests',
+  'chromium_checkout',
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -26,7 +26,7 @@ def RunSteps(api):
   api.ios.host_info()
 
   checkout_kwargs = {}
-  checkout_dir = api.chromium_tests.get_checkout_dir({})
+  checkout_dir = api.chromium_checkout.get_checkout_dir({})
   if checkout_dir:
     checkout_kwargs['cwd'] = checkout_dir
   update_step = api.bot_update.ensure_checkout(**checkout_kwargs)

@@ -30,10 +30,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.add_builders(builders.BUILDERS)
     self._precommit_mode = False
 
-    # Keep track of working directory (which contains the checkout).
-    # None means "default value".
-    self._working_dir = None
-
   @property
   def builders(self):
     return self._builders
@@ -130,40 +126,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
-  def get_checkout_dir(self, bot_config):
-    try:
-      builder_cache = self.m.path['builder_cache']
-    except KeyError:  # no-op if builder cache is not set up.
-      return None
-    else:
-      sanitized_buildername = ''.join(
-          c if c.isalnum() else '_' for c in self.m.properties['buildername'])
-      checkout_dir = builder_cache.join(
-          bot_config.get('checkout_dir', sanitized_buildername))
-      self.m.shutil.makedirs('checkout path', checkout_dir)
-      return checkout_dir
+  # TODO(phajdan.jr): fix callers and remove chromium_tests.get_checkout_dir.
+  def get_checkout_dir(self, bot_config):  # pragma: no cover
+    return self.m.chromium_checkout.get_checkout_dir(bot_config)
 
+  # TODO(phajdan.jr): fix callers and remove chromium_tests.ensure_checkout.
   def ensure_checkout(self, bot_config, root_solution_revision=None,
                       force=False):
-    if self.m.platform.is_win:
-      self.m.chromium.taskkill()
-
-    kwargs = {}
-    self._working_dir = self.get_checkout_dir(bot_config)
-    if self._working_dir:
-      kwargs['cwd'] = self._working_dir
-
-    # Bot Update re-uses the gclient configs.
-    update_step = self.m.bot_update.ensure_checkout(
-        patch_root=bot_config.get('patch_root'),
-        root_solution_revision=root_solution_revision,
-        clobber=bot_config.get('clobber', False),
-        force=force, **kwargs)
-    assert update_step.json.output['did_run']
-    # HACK(dnj): Remove after 'crbug.com/398105' has landed
-    self.m.chromium.set_build_properties(update_step.json.output['properties'])
-
-    return update_step
+    return self.m.chromium_checkout.ensure_checkout(  # pragma: no cover
+        bot_config, root_solution_revision, force)
 
   def set_up_swarming(self, bot_config):
     if not bot_config.get('enable_swarming'):
@@ -194,7 +165,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def prepare_checkout(self, bot_config, root_solution_revision=None,
                        force=False):
-    update_step = self.ensure_checkout(
+    update_step = self.m.chromium_checkout.ensure_checkout(
         bot_config, root_solution_revision, force=force)
 
     if (self.m.chromium.c.compile_py.compiler and
@@ -544,7 +515,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   @contextlib.contextmanager
   def wrap_chromium_tests(self, bot_config, tests=None):
     context = {
-        'cwd': self._working_dir,
+        'cwd': self.m.chromium_checkout.working_dir,
         'env': self.m.chromium.get_env(),
     }
     with self.m.step.context(context):
@@ -646,8 +617,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self._resolve_fixed_revisions(bot_update_json)
 
     kwargs = {}
-    if self._working_dir:
-      kwargs['cwd'] = self._working_dir
+    if self.m.chromium_checkout.working_dir:
+      kwargs['cwd'] = self.m.chromium_checkout.working_dir
 
     self.m.bot_update.ensure_checkout(
         force=True, patch=False, update_presentation=False, **kwargs)
@@ -694,21 +665,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               'TESTS FAILED; retries without patch disabled (%s)'
                   % deapply_patch_reason)
 
+  # TODO(phajdan.jr): fix callers and remove get_files_affected_by_patch.
   def get_files_affected_by_patch(self, relative_to='src/', cwd=None):
-    """Returns list of POSIX paths of files affected by patch for "analyze".
-
-    Paths are relative to `relative_to` which for analyze should be 'src/'.
-    """
-    patch_root = self.m.gclient.calculate_patch_root(
-        self.m.properties.get('patch_project'))
-    if not cwd:
-      cwd = self._working_dir.join(patch_root) if self._working_dir else None
-    files = self.m.tryserver.get_files_affected_by_patch(patch_root, cwd=cwd)
-    for i, path in enumerate(files):
-      path = str(path)
-      assert path.startswith(relative_to)
-      files[i] = path[len(relative_to):]
-    return files
+    return self.m.chromium_checkout.get_files_affected_by_patch(  # pragma: no cover
+        relative_to, cwd)
 
   # TODO(phajdan.jr): fix callers and remove chromium_tests.configure_swarming.
   def configure_swarming(self, project_name, precommit, mastername=None):

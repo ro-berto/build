@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromium_tests',
+  'chromium_checkout',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'ios',
@@ -20,7 +20,7 @@ def RunSteps(api):
   api.ios.host_info()
 
   checkout_kwargs = {'force': True}
-  checkout_dir = api.chromium_tests.get_checkout_dir({})
+  checkout_dir = api.chromium_checkout.get_checkout_dir({})
   if checkout_dir:
     checkout_kwargs['cwd'] = checkout_dir
   api.bot_update.ensure_checkout(**checkout_kwargs)

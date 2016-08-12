@@ -10,6 +10,7 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'chromium_android',
+  'chromium_checkout',
   'chromium_swarming',
   'chromium_tests',
   'commit_position',
@@ -115,7 +116,7 @@ def _RunStepsInternal(api):
     tests.extend(additional_tests)
     tests_including_triggered.extend(additional_tests)
 
-  affected_files = api.chromium_tests.get_files_affected_by_patch('src/')
+  affected_files = api.chromium_checkout.get_files_affected_by_patch('src/')
 
   affects_blink_paths = any(
       f.startswith(path) for f in affected_files

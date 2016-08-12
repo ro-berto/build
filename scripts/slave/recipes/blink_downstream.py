@@ -30,6 +30,7 @@ from recipe_engine.types import freeze
 DEPS = [
   'depot_tools/bot_update',
   'chromium',
+  'chromium_checkout',
   'chromium_tests',
   'depot_tools/gclient',
   'recipe_engine/json',
@@ -132,7 +133,7 @@ def RunSteps(api):
   api.gclient.c.got_revision_mapping['src'] = 'got_cr_revision'
 
   context = {}
-  checkout_dir = api.chromium_tests.get_checkout_dir(bot_config)
+  checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
   if checkout_dir:
     context['cwd'] = checkout_dir
 
