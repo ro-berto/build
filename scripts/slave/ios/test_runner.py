@@ -1275,13 +1275,28 @@ class SimulatorXCTestRunner(XCTestRunner):
     xctests_fullname = self.test_target_name + '.xctest'
     xctest_path = os.path.join(app_path, 'PlugIns', xctests_fullname)
 
-    cmd = [
-      os.path.join(built_dir, 'iossim'),
-      '-d', self.platform,
-      '-s', self.version,
-      app_path,
-      xctest_path
-    ]
+    if self.xcode_version == '8.0':
+      cmd = [
+        os.path.join(built_dir, 'iossim'),
+        '-d', self.platform,
+        '-s', self.version,
+        app_path,
+        xctest_path
+      ]
+    else:
+      cmd = [
+        'xcodebuild', 'test-without-building',
+        'BUILT_PRODUCTS_DIR=%s' % built_dir,
+        '-project', self.test_project_dir,
+        '-scheme','TestProject',
+        '-destination','platform=iOS Simulator,name=%s,OS=%s'
+        % (self.platform, self.version),
+        '-archivePath', self.homedir,
+        'APP_TARGET_NAME=%s' % self.test_host_name,
+        'TEST_TARGET_NAME=%s' % self.test_target_name,
+        'NSUnbufferedIO=YES'
+      ]
+
     return cmd
 
   @TestRunner.RequireTearDown
