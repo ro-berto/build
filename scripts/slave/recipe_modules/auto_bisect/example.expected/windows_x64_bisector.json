@@ -811,7 +811,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
       "linux-amd64",
       "--dest-directory",
@@ -891,7 +891,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::cipd]/resources/bootstrap.py",
+      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
       "linux-amd64",
       "--dest-directory",

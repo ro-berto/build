@@ -1,5 +1,5 @@
 DEPS = [
-  'cipd',
+  'depot_tools/cipd',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'recipe_engine/step',

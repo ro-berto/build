@@ -1,8 +1,8 @@
 DEPS = [
-  'cipd',
   'luci_config',
   'gsutil',
 
+  'depot_tools/cipd',
   'depot_tools/gclient',
   'depot_tools/git',
 

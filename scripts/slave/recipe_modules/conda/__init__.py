@@ -1,5 +1,5 @@
 DEPS = [
-  'cipd',
+  'depot_tools/cipd',
   'file',
   'recipe_engine/path',
   'recipe_engine/platform',

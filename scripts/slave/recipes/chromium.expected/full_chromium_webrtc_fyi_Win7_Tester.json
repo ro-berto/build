@@ -165,7 +165,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::cipd]\\resources\\bootstrap.py",
+      "RECIPE_MODULE[depot_tools::cipd]\\resources\\bootstrap.py",
       "--platform",
       "windows-386",
       "--dest-directory",

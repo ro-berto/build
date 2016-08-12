@@ -35,9 +35,8 @@ CipdBinary = collections.namedtuple('CipdBinary', ('package', 'relpath'))
 
 
 def bootstrap(path):
-  bootstrap_path = os.path.join(common.env.Build, 'scripts', 'slave',
-                                'recipe_modules', 'cipd', 'resources',
-                                'bootstrap.py')
+  bootstrap_path = os.path.join(
+      common.env.Build, 'scripts', 'slave', 'cipd_bootstrap.py')
 
   plat, bits = slave.infra_platform.get()
   plat = '%s-%s' % (
