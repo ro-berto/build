@@ -7,6 +7,32 @@ from datetime import datetime
 from twisted.python import log
 from twisted.internet import reactor
 
+
+class FloatingSet(object):
+  """A set describing available primary/floating slaves."""
+  def __init__(self):
+    self._primary = set()
+    self._floating = set()
+
+  def AddPrimary(self, *s):
+    self._primary.update(s)
+
+  def AddFloating(self, *s):
+    self._floating.update(s)
+
+  def NextSlaveFunc(self, grace_period):
+    """Returns a NextSlaveFunc that uses the contents of this set."""
+    return _FloatingNextSlaveFunc(self, grace_period)
+
+  def Get(self):
+    return (sorted(self._primary), sorted(self._floating))
+
+  def __str__(self):
+    return '%s > %s' % (
+        ', '.join(sorted(self._primary)),
+        ', '.join(sorted(self._floating)))
+
+
 class PokeBuilderTimer(object):
   def __init__(self, botmaster, buildername):
     self.botmaster = botmaster
@@ -21,7 +47,7 @@ class PokeBuilderTimer(object):
   def reset(self, delta):
     if self.delayed_call is not None:
       current_delta = (datetime.fromtimestamp(self.delayed_call.getTime()) -
-                       datetime.datetime.now())
+                       _get_now())
       if delta < current_delta:
         self.delayed_call.reset(delta.total_seconds())
       return
@@ -34,11 +60,11 @@ class PokeBuilderTimer(object):
 
   def _poke(self):
     self.delayed_call = None
-    log.msg("Poking builds for builder %r" % (self.buildername,))
+    log.msg('Poking builds for builder [%s]' % (self.buildername,))
     self.botmaster.maybeStartBuildsForBuilder(self.buildername)
 
 
-class FloatingNextSlaveFunc(object):
+class _FloatingNextSlaveFunc(object):
   """
   This object, when used as a Builder's 'nextSlave' function, allows a strata-
   based preferential treatment to be assigned to a Builder's Slaves.
@@ -58,24 +84,21 @@ class FloatingNextSlaveFunc(object):
     assigned to a Floating slave.
 
   Args:
-    strata_property: (str) The name of the Builder property to use to identify
-        its strata.
-    strata: (list) A list of strata values ordered by selection priority
-    grace_period: (None/timedelta) If not None, the amount of time that a slave
-        can be offline before builds fall through to a lower strata.
+    fs (FloatingSet): The set of available primary/floating slaves.
+    grace_period: (timedelta) The amount of time that a slave can be offline
+        before builds fall through to a lower strata.
   """
 
-  def __init__(self, strata_property, strata, grace_period=None):
-    self._strata = tuple(strata)
-    self._strata_property = strata_property
+  def __init__(self, fs, grace_period):
+    self._primary, self._floating = fs.Get()
+    self._fs = fs
     self._grace_period = grace_period
-    self._slave_strata_map = {}
     self._slave_seen_times = {}
     self._poke_builder_timers = {}
     self.verbose = False
 
   def __repr__(self):
-    return '%s(%s)' % (type(self).__name__, ' > '.join(self._strata))
+    return '%s(%s)' % (type(self).__name__, self._fs)
 
   def __call__(self, builder, slave_builders):
     """Main 'nextSlave' invocation point.
@@ -91,16 +114,22 @@ class FloatingNextSlaveFunc(object):
 
     We compile that into a stateful awareness and use it as a decision point.
     Based on the slave availability and grace period, we will either:
-    (1) Return a slave immediately to claim this build
-    (2) Return 'None' (delaying the build) in anticipation of a higher-strata
-        slave becoming available.
+    (1) Return a slave immediately to claim this build. We do this if:
+      (1a) There was a "primary" build slave available, or
+      (1b) We are outside of all of the grace periods for the primary slaves,
+           and there is a floating builder available.
+    (2) Return 'None' (delaying the build) in anticipation of primary/floating
+        availability.
 
     If we go with (2), we will schedule a 'poke' timer to stimulate a future
-    'nextSlave' call if the only higher-strata slave candidates are currently
-    offline. We do this because they could be permanently offline, so there's
-    no guarentee that a 'nextSlave' will be naturally called in any time frame.
+    'nextSlave' call, since BuildBot only checks for builds on explicit slave
+    availability edges. This covers the case where floating builders are
+    available, but aren't enlisted because we're within the grace period. In
+    this case, we need to re-evaluate slaves after the grace period expires,
+    but actual slave state won't haev changed, so no new slave availabilty edge
+    will have occurred.
     """
-    self._debug("Calling %r with builder=[%s], slaves=[%s]",
+    self._debug("Calling [%s] with builder=[%s], slaves=[%s]",
                 self, builder, slave_builders)
     self._cancel_builder_timer(builder)
 
@@ -111,111 +140,103 @@ class FloatingNextSlaveFunc(object):
         for slave_status in self._get_all_slave_status(builder)
     )
 
-    # Index proposed 'nextSlave' slaves by name
+    # Record the names of the slaves that were proposed.
     proposed_slave_builder_map = {}
     for slave_builder in slave_builders:
       proposed_slave_builder_map[slave_builder.slave.slavename] = slave_builder
 
     # Calculate the oldest a slave can be before we assume something's wrong.
-    grace_threshold = now = None
-    if self._grace_period is not None:
-      now = datetime.now()
-      grace_threshold = (now - self._grace_period)
+    now = _get_now()
+    grace_threshold = (now - self._grace_period)
 
-    # Index all builder slaves (even busy ones) by name. Also, record this
-    # slave's strata so we can reference it even if the slave goes offline
-    # in the future.
+    # Record the last time we've seen any of these slaves online.
     online_slave_builders = set()
     for slave_builder in builder.slaves:
       build_slave = slave_builder.slave
       if build_slave is None:
         continue
-      self._record_strata(build_slave)
-      if now is not None:
-        self._record_slave_seen_time(build_slave, now)
+      self._record_slave_seen_time(build_slave, now)
       online_slave_builders.add(build_slave.slavename)
 
-    # Check the strata, in order.
-    for stratum in self._strata:
-      busy_slaves = []
-      offline_slaves = []
-      wait_delta = None
+    self._debug('Online proposed slaves: [%s]',
+                slave_builders)
 
-      for slave_name in self._slave_strata_map.get(stratum, ()):
-        self._debug("Considering slave %r for stratum %r", slave_name, stratum)
+    # Are there any primary slaves that are proposed? If so, use it
+    within_grace_period = []
+    some_primary_were_busy = False
+    wait_delta = None
+    for slave_name in self._primary:
+      self._debug('Considering primary slave [%s]', slave_name)
 
-        # Get the 'SlaveStatus' object for this slave
-        slave_status = slave_status_map.get(slave_name)
-        if slave_status is None:
-          continue
+      # Was this slave proposed to 'nextSlave'?
+      slave_builder = proposed_slave_builder_map.get(slave_name)
+      if slave_builder is not None:
+        # Yes. Use it!
+        self._debug('Slave [%s] is available', slave_name)
+        return slave_builder
 
-        # Was this slave proposed by 'nextSlave'?
+      # Is this slave online? If so, we won't consider floating candiates.
+      if slave_name in online_slave_builders:
+        # The slave is online, but is not proposed (BUSY); add it to the
+        # desired slaves list.
+        self._debug('Slave [%s] is online but BUSY.', slave_name)
+        within_grace_period.append(slave_name)
+        some_primary_were_busy = True
+        continue
+
+      # Get the 'SlaveStatus' object for this slave
+      slave_status = slave_status_map.get(slave_name)
+      if slave_status is None:
+        continue
+
+      # The slave is offline. Is this slave within the grace period?
+      last_seen = self._get_latest_seen_time(slave_status)
+      if last_seen < grace_threshold:
+        # No, the slave is older than our grace period.
+        self._debug('Slave [%s] is OFFLINE and outside grace period '
+                    '(%s < %s).', slave_name, last_seen, grace_threshold)
+        continue
+
+      # This slave is within its grace threshold. Add it to the list of
+      # desired slaves from this set and update our wait delta in case we
+      # have to poke.
+      #
+      # We track the longest grace period delta, since after this point if
+      # no slaves have taken the build we would otherwise hang.
+      self._debug('Slave %r is OFFLINE but within grace period '
+                  '(%s >= %s).', slave_name, last_seen, grace_threshold)
+      within_grace_period.append(slave_name)
+      slave_wait_delta = (self._grace_period - (now - last_seen))
+      if (wait_delta is None) or (slave_wait_delta > wait_delta):
+        wait_delta = slave_wait_delta
+
+    # We've looped through all primary slaves, and none of them were available.
+    # Were some within the grace period?
+    if not within_grace_period:
+      # We're outside of our grace period. Are there floating slaves that we
+      # can use?
+      for slave_name in self._floating:
         slave_builder = proposed_slave_builder_map.get(slave_name)
         if slave_builder is not None:
           # Yes. Use it!
-          self._debug("Slave %r is available", slave_name)
+          self._debug('Slave [%s] is available', slave_name)
           return slave_builder
 
-        # Is this slave online?
-        if slave_name in online_slave_builders:
-          # The slave is online, but is not proposed (BUSY); add it to the
-          # desired slaves list.
-          self._debug("Slave %r is online but BUSY; marking preferred",
-                      slave_name)
-          busy_slaves.append(slave_name)
-          continue
+      self._debug('No slaves are available; returning None')
+      return None
 
-        # The slave is offline; do we have a grace period?
-        if grace_threshold is None:
-          # No grace period, so this slave is not a candidate
-          self._debug("Slave %r is OFFLINE with no grace period; ignoring",
-                      slave_name)
-          continue
+    # We're going to return 'None' to wait for a primary slave. If all of
+    # the slaves that we're anticipating are offline, schedule a 'poke'
+    # after the last candidate has exceeded its grace period to allow the
+    # build to go to lower strata.
+    log.msg('Returning None in anticipation of unavailable primary slaves. '
+            'Please disregard the following BuildBot `nextSlave` '
+            'error: %s' % (within_grace_period,))
 
-        # Yes; is this slave within the grace period?
-        last_seen = self._get_latest_seen_time(slave_status)
-        if last_seen < grace_threshold:
-          # Not within grace period, so this slave is out.
-          self._debug("Slave %r is OFFLINE and outside of grace period "
-                      "(%s < %s); ignoring",
-                      slave_name, last_seen, grace_threshold)
-          continue
-
-        # This slave is within its grace threshold. Add it to the list of
-        # desired stratum slaves and update our wait delta in case we have to
-        # poke.
-        #
-        # We track the longest grace period delta, since after this point if
-        # no slaves have taken the build we would otherwise hang.
-        self._debug("Slave %r is OFFLINE but within grace period "
-                    "(%s >= %s); marking preferred",
-                    slave_name, last_seen, grace_threshold)
-        offline_slaves.append(slave_name)
-        slave_wait_delta = (self._grace_period - (now - last_seen))
-        if (wait_delta is None) or (slave_wait_delta > wait_delta):
-          wait_delta = slave_wait_delta
-
-      # We've looped through our stratum and found no proposed candidates. Are
-      # there any preferred ones?
-      if busy_slaves or offline_slaves:
-        log.msg("Returning 'None' in anticipation of unavailable slaves. "
-                "Please disregard the following BuildBot 'nextSlave' "
-                "error: %s" % (busy_slaves + offline_slaves,))
-
-        # We're going to return 'None' to wait for a preferred slave. If all of
-        # the slaves that we're anticipating are offline, schedule a 'poke'
-        # after the last candidate has exceeded its grace period to allow the
-        # build to go to lower strata.
-        if (not busy_slaves) and (wait_delta is not None):
-          self._debug("Scheduling 'ping' for %r in %s",
-                      builder.name, wait_delta)
-          self._schedule_builder_timer(
-              builder,
-              wait_delta,
-          )
-        return None
-
-    self._debug("No slaves are available; returning 'None'")
+    if (not some_primary_were_busy) and (wait_delta is not None):
+      self._debug('Scheduling ping for [%s] in [%s]',
+                  builder.name, wait_delta)
+      self._schedule_builder_timer(builder, wait_delta)
     return None
 
   def _debug(self, fmt, *args):
@@ -252,14 +273,6 @@ class FloatingNextSlaveFunc(object):
       return None
     return max(times)
 
-  def _record_strata(self, build_slave):
-    stratum = build_slave.properties.getProperty(self._strata_property)
-    strata_set = self._slave_strata_map.get(stratum)
-    if strata_set is None:
-      strata_set = set()
-      self._slave_strata_map[stratum] = strata_set
-    strata_set.add(build_slave.slavename)
-
   def _record_slave_seen_time(self, build_slave, now):
     self._slave_seen_times[build_slave.slavename] = now
 
@@ -278,3 +291,13 @@ class FloatingNextSlaveFunc(object):
     if poke_builder_timer is None:
       return
     poke_builder_timer.cancel()
+
+
+def _get_now():
+  """Returns (datetime.datetime): The current time.
+
+  This exists so it can be overridden by mocks in unit tests.
+  """
+  return datetime.datetime.now()
+
+

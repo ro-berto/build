@@ -45,7 +45,7 @@ class BuilderConfig(object):
   # Default set of class base properties. Subclasses can override these to
   # affect behavior.
   CLOSER = False
-  FLOATING = None
+  FLOATING = 0
   UNIQUE = False
   COLLAPSE = True
   SLAVE_TYPE = SlaveType.BAREMETAL
@@ -120,7 +120,8 @@ class BuilderConfig(object):
 
   @property
   def floating(self):
-    """Returns (bool): Whether this builder should have a floating backup slave.
+    """Returns (int): The number of floating builders that this builder type
+        should be supported by.
     """
     return self.FLOATING
 
@@ -188,7 +189,14 @@ class PaladinBuilderConfig(BuilderConfig):
   """BuilderConfig for Paladin launcher targets."""
 
   UNIQUE = True
-  FLOATING = 'paladin'
+  FLOATING = 2
+
+
+class PfqBuilderConfig(BuilderConfig):
+  """BuilderConfig for Paladin launcher targets."""
+
+  UNIQUE = True
+  FLOATING = 2
 
 
 class IncrementalBuilderConfig(BuilderConfig):
@@ -271,7 +279,7 @@ CONFIG_MAP = OrderedDict((
     (ChromiteTarget.FULL, FullBuilderConfig),
     (ChromiteTarget.ASAN, AsanBuilderConfig),
     (ChromiteTarget.FIRMWARE, BuilderConfig),
-    (ChromiteTarget.PFQ, BuilderConfig),
+    (ChromiteTarget.PFQ, PfqBuilderConfig),
     (ChromiteTarget.PRE_FLIGHT_BRANCH, BuilderConfig),
     (ChromiteTarget.CANARY, CanaryBuilderConfig),
     (ChromiteTarget.SDK, SdkBuilderConfig),

@@ -45,10 +45,17 @@
       "x86-generic-asan": [
         "build84-m2"
       ]
+    }, 
+    "floating": {
+      "paladin": [
+        "build258-m2", 
+        "build317-m2"
+      ]
     }
   }, 
   "unallocated": [
-    "cros199-c2", 
-    "build94-m2"
+    "build333-m2", 
+    "build94-m2", 
+    "cros199-c2"
   ]
 }

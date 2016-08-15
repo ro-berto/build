@@ -156,7 +156,7 @@ class SlaveAllocator(object):
         subtype_dict.extend(slave_list)
 
     if self._list_unallocated:
-      state_dict['unallocated'] = list(self._state.unallocated or ())
+      state_dict['unallocated'] = sorted(list(self._state.unallocated or ()))
 
     with open(self.state_path, 'w') as fd:
       json.dump(state_dict, fd, sort_keys=True, indent=2)
@@ -346,3 +346,12 @@ class SlaveAllocator(object):
           classes=frozenset(v.classes),
           keys=tuple(sorted(v.keys)))
     return result
+
+
+def BuildClassMap(sm):
+  class_map = {}
+  for s, e in sm.entries.iteritems():
+    for cls in e.classes:
+      subtype_map = class_map.setdefault(cls.name, {})
+      subtype_map.setdefault(cls.subtype, set()).add(s)
+  return class_map
