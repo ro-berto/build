@@ -319,7 +319,6 @@ class LocalGTestTest(Test):
 
     if is_android:
       kwargs['json_results_file'] = gtest_results_file
-      kwargs['flakiness_dashboard'] = 'test-results.appspot.com'
       kwargs['shard_timeout'] = self._android_shard_timeout
       kwargs['tool'] = self._android_tool
     else:
