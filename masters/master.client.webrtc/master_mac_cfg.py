@@ -113,7 +113,7 @@ def Update(c):
         # remote_run is not working for the webrtc/ios recipe: crbug.com/637666.
         'factory': m_annotator.BaseFactory(spec['recipe'])
                    if 'recipe' in spec and spec['recipe'] == 'webrtc/ios'
-                   else m_remote_run('webrtc/standalone'),
+                   else m_remote_run(spec.get('recipe', 'webrtc/standalone')),
         'notify_on_missing': True,
         'category': spec.get('category', 'compile|testers'),
         'slavebuilddir': spec['slavebuilddir'],
