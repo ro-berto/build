@@ -105,7 +105,7 @@ for mode in ['debug', 'release', 'product']:
                   '--builder-tag=no_ipv6'],
     'build_args': ['runtime_precompiled'],
   }
-  builders['vm-linux-%s-x64-live-reload' % mode] = {
+  builders['vm-linux-%s-x64-reload' % mode] = {
     'mode': mode,
     'target_arch': 'x64',
     'env': default_envs['linux'],
@@ -113,7 +113,7 @@ for mode in ['debug', 'release', 'product']:
     'test_args': ['--hot-reload',
                   '--builder-tag=no_ipv6'],
   }
-  builders['vm-linux-%s-x64-stress-reload' % mode] = {
+  builders['vm-linux-%s-x64-reload-rollback' % mode] = {
     'mode': mode,
     'target_arch': 'x64',
     'env': default_envs['linux'],
