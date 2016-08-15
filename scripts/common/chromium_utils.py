@@ -600,7 +600,7 @@ def CopyFileToDir(src_path, dest_dir, dest_fn=None, link_ok=False):
 
 
 def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
-            raise_error=True, remove_archive_directory=True):
+            raise_error=True, remove_archive_directory=True, strip_files=None):
   """Packs files into a new zip archive.
 
   Files are first copied into a directory within the output_dir named for
@@ -624,6 +624,8 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
       the list is not found.
     remove_archive_directory: Whether to remove the archive staging directory
       before copying files over to it.
+    strip_files: List of executable files to strip symbols when zipping. The
+      option currently does not work in Windows.
 
   Returns:
     A tuple consisting of (archive_dir, zip_file_path), where archive_dir
@@ -633,7 +635,8 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     PathNotFound if any of the files in the list is not found, unless
     raise_error is False, in which case the error will be ignored.
   """
-
+  if not strip_files:
+    strip_files = []
   start_time = time.clock()
   # Collect files into the archive directory.
   archive_dir = os.path.join(output_dir, archive_name)
@@ -671,8 +674,14 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
         dest_dir = os.path.join(archive_dir, dirname)
         MaybeMakeDirectory(dest_dir)
         CopyFileToDir(src_path, dest_dir, basename, link_ok=True)
+        if not IsWindows() and basename in strip_files:
+          cmd = ['strip', os.path.join(dest_dir, basename)]
+          RunCommand(cmd)
       else:
         CopyFileToDir(src_path, archive_dir, basename, link_ok=True)
+        if not IsWindows() and basename in strip_files:
+          cmd = ['strip', os.path.join(archive_dir, basename)]
+          RunCommand(cmd)
     except PathNotFound:
       if raise_error:
         raise

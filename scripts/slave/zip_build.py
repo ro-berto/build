@@ -166,16 +166,17 @@ def WriteRevisionFile(dirname, build_revision):
   except IOError:
     print 'Writing to revision file in %s failed.' % dirname
 
-
 def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
-                           zip_file_name):
+                           zip_file_name, strip_files=None):
   """Creates an unversioned full build archive.
   Returns the path of the created archive."""
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
                                                zip_file_name,
                                                zip_file_list,
                                                build_dir,
-                                               raise_error=True)
+                                               raise_error=True,
+                                               strip_files=strip_files)
+
   chromium_utils.RemoveDirectory(zip_dir)
   if not os.path.exists(zip_file):
     raise StagingError('Failed to make zip package %s' % zip_file)
@@ -273,6 +274,7 @@ class PathMatcher(object):
     self.regex_whitelist = FileRegexWhitelist(options)
     self.regex_blacklist = FileRegexBlacklist(options)
     self.exclude_unmatched = options.exclude_unmatched
+    self.ignore_regex = options.ignore_regex
 
   def __str__(self):
     return '\n  '.join([
@@ -281,12 +283,16 @@ class PathMatcher(object):
         'Exclusions: %s' % self.exclusions,
         "Whitelist regex: '%s'" % self.regex_whitelist,
         "Blacklist regex: '%s'" % self.regex_blacklist,
-        'Zip unmatched files: %s' % (not self.exclude_unmatched)])
+        'Zip unmatched files: %s' % (not self.exclude_unmatched),
+        'Ignore regex matches: %s' % self.ignore_regex])
+
 
   def Match(self, filename):
     if filename in self.inclusions:
       return True
     if filename in self.exclusions:
+      return False
+    if self.ignore_regex:
       return False
     if re.match(self.regex_whitelist, filename):
       return True
@@ -305,7 +311,6 @@ def Archive(options):
   if not os.path.exists(staging_dir):
     os.makedirs(staging_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
-
   if not options.build_revision:
     (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
         options.src_dir, options.webkit_dir, options.revision_dir)
@@ -368,7 +373,8 @@ def Archive(options):
   zip_file_list.extend(mojom_files)
 
   zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
-                                    unversioned_base_name)
+                                    unversioned_base_name,
+                                    strip_files=options.strip_files)
 
   zip_base, zip_ext, versioned_file = MakeVersionedArchive(
       zip_file, version_suffix, options)
@@ -416,6 +422,8 @@ def main(argv):
   option_parser.add_option('--include-files', default='',
                            help='Comma separated list of files that should '
                                 'always be included in the zip.')
+  option_parser.add_option('--ignore-regex', action='store_true',
+                           default=False, help='Ignores regex matches')
   option_parser.add_option('--master-name', help='Name of the buildbot master.')
   option_parser.add_option('--slave-name', help='Name of the buildbot slave.')
   option_parser.add_option('--build-number', type=int,
@@ -450,6 +458,9 @@ def main(argv):
                            default=False, help='Add also dSYM files.')
   option_parser.add_option('--append-deps-patch-sha', action='store_true')
   option_parser.add_option('--gs-acl')
+  option_parser.add_option('--strip-files', default='',
+                           help='Comma separated list of files that should '
+                                'be stripped of symbols in the zip.')
   option_parser.add_option('--json-urls',
                            help=('Path to json file containing uploaded '
                                  'archive urls. If this is omitted then '
@@ -483,7 +494,8 @@ def main(argv):
         'append_deps_patch_sha')
   if not options.gs_acl:
     options.gs_acl = options.factory_properties.get('gs_acl')
-
+  if options.strip_files:
+    options.strip_files = options.strip_files.split(',')
   # When option_parser is passed argv as a list, it can return the caller as
   # first unknown arg.  So throw a warning if we have two or more unknown
   # arguments.

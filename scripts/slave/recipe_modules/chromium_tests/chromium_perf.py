@@ -14,6 +14,10 @@ SPEC = {
   'builders': {},
   'settings': {
     'build_gs_bucket': 'chrome-perf',
+    # Bucket for storing builds for manual bisect
+    'bisect_build_gs_bucket': 'chrome-test-builds',
+    'bisect_build_gs_extra': 'official-by-commit',
+    'bisect_builders': []
   },
 }
 
@@ -93,7 +97,7 @@ def _TestSpec(config_name, parent_builder, perf_id, platform, target_bits,
   return spec
 
 
-def _AddBuildSpec(name, platform, target_bits=64):
+def _AddBuildSpec(name, platform, target_bits=64, add_to_bisect=False):
   if target_bits == 64:
     perf_id = platform
   else:
@@ -103,6 +107,8 @@ def _AddBuildSpec(name, platform, target_bits=64):
       'chromium_perf', perf_id, platform, target_bits)
   assert target_bits not in _builders[platform]
   _builders[platform][target_bits] = name
+  if add_to_bisect:
+    SPEC['settings']['bisect_builders'].append(name)
 
 
 def _AddTestSpec(name, perf_id, platform, target_bits=64,
@@ -120,7 +126,7 @@ _AddBuildSpec('Android arm64 Builder', 'android')
 _AddBuildSpec('Win Builder', 'win', target_bits=32)
 _AddBuildSpec('Win x64 Builder', 'win')
 _AddBuildSpec('Mac Builder', 'mac')
-_AddBuildSpec('Linux Builder', 'linux')
+_AddBuildSpec('Linux Builder', 'linux', add_to_bisect=True)
 
 
 _AddTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5', 'android',

@@ -404,6 +404,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if not bot_config.get('cf_archive_build'):
         master_config = bot_db.get_master_settings(mastername)
         build_revision = update_step.presentation.properties['got_revision']
+
+        # For archiving 'chromium.perf', the builder also archives a version
+        # without perf test files for manual bisect.
+        # (https://bugs.chromium.org/p/chromium/issues/detail?id=604452)
+        if (master_config.get('bisect_builders') and
+            buildername in master_config.get('bisect_builders')):
+          self.m.archive.zip_and_upload_build(
+              'package build for bisect',
+              self.m.chromium.c.build_config_fs,
+              build_url=self._build_bisect_gs_archive_url(master_config),
+              build_revision=build_revision,
+              cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
+              update_properties=update_step.presentation.properties,
+              exclude_perf_test_files=True,
+              store_by_hash=False
+          )
+
         self.m.archive.zip_and_upload_build(
             'package build',
             self.m.chromium.c.build_config_fs,
@@ -677,6 +694,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def configure_swarming(self, project_name, precommit, mastername=None):
     return self.m.chromium_swarming.configure_swarming(  # pragma: no cover
         project_name, precommit, mastername)
+
+  def _build_bisect_gs_archive_url(self, master_config):
+    return self.m.archive.legacy_upload_url(
+        master_config.get('bisect_build_gs_bucket'),
+        extra_url_components=master_config.get('bisect_build_gs_extra'))
 
   def _build_gs_archive_url(self, mastername, master_config, buildername):
     """Returns the archive URL to pass to self.m.archive.zip_and_upload_build.
