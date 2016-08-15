@@ -351,6 +351,14 @@ class LocalGTestTest(Test):
             ['failures:', r.failures]
           ])
 
+        if api.test_results.c.test_results_server:
+          api.test_results.upload(
+              api.json.input(r.raw),
+              test_type=self.name,
+              chrome_revision=api.bot_update.last_returned_properties.get(
+                  'got_revision_cp', 'x@{#0}'))
+
+
     return step_result
 
   def has_valid_results(self, api, suffix):

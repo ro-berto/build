@@ -1152,6 +1152,24 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_gtest_android') +
+    api.properties.generic(mastername='chromium.android',
+                           buildername='Lollipop Phone Tester',
+                           parent_buildername='Android arm Builder (dbg)') +
+    api.override_step_data(
+        'read test spec (chromium.android.json)',
+        api.json.output({
+            'Lollipop Phone Tester': {
+                'gtest_tests': [
+                    {
+                      'test': 'base_unittests',
+                    }
+                ],
+            },
+        }))
+  )
+
+  yield (
     api.test('dynamic_gtest_asan_android') +
     api.properties.generic(mastername='chromium.fyi',
                            buildername='ClangToTAndroidASan') +

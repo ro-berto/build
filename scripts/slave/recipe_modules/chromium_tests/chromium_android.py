@@ -106,6 +106,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,
@@ -129,6 +130,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,
@@ -152,6 +154,7 @@ SPEC = {
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
+      'test_results_config': 'public_server',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,
@@ -175,6 +178,7 @@ SPEC = {
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
+      'test_results_config': 'public_server',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,
@@ -198,6 +202,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,
@@ -221,6 +226,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,
@@ -244,6 +250,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,
@@ -267,6 +274,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_instrumentation_test,
@@ -292,6 +300,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -320,6 +329,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -346,6 +356,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'remove_system_webview': True,
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
@@ -372,6 +383,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'remove_system_webview': True,
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
@@ -398,6 +410,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
       'remove_system_webview': True,
       'tests': [
         steps.WebViewCTSTest(),
