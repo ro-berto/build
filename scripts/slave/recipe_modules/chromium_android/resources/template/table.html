@@ -1,4 +1,4 @@
-<table id="{{tb_value.table_id}}">
+<table id="{{tb_value.table_id}}" class="info">
   <thead class="heads">
     <tr>
       {% for item in tb_value.table_headers %}
@@ -15,8 +15,10 @@
       <tr>
         {% for cell in row %}
           <td class="{{loop.index0}} {{cell.class}}">
-            {% if "is-pre" in cell.class %}
+            {% if cell.is_pre %}
               <pre>{{cell.data}}</pre>
+            {% elif cell.link %}
+              <a onclick="window.open('{{cell.link}}');">{{cell.data}}</a>
             {% else %}
               {{cell.data}}
             {% endif %}

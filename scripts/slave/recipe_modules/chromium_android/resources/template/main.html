@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/i/{{master_name}}/default.css" type="text/css">
     <style>
       table, th, td {
         border: 1px solid black;
@@ -15,11 +17,21 @@
       table {
         width: 100%;
       }
-      .align-center {
+      .center {
         text-align: center;
       }
-      .algin-left {
+      .left {
         text-align: left;
+      }
+      td a {
+        text-decoration: none;
+      }
+      td a:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      tr:hover {
+        background-color: #F6F6F6;
       }
     </style>
     <script type="text/javascript">
@@ -82,13 +94,15 @@
       }
     </script>
   </head>
-  <body>
-    {% for tb_value in tb_values %}
-      {% include 'template/table.html' %}
-      <br>
-      <br>
-      <br>
-    {% endfor %}
+  <body class="interface">
+    <div class="content">
+      {% for tb_value in tb_values %}
+        {% include 'template/table.html' %}
+        <br>
+        <br>
+        <br>
+      {% endfor %}
+    </div>
   </body>
   <script>
     Array.prototype.slice.call(document.getElementsByTagName('th'))

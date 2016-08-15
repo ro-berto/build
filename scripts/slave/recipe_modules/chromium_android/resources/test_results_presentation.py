@@ -20,7 +20,7 @@ jinja_environment = jinja2.Environment(
     loader = jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
 # Get result details from json path and then convert results to html.
-def result_details(json_path):
+def result_details(json_path, cs_base_url, master_name):
   with open(json_path) as json_file:
     json_object = json.loads(json_file.read())
     results_list = []
@@ -33,21 +33,31 @@ def result_details(json_path):
                 'duration': tr['elapsed_time_ms'],
                 'output_snippet' : tr['output_snippet']
             } for tr in test_runs])
-    return results_to_html(results_list)
+    return results_to_html(results_list, cs_base_url, master_name)
 
 # Convert list of test results into html format.
-def results_to_html(results):
+def results_to_html(results, cs_base_url, master_name):
+  def code_search(test):
+    search = test.replace('#', '.')
+    return '%s/?q=%s&type=cs' % (cs_base_url, search)
+
   suite_row_dict = {}
   test_row_list = []
   for result in results:
-    data = [{'data': result['name'], 'class': 'align-left'},
-            {'data': result['status'], 'class': 'align-center'},
-            {'data': result['duration'], 'class': 'align-center'},
-            {'data': result['output_snippet'], 'class': 'align-left is-pre'}]
+    # Constructing test_row_list.
+    data = [{'data': result['name'], 'class': 'left',
+             'link': code_search(result['name'])},
+            {'data': result['status'], 
+             'class': 'center ' + result['status'].lower()},
+            {'data': result['duration'], 'class': 'center'},
+            {'data': result['output_snippet'], 
+             'class': 'left', 'is_pre': True}]
 
     test_row_list.append(data)
-    suite_name = result['name'][:result['name'].index('#')]
 
+    # Constructing suite_row_dict
+    test_case_path = result['name']
+    suite_name = test_case_path.split('#')[0]
     # 'suite_row' is [name, success_count, fail_count, all_count, time].
     SUCCESS_COUNT = 1
     FAIL_COUNT = 2
@@ -57,11 +67,11 @@ def results_to_html(results):
     if suite_name in suite_row_dict:
       suite_row = suite_row_dict[suite_name]  
     else:
-      suite_row = [{'data': suite_name, 'class' : 'align-left'},
-                   {'data': 0, 'class': 'align-center'},
-                   {'data': 0, 'class': 'align-center'},
-                   {'data': 0, 'class': 'align-center'},
-                   {'data': 0, 'class': 'align-center'}]
+      suite_row = [{'data': suite_name, 'class' : 'left'},
+                   {'data': 0, 'class': 'center'},
+                   {'data': 0, 'class': 'center'},
+                   {'data': 0, 'class': 'center'},
+                   {'data': 0, 'class': 'center'}]
       suite_row_dict[suite_name] = suite_row
 
     suite_row[ALL_COUNT]['data'] += 1
@@ -70,6 +80,12 @@ def results_to_html(results):
     elif result['status'] == 'FAILURE':
       suite_row[FAIL_COUNT]['data'] += 1
     suite_row[TIME]['data'] += result['duration']
+
+  for suite in suite_row_dict.values():
+    if suite[FAIL_COUNT]['data'] > 0:
+      suite[FAIL_COUNT]['class'] += ' failure'
+    else:
+      suite[FAIL_COUNT]['class'] += ' success'
 
   test_table_values = {
     'table_id' : 'test_table',
@@ -95,7 +111,8 @@ def results_to_html(results):
   main_template = jinja_environment.get_template(
       os.path.join('template', 'main.html'))
   return main_template.render(
-      {'tb_values': [suite_table_values, test_table_values]})
+      {'tb_values': [suite_table_values, test_table_values],
+       'master_name': master_name})
 
 def main():
   logging.basicConfig(level=logging.INFO)
@@ -103,14 +120,19 @@ def main():
   parser.add_argument('--json-file', help='Path of json file.', required=True)
   parser.add_argument('--html-file', help='Path to store html file.',
                       required=True)
+  parser.add_argument('--cs-base-url', help='Base url for code search.',
+                      default='http://cs.chromium.org')
+  parser.add_argument('--master-name', help='Master name in urls.')
+
   args = parser.parse_args()
   if os.path.exists(args.json_file):
-    result_html_string = result_details(args.json_file)
+    result_html_string = result_details(args.json_file, args.cs_base_url,
+                                        args.master_name)
 
     with open(args.html_file, 'w') as html:
       html.write(result_html_string)
   else:
-    raise exception('Json file of result details is not found.')
+    raise Exception('Json file of result details is not found.')
 
 if __name__ == '__main__':
   sys.exit(main())
