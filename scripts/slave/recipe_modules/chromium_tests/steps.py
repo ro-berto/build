@@ -441,7 +441,6 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     swarming_expiration = None
     swarming_hard_timeout = None
     cipd_packages = None
-    output_links = None
     if enable_swarming:
       swarming_spec = test.get('swarming', {})
       if swarming_spec.get('can_use_on_swarming_builders'):
@@ -452,7 +451,6 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
         swarming_expiration = swarming_spec.get('expiration')
         swarming_hard_timeout = swarming_spec.get('hard_timeout')
         packages = swarming_spec.get('cipd_packages')
-        output_links = swarming_spec.get('output_links')
         if packages:
           cipd_packages = [(p['location'],
                             p['cipd_package'],
@@ -480,8 +478,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                         swarming_hard_timeout=swarming_hard_timeout,
                         override_compile_targets=override_compile_targets,
                         override_isolate_target=override_isolate_target,
-                        use_xvfb=use_xvfb, cipd_packages=cipd_packages,
-                        output_links=output_links)
+                        use_xvfb=use_xvfb, cipd_packages=cipd_packages)
     else:
       yield GTestTest(name, args=args, target_name=target_name,
                       flakiness_dash=True,
@@ -493,8 +490,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                       swarming_hard_timeout=swarming_hard_timeout,
                       override_compile_targets=override_compile_targets,
                       override_isolate_target=override_isolate_target,
-                      use_xvfb=use_xvfb, cipd_packages=cipd_packages,
-                      output_links=output_links)
+                      use_xvfb=use_xvfb, cipd_packages=cipd_packages)
 
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,
@@ -840,7 +836,7 @@ class SwarmingGTestTest(SwarmingTest):
                dimensions=None, tags=None, extra_suffix=None, priority=None,
                expiration=None, hard_timeout=None, upload_test_results=True,
                override_compile_targets=None, override_isolate_target=None,
-               cipd_packages=None, output_links=None):
+               cipd_packages=None):
     super(SwarmingGTestTest, self).__init__(name, dimensions, tags, target_name,
                                             extra_suffix, priority, expiration,
                                             hard_timeout)
@@ -850,7 +846,6 @@ class SwarmingGTestTest(SwarmingTest):
     self._override_compile_targets = override_compile_targets
     self._override_isolate_target = override_isolate_target
     self._cipd_packages = cipd_packages
-    self._output_links = output_links
 
   def compile_targets(self, api):
     # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
@@ -917,25 +912,6 @@ class SwarmingGTestTest(SwarmingTest):
           api, suffix,test_filter=test_filter)
     finally:
       step_result = api.step.active_result
-
-      # Populate additional swarming links on buildbot page.
-      if self._output_links:
-        for task in self._tasks.values():
-          for test in task.trigger_output['tasks'].values():
-            # Replace task_id and shard_index placeholders
-            task_id = test.get('task_id')
-            shard_index = str(test.get('shard_index'))
-            for output in self._output_links:
-              name = output['name']
-              name = (name.replace('${SHARD_INDEX}', shard_index)).replace(
-                  '${TASK_ID}', task_id)
-              link = output['link']
-              # Rejoin web links that are broken into a list in the JSON file.
-              link = ''.join(link)
-              link = (link.replace('${SHARD_INDEX}', shard_index)).replace(
-                  '${TASK_ID}', task_id)
-              step_result.presentation.links[name] = link
-
       # Only upload test results if we have gtest results.
       if (self._upload_test_results and
           hasattr(step_result, 'test_utils') and
@@ -1179,14 +1155,14 @@ class GTestTest(Test):
                swarming_shards=1, swarming_dimensions=None, swarming_tags=None,
                swarming_extra_suffix=None, swarming_priority=None,
                swarming_expiration=None, swarming_hard_timeout=None,
-               cipd_packages=None, output_links=None, **runtest_kwargs):
+               cipd_packages=None, **runtest_kwargs):
     super(GTestTest, self).__init__()
     if enable_swarming:
       self._test = SwarmingGTestTest(
           name, args, target_name, swarming_shards, swarming_dimensions,
           swarming_tags, swarming_extra_suffix, swarming_priority,
           swarming_expiration, swarming_hard_timeout,
-          cipd_packages=cipd_packages, output_links=output_links,
+          cipd_packages=cipd_packages,
           override_compile_targets=runtest_kwargs.get(
               'override_compile_targets'),
           override_isolate_target=runtest_kwargs.get(
