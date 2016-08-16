@@ -256,6 +256,28 @@ SPEC = {
       # This new hardware is being tested for reliability.
       'enable_swarming': False,
     },
+    'Win7 Release (AMD R7 240)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # These new graphics cards are being tested at the moment.
+      'enable_swarming': False,
+    },
     'GPU Win x64 Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
