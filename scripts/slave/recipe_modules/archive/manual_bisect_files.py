@@ -25,7 +25,7 @@ CHROME_REQUIRED_FILES = [
   'nacl_irt_x86_64.nexe',
   'natives_blob.bin',
   'PepperFlash',
-  'product_logo_48.png'
+  'product_logo_48.png',
   'resources.pak',
   'snapshot_blob.bin',
   'xdg-mime',
