@@ -54,4 +54,4 @@ def webrtc_openh264(c):
   c.gyp_env.GYP_DEFINES['rtc_use_h264'] = 1
 
 def _compiler_defaults(c):
-  c.compile_py.default_targets = ['All']
+  c.compile_py.default_targets = []
