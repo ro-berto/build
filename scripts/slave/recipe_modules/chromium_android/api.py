@@ -678,6 +678,7 @@ class AndroidApi(recipe_api.RecipeApi):
                          max_battery_temp=None,
                          known_devices_file=None,
                          enable_platform_mode=False,
+                         write_buildbot_json=False,
                          **kwargs):
     args = [
         'perf',
@@ -696,6 +697,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--known-devices-file', known_devices_file])
     if enable_platform_mode:
       args.extend(['--enable-platform-mode'])
+    if write_buildbot_json:
+      args.extend(['--write-buildbot-json'])
 
     self.test_runner(
         'Sharded Perf Tests',

@@ -762,6 +762,7 @@
       "--flaky-steps",
       "flake_fakes.json",
       "--enable-platform-mode",
+      "--write-buildbot-json",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],

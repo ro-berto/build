@@ -101,7 +101,8 @@ BUILDERS = freeze({
     },
     'enable_platform_mode': {
         'perf_config': 'sharded_perf_tests.json',
-        'enable_platform_mode': True
+        'enable_platform_mode': True,
+        'write_buildbot_json': True,
     },
     'timestamp_as_point_id': {
       'perf_config': 'sharded_perf_tests.json',
@@ -198,6 +199,7 @@ def RunSteps(api, buildername):
           upload_archives_to_bucket='archives-bucket',
           known_devices_file=config.get('last_known_devices', None),
           enable_platform_mode=config.get('enable_platform_mode', None),
+          write_buildbot_json=config.get('write_buildbot_json', False),
           timestamp_as_point_id=config.get('timestamp_as_point_id', False))
   except api.step.StepFailure as f:
     failure = f
