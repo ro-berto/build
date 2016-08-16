@@ -9,6 +9,7 @@ from buildbot.scheduler import Dependent
 from buildbot.scheduler import Nightly
 from buildbot.scheduler import Periodic
 from buildbot.schedulers.basic import SingleBranchScheduler as Scheduler
+from buildbot.schedulers.basic import AnyBranchScheduler
 from buildbot.scheduler import Triggerable
 
 from master import slaves_list
@@ -82,6 +83,13 @@ class Helper(object):
                               'builders': [],
                               'categories': categories}
 
+  def FilterScheduler(self, name, fltr, treeStableTimer=60):
+    assert name not in self._schedulers, ('Scheduler %s already exists' % name)
+    self._schedulers[name] = {'type': 'FilterScheduler',
+                              'filter': fltr,
+                              'treeStableTimer': treeStableTimer,
+                              'builders': []}
+
   def URLScheduler(self, name, url, pollInterval=300, include_revision=False):
     self._schedulers[name] = {'type': 'URLScheduler',
                               'url': url,
@@ -144,6 +152,14 @@ class Helper(object):
         instance = Scheduler(name=s_name,
                              change_filter=ChangeFilter(category=ident),
                              builderNames=scheduler['builders'])
+        scheduler['instance'] = instance
+        c['schedulers'].append(instance)
+      elif scheduler['type'] == 'FilterScheduler':
+        instance = AnyBranchScheduler(
+            name=s_name,
+            change_filter=scheduler['filter'],
+            treeStableTimer=scheduler['treeStableTimer'],
+            builderNames=scheduler['builders'])
         scheduler['instance'] = instance
         c['schedulers'].append(instance)
 
