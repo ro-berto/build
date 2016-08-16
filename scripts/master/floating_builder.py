@@ -298,6 +298,4 @@ def _get_now():
 
   This exists so it can be overridden by mocks in unit tests.
   """
-  return datetime.datetime.now()
-
-
+  return datetime.now()
