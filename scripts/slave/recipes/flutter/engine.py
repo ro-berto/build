@@ -123,6 +123,7 @@ def BuildLinuxAndroidArm(api):
     'gen/flutter/sky/shell/shell/classes.dex.jar',
   ]
   RunGN(api, '--android')
+  Build(api, 'android_debug')
   Build(api, 'android_debug', ':dist')
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
