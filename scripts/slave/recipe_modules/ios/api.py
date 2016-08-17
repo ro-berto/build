@@ -14,6 +14,7 @@ class iOSApi(recipe_api.RecipeApi):
   PRODUCT_TYPES = {
     'iPad Air': 'iPad4,1',
     'iPhone 5s': 'iPhone6,1',
+    'iPhone 6s': 'iPhone8,1',
   }
 
   def __init__(self, *args, **kwargs):
@@ -699,19 +700,71 @@ class iOSApi(recipe_api.RecipeApi):
         step_result = self.m.step(task.step_name, [])
         step_result.presentation.status = self.m.step.EXCEPTION
         step_result.presentation.step_text = 'Failed to trigger the test.'
+        infra_failures.append(task.step_name)
         continue
 
       try:
-        # TODO(smut): We need our own script here to interpret the results.
-        self.m.swarming.collect_task(task.task)
+        step_result = self.m.swarming.collect_task(task.task)
       except self.m.step.StepFailure as f:
+        step_result = f.result
+
+      # We only run one shard, so the results we're interested in will
+      # always be shard 0.
+      swarming_summary = step_result.json.output['shards'][0]
+      state = swarming_summary['state']
+      exit_code = (swarming_summary.get('exit_codes') or [None])[0]
+
+      # Interpret the result and set the display appropriately.
+      if state == self.m.swarming.State.COMPLETED and exit_code is not None:
+        # Task completed and we got an exit code from the iOS test runner.
+        if exit_code == 1:
+          step_result.presentation.status = self.m.step.FAILURE
+          test_failures.append(task.step_name)
+        elif exit_code == 2:
+          # The iOS test runner exits 2 to indicate an infrastructure failure.
+          step_result.presentation.status = self.m.step.EXCEPTION
+          infra_failures.append(task.step_name)
+      elif state == self.m.swarming.State.TIMED_OUT:
+        # The task was killed for taking too long. This is a test failure
+        # because the test itself hung.
+        step_result.presentation.status = self.m.step.FAILURE
+        step_result.presentation.step_text = 'Test timed out.'
         test_failures.append(task.step_name)
+      elif state == self.m.swarming.State.EXPIRED:
+        # No Swarming bot accepted the task in time.
+        step_result.presentation.status = self.m.step.EXCEPTION
+        step_result.presentation.step_text = (
+          'No suitable Swarming bot found in time.'
+        )
+        infra_failures.append(task.step_name)
+      else:
+        step_result.presentation.status = self.m.step.EXCEPTION
+        step_result.presentation.step_text = (
+          'Unexpected infrastructure failure.'
+        )
+        infra_failures.append(task.step_name)
+
+      # Add any iOS test runner results to the display.
+      test_summary = self.m.path.join(
+        task.task.task_output_dir, '0', 'summary.json')
+      if self.m.path.exists(test_summary): # pragma: no cover
+        with open(test_summary) as f:
+          test_summary_json = self.m.json.load(f)
+        step_result.presentation.logs['test_summary.json'] = self.m.json.dumps(
+          test_summary_json, indent=2).splitlines()
+        step_result.presentation.logs.update(test_summary_json.get('logs', {}))
+        step_result.presentation.links.update(
+          test_summary_json.get('links', {}))
+        if test_summary_json.get('step_text'):
+          step_result.presentation.step_text = '%s<br />%s' % (
+            step_result.presentation.step_text, test_summary_json['step_text'])
 
     if test_failures:
       raise self.m.step.StepFailure(
-        'Failed %s.' % ', '.join(test_failures + infra_failures))
+        'Failed %s.' % ', '.join(sorted(set(test_failures + infra_failures))))
     elif infra_failures:
-      raise self.m.step.InfraFailure('Failed %s.' % ', '.join(infra_failures))
+      raise self.m.step.InfraFailure(
+        'Failed %s.' % ', '.join(sorted(set(infra_failures))))
 
   @property
   def most_recent_app_dir(self):
