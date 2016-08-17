@@ -33,6 +33,8 @@ def Extend(pythonpath, cwd):
       'markupsafe',
       'mock-1.0.1',
       'oauth2client',
+      'pyasn1',
+      'pyasn1-modules',
       'requests_2_10_0',
       'setuptools-0.6c11',
       'sqlalchemy_0_7_1',

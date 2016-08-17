@@ -59,6 +59,8 @@ twistd.pid
 /third_party/lighttpd
 /third_party/oauth2client
 /third_party/psutils
+/third_party/pyasn1
+/third_party/pyasn1-modules
 /third_party/swarm_client
 /third_party/twisted_10_2/twisted/internet/test/fake_CAs/empty
 /third_party/twisted_10_2/twisted/trial/test/directory

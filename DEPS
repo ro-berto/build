@@ -17,6 +17,12 @@ deps = {
   'build/third_party/lighttpd':
     'https://chromium.googlesource.com/chromium/deps/lighttpd.git'
     '@9dfa55d15937a688a92cbf2b7a8621b0927d06eb',
+  'build/third_party/pyasn1':
+    'https://chromium.googlesource.com/external/github.com/etingof/pyasn1.git'
+    '@709cf013df8585956dda1a4fa2611bf10b91902b',
+  'build/third_party/pyasn1-modules':
+    'https://chromium.googlesource.com/external/github.com/etingof/pyasn1-modules.git'
+    '@ea54a2e498277b85e3ee5f7a1bb0aeab7d1d013b',
   'depot_tools':
     'https://chromium.googlesource.com/chromium/tools/depot_tools.git',
 }
