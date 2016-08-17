@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import os
-
 from recipe_engine import recipe_api
 
 class GomaApi(recipe_api.RecipeApi):
@@ -14,22 +12,7 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_dir = None
     self._goma_started = False
 
-    self._goma_ctl_env_init()
-
-  def _goma_ctl_env_init(self):
     self._goma_ctl_env = {}
-
-    # Inherit some env vars used in goma_utils.SendGomaTsMon.
-    for key in ['BUILDBOT_BUILDERNAME',
-                'BUILDBOT_MASTERNAME',
-                'BUILDBOT_SLAVENAME',
-                'BUILDBOT_CLOBBER',
-                'TEST_TMPDIR',
-                'TMPDIR',
-                'TMP',
-    ]:
-      if key in os.environ: # pragma: no cover
-        self._goma_ctl_env[key] = os.environ[key]
 
   @property
   def service_account_json_path(self):
@@ -86,9 +69,6 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
         self.service_account_json_path)
 
-    # GLOG_log_dir should not be set.
-    assert env is None or 'GLOG_log_dir' not in env
-
     goma_ctl_start_env = self._goma_ctl_env.copy()
 
     if env is not None:
@@ -132,8 +112,7 @@ class GomaApi(recipe_api.RecipeApi):
                      ninja_log_exit_status)
 
     self._goma_started = False
-    self._goma_ctl_env_init()
-
+    self._goma_ctl_env = {}
 
   def upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
                   ninja_log_command=None, ninja_log_exit_status=None,
@@ -166,6 +145,5 @@ class GomaApi(recipe_api.RecipeApi):
       name=name or 'upload_log',
       script=self.package_repo_resource(
           'scripts', 'slave', 'upload_goma_logs.py'),
-      args=args,
-      env=self._goma_ctl_env
+      args=args
     )

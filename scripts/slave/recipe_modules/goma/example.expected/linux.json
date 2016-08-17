@@ -84,9 +84,6 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
       "--upload-compiler-proxy-info"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "upload_log"
   },
   {
