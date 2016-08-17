@@ -41,9 +41,9 @@ def GetShortHostname():
   return socket.gethostname().split('.')[0].lower()
 
 
-def GetGomaTmpDirectory():
-  """Get goma's temp directory."""
-  candidates = ['GOMA_TMP_DIR', 'TEST_TMPDIR', 'TMPDIR', 'TMP']
+def GetGomaLogDirectory():
+  """Get goma's log directory."""
+  candidates = ['TEST_TMPDIR', 'TMPDIR', 'TMP']
   for candidate in candidates:
     value = os.environ.get(candidate)
     if value and os.path.isdir(value):
@@ -60,7 +60,7 @@ def GetLatestGlogInfoFile(pattern):
   Returns:
     the latest glog INFO filename in fullpath.
   """
-  dirname = GetGomaTmpDirectory()
+  dirname = GetGomaLogDirectory()
   info_pattern = os.path.join(dirname, '%s.*.INFO.*' % pattern)
   candidates = glob.glob(info_pattern)
   if not candidates:
