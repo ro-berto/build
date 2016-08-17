@@ -579,6 +579,29 @@ SPEC = {
       # in order to keep up with the faster cycle time of the tests.
       'enable_swarming': False,
     },
+    'Linux Release (AMD R7 240)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
+    },
     'GPU Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config':['archive_gpu_tests',
