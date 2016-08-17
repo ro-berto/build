@@ -123,7 +123,7 @@ class FloatingBuilderTest(unittest.TestCase):
 
     # Mock current date/time.
     self.now = datetime.datetime(2016, 1, 1, 8, 0, 0) # 1/1/2016 @8:00
-    fb._get_now.return_value = self.now
+    fb._get_now.side_effect = lambda: self.now
 
     # Mock PokeBuilderTimer to record when the poke builder was set, but not
     # actually schedule any reactor magic.
@@ -145,14 +145,31 @@ class FloatingBuilderTest(unittest.TestCase):
     for patcher in reversed(self._mocks):
       patcher.stop()
 
+  def testJustStartedNoPrimariesOnlineWaits(self):
+    fs = fb.FloatingSet()
+    fs.AddPrimary('primary-a')
+    fs.AddFloating('floating-a', 'floating-b')
+    fnsf = fs.NextSlaveFunc(datetime.timedelta(seconds=10))
+
+    self.builder.set_online_slaves('floating-a', 'floating-b')
+
+    nsb = fnsf(self.builder, self.builder.slavebuilders)
+    self.assertIsNone(nsb)
+    self.assertEqual(self.poke_delta, datetime.timedelta(seconds=10))
+
+    self.now += datetime.timedelta(seconds=11)
+    nsb = fnsf(self.builder, self.builder.slavebuilders)
+    self.assertIsNotNone(nsb)
+    self.assertEqual(nsb.slave.slavename, 'floating-a')
+
   def testPrimaryBuilderIsSelectedWhenAvailable(self):
     fs = fb.FloatingSet()
     fs.AddPrimary('primary-a')
     fs.AddFloating('floating-a', 'floating-b')
+    fnsf = fs.NextSlaveFunc(datetime.timedelta(seconds=10))
 
     self.builder.set_online_slaves('primary-a', 'floating-a', 'floating-b')
 
-    fnsf = fs.NextSlaveFunc(datetime.timedelta(seconds=10))
     nsb = fnsf(self.builder, self.builder.slavebuilders)
     self.assertIsNotNone(nsb)
     self.assertEqual(nsb.slave.slavename, 'primary-a')
@@ -161,12 +178,12 @@ class FloatingBuilderTest(unittest.TestCase):
     fs = fb.FloatingSet()
     fs.AddPrimary('primary-a', 'primary-b')
     fs.AddFloating('floating-a', 'floating-b')
+    fnsf = fs.NextSlaveFunc(datetime.timedelta(seconds=10))
 
     self.builder.set_online_slaves('primary-a', 'primary-b', 'floating-a',
                                    'floating-b')
     self.builder.set_busy_slaves('primary-a')
 
-    fnsf = fs.NextSlaveFunc(datetime.timedelta(seconds=10))
     nsb = fnsf(self.builder, self.builder.slavebuilders)
     self.assertIsNotNone(nsb)
     self.assertEqual(nsb.slave.slavename, 'primary-b')
@@ -175,11 +192,12 @@ class FloatingBuilderTest(unittest.TestCase):
     fs = fb.FloatingSet()
     fs.AddPrimary('primary-a', 'primary-b')
     fs.AddFloating('floating-a', 'floating-b')
+    fnsf = fs.NextSlaveFunc(datetime.timedelta(seconds=10))
 
+    self.now += datetime.timedelta(seconds=30)
     self.builder.set_online_slaves('floating-a')
     self._slaves['primary-b']._set_last_seen(self.now, seconds=-1)
 
-    fnsf = fs.NextSlaveFunc(datetime.timedelta(seconds=10))
     nsb = fnsf(self.builder, self.builder.slavebuilders)
     self.assertIsNone(nsb)
     self.assertEqual(self.poke_delta, datetime.timedelta(seconds=9))
@@ -188,10 +206,11 @@ class FloatingBuilderTest(unittest.TestCase):
     fs = fb.FloatingSet()
     fs.AddPrimary('primary-a', 'primary-b')
     fs.AddFloating('floating-a', 'floating-b')
+    fnsf = fs.NextSlaveFunc(datetime.timedelta(seconds=10))
 
+    self.now += datetime.timedelta(seconds=30)
     self.builder.set_online_slaves('floating-a')
 
-    fnsf = fs.NextSlaveFunc(datetime.timedelta(seconds=10))
     nsb = fnsf(self.builder, self.builder.slavebuilders)
     self.assertIsNotNone(nsb)
     self.assertEqual(nsb.slave.slavename, 'floating-a')

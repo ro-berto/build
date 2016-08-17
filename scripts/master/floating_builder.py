@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import itertools
 from datetime import datetime
 
 from twisted.python import log
@@ -93,9 +94,12 @@ class _FloatingNextSlaveFunc(object):
     self._primary, self._floating = fs.Get()
     self._fs = fs
     self._grace_period = grace_period
-    self._slave_seen_times = {}
     self._poke_builder_timers = {}
     self.verbose = False
+
+    started = _get_now()
+    self._slave_seen_times = dict((s, started) for s in itertools.chain(
+        self._primary, self._floating))
 
   def __repr__(self):
     return '%s(%s)' % (type(self).__name__, self._fs)
@@ -184,13 +188,9 @@ class _FloatingNextSlaveFunc(object):
         some_primary_were_busy = True
         continue
 
-      # Get the 'SlaveStatus' object for this slave
-      slave_status = slave_status_map.get(slave_name)
-      if slave_status is None:
-        continue
-
       # The slave is offline. Is this slave within the grace period?
-      last_seen = self._get_latest_seen_time(slave_status)
+      slave_status = slave_status_map.get(slave_name)
+      last_seen = self._get_latest_seen_time(slave_name, slave_status)
       if last_seen < grace_threshold:
         # No, the slave is older than our grace period.
         self._debug('Slave [%s] is OFFLINE and outside grace period '
@@ -254,23 +254,17 @@ class _FloatingNextSlaveFunc(object):
     return [slave_builder.slave.slave_status
             for slave_builder in builder.slaves]
 
-  def _get_latest_seen_time(self, slave_status):
-    times = []
+  def _get_latest_seen_time(self, slave_name, slave_status):
+    times = [self._slave_seen_times[slave_name]]
 
-    # Add all of the registered connect times
-    times += [datetime.fromtimestamp(connect_time)
-              for connect_time in slave_status.connect_times]
+    if slave_status:
+      # Add all of the registered connect times
+      times += [datetime.fromtimestamp(connect_time)
+                for connect_time in slave_status.connect_times]
 
-    # Add the time of the slave's last message
-    times.append(datetime.fromtimestamp(slave_status.lastMessageReceived()))
+      # Add the time of the slave's last message
+      times.append(datetime.fromtimestamp(slave_status.lastMessageReceived()))
 
-    # Add the last time we've seen the slave in our 'nextSlave' function
-    last_seen_time = self._slave_seen_times.get(slave_status.name)
-    if last_seen_time is not None:
-      times.append(last_seen_time)
-
-    if not times:
-      return None
     return max(times)
 
   def _record_slave_seen_time(self, build_slave, now):
