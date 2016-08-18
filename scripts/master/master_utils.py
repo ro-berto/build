@@ -28,7 +28,6 @@ import master.chromium_status_bb8 as chromium_status
 from common import chromium_utils
 from master import buildbucket
 from master import cbe_json_status_push
-from master import monitoring_status_receiver
 from master import pubsub_json_status_push
 from master import status_logger
 import config
@@ -429,9 +428,8 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
         web_template_globals=web_template_globals,
         **kwargs))
 
-  # Add a status logger and a ts_mon flushing receiver.
+  # Add a status logger.
   c['status'].append(status_logger.StatusEventLogger())
-  c['status'].append(monitoring_status_receiver.MonitoringStatusReceiver())
 
   # Keep last build logs, the default is too low.
   c['buildHorizon'] = 1000
