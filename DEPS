@@ -19,10 +19,13 @@ deps = {
     '@9dfa55d15937a688a92cbf2b7a8621b0927d06eb',
   'build/third_party/pyasn1':
     'https://chromium.googlesource.com/external/github.com/etingof/pyasn1.git'
-    '@709cf013df8585956dda1a4fa2611bf10b91902b',
+    '@4181b2379eeae3d6fd9f4f76d0e6ae3789ed56e7',
   'build/third_party/pyasn1-modules':
     'https://chromium.googlesource.com/external/github.com/etingof/pyasn1-modules.git'
-    '@ea54a2e498277b85e3ee5f7a1bb0aeab7d1d013b',
+    '@956fee4f8e5fd3b1c500360dc4aa12dc5a766cb2',
+  'build/third_party/python-rsa':
+    'https://chromium.googlesource.com/external/github.com/sybrenstuvel/python-rsa.git'
+    '@version-3.1.4',
   'depot_tools':
     'https://chromium.googlesource.com/chromium/tools/depot_tools.git',
 }

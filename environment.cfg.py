@@ -35,6 +35,7 @@ def Extend(pythonpath, cwd):
       'oauth2client',
       'pyasn1',
       'pyasn1-modules',
+      'python-rsa',
       'requests_2_10_0',
       'setuptools-0.6c11',
       'sqlalchemy_0_7_1',
