@@ -749,7 +749,7 @@ class iOSApi(recipe_api.RecipeApi):
         task.task.task_output_dir, '0', 'summary.json')
       if self.m.path.exists(test_summary): # pragma: no cover
         with open(test_summary) as f:
-          test_summary_json = self.m.json.load(f)
+          test_summary_json = self.m.json.loads(f.read())
         step_result.presentation.logs['test_summary.json'] = self.m.json.dumps(
           test_summary_json, indent=2).splitlines()
         step_result.presentation.logs.update(test_summary_json.get('logs', {}))
