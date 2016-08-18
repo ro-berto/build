@@ -14,7 +14,7 @@
 # Copyright Buildbot Team Members
 
 
-import os, weakref
+import os, time, weakref
 
 from zope.interface import implements
 from twisted.python import log
@@ -42,6 +42,8 @@ from buildbot.status.web.authz import Authz
 from buildbot.status.web.auth import AuthFailResource
 from buildbot.status.web.root import RootPage
 from buildbot.status.web.change_hook import ChangeHookResource
+
+from infra_libs.ts_mon.common import http_metrics
 
 # this class contains the WebStatus class.  Basic utilities are in base.py,
 # and specific pages are each in their own module.
@@ -386,8 +388,36 @@ class WebStatus(service.MultiService):
         maxRotatedFiles = either(self.maxRotatedFiles, self.master.log_rotation.maxRotatedFiles)
 
         if not self.site:
-            
+
+            class MonitoredRequest(server.Request):
+                def __init__(self, *args, **kwargs):
+                    server.Request.__init__(self, *args, **kwargs)
+                    self.startTime = time.time()
+
+                def render(self, resrc):
+                    self.resourceClassName = resrc.__class__.__name__
+                    server.Request.render(self, resrc)
+
             class RotateLogSite(server.Site):
+                requestFactory = MonitoredRequest
+
+                def log(self, request):
+                    server.Site.log(self, request)
+
+                    durationMsec = 1000 * (time.time() - request.startTime)
+
+                    requestLength = request.getHeader('content-length')
+                    if requestLength is not None:
+                      requestLength = int(requestLength)
+
+                    http_metrics.update_http_server_metrics(
+                        request.resourceClassName,
+                        request.code,
+                        durationMsec,
+                        requestLength,
+                        request.sentLength,
+                        request.getHeader('user-agent') or '')
+
                 def _openLogFile(self, path):
                     try:
                         from twisted.python.logfile import LogFile
