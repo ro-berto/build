@@ -764,6 +764,7 @@
       "--screenshot",
       "--json-results-file",
       "[TMP_BASE]/temp_details_tmp_1/json_results_file",
+      "--store-tombstones",
       "--test-apk",
       "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
       "--apk-under-test",
@@ -794,7 +795,11 @@
       "--json-file",
       "[TMP_BASE]/temp_details_tmp_1/json_results_file",
       "--html-file",
-      "[TMP_BASE]/temp_details_tmp_1/details.html"
+      "[TMP_BASE]/temp_details_tmp_1/details.html",
+      "--master-name",
+      "chromium.testing.master",
+      "--cs-base-url",
+      "cs_base_url"
     ],
     "name": "process results for SmallTest.Generate Result Details",
     "~followup_annotations": [

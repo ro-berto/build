@@ -853,6 +853,8 @@ class AndroidApi(recipe_api.RecipeApi):
                                 device_flags=None,
                                 wrapper_script_suite_name=None,
                                 result_details=False,
+                                cs_base_url=None,
+                                store_tombstones=False,
                                 **kwargs):
     args = [
       '--blacklist-file', self.blacklist_file,
@@ -877,6 +879,8 @@ class AndroidApi(recipe_api.RecipeApi):
         json_results_file = self.m.path.join(details_dir, 'json_results_file')
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
+    if store_tombstones:
+      args.append('--store-tombstones')
     if timeout_scale:
       args.extend(['--timeout-scale', timeout_scale])
     if strict_mode:
@@ -915,13 +919,18 @@ class AndroidApi(recipe_api.RecipeApi):
         with self.m.step.nest('process results for %s' % step_name):
           try:
             details_html = details_dir.join('details.html')
+            presentation_args = ['--json-file',
+                                 json_results_file,
+                                 '--html-file',
+                                 details_html,
+                                 '--master-name',
+                                 self.m.properties.get('mastername')]
+            if cs_base_url:
+              presentation_args.extend(['--cs-base-url', cs_base_url])
             self.m.python(
                 'Generate Result Details',
                 self.resource('test_results_presentation.py'),
-                args=['--json-file',
-                      json_results_file,
-                      '--html-file',
-                      details_html])
+                args=presentation_args)
             details_list = self.m.file.read(
                 'Read detail.html',
                 details_html,

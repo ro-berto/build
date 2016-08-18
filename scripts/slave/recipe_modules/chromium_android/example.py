@@ -98,6 +98,8 @@ BUILDERS = freeze({
     },
     'result_details': {
         'result_details': True,
+        'cs_base_url': 'cs_base_url',
+        'store_tombstones': True,
     },
     'enable_platform_mode': {
         'perf_config': 'sharded_perf_tests.json',
@@ -203,7 +205,6 @@ def RunSteps(api, buildername):
           timestamp_as_point_id=config.get('timestamp_as_point_id', False))
   except api.step.StepFailure as f:
     failure = f
-
   api.chromium_android.run_instrumentation_suite(
       name='AndroidWebViewTest',
       apk_under_test=api.chromium_android.apk_path('AndroidWebView.apk'),
@@ -219,7 +220,9 @@ def RunSteps(api, buildername):
       additional_apks=['Additional.apk'],
       device_flags=config.get('device_flags'),
       json_results_file=config.get('json_results_file'),
-      result_details=config.get('result_details'))
+      result_details=config.get('result_details'),
+      cs_base_url=config.get('cs_base_url'),
+      store_tombstones=config.get('store_tombstones'))
   api.chromium_android.run_test_suite(
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),
