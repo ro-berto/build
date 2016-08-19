@@ -2,108 +2,58 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from . import steps
+from . import chromium_perf
 
-
-RESULTS_URL = 'https://chromeperf.appspot.com'
-
-
-def _AddBotSpec(name, platform, parent_builder, perf_id, target_bits,
-                parent_master=None):
-  SPEC['builders'][name] = {
-    'disable_tests': True,
-    'bot_type': 'tester',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': target_bits,
-    },
-    'parent_buildername': parent_builder,
-    'chromium_config': 'chromium_perf',
-    'gclient_config': 'chromium_perf',
-    'testing': {
-      'platform': platform,
-    },
-    'perf-id': perf_id,
-    'results-url': RESULTS_URL,
-    'tests': [
-      steps.DynamicPerfTests(perf_id, platform, target_bits,
-                             shard_index=0, num_host_shards=1),
-    ],
-  }
-  if parent_master:
-    SPEC['builders'][name]['parent_mastername'] = parent_master
+import DEPS
+CHROMIUM_CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
+GCLIENT_CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 
 
 SPEC = {
-  'settings': {
-    'build_gs_bucket': 'chrome-perf',
-  },
-  'builders': {
-    'Win Clang Builder': {
-      'disable_tests': True,
-      'chromium_config': 'chromium_win_clang_official',
-      'gclient_config': 'chromium_perf',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_builder_perf',
-      ],
-      'testing': {
-        'platform': 'win',
-      },
-      'tests': {
-        steps.SizesStep(RESULTS_URL, 'win-clang-builder')
-      },
-    },
-  },
+  'builders': {},
+  'settings': chromium_perf.SPEC['settings'],
 }
 
-_AddBotSpec(
-    name='Win 7 Intel GPU Perf (Xeon)',
-    platform='win',
-    parent_builder='Win x64 Builder',
-    perf_id='chromium-rel-win7-gpu-intel',
-    target_bits=64,
-    parent_master='chromium.perf')
 
-_AddBotSpec(
-    name='Win Power High-DPI Perf',
-    platform='win',
-    parent_builder='Win x64 Builder',
-    perf_id='win-power-high-dpi',
-    target_bits=64,
-    parent_master='chromium.perf')
+@CHROMIUM_CONFIG_CTX(includes=['chromium_win_clang_official'])
+def chromium_perf_clang(c):
+  pass
 
-_AddBotSpec(
-    name='Win Clang Perf',
-    platform='win',
-    parent_builder='Win Clang Builder',
-    perf_id='chromium-win-clang',
-    target_bits=32)
 
-_AddBotSpec(
-    name='Mac Power Dual-GPU Perf',
-    platform='mac',
-    parent_builder='Mac Builder',
-    perf_id='mac-power-dual-gpu',
-    target_bits=64,
-    parent_master='chromium.perf')
+@GCLIENT_CONFIG_CTX(includes=['chromium_perf'])
+def chromium_perf_clang(c):
+  pass
 
-_AddBotSpec(
-    name='Mac Power Low-End Perf',
-    platform='mac',
-    parent_builder='Mac Builder',
-    perf_id='mac-power-low-end',
-    target_bits=64,
-    parent_master='chromium.perf')
 
-_AddBotSpec(
-    name='Mac Test Retina Perf',
-    platform='mac',
-    parent_builder='Mac Builder',
-    perf_id='mac-test-retina',
-    target_bits=64,
-    parent_master='chromium.perf')
+def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
+                  target_bits=64):
+  SPEC['builders'][name] = chromium_perf.BuildSpec(
+      config_name, perf_id, platform, target_bits)
+
+
+def _AddTestSpec(name, perf_id, platform,
+                 parent_builder=None, target_bits=64):
+  parent_buildername = (parent_builder or
+      chromium_perf.builders[platform][target_bits])
+  spec = chromium_perf.TestSpec('chromium_perf', parent_buildername, perf_id,
+                                platform, target_bits, 0, 1, 1)
+  if not parent_builder:
+    spec['parent_mastername'] = 'chromium.perf'
+  spec['disable_tests'] = True
+  SPEC['builders'][name] = spec
+
+
+_AddTestSpec('Win 7 Intel GPU Perf (Xeon)', 'chromium-rel-win7-gpu-intel',
+             'win')
+_AddTestSpec('Win Power High-DPI Perf', 'win-power-high-dpi', 'win')
+
+
+_AddTestSpec('Mac Power Dual-GPU Perf', 'mac-power-dual-gpu', 'mac')
+_AddTestSpec('Mac Power Low-End Perf', 'mac-power-low-end', 'mac')
+_AddTestSpec('Mac Test Retina Perf', 'mac-test-retina', 'mac')
+
+
+_AddBuildSpec('Win Clang Builder', 'win-clang-builder', 'win',
+              config_name='chromium_perf_clang', target_bits=32)
+_AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
+             parent_builder='Win Clang Builder', target_bits=32)

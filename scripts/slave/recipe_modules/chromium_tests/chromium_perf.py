@@ -6,8 +6,12 @@ import collections
 
 from . import steps
 
+import DEPS
+CHROMIUM_CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
+GCLIENT_CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 
-_builders = collections.defaultdict(dict)
+
+builders = collections.defaultdict(dict)
 
 
 SPEC = {
@@ -20,6 +24,12 @@ SPEC = {
     'bisect_builders': []
   },
 }
+
+
+@CHROMIUM_CONFIG_CTX(includes=['chromium', 'official', 'mb'])
+def chromium_perf(c):
+  c.clobber_before_runhooks = False
+  pass
 
 
 def _BaseSpec(bot_type, config_name, disable_tests,
@@ -70,9 +80,8 @@ def BuildSpec(config_name, perf_id, platform, target_bits):
   return spec
 
 
-def _TestSpec(config_name, parent_builder, perf_id, platform, target_bits,
-              max_battery_temp, shard_index, num_host_shards,
-              num_device_shards):
+def TestSpec(config_name, parent_buildername, perf_id, platform, target_bits,
+              shard_index, num_host_shards, num_device_shards):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
@@ -80,12 +89,12 @@ def _TestSpec(config_name, parent_builder, perf_id, platform, target_bits,
       platform=platform,
       target_bits=target_bits,
       tests=[steps.DynamicPerfTests(
-        perf_id, platform, target_bits, max_battery_temp=max_battery_temp,
+        perf_id, platform, target_bits, max_battery_temp=350,
         num_device_shards=num_device_shards, num_host_shards=num_host_shards,
         shard_index=shard_index)],
   )
 
-  spec['parent_buildername'] = parent_builder
+  spec['parent_buildername'] = parent_buildername
   spec['perf-id'] = perf_id
   spec['results-url'] = 'https://chromeperf.appspot.com'
 
@@ -105,20 +114,20 @@ def _AddBuildSpec(name, platform, target_bits=64, add_to_bisect=False):
 
   SPEC['builders'][name] = BuildSpec(
       'chromium_perf', perf_id, platform, target_bits)
-  assert target_bits not in _builders[platform]
-  _builders[platform][target_bits] = name
+  assert target_bits not in builders[platform]
+  builders[platform][target_bits] = name
   if add_to_bisect:
     SPEC['settings']['bisect_builders'].append(name)
 
 
 def _AddTestSpec(name, perf_id, platform, target_bits=64,
-                 max_battery_temp=350, num_host_shards=1, num_device_shards=1):
-  parent_builder = _builders[platform][target_bits]
+                 num_host_shards=1, num_device_shards=1):
+  parent_buildername = builders[platform][target_bits]
   for shard_index in xrange(num_host_shards):
     builder_name = '%s (%d)' % (name, shard_index + 1)
-    SPEC['builders'][builder_name] = _TestSpec(
-        'chromium_perf', parent_builder, perf_id, platform, target_bits,
-        max_battery_temp, shard_index, num_host_shards, num_device_shards)
+    SPEC['builders'][builder_name] = TestSpec(
+        'chromium_perf', parent_buildername, perf_id, platform, target_bits,
+        shard_index, num_host_shards, num_device_shards)
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)

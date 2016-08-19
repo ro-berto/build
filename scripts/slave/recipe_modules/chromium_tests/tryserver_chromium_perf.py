@@ -5,19 +5,29 @@
 from . import chromium_perf
 
 import DEPS
-CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
+CHROMIUM_CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
+GCLIENT_CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 
-@CONFIG_CTX(includes=['chromium_perf'])
-def tryserver_chromium_perf(c):
-  soln = c.solutions.add()
-  soln.name = 'catapult'
-  soln.url = ('https://chromium.googlesource.com/external/github.com/'
-              'catapult-project/catapult.git')
 
 SPEC = {
   'builders': {},
   'settings': chromium_perf.SPEC['settings'],
 }
+
+
+@CHROMIUM_CONFIG_CTX(includes=['chromium_perf', 'goma_hermetic_fallback'])
+def tryserver_chromium_perf(c):
+  # Bisects may build using old toolchains, so goma_hermetic_fallback is
+  # required. See https://codereview.chromium.org/1015633002
+  pass
+
+
+@GCLIENT_CONFIG_CTX(includes=['chromium_perf'])
+def tryserver_chromium_perf(c):
+  soln = c.solutions.add()
+  soln.name = 'catapult'
+  soln.url = ('https://chromium.googlesource.com/external/github.com/'
+              'catapult-project/catapult.git')
 
 
 def _AddBuildSpec(name, platform, target_bits=64):

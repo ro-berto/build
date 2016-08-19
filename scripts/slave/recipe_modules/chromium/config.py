@@ -788,16 +788,6 @@ def v8_hybrid_arm(c):
 def enable_ipc_fuzzer(c):
   c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
 
-@config_ctx(includes=['chromium', 'official', 'mb'])
-def chromium_perf(c):
-  c.clobber_before_runhooks = False
-
-@config_ctx(includes=['chromium_perf', 'goma_hermetic_fallback'])
-def tryserver_chromium_perf(c):
-  # Bisects may build using old toolchains, so goma_hermetic_fallback is
-  # required. See https://codereview.chromium.org/1015633002
-  pass
-
 @config_ctx(includes=['chromium_clang'])
 def cast_linux(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
