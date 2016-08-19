@@ -160,18 +160,18 @@ def BuildLinuxAndroidArm(api):
 
 
 def BuildLinux(api):
-  RunGN(api)
-  Build(api, 'host_debug')
+  RunGN(api, '--unoptimized')
+  Build(api, 'host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
-    'out/host_debug/icudtl.dat',
-    'out/host_debug/sky_shell',
-    'out/host_debug/sky_snapshot',
+    'out/host_debug_unopt/icudtl.dat',
+    'out/host_debug_unopt/sky_shell',
+    'out/host_debug_unopt/sky_snapshot',
   ])
 
 
 def TestObservatory(api):
   checkout = api.path['slave_build'].join('src')
-  sky_shell_path = checkout.join('out/host_debug/sky_shell')
+  sky_shell_path = checkout.join('out/host_debug_unopt/sky_shell')
   empty_main_path = \
       checkout.join('flutter/sky/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/sky/shell/testing/observatory/test.dart')
@@ -180,18 +180,18 @@ def TestObservatory(api):
 
 
 def BuildMac(api):
-  RunGN(api, '--runtime-mode', 'debug')
+  RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android')
 
-  Build(api, 'host_debug')
+  Build(api, 'host_debug_unopt')
   Build(api, 'android_profile', 'flutter/lib/snapshot')
   Build(api, 'android_release', 'flutter/lib/snapshot')
 
   UploadArtifacts(api, 'darwin-x64', [
-    'out/host_debug/sky_snapshot',
-    'out/host_debug/sky_shell',
-    'out/host_debug/icudtl.dat',
+    'out/host_debug_unopt/sky_snapshot',
+    'out/host_debug_unopt/sky_shell',
+    'out/host_debug_unopt/icudtl.dat',
   ])
 
   UploadArtifacts(api, "android-arm-profile" , [
