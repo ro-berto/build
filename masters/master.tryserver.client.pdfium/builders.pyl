@@ -60,18 +60,6 @@
         "xfa": True,
       }
     },
-    "linux_xfa_rel_gyp": {
-      "recipe": "pdfium",
-      "scheduler": None,
-      "slave_pools": ["linux_slave_pool"],
-      "slavebuilddir": "pdfium",
-      "category": "3xfa_gyp",
-      "properties": {
-        "xfa": True,
-        "rel": True,
-        "gn": False,
-      }
-    },
     "mac": {
       "recipe": "pdfium",
       "scheduler": None,
@@ -109,18 +97,6 @@
       "category": "1xfa",
       "properties": {
         "xfa": True,
-      }
-    },
-    "mac_xfa_rel_gyp": {
-      "recipe": "pdfium",
-      "scheduler": None,
-      "slave_pools": ["mac_slave_pool"],
-      "slavebuilddir": "pdfium",
-      "category": "3xfa_gyp",
-      "properties": {
-        "xfa": True,
-        "rel": True,
-        "gn": False,
       }
     },
     "win": {
@@ -171,19 +147,6 @@
         "xfa": True,
         "clang": True,
       },
-    },
-    "win_xfa_rel_gyp": {
-      "recipe": "pdfium",
-      "scheduler": None,
-      "slave_pools": ["win_slave_pool"],
-      "slavebuilddir": "pdfium",
-      "category": "3xfa_gyp",
-      "properties": {
-        "xfa": True,
-        "rel": True,
-        "gn": False,
-        "target_cpu": "x64",
-      }
     },
   },
 
