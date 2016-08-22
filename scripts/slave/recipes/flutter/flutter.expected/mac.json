@@ -203,7 +203,8 @@
       "-v",
       "build",
       "ios",
-      "--simulator"
+      "--simulator",
+      "--debug"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
     "env": {
@@ -250,7 +251,8 @@
       "-v",
       "build",
       "ios",
-      "--simulator"
+      "--simulator",
+      "--debug"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/examples/flutter_gallery",
     "env": {
