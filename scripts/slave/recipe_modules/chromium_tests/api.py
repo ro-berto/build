@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
 import contextlib
 import copy
 import itertools
@@ -21,6 +22,43 @@ from . import trybots
 RECIPE_CONFIG_PATHS = [
     'testing/buildbot',
 ]
+
+
+# TODO(phajdan.jr): Remove special case for layout tests.
+# This could be done by moving layout tests to main waterfall.
+CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
+  'linux_chromium_rel_ng',
+  'mac_chromium_rel_ng',
+  'win_chromium_rel_ng',
+])
+
+
+CHROMIUM_BLINK_TESTS_PATHS = freeze([
+  'components/test_runner',
+  'content/browser/bluetooth',
+  'content/browser/service_worker',
+  'content/child/service_worker',
+  'content/common/bluetooth',
+  'content/renderer/bluetooth',
+  'content/renderer/service_worker',
+  'content/shell/browser/layout_test',
+  'content/shell/renderer/layout_test',
+  'device/bluetooth',
+  'device/usb/public/interfaces',
+  'media',
+  'third_party/WebKit',
+  'third_party/harfbuzz-ng',
+  'third_party/iccjpeg',
+  'third_party/libjpeg',
+  'third_party/libjpeg_turbo',
+  'third_party/libpng',
+  'third_party/libwebp',
+  'third_party/qcms',
+  'third_party/skia',
+  'third_party/yasm',
+  'third_party/zlib',
+  'v8',
+])
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
@@ -810,3 +848,169 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         api, tests, serialize_tests=bot_config.get('serialize_tests'))
     with api.chromium_tests.wrap_chromium_tests(bot_config, tests):
       test_runner()
+
+  @staticmethod
+  # TODO(phajdan.jr): try to get rid of api parameter.
+  # We currently have to use it because clients of this dereference
+  # chromium_tests, and currently recipe engine does not set up
+  # self-reference self.m.chromium_tests in chromium_tests.
+  def trybot_steps(api):
+    with api.tryserver.set_failure_hash():
+      try:
+        bot_config_object, bot_update_step, affected_files, tests = \
+            ChromiumTestsApi._trybot_steps_internal(api)
+      finally:
+        api.python.succeeding_step('mark: before_tests', '')
+
+      if tests:
+        api.chromium_tests.run_tests_on_tryserver(
+            bot_config_object, api, tests, bot_update_step, affected_files)
+
+  @staticmethod
+  # TODO(phajdan.jr): try to get rid of api parameter.
+  # We currently have to use it because clients of this dereference
+  # chromium_tests, and currently recipe engine does not set up
+  # self-reference self.m.chromium_tests in chromium_tests.
+  def _trybot_steps_internal(api):
+    mastername = api.properties.get('mastername')
+    buildername = api.properties.get('buildername')
+    bot_config = api.chromium_tests.trybots.get(mastername, {}).get(
+        'builders', {}).get(buildername)
+
+    bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
+        bot_config['bot_ids'])
+    api.chromium_tests.set_precommit_mode()
+    api.chromium_tests.configure_build(
+        bot_config_object, override_bot_type='builder_tester')
+
+    api.chromium_swarming.configure_swarming('chromium', precommit=True)
+
+    api.chromium.apply_config('trybot_flavor')
+
+    bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
+        bot_config_object)
+
+    tests, tests_including_triggered = api.chromium_tests.get_tests(
+        bot_config_object, bot_db)
+
+    def add_tests(additional_tests):
+      tests.extend(additional_tests)
+      tests_including_triggered.extend(additional_tests)
+
+    affected_files = api.chromium_checkout.get_files_affected_by_patch('src/')
+
+    affects_blink_paths = any(
+        f.startswith(path) for f in affected_files
+        for path in CHROMIUM_BLINK_TESTS_PATHS)
+    affects_blink = any(
+        f.startswith('third_party/WebKit') for f in affected_files)
+
+    if affects_blink:
+      subproject_tag = 'blink'
+    elif affects_blink_paths:
+      subproject_tag = 'blink-paths'
+    else:
+      subproject_tag = 'chromium'
+
+    api.tryserver.set_subproject_tag(subproject_tag)
+
+    # TODO(phajdan.jr): Remove special case for layout tests.
+    add_blink_tests = (affects_blink_paths and
+                       buildername in CHROMIUM_BLINK_TESTS_BUILDERS)
+
+    # Add blink tests that work well with "analyze" here. The tricky ones
+    # that bypass it (like the layout tests) are added later.
+    if add_blink_tests:
+      add_tests([
+          api.chromium_tests.steps.GTestTest('blink_heap_unittests'),
+          api.chromium_tests.steps.GTestTest('blink_platform_unittests'),
+          api.chromium_tests.steps.GTestTest('webkit_unit_tests'),
+          api.chromium_tests.steps.GTestTest('wtf_unittests'),
+      ])
+
+    compile_targets = api.chromium_tests.get_compile_targets(
+        bot_config_object,
+        bot_db,
+        tests_including_triggered)
+
+    test_targets = sorted(set(ChromiumTestsApi._all_compile_targets(
+        api, tests + tests_including_triggered)))
+    additional_compile_targets = sorted(set(compile_targets) - set(test_targets))
+    test_targets, compile_targets = api.filter.analyze(
+        affected_files, test_targets, additional_compile_targets,
+        'trybot_analyze_config.json')
+
+    if bot_config.get('analyze_mode') == 'compile':
+      tests = []
+      tests_including_triggered = []
+
+    # Blink tests have to bypass "analyze", see below.
+    if compile_targets or add_blink_tests:
+      tests = ChromiumTestsApi._tests_in_compile_targets(
+          api, test_targets, tests)
+      tests_including_triggered = ChromiumTestsApi._tests_in_compile_targets(
+          api, test_targets, tests_including_triggered)
+
+      # Blink tests are tricky at this moment. We'd like to use "analyze" for
+      # everything else. However, there are blink changes that only add or modify
+      # layout test files (html etc). This is not recognized by "analyze" as
+      # compile dependency. However, the blink tests should still be executed.
+      if add_blink_tests:
+        blink_tests = [
+            api.chromium_tests.steps.ScriptTest(
+                'webkit_lint', 'webkit_lint.py', collections.defaultdict(list)),
+            api.chromium_tests.steps.ScriptTest(
+                'webkit_python_tests', 'webkit_python_tests.py',
+                collections.defaultdict(list)),
+            api.chromium_tests.steps.BlinkTest(),
+        ]
+        add_tests(blink_tests)
+        for test in blink_tests:
+          compile_targets.extend(test.compile_targets(api))
+        compile_targets = sorted(set(compile_targets))
+
+      api.chromium_tests.compile_specific_targets(
+          bot_config_object,
+          bot_update_step,
+          bot_db,
+          compile_targets,
+          tests_including_triggered,
+          override_bot_type='builder_tester')
+    else:
+      # Even though the patch doesn't require a compile on this platform,
+      # we'd still like to run tests not depending on
+      # compiled targets (that's obviously not covered by the
+      # 'analyze' step) if any source files change.
+      if any(ChromiumTestsApi._is_source_file(api, f) for f in affected_files):
+        tests = [t for t in tests if not t.compile_targets(api)]
+      else:
+        tests = []
+
+    return bot_config_object, bot_update_step, affected_files, tests
+
+  @staticmethod
+  def _all_compile_targets(api, tests):
+    """Returns the compile_targets for all the Tests in |tests|."""
+    return sorted(set(x
+                      for test in tests
+                      for x in test.compile_targets(api)))
+
+  @staticmethod
+  def _is_source_file(api, filepath):
+    """Returns true iff the file is a source file."""
+    _, ext = api.path.splitext(filepath)
+    return ext in ['.c', '.cc', '.cpp', '.h', '.java', '.mm']
+
+  @staticmethod
+  def _tests_in_compile_targets(api, compile_targets, tests):
+    """Returns the tests in |tests| that have at least one of their compile
+    targets in |compile_targets|."""
+    result = []
+    for test in tests:
+      test_compile_targets = test.compile_targets(api)
+      # Always return tests that don't require compile. Otherwise we'd never
+      # run them.
+      if ((set(compile_targets) & set(test_compile_targets)) or
+          not test_compile_targets):
+        result.append(test)
+    return result
