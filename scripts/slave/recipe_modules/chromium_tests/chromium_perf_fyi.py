@@ -43,6 +43,10 @@ def _AddTestSpec(name, perf_id, platform,
   SPEC['builders'][name] = spec
 
 
+_AddTestSpec('Android Galaxy S5 Perf (1)', 'fyi-android-galaxy-s5', 'android',
+             target_bits=32)
+
+
 _AddTestSpec('Win 7 Intel GPU Perf (Xeon)', 'chromium-rel-win7-gpu-intel',
              'win')
 _AddTestSpec('Win Power High-DPI Perf', 'win-power-high-dpi', 'win')
