@@ -6,6 +6,7 @@ DEPS = [
   'goma',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/raw_io',
 ]
 
 def RunSteps(api):

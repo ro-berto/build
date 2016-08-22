@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
+
 from recipe_engine import recipe_api
 
 class GomaApi(recipe_api.RecipeApi):
@@ -13,12 +15,19 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_started = False
 
     self._goma_ctl_env = {}
+    self._cloudtail_pid = None
 
   @property
   def service_account_json_path(self):
     if self.m.platform.is_win:
       return 'C:\\creds\\service_accounts\\service-account-goma-client.json'
     return '/creds/service_accounts/service-account-goma-client.json'
+
+  @property
+  def cloudtail_path(self):
+    if self.m.platform.is_win:
+      return 'C:\\infra-tools\\cloudtail'
+    return '/opt/infra-tools/cloudtail'
 
   def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):
@@ -38,6 +47,9 @@ class GomaApi(recipe_api.RecipeApi):
             ref='candidate'
           self._goma_dir = self.m.path['cache'].join('cipd', 'goma')
           self.m.cipd.ensure(self._goma_dir, {goma_package: ref})
+
+          # TODO(tikuta) download cloudtail from cipd here
+
           return self._goma_dir
         except self.m.step.StepFailure:
           # TODO(phajdan.jr): make failures fatal after experiment.
@@ -50,6 +62,46 @@ class GomaApi(recipe_api.RecipeApi):
   @property
   def build_data_dir(self):
     return self.m.properties.get('build_data_dir')
+
+  def _start_cloudtail(self):
+    """Start cloudtail to upload compiler_proxy.INFO
+
+    Raises:
+      InfraFailure if it fails to start cloudtail
+    """
+
+    assert self._cloudtail_pid is None
+
+    step_result = self.m.python(
+      name='start cloudtail',
+      script=self.resource('cloudtail_utils.py'),
+      args=['start',
+            '--cloudtail-path', self.cloudtail_path],
+      env=self._goma_ctl_env,
+      stdout=self.m.raw_io.output(),
+      step_test_data=(
+          lambda: self.m.raw_io.test_api.stream_output('12345')),
+      infra_step=True)
+
+    self._cloudtail_pid = step_result.stdout
+
+  def _stop_cloudtail(self):
+    """Stop cloudtail started by _start_cloudtail
+
+    Raises:
+      InfraFailure if it fails to stop cloudtail
+    """
+
+    assert self._cloudtail_pid is not None
+
+    self.m.python(
+        name='stop cloudtail',
+        script=self.resource('cloudtail_utils.py'),
+        args=['stop',
+              '--killed-pid', self._cloudtail_pid],
+        infra_step=True)
+
+    self._cloudtail_pid = None
 
   def start(self, env=None, **kwargs):
     """Start goma compiler_proxy.
@@ -80,6 +132,9 @@ class GomaApi(recipe_api.RecipeApi):
           script=self.goma_ctl,
           args=['restart'], env=goma_ctl_start_env, infra_step=True, **kwargs)
       self._goma_started = True
+
+      self._start_cloudtail()
+
     except self.m.step.InfraFailure as e: # pragma: no cover
       upload_logs_name = 'upload_goma_start_failed_logs'
 
@@ -100,16 +155,20 @@ class GomaApi(recipe_api.RecipeApi):
 
     A user MUST execute start beforehand.
     It is user's responsibility to handle failure of stopping compiler_proxy.
+
+    Raises:
+      StepFailure if it fails to stop goma or upload logs.
     """
+
     assert self._goma_dir
     assert self._goma_started
-    self.m.python(
-        name='stop_goma',
-        script=self.goma_ctl,
-        args=['stop'], env=self._goma_ctl_env, **kwargs)
 
-    self.upload_logs(ninja_log_outdir, ninja_log_compiler, ninja_log_command,
-                     ninja_log_exit_status)
+    with self.m.step.defer_results():
+      self.m.python(name='stop_goma', script=self.goma_ctl,
+                    args=['stop'], env=self._goma_ctl_env, **kwargs)
+      self.upload_logs(ninja_log_outdir, ninja_log_compiler,
+                       ninja_log_command, ninja_log_exit_status)
+      self._stop_cloudtail()
 
     self._goma_started = False
     self._goma_ctl_env = {}

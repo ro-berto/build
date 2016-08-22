@@ -69,6 +69,21 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "C:\\infra-tools\\cloudtail"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "start cloudtail",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]\\cipd\\goma\\goma_ctl.py",
       "stop"
     ],
@@ -85,6 +100,17 @@
       "--upload-compiler-proxy-info"
     ],
     "name": "upload_log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
+      "stop",
+      "--killed-pid",
+      "12345"
+    ],
+    "name": "stop cloudtail"
   },
   {
     "name": "$result",
