@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import argparse
+import errno
 import os
 import signal
 import subprocess
@@ -47,7 +48,12 @@ def main():
   if args.command == 'start':
     start_cloudtail(args)
   elif args.command == 'stop':
-    os.kill(args.killed_pid, signal.SIGKILL)
+    try:
+      os.kill(args.killed_pid, signal.SIGKILL)
+    except OSError as e:
+      if e.errno != errno.ESRCH:
+        # TODO(tikuta): Resolve https://crbug.com/639910.
+        raise
 
 
 if '__main__' == __name__:
