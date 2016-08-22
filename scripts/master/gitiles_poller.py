@@ -261,6 +261,9 @@ class GitilesPoller(PollingChangeSource):
     with open(self.cursor_file, 'w') as fd:
       json.dump(cursor, fd, sort_keys=True)
 
+  def _request(self, method, path):
+    return self.agent.request(method, path, retry=5, timeout=120)
+
   @defer.inlineCallbacks
   def _get_branches(self):
     result = {}
@@ -274,7 +277,7 @@ class GitilesPoller(PollingChangeSource):
     refs_json_requests = []
     for ref in refs:
       path = REFS_TEMPLATE % (self.repo_path, ref)
-      refs_json_requests.append(self.agent.request('GET', path, retry=5))
+      refs_json_requests.append(self._request('GET', path))
 
     refs_json = {}
     refs_json_results = yield defer.DeferredList(refs_json_requests)
@@ -374,7 +377,7 @@ class GitilesPoller(PollingChangeSource):
       if self.dry_run:
         log_json = {}
       else:
-        log_json = yield self.agent.request('GET', path, retry=5)
+        log_json = yield self._request('GET', path)
       if log_json.get('log'):
         result.extend(log_json['log'])
     log.msg('GitilesPoller: finished scan for branch %s' % branch)
@@ -405,7 +408,14 @@ class GitilesPoller(PollingChangeSource):
   @defer.inlineCallbacks
   def poll(self):
     all_commits = []
-    branches = yield self._get_branches()
+    try:
+      branches = yield self._get_branches()
+    except Exception:
+      msg = ('GitilesPoller: Failed to get branch heads:\n%s' %
+             (traceback.format_exc(),))
+      log.err(msg)
+      return
+
     for branch, branch_head in branches.iteritems():
       try:
         branch_commits = None
@@ -432,7 +442,7 @@ class GitilesPoller(PollingChangeSource):
       try:
         path = REVISION_DETAIL_TEMPLATE % (self.repo_path, commit['commit'])
         if not self.dry_run:
-          detail = yield self.agent.request('GET', path, retry=5)
+          detail = yield self._request('GET', path)
           yield self._create_change(detail, branch)
       except Exception:
         msg = ('GitilesPoller: Error while processing revision %s '

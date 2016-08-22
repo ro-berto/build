@@ -15,7 +15,7 @@ from common.twisted_util.body_producers import IMIMEBodyProducer, \
                                                IReusableBodyProducer, \
                                                StringBodyProducer
 from common.twisted_util.agent_util import CloneHeaders, RelativeURLJoin
-from twisted.internet import reactor
+from twisted.internet import defer, reactor
 from twisted.internet.task import deferLater
 from twisted.python import log
 
@@ -23,6 +23,17 @@ from twisted.python import log
 __all__ = [
     'Agent',
 ]
+
+
+class TimeoutError(Exception):
+  """An exception that is raised when a timeout is specified and the timeout
+  interval passes without a response.
+  """
+  def __init__(self, url, timeout):
+    super(TimeoutError, self).__init__(
+        'Failed to reach [%s] after %s seconds.' % (url, timeout))
+    self.url = url
+    self.timeout = timeout
 
 
 class Agent(twisted.web.client.Agent):
@@ -53,7 +64,7 @@ class Agent(twisted.web.client.Agent):
           (non-GET) will raise a 'httplib.METHOD_NOT_ALLOWED' error response.
       retry_count: (int) If not 'None', the default number of retries to
           perform with a request. This can be overridden in the request.
-      retry_delay: (int) If not 'None', the default retry delay multiplier.
+      retry_delay: (number) If not 'None', the default retry delay multiplier.
           This can be overridden in the request.
       args, kwargs: Forwarded to 'Agent.__init__'
     """
@@ -62,14 +73,6 @@ class Agent(twisted.web.client.Agent):
         (not IAuthorizer.providedBy(authorizer))):
       raise TypeError("'authorizer' does not implement the Authorizer "
                       "interface")
-
-    # Fall back on default retry/delay
-    if retry_count is None:
-      # Don't retry by default
-      retry_count = self.DEFAULT_RETRY_COUNT
-    if retry_delay is None:
-      # If retrying, use 0.5s delay by default
-      retry_delay = self.DEFAULT_RETRY_DELAY
 
     url = urlparse.urlparse(host)
     self.protocol = url.scheme
@@ -83,8 +86,9 @@ class Agent(twisted.web.client.Agent):
 
     self._read_only = bool(read_only)
     self._authorizer = authorizer
-    self._retry_count = retry_count
-    self._retry_delay = retry_delay
+    self._retry_count = retry_count or self.DEFAULT_RETRY_COUNT
+    self._retry_delay = ((retry_delay) if retry_delay is not None
+                         else (self.DEFAULT_RETRY_DELAY))
     twisted.web.client.Agent.__init__(self, reactor, *args, **kwargs)
 
   def __str__(self):
@@ -118,9 +122,10 @@ class Agent(twisted.web.client.Agent):
     return RelativeURLJoin(self.base_url, path)
 
   # Disable argument number difference | pylint: disable=W0221
+  @defer.inlineCallbacks
   def request(self, method, path, headers=None, body_producer=None,
               expected_code=httplib.OK, retry=None, delay=None,
-              error_protocol=None):
+              error_protocol=None, timeout=None):
     """
     Constructs and initiates a HTTP request.
 
@@ -152,13 +157,16 @@ class Agent(twisted.web.client.Agent):
       retry: (int) If non-zero, the number of times to retry when a transient
           error is encountered. If None, the default 'retry' value will be
           used.
-      delay: (int) The number of seconds of the initial retry delay; subsequent
-          delays will double this value. If 'None', the default delay will be
-          used. If no default delay was supplied either, a delay of 0.5 seconds
-          will be used if retrying.
+      delay: (number) The number of seconds of the initial retry delay;
+          subsequent delays will double this value. If 'None', the default delay
+          will be used. If no default delay was supplied either, a delay of 0.5
+          seconds will be used if retrying.
       error_protocol: (func) The function to use to load the HTTP response when
           an error occurs; if this is 'None', the body will not be read on
           error.
+      timeout (number): if not None, the number of seconds to wait before
+          terminating the request. If a timeout is encountered, a TimeoutError
+          will be raised.
 
     Returns: (Deferred) A deferred that will be invoked with a
        'twisted.web.client.Response' instance.
@@ -171,10 +179,8 @@ class Agent(twisted.web.client.Agent):
     url = self._buildRequest(path, headers)
 
     # Get parameters, falling back on global values
-    if retry is None:
-      retry = self._retry_count
-    if delay is None:
-      delay = self._retry_delay
+    retry = retry or self._retry_count
+    delay = (delay) if delay is not None else (self._retry_delay)
 
     if body_producer is not None:
       # If 'body_producer' supplies its own MIME type, use that.
@@ -199,68 +205,79 @@ class Agent(twisted.web.client.Agent):
               (method, url),
       )
 
-    #
     # Request/Retry Deferred Loop
-    #
-    # This Deferred loop starts wuith 'do_request' => 'handle_response'; if
-    # this encounters a transient error, 'handle_response' will enqueue another
-    # 'do_request' after a suitable delay until our retries are exhausted
-    #
-
-    def do_request():
-      return twisted.web.client.Agent.request(
-          self,
+    while True:
+      # Make the request.
+      response = yield self._timeout_request(
+          timeout,
           method,
           str(url),
           headers,
           body_producer)
 
-    def handle_response(response, retries_remaining, next_delay):
       if response.code in expected_code:
-        return response
+        defer.returnValue(response)
 
+      # The operation failed.
+      retry -= 1
       error = twe.Error(
           response.code,
           message="Response status (%s) didn't match expected (%s) for '%s'" %
                   (response.code, expected_code, url))
       log.msg(error.message)
 
-      # Do we retry?
-      if (retries_remaining > 0 and
-          response.code >= httplib.INTERNAL_SERVER_ERROR):
-        log.msg("Query '%s' encountered transient error (%d); retrying "
-                "(%d remaining) in %s second(s)..." %
-                    (url, response.code, retries_remaining, next_delay))
-        if (body_producer is not None and
-            IReusableBodyProducer.providedBy(body_producer)):
-          body_producer.reset()
-        d = deferLater(
-            reactor,
-            next_delay,
-            do_request)
-        d.addCallback(
-            handle_response,
-            (retries_remaining - 1),
-            (next_delay * 2))
-        return d
-
-      # No retries remaining; return an error
-      if error_protocol is None:
+      # If we have no more retries, or if this was a non-transient failure,
+      # exit immediately with Twisted web error.
+      if retry <= 0 or response.code < httplib.INTERNAL_SERVER_ERROR:
+        # No more retries, return our error.
+        if error_protocol:
+          error.response = yield error_protocol(response)
         raise error
 
-      d = error_protocol(response)
-      def cbRaiseError(response, error):
-        error.response = response
-        raise error
-      d.addCallback(cbRaiseError, error)
-      return d
+      # Retry after an exponentially-increasing delay.
+      log.msg("Query '%s' encountered transient error (%d); retrying "
+              "(%d remaining) in %s second(s)..." %
+                  (url, response.code, retry, delay))
 
-    # Make initial request
-    d = do_request()
-    d.addCallback(handle_response, retry, delay)
-    return d
+      if (body_producer is not None and
+          IReusableBodyProducer.providedBy(body_producer)):
+        body_producer.reset()
+
+      yield self._deferred_sleep(delay)
+      delay *= 2
+
 
   GET = lambda s, *a, **kw: s.request('GET', *a, **kw)
   PUT = lambda s, *a, **kw: s.request('PUT', *a, **kw)
   POST = lambda s, *a, **kw: s.request('POST', *a, **kw)
   DELETE = lambda s, *a, **kw: s.request('DELETE', *a, **kw)
+
+  def _timeout_request(self, timeout_seconds, method, url, headers,
+                       body_producer):
+    # Call our parent's 'request' function.
+    d = twisted.web.client.Agent.request(
+        self,
+        method,
+        str(url),
+        headers=headers,
+        bodyProducer=body_producer)
+
+    def timeout_expired():
+      d.cancel()
+      raise TimeoutError(url, timeout_seconds)
+    timeout = None
+    if timeout_seconds:
+      timeout = reactor.callLater(timeout_seconds, timeout_expired)
+
+    def completed(passthrough):
+      if timeout and timeout.active():
+        timeout.cancel()
+      return passthrough
+    d.addBoth(completed)
+    return d
+
+  @staticmethod
+  def _deferred_sleep(seconds):
+    d = defer.Deferred()
+    reactor.callLater(seconds, d.callback, seconds)
+    return d
