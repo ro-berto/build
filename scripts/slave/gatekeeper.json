@@ -249,7 +249,6 @@
           "builder_alerts",
           "publish_tarball",
           "rebaseline-o-matic",
-          "recipe-autoroller-public",
           "Chromium Linux Codesearch",
           "ChromiumOS Codesearch",
           "git-hash-metrics",
@@ -274,19 +273,6 @@
             "excluded_steps": [
               "run translation_unit clang tool"
             ]
-          }
-        }
-      },
-      {
-        "close_tree": false,
-        "builders": {
-          "recipe-autoroller-public": {
-            "tree_notify": [
-              "martiniss@chromium.org",
-              "phajdan.jr@chromium.org",
-              "estaab@chromium.org"
-            ],
-            "forgiving_optional": [ "*" ]
           }
         }
       }
