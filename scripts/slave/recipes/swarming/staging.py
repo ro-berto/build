@@ -66,7 +66,7 @@ def RunSteps(api):
 
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
-  api.gclient.set_config('chromium')
+  api.gclient.set_config('chromium', GIT_MODE=True)
   if api.properties.get('platform') == 'android':
     api.gclient.apply_config('android')
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
