@@ -17,9 +17,6 @@ def main(argv, anaconda_path=None):
         'first_sample': json.loads(list_a),
         'second_sample': json.loads(list_b),
         'mann_p_value': None,
-        'anderson_p_value': None,
-        'welch_p_value': None,
-        'normal-y': None,
         'significantly_different': False
     }
 

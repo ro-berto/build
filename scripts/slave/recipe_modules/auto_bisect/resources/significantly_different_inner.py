@@ -20,27 +20,14 @@ else:
     list_b = json.loads(list_b)
     significance = float(significance)
 
-    shapiro_p_value = stats.shapiro(list_a)[1], stats.shapiro(list_b)[1]
     mann_whitney_p_value = stats.mannwhitneyu(list_a, list_b).pvalue
-    anderson_p_value = stats.anderson_ksamp([list_a, list_b]).significance_level
-    welch_p_value = stats.ttest_ind(list_a, list_b, equal_var=False)[1]
 
     results = {
         'first_sample': list_a,
         'second_sample': list_b,
-        'shapiro_p_value': shapiro_p_value,
         'mann_p_value': mann_whitney_p_value,
-        'anderson_p_value': anderson_p_value,
-        'welch_p_value': welch_p_value,
     }
 
-    # TODO(robertocn): It seems we haven't used the results of shapiro test for
-    # normality. We should remove this along with anderson darling and welch's.
-    if (results['shapiro_p_value'][0] < significance and
-        results['shapiro_p_value'][1] < significance):
-      results['normal-y'] = True
-    else:
-      results['normal-y'] = False
     results['significantly_different'] = bool(
         float(results['mann_p_value']) < float(significance))
 
