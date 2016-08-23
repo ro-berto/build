@@ -61,8 +61,13 @@ def BuildExamples(api, git_hash):
         cwd=app_path,
       )
       api.step(
+        'flutter build ios debug %s' % app_name,
+        ['flutter', '-v', 'build', 'ios', '--no-codesign', '--debug'],
+        cwd=app_path,
+      )
+      api.step(
         'flutter build ios simulator %s' % app_name,
-        ['flutter', '-v', 'build', 'ios', '--simulator', '--debug'],
+        ['flutter', '-v', 'build', 'ios', '--simulator'],
         cwd=app_path,
       )
 

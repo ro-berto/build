@@ -203,8 +203,24 @@
       "-v",
       "build",
       "ios",
-      "--simulator",
+      "--no-codesign",
       "--debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/dev/bots/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter build ios debug stocks"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "ios",
+      "--simulator"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
     "env": {
@@ -251,8 +267,24 @@
       "-v",
       "build",
       "ios",
-      "--simulator",
+      "--no-codesign",
       "--debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/flutter_gallery",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/dev/bots/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter build ios debug flutter_gallery"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "ios",
+      "--simulator"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/examples/flutter_gallery",
     "env": {
