@@ -1652,28 +1652,6 @@
   },
   {
     "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "Gathering reference values.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Gathering reference values.Waiting for chromium@e28dc0d49c",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
@@ -1684,9 +1662,9 @@
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil ls",
+    "name": "Gathering reference values.gsutil ls (3)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1701,11 +1679,60 @@
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Gathering reference values.Waiting for chromium@e28dc0d49c.gsutil Get test results for build e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+    "name": "Gathering reference values.gsutil Get test results for build e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "name": "Gathering reference values.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_TEST_FAILURE\"]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Gathering reference values.gsutil ls (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cat",
+      "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Gathering reference values.gsutil Get test results for build fc6dfc7ff5b1073408499478969261b826441144",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1719,50 +1746,7 @@
     "name": "Gathering reference values.resolving hash fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Gathering reference values.Waiting for chromium@fc6dfc7ff5",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Gathering reference values.Waiting for chromium@fc6dfc7ff5.gsutil ls",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cat",
-      "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Gathering reference values.Waiting for chromium@fc6dfc7ff5.gsutil Get test results for build fc6dfc7ff5b1073408499478969261b826441144",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_REF_RANGE_FAIL\", \"B4T_TEST_FAILURE\"]@@@"
     ]
   },
