@@ -11,7 +11,7 @@
       "--slave",
       "TestSlave",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'native_client', 'url': 'https://chromium.googlesource.com/native_client/src/native_client.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'native_client', 'url': 'https://chromium.googlesource.com/native_client/src/native_client.git'}]",
       "--root",
       "native_client",
       "--revision_mapping_file",
