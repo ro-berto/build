@@ -5,6 +5,7 @@
 import json
 import logging
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -33,6 +34,25 @@ def _run_command(cmd, **kwargs):
   return proc.returncode, stdout
 
 
+def ensure_managed(dot_gclient_filename):
+  """Rewrites a .gclient file to set "managed": True.
+
+  Returns:
+    True if the .gclient file was modified.
+  """
+
+  with open(dot_gclient_filename) as fh:
+    contents = fh.read()
+
+  new_contents = re.sub(r'("managed"\s*:\s*)False', r'\1True', contents)
+
+  if contents != new_contents:
+    with open(dot_gclient_filename, 'w') as fh:
+      fh.write(new_contents)
+    return True
+  return False
+
+
 def update_scripts():
   if os.environ.get('RUN_SLAVE_UPDATED_SCRIPTS'):
     os.environ.pop('RUN_SLAVE_UPDATED_SCRIPTS')
@@ -41,6 +61,10 @@ def update_scripts():
   stream = annotator.StructuredAnnotationStream()
 
   with stream.step('update_scripts') as s:
+    if ensure_managed(os.path.join(env.Build, os.pardir, '.gclient')):
+      s.step_text('Top-level gclient solution was unmanaged, '
+                  'changed to managed')
+
     gclient_name = 'gclient'
     if sys.platform.startswith('win'):
       gclient_name += '.bat'
