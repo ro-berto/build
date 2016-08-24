@@ -69,15 +69,16 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
 
   @defer.inlineCallbacks
   def updateMetrics(self):
-    uptime.set(time.time() - SERVER_STARTED)
-    accepting_builds.set(bool(self.status.master.botmaster.brd.running))
+    uptime.set(time.time() - SERVER_STARTED, fields={'master': ''})
+    accepting_builds.set(bool(self.status.master.botmaster.brd.running),
+                         fields={'master': ''})
     pool = self.status.master.db.pool
-    pool_queue.set(pool.q.qsize())
-    pool_waiting.set(len(pool.waiters))
-    pool_working.set(len(pool.working))
+    pool_queue.set(pool.q.qsize(), fields={'master': ''})
+    pool_waiting.set(len(pool.waiters), fields={'master': ''})
+    pool_working.set(len(pool.working), fields={'master': ''})
 
     for builder_name in self.status.getBuilderNames():
-      fields = {'builder': builder_name}
+      fields = {'builder': builder_name, 'master': ''}
       builder = self.status.getBuilder(builder_name)
       slaves = builder.getSlaves()
 
@@ -106,7 +107,8 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
         pending_per_builder[brdict['buildername']] += 1
 
       for builder_name, count in pending_per_builder.iteritems():
-        pending_builds.set(count, fields={'builder': builder_name})
+        pending_builds.set(count,
+                           fields={'builder': builder_name, 'master': ''})
 
   def _flush_and_log_exceptions(self):
     try:
