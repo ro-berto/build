@@ -295,7 +295,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
-    cfg_kwargs = {}
+    cfg_kwargs = {'GIT_MODE': True}
     if not self.persistent_checkout:
       # We should've obtained the Skia checkout through isolates, so we don't
       # need to perform the checkout ourselves.

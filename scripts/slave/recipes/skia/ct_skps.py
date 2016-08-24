@@ -78,7 +78,7 @@ def RunSteps(api):
     raise Exception('Do not recognise the buildername %s.' % buildername)
 
   # Checkout Skia and Chromium.
-  gclient_cfg = api.gclient.make_config()
+  gclient_cfg = api.gclient.make_config(GIT_MODE=True)
 
   skia = gclient_cfg.solutions.add()
   skia.name = 'skia'

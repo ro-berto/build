@@ -6,7 +6,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'infra', 'url': 'https://skia.googlesource.com/buildbot.git'}]"
+      "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': False, 'name': 'infra', 'url': 'https://skia.googlesource.com/buildbot.git'}]"
     ],
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -19,9 +19,14 @@
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "sync",
-      "--nohooks",
-      "--force",
       "--verbose",
+      "--with_branch_heads",
+      "--nohooks",
+      "-j8",
+      "--reset",
+      "--force",
+      "--upstream",
+      "--no-nag-max",
       "--delete_unversioned_trees",
       "--revision",
       "infra@abc123",
@@ -36,13 +41,45 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"infra/\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": 197293@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"5e03a58dc0850e5137a8ebbce29610670c756aed\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@197293@@@"
+      "@@@SET_BUILD_PROPERTY@got_revision@\"5e03a58dc0850e5137a8ebbce29610670c756aed\"@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "recurse",
+      "git",
+      "config",
+      "user.name",
+      "local_bot"
+    ],
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient recurse (git config user.name)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "recurse",
+      "git",
+      "config",
+      "user.email",
+      "local_bot@example.com"
+    ],
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient recurse (git config user.email)"
   },
   {
     "cmd": [
@@ -470,7 +507,7 @@
       "slavename=skiabot-linux-swarm-000",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
-      "revision=197293"
+      "revision=5e03a58dc0850e5137a8ebbce29610670c756aed"
     ],
     "name": "[trigger] infra_skia on Ubuntu",
     "~followup_annotations": [
