@@ -1513,31 +1513,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release (swarming)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release (swarming)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--test-type=libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
-      "--step-name=libjingle_peerconnection_objc_test",
-      "--builder-name=Mac64 Release (swarming)",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[BUILDER_CACHE]/Mac64_Release__swarming_/src/third_party/gtest-parallel/gtest-parallel",
-      "[BUILDER_CACHE]/Mac64_Release__swarming_/src/out/Release/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
-      "--"
-    ],
-    "cwd": "[BUILDER_CACHE]/Mac64_Release__swarming_",
-    "name": "libjingle_peerconnection_objc_test"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",

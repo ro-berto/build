@@ -662,31 +662,6 @@
     "name": "xmllite_xmpp_unittests"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--test-type=libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
-      "--step-name=libjingle_peerconnection_objc_test",
-      "--builder-name=mac_dbg",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[BUILDER_CACHE]/mac_dbg/src/third_party/gtest-parallel/gtest-parallel",
-      "[BUILDER_CACHE]/mac_dbg/src/out/Debug/libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test",
-      "--"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac_dbg",
-    "name": "libjingle_peerconnection_objc_test"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",

@@ -9,15 +9,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     for test in api.NORMAL_TESTS:
       tests.append(WebRTCTest(test, revision,
                               enable_swarming=enable_swarming))
-
-    if api.m.platform.is_mac:
-      executable = api.m.path.join('libjingle_peerconnection_objc_test.app',
-                                   'Contents', 'MacOS',
-                                   'libjingle_peerconnection_objc_test')
-      tests.append(WebRTCTest(name='libjingle_peerconnection_objc_test',
-                              revision=revision,
-                              custom_executable=executable,
-                              enable_swarming=False))
     tests.append(WebRTCTest('webrtc_nonparallel_tests', revision,
                             parallel=False,
                             enable_swarming=False))
