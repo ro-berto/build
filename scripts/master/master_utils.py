@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import ctypes
-import ctypes.util
 import os
 import random
 import re
@@ -16,6 +14,7 @@ from buildbot.interfaces import IRenderable
 from buildbot.status import mail
 from buildbot.status.builder import BuildStatus
 from buildbot.status.status_push import HttpStatusPush
+from infra_libs import command_line
 from twisted.python import log
 from zope.interface import implements
 
@@ -676,25 +675,4 @@ def SetMasterProcessName():
   if sys.platform != 'linux2':
     return
 
-  SetCommandLine("master: %s" % GetMastername())
-
-
-def SetCommandLine(cmdline):
-  # Get the current commandline.
-  argc = ctypes.c_int()
-  argv = ctypes.POINTER(ctypes.c_char_p)()
-  ctypes.pythonapi.Py_GetArgcArgv(ctypes.byref(argc), ctypes.byref(argv))
-
-  # Calculate its length.
-  cmdlen = sum([len(argv[i]) for i in xrange(0, argc.value)]) + argc.value
-
-  # Pad the cmdline string to the required length.  If it's longer than the
-  # currentl commandline, truncate it.
-  if len(cmdline) >= cmdlen:
-    new_cmdline = ctypes.c_char_p(cmdline[:cmdlen-1] + '\0')
-  else:
-    new_cmdline = ctypes.c_char_p(cmdline.ljust(cmdlen, '\0'))
-
-  # Replace the old commandline.
-  libc = ctypes.CDLL(ctypes.util.find_library('c'))
-  libc.memcpy(argv.contents, new_cmdline, cmdlen)
+  command_line.set_command_line("master: %s" % GetMastername())
