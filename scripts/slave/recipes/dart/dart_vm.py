@@ -124,7 +124,7 @@ for mode in ['debug', 'release', 'product']:
 
 
 def RunSteps(api):
-  api.gclient.set_config('dart')
+  api.gclient.set_config('dart', GIT_MODE=True)
   api.path.c.dynamic_paths['tools'] = None
   api.bot_update.ensure_checkout(force=True)
   api.path['tools'] = api.path['checkout'].join('tools')

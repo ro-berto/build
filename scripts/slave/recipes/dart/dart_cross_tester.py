@@ -27,7 +27,7 @@ def tarball_name(arch, mode, revision):
   return 'cross_build_%s_%s_%s.tar.bz2' % (arch, mode, revision)
 
 def RunSteps(api):
-  api.gclient.set_config('dart')
+  api.gclient.set_config('dart', GIT_MODE=True)
   api.path.c.dynamic_paths['tools'] = None
   revision = api.properties['revision']
   api.bot_update.ensure_checkout(force=True)
