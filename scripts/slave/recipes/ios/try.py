@@ -28,10 +28,7 @@ def RunSteps(api):
       api.ios.checkout(patch=False, update_presentation=False)
       api.ios.build(suffix='without patch')
       raise
-    if api.properties['buildername'] == 'ios-simulator-swarming':
-      api.ios.test_swarming()
-    else:
-      api.ios.test()
+    api.ios.test_swarming()
 
 def GenTests(api):
   def suppress_analyze():
@@ -82,6 +79,44 @@ def GenTests(api):
         },
       ],
     })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+    + suppress_analyze()
+  )
+
+  yield (
+    api.test('no_tests')
+    + api.platform('mac', 64)
+    + api.properties(patch_url='patch url')
+    + api.properties(
+      buildername='ios-simulator',
+      buildnumber='0',
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      rietveld='fake://rietveld.url',
+      slavename='fake-vm',
+      path_config='kitchen',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'GYP_DEFINES': {
+        'fake gyp define 1': 'fake value 1',
+        'fake gyp define 2': 'fake value 2',
+      },
+      'compiler': 'ninja',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.0',
+      'tests': [
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+    + suppress_analyze()
   )
 
   yield (
@@ -192,6 +227,11 @@ def GenTests(api):
         },
       ],
     })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+    + suppress_analyze()
   )
 
   yield (
@@ -224,11 +264,15 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'xcodebuild',
+      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
-      'use_mb': False,
     })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+    + suppress_analyze()
   )
 
   yield (
@@ -337,6 +381,11 @@ def GenTests(api):
         },
       ],
     })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+    + suppress_analyze()
   )
 
   yield (
@@ -376,4 +425,9 @@ def GenTests(api):
         },
       ],
     })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+    + suppress_analyze()
   )

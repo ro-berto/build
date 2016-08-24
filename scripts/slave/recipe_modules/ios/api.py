@@ -425,7 +425,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       cmd.extend(args)
 
-      if test.get('skip'):
+      if test.get('skip'): # pragma: no cover
         step_result = self.m.step('[skipped] %s' % str(step_name), [])
         step_result.presentation.step_text = (
           'This test was skipped because it was not affected.'
