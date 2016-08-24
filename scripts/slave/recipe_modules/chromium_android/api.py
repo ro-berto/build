@@ -102,9 +102,10 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(sivachandra): Move the setting of the gclient spec below to an
     # internal config extension when they are supported by the recipe system.
     if use_git_cache:
-      spec = self.m.gclient.make_config(gclient_config)
+      spec = self.m.gclient.make_config(gclient_config, GIT_MODE=True)
     else:
-      spec = self.m.gclient.make_config(gclient_config, CACHE_DIR=None)
+      spec = self.m.gclient.make_config(gclient_config,
+                                        CACHE_DIR=None, GIT_MODE=True)
     spec.target_os = ['android']
     s = spec.solutions[0]
     s.name = self.c.deps_dir
