@@ -35,6 +35,32 @@
       }
     </style>
     <script type="text/javascript">
+      function showTestsOfOneSuiteOnly(suite_name) {
+        var testTableRows = document.getElementsByClassName(
+            'test-table-body-row');
+        Array.prototype.slice.call(testTableRows)
+            .forEach(function(row) {
+                var testCasePath = row.getElementsByClassName(
+                    'test-table-body-column-0')[0].innerText.trim();
+                if (testCasePath.startsWith(suite_name)) {
+                  row.style.display = 'table-row';
+                } else {
+                  row.style.display = 'none';
+                }
+            }
+        );
+      }
+
+      function showAllTests() {
+        var testTableRows = document.getElementsByClassName(
+            'test-table-body-row');
+        Array.prototype.slice.call(testTableRows)
+            .forEach(function(row) {
+                row.style.display = 'table-row';
+            }
+        );
+      }
+
       function sortByColumn(head) {
         var tbody = head.parentNode.parentNode.nextElementSibling;
         var rows = tbody.rows;
@@ -74,8 +100,8 @@
 
         // Sort the array by the specified column number (col) and order (asc).
         arr.sort(function (a, b) {
-          var aInnerHTML = a.getElementsByClassName(headIndex)[0].innerHTML;
-          var bInnerHTML = b.getElementsByClassName(headIndex)[0].innerHTML;
+          var aInnerHTML = a.children[headIndex].innerHTML;
+          var bInnerHTML = b.children[headIndex].innerHTML;
           if (head.className == "number") {
             var avalue = Number(aInnerHTML);
             var bvalue = Number(bInnerHTML);
@@ -106,10 +132,30 @@
   </body>
   <script>
     Array.prototype.slice.call(document.getElementsByTagName('th'))
-        .forEach(function(head, _) {
+        .forEach(function(head) {
             head.addEventListener(
                 "click",
                 function() { sortByColumn(head); },
+                false
+            );
+        }
+    );
+    Array.prototype.slice.call(
+        document.getElementsByClassName('suite-table-summary-column-0'))
+        .forEach(function(summaryTotal) {
+            summaryTotal.addEventListener(
+                "click",
+                function() { showAllTests(); },
+                false
+            );
+        }
+    );
+    Array.prototype.slice.call(
+        document.getElementsByClassName('suite-table-body-column-0'))
+        .forEach(function(suiteName) {
+            suiteName.addEventListener(
+                "click",
+                function() { showTestsOfOneSuiteOnly(suiteName.innerText); },
                 false
             );
         }

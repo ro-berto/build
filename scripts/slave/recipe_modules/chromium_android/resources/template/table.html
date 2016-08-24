@@ -12,13 +12,15 @@
   </thead>
   <tbody class="body">
     {% for row in tb_value.table_rows %}
-      <tr>
+      <tr class="{{tb_value.table_id}}-body-row">
         {% for cell in row %}
-          <td class="{{loop.index0}} {{cell.class}}">
+          <td class="{{tb_value.table_id}}-body-column-{{loop.index0}} {{cell.class}}">
             {% if cell.is_pre %}
               <pre>{{cell.data}}</pre>
             {% elif cell.link %}
               <a onclick="window.open('{{cell.link}}');">{{cell.data}}</a>
+            {% elif cell.action %}
+              <a>{{cell.data}}</a>
             {% else %}
               {{cell.data}}
             {% endif %}
@@ -27,4 +29,17 @@
       </tr>
     {% endfor %}
   </tbody>
+  <tfoot>
+    <tr>
+        {% for cell in tb_value.summary %}
+          <td class="{{tb_value.table_id}}-summary-column-{{loop.index0}} {{cell.class}}">
+            {% if cell.action %}
+              <a><b>{{cell.data}}</b></a>
+            {% else %}
+              <b>{{cell.data}}</b>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+  </tfoot>
 </table>

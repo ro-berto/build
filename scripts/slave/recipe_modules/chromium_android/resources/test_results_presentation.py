@@ -41,21 +41,28 @@ def results_to_html(results, cs_base_url, master_name):
     search = test.replace('#', '.')
     return '%s/?q=%s&type=cs' % (cs_base_url, search)
 
+  # Summary of all suites.
+  suites_summary = [{'data': 'TOTAL', 'class' : 'center',
+                     'action': True},
+                    {'data': 0, 'class': 'center'},
+                    {'data': 0, 'class': 'center'},
+                    {'data': 0, 'class': 'center'},
+                    {'data': 0, 'class': 'center'}]
+
   suite_row_dict = {}
   test_row_list = []
   for result in results:
     # Constructing test_row_list.
-    data = [{'data': result['name'], 'class': 'left',
+    test_case = [{'data': result['name'], 'class': 'left',
              'link': code_search(result['name'])},
             {'data': result['status'], 
              'class': 'center ' + result['status'].lower()},
             {'data': result['duration'], 'class': 'center'},
             {'data': result['output_snippet'], 
              'class': 'left', 'is_pre': True}]
+    test_row_list.append(test_case)
 
-    test_row_list.append(data)
-
-    # Constructing suite_row_dict
+    # Constructing suite_row_dict and suites_summary
     test_case_path = result['name']
     suite_name = test_case_path.split('#')[0]
     # 'suite_row' is [name, success_count, fail_count, all_count, time].
@@ -67,7 +74,8 @@ def results_to_html(results, cs_base_url, master_name):
     if suite_name in suite_row_dict:
       suite_row = suite_row_dict[suite_name]  
     else:
-      suite_row = [{'data': suite_name, 'class' : 'left'},
+      suite_row = [{'data': suite_name, 'class' : 'left',
+                    'action': True},
                    {'data': 0, 'class': 'center'},
                    {'data': 0, 'class': 'center'},
                    {'data': 0, 'class': 'center'},
@@ -75,20 +83,28 @@ def results_to_html(results, cs_base_url, master_name):
       suite_row_dict[suite_name] = suite_row
 
     suite_row[ALL_COUNT]['data'] += 1
+    suites_summary[ALL_COUNT]['data'] += 1
     if result['status'] == 'SUCCESS':
       suite_row[SUCCESS_COUNT]['data'] += 1
+      suites_summary[SUCCESS_COUNT]['data'] += 1
     elif result['status'] == 'FAILURE':
       suite_row[FAIL_COUNT]['data'] += 1
+      suites_summary[FAIL_COUNT]['data'] += 1
     suite_row[TIME]['data'] += result['duration']
+    suites_summary[TIME]['data'] += result['duration']
 
   for suite in suite_row_dict.values():
     if suite[FAIL_COUNT]['data'] > 0:
       suite[FAIL_COUNT]['class'] += ' failure'
     else:
       suite[FAIL_COUNT]['class'] += ' success'
+  if suites_summary[FAIL_COUNT]['data'] > 0:
+    suites_summary[FAIL_COUNT]['class'] += ' failure'
+  else:
+    suites_summary[FAIL_COUNT]['class'] += ' success'
 
   test_table_values = {
-    'table_id' : 'test_table',
+    'table_id' : 'test-table',
     'table_headers' : [('text', 'test_name'),
                        ('text', 'status'),
                        ('number', 'duration'),
@@ -98,7 +114,7 @@ def results_to_html(results, cs_base_url, master_name):
   }
 
   suite_table_values = {
-    'table_id' : 'suite_table',
+    'table_id' : 'suite-table',
     'table_headers' : [('text', 'suite_name'),
                        ('number', 'number_success_tests'),
                        ('number', 'number_fail_tests'),
@@ -106,6 +122,7 @@ def results_to_html(results, cs_base_url, master_name):
                        ('number', 'elapsed_time_ms'),
                       ],
     'table_rows' : suite_row_dict.values(),
+    'summary' : suites_summary,
   }
 
   main_template = jinja_environment.get_template(
@@ -128,7 +145,6 @@ def main():
   if os.path.exists(args.json_file):
     result_html_string = result_details(args.json_file, args.cs_base_url,
                                         args.master_name)
-
     with open(args.html_file, 'w') as html:
       html.write(result_html_string)
   else:
