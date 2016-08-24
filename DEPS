@@ -1,3 +1,8 @@
+# The dependencies listed here ARE NOT USED on masters and slave machines.
+# If changing something here you must also change it in these repos:
+#   https://chrome-internal.googlesource.com/chrome/tools/build/slave.DEPS
+#   https://chrome-internal.googlesource.com/chrome/tools/build/master.DEPS
+#   https://chrome-internal.googlesource.com/chrome/tools/build/internal.DEPS
 deps = {
   'build/scripts/gsd_generate_index':
     'https://chromium.googlesource.com/chromium/tools/gsd_generate_index.git',
