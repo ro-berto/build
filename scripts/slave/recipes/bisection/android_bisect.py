@@ -100,7 +100,7 @@ def RunSteps(api, mastername, buildername):
   api.chromium_android.configure_from_properties(recipe_config, **kwargs)
   api.chromium.set_config(recipe_config, **kwargs)
   api.chromium_android.c.set_val({'deps_file': 'DEPS'})
-  api.gclient.set_config('chromium')
+  api.gclient.set_config('chromium', GIT_MODE=True)
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
   update_step = api.auto_bisect.ensure_checkout()
