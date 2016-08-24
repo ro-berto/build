@@ -26,16 +26,16 @@ def RunSteps(api, buildername):
   if buildername == 'Syzygy Debug':
     api.syzygy.set_config('syzygy', BUILD_CONFIG='Debug')
     api.chromium.set_config('syzygy', BUILD_CONFIG='Debug')
-    api.gclient.set_config('syzygy', BUILD_CONFIG='Debug')
+    api.gclient.set_config('syzygy', BUILD_CONFIG='Debug', GIT_MODE=True)
   elif buildername == 'Syzygy Coverage':
     api.syzygy.set_config('syzygy', BUILD_CONFIG='Coverage')
     api.chromium.set_config('syzygy', BUILD_CONFIG='Coverage')
-    api.gclient.set_config('syzygy', BUILD_CONFIG='Coverage')
+    api.gclient.set_config('syzygy', BUILD_CONFIG='Coverage', GIT_MODE=True)
   else:
     assert buildername == 'Syzygy Official'
     api.syzygy.set_config('syzygy_official')
     api.chromium.set_config('syzygy_official')
-    api.gclient.set_config('syzygy_official')
+    api.gclient.set_config('syzygy_official', GIT_MODE=True)
 
   # Clean up any running processes on the slave.
   api.syzygy.taskkill()

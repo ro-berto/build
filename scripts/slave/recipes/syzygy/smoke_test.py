@@ -46,7 +46,7 @@ def RunSteps(api, buildername):
   kwargs = {'BUILD_CONFIG': 'Release'}
   s.set_config('syzygy', **kwargs)
   api.chromium.set_config('syzygy', **kwargs)
-  api.gclient.set_config('syzygy', **kwargs)
+  api.gclient.set_config('syzygy', GIT_MODE=True, **kwargs)
 
   # Clean up any running processes on the slave.
   s.taskkill()
