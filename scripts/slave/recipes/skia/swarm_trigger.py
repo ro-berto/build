@@ -194,9 +194,15 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
   }
   builder_cfg = builder_spec['builder_cfg']
   if builder_cfg['is_trybot']:
-    properties['issue'] = str(api.properties['issue'])
-    properties['patchset'] = str(api.properties['patchset'])
-    properties['rietveld'] = api.properties['rietveld']
+    if api.properties.get('patch_storage') == 'gerrit':
+      properties['patch_storage'] = api.properties['patch_storage']
+      properties['repository'] = api.properties['repository']
+      properties['event.patchSet.ref'] = api.properties['event.patchSet.ref']
+      properties['event.change.number'] = api.properties['event.change.number']
+    else:
+      properties['issue'] = str(api.properties['issue'])
+      properties['patchset'] = str(api.properties['patchset'])
+      properties['rietveld'] = api.properties['rietveld']
 
   extra_args = [
       '--workdir', '../../..',
@@ -873,19 +879,22 @@ def GenTests(api):
   )
   yield test
 
+  gerrit_kwargs = {
+    'patch_storage': 'gerrit',
+    'repository': 'skia',
+    'event.patchSet.ref': 'refs/changes/00/2100/2',
+    'event.change.number': '2100',
+  }
   test = (
     api.test('recipe_with_gerrit_patch') +
-    api.properties(buildername=builder + '-Trybot',
+    api.properties(buildername='Build-Ubuntu-GCC-x86_64-Release-Trybot',
                    mastername=master,
                    slavename=slave,
                    buildnumber=5,
                    path_config='kitchen',
                    revision='abc123',
-                   patch_storage='gerrit',
-                   repository='skia') +
-    api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'recipes.py'),
-    )
+                   **gerrit_kwargs) +
+    api.step_data('upload new .isolated file for compile_skia',
+                  stdout=api.raw_io.output('def456 XYZ.isolated'))
   )
   yield test
