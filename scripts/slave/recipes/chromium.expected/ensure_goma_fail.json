@@ -161,7 +161,7 @@
       "--root",
       "[CACHE]/cipd/goma",
       "--list",
-      "infra_internal/goma/client/linux-amd64 release",
+      "infra/tools/cloudtail/linux-amd64 git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3\ninfra_internal/goma/client/linux-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",

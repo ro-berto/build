@@ -25,9 +25,8 @@ class GomaApi(recipe_api.RecipeApi):
 
   @property
   def cloudtail_path(self):
-    if self.m.platform.is_win:
-      return 'C:\\infra-tools\\cloudtail'
-    return '/opt/infra-tools/cloudtail'
+    assert self._goma_dir
+    return self.m.path.join(self._goma_dir, 'cloudtail')
 
   def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):
@@ -46,9 +45,14 @@ class GomaApi(recipe_api.RecipeApi):
           if canary:
             ref='candidate'
           self._goma_dir = self.m.path['cache'].join('cipd', 'goma')
-          self.m.cipd.ensure(self._goma_dir, {goma_package: ref})
+          cloudtail_package = (
+              'infra/tools/cloudtail/%s' % self.m.cipd.platform_suffix())
+          cloudtail_version = (
+              'git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3')
 
-          # TODO(tikuta) download cloudtail from cipd here
+          self.m.cipd.ensure(self._goma_dir,
+                             {goma_package: ref,
+                              cloudtail_package: cloudtail_version})
 
           return self._goma_dir
         except self.m.step.StepFailure:
