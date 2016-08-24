@@ -67,7 +67,7 @@ TESTS = [
 ]
 
 def RunSteps(api):
-  api.gclient.set_config('build')
+  api.gclient.set_config('build', GIT_MODE=True)
   api.bot_update.ensure_checkout(force=True)
 
   for test in TESTS:

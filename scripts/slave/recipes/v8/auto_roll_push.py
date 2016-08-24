@@ -16,7 +16,7 @@ DEPS = [
 
 def RunSteps(api):
   api.chromium.cleanup_temp()
-  api.gclient.set_config('v8')
+  api.gclient.set_config('v8', GIT_MODE=True)
   api.bot_update.ensure_checkout(force=True, no_shallow=True)
 
   step_result = api.python(

@@ -79,7 +79,7 @@ def GetDEPS(api, name, repo):
 
 
 def RunSteps(api):
-  api.gclient.set_config('v8')
+  api.gclient.set_config('v8', GIT_MODE=True)
   api.gclient.apply_config('chromium')
 
   # Allow rolling all v8 os deps.

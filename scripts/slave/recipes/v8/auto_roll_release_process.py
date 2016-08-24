@@ -143,7 +143,7 @@ def RunSteps(api):
   repo = api.properties.get('repo', REPO)
   fail_on_exit = []
 
-  api.gclient.set_config('v8')
+  api.gclient.set_config('v8', GIT_MODE=True)
   api.bot_update.ensure_checkout(force=True, no_shallow=True)
 
   # Get current lkgr ref and update.
