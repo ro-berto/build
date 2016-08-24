@@ -10,6 +10,7 @@ import json
 
 
 DEPS = [
+  'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/tryserver',
@@ -254,6 +255,11 @@ def checkout_steps(api):
   update_step = api.gclient.checkout(gclient_config=gclient_cfg)
   got_revision = update_step.presentation.properties['got_revision']
   api.tryserver.maybe_apply_issue()
+  # TODO(rmistry): Remove after skbug.com/5588 is resolved.
+  if api.properties.get('patch_storage') == 'gerrit':
+    api.bot_update.apply_gerrit_ref(
+        root=str(api.path['slave_build'].join(repo.name)))
+
   return got_revision
 
 
@@ -860,6 +866,23 @@ def GenTests(api):
                    buildnumber=5,
                    path_config='kitchen',
                    revision='abc123') +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('skia', 'infra', 'bots', 'recipes.py'),
+    )
+  )
+  yield test
+
+  test = (
+    api.test('recipe_with_gerrit_patch') +
+    api.properties(buildername=builder + '-Trybot',
+                   mastername=master,
+                   slavename=slave,
+                   buildnumber=5,
+                   path_config='kitchen',
+                   revision='abc123',
+                   patch_storage='gerrit',
+                   repository='skia') +
     api.path.exists(
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('skia', 'infra', 'bots', 'recipes.py'),
