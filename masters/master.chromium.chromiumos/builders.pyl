@@ -185,7 +185,7 @@
         "version": "precise",
         "bits": 64,
       },
-      "slaves": ["vm913-m1"],
+      "slaves": ["slave117-c1", "slave118-c1"],
     },
 
     "linux_simplechrome_x86_generic": {
