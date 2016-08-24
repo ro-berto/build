@@ -6,6 +6,7 @@
 """upload goma related logs."""
 
 import argparse
+import os
 import sys
 
 from slave import goma_utils
@@ -41,7 +42,29 @@ def main():
   parser.add_argument('--build-data-dir',
                       metavar='DIR',
                       help='Directory that has build data used by event_mon.')
+
+
+  # Arguments set to os.environ
+  parser.add_argument('--buildbot-buildername',
+                      help='buildbot buildername')
+  parser.add_argument('--buildbot-mastername',
+                      help='buildbot mastername')
+  parser.add_argument('--buildbot-slavename',
+                      help='buildbot slavename')
+  parser.add_argument('--buildbot-clobber',
+                      help='buildbot clobber')
+
   args = parser.parse_args()
+
+  # TODO(tikuta): Pass these variables explicitly.
+  if args.buildbot_buildername:
+    os.environ['BUILDBOT_BUILDERNAME'] = args.buildbot_buildername
+  if args.buildbot_mastername:
+    os.environ['BUILDBOT_MASTERNAME'] = args.buildbot_mastername
+  if args.buildbot_slavename:
+    os.environ['BUILDBOT_SLAVENAME'] = args.buildbot_slavename
+  if args.buildbot_clobber:
+    os.environ['BUILDBOT_CLOBBER'] = args.buildbot_clobber
 
   if args.upload_compiler_proxy_info:
     goma_utils.UploadGomaCompilerProxyInfo()

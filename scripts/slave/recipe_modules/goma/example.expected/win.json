@@ -101,8 +101,19 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
-      "--upload-compiler-proxy-info"
+      "--upload-compiler-proxy-info",
+      "--buildbot-buildername",
+      "test_builder",
+      "--buildbot-mastername",
+      "test_master",
+      "--buildbot-slavename",
+      "test_slave",
+      "--buildbot-clobber",
+      "1"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "upload_log"
   },
   {

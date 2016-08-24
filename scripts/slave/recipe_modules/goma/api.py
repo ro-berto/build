@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import os
-
 from recipe_engine import recipe_api
 
 class GomaApi(recipe_api.RecipeApi):
@@ -125,6 +123,9 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
         self.service_account_json_path)
 
+    # GLOG_log_dir should not be set.
+    assert env is None or 'GLOG_log_dir' not in env
+
     goma_ctl_start_env = self._goma_ctl_env.copy()
 
     if env is not None:
@@ -150,7 +151,7 @@ class GomaApi(recipe_api.RecipeApi):
       except self.m.step.StepFailure:
         upload_logs_name = 'upload_goma_start_and_stop_failed_logs'
 
-      self.upload_logs(name=upload_logs_name)
+      self._upload_logs(name=upload_logs_name)
       raise e
 
   def stop(self, ninja_log_outdir=None, ninja_log_compiler=None,
@@ -170,16 +171,16 @@ class GomaApi(recipe_api.RecipeApi):
     with self.m.step.defer_results():
       self.m.python(name='stop_goma', script=self.goma_ctl,
                     args=['stop'], env=self._goma_ctl_env, **kwargs)
-      self.upload_logs(ninja_log_outdir, ninja_log_compiler,
+      self._upload_logs(ninja_log_outdir, ninja_log_compiler,
                        ninja_log_command, ninja_log_exit_status)
       self._stop_cloudtail()
 
     self._goma_started = False
     self._goma_ctl_env = {}
 
-  def upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
-                  ninja_log_command=None, ninja_log_exit_status=None,
-                  name=None):
+  def _upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
+                   ninja_log_command=None, ninja_log_exit_status=None,
+                   name=None):
     args = [
         '--upload-compiler-proxy-info'
     ]
@@ -204,9 +205,18 @@ class GomaApi(recipe_api.RecipeApi):
           '--build-data-dir', self.build_data_dir,
       ])
 
+    # Set some buildbot info used in goma_utils.SendGomaTsMon.
+    for key in ['buildername', 'mastername', 'slavename', 'clobber']:
+      if key in self.m.properties:
+        args.extend([
+            '--buildbot-%s' % key, self.m.properties[key]
+        ])
+
+
     self.m.python(
       name=name or 'upload_log',
       script=self.package_repo_resource(
           'scripts', 'slave', 'upload_goma_logs.py'),
-      args=args
+      args=args,
+      env=self._goma_ctl_env
     )

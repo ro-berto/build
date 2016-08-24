@@ -23,15 +23,23 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
-    yield api.test(platform) + api.platform.name(platform)
-
     properties = {
+        'buildername': 'test_builder',
+        'mastername': 'test_master',
+        'slavename': 'test_slave',
+        'clobber': '1',
+    }
+
+    yield (api.test(platform) + api.platform.name(platform) +
+           api.properties.generic(**properties))
+
+    properties.update({
         'build_data_dir': 'build_data_dir',
         'ninja_log_outdir': 'build_data_dir',
         'ninja_log_compiler': 'goma',
         'ninja_log_command': 'ninja -j 500',
-        'ninja_log_exit_status': 0,
-    }
+        'ninja_log_exit_status': '0',
+    })
 
     yield (api.test('%s_upload_logs' % platform) + api.platform.name(platform) +
            api.properties.generic(**properties))
