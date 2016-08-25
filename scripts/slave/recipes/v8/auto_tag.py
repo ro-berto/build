@@ -164,6 +164,14 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
       'new-branch', 'work', '--upstream', ref,
       cwd=api.path['checkout'],
   )
+  api.git(
+      'config', 'user.name', 'V8 Autoroll',
+      cwd=api.path['checkout'], name='git config user.name',
+  )
+  api.git(
+      'config', 'user.email', 'v8-autoroll@chromium.org',
+      cwd=api.path['checkout'], name='git config user.email',
+  )
 
   # Increment patch level and update file content.
   latest_version = latest_version.with_incremented_patch()
