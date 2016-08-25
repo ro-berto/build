@@ -2032,26 +2032,20 @@ def GetSlaveNamesForBuilder(builders, builder_name):
   return slaves
 
 def IsClangWinBuild(build_dir, target):
-  """Check if a ninja build has been build with Clang on Windows.
-
-  This checks the build.ninja file from the build directory to see which
-  compiler has been used for a build.
-  """
-  # TODO(sebmarchand): Make this works for gn builds, currently only the gyp one
-  #     is supported.
+  """Check if a ninja build has been build with Clang on Windows."""
   if not IsWindows():
     return False
-  build_file = os.path.join(build_dir, target, 'build.ninja')
-  if not os.path.isfile(build_file):
+
+  gn_file = os.path.join(build_dir, target, 'args.gn')
+  if not os.path.isfile(gn_file):
+    print 'WARNING:  Unable to find the args.gn file.'
     return False
-  # Matches e.g. "cl_x86 = path/to/clang-cl.exe"
-  clang_cl_re = re.compile(
-      r'^cl_x\d\d\s+\=\s+(?P<compiler_path>[^ ]+)\s.*$',
-      re.VERBOSE)
-  for line in open(build_file):
-    m = clang_cl_re.match(line)
-    if m:
-      return 'clang' in m.group('compiler_path')
+  # Matches e.g. "gn_arg = value"
+  gn_arg_re = re.compile(r'^(?P<flag>[^= ]+)\s*=\s*(?P<value>[^ \n]+)$')
+  for line in open(gn_file):
+    m = gn_arg_re.match(line)
+    if m and m.group('flag') == 'is_clang':
+      return m.group('value') == 'true'
   return False
 
 # Everything below this point has been copied from the Python-3.3 sources with
