@@ -820,7 +820,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Mac Retina Release (AMD)': {
+    'Mac 10.11 Retina Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',

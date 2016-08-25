@@ -281,7 +281,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac Retina Release\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.11 Retina Release (AMD)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -291,7 +291,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac Retina Release (AMD)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac Retina Release\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -574,7 +574,7 @@
         }
       },
       {
-        "builder_name": "Mac Retina Release",
+        "builder_name": "Mac 10.11 Retina Release (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -593,7 +593,7 @@
         }
       },
       {
-        "builder_name": "Mac Retina Release (AMD)",
+        "builder_name": "Mac Retina Release",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -670,7 +670,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Release (ATI)<br />Mac 10.10 Release (Intel)<br />Mac 10.10 Retina Release (AMD)<br />Mac Retina Release<br />Mac Retina Release (AMD)<br />Optional Mac 10.10 Release (Intel)<br />Optional Mac 10.10 Retina Release (AMD)<br />Optional Mac Retina Release@@@"
+      "@@@STEP_TEXT@Mac 10.10 Release (ATI)<br />Mac 10.10 Release (Intel)<br />Mac 10.10 Retina Release (AMD)<br />Mac 10.11 Retina Release (AMD)<br />Mac Retina Release<br />Optional Mac 10.10 Release (Intel)<br />Optional Mac 10.10 Retina Release (AMD)<br />Optional Mac Retina Release@@@"
     ]
   },
   {
