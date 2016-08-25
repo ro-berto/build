@@ -679,6 +679,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.chromium_checkout.working_dir:
       kwargs['cwd'] = self.m.chromium_checkout.working_dir
 
+    # TODO(tandrii): remove this per http://crbug.com/635641.
+    if self.m.platform.is_linux:
+      kwargs['env'] = {'GCLIENT_KILL_GIT_FETCH_AFTER': '1200'}  # 20 minutes.
+
     self.m.bot_update.ensure_checkout(
         force=True, patch=False, update_presentation=False, **kwargs)
     self.m.chromium.runhooks(name='runhooks (without patch)')
