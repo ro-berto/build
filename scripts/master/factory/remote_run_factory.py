@@ -9,7 +9,7 @@ from master.factory.build_factory import BuildFactory
 
 # TODO(nodir): restore timeout=1200, https://crbug.com/593891
 def RemoteRunFactory(active_master, repository, recipe,
-                     revision='origin/master', factory_properties=None,
+                     revision=None, factory_properties=None,
                      timeout=2400, max_time=None, triggers=None,
                      use_gitiles=False):
   """Returns buildbot build factory which runs recipes using recipe engine's
@@ -41,6 +41,9 @@ def RemoteRunFactory(active_master, repository, recipe,
   |use_gitiles| enables a Gitiles-specific way to fetch the repo; it's more
   efficient for large repos.
   """
+  if not revision:
+    revision = 'master' if use_gitiles else 'origin/master'
+
   factory_properties = factory_properties or {}
 
   # This is useful e.g. for botmap updater to easily extract info about builder.
