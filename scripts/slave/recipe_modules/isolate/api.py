@@ -207,13 +207,15 @@ class IsolateApi(recipe_api.RecipeApi):
     """Removes the build metadata embedded in the build artifacts."""
     args = [
         '--build-dir', self.m.chromium.output_dir,
-        '--src-dir', self.m.path['checkout']
     ]
     # Turn the failures during this step into warnings, it's a best effort step
     # that shouldn't break the build for now.
     try:
       self.m.python('remove_build_metadata',
-                    self.resource('remove_build_metadata.py'),
+                    self.m.path.join(self.m.path['checkout'],
+                                     'tools',
+                                     'determinism',
+                                     'remove_build_metadata.py'),
                     args=args,
                     cwd=self.m.path['slave_build'])
     except self.m.step.StepFailure:
@@ -228,6 +230,9 @@ class IsolateApi(recipe_api.RecipeApi):
         '--target-platform', self.m.chromium.c.TARGET_PLATFORM
     ]
     self.m.python('compare_build_artifacts',
-                  self.resource('compare_build_artifacts.py'),
+                  self.m.path.join(self.m.path['checkout'],
+                                   'tools',
+                                   'determinism',
+                                   'compare_build_artifacts.py'),
                   args=args,
                   cwd=self.m.path['slave_build'])

@@ -282,11 +282,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "[BUILDER_CACHE]/Mac64_Release__swarming_/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/Mac64_Release__swarming_/src/out/Release",
-      "--src-dir",
-      "[BUILDER_CACHE]/Mac64_Release__swarming_/src"
+      "[BUILDER_CACHE]/Mac64_Release__swarming_/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"

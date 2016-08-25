@@ -359,11 +359,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "[BUILDER_CACHE]/WebKit_Linux_Leak/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/WebKit_Linux_Leak/src/out/Release",
-      "--src-dir",
-      "[BUILDER_CACHE]/WebKit_Linux_Leak/src"
+      "[BUILDER_CACHE]/WebKit_Linux_Leak/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"

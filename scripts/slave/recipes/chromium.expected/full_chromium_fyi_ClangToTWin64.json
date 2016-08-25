@@ -341,11 +341,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\remove_build_metadata.py",
+      "[BUILDER_CACHE]\\ClangToTWin64\\src\\tools\\determinism\\remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]\\ClangToTWin64\\src\\out\\Release_x64",
-      "--src-dir",
-      "[BUILDER_CACHE]\\ClangToTWin64\\src"
+      "[BUILDER_CACHE]\\ClangToTWin64\\src\\out\\Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"

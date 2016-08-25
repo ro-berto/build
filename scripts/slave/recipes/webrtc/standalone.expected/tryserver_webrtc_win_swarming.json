@@ -270,11 +270,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\remove_build_metadata.py",
+      "[BUILDER_CACHE]\\win_swarming\\src\\tools\\determinism\\remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]\\win_swarming\\src\\out\\Debug",
-      "--src-dir",
-      "[BUILDER_CACHE]\\win_swarming\\src"
+      "[BUILDER_CACHE]\\win_swarming\\src\\out\\Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"

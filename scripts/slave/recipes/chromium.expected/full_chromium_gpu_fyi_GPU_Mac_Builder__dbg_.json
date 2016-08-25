@@ -415,11 +415,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "[BUILDER_CACHE]/mac/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Debug",
-      "--src-dir",
-      "[BUILDER_CACHE]/mac/src"
+      "[BUILDER_CACHE]/mac/src/out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"

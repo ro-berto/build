@@ -465,11 +465,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "[BUILDER_CACHE]/linux/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/linux/src/out/Release",
-      "--src-dir",
-      "[BUILDER_CACHE]/linux/src"
+      "[BUILDER_CACHE]/linux/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"

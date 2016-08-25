@@ -380,11 +380,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "[BUILDER_CACHE]/Chromium_Linux_TSan_Builder/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/Chromium_Linux_TSan_Builder/src/out/Release",
-      "--src-dir",
-      "[BUILDER_CACHE]/Chromium_Linux_TSan_Builder/src"
+      "[BUILDER_CACHE]/Chromium_Linux_TSan_Builder/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"

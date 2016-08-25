@@ -395,11 +395,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "[BUILDER_CACHE]/Android_Cloud_Tests/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/Android_Cloud_Tests/src/out/Release",
-      "--src-dir",
-      "[BUILDER_CACHE]/Android_Cloud_Tests/src"
+      "[BUILDER_CACHE]/Android_Cloud_Tests/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
