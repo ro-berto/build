@@ -90,9 +90,17 @@ def GenTests(api):
   failed_build_test += api.step_data('gsutil ls', retcode=1)
   failed_build_test += api.step_data('gsutil ls (2)' , retcode=1)
   failed_build_test += api.step_data('gsutil ls (3)' , retcode=1)
-  failed_build_test += api.override_step_data(
-      'buildbucket.get', stdout=api.json.output(
-          {'results':[{'build':{'status': 'COMPLETED', 'result': 'FAILED'}}]}))
+  failed_build_test += api.step_data(
+      'fetch builder state',
+      api.raw_io.output(json.dumps({'cachedBuilds': ['2106']})))
+  failed_build_test += api.step_data(
+      'fetch build details',
+      api.raw_io.output(json.dumps({
+          'results': 2,
+          'properties': [('build_archive_url',
+                          ('gs://chrome-perf/Linux Builder/full-build-linux_'
+                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))]
+      })))
   yield failed_build_test
 
 
@@ -106,8 +114,26 @@ def GenTests(api):
   delayed_build_test += api.step_data('gsutil ls (5)', retcode=1)
   delayed_build_test += api.step_data('gsutil ls (6)', retcode=1)
   delayed_build_test += api.step_data(
-      'buildbucket.get', stdout=api.json.output(
-          {'results':[{'build':{'status': 'PENDING'}}]}))
+      'fetch builder state',
+      api.raw_io.output(json.dumps({'cachedBuilds': []})))
+  delayed_build_test += api.step_data(
+      'fetch builder state (2)',
+      api.raw_io.output(json.dumps({'cachedBuilds': ['2106']})))
+  delayed_build_test += api.step_data(
+      'fetch build details',
+      api.raw_io.output(json.dumps({
+          'properties': [('build_archive_url',
+                          ('gs://chrome-perf/Linux Builder/full-build-linux_'
+                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))]
+      })))
+  delayed_build_test += api.step_data(
+      'fetch build details (2)',
+      api.raw_io.output(json.dumps({
+          'results': 2,
+          'properties': [('build_archive_url',
+                          ('gs://chrome-perf/Linux Builder/full-build-linux_'
+                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))]
+      })))
   yield delayed_build_test
 
   missing_metric_test = _make_test(

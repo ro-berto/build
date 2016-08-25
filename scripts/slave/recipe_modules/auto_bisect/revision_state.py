@@ -23,6 +23,9 @@ from . import depot_config
 # These relate to how to increase the number of repetitions during re-test
 MINIMUM_SAMPLE_SIZE = 5
 INCREASE_FACTOR = 1.5
+# Buildbot job result codes.
+# See http://docs.buildbot.net/current/developer/results.html
+SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION = range(5)
 
 class RevisionState(object):
   """Abstracts the state of a single revision on a bisect job."""
@@ -73,7 +76,6 @@ class RevisionState(object):
     self._rev_str = None
     self.base_revision = base_revision
     self.revision_overrides = {}
-    self.build_id = None
     if self.base_revision:
       assert self.base_revision.deps_file_contents
       self.needs_patch = True
@@ -93,6 +95,7 @@ class RevisionState(object):
     self.overall_return_code = None
     self.std_dev = None
     self._test_config = None
+    self.build_number = None
 
     if self.bisector.test_type == 'perf':
       self.repeat_count = MINIMUM_SAMPLE_SIZE
@@ -280,15 +283,43 @@ class RevisionState(object):
 
     return self.build_archived
 
+  def _fetch_build_info(self, base_url, build_number):
+    api = self.bisector.api
+    build_url = '%s/builds/%s?as_text=1' % (base_url, build_number)
+    fetch_result = api.m.url.fetch( build_url, step_name='fetch build details')
+    return json.loads(fetch_result or '{}')
+
   def _is_build_failed(self):
-    result = self.bisector.api.m.buildbucket.get_build(
-        self.build_id,
-        step_test_data=lambda: self.bisector.api.m.json.test_api.output_stream(
-            {'results': [
-                {'build': {'result': 'SUCCESS', 'status': 'COMPLETED'}}]}
-        ))
-    return (result.stdout['results'][0]['build']['status'] == 'COMPLETED' and
-            result.stdout['results'][0]['build'].get('result') != 'SUCCESS')
+    api = self.bisector.api
+    current_build = None
+    path = 'json/builders/' + self.bisector.get_builder_bot_for_this_platform()
+    base_url = api.m.properties.get('buildbotURL', 'http://localhost:8041/')
+    base_url += path
+    if self.build_number is None:
+      try:
+        # Get all the current builds.
+        builder_state_url = base_url + '?as_text=1'
+        builder_state = api.m.url.fetch(
+            builder_state_url, step_name='fetch builder state')
+        builder_state = json.loads(builder_state or '{}')
+        for build_number in builder_state.get('cachedBuilds', []):
+          build = self._fetch_build_info(base_url, build_number)
+          # Properties is a list of triples (key, value, source)
+          build_properties = dict([t[:2] for t in build.get('properties', [])])
+          if build_properties.get('build_archive_url') == self.build_url:
+            self.build_number = build_number
+            current_build = build
+            break
+      except (api.m.step.StepFailure, ValueError):  # pragma: no cover
+        # If we cannot get json from buildbot, we cannot determine if a build is
+        # failed, hence we consider it in progress until it times out.
+        return False
+    if self.build_number is None:
+      # The build hasn't started yet, therefore it's not failed.
+      return False
+    if not current_build:
+      current_build = self._fetch_build_info(base_url, self.build_number)
+    return current_build.get('results') in [FAILURE, SKIPPED, EXCEPTION]
 
   def _results_available(self):
     """Checks if the results for the test job have been uploaded."""
@@ -396,15 +427,12 @@ class RevisionState(object):
           self.revision_overrides
 
     try:
-      result = api.m.buildbucket.put(
-          [build_details],
-          api.m.service_account.get_json_path(api.SERVICE_ACCOUNT),
-          step_test_data=lambda: api.m.json.test_api.output_stream(
-              {'results':[{'build':{'id':'1201331270'}}]}))
+      api.m.buildbucket.put([build_details],
+                            api.m.service_account.get_json_path(
+                                api.SERVICE_ACCOUNT))
     except api.m.step.StepFailure:  # pragma: no cover
       self.bisector.surface_result('BUILD_FAILURE')
       raise
-    self.build_id = result.stdout['results'][0]['build']['id']
 
   def _get_bisect_config_for_tester(self):
     """Copies the key-value pairs required by a tester bot to a new dict."""
