@@ -820,6 +820,29 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
+    'Mac Retina Release (AMD)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
+    },
     'Android Release (Nexus 5)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
