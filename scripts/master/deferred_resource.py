@@ -17,8 +17,9 @@ from twisted.python import log as twistedLog
 from twisted.python.threadpool import ThreadPool
 import apiclient
 import apiclient.discovery
-import httplib2
 import oauth2client
+
+from infra_libs import InstrumentedHttp
 
 
 DEFAULT_RETRY_ATTEMPT_COUNT = 5
@@ -121,7 +122,7 @@ class DeferredResource(object):
   def __init__(
       self, resource, credentials=None, max_concurrent_requests=1,
       retry_wait_seconds=None, retry_attempt_count=None, verbose=False,
-      log_prefix='', timeout=None, _pool=None):
+      log_prefix='', timeout=None, _pool=None, http_client_name=None):
     """Creates a DeferredResource.
 
     Args:
@@ -141,6 +142,8 @@ class DeferredResource(object):
         then Python's default timeout for sockets will be used. See
         for example the docs of socket.setdefaulttimeout():
         http://docs.python.org/library/socket.html#socket.setdefaulttimeout
+      http_client_name (str): an identifier for the HTTP requests made by this
+        resource.  Included with monitoring metrics.
     """
     max_concurrent_requests = max_concurrent_requests or 1
     assert resource, 'resource not specified'
@@ -150,6 +153,8 @@ class DeferredResource(object):
     if retry_attempt_count is None:
       retry_attempt_count = DEFAULT_RETRY_ATTEMPT_COUNT
     assert isinstance(retry_attempt_count, int)
+    if http_client_name is None:
+      http_client_name = 'deferred_resource'
 
     self._pool = _pool or self._create_thread_pool(max_concurrent_requests)
     self._resource = resource
@@ -162,6 +167,7 @@ class DeferredResource(object):
     self._th_local = threading.local()
     self.started = False
     self.timeout = timeout
+    self.http_client_name = http_client_name
 
   @classmethod
   def _create_thread_pool(cls, max_concurrent_requests):
@@ -335,7 +341,8 @@ class DeferredResource(object):
         if create_creds:
           self._th_local.credentials = None
           self._th_local.credentials_expiry = None
-          self._th_local.http = httplib2.Http(timeout=self.timeout)
+          self._th_local.http = InstrumentedHttp(
+              self.http_client_name, timeout=self.timeout)
           if self.credentials is not None:
             creds = self.credentials
             ttl = None

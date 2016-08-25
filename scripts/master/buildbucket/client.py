@@ -69,4 +69,5 @@ def create_buildbucket_service(master, hostname=None, verbose=None):
       verbose=verbose or False,
       log_prefix=common.LOG_PREFIX,
       timeout=60,
+      http_client_name='buildbucket',
   )

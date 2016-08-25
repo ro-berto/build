@@ -13,13 +13,7 @@ import sys
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(TESTS_DIR, 'data')
-BASE_DIR = os.path.dirname(TESTS_DIR)
-sys.path.insert(0, os.path.join(BASE_DIR, 'third_party'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'buildbot_8_4p1'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'buildbot_slave_8_4'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'jinja2'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'markupsafe'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'mock-1.0.1'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'twisted_10_2'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'site_config'))
+
+sys.path.insert(0, os.path.join(TESTS_DIR, '../scripts'))
+import common.env
+common.env.Install()
