@@ -18,7 +18,7 @@ def start_cloudtail(args):
 
   proc = subprocess.Popen([args.cloudtail_path,
                            'tail',
-                           '--log-id', 'goma_compiler_proxy'
+                           '--log-id', 'goma_compiler_proxy',
                            '--path',
                            goma_utils.GetLatestGomaCompilerProxyInfo()])
 
