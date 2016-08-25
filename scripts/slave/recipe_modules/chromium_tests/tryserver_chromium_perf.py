@@ -61,6 +61,7 @@ _AddTestSpec('linux_fyi_perf_bisect', 'linux')
 
 
 _AddTestSpec('winx64_zen_perf_bisect', 'win')
+_AddTestSpec('winx64_high_dpi_perf_bisect', 'win')
 _AddTestSpec('winx64_10_perf_bisect', 'win')
 _AddTestSpec('win_8_perf_bisect', 'win', target_bits=32)
 _AddTestSpec('win_perf_bisect', 'win', target_bits=32)

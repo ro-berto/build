@@ -156,6 +156,8 @@ _AddTestSpec('Android One Perf', 'android-one', 'android',
 
 _AddTestSpec('Win Zenbook Perf', 'win-zenbook', 'win',
              num_host_shards=5)
+_AddTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win',
+             num_host_shards=5)
 _AddTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win',
              num_host_shards=5)
 _AddTestSpec('Win 8 Perf', 'chromium-rel-win8-dual', 'win',
