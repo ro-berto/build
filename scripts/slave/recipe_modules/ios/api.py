@@ -49,11 +49,6 @@ class iOSApi(recipe_api.RecipeApi):
     return self.m.bot_update.ensure_checkout(**kwargs)
 
   @property
-  def compiler(self):
-    assert self.__config is not None
-    return self.__config['compiler']
-
-  @property
   def configuration(self):
     assert self.__config is not None
     return self.__config['configuration']
@@ -66,9 +61,7 @@ class iOSApi(recipe_api.RecipeApi):
   @property
   def using_mb(self):
     assert self.__config is not None
-    # MB and GN only work if we're doing ninja builds, so we will
-    # ignore the mb_type setting if compiler isn't set to ninja.
-    return self.__config['mb_type'] is not None and self.compiler == 'ninja'
+    return self.__config['mb_type'] is not None
 
   @property
   def platform(self):
@@ -124,7 +117,6 @@ class iOSApi(recipe_api.RecipeApi):
       for key in (
         'xcode version',
         'GYP_DEFINES',
-        'compiler',
         'configuration',
         'sdk',
         'gn_args',
@@ -244,9 +236,8 @@ class iOSApi(recipe_api.RecipeApi):
                                        v in self.__config['GYP_DEFINES'])
     self.m.chromium.c = cfg
 
-    use_goma = (self.compiler == 'ninja' and
-                (cfg.gyp_env.GYP_DEFINES.get('use_goma') == '1' or
-                 'use_goma=true' in self.__config['gn_args']))
+    use_goma = (cfg.gyp_env.GYP_DEFINES.get('use_goma') == '1' or
+                'use_goma=true' in self.__config['gn_args'])
     if use_goma:
       # Make sure these chromium configs are applied consistently for the
       # rest of the recipe; they are needed in order for m.chromium.compile()
@@ -291,30 +282,16 @@ class iOSApi(recipe_api.RecipeApi):
 
     build_sub_path = ''
 
-    if self.compiler == 'xcodebuild':
-      env['GYP_GENERATORS'] = 'xcode'
-      env['GYP_GENERATOR_FLAGS'] = 'xcode_project_version=3.2'
-      cwd = self.m.path['checkout'].join('xcodebuild')
-      cmd = [
-        'xcodebuild',
-        '-configuration', self.configuration,
-        '-project', self.m.path['checkout'].join(
-          'build',
-          'all.xcodeproj',
-        ),
-        '-sdk', self.__config['sdk'],
-      ]
-    elif self.compiler == 'ninja':
-      env['GYP_CROSSCOMPILE'] = '1'
-      env['GYP_GENERATORS'] = 'ninja'
-      build_sub_path = '%s-%s' % (self.configuration, {
-          'simulator': 'iphonesimulator',
-          'device': 'iphoneos',
-        }[self.platform])
+    env['GYP_CROSSCOMPILE'] = '1'
+    env['GYP_GENERATORS'] = 'ninja'
+    build_sub_path = '%s-%s' % (self.configuration, {
+        'simulator': 'iphonesimulator',
+        'device': 'iphoneos',
+      }[self.platform])
 
-      cwd = self.m.path['checkout'].join('out', build_sub_path)
-      compile_targets = self.__config['additional_compile_targets']
-      cmd = ['ninja', '-C', cwd]
+    cwd = self.m.path['checkout'].join('out', build_sub_path)
+    compile_targets = self.__config['additional_compile_targets']
+    cmd = ['ninja', '-C', cwd]
 
     if self.using_mb:
       # if we're using MB to generate build files, make sure we don't
@@ -339,7 +316,6 @@ class iOSApi(recipe_api.RecipeApi):
 
     use_analyze = self.__config['use_analyze']
     if (use_analyze and
-        self.compiler == 'ninja' and
         self.m.tryserver.is_tryserver and
         'without patch' not in suffix):
       affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
@@ -370,8 +346,7 @@ class iOSApi(recipe_api.RecipeApi):
       else:
         return
 
-    use_goma = (self.compiler == 'ninja' and
-                ('use_goma=1' in gyp_defines or 'use_goma=true' in gn_args))
+    use_goma = 'use_goma=1' in gyp_defines or 'use_goma=true' in gn_args
     if use_goma:
       self.m.chromium.compile(targets=compile_targets,
                               target=build_sub_path,
@@ -769,11 +744,6 @@ class iOSApi(recipe_api.RecipeApi):
   @property
   def most_recent_app_dir(self):
     """Returns the path to the directory of the most recently compiled apps."""
-    build_dir = {
-      'xcodebuild': 'xcodebuild',
-      'ninja': 'out',
-    }[self.compiler]
-
     platform = {
       'device': 'iphoneos',
       'simulator': 'iphonesimulator',
@@ -781,47 +751,17 @@ class iOSApi(recipe_api.RecipeApi):
 
     return self.m.path.join(
       'src',
-      build_dir,
+      'out',
       '%s-%s' % (self.configuration, platform),
     )
 
   @property
   def most_recent_iossim(self):
     """Returns the path to the most recently compiled iossim."""
-    build_dir = {
-      'xcodebuild': self.m.path.join('xcodebuild', 'ninja-iossim'),
-      'ninja': 'out',
-    }[self.compiler]
-
-    # If built with Xcode, the iossim path depends on whether the target is
-    # Debug or Release, but doesn't depend on the platform.
-    # i.e. iossim is located at one of:
-    # xcodebuild/ninja-iossim/Debug/iossim
-    # xcodebuild/ninja-iossim/Release/iossim
-    # However if built with ninja, the iossim path does depend on the platform
-    # as well.
-    # i.e. iossim could be located at:
-    # out/Debug-iphoneos/iossim
-    # out/Debug-iphonesimulator/iossim
-    # out/Release-iphoneos/iossim
-    # out/Release-iphonesimulator/iossim
-
     platform = {
       'device': 'iphoneos',
       'simulator': 'iphonesimulator',
     }[self.platform]
 
-    return {
-      'xcodebuild': self.m.path.join(
-        'src',
-        build_dir,
-        self.configuration,
-        'iossim',
-      ),
-      'ninja': self.m.path.join(
-        'src',
-         build_dir,
-         '%s-%s' % (self.configuration, platform),
-         'iossim',
-      ),
-    }[self.compiler]
+    return self.m.path.join(
+      'src', 'out', '%s-%s' % (self.configuration, platform), 'iossim')

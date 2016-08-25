@@ -117,7 +117,6 @@
       "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 2\": \"fake value 2\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"use_goma\": \"1\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler\": \"ninja\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mb_type\": \"gyp\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos8.0\", @@@",
@@ -132,7 +131,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\", \n    \"use_goma\": \"1\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"ninja\", \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": \"gyp\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": \"false\", \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\", \n    \"use_goma\": \"1\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": \"gyp\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": \"false\", \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },

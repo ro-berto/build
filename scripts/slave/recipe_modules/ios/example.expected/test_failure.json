@@ -116,7 +116,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": {}, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler\": \"xcodebuild\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
@@ -135,7 +134,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -162,9 +161,9 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
+      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "component=static_library OS=ios",
-      "GYP_GENERATORS": "xcode",
-      "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2",
+      "GYP_GENERATORS": "ninja",
       "LANDMINES_VERBOSE": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -175,15 +174,11 @@
   },
   {
     "cmd": [
-      "xcodebuild",
-      "-configuration",
-      "Debug",
-      "-project",
-      "[SLAVE_BUILD]/src/build/all.xcodeproj",
-      "-sdk",
-      "iphonesimulator8.1"
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator"
     ],
-    "cwd": "[SLAVE_BUILD]/src/xcodebuild",
+    "cwd": "[SLAVE_BUILD]/src/out/Debug-iphonesimulator",
     "name": "compile"
   },
   {
@@ -312,7 +307,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--xcode-version\", \n            \"<(xcode_version)\", \n            \"--iossim\", \n            \"src/xcodebuild/ninja-iossim/Debug/iossim\", \n            \"--platform\", \n            \"<(platform)\", \n            \"--version\", \n            \"<(version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\", \n            \"src/xcodebuild/ninja-iossim/Debug/iossim\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
+      "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--xcode-version\", \n            \"<(xcode_version)\", \n            \"--iossim\", \n            \"src/out/Debug-iphonesimulator/iossim\", \n            \"--platform\", \n            \"<(platform)\", \n            \"--version\", \n            \"<(version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\", \n            \"src/out/Debug-iphonesimulator/iossim\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
       "[SLAVE_BUILD]/template.isolate"
     ],
     "name": "isolate.generate template.isolate",
@@ -333,7 +328,7 @@
       "@@@STEP_LOG_LINE@template.isolate@            \"--xcode-version\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"<(xcode_version)\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--iossim\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"src/xcodebuild/ninja-iossim/Debug/iossim\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"src/out/Debug-iphonesimulator/iossim\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--platform\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"<(platform)\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--version\", @@@",
@@ -342,7 +337,7 @@
       "@@@STEP_LOG_LINE@template.isolate@          \"files\": [@@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)/\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"src/ios/build/bots/scripts/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"src/xcodebuild/ninja-iossim/Debug/iossim\"@@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"src/out/Debug-iphonesimulator/iossim\"@@@",
       "@@@STEP_LOG_LINE@template.isolate@          ]@@@",
       "@@@STEP_LOG_LINE@template.isolate@        }@@@",
       "@@@STEP_LOG_LINE@template.isolate@      }@@@",
@@ -357,7 +352,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Debug-iphonesimulator/fake test.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Debug-iphonesimulator/fake test.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
     ],
     "name": "isolate.generate 0.isolate.gen.json",
@@ -371,7 +366,7 @@
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"ios\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"src/xcodebuild/Debug-iphonesimulator/fake test.app\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"src/out/Debug-iphonesimulator/fake test.app\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"6.1.1\", @@@",
@@ -381,7 +376,7 @@
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"src/xcodebuild/Debug-iphonesimulator/fake test.app\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"src/out/Debug-iphonesimulator/fake test.app\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"platform\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"fake device\", @@@",

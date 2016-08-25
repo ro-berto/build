@@ -165,7 +165,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler\": \"ninja\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"target_os=\\\"ios\\\"\", @@@",
@@ -191,7 +190,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": [], \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"ninja\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"target_os=\\\"ios\\\"\", \n    \"ios_enable_code_signing=false\", \n    \"use_goma=true\"\n  ], \n  \"mastername\": \"chromium.mac\", \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": [], \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"target_os=\\\"ios\\\"\", \n    \"ios_enable_code_signing=false\", \n    \"use_goma=true\"\n  ], \n  \"mastername\": \"chromium.mac\", \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },

@@ -164,7 +164,6 @@
       "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 1\": \"fake value 1\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 2\": \"fake value 2\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler\": \"xcodebuild\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator7.1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
@@ -208,7 +207,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator7.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"id\": \"1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 3\", \n      \"device type\": \"fake device\", \n      \"id\": \"2\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 4\", \n      \"device type\": \"fake device\", \n      \"id\": \"3\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 5\", \n      \"device type\": \"fake device\", \n      \"id\": \"4\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 6\", \n      \"device type\": \"fake device\", \n      \"id\": \"5\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator7.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"id\": \"1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 3\", \n      \"device type\": \"fake device\", \n      \"id\": \"2\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 4\", \n      \"device type\": \"fake device\", \n      \"id\": \"3\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 5\", \n      \"device type\": \"fake device\", \n      \"id\": \"4\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake tests 6\", \n      \"device type\": \"fake device\", \n      \"id\": \"5\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -235,9 +234,9 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "env": {
+      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
-      "GYP_GENERATORS": "xcode",
-      "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2",
+      "GYP_GENERATORS": "ninja",
       "LANDMINES_VERBOSE": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -248,26 +247,22 @@
   },
   {
     "cmd": [
-      "xcodebuild",
-      "-configuration",
-      "Debug",
-      "-project",
-      "[BUILDER_CACHE]/ios/src/build/all.xcodeproj",
-      "-sdk",
-      "iphonesimulator7.1"
+      "ninja",
+      "-C",
+      "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src/xcodebuild",
+    "cwd": "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
     "name": "compile"
   },
   {
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 1.app",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/fake tests 1.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/iossim",
       "--platform",
       "fake device",
       "--version",
@@ -297,11 +292,11 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 2.app",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/fake tests 2.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/iossim",
       "--platform",
       "fake device",
       "--version",
@@ -333,11 +328,11 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 3.app",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/fake tests 3.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/iossim",
       "--platform",
       "fake device",
       "--version",
@@ -369,11 +364,11 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 4.app",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/fake tests 4.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/iossim",
       "--platform",
       "fake device",
       "--version",
@@ -403,11 +398,11 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 5.app",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/fake tests 5.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/iossim",
       "--platform",
       "fake device",
       "--version",
@@ -439,11 +434,11 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
-      "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests 6.app",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/fake tests 6.app",
       "--json_file",
       "/path/to/tmp/json",
       "--iossim",
-      "[SLAVE_BUILD]/src/xcodebuild/ninja-iossim/Debug/iossim",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/iossim",
       "--platform",
       "fake device",
       "--version",

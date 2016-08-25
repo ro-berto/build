@@ -66,7 +66,6 @@ def GenTests(api):
         'use_goma': '1',
       },
       'mb_type': 'gyp',
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -102,7 +101,6 @@ def GenTests(api):
         "is_debug=true"
       ],
       "mb_type": "gn",
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphoneos8.0',
       'tests': [
@@ -128,7 +126,6 @@ def GenTests(api):
         'use_goma': '1',
       },
       'mb_type': 'gyp',
-      'compiler': 'ninja',
       'configuration': 'Release',
       'sdk': 'iphoneos8.0',
       'tests': [
@@ -155,7 +152,6 @@ def GenTests(api):
       },
       'use_analyze': 'false',
       'mb_type': 'gyp',
-      'compiler': 'ninja',
       'configuration': 'Release',
       'sdk': 'iphoneos8.0',
       'tests': [
@@ -166,7 +162,6 @@ def GenTests(api):
   yield (
     api.test('test_failure')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios',
       buildnumber='0',
@@ -181,7 +176,6 @@ def GenTests(api):
         'fake gyp define 2': 'fake value 2',
       },
       'mb_type': 'gyp',
-      'compiler': 'xcodebuild',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -220,7 +214,6 @@ def GenTests(api):
         'fake gyp define 2': 'fake value 2',
       },
       'mb_type': 'gyp',
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [

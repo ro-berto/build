@@ -68,7 +68,6 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -106,7 +105,6 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -139,7 +137,6 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -177,7 +174,6 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -216,7 +212,6 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -264,7 +259,6 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
     })
@@ -295,7 +289,6 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -330,7 +323,6 @@ def GenTests(api):
         'fake gyp define 1': 'fake value 1',
         'fake gyp define 2': 'fake value 2',
       },
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -370,7 +362,6 @@ def GenTests(api):
       ],
       'use_analyze': True,
       'mb_type': 'gn',
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -414,7 +405,6 @@ def GenTests(api):
       ],
       'use_analyze': True,
       'mb_type': 'gyp',
-      'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [

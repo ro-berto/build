@@ -116,7 +116,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": {}, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler\": \"xcodebuild\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos8.1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
@@ -150,7 +149,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphoneos8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 2\", \n      \"device type\": \"iPad Air\", \n      \"id\": \"1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 3\", \n      \"device type\": \"fake device\", \n      \"id\": \"2\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 4\", \n      \"device type\": \"iPhone 5s\", \n      \"id\": \"3\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphoneos8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 2\", \n      \"device type\": \"iPad Air\", \n      \"id\": \"1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 3\", \n      \"device type\": \"fake device\", \n      \"id\": \"2\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 4\", \n      \"device type\": \"iPhone 5s\", \n      \"id\": \"3\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -177,9 +176,9 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
+      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "component=static_library OS=ios",
-      "GYP_GENERATORS": "xcode",
-      "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2",
+      "GYP_GENERATORS": "ninja",
       "LANDMINES_VERBOSE": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -190,15 +189,11 @@
   },
   {
     "cmd": [
-      "xcodebuild",
-      "-configuration",
-      "Release",
-      "-project",
-      "[SLAVE_BUILD]/src/build/all.xcodeproj",
-      "-sdk",
-      "iphoneos8.1"
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/Release-iphoneos"
     ],
-    "cwd": "[SLAVE_BUILD]/src/xcodebuild",
+    "cwd": "[SLAVE_BUILD]/src/out/Release-iphoneos",
     "name": "compile"
   },
   {
@@ -365,7 +360,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Release-iphoneos/fake test 1.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Release-iphoneos/fake test 1.app\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 1.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 1.app\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
     ],
     "name": "isolate.generate 0.isolate.gen.json",
@@ -380,7 +375,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Release-iphoneos/fake test 2.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Release-iphoneos/fake test 2.app\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 2.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 2.app\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/1.isolate.gen.json"
     ],
     "name": "isolate.generate 1.isolate.gen.json",
@@ -394,7 +389,7 @@
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"ios\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"src/xcodebuild/Release-iphoneos/fake test 2.app\", @@@",
+      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"src/out/Release-iphoneos/fake test 2.app\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"6.1.1\", @@@",
@@ -404,7 +399,7 @@
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"[TMP_BASE]/isolate_tmp_1/1.isolated\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"src/xcodebuild/Release-iphoneos/fake test 2.app\"@@@",
+      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"src/out/Release-iphoneos/fake test 2.app\"@@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@  ], @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@  \"dir\": \"[SLAVE_BUILD]\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@  \"version\": 1@@@",
@@ -417,7 +412,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Release-iphoneos/fake test 3.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Release-iphoneos/fake test 3.app\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 3.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 3.app\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/2.isolate.gen.json"
     ],
     "name": "isolate.generate 2.isolate.gen.json",
@@ -431,7 +426,7 @@
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"ios\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"src/xcodebuild/Release-iphoneos/fake test 3.app\", @@@",
+      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"src/out/Release-iphoneos/fake test 3.app\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"6.1.1\", @@@",
@@ -441,7 +436,7 @@
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"src/xcodebuild/Release-iphoneos/fake test 3.app\"@@@",
+      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"src/out/Release-iphoneos/fake test 3.app\"@@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@  ], @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@  \"dir\": \"[SLAVE_BUILD]\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@  \"version\": 1@@@",
@@ -454,7 +449,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Release-iphoneos/fake test 4.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/3.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/xcodebuild/Release-iphoneos/fake test 4.app\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 4.app\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--isolate\", \n    \"[SLAVE_BUILD]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/3.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 4.app\"\n  ], \n  \"dir\": \"[SLAVE_BUILD]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/3.isolate.gen.json"
     ],
     "name": "isolate.generate 3.isolate.gen.json",
@@ -468,7 +463,7 @@
       "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"ios\", @@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"src/xcodebuild/Release-iphoneos/fake test 4.app\", @@@",
+      "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"src/out/Release-iphoneos/fake test 4.app\", @@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"6.1.1\", @@@",
@@ -478,7 +473,7 @@
       "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"[TMP_BASE]/isolate_tmp_1/3.isolated\", @@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"src/xcodebuild/Release-iphoneos/fake test 4.app\"@@@",
+      "@@@STEP_LOG_LINE@3.isolate.gen.json@    \"src/out/Release-iphoneos/fake test 4.app\"@@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@  ], @@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@  \"dir\": \"[SLAVE_BUILD]\", @@@",
       "@@@STEP_LOG_LINE@3.isolate.gen.json@  \"version\": 1@@@",
