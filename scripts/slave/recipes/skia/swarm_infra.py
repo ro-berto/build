@@ -10,6 +10,7 @@ import re
 
 
 DEPS = [
+  'depot_tools/bot_update',
   'depot_tools/infra_paths',
   'file',
   'recipe_engine/path',
@@ -60,6 +61,12 @@ def git_checkout(api, url, dest, ref=None):
       api.properties.get('issue') and
       api.properties.get('patchset')):
     api.rietveld.apply_issue()
+  elif (api.properties.get('repository') and
+        api.properties.get('event.patchSet.ref') and
+        api.properties.get('event.change.number')):
+    api.bot_update.apply_gerrit_ref(root=dest)
+    # Applying gerrit ref puts us in a detached branch. Go back to the master.
+    git(api, 'checkout', 'master', cwd=dest)
 
 
 def RunSteps(api):
@@ -153,4 +160,16 @@ def GenTests(api):
                      revision=REF_HEAD,
                      slavename='skiabot-linux-infra-001',
                      path_config='kitchen')
+  )
+  gerrit_kwargs = {
+      'repository': 'skia',
+      'event.patchSet.ref': 'refs/changes/00/2100/2',
+      'event.change.number': '2100',
+  }
+  yield (
+      api.test('Infra-PerCommit_try_gerrit') +
+      api.properties(revision=REF_HEAD,
+                     slavename='skiabot-linux-infra-001',
+                     path_config='kitchen',
+                     **gerrit_kwargs)
   )
