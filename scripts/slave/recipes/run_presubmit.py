@@ -25,7 +25,7 @@ def _RunStepsInternal(api):
   force_checkout = api.properties.get('force_checkout', False)
   patch_storage = api.properties.get('patch_storage', 'rietveld')
 
-  api.gclient.set_config(repo_name)
+  api.gclient.set_config(repo_name, GIT_MODE=True)
 
   kwargs = {}
   if patch_storage == 'gerrit':

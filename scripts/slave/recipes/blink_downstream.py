@@ -114,7 +114,7 @@ def RunSteps(api):
   bot_config = master_dict.get('builders', {}).get(buildername)
 
   # Sync chromium to HEAD.
-  api.gclient.set_config('chromium')
+  api.gclient.set_config('chromium', GIT_MODE=True)
   api.gclient.c.revisions['src'] = 'HEAD'
   api.chromium.set_config('blink',
                           **bot_config.get('chromium_config_kwargs', {}))

@@ -57,7 +57,7 @@ def RunSteps(api):
       'https://omnibot-legion-isolate-server.appspot.com')
   api.swarming.swarming_server = (
       'https://omnibot-legion-swarming-server.appspot.com')
-  api.gclient.set_config('chromium')
+  api.gclient.set_config('chromium', GIT_MODE=True)
   api.bot_update.ensure_checkout(force=True)
 
   for name, config in CONFIGS.iteritems():

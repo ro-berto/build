@@ -107,7 +107,8 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     self.m.chromium.set_config(self.recipe_config['chromium_config'],
                                **chromium_kwargs)
-    self.m.gclient.set_config(self.recipe_config['gclient_config'])
+    self.m.gclient.set_config(self.recipe_config['gclient_config'],
+                              GIT_MODE=True)
 
     # Support applying configs both at the bot and the recipe config level.
     for c in self.bot_config.get('chromium_apply_config', []):

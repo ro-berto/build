@@ -267,7 +267,7 @@ class RecipeTryjobApi(recipe_api.RecipeApi):
     root_dir = self.m.path['slave_build']
 
     # Needed to set up the infra checkout, for _python
-    self.m.gclient.set_config('infra')
+    self.m.gclient.set_config('infra', GIT_MODE=True)
     self.m.gclient.c.solutions[0].revision = 'origin/master'
     self.m.gclient.checkout()
     self.m.gclient.runhooks()

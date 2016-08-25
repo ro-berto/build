@@ -861,7 +861,7 @@ def RunSteps(api):
 
   api.chromium.set_config(recipe_config['chromium_config'],
                           **bot_config.get('chromium_config_kwargs', {}))
-  api.gclient.set_config(recipe_config['gclient_config'])
+  api.gclient.set_config(recipe_config['gclient_config'], GIT_MODE=True)
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
   for c in bot_config.get('chromium_apply_config', []):

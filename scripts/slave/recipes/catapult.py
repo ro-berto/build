@@ -23,7 +23,7 @@ PROPERTIES = {
 
 def _CheckoutSteps(api):
   """Checks out the catapult repo (and any dependencies) using gclient."""
-  api.gclient.set_config('catapult')
+  api.gclient.set_config('catapult', GIT_MODE=True)
   api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
 

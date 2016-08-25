@@ -19,7 +19,7 @@ DEPS = [
 
 def RunSteps(api):
   # Sync and pull in everything.
-  api.gclient.set_config('boringssl')
+  api.gclient.set_config('boringssl', GIT_MODE=True)
   api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
 

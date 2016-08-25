@@ -13,7 +13,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.gclient.set_config('gyp')
+  api.gclient.set_config('gyp', GIT_MODE=True)
 
   api.bot_update.ensure_checkout(force=True)
 

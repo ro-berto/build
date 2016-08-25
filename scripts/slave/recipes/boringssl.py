@@ -138,7 +138,7 @@ PROPERTIES = {
 
 def RunSteps(api, buildername):
   # Sync and pull in everything.
-  api.gclient.set_config('boringssl')
+  api.gclient.set_config('boringssl', GIT_MODE=True)
   if _HasToken(buildername, 'android'):
     api.gclient.c.target_os.add('android')
   api.bot_update.ensure_checkout(force=True)

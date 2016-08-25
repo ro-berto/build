@@ -20,7 +20,7 @@ def RunSteps(api):
   kwargs['TARGET_ARCH'] = 'arm'
 
   api.chromium.set_config('chromium', **kwargs)
-  api.gclient.set_config('chromium', **kwargs)
+  api.gclient.set_config('chromium', GIT_MODE=True, **kwargs)
   api.gclient.apply_config('android')
   step_result = api.bot_update.ensure_checkout()
   # Whatever step is run right before this line needs to emit got_revision.

@@ -18,7 +18,7 @@ DEPS = [
 
 def RunSteps(api):
   """Generates the sequence of steps that will be run by the slave."""
-  api.gclient.set_config('crashpad')
+  api.gclient.set_config('crashpad', GIT_MODE=True)
   api.gclient.checkout()
 
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
