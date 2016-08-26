@@ -39,12 +39,6 @@ def _RunStepsInternal(api):
   got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
   upstream = bot_update_step.json.output['properties'].get(
       got_revision_property)
-  if (not upstream or
-      isinstance(upstream, int) or
-      (upstream.isdigit() and len(upstream) < 40)):
-    # If got_revision is an svn revision, then use got_revision_git.
-    upstream = bot_update_step.json.output['properties'].get(
-        '%s_git' % got_revision_property) or ''
 
   abs_root = api.path['slave_build'].join(relative_root)
   # TODO(hinoka): Extract email/name from issue?
@@ -138,17 +132,6 @@ def GenTests(api):
       api.step_data('presubmit', api.json.output([['%s_presubmit' % repo_name,
                                                    ['compile']]]))
     )
-
-  yield (
-    api.test('fake_svn_master') +
-    api.properties.tryserver(
-        mastername='experimental.svn',
-        buildername='chromium_presubmit',
-        repo_name='chromium',
-        force_checkout=True) +
-    api.step_data('presubmit', api.json.output([['chromium_presubmit',
-                                                 ['compile']]]))
-  )
 
   yield (
     api.test('chromium_dry_run') +
