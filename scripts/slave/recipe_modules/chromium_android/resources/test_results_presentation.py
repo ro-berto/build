@@ -51,6 +51,12 @@ def results_to_html(results, cs_base_url, master_name):
 
   suite_row_dict = {}
   test_row_list = []
+  # 'suite_row' is [name, success_count, fail_count, all_count, time].
+  SUCCESS_COUNT = 1
+  FAIL_COUNT = 2
+  ALL_COUNT = 3
+  TIME = 4
+
   for result in results:
     # Constructing test_row_list.
     test_case = [{'data': result['name'], 'class': 'left',
@@ -65,11 +71,6 @@ def results_to_html(results, cs_base_url, master_name):
     # Constructing suite_row_dict and suites_summary
     test_case_path = result['name']
     suite_name = test_case_path.split('#')[0]
-    # 'suite_row' is [name, success_count, fail_count, all_count, time].
-    SUCCESS_COUNT = 1
-    FAIL_COUNT = 2
-    ALL_COUNT = 3
-    TIME = 4
 
     if suite_name in suite_row_dict:
       suite_row = suite_row_dict[suite_name]  
