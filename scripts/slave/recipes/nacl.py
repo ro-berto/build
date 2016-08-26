@@ -31,7 +31,7 @@ trigger_map = {
 }
 
 def _CheckoutSteps(api):
-  api.gclient.set_config('nacl', GIT_MODE=True)
+  api.gclient.set_config('nacl')
   result = api.bot_update.ensure_checkout(force=True)
 
   # HACK(iannucci): bot_update.ensure_checkout should return an actual meaninful

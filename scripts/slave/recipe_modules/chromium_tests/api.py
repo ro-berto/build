@@ -127,7 +127,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot_config.get('gclient_config'),
         PATCH_PROJECT=self.m.properties.get('patch_project'),
         BUILDSPEC_VERSION=buildspec_version,
-        GIT_MODE=True,
         **bot_config.get('gclient_config_kwargs', {}))
 
     self.m.test_results.set_config(

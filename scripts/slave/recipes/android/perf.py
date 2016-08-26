@@ -131,7 +131,7 @@ def RunSteps(api):
 
   api.chromium_android.set_config(builder_config, **kwargs)
   api.chromium.set_config(builder_config, **kwargs)
-  api.gclient.set_config('perf', GIT_MODE=True)
+  api.gclient.set_config('perf')
   api.gclient.apply_config('android')
 
   bot_update_step = api.bot_update.ensure_checkout()

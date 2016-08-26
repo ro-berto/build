@@ -16,7 +16,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.gclient.set_config('webrtc', GIT_MODE=True)
+  api.gclient.set_config('webrtc')
 
   step_result = api.python(
         'check roll status',

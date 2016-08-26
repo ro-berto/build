@@ -20,7 +20,7 @@ DEPS = [
 
 def _CheckoutSteps(api, buildername):
   # Checkout mojo and its dependencies (specified in DEPS) using gclient
-  api.gclient.set_config('mojo', GIT_MODE=True)
+  api.gclient.set_config('mojo')
   if 'Android' in buildername:
     api.gclient.apply_config('android')
   api.bot_update.ensure_checkout(force=True)

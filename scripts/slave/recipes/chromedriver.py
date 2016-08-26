@@ -56,7 +56,7 @@ def RunSteps(api):
   update_test_log = builder.get('update_test_log')
   platform = builder.get('chromedriver_platform')
 
-  api.gclient.set_config('chromium', GIT_MODE=True)
+  api.gclient.set_config('chromium')
   api.gclient.apply_config('android')
   api.gclient.apply_config('chromedriver')
   api.bot_update.ensure_checkout()

@@ -20,7 +20,7 @@ DEPS = [
 def linux_builder_steps(api):
     build_properties = api.properties.legacy()
     # checkout DrMemory step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "drmemory"
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
@@ -46,7 +46,7 @@ def linux_builder_steps(api):
 def linux_lucid_x64_drm_steps(api):
     build_properties = api.properties.legacy()
     # checkout DrMemory step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "drmemory"
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
@@ -88,7 +88,7 @@ def linux_lucid_x64_drm_steps(api):
 def win_vista_x64_drm_steps(api):
     build_properties = api.properties.legacy()
     # checkout DrMemory step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "drmemory"
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
@@ -235,7 +235,7 @@ def win_vista_x64_drm_steps(api):
 def mac_mavericks_x64_DR_steps(api):
     build_properties = api.properties.legacy()
     # checkout DynamiRIO step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "dynamorio"
     soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -254,7 +254,7 @@ def linux_cr_builder_steps(api):
     build_properties = api.properties.legacy()
     # update scripts step; implicitly run by recipe engine.
     # bot_update step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
@@ -307,7 +307,7 @@ def linux_cr_builder_steps(api):
 def mac_builder_DR_steps(api):
     build_properties = api.properties.legacy()
     # checkout DynamiRIO step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "dynamorio"
     soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -329,7 +329,7 @@ def mac_builder_DR_steps(api):
 def win_xp_drm_steps(api):
     build_properties = api.properties.legacy()
     # checkout DrMemory step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "drmemory"
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
@@ -476,7 +476,7 @@ def win_xp_drm_steps(api):
 def mac_mavericks_x64_drm_steps(api):
     build_properties = api.properties.legacy()
     # checkout DrMemory step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "drmemory"
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
@@ -514,7 +514,7 @@ def mac_mavericks_x64_drm_steps(api):
 def linux_cr_steps(api):
     build_properties = api.properties.legacy()
     # checkout DynamiRIO step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "dynamorio"
     soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -659,7 +659,7 @@ def win8_cr_builder_steps(api):
     api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
@@ -894,7 +894,7 @@ def win7_cr_steps(api):
 def win_8_x64_drm_steps(api):
     build_properties = api.properties.legacy()
     # checkout DrMemory step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "drmemory"
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
@@ -1046,7 +1046,7 @@ def win7_cr_builder_steps(api):
     api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
@@ -1093,7 +1093,7 @@ def win7_cr_builder_steps(api):
 def win_7_x64_drm_steps(api):
     build_properties = api.properties.legacy()
     # checkout DrMemory step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "drmemory"
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
@@ -1240,7 +1240,7 @@ def win_7_x64_drm_steps(api):
 def mac_builder_steps(api):
     build_properties = api.properties.legacy()
     # checkout DrMemory step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "drmemory"
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
@@ -1266,7 +1266,7 @@ def mac_builder_steps(api):
 def win_builder_steps(api):
     build_properties = api.properties.legacy()
     # checkout DrMemory step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "drmemory"
     soln.url = "https://github.com/DynamoRIO/drmemory.git"

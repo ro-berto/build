@@ -103,7 +103,7 @@ class PGOApi(recipe_api.RecipeApi):
     Do a PGO build. This takes care of building an instrumented image, profiling
     it and then compiling the optimized version of it.
     """
-    self.m.gclient.set_config(bot_config['gclient_config'], GIT_MODE=True)
+    self.m.gclient.set_config(bot_config['gclient_config'])
 
     # Augment the solution if needed.
     self.m.gclient.c.solutions[0].url += bot_config.get('url_suffix', '')

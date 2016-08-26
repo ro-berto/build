@@ -19,7 +19,7 @@ def linux_sdk_multi_steps(api):
     build_properties = api.properties.legacy()
     # update scripts step; implicitly run by recipe engine.
     # bot_update step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
@@ -107,7 +107,7 @@ def mac_sdk_multi_steps(api):
     build_properties = api.properties.legacy()
     # update scripts step; implicitly run by recipe engine.
     # bot_update step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
@@ -200,7 +200,7 @@ def windows_sdk_multi_steps(api):
     api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
@@ -288,7 +288,7 @@ def linux_sdk_multirel_steps(api):
     build_properties = api.properties.legacy()
     # update scripts step; implicitly run by recipe engine.
     # bot_update step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "chrome-official"
     soln.url = "svn://svn.chromium.org/chrome-internal/trunk/tools/buildspec/"+\
@@ -354,7 +354,7 @@ def windows_sdk_multirel_steps(api):
     api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "chrome-official"
     soln.url = "svn://svn.chromium.org/chrome-internal/trunk/tools/buildspec/"+\
@@ -416,7 +416,7 @@ def mac_sdk_multirel_steps(api):
     build_properties = api.properties.legacy()
     # update scripts step; implicitly run by recipe engine.
     # bot_update step
-    src_cfg = api.gclient.make_config(GIT_MODE=True)
+    src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "chrome-official"
     soln.url = "svn://svn.chromium.org/chrome-internal/trunk/tools/buildspec/"+\

@@ -12,7 +12,7 @@ DEPS = [
 def _CheckoutSteps(api):
   # Checkout custom-tabs-client. The config is implemented at:
   #   scripts/slave/recipe_modules/gclient/config.py
-  api.gclient.set_config('custom_tabs_client', GIT_MODE=True)
+  api.gclient.set_config('custom_tabs_client')
   api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
 

@@ -17,7 +17,7 @@ def target_dartino_linux_debug_arm_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -66,7 +66,7 @@ def dartino_mac_debug_asan_x86_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -112,7 +112,7 @@ def target_dartino_linux_release_arm_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -161,7 +161,7 @@ def dartino_lk_debug_arm_qemu_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -210,7 +210,7 @@ def dartino_linux_release_asan_x86_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -259,7 +259,7 @@ def dartino_mac_release_x86_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -305,7 +305,7 @@ def cross_dartino_linux_arm_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -358,7 +358,7 @@ def dartino_mac_release_asan_x86_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -404,7 +404,7 @@ def cross_dartino_linux_arm_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -457,7 +457,7 @@ def dartino_free_rtos_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -506,7 +506,7 @@ def dartino_mac_release_x64_sdk_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -552,7 +552,7 @@ def dartino_free_rtos_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -601,7 +601,7 @@ def dartino_mac_debug_asan_x86_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -647,7 +647,7 @@ def dartino_mac_debug_x86_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -693,7 +693,7 @@ def target_dartino_linux_debug_arm_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -746,7 +746,7 @@ def dartino_win_debug_x86_steps(api):
   api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                 "kill_processes.py"))
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -791,7 +791,7 @@ def dartino_linux_release_x86_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -840,7 +840,7 @@ def dartino_mac_debug_x86_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -886,7 +886,7 @@ def dartino_linux_release_x64_sdk_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -938,7 +938,7 @@ def dartino_linux_debug_asan_x86_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -987,7 +987,7 @@ def dartino_linux_debug_asan_x86_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1036,7 +1036,7 @@ def dartino_mac_release_asan_x86_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1082,7 +1082,7 @@ def target_dartino_linux_release_arm_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1131,7 +1131,7 @@ def dartino_mac_release_x86_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1177,7 +1177,7 @@ def dartino_linux_release_x64_sdk_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1229,7 +1229,7 @@ def dartino_lk_debug_arm_qemu_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1278,7 +1278,7 @@ def dartino_mac_release_x64_sdk_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1324,7 +1324,7 @@ def dartino_linux_release_asan_x86_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1373,7 +1373,7 @@ def dartino_linux_debug_x86_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1422,7 +1422,7 @@ def dartino_linux_release_x86_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1471,7 +1471,7 @@ def dartino_linux_debug_x86_dev_steps(api):
   build_properties = api.properties.legacy()
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"
@@ -1524,7 +1524,7 @@ def dartino_win_debug_x86_dev_steps(api):
   api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                 "kill_processes.py"))
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "sdk"
   soln.url = "https://github.com/dartino/sdk.git"

@@ -90,7 +90,7 @@ def RunSteps(api):
   for option in options:
     assert all_options.has_key(option)
 
-  api.gclient.set_config('dart', GIT_MODE=True)
+  api.gclient.set_config('dart')
   api.path.c.dynamic_paths['tools'] = None
   api.bot_update.ensure_checkout(force=True)
   api.path['tools'] = api.path['checkout'].join('tools')

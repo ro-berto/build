@@ -19,7 +19,7 @@ DEPS = [
 def RunSteps(api):
   buildername = str(api.properties.get('buildername')) # Convert from unicode.
 
-  api.gclient.set_config('dart', GIT_MODE=True)
+  api.gclient.set_config('dart')
 
   if 'vm-precomp-android' in buildername:
     api.gclient.apply_config('android')

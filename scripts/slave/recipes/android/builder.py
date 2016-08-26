@@ -184,7 +184,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   api.chromium.set_config(bot_config['recipe_config'], **default_kwargs)
   droid.c.set_val({'deps_file': 'DEPS'})
 
-  api.gclient.set_config('chromium', GIT_MODE=True)
+  api.gclient.set_config('chromium')
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 

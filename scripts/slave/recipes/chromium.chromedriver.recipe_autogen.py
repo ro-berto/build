@@ -17,7 +17,7 @@ DEPS = [
 def Linux32_steps(api):
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
@@ -93,7 +93,7 @@ def Linux32_steps(api):
 def Mac_10_6_steps(api):
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
@@ -171,7 +171,7 @@ def Win7_steps(api):
   api.python("taskkill", api.path["build"].join("scripts", "slave",
     "kill_processes.py"))
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
@@ -244,7 +244,7 @@ def Win7_steps(api):
 def Linux_steps(api):
   # update scripts step; implicitly run by recipe engine.
   # bot_update step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"

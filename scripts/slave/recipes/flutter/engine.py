@@ -257,7 +257,7 @@ def BuildIOS(api):
 
 
 def GetCheckout(api):
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = 'src/flutter'
   soln.url = \

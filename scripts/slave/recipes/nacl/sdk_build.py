@@ -15,9 +15,9 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.chromium.set_config('chromium', GIT_MODE=True)
+  api.chromium.set_config('chromium')
   api.chromium.apply_config('mb')
-  api.gclient.set_config('chromium', GIT_MODE=True)
+  api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout(force=True)
   api.tryserver.maybe_apply_issue()
   api.chromium.runhooks()

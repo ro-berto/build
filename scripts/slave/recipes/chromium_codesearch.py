@@ -122,7 +122,7 @@ def RunSteps(api):
 
   # Checkout the repositories that are either directly needed or should be
   # included in the source archive.
-  gclient_config = api.gclient.make_config('chromium', GIT_MODE=True)
+  gclient_config = api.gclient.make_config('chromium')
   for name, url in ADDITIONAL_REPOS.iteritems():
     solution = gclient_config.solutions.add()
     solution.name = name

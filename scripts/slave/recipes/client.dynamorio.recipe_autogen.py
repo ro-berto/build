@@ -14,7 +14,7 @@ DEPS = [
 def win_xp_dr_nightly_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -40,7 +40,7 @@ def win_xp_dr_nightly_steps(api):
 def linux_dr_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -59,7 +59,7 @@ def linux_dr_steps(api):
 def win_7_dr_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -83,7 +83,7 @@ def win_7_dr_steps(api):
 def linux_dr_package_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -105,7 +105,7 @@ def linux_dr_package_steps(api):
 def win_8_dr_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -130,7 +130,7 @@ def win_8_dr_steps(api):
 def win_xp_dr_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -154,7 +154,7 @@ def win_xp_dr_steps(api):
 def win_7_dr_nightly_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -179,7 +179,7 @@ def win_7_dr_nightly_steps(api):
 def win_8_dr_nightly_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -204,7 +204,7 @@ def win_8_dr_nightly_steps(api):
 def win_dr_package_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
@@ -235,7 +235,7 @@ def win_dr_package_steps(api):
 def linux_dr_nightly_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config(GIT_MODE=True)
+  src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"

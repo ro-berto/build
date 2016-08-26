@@ -53,7 +53,7 @@ def RunSteps(api, mastername, buildername):
       BUILD_CONFIG=builder['target'])
 
   api.emulator.set_config('base_config')
-  api.gclient.set_config('chromium', GIT_MODE=True)
+  api.gclient.set_config('chromium')
   api.gclient.apply_config('android')
 
   api.bot_update.ensure_checkout()

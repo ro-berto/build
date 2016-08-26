@@ -21,7 +21,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.gclient.set_config('webrtc_ios', GIT_MODE=True)
+  api.gclient.set_config('webrtc_ios')
 
   api.ios.host_info()
 

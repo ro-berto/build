@@ -53,7 +53,7 @@ def RunSteps(api, buildername):
   config, kwargs = BUILDERS[buildername]
   s.set_config(config, **kwargs)
   api.chromium.set_config(config, **kwargs)
-  api.gclient.set_config(config, GIT_MODE=True, **kwargs)
+  api.gclient.set_config(config, **kwargs)
 
   # Clean up any running processes on the slave.
   s.taskkill()

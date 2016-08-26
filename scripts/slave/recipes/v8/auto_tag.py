@@ -235,7 +235,7 @@ def RunSteps(api):
   local_branch_ref = 'refs/remotes/branch-heads/%s' % branch
   lkgr_ref = 'refs/heads/%s-lkgr' % branch
 
-  api.gclient.set_config('v8', GIT_MODE=True)
+  api.gclient.set_config('v8')
   api.gclient.checkout(with_branch_heads=True)
 
   # Enforce a clean state.

@@ -170,7 +170,7 @@ class ChromiteApi(recipe_api.RecipeApi):
 
     Return: (config) A 'gclient' recipe module configuration.
     """
-    cfg = self.m.gclient.make_config(GIT_MODE=True)
+    cfg = self.m.gclient.make_config()
     soln = cfg.solutions.add()
     soln.name = 'chromite'
     soln.url = self.chromite_url
