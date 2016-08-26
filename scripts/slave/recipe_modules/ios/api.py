@@ -252,6 +252,8 @@ class iOSApi(recipe_api.RecipeApi):
       # available as well.
       self.m.chromium.ensure_goma()
 
+    return copy.deepcopy(self.__config)
+
   def build(self, mb_config_path=None, gyp_script=None, suffix=None):
     """Builds from this bot's build config."""
     assert self.__config is not None
