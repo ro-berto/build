@@ -182,7 +182,7 @@ def main(argv):
         '--properties-file', properties_file,
         '--workdir', os.path.join(tempdir, 'w'),
         '--output-result-json', recipe_result_path,
-        args.recipe,
+        properties.get('recipe') or args.recipe,
     ])
     # If we bootstrap through logdog, the recipe command line gets written
     # to a temporary file and does not appear in the log.
