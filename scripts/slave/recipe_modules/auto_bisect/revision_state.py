@@ -399,11 +399,12 @@ class RevisionState(object):
           [build_details],
           api.m.service_account.get_json_path(api.SERVICE_ACCOUNT),
           step_test_data=lambda: api.m.json.test_api.output_stream(
-            {'builds':[{'id':'1201331270'}]}))
+              {'results':[{'build':{'id':'1201331270'}}]}))
     except api.m.step.StepFailure:  # pragma: no cover
       self.bisector.surface_result('BUILD_FAILURE')
       raise
-    self.build_id = result.stdout['builds'][0]['id']
+    self.build_id = result.stdout['results'][0]['build']['id']
+
 
   def _get_bisect_config_for_tester(self):
     """Copies the key-value pairs required by a tester bot to a new dict."""
