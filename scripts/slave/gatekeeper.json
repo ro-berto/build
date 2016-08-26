@@ -812,7 +812,7 @@
             "forgive_all": "true",
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
           },
-          "Chromium Win 10": {
+          "Win 10 Fast Ring": {
             "tree_notify": [
               "wfh@chromium.org"
             ],
