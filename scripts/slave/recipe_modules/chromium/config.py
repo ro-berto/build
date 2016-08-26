@@ -690,8 +690,9 @@ def chromium_official(c):
   elif c.TARGET_PLATFORM in ['linux', 'mac']:
     c.compile_py.default_targets = []
 
+# TODO(phajdan.jr): cover or remove blink; used by blink_downstream.
 @config_ctx(includes=['chromium'])
-def blink(c):
+def blink(c):  # pragma: no cover
   c.compile_py.default_targets = ['blink_tests']
 
 @config_ctx()
@@ -769,8 +770,9 @@ def chromium_pgo_optimize(c):
 def v8_optimize_medium(c):
   c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
 
+# TODO(phajdan.jr): cover or remove v8_slow_dchecks; used by blink_downstream.
 @config_ctx()
-def v8_slow_dchecks(c):
+def v8_slow_dchecks(c):  # pragma: no cover
   c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1
 
 @config_ctx()
