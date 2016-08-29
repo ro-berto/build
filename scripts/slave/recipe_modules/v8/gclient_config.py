@@ -4,14 +4,14 @@
 
 import DEPS
 CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
-from recipe_engine.config import BadConf
+ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
 
 
 @CONFIG_CTX()
 def v8(c):
   soln = c.solutions.add()
   soln.name = 'v8'
-  soln.url = 'https://chromium.googlesource.com/v8/v8'
+  soln.url = ChromiumGitURL(c, 'v8', 'v8')
   c.got_revision_mapping['v8'] = 'got_revision'
   # Needed to get the testers to properly sync the right revision.
   # TODO(infra): Upload full buildspecs for every build to isolate and then use
@@ -26,20 +26,20 @@ def v8(c):
 def dynamorio(c):
   soln = c.solutions.add()
   soln.name = 'dynamorio'
-  soln.url = 'https://chromium.googlesource.com/external/dynamorio'
+  soln.url = ChromiumGitURL(c, 'external', 'dynamorio')
 
 
 @CONFIG_CTX(includes=['v8'])
 def llvm_compiler_rt(c):
   c.solutions[0].custom_deps['v8/third_party/llvm/projects/compiler-rt'] = (
-    'https://chromium.googlesource.com/external/llvm.org/compiler-rt.git')
+    ChromiumGitURL(c, 'external', 'llvm.org', 'compiler-rt'))
 
 
 @CONFIG_CTX()
 def node_js(c):
   soln = c.solutions.add()
   soln.name = 'node.js'
-  soln.url = 'https://chromium.googlesource.com/external/github.com/v8/node'
+  soln.url = ChromiumGitURL(c, 'external', 'github.com', 'v8', 'node')
   soln.revision = 'vee-eight-lkgr:HEAD'
   c.got_revision_mapping[soln.name] = 'got_node_js_revision'
 
@@ -47,4 +47,4 @@ def node_js(c):
 @CONFIG_CTX(includes=['v8'])
 def v8_valgrind(c):
   c.solutions[0].custom_deps['v8/third_party/valgrind'] = (
-    'https://chromium.googlesource.com/chromium/deps/valgrind/binaries.git')
+    ChromiumGitURL(c, 'chromium', 'deps', 'valgrind', 'binaries'))
