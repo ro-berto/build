@@ -332,6 +332,10 @@
       "@@@STEP_LOG_LINE@json.output@  [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"ignored\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ignored\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"

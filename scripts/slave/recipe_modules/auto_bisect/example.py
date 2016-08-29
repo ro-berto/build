@@ -355,7 +355,7 @@ def _get_revision_range_step_data(api, range_data):
   """Adds canned output for fetch_intervening_revisions.py."""
   min_rev = range_data[0]['hash']
   max_rev = range_data[-1]['hash']
-  output = [[r['hash'], 'ignored'] for r in range_data[1:-1]]
+  output = [[r['hash'], 'ignored'] for r in range_data[1:]]
   step_name = ('Expanding revision range.for revisions %s:%s' %
                (min_rev, max_rev))
   return api.step_data(step_name, stdout=api.json.output(output))

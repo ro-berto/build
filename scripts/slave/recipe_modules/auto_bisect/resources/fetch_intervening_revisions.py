@@ -42,8 +42,8 @@ def fetch_intervening_revisions(start, end, base_url):
 
   Returns:
     A list of pairs (commit hash, commit position), from earliest to latest,
-    for all commits in between the two given commits, not including either
-    of the given commits.
+    for all commits in between the two given commits, including the end commit
+    but not the start commit.
 
   Raises:
     urllib2.URLError: The request to gitiles failed.
@@ -53,7 +53,7 @@ def fetch_intervening_revisions(start, end, base_url):
   revisions = _fetch_range_from_gitiles(start, end, base_url)
   # The response from gitiles includes the end revision and is ordered
   # from latest to earliest.
-  return [_commit_pair(r) for r in reversed(revisions[1:])]
+  return [_commit_pair(r) for r in reversed(revisions)]
 
 
 def _fetch_range_from_gitiles(start, end, base_url):

@@ -1874,17 +1874,6 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
-    "stdout": "/path/to/tmp/"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info",
@@ -3204,17 +3193,6 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155 (2)",
-    "stdout": "/path/to/tmp/"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info (2)",
@@ -3225,7 +3203,6 @@
       "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
       "@@@STEP_LOG_LINE@Debug Info@chromium@e28dc0d49c[]             @@@",
       "@@@STEP_LOG_LINE@Debug Info@chromium@fc6dfc7ff5[]             @@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@e28dc0d49c[]             @@@",
       "@@@STEP_LOG_LINE@Debug Info@chromium@fc6dfc7ff5[]             @@@",
       "@@@STEP_LOG_END@Debug Info@@@"
     ]

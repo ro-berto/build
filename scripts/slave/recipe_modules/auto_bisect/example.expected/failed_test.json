@@ -149,6 +149,10 @@
       "@@@STEP_LOG_LINE@json.output@  [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"dcdcdc0ff1122212323134879ddceeb1240b0988\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"ignored\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ignored\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"

@@ -1776,17 +1776,6 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
-    "stdout": "/path/to/tmp/"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info",

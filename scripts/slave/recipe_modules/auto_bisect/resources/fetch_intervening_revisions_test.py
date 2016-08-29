@@ -47,7 +47,8 @@ class FetchInterveningRevisionsTest(unittest.TestCase):
             ('8fcc8af20a3d41b0512e3b1486e4dc7de528a72b', '356396'),
             ('3861789af25e2d3502f0fb7080da5785d31308aa', '356397'),
             ('6feaa73a54d0515ad2940709161ca0a5ad91d1f8', '356398'),
-            ('2e93263dc74f0496100435e1fd7232e9e8323af0', '356399')
+            ('2e93263dc74f0496100435e1fd7232e9e8323af0', '356399'),
+            ('c89130e28fd01062104e1be7f3a6fc3abbb80ca9', '356400')
         ])
 
   def test_fetch_intervening_revisions_pagination(self):
@@ -68,6 +69,7 @@ class FetchInterveningRevisionsTest(unittest.TestCase):
             ('ee261f306c3c66e96339aa1026d62a6d953302fe', '356394'),
             ('f1c777e3f97a16cc6a3aa922a23602fa59412989', '356395'),
             ('8fcc8af20a3d41b0512e3b1486e4dc7de528a72b', '356396'),
+            ('3861789af25e2d3502f0fb7080da5785d31308aa', '356397')
         ])
 
 

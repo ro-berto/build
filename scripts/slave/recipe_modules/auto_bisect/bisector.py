@@ -377,13 +377,20 @@ class Bisector(object):
           start=good_hash,
           end=bad_hash,
           depot_name=self.base_depot,
-          step_name=step_name)
+          step_name=step_name,
+          exclude_end=True)
       self.revisions = [self.good_rev] + revisions + [self.bad_rev]
       self._update_revision_list_indexes()
 
   def _revision_range(self, start, end, depot_name, base_revision=None,
-                      step_name=None):
+                      step_name=None, exclude_end=False):
     """Returns a list of RevisionState objects between |start| and |end|.
+
+    When expanding the initial revision range we want to exclude the last
+    revision, since both good and bad have already been created and tested.
+    When bisecting into a roll on the other hand, we want to include the last
+    revision in the roll, because although the code should be equivalent to
+    the roll, we want to blame the right culprit and not the roll.
 
     Args:
       start (str): Start commit hash.
@@ -391,9 +398,11 @@ class Bisector(object):
       depot_name (str): Short string name of repo, e.g. chromium or v8.
       base_revision (str): Base revision in the downstream repo (e.g. chromium).
       step_name (str): Optional step name.
+      exclude_end (bool): Whether to exclude the last revision in the range,
+          i.e. the revision given as end.
 
     Returns:
-      A list of RevisionState objects, not including the given start or end.
+      A list of RevisionState objects.
     """
     if self.internal_bisect:  # pragma: no cover
       return self._revision_range_with_gitiles(
@@ -408,7 +417,10 @@ class Bisector(object):
       self.surface_result('BAD_REV')
       raise
     revisions = []
-    for commit_hash, _ in step_result.stdout:
+    revision_hashes = step_result.stdout
+    if exclude_end:
+      revision_hashes = revision_hashes[:-1]
+    for commit_hash, _ in revision_hashes:
       revisions.append(self.revision_class(
           bisector=self,
           commit_hash=commit_hash,
