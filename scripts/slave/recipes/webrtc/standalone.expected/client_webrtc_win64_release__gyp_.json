@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/Linux64_Debug__GN_",
+      "[BUILDER_CACHE]\\Win64_Release__GYP_",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -25,11 +25,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "client.webrtc",
       "--builder",
-      "Linux64 Debug (GN)",
+      "Win64 Release (GYP)",
       "--slave",
       "slavename",
       "--spec",
@@ -46,9 +46,9 @@
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux64_Debug__GN_",
+    "cwd": "[BUILDER_CACHE]\\Win64_Release__GYP_",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -82,8 +82,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[BUILDER_CACHE]/Linux64_Debug__GN_/src/out"
+      "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_files.py",
+      "[BUILDER_CACHE]\\Win64_Release__GYP_\\src\\out"
     ],
     "name": "clean test output files"
   },
@@ -91,10 +91,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
     "name": "cleanup_temp"
   },
@@ -106,11 +106,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
+      "RECIPE_MODULE[depot_tools::cipd]\\resources\\bootstrap.py",
       "--platform",
-      "linux-amd64",
+      "windows-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[SLAVE_BUILD]\\cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -119,7 +119,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -127,16 +127,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "ensure",
       "--root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]\\cipd\\goma",
       "--list",
-      "infra/tools/cloudtail/linux-amd64 git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3\ninfra_internal/goma/client/linux-amd64 release",
+      "infra/tools/cloudtail/windows-amd64 git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3\ninfra_internal/goma/client/windows-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
+      "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -145,11 +145,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:c6b\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -160,15 +160,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux64_Debug__GN_/src",
+    "cwd": "[BUILDER_CACHE]\\Win64_Release__GYP_\\src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\cipd\\goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -176,22 +176,22 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Linux64_Debug__GN_/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]\\Win64_Release__GYP_\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "client.webrtc",
       "-b",
-      "Linux64 Debug (GN)",
+      "Win64 Release (GYP)",
       "--config-file",
-      "[BUILDER_CACHE]/Linux64_Debug__GN_/src/webrtc/build/mb_config.pyl",
+      "[BUILDER_CACHE]\\Win64_Release__GYP_\\src\\webrtc\\build\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--gyp-script=[BUILDER_CACHE]/Linux64_Debug__GN_/src/webrtc/build/gyp_webrtc.py",
-      "//out/Debug"
+      "[CACHE]\\cipd\\goma",
+      "--gyp-script=[BUILDER_CACHE]\\Win64_Release__GYP_\\src\\webrtc\\build\\gyp_webrtc.py",
+      "//out/Release_x64"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux64_Debug__GN_/src",
+    "cwd": "[BUILDER_CACHE]\\Win64_Release__GYP_\\src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "generate_build_files"
   },
@@ -199,18 +199,18 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "--target",
-      "Debug",
+      "Release_x64",
       "--src-dir",
-      "[BUILDER_CACHE]/Linux64_Debug__GN_/src",
+      "[BUILDER_CACHE]\\Win64_Release__GYP_\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
@@ -220,14 +220,13 @@
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
+      "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--",
-      "all"
+      "[CACHE]\\cipd\\goma",
+      "--"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "compile",
     "~followup_annotations": [

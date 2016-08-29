@@ -1,10 +1,32 @@
 [
   {
     "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/host_info.py",
+      "--json-file",
+      "/path/to/tmp/json"
+    ],
+    "name": "host and tools info",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br />OS X 1.2.3, Xcode 6.7.8 (5D342509a)@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac OS X Version\": \"1.2.3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Xcode Build Version\": \"5D342509a\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Xcode SDKs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 2.0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Xcode Version\": \"6.7.8\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/Linux64_Release__GN_",
+      "[BUILDER_CACHE]/Mac64_Debug__GYP_",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -29,7 +51,7 @@
       "--master",
       "client.webrtc",
       "--builder",
-      "Linux64 Release (GN)",
+      "Mac64 Debug (GYP)",
       "--slave",
       "slavename",
       "--spec",
@@ -46,7 +68,7 @@
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux64_Release__GN_",
+    "cwd": "[BUILDER_CACHE]/Mac64_Debug__GYP_",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -83,7 +105,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[BUILDER_CACHE]/Linux64_Release__GN_/src/out"
+      "[BUILDER_CACHE]/Mac64_Debug__GYP_/src/out"
     ],
     "name": "clean test output files"
   },
@@ -108,7 +130,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
-      "linux-amd64",
+      "mac-amd64",
       "--dest-directory",
       "[SLAVE_BUILD]/cipd",
       "--json-output",
@@ -132,7 +154,7 @@
       "--root",
       "[CACHE]/cipd/goma",
       "--list",
-      "infra/tools/cloudtail/linux-amd64 git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3\ninfra_internal/goma/client/linux-amd64 release",
+      "infra/tools/cloudtail/mac-amd64 git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3\ninfra_internal/goma/client/mac-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -145,11 +167,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:c6b\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -163,11 +185,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux64_Release__GN_/src",
+    "cwd": "[BUILDER_CACHE]/Mac64_Debug__GYP_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -176,24 +198,46 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Linux64_Release__GN_/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/Mac64_Debug__GYP_/src/tools/mb/mb.py",
       "gen",
       "-m",
       "client.webrtc",
       "-b",
-      "Linux64 Release (GN)",
+      "Mac64 Debug (GYP)",
       "--config-file",
-      "[BUILDER_CACHE]/Linux64_Release__GN_/src/webrtc/build/mb_config.pyl",
+      "[BUILDER_CACHE]/Mac64_Debug__GYP_/src/webrtc/build/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--gyp-script=[BUILDER_CACHE]/Linux64_Release__GN_/src/webrtc/build/gyp_webrtc.py",
-      "//out/Release"
+      "--gyp-script=[BUILDER_CACHE]/Mac64_Debug__GYP_/src/webrtc/build/gyp_webrtc.py",
+      "//out/Debug"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux64_Release__GN_/src",
+    "cwd": "[BUILDER_CACHE]/Mac64_Debug__GYP_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[BUILDER_CACHE]/Mac64_Debug__GYP_/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -208,23 +252,22 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
-      "[BUILDER_CACHE]/Linux64_Release__GN_/src",
+      "[BUILDER_CACHE]/Mac64_Debug__GYP_/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
       "[GOMA_DEPS_CACHE]",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--",
-      "all"
+      "--"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

@@ -34,8 +34,8 @@ def Update(c):
           'Android64 Builder',
           'Android64 Builder (dbg)',
           'Android64 Builder x64 (dbg)',
-          'Android32 GN',
-          'Android32 GN (dbg)',
+          'Android32 GYP',
+          'Android32 GYP (dbg)',
       ]),
   ])
 
@@ -51,8 +51,8 @@ def Update(c):
     {'name': 'Android64 Builder', 'slavebuilddir': 'android_arm64'},
     {'name': 'Android64 Builder (dbg)', 'slavebuilddir': 'android_arm64'},
     {'name': 'Android64 Builder x64 (dbg)', 'slavebuilddir': 'android_x64'},
-    {'name': 'Android32 GN', 'slavebuilddir': 'android_gn'},
-    {'name': 'Android32 GN (dbg)', 'slavebuilddir': 'android_gn'},
+    {'name': 'Android32 GYP', 'slavebuilddir': 'android_gyp'},
+    {'name': 'Android32 GYP (dbg)', 'slavebuilddir': 'android_gyp'},
     {'name': 'Android32 Tests (L Nexus5)(dbg)'},
     {'name': 'Android32 Tests (L Nexus7.2)(dbg)'},
     {'name': 'Android64 Tests (L Nexus9)'},

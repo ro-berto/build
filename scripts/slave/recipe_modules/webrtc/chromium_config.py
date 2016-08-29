@@ -20,30 +20,24 @@ def webrtc_standalone(c):
       'tools', 'valgrind-webrtc', 'webrtc_tests',
       platform_ext={'win': '.bat', 'mac': '.sh', 'linux': '.sh'})
 
+# TOOD(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
 @CONFIG_CTX(includes=['ninja', 'gcc', 'goma'])
 def webrtc_gcc(c):
   _compiler_defaults(c)
 
+# TOOD(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
 @CONFIG_CTX(includes=['chromium_clang', 'dcheck', 'webrtc_openh264'])
 def webrtc_clang(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX(includes=['gn'])
-def webrtc_gn(c):
-  c.compile_py.default_targets = ['all']
-  if c.TARGET_PLATFORM != 'ios' and c.TARGET_PLATFORM != 'android':
-    c.gn_args = [
-      'ffmpeg_branding="Chrome"',
-      'rtc_use_h264=true',
-    ]
-
-@CONFIG_CTX(includes=['webrtc_gn'])
+@CONFIG_CTX()
 def webrtc_libfuzzer(c):
   c.gn_args.extend([
     'use_libfuzzer=true',
     'is_asan=true',
   ])
 
+# TODO(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
 @CONFIG_CTX()
 def webrtc_openh264(c):
   if c.TARGET_PLATFORM == 'ios':
@@ -52,6 +46,10 @@ def webrtc_openh264(c):
     raise BadConf('h264 decode not supported for Android')  # pragma: no cover
   c.gyp_env.GYP_DEFINES['ffmpeg_branding'] = 'Chrome'
   c.gyp_env.GYP_DEFINES['rtc_use_h264'] = 1
+  c.gn_args = [
+    'ffmpeg_branding="Chrome"',
+    'rtc_use_h264=true',
+  ]
 
 def _compiler_defaults(c):
   c.compile_py.default_targets = []

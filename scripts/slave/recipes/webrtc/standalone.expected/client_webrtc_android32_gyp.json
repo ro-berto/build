@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/linux_gn_dbg",
+      "[BUILDER_CACHE]/Android32_GYP",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -27,32 +27,26 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "tryserver.webrtc",
+      "client.webrtc",
       "--builder",
-      "linux_gn_dbg",
+      "Android32 GYP",
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
-      "--issue",
-      "666666",
-      "--patchset",
-      "1",
-      "--rietveld_server",
-      "https://fake.rietveld.url",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_gn_dbg",
+    "cwd": "[BUILDER_CACHE]/Android32_GYP",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -89,7 +83,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[BUILDER_CACHE]/linux_gn_dbg/src/out"
+      "[BUILDER_CACHE]/Android32_GYP/src/out"
     ],
     "name": "clean test output files"
   },
@@ -97,12 +91,28 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+      "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
+      "[BUILDER_CACHE]/Android32_GYP/src/out/Release/debug_info_dumps",
+      "[BUILDER_CACHE]/Android32_GYP/src/out/Release/test_logs",
+      "[BUILDER_CACHE]/Android32_GYP/src/out/build_product.zip",
+      "[BUILDER_CACHE]/Android32_GYP/src"
     ],
-    "name": "cleanup_temp"
+    "name": "clean local files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[2], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(sys.argv[3])@@@",
+      "@@@STEP_LOG_LINE@python.inline@except OSError:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
+      "@@@STEP_LOG_LINE@python.inline@for base, _dirs, files in os.walk(sys.argv[4]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in files:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if f.endswith('.pyc'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@      os.remove(os.path.join(base, f))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [],
@@ -114,7 +124,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
-      "linux-amd64",
+      "linux-386",
       "--dest-directory",
       "[SLAVE_BUILD]/cipd",
       "--json-output",
@@ -138,7 +148,7 @@
       "--root",
       "[CACHE]/cipd/goma",
       "--list",
-      "infra/tools/cloudtail/linux-amd64 git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3\ninfra_internal/goma/client/linux-amd64 release",
+      "infra/tools/cloudtail/linux-386 git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3\ninfra_internal/goma/client/linux-386 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -151,11 +161,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:c6b\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-386\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -169,12 +179,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_gn_dbg/src",
+    "cwd": "[BUILDER_CACHE]/Android32_GYP/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
+      "PATH": "[BUILDER_CACHE]/Android32_GYP/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_GYP/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -182,20 +193,20 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux_gn_dbg/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/Android32_GYP/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc",
       "-b",
-      "linux_gn_dbg",
+      "Android32 GYP",
       "--config-file",
-      "[BUILDER_CACHE]/linux_gn_dbg/src/webrtc/build/mb_config.pyl",
+      "[BUILDER_CACHE]/Android32_GYP/src/webrtc/build/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--gyp-script=[BUILDER_CACHE]/linux_gn_dbg/src/webrtc/build/gyp_webrtc.py",
-      "//out/Debug"
+      "--gyp-script=[BUILDER_CACHE]/Android32_GYP/src/webrtc/build/gyp_webrtc.py",
+      "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_gn_dbg/src",
+    "cwd": "[BUILDER_CACHE]/Android32_GYP/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -214,9 +225,9 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
-      "[BUILDER_CACHE]/linux_gn_dbg/src",
+      "[BUILDER_CACHE]/Android32_GYP/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--goma-deps-cache-dir",
@@ -229,13 +240,11 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--goma-fail-fast",
-      "--goma-disable-local-fallback",
-      "--",
-      "all"
+      "--"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android32_GYP/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_GYP/src/build/android:%(PATH)s"
     },
     "name": "compile",
     "~followup_annotations": [
