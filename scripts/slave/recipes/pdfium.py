@@ -22,40 +22,19 @@ PROPERTIES = {
   'target_cpu': Property(default=None, kind=str),
   'clang': Property(default=False, kind=bool),
   'rel': Property(default=False, kind=bool),
-  'gn': Property(default=True, kind=bool),
   'skip_test': Property(default=False, kind=bool),
   'target_os': Property(default=None, kind=str),
 }
 
-def _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, gn,
+def _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang,
                    target_os):
-  assert(gn)
-
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient.
   api.gclient.set_config('pdfium')
   if target_os:
     api.gclient.c.target_os = {target_os}
   api.bot_update.ensure_checkout(force=True)
 
-  gyp_defines = [
-      'pdf_enable_v8=%d' % int(v8),
-      'pdf_enable_xfa=%d' % int(xfa),
-  ]
-
-  if skia:
-    gyp_defines.append('pdf_use_skia=1')
-
-  if memory_tool == 'asan':
-    gyp_defines.append('asan=1')
-
-  if clang:
-    gyp_defines.append('clang=1')
-
-  if target_cpu == 'x86':
-    gyp_defines.append('target_arch=ia32')
-
-  env = {'GYP_PDFIUM_NO_ACTION' : '1'}
-  api.gclient.runhooks(env=env)
+  api.gclient.runhooks()
 
 
 def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
@@ -162,11 +141,9 @@ def _RunTests(api, memory_tool, v8, out_dir):
              cwd=api.path['checkout'], env=env)
 
 
-def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, gn,
-             skip_test, target_os):
-  assert(gn)
-  _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, gn,
-                 target_os)
+def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, skip_test,
+             target_os):
+  _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, target_os)
 
   out_dir = 'Release' if rel else 'Debug'
 
