@@ -1079,8 +1079,18 @@ class SimulatorXCTestRunner(XCTestRunner):
       test_args=test_args,
       xcode_version=xcode_version,
     )
+
+    self.cfbundleid = utils.call(
+      utils.PLIST_BUDDY,
+      '-c', 'Print:CFBundleIdentifier',
+      os.path.join(self.app_path, 'Info.plist'),
+    ).stdout[0]
+
     self.platform = platform
     self.version = version
+
+    self.built_dir = os.path.split(self.app_path)[0]
+    self.iossim_path = os.path.join(self.built_dir, 'iossim')
 
   def UploadTestData(self):
     """Uploads the contents of the test's Documents directory.
@@ -1091,49 +1101,14 @@ class SimulatorXCTestRunner(XCTestRunner):
     if not self.gs_bucket:
       return False
 
-    apps_dir = ''
-
-    # [homedir]/Library/Developers/CoreSimulator/Devices contains UDID
-    # directories for each simulated platform started with this home directory.
-    # We'd expect just one such directory since we generate a unique home
-    # directory for each SimulatorTestRunner instance. Inside the device
-    # UDID directory is where we find the Applications directory.
-    udid_dir = os.path.join(
+    apps_dir = os.path.join(
       self.homedir,
-      'Library',
-      'Developer',
-      'CoreSimulator',
-      'Devices',
+      'Containers',
+      'Data',
+      'Application',
     )
 
-    if os.path.exists(udid_dir):
-      udids = os.listdir(udid_dir)
-
-      if len(udids) == 1:
-        apps_dir = os.path.join(
-          udid_dir,
-          udids[0],
-          'data',
-        )
-
-        if self.version.startswith('7'):
-          # On iOS 7 the Applications directory is found right here.
-          apps_dir = os.path.join(apps_dir, 'Applications')
-        else:
-          # On iOS 8+ the Application (singular) directory is a little deeper.
-          apps_dir = os.path.join(
-            apps_dir,
-            'Containers',
-            'Data',
-            'Application',
-          )
-      else:
-        self.Print(
-          'Unexpected number of simulated device UDIDs in %s.' % udid_dir
-        )
-
     docs_dir = None
-
     if os.path.exists(apps_dir):
       self.Print('Found Applications directory.')
       docs_dir = self.FindTestDocumentsDirectory(apps_dir)
@@ -1167,13 +1142,39 @@ class SimulatorXCTestRunner(XCTestRunner):
 
   def CreateNewHomeDirectory(self):
     """Creates a new home directory for the simulator."""
-    self.homedir = tempfile.mkdtemp()
+    if self.xcode_version == '8.0':
+      cmd = [
+        self.iossim_path,
+        '-d', self.platform,
+        '-s', self.version,
+        '-w'
+      ]
+      subprocess.check_output(cmd)
+      cmd = [
+        self.iossim_path,
+        '-d', self.platform,
+        '-s', self.version,
+        '-p'
+      ]
+      self.homedir = subprocess.check_output(cmd).strip()
+    else:
+      self.homedir = tempfile.mkdtemp()
 
   def RemoveHomeDirectory(self):
     """Recursively removes the home directory being used by the simulator."""
-    if os.path.exists(self.homedir):
-      shutil.rmtree(self.homedir, ignore_errors=True)
+    if self.xcode_version == '8.0':
+      cmd = [
+        self.iossim_path,
+        '-d', self.platform,
+        '-s', self.version,
+        '-w'
+      ]
+      subprocess.check_output(cmd)
       self.homedir = ''
+    else:
+      if os.path.exists(self.homedir):
+        shutil.rmtree(self.homedir, ignore_errors=True)
+        self.homedir = ''
 
   def KillSimulators(self):
     """Forcibly kills any running iOS simulator instances."""
@@ -1269,24 +1270,25 @@ class SimulatorXCTestRunner(XCTestRunner):
     Returns:
       A list whose elements are the args representing the command.
     """
-    built_dir = os.path.split(self.app_path)[0]
-
-    app_path = os.path.join(built_dir, self.test_host_name + '.app/')
+    app_path = os.path.join(self.built_dir, self.test_host_name + '.app/')
     xctests_fullname = self.test_target_name + '.xctest'
     xctest_path = os.path.join(app_path, 'PlugIns', xctests_fullname)
 
     if self.xcode_version == '8.0':
       cmd = [
-        os.path.join(built_dir, 'iossim'),
+        self.iossim_path,
         '-d', self.platform,
         '-s', self.version,
         app_path,
         xctest_path
       ]
+
+      for env_var in self.env_vars:
+        cmd.extend(['-e', env_var])
     else:
       cmd = [
         'xcodebuild', 'test-without-building',
-        'BUILT_PRODUCTS_DIR=%s' % built_dir,
+        'BUILT_PRODUCTS_DIR=%s' % self.built_dir,
         '-project', self.test_project_dir,
         '-scheme','TestProject',
         '-destination','platform=iOS Simulator,name=%s,OS=%s'
