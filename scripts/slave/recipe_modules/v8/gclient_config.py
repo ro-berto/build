@@ -7,19 +7,11 @@ CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 from recipe_engine.config import BadConf
 
 
-# TODO(machenbach): Remove this.
-def ChromiumSvnTrunkURL(c, *pieces):
-  BASES = ('https://src.chromium.org/svn/trunk',
-           'svn://svn-mirror.golo.chromium.org/chrome/trunk')
-  return '/'.join((BASES[c.USE_MIRROR],) + pieces)
-
-
 @CONFIG_CTX()
 def v8(c):
   soln = c.solutions.add()
   soln.name = 'v8'
   soln.url = 'https://chromium.googlesource.com/v8/v8'
-  soln.custom_vars = {'chromium_trunk': ChromiumSvnTrunkURL(c)}
   c.got_revision_mapping['v8'] = 'got_revision'
   # Needed to get the testers to properly sync the right revision.
   # TODO(infra): Upload full buildspecs for every build to isolate and then use
