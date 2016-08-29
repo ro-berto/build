@@ -55,13 +55,14 @@ class BuildState(object):
         ))
     return result.stdout['build']['status'] == 'COMPLETED'
 
-  def _is_build_archived(self): # pragma: no cover
+  def _is_build_successful(self): # pragma: no cover
     result = self.api.m.buildbucket.get_build(
         self.build_id,
         step_test_data=lambda: self.api.m.json.test_api.output_stream(
-            {'build': {'result': 'SUCCESS'}}
+            {'build': {'result': 'SUCCESS', 'url': 'buildbot.dummy.url/job/12'}}
         ))
-    return result.stdout['build']['result'] == 'SUCCESS'
+    return (result.stdout['build']['result'] == 'SUCCESS',
+            result.stdout['build']['url'])
 
   # Duplicate code from auto_bisect.bisector.get_builder_bot_for_this_platform
   def get_builder_bot_for_this_platform(self):  # pragma: no cover
@@ -121,8 +122,15 @@ class BuildState(object):
   def wait_for(self): # pragma: no cover
     while True:
       if self._is_completed():
-        if self._is_build_archived():
+        succeeded, build_url = self._is_build_successful()
+        if succeeded:
             break
+        self.api.m.step.active_result.presentation.status = (
+            self.api.m.step.WARNING)
+        self.api.m.step.active_result.presentation.links['FAILED BUILD'] = (
+            build_url)
+        self.api.m.halt('Build %s patch failed' % (
+            'with' if self.with_patch else 'without'))
         raise self.api.m.step.StepFailure('Build %s fails' % self.build_id)
       else:
         self.api.m.python.inline(
