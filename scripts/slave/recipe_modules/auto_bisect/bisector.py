@@ -46,7 +46,7 @@ DEFAULT_SEARCH_RANGE_PERCENTAGE = 0.25
 
 # How long to re-test the initial good-bad range for until significant
 # difference is established.
-REGRESSION_CHECK_TIMEOUT = 2 * 60 * 60
+REGRESSION_CHECK_TIMEOUT = 20 * 60 * 60  # 20 hours. A build times out after 24.
 # If we reach this number of samples on the reference range and have not
 # achieved statistical significance, bail.
 MAX_REQUIRED_SAMPLES = 15
