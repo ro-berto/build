@@ -729,7 +729,7 @@
     "cwd": "[BUILDER_CACHE]/Android_WebView_CTS_L_MR1__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_WebView_CTS_L_MR1__dbg_/src/third_party/android_tools/sdk/platform-tools:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_CTS_L_MR1__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_CTS_L_MR1__dbg_/src/third_party/android_tools/sdk/build-tools/23.0.1:%(PATH)s"
     },
     "name": "Run CTS",
     "stdout": "/path/to/tmp/",

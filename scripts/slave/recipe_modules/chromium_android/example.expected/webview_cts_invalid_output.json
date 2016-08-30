@@ -968,7 +968,7 @@
       "android.webkit"
     ],
     "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/third_party/android_tools/sdk/build-tools/23.0.1:%(PATH)s"
     },
     "name": "Run CTS",
     "stdout": "/path/to/tmp/",

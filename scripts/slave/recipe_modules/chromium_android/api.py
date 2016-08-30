@@ -1157,6 +1157,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_webview_cts(self, command_line_args=None, suffix=None,
                       android_platform='L', arch='arm_64'):
+    is_cts_v2 = (android_platform == 'N')
+
     suffix = ' (%s)' % suffix if suffix else ''
     if command_line_args:
       self._set_webview_command_line(command_line_args)
@@ -1213,11 +1215,18 @@ class AndroidApi(recipe_api.RecipeApi):
                          output=cts_extract_dir)
 
     cts_path = cts_extract_dir.join('android-cts', 'tools', 'cts-tradefed')
-    env = {'PATH': self.m.path.pathsep.join([self.m.adb.adb_dir(), '%(PATH)s'])}
+    env = {'PATH': self.m.path.pathsep.join(
+        [self.m.adb.adb_dir(),
+         str(self.m.path['checkout'].join(
+            'third_party', 'android_tools', 'sdk', 'build-tools', '23.0.1')),
+         '%(PATH)s'])
+    }
 
     try:
+      cts_v1_command = [cts_path, 'run', 'cts', '-p', 'android.webkit']
+      cts_v2_command = [cts_path, 'run', 'cts', '-m', 'CtsWebKitTestCases']
       self.m.step('Run CTS%s' % suffix,
-                  [cts_path, 'run', 'cts', '-p', 'android.webkit'],
+                  cts_v2_command if is_cts_v2 else cts_v1_command,
                   env=env, stdout=self.m.raw_io.output())
     finally:
       result = self.m.step.active_result
@@ -1228,17 +1237,19 @@ class AndroidApi(recipe_api.RecipeApi):
 
     from xml.etree import ElementTree
 
-    def find_test_report_html(test_output):
+    def find_test_report_xml(test_output):
+      test_results_line = ('Test Result: ' if is_cts_v2 else
+                           'Created xml report file at file://')
       if test_output:
         for line in test_output.splitlines():
-          split = line.split('Created xml report file at file://')
+          split = line.split(test_results_line)
           if (len(split) > 1):
             return split[1]
       raise self.m.step.StepFailure(
           "Failed to parse the CTS output for the xml report file location")
 
     report_xml = self.m.file.read('Read test result and report failures',
-                                  find_test_report_html(result.stdout))
+                                  find_test_report_xml(result.stdout))
     root = ElementTree.fromstring(report_xml)
     not_executed_tests = []
     unexpected_test_failures = []
