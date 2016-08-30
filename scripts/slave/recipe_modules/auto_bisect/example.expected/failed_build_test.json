@@ -258,6 +258,8 @@
       "get",
       "--host",
       "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
     "name": "buildbucket.get",

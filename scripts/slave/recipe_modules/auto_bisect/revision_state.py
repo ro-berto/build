@@ -281,9 +281,11 @@ class RevisionState(object):
     return self.build_archived
 
   def _is_build_failed(self):
-    result = self.bisector.api.m.buildbucket.get_build(
+    api = self.bisector.api
+    result = api.m.buildbucket.get_build(
         self.build_id,
-        step_test_data=lambda: self.bisector.api.m.json.test_api.output_stream(
+        api.m.service_account.get_json_path(api.SERVICE_ACCOUNT),
+        step_test_data=lambda: api.m.json.test_api.output_stream(
             {'build': {'result': 'SUCCESS', 'status': 'COMPLETED'}}
         ))
     return (result.stdout['build']['status'] == 'COMPLETED' and

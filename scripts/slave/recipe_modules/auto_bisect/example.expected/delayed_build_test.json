@@ -258,6 +258,8 @@
       "get",
       "--host",
       "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
     "name": "buildbucket.get",
@@ -309,6 +311,8 @@
       "get",
       "--host",
       "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
     "name": "buildbucket.get (2)",
@@ -361,6 +365,8 @@
       "get",
       "--host",
       "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
     "name": "buildbucket.get (3)",
@@ -413,6 +419,8 @@
       "get",
       "--host",
       "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
     "name": "buildbucket.get (4)",
