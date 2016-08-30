@@ -90,6 +90,10 @@ def _ChromiumPerfTesters():
         required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
         num_device_shards=7, num_host_shards=3, target_bits=64,
         browser_name='android-webview', remove_system_webview=True),
+    _CreateTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
+        required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
+        num_device_shards=6, num_host_shards=3, target_bits=32,
+        browser_name='android-webview', remove_system_webview=True),
   ]
   master_spec = {}
   for spec in testers:
