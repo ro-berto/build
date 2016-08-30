@@ -93,8 +93,14 @@ class CronetApi(recipe_api.RecipeApi):
 
 
   def sizes(self, perf_id):
+    # Measures native .so size.
     self.m.chromium.sizes(results_url=self.DASHBOARD_UPLOAD_URL,
                           perf_id=perf_id, platform='android-cronet')
+    if self.m.chromium.c.BUILD_CONFIG == 'Release':
+      # Measure Java dex size.
+      self.m.chromium_android.java_method_count(
+              self.m.chromium.output_dir.join('apks', 'CronetSample.apk'),
+              perf_id=perf_id)
 
 
   def run_tests(

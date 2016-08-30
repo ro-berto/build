@@ -347,6 +347,36 @@
     "name": "sizes"
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--test-platform",
+      "android",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"Android Cronet Lollipop Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"Android Cronet Lollipop Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=java_method_count",
+      "--perf-id=android_cronet_l_builder",
+      "--test-type=java_method_count",
+      "--step-name=method_count",
+      "--builder-name=Android Cronet Lollipop Builder",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/build/android/method_count.py",
+      "[SLAVE_BUILD]/src/out/Release/apks/CronetSample.apk"
+    ],
+    "name": "method_count"
+  },
+  {
     "cmd": [
       "python",
       "-u",
