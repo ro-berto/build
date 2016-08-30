@@ -819,8 +819,10 @@ class Bisector(object):
         return 'winx64_bisect_builder'
       return 'win_perf_bisect_builder'
 
+    # TODO(prasadv): Refactor this code to remove hard coded values and use
+    # target_bit from the bot config. crbug.com/640287
     if 'android' in bot_name:
-      if any(b in bot_name for b in ['arm64', 'nexus9']):
+      if any(b in bot_name for b in ['arm64', 'nexus9', 'nexus5X']):
         return 'android_arm64_perf_bisect_builder'
       return 'android_perf_bisect_builder'
 
@@ -847,8 +849,10 @@ class Bisector(object):
         return 'gs://chrome-perf/Win x64 Builder/full-build-win32_'
       return 'gs://chrome-perf/Win Builder/full-build-win32_'
 
+    # TODO(prasadv): Refactor this code to remove hard coded values and use
+    # target_bit from the bot config. crbug.com/640287
     if 'android' in bot_name:
-      if any(b in bot_name for b in ['arm64', 'nexus9']):
+      if any(b in bot_name for b in ['arm64', 'nexus9', 'nexus5X']):
         return 'gs://chrome-perf/android_perf_rel_arm64/full-build-linux_'
       return 'gs://chrome-perf/android_perf_rel/full-build-linux_'
 
