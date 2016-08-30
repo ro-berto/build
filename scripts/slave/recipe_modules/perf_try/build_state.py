@@ -92,7 +92,14 @@ class BuildState(object):
         'parent_got_revision': self.commit_hash,
         'clobber': True,
         'build_archive_url': self.build_file_path,
-     }
+    }
+
+    deps_override = self.api.m.properties.get('deps_revision_overrides')
+    if deps_override:  # pragma: no cover
+      properties.update({
+          'deps_revision_overrides': deps_override
+      })
+
     if self.with_patch:
       properties.update({
         'issue': self.api.m.properties['issue'],
