@@ -30,7 +30,6 @@ IgnitionTurbofan = TestStepConfig('ignition_turbofan')
 Mjsunit = TestStepConfig('mjsunit')
 Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
-Mjsunit_4 = TestStepConfig('mjsunit', shards=4)
 MjsunitExtra_3 = TestStepConfig('mjsunit_extra', shards=3)
 MjsunitIgnitionTurbofan_2 = TestStepConfig(
     'mjsunit_ignition_turbofan', shards=2)
@@ -1469,7 +1468,7 @@ BUILDERS = {
           'default_expiration': 2 * 60 * 60,
           'default_priority': 35,
         },
-        'tests': [Mjsunit_4, Webkit],
+        'tests': [Mjsunit_3, Webkit],
         'testing': {'platform': 'linux'},
       },
 ####### Category: MIPS
