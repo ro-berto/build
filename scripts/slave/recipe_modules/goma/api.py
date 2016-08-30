@@ -43,10 +43,18 @@ class GomaApi(recipe_api.RecipeApi):
           if canary:
             ref='candidate'
           self._goma_dir = self.m.path['cache'].join('cipd', 'goma')
+
+          # To update:
+          # ./cipd set-ref infra/tools/cloudtail/ \
+          #     -ref goma_recipe_module \
+          #     -version git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3
+          #
+          # To see tags (e.g. git_revision:*):
+          # ./cipd describe infra/tools/cloudtail/linux-amd64 \
+          #     -version goma_recipe_module
           cloudtail_package = (
               'infra/tools/cloudtail/%s' % self.m.cipd.platform_suffix())
-          cloudtail_version = (
-              'git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3')
+          cloudtail_version = 'goma_recipe_module'
 
           self.m.cipd.ensure(self._goma_dir,
                              {goma_package: ref,
