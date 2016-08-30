@@ -449,17 +449,6 @@ class StagerBase(object):
     # files?
 
     print 'last change: %s' % self._build_revision
-    previous_revision = self.GetLastBuildRevision()
-    # TODO(agable): This conditional only works for svn because git can't easily
-    # compare revisions.
-    if (slave_utils.GitOrSubversion(self._src_dir) == 'svn' and
-        self._build_revision <= previous_revision):
-      # If there have been no changes, report it but don't raise an exception.
-      # Someone might have pushed the "force build" button.
-      print 'No changes since last build (r%s <= r%s)' % (self._build_revision,
-                                                          previous_revision)
-      return 0
-
     print 'build name: %s' % self._build_name
 
     archive_name = 'chrome-%s.zip' % self.TargetPlatformName()
