@@ -177,7 +177,7 @@
       "4.7",
       "----",
       "cp",
-      "gs://chrome-perf/android_perf_rel_arm64/full-build-linux_deadbeef.zip",
+      "gs://chrome-perf/Android arm64 Builder/full-build-linux_deadbeef.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
     "name": "gsutil download_build_product"

@@ -41,8 +41,8 @@ class BuildState(object):
       return 'gs://%s/Win Builder/full-build-win32_' % self.bucket
     if 'android' in bot_name:
       if 'nexus9' in bot_name or 'nexus5x' in bot_name:
-        return 'gs://%s/android_perf_rel_arm64/full-build-linux_' % self.bucket
-      return 'gs://%s/android_perf_rel/full-build-linux_' % self.bucket
+        return 'gs://%s/Android arm64 Builder/full-build-linux_' % self.bucket
+      return 'gs://%s/Android Builder/full-build-linux_' % self.bucket
     if 'mac' in bot_name:
       return 'gs://%s/Mac Builder/full-build-mac_' % self.bucket
     return 'gs://%s/Linux Builder/full-build-linux' % self.bucket

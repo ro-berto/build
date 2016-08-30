@@ -46,9 +46,9 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
       'enable_platform_mode': enable_platform_mode,
     }
     if target_bits == 32:
-      builder_name = 'android_perf_rel'
+      builder_name = 'Android Builder'
     elif target_bits == 64:
-      builder_name = 'android_perf_rel_arm64'
+      builder_name = 'Android arm64 Builder'
       spec['recipe_config'] = 'tests_arm64'
     spec['path'] = lambda api: '%s/full-build-linux_%s.zip' % (
         builder_name, api.properties['parent_revision'])

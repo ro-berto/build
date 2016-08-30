@@ -52,7 +52,7 @@ BUILDERS = freeze({
       },
       'upload': {
         'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
+        'path': lambda api: ('Android Builder/full-build-linux_%s.zip'
                              % api.properties['revision']),
       },
       'run_mb': True,
@@ -85,7 +85,7 @@ BUILDERS = freeze({
       'upload': {
         'bucket': 'chrome-perf',
         'path': lambda api: (
-            'android_perf_rel_arm64/full-build-linux_%s.zip'
+            'Android arm64 Builder/full-build-linux_%s.zip'
             % api.properties['revision']),
       },
       'run_mb': True,

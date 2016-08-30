@@ -301,11 +301,11 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://chrome-perf/android_perf_rel_arm64/full-build-linux_267739.zip"
+      "gs://chrome-perf/Android arm64 Builder/full-build-linux_267739.zip"
     ],
     "name": "gsutil upload_build_product",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/android_perf_rel_arm64/full-build-linux_267739.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/Android arm64 Builder/full-build-linux_267739.zip@@@"
     ]
   },
   {

@@ -167,7 +167,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+      "gs://chrome-perf/Android Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
     "name": "gsutil ls"
   },
@@ -179,7 +179,7 @@
       "cr-buildbucket.appspot.com",
       "--service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Android Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
     "name": "buildbucket.put",
     "stdout": "/path/to/tmp/json",
@@ -205,7 +205,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
+      "gs://chrome-perf/Android Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
     "name": "gsutil ls (2)"
   },
@@ -217,7 +217,7 @@
       "cr-buildbucket.appspot.com",
       "--service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/android_perf_rel/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Android Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
     "name": "buildbucket.put (2)",
     "stdout": "/path/to/tmp/json",
@@ -243,7 +243,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+      "gs://chrome-perf/Android Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
     "name": "gsutil ls (3)"
   },
@@ -261,7 +261,7 @@
             "test_type": "perf"
           },
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
-          "parent_build_archive_url": "gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
+          "parent_build_archive_url": "gs://chrome-perf/Android Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
           "parent_got_revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222",
           "revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222",
           "revision_ladder": {
@@ -323,7 +323,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
+      "gs://chrome-perf/Android Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
     "name": "gsutil ls (5)"
   },
@@ -341,7 +341,7 @@
             "test_type": "perf"
           },
           "job_name": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
-          "parent_build_archive_url": "gs://chrome-perf/android_perf_rel/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
+          "parent_build_archive_url": "gs://chrome-perf/Android Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
           "parent_got_revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
           "revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
           "revision_ladder": {
@@ -403,7 +403,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
+      "gs://chrome-perf/Android Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "name": "gsutil ls (7)"
   },
@@ -415,7 +415,7 @@
       "cr-buildbucket.appspot.com",
       "--service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/android_perf_rel/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Android Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
     "name": "buildbucket.put (3)",
     "stdout": "/path/to/tmp/json",
@@ -441,7 +441,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
+      "gs://chrome-perf/Android Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "name": "gsutil ls (8)"
   },
@@ -459,7 +459,7 @@
             "test_type": "perf"
           },
           "job_name": "dcdcdc0ff1122212323134879ddceeb1240b0988-test",
-          "parent_build_archive_url": "gs://chrome-perf/android_perf_rel/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
+          "parent_build_archive_url": "gs://chrome-perf/Android Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
           "parent_got_revision": "dcdcdc0ff1122212323134879ddceeb1240b0988",
           "revision": "dcdcdc0ff1122212323134879ddceeb1240b0988",
           "revision_ladder": {
@@ -683,7 +683,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_51e7ed4b63ad81d8b499e42b888149349afaaca1.zip"
+      "gs://chrome-perf/Android Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_51e7ed4b63ad81d8b499e42b888149349afaaca1.zip"
     ],
     "name": "gsutil ls (10)"
   },
@@ -695,7 +695,7 @@
       "cr-buildbucket.appspot.com",
       "--service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_51e7ed4b63ad81d8b499e42b888149349afaaca1.zip\\\", \\\"clobber\\\": true, \\\"deps_revision_overrides\\\": {\\\"src/v8\\\": \\\"003\\\"}, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Android Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_51e7ed4b63ad81d8b499e42b888149349afaaca1.zip\\\", \\\"clobber\\\": true, \\\"deps_revision_overrides\\\": {\\\"src/v8\\\": \\\"003\\\"}, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
     "name": "buildbucket.put (4)",
     "stdout": "/path/to/tmp/json",
