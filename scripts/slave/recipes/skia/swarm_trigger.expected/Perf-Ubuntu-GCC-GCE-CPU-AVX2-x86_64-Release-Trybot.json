@@ -1095,7 +1095,7 @@
       "5",
       "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot/data",
       "9046e2e693bb92a76e972b694580e5d17ad10748",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "[DEPOT_TOOLS]/gsutil.py",
       "500"
     ],
     "cwd": "[SLAVE_BUILD]/skia",

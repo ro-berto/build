@@ -813,7 +813,7 @@
       "5",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0",
       "9046e2e693bb92a76e972b694580e5d17ad10748",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "[DEPOT_TOOLS]/gsutil.py",
       "500"
     ],
     "cwd": "[SLAVE_BUILD]/skia",

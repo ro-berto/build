@@ -457,8 +457,7 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
     api.file.copy('perf_results', src_results_file, dst_results_file,
                   infra_step=True)
 
-    gsutil_path = api.path['depot_tools'].join(
-        'third_party', 'gsutil', 'gsutil')
+    gsutil_path = api.path['depot_tools'].join('gsutil.py')
     upload_args = [api.properties['buildername'], api.properties['buildnumber'],
                    perf_data_dir, got_revision, gsutil_path]
     if is_trybot:
@@ -565,8 +564,7 @@ def upload_coverage_results(api, task, got_revision, is_trybot):
   api.file.remove('old nanobench JSON', src_nano_file)
 
   # Upload nanobench JSON data.
-  gsutil_path = api.path['depot_tools'].join(
-      'third_party', 'gsutil', 'gsutil')
+  gsutil_path = api.path['depot_tools'].join('gsutil.py')
   upload_args = [api.properties['buildername'], api.properties['buildnumber'],
                  results_dir, got_revision, gsutil_path]
   if is_trybot:
