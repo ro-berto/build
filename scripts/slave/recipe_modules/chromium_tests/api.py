@@ -456,7 +456,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
               update_properties=update_step.presentation.properties,
               exclude_perf_test_files=True,
-              store_by_hash=False
+              store_by_hash=False,
+              platform=self.m.chromium.c.HOST_PLATFORM
           )
 
         self.m.archive.zip_and_upload_build(

@@ -171,6 +171,8 @@ def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
                            zip_file_name, strip_files=None):
   """Creates an unversioned full build archive.
   Returns the path of the created archive."""
+  # Prevents having zip_file_list to contain duplicates
+  zip_file_list = list(set(zip_file_list))
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
                                                zip_file_name,
                                                zip_file_list,
@@ -271,11 +273,11 @@ class PathMatcher(object):
     self.inclusions = CommaStrParser(options.include_files)
     self.exclusions = (CommaStrParser(options.exclude_files)
                        + chromium_utils.FileExclusions())
-
     self.regex_whitelist = FileRegexWhitelist(options)
     self.regex_blacklist = FileRegexBlacklist(options)
     self.exclude_unmatched = options.exclude_unmatched
-    self.ignore_regex = options.ignore_regex
+    self.exclude_extra = options.exclude_extra
+    self.custom_whitelist = options.whitelist
 
   def __str__(self):
     return '\n  '.join([
@@ -285,7 +287,8 @@ class PathMatcher(object):
         "Whitelist regex: '%s'" % self.regex_whitelist,
         "Blacklist regex: '%s'" % self.regex_blacklist,
         'Zip unmatched files: %s' % (not self.exclude_unmatched),
-        'Ignore regex matches: %s' % self.ignore_regex])
+        'Exclude extra: %s' % self.exclude_extra,
+        "Custom Whitelist regex: '%s'" % self.custom_whitelist])
 
 
   def Match(self, filename):
@@ -293,7 +296,10 @@ class PathMatcher(object):
       return True
     if filename in self.exclusions:
       return False
-    if self.ignore_regex:
+    if (self.custom_whitelist and
+       re.match(self.custom_whitelist, filename)):
+      return True
+    if self.exclude_extra:
       return False
     if re.match(self.regex_whitelist, filename):
       return True
@@ -423,8 +429,11 @@ def main(argv):
   option_parser.add_option('--include-files', default='',
                            help='Comma separated list of files that should '
                                 'always be included in the zip.')
-  option_parser.add_option('--ignore-regex', action='store_true',
-                           default=False, help='Ignores regex matches')
+  option_parser.add_option('--whitelist', default='',
+                           help='Custom regex whitelist to include files')
+  option_parser.add_option('--exclude-extra', action='store_true',
+                           default=False, help='Only includes include file list'
+                           'and regex whitelist match provided')
   option_parser.add_option('--master-name', help='Name of the buildbot master.')
   option_parser.add_option('--slave-name', help='Name of the buildbot slave.')
   option_parser.add_option('--build-number', type=int,

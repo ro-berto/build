@@ -133,8 +133,8 @@ def _AddTestSpec(name, perf_id, platform, target_bits=64,
 _AddBuildSpec('Android Builder', 'android', target_bits=32)
 _AddBuildSpec('Android arm64 Builder', 'android')
 _AddBuildSpec('Win Builder', 'win', target_bits=32)
-_AddBuildSpec('Win x64 Builder', 'win')
-_AddBuildSpec('Mac Builder', 'mac')
+_AddBuildSpec('Win x64 Builder', 'win', add_to_bisect=True)
+_AddBuildSpec('Mac Builder', 'mac', add_to_bisect=True)
 _AddBuildSpec('Linux Builder', 'linux', add_to_bisect=True)
 
 

@@ -4,36 +4,75 @@
 
 """ Defines variables necessary to make lightweight linux perf builds.
 
-Declares required files to run manual bisect script on chrome Linux
-builds in perf. Binary files that should be stripped to reduce zip file
-size are declared. The file list was gotten from the local chrome 
-executable path in Linux. (This can be retrieved by typing 'chrome://version'
-in chrome and following the executable path. The list needs to be updated if
-future chrome versions require additional files.
+Declares required files and whitelisted files to run manual bisect
+script on perf builds. Binary files that should be
+stripped to reduce zip file size are declared. The file list was
+gotten from the local chrome executable path. (This can be retrieved by
+typing 'chrome://version' in chrome and following the executable path.
+The list needs to be updated if future chrome versions require additional files.
 """
+CHROME_REQUIRED_FILES = {
+  'linux': [
+    'chrome',
+    'chrome_100_percent.pak',
+    'chrome_200_percent.pak',
+    'default_apps',
+    'icudtl.dat',
+    'libwidevinecdm.so',
+    'locales',
+    'nacl_helper',
+    'nacl_helper_bootstrap',
+    'nacl_irt_x86_64.nexe',
+    'natives_blob.bin',
+    'PepperFlash',
+    'product_logo_48.png',
+    'resources.pak',
+    'snapshot_blob.bin',
+    'xdg-mime',
+    'xdg-settings'
+  ],
+  'win': [
+    'chrome.dll',
+    'chrome.exe',
+    'chrome_100_percent.pak',
+    'chrome_200_percent.pak',
+    'chrome_child.dll',
+    'chrome_elf.dll',
+    'chrome_watcher.dll',
+    'default_apps',
+    'd3dcompiler_47.dll',
+    'icudtl.dat',
+    'libEGL.dll',
+    'libGLESv2.dll',
+    'locales',
+    'nacl_irt_x86_64.nexe',
+    'natives_blob.bin',
+    'PepperFlash',
+    'resources.pak',
+    'SecondaryTile.png',
+    'snapshot_blob.bin'
+  ],
+  'mac': [
+    'Google Chrome.app'
+  ]
+}
 
-CHROME_REQUIRED_FILES = [
-  'chrome',
-  'chrome_100_percent.pak',
-  'chrome_200_percent.pak',
-  'default_apps',
-  'icudtl.dat',
-  'libwidevinecdm.so',
-  'locales',
-  'nacl_helper',
-  'nacl_helper_bootstrap',
-  'nacl_irt_x86_64.nexe',
-  'natives_blob.bin',
-  'PepperFlash',
-  'product_logo_48.png',
-  'resources.pak',
-  'snapshot_blob.bin',
-  'xdg-mime',
-  'xdg-settings',
-]
+CHROME_WHITELIST_FILES = {
+  'linux': '',
+  'win': '^\d+\.\d+\.\d+\.\d+\.manifest$',
+  'mac': ''
+}
 
+CHROME_STRIP_LIST = {
+  'linux': [
+    'chrome',
+    'nacl_helper'
+  ],
+  'win': [
+    # No stripping symbols from win64 archives.
 
-CHROME_STRIP_LIST = [
-  'chrome',
-  'nacl_helper'
-]
+  ],
+  'mac': [
+    # No stripping symbols from Mac archives.
+  ]
+}

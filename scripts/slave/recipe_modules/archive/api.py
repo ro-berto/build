@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 import re
+import sys
+
 import manual_bisect_files
 from recipe_engine import recipe_api
 
@@ -92,7 +94,8 @@ class ArchiveApi(recipe_api.RecipeApi):
       self, step_name, target, build_url=None, src_dir=None,
       build_revision=None, cros_board=None, package_dsym_files=False,
       exclude_files=None, exclude_perf_test_files=False,
-      update_properties=None, store_by_hash=True, **kwargs):
+      update_properties=None, store_by_hash=True, 
+      platform=None, **kwargs):
     """Returns a step invoking zip_build.py to zip up a Chromium build.
        If build_url is specified, also uploads the build."""
     if not src_dir:
@@ -121,12 +124,23 @@ class ArchiveApi(recipe_api.RecipeApi):
       args.extend(['--exclude-files', exclude_files])
     if 'gs_acl' in self.m.properties:
       args.extend(['--gs-acl', self.m.properties['gs_acl']])
-    if exclude_perf_test_files:
-      inclusions = ','.join(manual_bisect_files.CHROME_REQUIRED_FILES)
-      strip_files = ','.join(manual_bisect_files.CHROME_STRIP_LIST)
-      args.extend(['--include-files', inclusions])
-      args.extend(['--ignore-regex'])
-      args.extend(['--strip-files', strip_files])
+    if exclude_perf_test_files and platform:
+      include_bisect_file_list = (
+        manual_bisect_files.CHROME_REQUIRED_FILES.get(platform))
+      include_bisect_strip_list = (
+        manual_bisect_files.CHROME_STRIP_LIST.get(platform))
+      include_bisect_whitelist = (
+        manual_bisect_files.CHROME_WHITELIST_FILES.get(platform))
+      if include_bisect_file_list:
+        inclusions = ','.join(include_bisect_file_list)
+        args.extend(['--include-files', inclusions])
+      if include_bisect_strip_list:
+        strip_files = ','.join(include_bisect_strip_list)
+        args.extend(['--strip-files', strip_files])
+      if include_bisect_whitelist:
+        args.extend(['--whitelist', include_bisect_whitelist])
+      args.extend(['--not-include-extra'])
+
       # If update_properties is passed in and store_by_hash is False,
       # we store it with commit position number instead of a hash
       if update_properties and not store_by_hash:
