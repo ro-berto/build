@@ -28,8 +28,6 @@ def _RunStepsInternal(api):
   api.gclient.set_config(repo_name)
 
   kwargs = {}
-  if patch_storage == 'gerrit':
-    kwargs['gerrit_rebase_patch_ref'] = True
   bot_update_step = api.bot_update.ensure_checkout(
       force=force_checkout,
       patch_oauth2=codereview_auth,
