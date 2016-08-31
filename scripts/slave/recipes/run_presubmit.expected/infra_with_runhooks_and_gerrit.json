@@ -26,8 +26,7 @@
       "/path/to/tmp/json",
       "--revision",
       "infra@HEAD",
-      "--output_manifest",
-      "--gerrit_rebase_patch_ref"
+      "--output_manifest"
     ],
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"

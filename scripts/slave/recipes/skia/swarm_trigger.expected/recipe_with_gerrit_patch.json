@@ -91,8 +91,7 @@
       "--gerrit_ref",
       "refs/changes/00/2100/2",
       "--root",
-      "[SLAVE_BUILD]/skia",
-      "--gerrit_rebase_patch_ref"
+      "[SLAVE_BUILD]/skia"
     ],
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
