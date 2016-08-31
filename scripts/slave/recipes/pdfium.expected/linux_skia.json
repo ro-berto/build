@@ -67,7 +67,7 @@
       "--root=[SLAVE_BUILD]/pdfium",
       "gen",
       "//out/Debug",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=true pdf_is_standalone=true"
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=true pdf_is_standalone=true use_sysroot=false"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "gn gen"
