@@ -324,7 +324,7 @@
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--include-files",
       "Google Chrome.app",
-      "--not-include-extra",
+      "--exclude-extra",
       "--build_revision",
       "170242",
       "--factory-properties",

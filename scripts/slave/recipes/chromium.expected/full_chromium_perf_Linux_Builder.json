@@ -305,7 +305,7 @@
       "chrome,chrome_100_percent.pak,chrome_200_percent.pak,default_apps,icudtl.dat,libwidevinecdm.so,locales,nacl_helper,nacl_helper_bootstrap,nacl_irt_x86_64.nexe,natives_blob.bin,PepperFlash,product_logo_48.png,resources.pak,snapshot_blob.bin,xdg-mime,xdg-settings",
       "--strip-files",
       "chrome,nacl_helper",
-      "--not-include-extra",
+      "--exclude-extra",
       "--build_revision",
       "170242",
       "--factory-properties",

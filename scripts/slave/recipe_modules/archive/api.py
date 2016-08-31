@@ -94,7 +94,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       self, step_name, target, build_url=None, src_dir=None,
       build_revision=None, cros_board=None, package_dsym_files=False,
       exclude_files=None, exclude_perf_test_files=False,
-      update_properties=None, store_by_hash=True, 
+      update_properties=None, store_by_hash=True,
       platform=None, **kwargs):
     """Returns a step invoking zip_build.py to zip up a Chromium build.
        If build_url is specified, also uploads the build."""
@@ -139,7 +139,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         args.extend(['--strip-files', strip_files])
       if include_bisect_whitelist:
         args.extend(['--whitelist', include_bisect_whitelist])
-      args.extend(['--not-include-extra'])
+      args.extend(['--exclude-extra'])
 
       # If update_properties is passed in and store_by_hash is False,
       # we store it with commit position number instead of a hash
