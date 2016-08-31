@@ -41,8 +41,8 @@ def Update(c):
           'iOS64 Release',
           'iOS32 Simulator Debug',
           'iOS64 Simulator Debug',
-          'iOS64 Debug (GN)',
-          'iOS64 Release (GN)',
+          'iOS64 Debug (GYP)',
+          'iOS64 Release (GYP)',
           'iOS API Framework Builder',
       ]),
   ])
@@ -91,13 +91,13 @@ def Update(c):
       'recipe': 'webrtc/ios',
     },
     {
-      'name': 'iOS64 Debug (GN)',
-      'slavebuilddir': 'mac64_gn',
+      'name': 'iOS64 Debug (GYP)',
+      'slavebuilddir': 'mac64_gyp',
       'recipe': 'webrtc/ios',
     },
     {
-      'name': 'iOS64 Release (GN)',
-      'slavebuilddir': 'mac64_gn',
+      'name': 'iOS64 Release (GYP)',
+      'slavebuilddir': 'mac64_gyp',
       'recipe': 'webrtc/ios',
     },
     {
