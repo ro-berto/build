@@ -4,8 +4,8 @@
 
 DEPS = [
   'depot_tools/bot_update',
-  'file',
   'depot_tools/gclient',
+  'file',
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -179,16 +179,16 @@ def RunSteps(api):
 
       needs_xvfb = (runtime in ['drt', 'dartium', 'chrome', 'ff'] and
                     system == 'linux')
-      RunTests(api, tuple(test_args), test_specs, use_xvfb=needs_xvfb)
+      RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
       test_args.append('--fast-startup')
       for spec in test_specs:
         spec['name'] = spec['name'].replace(' tests', ' fast-startup tests')
-      RunTests(api, tuple(test_args), test_specs, use_xvfb=needs_xvfb)
+      RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
       if runtime in ['d8', 'drt']:
         test_args.append('--checked')
         for spec in test_specs:
           spec['name'] = spec['name'].replace(' tests', ' checked tests')
-        RunTests(api, tuple(test_args), test_specs, use_xvfb=needs_xvfb)
+        RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
 
     # TODO(whesse): Add archive coredumps step from dart_factory.py.
     api.python('taskkill after testing',

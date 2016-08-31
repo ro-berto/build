@@ -28,7 +28,14 @@ def RunSteps(api):
     'dart2js-mac10.11-safari-1-3' + postfix,
     'dart2js-mac10.11-safari-2-3' + postfix,
     'dart2js-mac10.11-safari-3-3' + postfix,
-    'dart2js-mac10.11-chrome' + postfix]
+    'dart2js-mac10.11-chrome' + postfix,
+    'pkg-mac10.11-release' + postfix,
+    'pkg-win7-release' + postfix,
+    'pkg-linux-release' + postfix,
+    'analyzer-mac10.11-release' + postfix,
+    'analyzer-win7-release' + postfix,
+    'analyzer-linux-release' + postfix,
+  ]
 
   for option in ['minified', 'hostchecked']:
     for shard in range(1,6):

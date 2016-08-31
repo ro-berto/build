@@ -6,8 +6,8 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
   'depot_tools/bot_update',
-  'file',
   'depot_tools/gclient',
+  'file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
