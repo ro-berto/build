@@ -47,6 +47,7 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
   # Prepare the arguments to pass in.
   args = [
       'is_debug=%s' % gn_bool[not rel],
+      'is_component_build=false',
       'pdf_enable_v8=%s' % gn_bool[v8],
       'pdf_enable_xfa=%s' % gn_bool[xfa],
       'pdf_use_skia=%s' % gn_bool[skia],
