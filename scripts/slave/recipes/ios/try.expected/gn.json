@@ -195,20 +195,6 @@
     "name": "finalize build config"
   },
   {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
-      "--json-file",
-      "/path/to/tmp/json",
-      "--version",
-      "fake xcode version"
-    ],
-    "name": "find xcode",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -263,6 +249,20 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--version",
+      "fake xcode version"
+    ],
+    "name": "find xcode",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },

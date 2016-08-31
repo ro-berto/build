@@ -217,14 +217,6 @@ class iOSApi(recipe_api.RecipeApi):
       self.m.json.dumps(self.__config, indent=2),
     ])
 
-    step_result = self.m.step(
-      'find xcode', [
-      self.package_repo_resource(
-        'scripts', 'slave', 'ios', 'find_xcode.py'),
-      '--json-file', self.m.json.output(),
-      '--version', self.__config['xcode version'],
-    ], step_test_data=lambda: self.m.json.test_api.output({}))
-
     cfg = self.m.chromium.make_config()
 
     if self.using_gyp:
@@ -259,6 +251,14 @@ class iOSApi(recipe_api.RecipeApi):
     assert self.__config is not None
 
     suffix = ' (%s)' % suffix if suffix else ''
+
+    self.m.step(
+      'find xcode', [
+      self.package_repo_resource(
+        'scripts', 'slave', 'ios', 'find_xcode.py'),
+      '--json-file', self.m.json.output(),
+      '--version', self.__config['xcode version'],
+    ], step_test_data=lambda: self.m.json.test_api.output({}))
 
     if self.using_mb:
       self.m.chromium.c.project_generator.tool = 'mb'
