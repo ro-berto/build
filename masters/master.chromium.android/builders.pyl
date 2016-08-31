@@ -3,6 +3,7 @@
   "master_port": 20101,
   "master_port_alt": 40101,
   "slave_port": 30101,
+  "pubsub_service_account_file": "service-account-luci-milo.json",
   "templates": ["templates", "../master.chromium/templates"],
 
   "default_remote_run_properties": {

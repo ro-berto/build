@@ -10,3 +10,6 @@ class ChromiumOS(Master.ChromiumOSBase):
   project_name = 'ChromiumOS'
   master_port_id = 0
   buildbot_url = 'http://build.chromium.org/p/chromiumos/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromiumos'

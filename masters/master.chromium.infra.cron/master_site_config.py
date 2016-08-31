@@ -12,3 +12,6 @@ class InfraCron(Master.Master1):
   buildbot_url = 'https://build.chromium.org/p/chromium.infra.cron/'
   service_account_file = 'service-account-infra-cron.json'
   buildbucket_bucket = 'master.chromium.infra.cron'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.infra.cron'

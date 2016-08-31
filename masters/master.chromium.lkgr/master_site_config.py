@@ -13,3 +13,6 @@ class ChromiumLKGR(Master.Master1):
   master_port_alt = 8218
   poll_url = 'https://chromium-status.appspot.com/lkgr'
   buildbot_url = 'http://build.chromium.org/p/chromium.lkgr/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.lkgr'

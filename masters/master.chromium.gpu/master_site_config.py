@@ -14,3 +14,6 @@ class ChromiumGPU(Master.Master1):
   tree_closing_notification_recipients = [
     'chrome-gpu-build-failures@google.com']
   buildbot_url = 'http://build.chromium.org/p/chromium.gpu/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.gpu'

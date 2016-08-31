@@ -12,3 +12,6 @@ class ChromiumMemoryFull(Master.Master1):
   slave_port = 30105
   master_port_alt = 25105
   buildbot_url = 'http://build.chromium.org/p/chromium.memory.full/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.memory.full'

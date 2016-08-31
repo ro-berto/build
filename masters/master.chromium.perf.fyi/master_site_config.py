@@ -44,3 +44,6 @@ class ChromiumPerfFyi(Master.Master1):
   # commit URLs, see long comment above), so buildbucket reuses "changes" table
   # rows created by gitiles poller.
   buildbucket_unique_change_urls = True
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.perf.fyi'

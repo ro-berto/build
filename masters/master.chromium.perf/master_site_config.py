@@ -14,3 +14,6 @@ class ChromiumPerf(Master.Master1):
   buildbot_url = 'http://build.chromium.org/p/chromium.perf/'
   service_account_file = 'service-account-chromium.json'
   buildbucket_bucket = 'master.chromium.perf'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.perf'
