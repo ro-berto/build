@@ -12,3 +12,6 @@ class ART(Master.Master3):
   slave_port = 8300
   master_port_alt = 8400
   buildbot_url = 'http://build.chromium.org/p/client.art/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.art'

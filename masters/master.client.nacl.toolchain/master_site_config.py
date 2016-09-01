@@ -12,3 +12,6 @@ class NativeClientToolchain(Master.NaClBase):
   slave_port = 8131
   master_port_alt = 8231
   buildbot_url = 'http://build.chromium.org/p/client.nacl.toolchain/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.nacl.toolchain'

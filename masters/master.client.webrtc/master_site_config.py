@@ -24,3 +24,6 @@ class WebRTC(Master.Master3):
   buildbot_url = 'http://build.chromium.org/p/client.webrtc/'
   service_account_file = 'service-account-webrtc.json'
   buildbucket_bucket = 'master.client.webrtc'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.webrtc'

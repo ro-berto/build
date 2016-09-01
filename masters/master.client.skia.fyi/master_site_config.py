@@ -18,3 +18,6 @@ class SkiaFYI(Master.Master3):
   buildbot_url = 'http://build.chromium.org/p/client.skia.fyi/'
   service_account_file = global_constants.SERVICE_ACCOUNT_FILE
   buildbucket_bucket = 'master.client.skia.fyi'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.skia.fyi'

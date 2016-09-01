@@ -16,3 +16,6 @@ class Dartino(Master.Master3):
   # Enable when there's a public waterfall.
   master_port_alt = 25316
   buildbot_url = 'http://build.chromium.org/p/client.fletch/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.fletch'

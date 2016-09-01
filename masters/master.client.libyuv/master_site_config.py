@@ -16,3 +16,6 @@ class Libyuv(Master.Master3):
   project_url = 'https://code.google.com/p/libyuv/'
   from_address = 'libyuv-cb-watchlist@google.com'
   permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.libyuv'

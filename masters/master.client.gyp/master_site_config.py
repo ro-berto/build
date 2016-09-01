@@ -20,3 +20,6 @@ class GYP(Master.Master3):
   buildbot_url = 'https://build.chromium.org/p/client.gyp/'
   buildbucket_bucket = 'master.client.gyp'
   service_account_file = 'service-account-gyp.json'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.gyp'

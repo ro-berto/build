@@ -12,3 +12,6 @@ class NativeClientSDK(Master.NaClBase):
   slave_port = 8134
   master_port_alt = 8234
   buildbot_url = 'http://build.chromium.org/p/client.nacl.sdk/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.nacl.sdk'

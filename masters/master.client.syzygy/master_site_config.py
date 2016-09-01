@@ -13,3 +13,6 @@ class Syzygy(Master.Master3):
   slave_port = 8142
   master_port_alt = 8242
   buildbot_url = 'https://build.chromium.org/p/client.syzygy/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.syzygy'

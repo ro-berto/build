@@ -12,3 +12,6 @@ class DynamoRIO(Master.Master3):
   slave_port = 8159
   master_port_alt = 8259
   buildbot_url = 'http://build.chromium.org/p/client.dynamorio/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.dynamorio'

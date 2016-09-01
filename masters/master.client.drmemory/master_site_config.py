@@ -12,3 +12,6 @@ class DrMemory(Master.Master3):
   slave_port = 8158
   master_port_alt = 8258
   buildbot_url = 'http://build.chromium.org/p/client.drmemory/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.drmemory'

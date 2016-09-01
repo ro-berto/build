@@ -16,3 +16,6 @@ class WebPorts(Master.NaClBase):
   store_revisions_url = base_app_url + '/revisions'
   last_good_url = base_app_url + '/lkgr'
   buildbot_url = 'http://build.chromium.org/p/client.nacl.ports/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.nacl.ports'

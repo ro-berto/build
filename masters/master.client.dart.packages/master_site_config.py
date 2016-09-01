@@ -18,3 +18,6 @@ class DartPackages(Master.Master3):
   # This IP refers to a golem server in BigCluster
   http_status_push_url = "http://108.170.219.8:8080/submit-buildbot-info/"
   buildbot_url = 'http://build.chromium.org/p/client.dart.packages/'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'client.dart.packages'
