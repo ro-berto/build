@@ -52,7 +52,8 @@
       "src@origin/lkcr",
       "--revision",
       "src/v8@HEAD",
-      "--output_manifest"
+      "--output_manifest",
+      "--gerrit_no_rebase_patch_ref"
     ],
     "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel",
     "env": {

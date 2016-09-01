@@ -44,7 +44,8 @@
       "/path/to/tmp/json",
       "--revision",
       "src@r6",
-      "--output_manifest"
+      "--output_manifest",
+      "--gerrit_no_rebase_patch_ref"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -320,7 +321,8 @@
       "/path/to/tmp/json",
       "--revision",
       "src@r3",
-      "--output_manifest"
+      "--output_manifest",
+      "--gerrit_no_rebase_patch_ref"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -703,7 +705,8 @@
       "/path/to/tmp/json",
       "--revision",
       "src@r4",
-      "--output_manifest"
+      "--output_manifest",
+      "--gerrit_no_rebase_patch_ref"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {

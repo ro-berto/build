@@ -55,7 +55,8 @@
       "--revision",
       "src/third_party/angle@HEAD",
       "--force",
-      "--output_manifest"
+      "--output_manifest",
+      "--gerrit_no_rebase_patch_ref"
     ],
     "cwd": "[BUILDER_CACHE]\\GPU_Win_Clang_Builder__dbg_",
     "env": {

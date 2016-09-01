@@ -53,7 +53,8 @@
       "--revision",
       "src@1111111",
       "--force",
-      "--output_manifest"
+      "--output_manifest",
+      "--gerrit_no_rebase_patch_ref"
     ],
     "cwd": "[BUILDER_CACHE]\\ClangToTWin64_dll__tester",
     "env": {

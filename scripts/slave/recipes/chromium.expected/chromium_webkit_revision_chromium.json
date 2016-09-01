@@ -23,7 +23,8 @@
       "--revision",
       "src@3edb4989f8f69c968c0df14cb1c26d21dd19bf1f",
       "--force",
-      "--output_manifest"
+      "--output_manifest",
+      "--gerrit_no_rebase_patch_ref"
     ],
     "env": {
       "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",

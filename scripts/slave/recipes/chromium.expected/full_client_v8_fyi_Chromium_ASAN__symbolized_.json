@@ -47,7 +47,8 @@
       "--revision",
       "src/v8@22135",
       "--force",
-      "--output_manifest"
+      "--output_manifest",
+      "--gerrit_no_rebase_patch_ref"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_ASAN__symbolized_",
     "env": {

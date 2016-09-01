@@ -74,7 +74,10 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
         patch_root=bot_config.get('patch_root'),
         root_solution_revision=root_solution_revision,
         clobber=bot_config.get('clobber', False),
-        force=force, **kwargs)
+        force=force,
+        # TODO(tandrii): remove this temp fix for Angle http://crbug.com/642914.
+        gerrit_rebase_patch_ref=False,
+        **kwargs)
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])

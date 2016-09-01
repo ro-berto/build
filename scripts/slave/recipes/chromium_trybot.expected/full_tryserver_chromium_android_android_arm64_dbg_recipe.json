@@ -50,7 +50,8 @@
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
-      "--output_manifest"
+      "--output_manifest",
+      "--gerrit_no_rebase_patch_ref"
     ],
     "cwd": "[BUILDER_CACHE]/android_arm64_dbg_recipe",
     "env": {
