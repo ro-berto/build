@@ -99,6 +99,9 @@ class BuildState(object):
       properties.update({
           'deps_revision_overrides': dict(deps_override)
       })
+      patch_project = self.api.m.properties.get('patch_project')
+      if patch_project:
+        properties.update({'patch_project': patch_project})
 
     if self.with_patch:
       properties.update({
