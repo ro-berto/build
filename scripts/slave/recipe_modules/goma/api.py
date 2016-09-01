@@ -26,6 +26,11 @@ class GomaApi(recipe_api.RecipeApi):
     assert self._goma_dir
     return self.m.path.join(self._goma_dir, 'cloudtail')
 
+  @property
+  def json_path(self):
+    assert self._goma_dir
+    return self.m.path.join(self._goma_dir, 'jsonstatus')
+
   def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):
       with self.m.step.context({'infra_step': True}):
@@ -149,17 +154,17 @@ class GomaApi(recipe_api.RecipeApi):
       self._start_cloudtail()
 
     except self.m.step.InfraFailure as e: # pragma: no cover
-      upload_logs_name = 'upload_goma_start_failed_logs'
-
       try:
-        self.m.python(
-            name='stop_goma (start failure)',
-            script=self.goma_ctl,
-            args=['stop'], env=self._goma_ctl_env, **kwargs)
+        with self.m.step.defer_results():
+          self.m.python(
+              name='stop_goma (start failure)',
+              script=self.goma_ctl,
+              args=['stop'], env=self._goma_ctl_env, **kwargs)
+          self._upload_logs(name='upload_goma_start_failed_logs',
+                            skip_sendgomatsmon=True)
       except self.m.step.StepFailure:
-        upload_logs_name = 'upload_goma_start_and_stop_failed_logs'
+        pass
 
-      self._upload_logs(name=upload_logs_name)
       raise e
 
   def stop(self, ninja_log_outdir=None, ninja_log_compiler=None,
@@ -177,6 +182,9 @@ class GomaApi(recipe_api.RecipeApi):
     assert self._goma_started
 
     with self.m.step.defer_results():
+      self.m.python(name='goma_jsonstatus', script=self.goma_ctl,
+                    args=['jsonstatus', self.json_path],
+                    env=self._goma_ctl_env, **kwargs)
       self.m.python(name='stop_goma', script=self.goma_ctl,
                     args=['stop'], env=self._goma_ctl_env, **kwargs)
       self._upload_logs(ninja_log_outdir, ninja_log_compiler,
@@ -188,10 +196,16 @@ class GomaApi(recipe_api.RecipeApi):
 
   def _upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
                    ninja_log_command=None, ninja_log_exit_status=None,
-                   name=None):
+                   name=None, skip_sendgomatsmon=False):
     args = [
-        '--upload-compiler-proxy-info'
+        '--upload-compiler-proxy-info',
     ]
+
+    if skip_sendgomatsmon: # pragma: no cover
+      args.append('--skip-sendgomatsmon')
+
+    if self.json_path:
+      args.extend(['--json-status', self.json_path])
 
     if ninja_log_outdir:
       assert ninja_log_compiler is not None
@@ -204,6 +218,8 @@ class GomaApi(recipe_api.RecipeApi):
         '--ninja-log-command', ninja_log_command,
         '--ninja-log-exit-status', ninja_log_exit_status,
       ])
+    else:
+      args.extend(['--ninja-log-exit-status', '-1'])
 
     if self.build_data_dir:
       args.extend([

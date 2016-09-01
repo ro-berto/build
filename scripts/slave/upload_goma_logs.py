@@ -43,6 +43,15 @@ def main():
                       metavar='DIR',
                       help='Directory that has build data used by event_mon.')
 
+  parser.add_argument('--json-status',
+                      metavar='JSON',
+                      help='path of json file generated from'
+                      ' ./goma_ctl.py jsonstatus')
+  parser.add_argument('--skip-sendgomatsmon', action='store_true',
+                      help='Represent whether send jsonstatus'
+                      ' and exit_status log to TsMon.'
+                      ' This option is only allowed to used when'
+                      ' start() of recipe_modules/goma failes.')
 
   # Arguments set to os.environ
   parser.add_argument('--buildbot-buildername',
@@ -77,6 +86,16 @@ def main():
     goma_utils.SendGomaStats(args.goma_stats_file,
                              args.goma_crash_report_id_file,
                              args.build_data_dir)
+
+  if not args.skip_sendgomatsmon:
+    # In the case of goma_start is failed,
+    # we want log to investigate failed reason.
+    # So, let me send some logs instead of
+    # error in parse_args() using required option.
+    assert args.json_status is not None and os.path.exists(args.json_status)
+    assert args.ninja_log_exit_status is not None
+    goma_utils.SendGomaTsMon(args.json_status, args.ninja_log_exit_status)
+
   return 0
 
 
