@@ -28,6 +28,7 @@ class PubSubClient(object):
   """
 
   def __init__(self, topic, service_account_file):
+    self.closed = False
     self.topic = topic
     self.service_account_file = '/' + os.path.join(
         'creds', 'service_accounts', service_account_file)
@@ -38,6 +39,7 @@ class PubSubClient(object):
       log.err(
           'PubSub: Could not load credentials %s: %s.' % (
               self.service_account_file, e))
+      self.closed = True
       raise e
     self.resource = None
     log.msg('PubSub client for topic %s created' % self.topic)
@@ -54,6 +56,7 @@ class PubSubClient(object):
 
   def close(self):
     self.resource.stop()
+    self.closed = True
 
   def send(self, data):
     # TODO(hinoka): Sign messages so that they can be verified to originate
@@ -195,13 +198,17 @@ class StatusPush(StatusReceiverMultiService):
   @defer.inlineCallbacks
   def stopService(self):
     """Twisted service is shutting down."""
+    log.msg("PubSub: stopService called, Shutting down...")
     self._clearPushTimer()
 
     # Do one last status push.
+    log.msg("PubSub: One last status push.")
     yield self._doStatusPush(self._updated_builds)
 
     # Stop our resource.
+    log.msg("PubSub: Closing client.")
     self._client.close()
+    log.msg("PubSub: Client closed.")
 
   @staticmethod
   def _build_pubsub_message(obj):
@@ -376,6 +383,8 @@ class StatusPush(StatusReceiverMultiService):
     Args:
       build: (Build) The BuildBot Build object that was updated.
     """
+    if self._client.closed:
+      log.msg("PubSub: WARNING - _recordBuild called after resource closed.")
     build = _Build(
         builder_name=build.builder.name,
         build_number=build.number,
