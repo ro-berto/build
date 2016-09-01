@@ -94,8 +94,7 @@ def RmtreeExceptNinjaOrGomaFiles(build_output_dir):
           f.startswith('vcruntime') or  # VS2015 runtime libraries.
           f.startswith('ucrtbase') or  #  Win runtime DLLs for VS.
           f.startswith('api-ms-win') or  # Win runtime DLLs for VS.
-          f in ('gyp-mac-tool', 'gyp-win-tool',
-                'environment.x86', 'environment.x64')):
+          f in ('environment.x86', 'environment.x64')):
         continue
       # Keep goma related files.
       if f == '.goma_deps':
