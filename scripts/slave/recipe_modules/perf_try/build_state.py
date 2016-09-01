@@ -95,9 +95,9 @@ class BuildState(object):
     }
 
     deps_override = self.api.m.properties.get('deps_revision_overrides')
-    if deps_override:  # pragma: no cover
+    if deps_override:
       properties.update({
-          'deps_revision_overrides': deps_override
+          'deps_revision_overrides': dict(deps_override)
       })
 
     if self.with_patch:
