@@ -23,3 +23,6 @@ class V8TryServer(Master.Master4):
   code_review_site = 'http://codereview.chromium.org'
   service_account_file = 'service-account-v8.json'
   buildbucket_bucket = 'master.tryserver.v8'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'tryserver.v8'

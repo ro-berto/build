@@ -17,3 +17,6 @@ class NativeClientTryServer(Master.Master4):
   buildbot_url = 'http://build.chromium.org/p/tryserver.nacl/'
   service_account_file = 'service-account-nacl.json'
   buildbucket_bucket = 'master.tryserver.nacl'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'tryserver.nacl'

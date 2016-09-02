@@ -19,3 +19,6 @@ class LibyuvTryServer(Master.Master4):
   buildbot_url = 'http://build.chromium.org/p/tryserver.libyuv/'
   service_account_file = 'service-account-libyuv.json'
   buildbucket_bucket = 'master.tryserver.libyuv'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'tryserver.libyuv'

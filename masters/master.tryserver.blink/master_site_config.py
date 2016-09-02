@@ -21,3 +21,6 @@ class BlinkTryServer(Master.Master4):
   last_good_blink_url = 'http://blink-status.appspot.com/lkgr'
   service_account_file = 'service-account-chromium-tryserver.json'
   buildbucket_bucket = 'master.tryserver.blink'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'tryserver.blink'

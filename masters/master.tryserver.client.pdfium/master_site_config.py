@@ -20,3 +20,6 @@ class PDFiumTryserver(Master.Master4a):
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.pdfium/'
   buildbucket_bucket = 'master.tryserver.client.pdfium'
   service_account_file = 'service-account-chromium-tryserver.json'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'tryserver.client.pdfium'

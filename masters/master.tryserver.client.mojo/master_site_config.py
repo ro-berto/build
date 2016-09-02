@@ -14,3 +14,6 @@ class MojoTryServer(Master.Master4a):
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.mojo/'
   service_account_file = 'service-account-mojo.json'
   buildbucket_bucket = 'master.tryserver.client.mojo'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'tryserver.client.mojo'

@@ -21,3 +21,6 @@ class ChromiumPerfTryServer(Master.Master4):
   last_good_url = base_app_url + '/lkgr'
   service_account_file = 'service-account-chromium-tryserver.json'
   buildbucket_bucket = 'master.tryserver.chromium.perf'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'tryserver.chromium.perf'

@@ -23,3 +23,6 @@ class WebRTCTryServer(Master.Master4):
   buildbot_url = 'http://build.chromium.org/p/tryserver.webrtc/'
   service_account_file = 'service-account-webrtc.json'
   buildbucket_bucket = 'master.tryserver.webrtc'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  name = 'tryserver.webrtc'
