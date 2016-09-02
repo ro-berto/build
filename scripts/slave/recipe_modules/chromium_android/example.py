@@ -57,6 +57,10 @@ BUILDERS = freeze({
         'build': True,
         'skip_wipe': True,
     },
+    'java_method_count_builder': {
+        'build': True,
+        'java_method_count': True,
+    },
     'webview_tester': {
         'remove_system_webview': True,
         'disable_system_chrome': True,
@@ -152,6 +156,10 @@ def RunSteps(api, buildername):
                                               'build_product.zip')
   api.chromium_android.git_number()
 
+  if config.get('java_method_count'):
+    api.chromium_android.java_method_count(
+        api.chromium.output_dir.join('chrome_public_apk', 'classes.dex.zip'))
+
   if config.get('specific_install'):
     api.chromium_android.adb_install_apk('Chrome.apk', devices=['abc123'])
 
@@ -226,9 +234,13 @@ def RunSteps(api, buildername):
 
   if config.get('resource_size'):
     api.chromium_android.resource_sizes(
-        apk_path=api.chromium_android.apk_path('Example.apk'),
-        chartjson_file=True,
-        upload_archives_to_bucket='Bucket')
+        apk_path=api.chromium_android.apk_path('Chrome.apk'),
+        so_path=api.path['checkout'].join(
+            'out', api.chromium.c.BUILD_CONFIG, 'chrome_apk', 'libs',
+            'armeabi-v7a', 'libchrome.so'),
+        so_with_symbols_path=api.path['checkout'].join(
+          'out', api.chromium.c.BUILD_CONFIG, 'lib', 'libchrome.so'),
+        chartjson_file=True)
 
   if config.get('run_webview_cts'):
     api.chromium_android.run_webview_cts(command_line_args=[

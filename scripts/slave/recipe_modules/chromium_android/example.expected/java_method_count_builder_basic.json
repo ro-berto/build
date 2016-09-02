@@ -199,26 +199,43 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--force-version",
-      "4.7",
-      "----",
-      "cp",
-      "gs://build-bucket/build_product.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--"
     ],
-    "name": "gsutil download_build_product"
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile"
   },
   {
     "cmd": [
-      "unzip",
-      "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/archive_build.py",
+      "--target",
+      "Release",
+      "--name",
+      "archive.zip",
+      "--filters",
+      "*.apk"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "unzip_build_product"
+    "name": "zip_build_proudct"
   },
   {
     "cmd": [
@@ -227,6 +244,36 @@
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git_number",
     "stdout": "/path/to/tmp/"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--test-platform",
+      "android",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"java_method_count_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"java_method_count_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=java_method_count",
+      "--perf-id=java_method_count_builder",
+      "--test-type=java_method_count",
+      "--step-name=method_count",
+      "--builder-name=java_method_count_builder",
+      "--slave-name=tehslave",
+      "--build-number=571",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/build/android/method_count.py",
+      "[SLAVE_BUILD]/src/out/Release/chrome_public_apk/classes.dex.zip"
+    ],
+    "name": "method_count"
   },
   {
     "cmd": [
@@ -846,52 +893,6 @@
       "test.py"
     ],
     "name": "run bisect perf regression"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--test-platform",
-      "android",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"resource_size_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"resource_size_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=resource_sizes",
-      "--perf-id=resource_size_builder",
-      "--test-type=resource_sizes",
-      "--step-name=resource_sizes",
-      "--chartjson-file",
-      "/path/to/tmp/json",
-      "--builder-name=resource_size_builder",
-      "--slave-name=tehslave",
-      "--build-number=571",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/build/android/resource_sizes.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/Chrome.apk",
-      "--build_type",
-      "Release",
-      "--chartjson",
-      "--so-path",
-      "[SLAVE_BUILD]/src/out/Release/chrome_apk/libs/armeabi-v7a/libchrome.so",
-      "--so-with-symbols-path",
-      "[SLAVE_BUILD]/src/out/Release/lib/libchrome.so"
-    ],
-    "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
-    },
-    "name": "resource_sizes",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
