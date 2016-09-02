@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from . import chromium_perf
+from . import steps
 
 import DEPS
 CHROMIUM_CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
@@ -43,6 +44,28 @@ def _AddTestSpec(name, perf_id, platform,
   SPEC['builders'][name] = spec
 
 
+def _AddIsolatedTestSpec(name, platform, parent_builder=None, target_bits=64):
+  spec = {
+    'bot_type': 'tester',
+    'chromium_config': 'chromium_perf',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': target_bits,
+    },
+    'gclient_config': 'chromium_perf',
+    'testing': {
+      'platform': 'linux' if platform == 'android' else platform,
+    },
+    'parent_buildername': parent_builder,
+    'test_generators': [steps.generate_isolated_script],
+    'test_spec_file': 'chromium.perf.fyi.json',
+    'enable_swarming': True,
+    'parent_mastername': 'chromium.perf',
+  }
+
+  SPEC['builders'][name] = spec
+
+
 _AddTestSpec('Android Galaxy S5 Perf (1)', 'fyi-android-galaxy-s5', 'android',
              target_bits=32)
 
@@ -61,3 +84,9 @@ _AddBuildSpec('Win Clang Builder', 'win-clang-builder', 'win',
               config_name='chromium_perf_clang', target_bits=32)
 _AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
              parent_builder='Win Clang Builder', target_bits=32)
+
+
+_AddIsolatedTestSpec('Win 10 Low-End 2 Core Perf', 'win',
+                     parent_builder='Win x64 Builder')
+_AddIsolatedTestSpec('Win 10 Low-End 4 Core Perf', 'win',
+                     parent_builder='Win x64 Builder')
