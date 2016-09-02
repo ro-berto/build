@@ -541,7 +541,7 @@ def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
 
 
 class DynamicPerfTests(Test):
-  def __init__(self, perf_id, platform, target_bits, max_battery_temp=None,
+  def __init__(self, perf_id, platform, target_bits, max_battery_temp=350,
                num_device_shards=1, num_host_shards=1, shard_index=0,
                override_browser_name=None, enable_platform_mode=False):
     self._perf_id = perf_id

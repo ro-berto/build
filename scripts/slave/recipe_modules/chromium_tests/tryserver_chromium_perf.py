@@ -31,17 +31,14 @@ def tryserver_chromium_perf(c):
 
 
 def _AddBuildSpec(name, platform, target_bits=64):
+  # We run sizes with no perf_id for perf tryjobs. http://crbug.com/610772
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       'tryserver_chromium_perf', None, platform, target_bits)
 
 
 def _AddTestSpec(name, platform, target_bits=64):
-  # TODO(dtu): Change this to TestSpec after try job builds are all offloaded
-  # to builders.
-  spec = chromium_perf.BuildSpec(
-      'tryserver_chromium_perf', None, platform, target_bits)
-  del spec['tests']
-  SPEC['builders'][name] = spec
+  SPEC['builders'][name] = chromium_perf.TestSpec(
+      'tryserver_chromium_perf', platform, target_bits)
 
 
 _AddBuildSpec('win_perf_bisect_builder', 'win', target_bits=32)

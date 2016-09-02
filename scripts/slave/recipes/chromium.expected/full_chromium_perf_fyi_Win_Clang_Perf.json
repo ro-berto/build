@@ -214,6 +214,42 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILDER_CACHE]\\Win_Clang_Perf\\src\\testing\\scripts\\get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"checkout\": \"[BUILDER_CACHE]\\\\Win_Clang_Perf\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "--properties",
+      "{\"buildername\": \"Win Clang Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+    ],
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]\\Win_Clang_Perf\\src\\testing\\buildbot\\chromium.perf.fyi.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec (chromium.perf.fyi.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\Win_Clang_Perf\\src\\testing\\buildbot\\chromium.perf.fyi.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "python",

@@ -33,36 +33,25 @@ def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
 
 
 def _AddTestSpec(name, perf_id, platform,
-                 parent_builder=None, target_bits=64):
-  parent_buildername = (parent_builder or
-      chromium_perf.builders[platform][target_bits])
-  spec = chromium_perf.TestSpec('chromium_perf', parent_buildername, perf_id,
-                                platform, target_bits, 0, 1, 1)
-  if not parent_builder:
+                 parent_buildername=None, target_bits=64):
+  tests = [steps.DynamicPerfTests(
+      perf_id, platform, target_bits,
+      num_device_shards=1, num_host_shards=1, shard_index=0)]
+
+  spec = chromium_perf.TestSpec(
+      'chromium_perf', platform, target_bits,
+      parent_buildername=parent_buildername, tests=tests)
+  if not parent_buildername:
     spec['parent_mastername'] = 'chromium.perf'
-  spec['disable_tests'] = True
+
   SPEC['builders'][name] = spec
 
 
-def _AddIsolatedTestSpec(name, platform, parent_builder=None, target_bits=64):
-  spec = {
-    'bot_type': 'tester',
-    'chromium_config': 'chromium_perf',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': target_bits,
-    },
-    'gclient_config': 'chromium_perf',
-    'testing': {
-      'platform': 'linux' if platform == 'android' else platform,
-    },
-    'parent_buildername': parent_builder,
-    'test_generators': [steps.generate_isolated_script],
-    'test_spec_file': 'chromium.perf.fyi.json',
-    'enable_swarming': True,
-    'parent_mastername': 'chromium.perf',
-  }
-
+def _AddIsolatedTestSpec(name, platform, target_bits=64):
+  spec = chromium_perf.TestSpec('chromium_perf', platform, target_bits)
+  spec['parent_mastername'] = 'chromium.perf'
+  spec['enable_swarming'] = True
+  spec['test_generators'] = [steps.generate_isolated_script]
   SPEC['builders'][name] = spec
 
 
@@ -83,10 +72,8 @@ _AddTestSpec('Mac Test Retina Perf', 'mac-test-retina', 'mac')
 _AddBuildSpec('Win Clang Builder', 'win-clang-builder', 'win',
               config_name='chromium_perf_clang', target_bits=32)
 _AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
-             parent_builder='Win Clang Builder', target_bits=32)
+             parent_buildername='Win Clang Builder', target_bits=32)
 
 
-_AddIsolatedTestSpec('Win 10 Low-End 2 Core Perf', 'win',
-                     parent_builder='Win x64 Builder')
-_AddIsolatedTestSpec('Win 10 Low-End 4 Core Perf', 'win',
-                     parent_builder='Win x64 Builder')
+_AddIsolatedTestSpec('Win 10 Low-End 2 Core Perf', 'win')
+_AddIsolatedTestSpec('Win 10 Low-End 4 Core Perf', 'win')

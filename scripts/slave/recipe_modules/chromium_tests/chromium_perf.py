@@ -32,8 +32,7 @@ def chromium_perf(c):
   pass
 
 
-def _BaseSpec(bot_type, config_name, disable_tests,
-              platform, target_bits, tests):
+def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
   spec = {
     'bot_type': bot_type,
     'chromium_config': config_name,
@@ -41,7 +40,6 @@ def _BaseSpec(bot_type, config_name, disable_tests,
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': target_bits,
     },
-    'disable_tests': disable_tests,
     'gclient_config': config_name,
     'testing': {
       'platform': 'linux' if platform == 'android' else platform,
@@ -69,7 +67,6 @@ def BuildSpec(config_name, perf_id, platform, target_bits):
   spec = _BaseSpec(
       bot_type='builder',
       config_name=config_name,
-      disable_tests=True,
       platform=platform,
       target_bits=target_bits,
       tests=tests,
@@ -80,28 +77,20 @@ def BuildSpec(config_name, perf_id, platform, target_bits):
   return spec
 
 
-def TestSpec(config_name, parent_buildername, perf_id, platform, target_bits,
-              shard_index, num_host_shards, num_device_shards):
+def TestSpec(config_name, platform, target_bits,
+             parent_buildername=None, tests=None):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
-      disable_tests=platform == 'android',
       platform=platform,
       target_bits=target_bits,
-      tests=[steps.DynamicPerfTests(
-        perf_id, platform, target_bits, max_battery_temp=350,
-        num_device_shards=num_device_shards, num_host_shards=num_host_shards,
-        shard_index=shard_index)],
+      tests=tests or [],
   )
 
+  if not parent_buildername:
+    parent_buildername = builders[platform][target_bits]
   spec['parent_buildername'] = parent_buildername
-  spec['perf-id'] = perf_id
-  spec['results-url'] = 'https://chromeperf.appspot.com'
-
-  if platform != 'android':
-    # TODO: Remove disable_tests and run test_generators on Android.
-    spec['test_generators'] = [steps.generate_script]
-    spec['test_spec_file'] = 'chromium.perf.json'
+  spec['test_generators'] = [steps.generate_script]
 
   return spec
 
@@ -122,12 +111,13 @@ def _AddBuildSpec(name, platform, target_bits=64, add_to_bisect=False):
 
 def _AddTestSpec(name, perf_id, platform, target_bits=64,
                  num_host_shards=1, num_device_shards=1):
-  parent_buildername = builders[platform][target_bits]
   for shard_index in xrange(num_host_shards):
     builder_name = '%s (%d)' % (name, shard_index + 1)
+    tests = [steps.DynamicPerfTests(
+        perf_id, platform, target_bits, num_device_shards=num_device_shards,
+        num_host_shards=num_host_shards, shard_index=shard_index)]
     SPEC['builders'][builder_name] = TestSpec(
-        'chromium_perf', parent_buildername, perf_id, platform, target_bits,
-        shard_index, num_host_shards, num_device_shards)
+        'chromium_perf', platform, target_bits, tests=tests)
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)

@@ -919,6 +919,42 @@
     "cmd": [
       "python",
       "-u",
+      "[TMP_BASE]/fake_checkout_tmp_1/testing/scripts/get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"checkout\": \"[TMP_BASE]/fake_checkout_tmp_1\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "--properties",
+      "{\"buildername\": \"linux_perf_bisect\", \"buildnumber\": 123456, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"dummyslave\", \"target_platform\": \"linux\"}"
+    ],
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/fake_checkout_tmp_1/testing/buildbot/tryserver.chromium.perf.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec (tryserver.chromium.perf.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [TMP_BASE]/fake_checkout_tmp_1/testing/buildbot/tryserver.chromium.perf.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[TMP_BASE]/fake_checkout_tmp_1/tools/prepare-bisect-perf-regression.py",
       "-w",
       "[CACHE]/bisect"
@@ -993,12 +1029,13 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"chromium_rel_win7\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"chromium_rel_win7\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 123456, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"chromium_rel_win7\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"chromium_rel_win7\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 123456, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Running Bisection",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
+      "--build-number=123456",
       "--run-python-script",
       "[TMP_BASE]/fake_checkout_tmp_1/tools/run-bisect-perf-regression.py",
       "-w",
@@ -1010,7 +1047,7 @@
       "--path_to_goma",
       "[CACHE]/cipd/goma",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"chromium_rel_win7\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}"
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"chromium_rel_win7\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 123456, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}"
     ],
     "name": "Running Bisection"
   },

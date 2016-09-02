@@ -223,7 +223,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\Win_Zenbook_Perf__4_\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Win Zenbook Perf (4)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"win-zenbook\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"Win Zenbook Perf (4)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

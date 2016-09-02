@@ -51,7 +51,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@1111111",
       "--force",
       "--output_manifest",
       "--gerrit_no_rebase_patch_ref"
@@ -66,7 +66,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"1111111\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -214,6 +214,42 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILDER_CACHE]\\winx64_10_perf_cq\\src\\testing\\scripts\\get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Release_x64",
+      "--paths",
+      "{\"checkout\": \"[BUILDER_CACHE]\\\\winx64_10_perf_cq\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "--properties",
+      "{\"buildername\": \"winx64_10_perf_cq\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+    ],
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]\\winx64_10_perf_cq\\src\\testing\\buildbot\\tryserver.chromium.perf.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec (tryserver.chromium.perf.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\winx64_10_perf_cq\\src\\testing\\buildbot\\tryserver.chromium.perf.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "python",
@@ -225,95 +261,43 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\winx64_10_perf_cq\\src\\tools\\mb\\mb.py",
-      "gen",
-      "-m",
-      "tryserver.chromium.perf",
-      "-b",
-      "winx64_10_perf_cq",
-      "--config-file",
-      "[BUILDER_CACHE]\\winx64_10_perf_cq\\src\\tools\\mb\\mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]\\cipd\\goma",
-      "//out/Release_x64"
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[BUILDER_CACHE]\\winx64_10_perf_cq\\src\\out\\Release_x64"
     ],
-    "cwd": "[BUILDER_CACHE]\\winx64_10_perf_cq\\src",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
-      "--target",
-      "Release_x64",
-      "--src-dir",
-      "[BUILDER_CACHE]\\winx64_10_perf_cq\\src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--goma-deps-cache-dir",
-      "[GOMA_DEPS_CACHE]",
-      "--build-data-dir",
-      "[ROOT]\\build_data_dir",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "--mode",
-      "official",
-      "--goma-dir",
-      "[CACHE]\\cipd\\goma",
-      "--goma-hermetic",
-      "fallback",
-      "--",
-      "chromium_builder_perf"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "compile",
+    "name": "rmtree build directory",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\zip_build.py",
-      "--target",
-      "Release_x64",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\extract_build.py",
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--staging-dir",
-      "[CACHE]\\chrome_staging",
+      "--target",
+      "Release_x64",
       "--src-dir",
       "[BUILDER_CACHE]\\winx64_10_perf_cq\\src",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"winx64_10_perf_cq\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"winx64_10_perf_cq\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--build-archive-url",
+      "gs://test-domain/test-archive.zip",
+      "--master-name",
+      "tryserver.chromium.perf",
+      "--build-number",
+      "571"
     ],
-    "name": "package build"
+    "name": "extract build"
   },
   {
     "name": "$result",

@@ -318,7 +318,8 @@ def _make_test(api, test_data, test_name, platform='linux', extra_config=None):
   basic_test = api.test(test_name)
   basic_test += api.properties(mastername='tryserver.chromium.perf',
                                buildername='linux_perf_bisect',
-                               slavename='dummyslave')
+                               slavename='dummyslave',
+                               buildnumber=123456)
   basic_test += _get_revision_range_step_data(api, test_data)
   for revision_data in test_data:
     for step_data in _get_step_data_for_revision(api, revision_data):
