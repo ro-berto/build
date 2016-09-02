@@ -102,18 +102,6 @@
       "python",
       "-u",
       "[CACHE]/cipd/goma/goma_ctl.py",
-      "stat"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "goma_stat"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
     "env": {
