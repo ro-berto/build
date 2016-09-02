@@ -185,6 +185,9 @@ class GomaApi(recipe_api.RecipeApi):
       self.m.python(name='goma_jsonstatus', script=self.goma_ctl,
                     args=['jsonstatus', self.json_path],
                     env=self._goma_ctl_env, **kwargs)
+      self.m.python(name='goma_stat', script=self.goma_ctl,
+                    args=['stat'],
+                    env=self._goma_ctl_env, **kwargs)
       self.m.python(name='stop_goma', script=self.goma_ctl,
                     args=['stop'], env=self._goma_ctl_env, **kwargs)
       self._upload_logs(ninja_log_outdir, ninja_log_compiler,
