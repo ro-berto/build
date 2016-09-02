@@ -2111,6 +2111,28 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Android VR Tests': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Android Builder (dbg)',
+      'android_config': 'main_builder_mb',
+      'root_devices': True,
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+        steps.generate_instrumentation_test,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
 
     'Linux remote_run Builder': {
       'chromium_config': 'chromium',
