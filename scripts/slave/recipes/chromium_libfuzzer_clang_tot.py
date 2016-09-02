@@ -44,7 +44,7 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
-  api.chromium.runhooks()
+  api.chromium.runhooks(env={'LLVM_FORCE_HEAD_REVISION': 'YES'})
   api.chromium.run_mb(mastername, buildername, use_goma=False)
 
   api.chromium.compile(targets=['empty_fuzzer'])
