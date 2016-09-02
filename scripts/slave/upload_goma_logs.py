@@ -55,13 +55,10 @@ def main():
 
   # Arguments set to os.environ
   parser.add_argument('--buildbot-buildername',
-                      default='unknown',
                       help='buildbot buildername')
   parser.add_argument('--buildbot-mastername',
-                      default='unknown',
                       help='buildbot mastername')
   parser.add_argument('--buildbot-slavename',
-                      default='unknown',
                       help='buildbot slavename')
   parser.add_argument('--buildbot-clobber',
                       help='buildbot clobber')
@@ -97,11 +94,7 @@ def main():
     # error in parse_args() using required option.
     assert args.json_status is not None and os.path.exists(args.json_status)
     assert args.ninja_log_exit_status is not None
-    goma_utils.SendGomaTsMon(args.json_status, args.ninja_log_exit_status,
-                             builder=args.buildbot_buildername,
-                             master=args.buildbot_mastername,
-                             slave=args.buildbot_slavename,
-                             clobber=args.buildbot_clobber)
+    goma_utils.SendGomaTsMon(args.json_status, args.ninja_log_exit_status)
 
   return 0
 

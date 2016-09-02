@@ -99,12 +99,6 @@
       "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
-      "--buildbot-buildername",
-      "win8_rel_try",
-      "--buildbot-mastername",
-      "master.client.syzygy",
-      "--buildbot-slavename",
-      "vm331-m3",
       "--ninja-ensure-up-to-date",
       "--",
       "build_all"
