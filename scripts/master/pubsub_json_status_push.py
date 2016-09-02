@@ -21,11 +21,7 @@ PUBSUB_SCOPES = ['https://www.googleapis.com/auth/pubsub']
 
 
 class PubSubClient(object):
-  """A client residing in a separate process to send data to PubSub.
-
-  This is separated from the main twistd reactor in order to shield the
-  main reactor from the increased load.
-  """
+  """A client residing in a separate process to send data to PubSub."""
 
   def __init__(self, topic, service_account_file):
     self.closed = False
@@ -195,10 +191,19 @@ class StatusPush(StatusReceiverMultiService):
     # Schedule our first push.
     self._schedulePush()
 
-  @defer.inlineCallbacks
+    # Register our final push to happen when the reactor exits.
+    reactor.addSystemEventTrigger('during', 'shutdown', self._stop)
+
   def stopService(self):
-    """Twisted service is shutting down."""
-    log.msg("PubSub: stopService called, Shutting down...")
+    """Twisted service is shutting down.
+
+    We do nothing here because events still fire after stopService is called.
+    """
+    log.msg("PubSub: stopService called...")
+
+  @defer.inlineCallbacks
+  def _stop(self):
+    """Do a final push and close our resource."""
     self._clearPushTimer()
 
     # Do one last status push.
