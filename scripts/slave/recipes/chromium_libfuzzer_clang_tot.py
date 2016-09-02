@@ -23,7 +23,7 @@ DEPS = [
 BUILDERS = freeze({
   'chromium.fyi': {
     'builders': {
-      'ClangToTLinuxAsanLibfuzzer': {
+      'ClangToTLinuxASanLibfuzzer': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'proprietary_codecs' ],
         'chromium_config_kwargs': {

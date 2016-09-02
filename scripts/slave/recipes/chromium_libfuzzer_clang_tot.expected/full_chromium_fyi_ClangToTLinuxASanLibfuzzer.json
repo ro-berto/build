@@ -7,7 +7,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "ClangToTLinuxAsanLibfuzzer",
+      "ClangToTLinuxASanLibfuzzer",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -129,7 +129,7 @@
       "-m",
       "chromium.fyi",
       "-b",
-      "ClangToTLinuxAsanLibfuzzer",
+      "ClangToTLinuxASanLibfuzzer",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "//out/Release"
