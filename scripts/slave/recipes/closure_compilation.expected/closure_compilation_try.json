@@ -137,6 +137,12 @@
       "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--buildbot-buildername",
+      "closure_compilation",
+      "--buildbot-mastername",
+      "tryserver.chromium.linux",
+      "--buildbot-slavename",
+      "TestSlavename",
       "--"
     ],
     "env": {
@@ -169,6 +175,12 @@
       "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--buildbot-buildername",
+      "closure_compilation",
+      "--buildbot-mastername",
+      "tryserver.chromium.linux",
+      "--buildbot-slavename",
+      "TestSlavename",
       "--"
     ],
     "env": {

@@ -177,6 +177,12 @@
       "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--buildbot-buildername",
+      "Chromium Windows Analyze",
+      "--buildbot-mastername",
+      "chromium.fyi",
+      "--buildbot-slavename",
+      "TestSlavename",
       "--",
       "chrome"
     ],

@@ -87,7 +87,11 @@ def StopGomaClientAndUploadInfo(options, env, exit_status):
   if options.goma_jsonstatus:
     chromium_utils.RunCommand(
         goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
-    goma_utils.SendGomaTsMon(options.goma_jsonstatus, exit_status)
+    goma_utils.SendGomaTsMon(options.goma_jsonstatus, exit_status,
+                             builder=options.buildbot_buildername,
+                             master=options.buildbot_mastername,
+                             slave=options.buildbot_slavename,
+                             clobber=options.buildbot_clobber)
 
   # If goma compiler_proxy crashes, there could be crash dump.
   if options.build_data_dir:
@@ -505,6 +509,15 @@ def get_parsed_options():
                                 'the first is a no-op.')
   option_parser.add_option('--cloudtail-pid-file', default=None,
                            help='Specify a file to store pid of cloudtail')
+
+  # Arguments to pass buildbot properties.
+  option_parser.add_argument('--buildbot-buildername', default='unknown',
+                             help='buildbot buildername')
+  option_parser.add_argument('--buildbot-mastername', default='unknown',
+                             help='buildbot mastername')
+  option_parser.add_argument('--buildbot-slavename', default='unknown',
+                             help='buildbot slavename')
+  option_parser.add_argument('--buildbot-clobber', help='buildbot clobber')
 
   options, args = option_parser.parse_args()
 

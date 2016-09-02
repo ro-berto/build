@@ -122,6 +122,12 @@
       "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--buildbot-buildername",
+      "Syzygy Official",
+      "--buildbot-mastername",
+      "master.client.syzygy",
+      "--buildbot-slavename",
+      "fake_slave",
       "--ninja-ensure-up-to-date",
       "--",
       "official_build"

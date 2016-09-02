@@ -137,6 +137,12 @@
       "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--buildbot-buildername",
+      "Closure Compilation Linux",
+      "--buildbot-mastername",
+      "chromium.fyi",
+      "--buildbot-slavename",
+      "TestSlavename",
       "--"
     ],
     "env": {
@@ -169,6 +175,12 @@
       "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--buildbot-buildername",
+      "Closure Compilation Linux",
+      "--buildbot-mastername",
+      "chromium.fyi",
+      "--buildbot-slavename",
+      "TestSlavename",
       "--"
     ],
     "env": {
