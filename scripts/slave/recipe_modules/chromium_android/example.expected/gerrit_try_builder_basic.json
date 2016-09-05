@@ -213,6 +213,12 @@
       "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--buildbot-buildername",
+      "gerrit_try_builder",
+      "--buildbot-mastername",
+      "chromium.testing.master",
+      "--buildbot-slavename",
+      "tehslave",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--"

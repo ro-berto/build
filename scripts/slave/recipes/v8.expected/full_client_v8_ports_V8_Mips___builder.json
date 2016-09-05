@@ -202,6 +202,12 @@
       "[SLAVE_BUILD]/v8",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
+      "--buildbot-buildername",
+      "V8 Mips - builder",
+      "--buildbot-mastername",
+      "client.v8.ports",
+      "--buildbot-slavename",
+      "TestSlavename",
       "--"
     ],
     "env": {

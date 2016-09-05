@@ -269,7 +269,9 @@ def GetCompilerProxyStartTime():
       return datetime.datetime.strptime(matched.group(1), TIMESTAMP_FORMAT)
 
 
-def SendGomaTsMon(json_file, exit_status):
+def SendGomaTsMon(json_file, exit_status,
+                  builder='unknown', master='unknown', slave='unknown',
+                  clobber=''):
   """Send latest Goma status to ts_mon.
 
   Args:
@@ -311,17 +313,13 @@ def SendGomaTsMon(json_file, exit_status):
       num_failure = infra_status['num_exec_compiler_proxy_failure']
       ping_status_code = infra_status['ping_status_code']
 
-    clobber = 0
-    if os.environ.get('BUILDBOT_CLOBBER'):
-      clobber = 1
-
     counter = {
         'name': 'goma/failure',
         'value': num_failure,
-        'builder': os.environ.get('BUILDBOT_BUILDERNAME', 'unknown'),
-        'master': os.environ.get('BUILDBOT_MASTERNAME', 'unknown'),
-        'slave': os.environ.get('BUILDBOT_SLAVENAME', 'unknown'),
-        'clobber': clobber,
+        'builder': builder,
+        'master': master,
+        'slave': slave,
+        'clobber': 1 if clobber else 0,
         'os': chromium_utils.PlatformName(),
         'ping_status_code': ping_status_code,
         'result': result}

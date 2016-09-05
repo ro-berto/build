@@ -177,6 +177,13 @@ class ChromiumApi(recipe_api.RecipeApi):
       '--goma-cache-dir', self.m.path['goma_cache'],
     ]
 
+    # Set some buildbot info used in goma_utils.
+    for key in ['buildername', 'mastername', 'slavename', 'clobber']:
+      if key in self.m.properties:
+        args.extend([
+            '--buildbot-%s' % key, self.m.properties[key]
+        ])
+
     # Use explicit goma deps cache dir if it's set in the path config.
     # Otherwise use the default one inside build output directory.
     try:
