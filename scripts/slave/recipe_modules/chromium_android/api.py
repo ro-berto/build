@@ -6,6 +6,7 @@ import contextlib
 import datetime
 import json
 import os
+import pipes
 import re
 import sys
 import urllib
@@ -192,35 +193,31 @@ class AndroidApi(recipe_api.RecipeApi):
         **kwargs)
 
   def java_method_count(self, dexfile, name='java_method_count', perf_id=None):
-    self.m.chromium.runtest(
-        self.m.path['checkout'].join('build', 'android', 'method_count.py'),
-        args=[dexfile],
-        annotate='graphing',
-        results_url='https://chromeperf.appspot.com',
-        perf_id=perf_id or self.m.properties['buildername'],
-        perf_dashboard_id=name,
-        test_type=name)
+    # TODO(agrieve): Remove once usages are elimintated.
+    self.resource_sizes(dexfile, perf_id=perf_id)  # pragma: no cover
 
-  def resource_sizes(self, apk_path, so_path=None, so_with_symbols_path=None,
-                     chartjson_file=False):
-    args=[apk_path, '--build_type', self.m.chromium.c.BUILD_CONFIG]
+  def resource_sizes(self, apk_path, chartjson_file=False,
+                     upload_archives_to_bucket=None, perf_id=None):
+    cmd = ['build/android/resource_sizes.py', str(apk_path)]
     if chartjson_file:
-      args.extend(['--chartjson'])
-    if so_path:
-      args.extend(['--so-path', so_path])
-    if so_with_symbols_path:
-      args.extend(['--so-with-symbols-path', so_with_symbols_path])
+      cmd.append('--chartjson')
 
-    self.m.chromium.runtest(
-        self.m.path['checkout'].join('build', 'android', 'resource_sizes.py'),
-        args=args,
-        annotate='graphing',
-        results_url='https://chromeperf.appspot.com',
-        perf_id=self.m.properties['buildername'],
-        perf_dashboard_id='resource_sizes',
-        test_type='resource_sizes',
-        env={'CHROMIUM_OUTPUT_DIR': self.m.chromium.output_dir},
-        chartjson_file=chartjson_file)
+    config = {
+        'steps': {
+            'resource_sizes': {
+                'cmd': ' '.join(pipes.quote(x) for x in cmd),
+                'device_affinity': None,
+                'archive_output_dir': True
+            }
+        },
+        'version': 1
+    }
+    self.run_sharded_perf_tests(
+        config=self.m.json.input(config),
+        flaky_config=None,
+        perf_id=perf_id or self.m.properties['buildername'],
+        chartjson_file=chartjson_file,
+        upload_archives_to_bucket=upload_archives_to_bucket)
 
   def check_webview_licenses(self, name='check licenses'):
     self.m.python(
