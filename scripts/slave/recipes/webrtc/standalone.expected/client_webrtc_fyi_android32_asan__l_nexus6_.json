@@ -182,11 +182,35 @@
     "cwd": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android asan=1 clang=1 component=shared_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.webrtc.fyi",
+      "-b",
+      "Android32 ASan (L Nexus6)",
+      "--config-file",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/webrtc/build/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--gyp-script=[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/webrtc/build/gyp_webrtc.py",
+      "//out/Release"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files"
   },
   {
     "allow_subannotations": true,

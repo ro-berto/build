@@ -117,14 +117,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     for c in self.recipe_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
-    # Apply MB config (to avoid heavy duplication in builders.py). See
-    # crbug.com/589510 for more info.
-    if (mastername in ('client.webrtc', 'tryserver.webrtc') and
-        (buildername.lower().startswith('linux') or
-         buildername.lower().startswith('mac') or
-         buildername.lower().startswith('win') or
-         buildername.lower().startswith('android'))):
-      self.m.chromium.apply_config('mb')
+    # Apply MB config to all bots.
+    self.m.chromium.apply_config('mb')
 
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
