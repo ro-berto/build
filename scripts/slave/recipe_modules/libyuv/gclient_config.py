@@ -14,6 +14,7 @@ def libyuv(c):
   s.url = ChromiumGitURL(c, 'libyuv', 'libyuv')
   s.deps_file = 'DEPS'
   s.custom_vars['root_dir'] = 'src'
+  c.got_revision_mapping['src'] = 'got_revision'
 
 @CONFIG_CTX(includes=['libyuv', 'android'])
 def libyuv_android(c):
