@@ -31,8 +31,7 @@
       "--revision",
       "src@HEAD",
       "--force",
-      "--output_manifest",
-      "--gerrit_no_rebase_patch_ref"
+      "--output_manifest"
     ],
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"

@@ -48,8 +48,7 @@
       "src/v8@origin/canary",
       "--force",
       "--output_manifest",
-      "--with_branch_heads",
-      "--gerrit_no_rebase_patch_ref"
+      "--with_branch_heads"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_V8_API_Stability",
     "env": {

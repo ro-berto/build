@@ -45,8 +45,7 @@
       "--revision",
       "src@HEAD",
       "--force",
-      "--output_manifest",
-      "--gerrit_no_rebase_patch_ref"
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Google_Chrome_Linux_x64",
     "env": {

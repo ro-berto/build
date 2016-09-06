@@ -60,8 +60,7 @@
       "src@HEAD",
       "--revision",
       "src/v8@HEAD",
-      "--output_manifest",
-      "--gerrit_no_rebase_patch_ref"
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {

@@ -55,8 +55,7 @@
       "--revision",
       "src/v8@22135",
       "--force",
-      "--output_manifest",
-      "--gerrit_no_rebase_patch_ref"
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\Chromium_Win_SyzyASAN",
     "env": {

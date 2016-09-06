@@ -45,8 +45,7 @@
       "--revision",
       "src@1111111",
       "--force",
-      "--output_manifest",
-      "--gerrit_no_rebase_patch_ref"
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Android_WebView_CTS_L_MR1__dbg_",
     "env": {

@@ -52,8 +52,7 @@
       "src@HEAD",
       "--revision",
       "src/third_party/angle@HEAD",
-      "--output_manifest",
-      "--gerrit_no_rebase_patch_ref"
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_angle_chromeos_rel_ng",
     "env": {

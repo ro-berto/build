@@ -55,8 +55,7 @@
       "--revision",
       "src/third_party/angle@HEAD",
       "--force",
-      "--output_manifest",
-      "--gerrit_no_rebase_patch_ref"
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_Builder__ANGLE_",
     "env": {

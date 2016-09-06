@@ -53,8 +53,7 @@
       "--revision",
       "src@1111111",
       "--force",
-      "--output_manifest",
-      "--gerrit_no_rebase_patch_ref"
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_10_High_DPI_Perf__4_",
     "env": {
