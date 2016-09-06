@@ -25,7 +25,7 @@ BUILDERS = freeze({
     'builders': {
       'ClangToTLinuxASanLibfuzzer': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clang_tot', 'proprietary_codecs' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -44,7 +44,7 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
-  api.chromium.runhooks(env={'LLVM_FORCE_HEAD_REVISION': 'YES'})
+  api.chromium.runhooks()
   api.chromium.run_mb(mastername, buildername, use_goma=False)
 
   api.chromium.compile(targets=['empty_fuzzer'])

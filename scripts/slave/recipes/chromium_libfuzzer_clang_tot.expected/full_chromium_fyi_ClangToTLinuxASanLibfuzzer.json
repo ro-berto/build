@@ -115,7 +115,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=static_library gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -153,7 +153,8 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -199,7 +200,8 @@
       "empty_fuzzer"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "compile",
     "~followup_annotations": [
