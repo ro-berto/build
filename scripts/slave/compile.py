@@ -102,7 +102,11 @@ def StopGomaClientAndUploadInfo(options, env, exit_status):
   override_gsutil = None
   if options.gsutil_py_path:
     override_gsutil = [sys.executable, options.gsutil_py_path]
-  goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil)
+  goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil,
+                                         builder=options.buildbot_buildername,
+                                         master=options.buildbot_mastername,
+                                         slave=options.buildbot_slavename,
+                                         clobber=options.buildbot_clobber)
 
   # Upload GomaStats to make it monitored.
   if env.get('GOMA_DUMP_STATS_FILE'):
