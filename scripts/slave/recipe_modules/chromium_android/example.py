@@ -251,7 +251,9 @@ def GenTests(api):
         buildername=buildername,
         slavename='tehslave',
         repo_name='src/repo',
-        patch_url='https://the.patch.url/the.patch',
+        issue='123456789',
+        patchset='1',
+        rietveld='http://rietveld.example.com',
         repo_url='svn://svn.chromium.org/chrome/trunk/src',
         revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
         internal=True)
@@ -302,7 +304,9 @@ def GenTests(api):
         buildername='gerrit_try_builder',
         slavename='testslave',
         repo_name='src/repo',
-        patch_url='https://the.patch.url/the.patch',
+        issue='123456789',
+        patchset='1',
+        rietveld='http://rietveld.example.com',
         repo_url='svn://svn.chromium.org/chrome/trunk/src',
         revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
         internal=True, **({'event.patchSet.ref':'refs/changes/50/176150/1'})))
