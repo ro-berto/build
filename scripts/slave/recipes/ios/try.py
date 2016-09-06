@@ -51,7 +51,6 @@ def GenTests(api):
   yield (
     api.test('basic')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios-simulator',
       buildnumber='0',
@@ -88,7 +87,6 @@ def GenTests(api):
   yield (
     api.test('no_tests')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios-simulator',
       buildnumber='0',
@@ -120,7 +118,6 @@ def GenTests(api):
   yield (
     api.test('swarming')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios-simulator-swarming',
       buildnumber='0',
@@ -157,7 +154,6 @@ def GenTests(api):
   yield (
     api.test('swarming_tests_skipped')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios-simulator-swarming',
       buildnumber='0',
@@ -194,7 +190,6 @@ def GenTests(api):
   yield (
     api.test('icu_patch')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios-simulator',
       buildnumber='0',
@@ -232,7 +227,6 @@ def GenTests(api):
   yield (
     api.test('parent')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios',
       buildnumber='0',
@@ -272,7 +266,6 @@ def GenTests(api):
   yield (
     api.test('without_patch_success')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios',
       buildnumber='0',
@@ -306,7 +299,6 @@ def GenTests(api):
   yield (
     api.test('without_patch_failure')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios',
       buildnumber='0',
@@ -341,7 +333,6 @@ def GenTests(api):
   yield (
     api.test('gn')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios-simulator-gn',
       buildnumber='0',
@@ -382,7 +373,6 @@ def GenTests(api):
   yield (
     api.test('gyp_goma')
     + api.platform('mac', 64)
-    + api.properties(patch_url='patch url')
     + api.properties(
       buildername='ios-simulator',
       buildnumber='0',
