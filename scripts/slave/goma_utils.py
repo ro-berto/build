@@ -78,8 +78,10 @@ def GetLatestGomaCompilerProxySubprocInfo():
   return GetLatestGlogInfoFile('compiler_proxy-subproc')
 
 
-def UploadToGomaLogGS(
-    file_path, gs_filename, text_to_append=None, override_gsutil=None):
+def UploadToGomaLogGS(file_path, gs_filename,
+                      text_to_append=None,
+                      metadata=None,
+                      override_gsutil=None):
   """Upload a file to Google Cloud Storage (gs://chrome-goma-log).
 
   Note that the uploaded file would automatically be gzip compressed.
@@ -87,6 +89,7 @@ def UploadToGomaLogGS(
   Args:
     file_path: a path of a file to be uploaded.
     gs_filename: a name of a file in Google Storage.
+    metadata: (dict) A dictionary of string key/value metadata entries.
     text_to_append: an addtional text to be added to a file in GS.
 
   Returns:
@@ -105,19 +108,36 @@ def UploadToGomaLogGS(
           shutil.copyfileobj(f_in, gzipf_out)
         if text_to_append:
           gzipf_out.write(text_to_append)
-    slave_utils.GSUtilCopy(temp.name, gs_path, override_gsutil=override_gsutil)
+    slave_utils.GSUtilCopy(temp.name, gs_path,
+                           metadata=metadata, override_gsutil=override_gsutil)
     print "Copied log file to %s" % gs_path
   finally:
     os.remove(temp.name)
   return log_path
 
 
-def UploadGomaCompilerProxyInfo(override_gsutil=None):
+def UploadGomaCompilerProxyInfo(override_gsutil=None,
+                                builder='unknown', master='unknown',
+                                slave='unknown', clobber=''):
   """Upload goma compiler_proxy.INFO to Google Storage."""
   latest_subproc_info = GetLatestGomaCompilerProxySubprocInfo()
+
+  builderinfo = {
+    'builder': builder,
+    'master': master,
+    'slave': slave,
+    'clobber': True if clobber else False,
+    'os': chromium_utils.PlatformName(),
+  }
+  # Append 'x-' to indicate this is custom metadata.
+  metadata = {
+    'x-builderinfo': json.dumps(builderinfo)
+  }
+
   if latest_subproc_info:
     UploadToGomaLogGS(latest_subproc_info,
                       os.path.basename(latest_subproc_info),
+                      metadata=metadata,
                       override_gsutil=override_gsutil)
   else:
     print 'No compiler_proxy-subproc.INFO to upload'
@@ -129,6 +149,7 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None):
   # we might be able to upload it as-is.
   log_path = UploadToGomaLogGS(
       latest_info, os.path.basename(latest_info),
+      metadata=metadata,
       override_gsutil=override_gsutil)
   viewer_url = ('http://chromium-build-stats.appspot.com/compiler_proxy_log/'
                 + log_path)
@@ -178,7 +199,7 @@ def UploadNinjaLog(
       hostname, username, mtime.strftime('%Y%m%d-%H%M%S'), pid)
   additional_text = '# end of ninja log\n' + json.dumps(info)
   log_path = UploadToGomaLogGS(
-      ninja_log_path, ninja_log_filename, additional_text,
+      ninja_log_path, ninja_log_filename, text_to_append=additional_text,
       override_gsutil=override_gsutil)
   viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
   print 'Visualization at %s' % viewer_url
