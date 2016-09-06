@@ -204,7 +204,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     config = {
         'steps': {
-            'resource_sizes': {
+            'resource_sizes (%s)' % self.m.path.basename(apk_path): {
                 'cmd': ' '.join(pipes.quote(x) for x in cmd),
                 'device_affinity': None,
                 'archive_output_dir': True
