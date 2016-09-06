@@ -124,6 +124,7 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
           recipe=builder_data['recipe'],
           max_time=builder_data.get('builder_timeout_s'),
           factory_properties=props,
+          use_gitiles=builder_data.get('remote_run_use_gitiles', False),
       )
     else:
       factory = m_annotator.BaseFactory(
