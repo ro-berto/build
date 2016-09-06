@@ -66,7 +66,8 @@ def GenTests(api):
       test += api.properties(revision=revision)
 
     if mastername.startswith('tryserver'):
-      test += api.properties(patch_url='try_job_svn_patch')
+      test += api.properties(issue='123456789', patchset='1',
+                             rietveld='https://rietveld.example.com')
     return test
 
   for mastername, master_config in builders.iteritems():
