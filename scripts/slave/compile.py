@@ -101,8 +101,13 @@ def StopGomaClientAndUploadInfo(options, env, exit_status):
   chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
   override_gsutil = None
   if options.gsutil_py_path:
-    override_gsutil = [sys.executable, options.gsutil_py_path]
-  goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil)
+    # Needs to add '--', otherwise gsutil options will be passed to gsutil.py.
+    override_gsutil = [sys.executable, options.gsutil_py_path, '--']
+  goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil,
+                                         builder=options.buildbot_buildername,
+                                         master=options.buildbot_mastername,
+                                         slave=options.buildbot_slavename,
+                                         clobber=options.buildbot_clobber)
 
   # Upload GomaStats to make it monitored.
   if env.get('GOMA_DUMP_STATS_FILE'):
@@ -431,7 +436,8 @@ def main_ninja(options, args, env):
   finally:
     override_gsutil = None
     if options.gsutil_py_path:
-      override_gsutil = [sys.executable, options.gsutil_py_path]
+      # Needs to add '--', otherwise gsutil options will be passed to gsutil.py.
+      override_gsutil = [sys.executable, options.gsutil_py_path, '--']
 
     goma_utils.UploadNinjaLog(
         options.target_output_dir, options.compiler, command, exit_status,
@@ -500,7 +506,8 @@ def get_parsed_options():
   option_parser.add_option('--goma-jobs', default=None,
                            help='The number of jobs for ninja -j.')
   option_parser.add_option('--gsutil-py-path',
-                           help='Specify path to gsutil.py script.')
+                           help='Specify path to gsutil.py script '
+                                'in depot_tools.')
   option_parser.add_option('--ninja-path', default='ninja',
                            help='Specify path to the ninja tool.')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
