@@ -40,10 +40,22 @@ def RunSteps(api):
   )
 
   api.step(
-      'run_compiler',
-       [api.path['checkout'].join('third_party', 'closure_compiler',
-                                 'run_compiler')]
+      'generate_gyp_files',
+      [api.path['checkout'].join('build', 'gyp_chromium'),
+       api.path['checkout'].join('third_party', 'closure_compiler',
+                                 'compiled_resources.gyp')],
   )
+
+  api.chromium.compile()
+
+  api.step(
+      'generate_v2_gyp_files',
+      [api.path['checkout'].join('build', 'gyp_chromium'),
+       api.path['checkout'].join('third_party', 'closure_compiler',
+                                 'compiled_resources2.gyp')],
+  )
+
+  api.chromium.compile(name='compile_v2')
 
 
 def GenTests(api):
