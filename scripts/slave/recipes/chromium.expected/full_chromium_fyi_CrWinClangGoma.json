@@ -383,6 +383,7 @@
       "[CACHE]\\cipd\\goma",
       "--goma-hermetic",
       "error",
+      "--goma-disable-local-fallback",
       "--",
       "all"
     ],

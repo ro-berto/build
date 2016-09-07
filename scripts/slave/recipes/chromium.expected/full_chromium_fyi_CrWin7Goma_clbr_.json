@@ -335,6 +335,7 @@
       "[CACHE]\\cipd\\goma",
       "--goma-hermetic",
       "error",
+      "--goma-disable-local-fallback",
       "--",
       "base_unittests",
       "chromium_builder_tests",
