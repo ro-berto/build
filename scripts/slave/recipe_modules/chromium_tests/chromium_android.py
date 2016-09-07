@@ -44,6 +44,22 @@ SPEC = {
       },
     },
 
+    'Android Cronet Builder': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder_rel_mb',
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
     'Android MIPS Builder (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],

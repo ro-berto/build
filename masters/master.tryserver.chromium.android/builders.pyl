@@ -125,6 +125,14 @@
       "slavebuilddir": "android",
       "slave_pools": ["slaves_with_devices"],
     },
+    "android_cronet": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "chromium_trybot",
+      "use_remote_run": True,
+      "scheduler": None,
+      "slavebuildder": "cronet",
+      "slave_pools": ["ccompute_bots_cq"],
+    },
     "android_cronet_tester": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "cronet",
