@@ -434,6 +434,8 @@ class AndroidApi(recipe_api.RecipeApi):
         '--adb-path', self.m.adb.adb_path(),
         '-v'
     ]
+    if restart_usb:
+      args += ['--enable-usb-reset']
     self.m.step(
         'device_recovery',
         [self.m.path['checkout'].join('third_party', 'catapult', 'devil',
@@ -1046,7 +1048,9 @@ class AndroidApi(recipe_api.RecipeApi):
     self.create_adb_symlink()
     self.spawn_logcat_monitor()
     self.authorize_adb_devices()
-    self.device_recovery()
+    # TODO(jbudorick): Restart USB only on perf bots while we
+    # figure out the fate of the usb reset in general.
+    self.device_recovery(restart_usb=perf_setup)
     if perf_setup:
       kwargs = {
           'min_battery_level': 95,

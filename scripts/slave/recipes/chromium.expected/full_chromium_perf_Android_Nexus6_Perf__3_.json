@@ -384,7 +384,8 @@
       "[HOME]/.android/known_devices.json",
       "--adb-path",
       "[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb",
-      "-v"
+      "-v",
+      "--enable-usb-reset"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus6_Perf__3_",
     "env": {
