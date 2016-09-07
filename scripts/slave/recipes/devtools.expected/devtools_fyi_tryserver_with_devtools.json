@@ -18,6 +18,12 @@
       "{\"src\": \"got_revision\", \"src/buildtools\": \"got_buildtools_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
+      "--issue",
+      "1",
+      "--patchset",
+      "2",
+      "--rietveld_server",
+      "https://rietveld.example.com",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -123,7 +129,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/scripts/buildbot/npm.py",
+      "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/scripts/buildbot/node.py",
       "--version"
     ],
     "name": "install node.js and npm"
@@ -145,8 +151,7 @@
       "git",
       "retry",
       "fetch",
-      "origin",
-      "master"
+      "origin"
     ],
     "cwd": "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/npm_modules",
     "env": {
@@ -159,7 +164,7 @@
       "git",
       "checkout",
       "-f",
-      "FETCH_HEAD"
+      "8451e3a3fae09eaa18ddeed0c069a8e2f0e3541c"
     ],
     "cwd": "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/npm_modules",
     "name": "git checkout"
@@ -212,29 +217,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/node_modules"
-    ],
-    "name": "rmtree [SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/node_modules"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/npm_modules/devtools/node_modules",
-      "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/node_modules",
-      "0"
-    ],
-    "name": "copy npm modules"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/scripts/buildbot/npm.py",
-      "run",
-      "lint"
+      "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/scripts/buildbot/node.py",
+      "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/npm_modules/node_modules/.bin/eslint",
+      "-c",
+      "front_end/.eslintrc.js",
+      "--ignore-path",
+      "front_end/.eslintignore",
+      "front_end"
     ],
     "cwd": "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools",
     "name": "run eslint"

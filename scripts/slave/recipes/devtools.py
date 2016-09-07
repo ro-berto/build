@@ -5,10 +5,11 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-  'chromium_tests',
+  'chromium_checkout',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
+  'depot_tools/tryserver',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -24,17 +25,22 @@ MASTERS = freeze({
   },
 })
 
+AFFECTED_PATHS = (
+  'third_party/WebKit/Source/devtools',
+)
+
+def should_skip_checks(api):
+  if not api.tryserver.is_tryserver:
+    return False
+  return all(
+      not filename.startswith(AFFECTED_PATHS)
+      for filename in api.chromium_checkout.get_files_affected_by_patch())
+
 def RunSteps(api):
   api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout(force=True)
 
-  has_devtools_file = False
-  files = api.chromium_tests.get_files_affected_by_patch()
-  for f in files:
-    if f.startswith('third_party/WebKit/Source/devtools'):
-      has_devtools_file = True
-
-  if not has_devtools_file:
+  if should_skip_checks(api):
     api.step('skip checks', ['echo', 'no devtools file in patch'])
     return
 
@@ -44,45 +50,51 @@ def RunSteps(api):
     return api.path['checkout'].join(*joined_path)
 
   devtools_path = get_devtools_path()
-  npm_path = get_devtools_path('scripts', 'buildbot', 'npm.py')
+  node_path = get_devtools_path('scripts', 'buildbot', 'node.py')
   npm_modules_checkout_path = get_devtools_path('npm_modules')
-  node_modules_src_path = get_devtools_path(
-      'npm_modules', 'devtools', 'node_modules')
-  node_modules_dest_path = get_devtools_path('node_modules')
+  eslint_path = get_devtools_path(
+      'npm_modules', 'node_modules', '.bin', 'eslint')
 
-  api.python('install node.js and npm', npm_path, ['--version'])
+  api.python('install node.js and npm', node_path, ['--version'])
 
   # TODO(chenwilliam): instead of checkout here, add it as DEPS
   api.git.checkout(
       url='https://chromium.googlesource.com/deps/third_party/npm_modules',
-      # TODO(chenwilliam): pin this ref to a specific commit
-      ref='master',
+      ref='8451e3a3fae09eaa18ddeed0c069a8e2f0e3541c',
       dir_path=npm_modules_checkout_path)
 
-  # Moving the node_modules folder within the npm_modules git checkout
-  # because npm expects a certain directory layout
-  # this is a naive approach to ensure we're using the latest npm_modules
-  api.shutil.rmtree(node_modules_dest_path)
-  api.shutil.copytree(
-      'copy npm modules', node_modules_src_path, node_modules_dest_path)
+  eslint_args = [
+    eslint_path, '-c', 'front_end/.eslintrc.js',
+    '--ignore-path', 'front_end/.eslintignore', 'front_end'
+  ]
+  api.python('run eslint', node_path, eslint_args, cwd=devtools_path)
 
-  api.python('run eslint', npm_path, ['run', 'lint'], cwd=devtools_path)
+
+def tryserver_properties(api, mastername, config):
+  return api.properties.generic(
+      buildername=config['buildername'],
+      mastername=mastername,
+      rietveld='https://rietveld.example.com',
+      issue=1,
+      patchset=2,
+  )
 
 def GenTests(api):
   for mastername, config in MASTERS.iteritems():
     yield (
-      api.test(config['testname'] + '_no_devtools_file') +
+      api.test(config['testname'] + '_main') +
       api.properties.generic(
           buildername=config['buildername'],
           mastername=mastername,
       )
     )
     yield (
-      api.test(config['testname']  + '_with_devtools_file') +
-      api.properties.generic(
-          buildername=config['buildername'],
-          mastername=mastername,
-      ) +
+      api.test(config['testname'] + '_tryserver_no_devtools') +
+      tryserver_properties(api, mastername, config)
+    )
+    yield (
+      api.test(config['testname']  + '_tryserver_with_devtools') +
+      tryserver_properties(api, mastername, config) +
       api.override_step_data(
         'git diff to analyze patch',
         api.raw_io.stream_output(
