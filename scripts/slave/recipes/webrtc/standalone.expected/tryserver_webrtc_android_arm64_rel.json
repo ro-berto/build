@@ -787,12 +787,12 @@
       "-a",
       "public-read",
       "[BUILDER_CACHE]/android_arm64_rel/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/android_arm64_rel/1337"
+      "gs://chromium-webrtc/logcat_dumps/android_arm64_rel/1337"
     ],
     "cwd": "[BUILDER_CACHE]/android_arm64_rel",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_arm64_rel/1337@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-webrtc/logcat_dumps/android_arm64_rel/1337@@@"
     ]
   },
   {

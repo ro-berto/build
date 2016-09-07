@@ -694,12 +694,12 @@
       "----",
       "cp",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2__dbg_/src/out/Debug/full_log",
-      "gs://chromium-android/logcat_dumps/Android32 Tests (L Nexus7.2)(dbg)/1337"
+      "gs://chromium-webrtc/logcat_dumps/Android32 Tests (L Nexus7.2)(dbg)/1337"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2__dbg_",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android32 Tests (L Nexus7.2)(dbg)/1337@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-webrtc/logcat_dumps/Android32 Tests (L Nexus7.2)(dbg)/1337@@@"
     ]
   },
   {

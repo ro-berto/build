@@ -890,12 +890,12 @@
       "----",
       "cp",
       "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/Android32 ASan (L Nexus6)/1337"
+      "gs://chromium-webrtc/logcat_dumps/Android32 ASan (L Nexus6)/1337"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android32 ASan (L Nexus6)/1337@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-webrtc/logcat_dumps/Android32 ASan (L Nexus6)/1337@@@"
     ]
   },
   {

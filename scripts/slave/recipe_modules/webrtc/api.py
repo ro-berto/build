@@ -199,7 +199,8 @@ class WebRTCApi(recipe_api.RecipeApi):
 
           if self.m.chromium.c.TARGET_PLATFORM == 'android':
             self.m.chromium_android.shutdown_device_monitor()
-            self.m.chromium_android.logcat_dump(gs_bucket='chromium-android')
+            self.m.chromium_android.logcat_dump(
+                gs_bucket=self.master_config.get('build_gs_bucket'))
             self.m.chromium_android.stack_tool_steps(force_latest_version=True)
             self.m.chromium_android.test_report()
 

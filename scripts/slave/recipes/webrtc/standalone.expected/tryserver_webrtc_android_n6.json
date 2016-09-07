@@ -787,12 +787,12 @@
       "-a",
       "public-read",
       "[BUILDER_CACHE]/android_n6/src/out/Debug/full_log",
-      "gs://chromium-android/logcat_dumps/android_n6/1337"
+      "gs://chromium-webrtc/logcat_dumps/android_n6/1337"
     ],
     "cwd": "[BUILDER_CACHE]/android_n6",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_n6/1337@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-webrtc/logcat_dumps/android_n6/1337@@@"
     ]
   },
   {

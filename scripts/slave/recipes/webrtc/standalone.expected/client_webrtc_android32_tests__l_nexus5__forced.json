@@ -728,12 +728,12 @@
       "----",
       "cp",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/Android32 Tests (L Nexus5)/1337"
+      "gs://chromium-webrtc/logcat_dumps/Android32 Tests (L Nexus5)/1337"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android32 Tests (L Nexus5)/1337@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-webrtc/logcat_dumps/Android32 Tests (L Nexus5)/1337@@@"
     ]
   },
   {

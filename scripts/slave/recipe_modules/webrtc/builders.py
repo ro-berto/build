@@ -712,6 +712,9 @@ BUILDERS = freeze({
     },
   },
   'tryserver.webrtc': {
+    'settings': {
+      'build_gs_bucket': 'chromium-webrtc',
+    },
     'builders': {
       'win_compile_dbg': {
         'recipe_config': 'webrtc',
