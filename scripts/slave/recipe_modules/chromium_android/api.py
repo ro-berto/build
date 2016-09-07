@@ -368,7 +368,8 @@ class AndroidApi(recipe_api.RecipeApi):
     self.device_recovery()
     return self.device_status()
 
-  def host_info(self, args=[], **kwargs):
+  def host_info(self, args=None, **kwargs):
+    args = args or []
     results = None
     try:
       with self.handle_exit_codes():
