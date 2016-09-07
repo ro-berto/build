@@ -38,7 +38,7 @@ def _AddBuildSpec(name, platform, target_bits=64):
 
 def _AddTestSpec(name, platform, target_bits=64):
   SPEC['builders'][name] = chromium_perf.TestSpec(
-      'tryserver_chromium_perf', platform, target_bits)
+      'tryserver_chromium_perf', None, platform, target_bits)
 
 
 _AddBuildSpec('win_perf_bisect_builder', 'win', target_bits=32)

@@ -77,7 +77,7 @@ def BuildSpec(config_name, perf_id, platform, target_bits):
   return spec
 
 
-def TestSpec(config_name, platform, target_bits,
+def TestSpec(config_name, perf_id, platform, target_bits,
              parent_buildername=None, tests=None):
   spec = _BaseSpec(
       bot_type='tester',
@@ -90,6 +90,8 @@ def TestSpec(config_name, platform, target_bits,
   if not parent_buildername:
     parent_buildername = builders[platform][target_bits]
   spec['parent_buildername'] = parent_buildername
+  spec['perf-id'] = perf_id
+  spec['results-url'] = 'https://chromeperf.appspot.com'
   spec['test_generators'] = [steps.generate_script]
 
   return spec
@@ -117,7 +119,7 @@ def _AddTestSpec(name, perf_id, platform, target_bits=64,
         perf_id, platform, target_bits, num_device_shards=num_device_shards,
         num_host_shards=num_host_shards, shard_index=shard_index)]
     SPEC['builders'][builder_name] = TestSpec(
-        'chromium_perf', platform, target_bits, tests=tests)
+        'chromium_perf', perf_id, platform, target_bits, tests=tests)
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)

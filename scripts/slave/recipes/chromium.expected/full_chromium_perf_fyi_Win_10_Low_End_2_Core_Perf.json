@@ -235,7 +235,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\Win_10_Low_End_2_Core_Perf\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Win 10 Low-End 2 Core Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"Win 10 Low-End 2 Core Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

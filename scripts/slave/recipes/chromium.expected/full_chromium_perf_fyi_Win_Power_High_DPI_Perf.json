@@ -222,7 +222,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\Win_Power_High_DPI_Perf\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Win Power High-DPI Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"Win Power High-DPI Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"win-power-high-dpi\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

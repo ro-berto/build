@@ -39,7 +39,7 @@ def _AddTestSpec(name, perf_id, platform,
       num_device_shards=1, num_host_shards=1, shard_index=0)]
 
   spec = chromium_perf.TestSpec(
-      'chromium_perf', platform, target_bits,
+      'chromium_perf', perf_id, platform, target_bits,
       parent_buildername=parent_buildername, tests=tests)
   if not parent_buildername:
     spec['parent_mastername'] = 'chromium.perf'
@@ -48,7 +48,7 @@ def _AddTestSpec(name, perf_id, platform,
 
 
 def _AddIsolatedTestSpec(name, platform, target_bits=64):
-  spec = chromium_perf.TestSpec('chromium_perf', platform, target_bits)
+  spec = chromium_perf.TestSpec('chromium_perf', None, platform, target_bits)
   spec['parent_mastername'] = 'chromium.perf'
   spec['enable_swarming'] = True
   spec['test_generators'] = [steps.generate_isolated_script]
