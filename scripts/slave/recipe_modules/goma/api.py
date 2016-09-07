@@ -14,6 +14,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     self._goma_ctl_env = {}
     self._cloudtail_pid = None
+    self._goma_jobs = None
 
   @property
   def service_account_json_path(self):
@@ -30,6 +31,46 @@ class GomaApi(recipe_api.RecipeApi):
   def json_path(self):
     assert self._goma_dir
     return self.m.path.join(self._goma_dir, 'jsonstatus')
+
+  @property
+  def recommended_goma_jobs(self):
+    """
+    Return the recommended number of jobs for parallel build using Goma.
+
+    This function caches the _goma_jobs.
+    """
+    if self._goma_jobs:
+      return self._goma_jobs
+
+    # In presubmit, a buildbot generates recipe json file and
+    # another buildbot checks generated recipe,
+    # so we need to use python.inline not to change
+    # behavior of recipes.
+    step_result = self.m.python.inline(
+      'calculate the number of recommended jobs',
+      """
+import multiprocessing
+import sys
+
+job_limit = 200
+if sys.platform.startswith('linux'):
+  # Use 80 for linux not to load goma backend.
+  job_limit = 80
+
+try:
+  jobs = min(job_limit, multiprocessing.cpu_count() * 10)
+except NotImplementedError:
+  jobs = 50
+
+print jobs
+      """,
+      stdout=self.m.raw_io.output(),
+      step_test_data=(
+          lambda: self.m.raw_io.test_api.stream_output('50\n'))
+    )
+    self._goma_jobs = int(step_result.stdout)
+
+    return self._goma_jobs
 
   def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):

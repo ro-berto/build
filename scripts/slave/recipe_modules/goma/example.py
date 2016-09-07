@@ -6,13 +6,18 @@ DEPS = [
   'goma',
   'recipe_engine/platform',
   'recipe_engine/properties',
-  'recipe_engine/raw_io',
+  'recipe_engine/step',
 ]
 
 def RunSteps(api):
   api.goma.ensure_goma()
   api.goma.start(env={})
   # build something using goma.
+  api.step('echo goma jobs',
+           ['echo', str(api.goma.recommended_goma_jobs)])
+  api.step('echo goma jobs second',
+           ['echo', str(api.goma.recommended_goma_jobs)])
+
   api.goma.stop(
       ninja_log_outdir=api.properties.get('ninja_log_outdir'),
       ninja_log_compiler=api.properties.get('ninja_log_compiler'),
