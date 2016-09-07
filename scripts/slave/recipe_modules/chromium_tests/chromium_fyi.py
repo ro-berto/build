@@ -524,9 +524,9 @@ SPEC = {
       'tests': [
         steps.BlinkTest(extra_args=[
           '--additional-driver-flag',
-          '--isolate-sites-for-testing=*.is',
+          '--site-per-process',
           '--additional-expectations',
-          'src\\third_party\\WebKit\\LayoutTests\\FlagExpectations\\isolate-extensions',
+          'src\\third_party\\WebKit\\LayoutTests\\FlagExpectations\\site-per-process',
         ]),
       ],
       'test_generators': [
