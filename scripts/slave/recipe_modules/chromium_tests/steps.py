@@ -555,7 +555,8 @@ class DynamicPerfTests(Test):
     self._shard_index = shard_index
 
     if override_browser_name:
-      self._browser_name = override_browser_name
+      # TODO(phajdan.jr): restore coverage after moving to chromium/src .
+      self._browser_name = override_browser_name  # pragma: no cover
     else:
       if platform == 'android':
         self._browser_name = 'android-chromium'

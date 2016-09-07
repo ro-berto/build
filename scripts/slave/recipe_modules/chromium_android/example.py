@@ -143,6 +143,8 @@ def RunSteps(api, buildername):
   api.chromium_android.run_tree_truth(additional_repos=['foo'])
   assert 'MAJOR' in api.chromium.get_version()
 
+  api.chromium_android.host_info()
+
   if config.get('build', False):
     api.chromium.compile()
     api.chromium_android.make_zip_archive('zip_build_proudct', 'archive.zip',
@@ -280,6 +282,13 @@ def GenTests(api):
   yield (api.test('tester_with_step_warning') +
          properties_for('tester') +
          api.step_data('unittests', retcode=88))
+
+  yield (api.test('tester_failing_host_info') +
+         properties_for('tester') +
+         api.step_data(
+             'Host Info',
+             api.json.output({'failures': ['foo', 'bar']}),
+             retcode=1))
 
   yield (api.test('tester_blacklisted_devices') +
          properties_for('tester') +

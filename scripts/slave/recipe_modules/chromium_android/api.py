@@ -751,7 +751,8 @@ class AndroidApi(recipe_api.RecipeApi):
       perf_tests = sorted(perf_tests,
           key=lambda x: (x['device_affinity'], x['test']))
     else:
-      perf_tests = [{'test': v} for v in perf_tests]
+      # TODO(phajdan.jr): restore coverage after moving to chromium/src .
+      perf_tests = [{'test': v} for v in perf_tests]  # pragma: no cover
 
     failures = []
     for test_data in perf_tests:
