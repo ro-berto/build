@@ -2672,7 +2672,8 @@ BUILDERS = {
     'builders': {
       'linux-v8-dr': {
         'gclient_apply_config': ['dynamorio'],
-        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma'],
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2697,7 +2698,7 @@ def AddBranchBuilder(build_config, arch, bits, presubmit=False,
   if presubmit:
     tests = [Presubmit] + tests
   return {
-    'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma'],
+    'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': build_config,
       'TARGET_ARCH': arch,
@@ -2755,7 +2756,7 @@ BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
 BUILDERS['client.dart.fyi'] = {'builders': {
   'v8-%s-release' % platform: {
     'chromium_apply_config': [
-        'v8_ninja', 'default_compiler', 'goma', 'disassembler'],
+        'v8_ninja', 'default_compiler', 'goma', 'disassembler', 'mb'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_ARCH': 'intel',
