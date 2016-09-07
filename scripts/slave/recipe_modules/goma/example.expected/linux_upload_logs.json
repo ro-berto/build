@@ -144,7 +144,7 @@
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "ninja -j 500",
+      "('ninja', '-j', '500')",
       "--ninja-log-exit-status",
       "0",
       "--goma-stats-file",

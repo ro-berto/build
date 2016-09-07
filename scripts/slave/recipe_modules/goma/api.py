@@ -218,7 +218,7 @@ class GomaApi(recipe_api.RecipeApi):
       args.extend([
         '--ninja-log-outdir', ninja_log_outdir,
         '--ninja-log-compiler', ninja_log_compiler,
-        '--ninja-log-command', ninja_log_command,
+        '--ninja-log-command', str(ninja_log_command),
         '--ninja-log-exit-status', ninja_log_exit_status,
       ])
     else:

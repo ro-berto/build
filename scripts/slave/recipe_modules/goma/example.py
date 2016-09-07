@@ -37,7 +37,7 @@ def GenTests(api):
         'build_data_dir': 'build_data_dir',
         'ninja_log_outdir': 'build_data_dir',
         'ninja_log_compiler': 'goma',
-        'ninja_log_command': 'ninja -j 500',
+        'ninja_log_command': ['ninja', '-j', '500'],
         'ninja_log_exit_status': '0',
     })
 
