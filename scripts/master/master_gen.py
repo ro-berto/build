@@ -6,6 +6,7 @@ import ast
 import os
 
 from buildbot.changes.filter import ChangeFilter
+from buildbot.process.properties import WithProperties
 from buildbot.schedulers.basic import SingleBranchScheduler
 from buildbot.schedulers.timed import Nightly
 from buildbot.status.mail import MailNotifier
@@ -28,6 +29,12 @@ def PopulateBuildmasterConfig(BuildmasterConfig, builders_path,
   """Read builders_path and populate a build master config dict."""
   builders = chromium_utils.ReadBuildersFile(builders_path)
   _Populate(BuildmasterConfig, builders, active_master_cls)
+
+
+_revision_getter = master_utils.ConditionalProperty(
+    lambda build: build.getProperty('revision'),
+    WithProperties('%(revision)s'),
+    'master')
 
 
 def _Populate(BuildmasterConfig, builders, active_master_cls):
@@ -122,6 +129,9 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
           repository=builder_data.get(
               'repository', builders.get('default_remote_run_repository')),
           recipe=builder_data['recipe'],
+          revision=(
+              _revision_getter if builder_data.get('remote_run_sync_revision')
+                               else None),
           max_time=builder_data.get('builder_timeout_s'),
           factory_properties=props,
           use_gitiles=builder_data.get('remote_run_use_gitiles', False),
