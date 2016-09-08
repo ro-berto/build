@@ -14,7 +14,7 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
 
   controller = api.legion.create_controller(
       name='Test Controller',

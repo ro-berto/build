@@ -68,7 +68,7 @@ TESTS = [
 
 def RunSteps(api):
   api.gclient.set_config('build')
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
 
   for test in TESTS:
     try:

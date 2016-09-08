@@ -45,7 +45,6 @@
       "/path/to/tmp/json",
       "--revision",
       "src/flutter@HEAD",
-      "--force",
       "--output_manifest"
     ],
     "env": {

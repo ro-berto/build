@@ -54,7 +54,6 @@
       "src@HEAD",
       "--revision",
       "src/third_party/skia@origin/master",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\win",

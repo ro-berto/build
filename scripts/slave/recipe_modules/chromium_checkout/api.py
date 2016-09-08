@@ -54,8 +54,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
       files[i] = path[len(relative_to):]
     return files
 
-  def ensure_checkout(self, bot_config, root_solution_revision=None,
-                      force=False):
+  def ensure_checkout(self, bot_config, root_solution_revision=None):
     """Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     """
     if self.m.platform.is_win:
@@ -74,7 +73,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
         patch_root=bot_config.get('patch_root'),
         root_solution_revision=root_solution_revision,
         clobber=bot_config.get('clobber', False),
-        force=force, **kwargs)
+        **kwargs)
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])

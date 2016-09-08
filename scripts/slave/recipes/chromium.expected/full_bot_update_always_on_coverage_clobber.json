@@ -45,7 +45,6 @@
       "--revision",
       "src@HEAD",
       "--clobber",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/coverage_clobber",

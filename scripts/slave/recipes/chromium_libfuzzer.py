@@ -104,7 +104,7 @@ def RunSteps(api):
   buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
   checkout_results = api.bot_update.ensure_checkout(
-      force=True, patch_root=bot_config.get('root_override'))
+      patch_root=bot_config.get('root_override'))
 
   api.chromium.runhooks()
   api.chromium.run_mb(mastername, buildername, use_goma=False)

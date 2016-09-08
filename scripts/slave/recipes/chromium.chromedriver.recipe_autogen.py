@@ -49,7 +49,7 @@ def Linux32_steps(api):
     'src/tools/swarming_client': 'got_swarming_client_revision',
     'src/v8': 'got_v8_revision'})
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties = api.properties.legacy()
   build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
@@ -125,7 +125,7 @@ def Mac_10_6_steps(api):
     'src/tools/swarming_client': 'got_swarming_client_revision',
     'src/v8': 'got_v8_revision'})
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties = api.properties.legacy()
   build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
@@ -203,7 +203,7 @@ def Win7_steps(api):
     'src/tools/swarming_client': 'got_swarming_client_revision',
     'src/v8': 'got_v8_revision'})
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties = api.properties.legacy()
   build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
@@ -276,7 +276,7 @@ def Linux_steps(api):
     'src/tools/swarming_client': 'got_swarming_client_revision',
     'src/v8': 'got_v8_revision'})
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties = api.properties.legacy()
   build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update

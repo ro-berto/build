@@ -22,7 +22,6 @@
       "/path/to/tmp/json",
       "--revision",
       "sdk@hash_of_revision",
-      "--force",
       "--output_manifest"
     ],
     "env": {

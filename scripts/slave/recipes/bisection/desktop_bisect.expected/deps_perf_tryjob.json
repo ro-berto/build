@@ -501,7 +501,6 @@
       "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--revision",
       "src/v8@feeedbeed",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",

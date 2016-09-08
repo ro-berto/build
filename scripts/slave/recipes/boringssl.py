@@ -141,7 +141,7 @@ def RunSteps(api, buildername):
   api.gclient.set_config('boringssl')
   if _HasToken(buildername, 'android'):
     api.gclient.c.target_os.add('android')
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
   # Set up paths.

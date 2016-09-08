@@ -48,7 +48,6 @@
       "src/third_party/libjingle/source/talk@HEAD",
       "--revision",
       "src/third_party/webrtc@HEAD",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Tests__dbg___L_Nexus5_",

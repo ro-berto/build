@@ -16,7 +16,7 @@ DEPS = [
 
 def _CheckoutSteps(api):
   api.gclient.set_config('webports')
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   api.gclient.runhooks()
   # HACK(aneeshm): Borrowed from iannucci's hack in nacl.py.
   got_revision = result.presentation.properties['got_revision']

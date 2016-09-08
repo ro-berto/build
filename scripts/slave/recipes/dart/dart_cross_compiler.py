@@ -40,7 +40,7 @@ def tarball_name(arch, mode, revision):
 def RunSteps(api):
   api.gclient.set_config('dart')
   api.path.c.dynamic_paths['tools'] = None
-  update_step = api.bot_update.ensure_checkout(force=True)
+  update_step = api.bot_update.ensure_checkout()
   revision = update_step.json.output['fixed_revisions']['sdk']
 
   api.path['tools'] = api.path['checkout'].join('tools')

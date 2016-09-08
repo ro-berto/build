@@ -46,7 +46,6 @@
       "src@HEAD",
       "--revision",
       "src/third_party/angle@HEAD",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_ChromiumOS_Builder",

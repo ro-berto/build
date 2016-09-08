@@ -271,8 +271,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     """
     self.m.bot_update.ensure_checkout(
         gclient_config=self.gclient_config(),
-        update_presentation=False,
-        force=True)
+        update_presentation=False)
 
     if self.c.chromite_branch and self.c.cbb.disable_bootstrap:
       # Chromite auto-detects which branch to build for based on its current

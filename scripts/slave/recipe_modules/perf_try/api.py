@@ -168,8 +168,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
         self.m.chromium.taskkill()
       self.m.gclient.c.revisions['src'] = str(revision)
       update_step = self.m.bot_update.ensure_checkout(
-          suffix=str(revision), force=True, patch=False,
-          update_presentation=False)
+          suffix=str(revision), patch=False, update_presentation=False)
       assert update_step.json.output['did_run']
       self.m.chromium.runhooks(name='runhooks on %s' % str(revision))
 

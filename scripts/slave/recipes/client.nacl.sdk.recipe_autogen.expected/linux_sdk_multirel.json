@@ -22,7 +22,6 @@
       "/path/to/tmp/json",
       "--revision",
       "chrome-official@123456789abcdef",
-      "--force",
       "--output_manifest"
     ],
     "env": {

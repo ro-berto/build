@@ -72,7 +72,6 @@
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator",

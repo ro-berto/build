@@ -38,7 +38,7 @@ def should_skip_checks(api):
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
 
   if should_skip_checks(api):
     api.step('skip checks', ['echo', 'no devtools file in patch'])

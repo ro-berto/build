@@ -60,7 +60,7 @@ def linux_sdk_multi_steps(api):
          'src/tools/swarming_client': 'got_swarming_client_revision',
          'src/v8': 'got_v8_revision'})
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
     # clobber before runhooks
@@ -148,7 +148,7 @@ def mac_sdk_multi_steps(api):
          'src/tools/swarming_client': 'got_swarming_client_revision',
          'src/v8': 'got_v8_revision'})
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
     # clobber before runhooks
@@ -241,7 +241,7 @@ def windows_sdk_multi_steps(api):
          'src/tools/swarming_client': 'got_swarming_client_revision',
          'src/v8': 'got_v8_revision'})
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
     # clobber before runhooks
@@ -304,7 +304,7 @@ def linux_sdk_multirel_steps(api):
          'src/tools/swarming_client': 'got_swarming_client_revision',
          'src/v8': 'got_v8_revision'})
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
     # clobber before runhooks
@@ -370,7 +370,7 @@ def windows_sdk_multirel_steps(api):
          'src/tools/swarming_client': 'got_swarming_client_revision',
          'src/v8': 'got_v8_revision'})
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
     # clobber before runhooks
@@ -432,7 +432,7 @@ def mac_sdk_multirel_steps(api):
          'src/tools/swarming_client': 'got_swarming_client_revision',
          'src/v8': 'got_v8_revision'})
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
     # clobber before runhooks

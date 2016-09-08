@@ -20,7 +20,7 @@ def RunSteps(api):
   api.gclient.set_config('chromium')
   api.gclient.apply_config('v8')
   api.bot_update.ensure_checkout(
-      force=True, no_shallow=True, with_branch_heads=True)
+      no_shallow=True, with_branch_heads=True)
   api.step(
       'V8Releases',
       [api.path['slave_build'].join(

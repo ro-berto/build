@@ -13,7 +13,7 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('wasm_llvm')
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   got_revision = result.presentation.properties['got_waterfall_revision']
 
   env = {

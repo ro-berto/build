@@ -46,7 +46,6 @@
       "src@origin/lkcr",
       "--revision",
       "src/v8@1111111",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_ASan_LSan_Tests__1_",

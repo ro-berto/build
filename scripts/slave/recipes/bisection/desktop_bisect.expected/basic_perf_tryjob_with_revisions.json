@@ -364,7 +364,6 @@
       "/path/to/tmp/json",
       "--revision",
       "src@bad49c331def2a3bbf3ddd0096eb51551155",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
@@ -673,7 +672,6 @@
       "/path/to/tmp/json",
       "--revision",
       "src@d49c331def2a3bbf3ddd0096eb51551155",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",

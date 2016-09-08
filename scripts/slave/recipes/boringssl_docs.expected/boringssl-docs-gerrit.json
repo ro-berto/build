@@ -26,7 +26,6 @@
       "/path/to/tmp/json",
       "--revision",
       "boringssl@HEAD",
-      "--force",
       "--output_manifest"
     ],
     "env": {

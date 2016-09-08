@@ -516,7 +516,6 @@
       "/path/to/tmp/json",
       "--revision",
       "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",

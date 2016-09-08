@@ -32,7 +32,7 @@ def _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang,
   api.gclient.set_config('pdfium')
   if target_os:
     api.gclient.c.target_os = {target_os}
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
 
   api.gclient.runhooks()
 

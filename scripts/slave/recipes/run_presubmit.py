@@ -22,14 +22,12 @@ DEPS = [
 def _RunStepsInternal(api):
   repo_name = api.properties['repo_name']
   codereview_auth = api.properties.get('codereview_auth', False)
-  force_checkout = api.properties.get('force_checkout', False)
   patch_storage = api.properties.get('patch_storage', 'rietveld')
 
   api.gclient.set_config(repo_name)
 
   kwargs = {}
   bot_update_step = api.bot_update.ensure_checkout(
-      force=force_checkout,
       patch_oauth2=codereview_auth,
       **kwargs)
   relative_root = api.gclient.calculate_patch_root(

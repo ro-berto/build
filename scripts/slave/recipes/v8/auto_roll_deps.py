@@ -121,7 +121,7 @@ def RunSteps(api):
         'import time; time.sleep(20)',
     )
 
-    api.bot_update.ensure_checkout(force=True, no_shallow=True)
+    api.bot_update.ensure_checkout(no_shallow=True)
 
     # Get deps file from pending ref.
     pending_deps = api.gitiles.download_file(

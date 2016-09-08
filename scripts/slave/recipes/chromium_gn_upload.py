@@ -66,7 +66,7 @@ def RunSteps(api):
                                                        ['gn_for_uploads', 'mb'])
 
   api.bot_update.ensure_checkout(
-      force=True, patch_root=bot_config.get('root_override'))
+      patch_root=bot_config.get('root_override'))
 
   api.chromium.ensure_goma()
 

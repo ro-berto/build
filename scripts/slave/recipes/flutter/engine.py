@@ -267,9 +267,7 @@ def GetCheckout(api):
   src_cfg.target_os = set(['android'])
   api.gclient.c = src_cfg
   api.gclient.c.got_revision_mapping['src/flutter'] = 'got_engine_revision'
-  # TODO(eseidel): According to iannucci force=True is required.
-  # See https://codereview.chromium.org/1690713003#msg6
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
 

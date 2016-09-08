@@ -22,7 +22,6 @@
       "/path/to/tmp/json",
       "--revision",
       "chromite@factory-1412.B:",
-      "--force",
       "--output_manifest"
     ],
     "env": {

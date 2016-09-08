@@ -22,7 +22,6 @@
       "/path/to/tmp/json",
       "--revision",
       "sdk@HEAD",
-      "--force",
       "--output_manifest"
     ],
     "env": {

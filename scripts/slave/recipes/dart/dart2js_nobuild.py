@@ -92,7 +92,7 @@ def RunSteps(api):
 
   api.gclient.set_config('dart')
   api.path.c.dynamic_paths['tools'] = None
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
   api.path['tools'] = api.path['checkout'].join('tools')
   revision = api.properties['revision']
 

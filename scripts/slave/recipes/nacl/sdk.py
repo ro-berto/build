@@ -18,7 +18,7 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
   api.chromium.apply_config('mb')
   api.gclient.set_config('chromium')
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
   api.tryserver.maybe_apply_issue()
   api.chromium.runhooks()
   api.chromium.run_mb(

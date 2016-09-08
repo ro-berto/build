@@ -19,7 +19,7 @@ def RunSteps(api):
 
   api.ios.host_info()
 
-  checkout_kwargs = {'force': True}
+  checkout_kwargs = {}
   checkout_dir = api.chromium_checkout.get_checkout_dir({})
   if checkout_dir:
     checkout_kwargs['cwd'] = checkout_dir

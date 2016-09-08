@@ -45,7 +45,6 @@
       "/path/to/tmp/json",
       "--revision",
       "src@204787",
-      "--force",
       "--output_manifest"
     ],
     "env": {

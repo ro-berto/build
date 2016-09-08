@@ -161,7 +161,7 @@ PATCH=1
 
   def checkout(self):
     """Checks out the Syzygy code using the current gclient configuration."""
-    step = self.m.bot_update.ensure_checkout(force=True)
+    step = self.m.bot_update.ensure_checkout()
     self._revision = step.presentation.properties['got_revision']
     github_url = self._SYZYGY_GITHUB + str(self._revision)
     step.presentation.links[str(self._revision)] = github_url

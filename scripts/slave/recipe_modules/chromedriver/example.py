@@ -42,7 +42,7 @@ def RunSteps(api):
 
   api.chromium.set_config('chromium')
   api.gclient.set_config('chromium')
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
   platform = builder.get('chromedriver_platform')
 
   commit_position = api.commit_position.parse_revision(

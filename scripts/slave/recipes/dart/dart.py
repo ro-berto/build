@@ -24,7 +24,7 @@ def RunSteps(api):
   if 'vm-precomp-android' in buildername:
     api.gclient.apply_config('android')
 
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
   extra_build_args = api.properties.get('build_args', [])

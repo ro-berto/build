@@ -63,7 +63,7 @@ def RunSteps(api):
   _, bot_config = api.chromium.configure_bot(BUILDERS)
 
   api.bot_update.ensure_checkout(
-      force=True, patch_root=bot_config.get('root_override'))
+      patch_root=bot_config.get('root_override'))
 
   api.python('download binutils',
       api.path['checkout'].join('third_party', 'binutils', 'download.py'))

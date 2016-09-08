@@ -22,7 +22,6 @@
       "/path/to/tmp/json",
       "--revision",
       "src/dart@12345",
-      "--force",
       "--output_manifest"
     ],
     "env": {

@@ -21,7 +21,7 @@ def win_xp_dr_nightly_steps(api):
   soln.custom_deps = {'dynamorio/tools/buildbot':
       'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
@@ -45,7 +45,7 @@ def linux_dr_steps(api):
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # pre-commit suite step
   api.step("pre-commit suite", ['ctest', '--timeout', '120', '-VV', '-S',
@@ -66,7 +66,7 @@ def win_7_dr_steps(api):
   soln.custom_deps = {'dynamorio/tools/buildbot':
       'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
@@ -88,7 +88,7 @@ def linux_dr_package_steps(api):
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # get buildnumber step; no longer needed
   # Package DynamoRIO step
@@ -112,7 +112,7 @@ def win_8_dr_steps(api):
   soln.custom_deps = {'dynamorio/tools/buildbot':
       'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
@@ -137,7 +137,7 @@ def win_xp_dr_steps(api):
   soln.custom_deps = {'dynamorio/tools/buildbot':
       'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
@@ -161,7 +161,7 @@ def win_7_dr_nightly_steps(api):
   soln.custom_deps = {'dynamorio/tools/buildbot':
       'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
@@ -186,7 +186,7 @@ def win_8_dr_nightly_steps(api):
   soln.custom_deps = {'dynamorio/tools/buildbot':
       'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
@@ -211,7 +211,7 @@ def win_dr_package_steps(api):
   soln.custom_deps = {'dynamorio/tools/buildbot':
       'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
@@ -240,7 +240,7 @@ def linux_dr_nightly_steps(api):
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # dynamorio nightly suite step
   api.step("nightly suite", ["ctest", "--timeout", "120", "-VV", "-S",

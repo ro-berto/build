@@ -27,7 +27,7 @@ BUILDERS = {
 def RunSteps(api):
   api.chromium.configure_bot(BUILDERS, ['win_analyze', 'mb'])
 
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
 
   api.chromium.runhooks()
 

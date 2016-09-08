@@ -29,7 +29,7 @@ def linux_builder_steps(api):
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # get buildnumber step; no longer needed
     # Package DrMemory step
@@ -55,7 +55,7 @@ def linux_lucid_x64_drm_steps(api):
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # Dr. Memory ctest step
     api.step(
@@ -97,7 +97,7 @@ def win_vista_x64_drm_steps(api):
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # clear tools directory step; null converted
     # update tools step; null converted
@@ -240,7 +240,7 @@ def mac_mavericks_x64_DR_steps(api):
     soln.name = "dynamorio"
     soln.url = "https://github.com/DynamoRIO/dynamorio.git"
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # pre-commit suite step
     api.step("pre-commit suite",
@@ -272,7 +272,7 @@ def linux_cr_builder_steps(api):
          'src/tools/swarming_client': 'got_swarming_client_revision',
          'src/v8': 'got_v8_revision'})
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
     # clobber before runhooks
@@ -312,7 +312,7 @@ def mac_builder_DR_steps(api):
     soln.name = "dynamorio"
     soln.url = "https://github.com/DynamoRIO/dynamorio.git"
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # get buildnumber step; no longer needed
     # Package DynamoRIO step
@@ -338,7 +338,7 @@ def win_xp_drm_steps(api):
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # clear tools directory step; null converted
     # update tools step; null converted
@@ -485,7 +485,7 @@ def mac_mavericks_x64_drm_steps(api):
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # Dr. Memory ctest step
     api.step(
@@ -519,7 +519,7 @@ def linux_cr_steps(api):
     soln.name = "dynamorio"
     soln.url = "https://github.com/DynamoRIO/dynamorio.git"
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # Make the build directory step
     api.file.makedirs("makedirs", api.path["slave_build"].join("dynamorio"))
@@ -677,7 +677,7 @@ def win8_cr_builder_steps(api):
          'src/tools/swarming_client': 'got_swarming_client_revision',
          'src/v8': 'got_v8_revision'})
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
     # clobber before runhooks
@@ -903,7 +903,7 @@ def win_8_x64_drm_steps(api):
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # clear tools directory step; null converted
     # update tools step; null converted
@@ -1064,7 +1064,7 @@ def win7_cr_builder_steps(api):
          'src/tools/swarming_client': 'got_swarming_client_revision',
          'src/v8': 'got_v8_revision'})
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
     # clobber before runhooks
@@ -1102,7 +1102,7 @@ def win_7_x64_drm_steps(api):
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # clear tools directory step; null converted
     # update tools step; null converted
@@ -1249,7 +1249,7 @@ def mac_builder_steps(api):
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # get buildnumber step; no longer needed
     # Package DrMemory step
@@ -1275,7 +1275,7 @@ def win_builder_steps(api):
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
-    result = api.bot_update.ensure_checkout(force=True)
+    result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
     # clear tools directory step; null converted
     # update tools step; null converted

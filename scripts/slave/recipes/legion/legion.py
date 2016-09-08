@@ -58,7 +58,7 @@ def RunSteps(api):
   api.swarming.swarming_server = (
       'https://omnibot-legion-swarming-server.appspot.com')
   api.gclient.set_config('chromium')
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
 
   for name, config in CONFIGS.iteritems():
     controller = api.legion.create_controller(

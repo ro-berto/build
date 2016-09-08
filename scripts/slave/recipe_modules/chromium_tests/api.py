@@ -172,8 +172,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return self.m.chromium_checkout.get_checkout_dir(bot_config)
 
   # TODO(phajdan.jr): fix callers and remove chromium_tests.ensure_checkout.
-  def ensure_checkout(self, bot_config, root_solution_revision=None,
-                      force=False):
+  def ensure_checkout(self, bot_config, root_solution_revision=None):
     return self.m.chromium_checkout.ensure_checkout(  # pragma: no cover
         bot_config, root_solution_revision, force)
 
@@ -204,10 +203,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_db._add_master_dict_and_test_spec(mastername, master_dict, {})
     return bot_db
 
-  def prepare_checkout(self, bot_config, root_solution_revision=None,
-                       force=False):
+  def prepare_checkout(self, bot_config, root_solution_revision=None):
     update_step = self.m.chromium_checkout.ensure_checkout(
-        bot_config, root_solution_revision, force=force)
+        bot_config, root_solution_revision)
 
     if (self.m.chromium.c.compile_py.compiler and
         'goma' in self.m.chromium.c.compile_py.compiler):
@@ -684,7 +682,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       kwargs['env'] = {'GCLIENT_KILL_GIT_FETCH_AFTER': '1200'}  # 20 minutes.
 
     self.m.bot_update.ensure_checkout(
-        force=True, patch=False, update_presentation=False, **kwargs)
+        patch=False, update_presentation=False, **kwargs)
     self.m.chromium.runhooks(name='runhooks (without patch)')
 
   def run_tests_on_tryserver(self, bot_config, api, tests, bot_update_step,
@@ -831,7 +829,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         mastername, buildername)
     api.chromium_tests.configure_build(bot_config)
     update_step, bot_db = api.chromium_tests.prepare_checkout(
-        bot_config, force=True)
+        bot_config)
     tests, tests_including_triggered = api.chromium_tests.get_tests(
         bot_config, bot_db)
     compile_targets = api.chromium_tests.get_compile_targets(
