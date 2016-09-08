@@ -910,10 +910,19 @@ def main(argv):
   if args.set_status and not simulate:
     args.password = get_pwd(args.password_file)
 
-  masters = set(args.master_url)
-  if not masters <= set(gatekeeper_config):
+  masters = defaultdict(set)
+  for m in args.master_url:
+    if m.count(':') > 1:
+      # Master in master_url:builder,builder format.
+      http, mname, builderlist = m.split(':', 2)
+      mastername = ':'.join([http, mname])
+      masters[mastername].update(builderlist.split(','))
+    else:
+      # Regular master URL, just add '*'.
+      masters[m].add(build_scan.BUILDER_WILDCARD)
+  if not set(masters) <= set(gatekeeper_config):
     print 'The following masters are not present in the gatekeeper config:'
-    for m in masters - set(gatekeeper_config):
+    for m in set(masters) - set(gatekeeper_config):
       print '  ' + m
     return 1
 

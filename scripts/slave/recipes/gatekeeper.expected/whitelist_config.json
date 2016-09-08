@@ -15,8 +15,8 @@
       "@@@STEP_LOG_LINE@json.output@    \"filter-domain\": \"google.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.webkit\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"foobar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"foobar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"coolbar\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
@@ -46,9 +46,39 @@
     "name": "gatekeeper: chromium"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "--status-url",
+      "https://blink-status.appspot.com",
+      "--sheriff-url",
+      "https://build.chromium.org/p/chromium/%s.js",
+      "--set-status",
+      "--open-tree",
+      "--track-revisions",
+      "--revision-properties",
+      "got_revision,got_webkit_revision",
+      "--build-db",
+      "blink_build_db.json",
+      "--password-file",
+      ".blink_status_password",
+      "--default-from-email",
+      "blink-buildbot@chromium-build.appspotmail.com",
+      "--filter-domain",
+      "google.com",
+      "--status-user",
+      "gatekeeper@google.com",
+      "https://build.chromium.org/p/chromium.webkit:foobar,coolbar"
+    ],
+    "name": "gatekeeper: blink"
+  },
+  {
     "name": "$result",
-    "reason": "Invalid tree config. Masters with individually specified builders cannot set tree status. Email infra-dev@chromium.org if you want this feature.",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

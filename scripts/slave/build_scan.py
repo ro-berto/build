@@ -27,6 +27,9 @@ SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
 MAX_ATTEMPTS = 4
 URL_TIMEOUT = 30
 
+BUILDER_WILDCARD = '*'
+
+
 def _url_open_json(url):
   attempts = 0
   while True:
@@ -53,7 +56,7 @@ def get_root_json(master_url):
   return _url_open_json(url)
 
 
-def find_new_builds(master_url, root_json, build_db):
+def find_new_builds(master_url, builderlist, root_json, build_db):
   """Given a dict of previously-seen builds, find new builds on each builder.
 
   Note that we use the 'cachedBuilds' here since it should be faster, and this
@@ -76,6 +79,12 @@ def find_new_builds(master_url, root_json, build_db):
       last_finished_build[builder] = max(finished)
 
   for buildername, builder in root_json['builders'].iteritems():
+    if (BUILDER_WILDCARD not in builderlist) and (
+        buildername not in builderlist):
+      logging.debug('ignoring %s:%s because not in builder whitelist',
+                    master_url, buildername)
+      continue
+
     # cachedBuilds are the builds in the cache, while currentBuilds are the
     # currently running builds. Thus cachedBuilds can be unfinished or finished,
     # while currentBuilds are always unfinished.
@@ -113,10 +122,10 @@ def find_new_builds_per_master(masters, build_db):
   """Given a list of masters, find new builds and collect them under a dict."""
   builds = {}
   master_jsons = {}
-  for master in masters:
+  for master, builders in masters.iteritems():
     root_json = get_root_json(master)
     master_jsons[master] = root_json
-    builds[master] = find_new_builds(master, root_json, build_db)
+    builds[master] = find_new_builds(master, builders, root_json, build_db)
   return builds, master_jsons
 
 
@@ -210,7 +219,9 @@ def main():
 
   logging.basicConfig(level=logging.DEBUG if options.verbose else logging.INFO)
 
-  masters = set(args)
+  masters = {}
+  for m in set(args):
+    masters[m] = BUILDER_WILDCARD
 
   if options.clear_build_db:
     build_db = {}

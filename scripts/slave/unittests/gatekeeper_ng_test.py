@@ -1053,6 +1053,50 @@ class GatekeeperTest(unittest.TestCase):
     self.assertTrue(status_data['message'][0].startswith(
       "Tree is open (Automatic"))
 
+  def testBuilderWhitelisted(self):
+    """Test that a whitelisted builder successfully closes the tree."""
+
+    whitelisted_builders = ','.join(['mybuilder', 'some_other_builder'])
+
+    self.argv.extend([m.url + ':' + whitelisted_builders
+                      for m in self.masters])
+    self.argv.extend(['--skip-build-db-update',
+                      '--email-app-secret-file=%s' % self.email_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    self.call_gatekeeper()
+
+    # Check that gatekeeper indeed sent an email.
+    self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
+    mailer_data = GatekeeperTest.decode_param_json(
+        self.url_calls[-1]['params'])
+    self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
+
+  def testBuilderNotWhitelisted(self):
+    """Test that a non-whitelisted builder does not close the tree."""
+
+    whitelisted_builders = ','.join(['doesnt_exist_builder',
+                                     'some_other_builder'])
+
+    self.argv.extend([m.url + ':' + whitelisted_builders
+                      for m in self.masters])
+    self.argv.extend(['--skip-build-db-update',
+                      '--email-app-secret-file=%s' % self.email_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    urls = self.call_gatekeeper()
+
+    # Check that gatekeeper did not send an email.
+    self.assertNotIn(self.mailer_url, urls)
+
   def testBuildStatusWrittenToBuildDB(self):
     """Test that build success and failure is written to the build_db."""
     self.argv.extend([m.url for m in self.masters])

@@ -51,14 +51,10 @@ class Gatekeeper(recipe_api.RecipeApi):
             modifies_tree = True
 
           for master, allowed in tree_args['masters'].items():
-            if bool(set(allowed) - set(['*'])) and modifies_tree:
-              raise self.m.step.StepFailure(
-                  "Invalid tree config. Masters with individually specified "
-                  "builders cannot set tree status. Email "
-                  "infra-dev@chromium.org if you want this feature.")
-
             if '*' in allowed:
               valid_masters.append(master)
+            elif allowed:
+              valid_masters.append(master + ':' + ','.join(allowed))
           args.extend(valid_masters)
         else: #pragma: no cover
           args.extend(tree_args['masters'])

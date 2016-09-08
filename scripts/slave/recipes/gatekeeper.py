@@ -40,14 +40,14 @@ def GenTests(api):
     + api.step_data('gatekeeper: chromium', retcode=1)
   )
 
-  bad_data = api.gatekeeper.fake_test_json()
-  bad_data['blink']['masters'][
-      'https://build.chromium.org/p/chromium.webkit'].append('foobar')
+  whitelist_data = api.gatekeeper.fake_test_json()
+  whitelist_data['blink']['masters'][
+      'https://build.chromium.org/p/chromium.webkit'] = ['foobar', 'coolbar']
 
   yield (
-    api.test('bad_config')
+    api.test('whitelist_config')
     + api.step_data(
         'reading gatekeeper_trees.json',
-        api.gatekeeper.fake_test_data(bad_data)
+        api.gatekeeper.fake_test_data(whitelist_data)
     )
   )
