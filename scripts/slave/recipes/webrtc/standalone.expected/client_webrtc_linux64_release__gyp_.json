@@ -166,7 +166,6 @@
     "cwd": "[BUILDER_CACHE]/Linux64_Release__GYP_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -194,51 +193,6 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[BUILDER_CACHE]/Linux64_Release__GYP_/src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--buildbot-buildername",
-      "Linux64 Release (GYP)",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "slavename",
-      "--goma-deps-cache-dir",
-      "[GOMA_DEPS_CACHE]",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
   },
   {
     "name": "$result",

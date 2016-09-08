@@ -79,22 +79,22 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.bot_config.get('parent_buildername')
 
   def apply_bot_config(self, builders, recipe_configs, perf_config=None):
-    mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
-    master_dict = builders.get(mastername, {})
+    self.mastername = self.m.properties.get('mastername')
+    self.buildername = self.m.properties.get('buildername')
+    master_dict = builders.get(self.mastername, {})
     self.master_config = master_dict.get('settings', {})
     perf_config = self.master_config.get('PERF_CONFIG')
 
-    self.bot_config = master_dict.get('builders', {}).get(buildername)
+    self.bot_config = master_dict.get('builders', {}).get(self.buildername)
     assert self.bot_config, ('Unrecognized builder name "%r" for master "%r".' %
-                             (buildername, mastername))
+                             (self.buildername, self.mastername))
 
     self.bot_type = self.bot_config.get('bot_type', 'builder_tester')
     recipe_config_name = self.bot_config['recipe_config']
     self.recipe_config = recipe_configs.get(recipe_config_name)
     assert self.recipe_config, (
         'Cannot find recipe_config "%s" for builder "%r".' %
-        (recipe_config_name, buildername))
+        (recipe_config_name, self.buildername))
 
     self.set_config('webrtc', PERF_CONFIG=perf_config,
                     TEST_SUITE=self.recipe_config.get('test_suite'),
@@ -117,9 +117,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     for c in self.recipe_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
-    # Apply MB config to all bots.
-    self.m.chromium.apply_config('mb')
-
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
@@ -132,7 +129,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium_swarming.configure_swarming(
           'webrtc',
           precommit=self.m.tryserver.is_tryserver,
-          mastername=mastername)
+          mastername=self.mastername)
       self.m.swarming.set_default_dimension(
           'os',
           self.m.swarming.prefered_os_dimension(
@@ -158,18 +155,15 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.swarming.check_client_version()
 
   def compile(self):
-    # TODO(kjellander); Clean up the rest of the mb configs once we've got the
-    # last builders switched over (iOS).
-    if self.m.chromium.c.project_generator.tool == 'mb':
-      mastername = self.m.properties.get('mastername')
-      buildername = self.m.properties.get('buildername')
-      self.m.chromium.run_mb(
-        mastername, buildername, use_goma=True,
-        mb_config_path=self.m.path['checkout'].join('webrtc', 'build',
-                                                    'mb_config.pyl'),
-        gyp_script=self.m.path['checkout'].join('webrtc', 'build',
-                                                'gyp_webrtc.py'))
-    self.m.chromium.compile()
+    self.m.chromium.run_mb(
+      self.mastername, self.buildername, use_goma=True,
+      mb_config_path=self.m.path['checkout'].join('webrtc', 'build',
+                                                  'mb_config.pyl'),
+      gyp_script=self.m.path['checkout'].join('webrtc', 'build',
+                                              'gyp_webrtc.py'))
+    # GYP bots no longer compiles, we only want to ensure GYP executes.
+    if 'gyp' not in self.buildername.lower():
+      self.m.chromium.compile()
 
   def runtests(self):
     """Add a suite of test steps.
@@ -272,7 +266,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   def package_build(self):
     upload_url = self.m.archive.legacy_upload_url(
         self.master_config.get('build_gs_bucket'),
-        extra_url_components=self.m.properties['mastername'])
+        extra_url_components=self.mastername)
     self.m.archive.zip_and_upload_build(
         'package build',
         self.m.chromium.c.build_config_fs,
@@ -293,7 +287,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     download_url = self.m.archive.legacy_download_url(
        self.master_config.get('build_gs_bucket'),
-       extra_url_components=self.m.properties['mastername'])
+       extra_url_components=self.mastername)
     self.m.archive.download_and_unzip_build(
         'extract build',
         self.m.chromium.c.build_config_fs,
