@@ -55,6 +55,7 @@ BUILDERS = freeze({
         'path': lambda api: ('Android Builder/full-build-linux_%s.zip'
                              % api.properties['revision']),
       },
+      'resource_sizes_apks': ['ChromePublic.apk', 'SystemWebView.apk'],
       'run_mb': True,
       'targets': [
         'android_tools',
@@ -88,6 +89,7 @@ BUILDERS = freeze({
             'Android arm64 Builder/full-build-linux_%s.zip'
             % api.properties['revision']),
       },
+      'resource_sizes_apks': ['ChromePublic.apk', 'SystemWebView.apk'],
       'run_mb': True,
       'targets': [
         'android_tools',
@@ -211,6 +213,10 @@ def _RunStepsInternal(api, mastername, buildername, revision):
     with bot_config['check_licenses']():
       droid.check_webview_licenses()
   api.chromium.compile(bot_config.get('targets'))
+
+  for apk_name in bot_config.get('resource_sizes_apks', ()):
+    apk_path = api.chromium_android.apk_path(apk_name)
+    api.chromium_android.resource_sizes(apk_path, chartjson_file=True)
 
   upload_config = bot_config.get('upload')
   if upload_config:
