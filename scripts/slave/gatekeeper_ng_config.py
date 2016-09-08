@@ -369,18 +369,6 @@ def load_gatekeeper_tree_config(filename):
       'You can only specify one of "default-from-email",'
       ' "use-project-email-address".')
 
-    if tree_config.get('set-status', True) or tree_config.get('open-tree'):
-      all_builders = set()
-      for allowed in masters.values():
-        all_builders = all_builders.union(allowed)
-
-      all_builders.remove('*')
-      assert not all_builders, (
-        "Invalid tree config. Masters with individually specified"
-        "builders cannot set tree status. Email infra-dev@chromium.org"
-        "if you want this feature.")
-
-
   return trees_config
 
 def gatekeeper_section_hash(gatekeeper_section):
