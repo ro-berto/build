@@ -23,6 +23,10 @@ MASTERS = freeze({
     'buildername': 'Chromium DevTools Linux',
     'testname': 'devtools_fyi',
   },
+  'tryserver.chromium.linux': {
+    'buildername': 'chromium_devtools',
+    'testname': 'devtools_tryserver',
+  },
 })
 
 AFFECTED_PATHS = (
@@ -41,7 +45,8 @@ def RunSteps(api):
   api.bot_update.ensure_checkout()
 
   if should_skip_checks(api):
-    api.step('skip checks', ['echo', 'no devtools file in patch'])
+    result = api.step('skip checks', ['echo', 'No devtools files in patch.'])
+    result.presentation.step_text = "No devtools files in patch."
     return
 
   def get_devtools_path(*sub_paths):
@@ -69,35 +74,33 @@ def RunSteps(api):
   ]
   api.python('run eslint', node_path, eslint_args, cwd=devtools_path)
 
-
-def tryserver_properties(api, mastername, config):
-  return api.properties.generic(
-      buildername=config['buildername'],
-      mastername=mastername,
-      rietveld='https://rietveld.example.com',
-      issue=1,
-      patchset=2,
-  )
-
 def GenTests(api):
   for mastername, config in MASTERS.iteritems():
-    yield (
-      api.test(config['testname'] + '_main') +
-      api.properties.generic(
-          buildername=config['buildername'],
-          mastername=mastername,
+    if mastername.startswith('tryserver'):
+      yield (
+        api.test(config['testname'] + '_no_devtools') +
+        api.properties.tryserver(
+            buildername=config['buildername'],
+            mastername=mastername,
+        )
       )
-    )
-    yield (
-      api.test(config['testname'] + '_tryserver_no_devtools') +
-      tryserver_properties(api, mastername, config)
-    )
-    yield (
-      api.test(config['testname']  + '_tryserver_with_devtools') +
-      tryserver_properties(api, mastername, config) +
-      api.override_step_data(
-        'git diff to analyze patch',
-        api.raw_io.stream_output(
-          'third_party/WebKit/Source/devtools/fake.js\n')
+      yield (
+        api.test(config['testname']  + '_with_devtools') +
+        api.properties.tryserver(
+            buildername=config['buildername'],
+            mastername=mastername,
+        ) +
+        api.override_step_data(
+            'git diff to analyze patch',
+            api.raw_io.stream_output(
+                'third_party/WebKit/Source/devtools/fake.js\n'),
+        )
       )
-    )
+    else:
+      yield (
+        api.test(config['testname']) +
+        api.properties.generic(
+            buildername=config['buildername'],
+            mastername=mastername,
+        )
+      )
