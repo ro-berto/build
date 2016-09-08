@@ -30,6 +30,7 @@ IgnitionTurbofan = TestStepConfig('ignition_turbofan')
 Mjsunit = TestStepConfig('mjsunit')
 Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
+Mjsunit_4 = TestStepConfig('mjsunit', shards=4)
 MjsunitExtra_3 = TestStepConfig('mjsunit_extra', shards=3)
 MjsunitIgnitionTurbofan_2 = TestStepConfig(
     'mjsunit_ignition_turbofan', shards=2)
@@ -839,7 +840,7 @@ BUILDERS = {
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
         'tests': [
-          Mjsunit_3,
+          Mjsunit_4,
           MjsunitExtra_3,
           Webkit,
           MjsunitIgnitionTurbofan_2,
@@ -873,7 +874,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'enable_swarming': True,
-        'tests': [Mjsunit_2],
+        'tests': [Mjsunit_3],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux gcc 4.8': {
@@ -1305,7 +1306,7 @@ BUILDERS = {
         'variants': V8Variant('default'),
         'enable_swarming': True,
         'swarming_properties': {
-          'default_hard_timeout': 60 * 60,
+          'default_hard_timeout': 2 * 60 * 60,
           'default_expiration': 6 * 60 * 60,
         },
         'swarming_dimensions': {
@@ -1989,7 +1990,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          Mjsunit_3,
+          Mjsunit_4,
           MjsunitExtra_3,
           Webkit,
           MjsunitIgnitionTurbofan_2,
