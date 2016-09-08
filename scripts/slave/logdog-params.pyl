@@ -44,9 +44,11 @@
 {
   'chromium': {
     # Infra
-    'chromium.infra': {},
+    'chromium.infra': {
+        # Used for canarying.
+        'cipd_tag': 'git_revision:c88b313d2fae775acf973229bca7a00d45178781',
+    },
     'chromium.infra.cron': {},
-    'tryserver.infra': {},
 
     # Chromium tryservers.
     'tryserver.chromium.android': {},
