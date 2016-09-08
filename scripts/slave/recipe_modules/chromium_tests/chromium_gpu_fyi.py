@@ -843,6 +843,26 @@ SPEC = {
       # in order to keep up with the faster cycle time of the tests.
       'enable_swarming': False,
     },
+    'Mac GPU ASAN Release': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'mac',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
     'Android Release (Nexus 5)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
