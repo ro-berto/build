@@ -30,6 +30,8 @@ def Update(c):
                             treeStableTimer=30,
                             builderNames=[
           'Linux32 ARM',
+          'Linux32 Debug',
+          'Linux32 Release',
           'Linux64 Debug',
           'Linux64 Release',
           'Linux Asan',
@@ -49,6 +51,8 @@ def Update(c):
   # of the builders are pooled over multiple slave machines.
   specs = [
     {'name': 'Linux32 ARM', 'slavebuilddir': 'linux_arm'},
+    {'name': 'Linux32 Debug', 'slavebuilddir': 'linux32'},
+    {'name': 'Linux32 Release', 'slavebuilddir': 'linux32'},
     {'name': 'Linux64 Debug', 'slavebuilddir': 'linux64'},
     {'name': 'Linux64 Release', 'slavebuilddir': 'linux64'},
     {'name': 'Linux Asan', 'slavebuilddir': 'linux_asan'},

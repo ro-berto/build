@@ -249,6 +249,24 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
+      'Linux32 Debug': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'Linux32 Release': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
       'Linux64 Debug': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -598,24 +616,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
         'use_isolate': True,
         'enable_swarming': True,
-      },
-      'Linux32 Debug': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux32 Release': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
       },
       'Linux64 Release (swarming)': {
         'recipe_config': 'webrtc',

@@ -30,8 +30,6 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-                                'Linux32 Debug',
-                                'Linux32 Release',
                                 'Linux64 GCC',
                                 'Linux64 Release (swarming)',
       ]),
@@ -45,8 +43,6 @@ def Update(c):
   ])
 
   specs = [
-    {'name': 'Linux32 Debug', 'slavebuilddir': 'linux32'},
-    {'name': 'Linux32 Release', 'slavebuilddir': 'linux32'},
     {
       'name': 'Linux64 GCC',
       'slavebuilddir': 'linux_gcc',
