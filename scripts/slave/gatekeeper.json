@@ -25,7 +25,6 @@
           "chromium_android"
         ],
         "excluded_builders": [
-          "Android N5X Swarm Builder",
           "Android Swarm Builder",
           "Lollipop Consumer Tester",
           "Marshmallow 64 bit Tester"
@@ -133,6 +132,11 @@
             ],
             "closing_optional": [
               "*"
+            ]
+          },
+          "Android N5X Swarm Builder": {
+            "categories": [
+              "chromium_tree_closer"
             ]
           },
           "*": {}
