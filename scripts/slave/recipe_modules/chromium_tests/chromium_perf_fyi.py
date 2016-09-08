@@ -75,5 +75,4 @@ _AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
              parent_buildername='Win Clang Builder', target_bits=32)
 
 
-_AddIsolatedTestSpec('Win 10 Low-End 2 Core Perf', 'win')
-_AddIsolatedTestSpec('Win 10 Low-End 4 Core Perf', 'win')
+_AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win')
