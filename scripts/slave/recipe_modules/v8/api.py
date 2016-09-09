@@ -274,6 +274,8 @@ class V8Api(recipe_api.RecipeApi):
       env['RANLIB'] = self.c.gyp_env.RANLIB
     if self.m.chromium.c.project_generator.tool != 'gyp':
       env['GYP_CHROMIUM_NO_ACTION'] = 1
+    else:
+      env['GYP_CHROMIUM_NO_ACTION'] = 0
     if self.m.chromium.c.gyp_env.GYP_MSVS_VERSION:
       env['GYP_MSVS_VERSION'] = self.m.chromium.c.gyp_env.GYP_MSVS_VERSION
     self.m.chromium.runhooks(env=env, **kwargs)
