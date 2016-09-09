@@ -105,13 +105,10 @@ class PGOApi(recipe_api.RecipeApi):
     """
     self.m.gclient.set_config(bot_config['gclient_config'])
 
-    # TODO(agable): LEGACY: only for a clean roll forward, will be removed soon.
-    if self.m.gclient.c.solutions[0].url.startswith('svn://'):# pragma: no cover
-      self.m.gclient.c.solutions[0].url += bot_config.get('url_suffix', '')
     # Augment the DEPS path if needed.
     if '%s' in self.m.gclient.c.solutions[0].deps_file:  # pragma: no cover
       self.m.gclient.c.solutions[0].deps_file = (
-        self.m.gclient.c.solutions[0].deps_file % bot_config.get('bucket', ''))
+        self.m.gclient.c.solutions[0].deps_file % bot_config['bucket'])
 
     if self.m.properties.get('slavename') != 'fake_slave':
       self.m.chromium.taskkill()
