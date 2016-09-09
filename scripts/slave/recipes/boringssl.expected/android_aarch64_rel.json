@@ -6,7 +6,7 @@
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]\ntarget_os = ['android']",
-      "--root",
+      "--patch_root",
       "boringssl",
       "--revision_mapping_file",
       "{}",

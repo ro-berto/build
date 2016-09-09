@@ -6,7 +6,7 @@
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'tools/deps/dartium.deps/DEPS', 'managed': False, 'name': 'src/dart', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
-      "--root",
+      "--patch_root",
       "src/dart",
       "--revision_mapping_file",
       "{}",

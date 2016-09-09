@@ -6,7 +6,7 @@
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'build_internal/slave.DEPS', 'url': 'https://chrome-internal.googlesource.com/chrome/tools/build/slave.DEPS.git'}]",
-      "--root",
+      "--patch_root",
       "build_internal/slave.DEPS",
       "--revision_mapping_file",
       "{\"build_internal/slave.DEPS\": \"got_revision\"}",
