@@ -16,9 +16,6 @@ from buildbot.status.mail import MailNotifier
 from buildbot.status.status_push import HttpStatusPush
 from buildbot.steps import trigger
 
-from common import chromium_utils
-
-from master.factory import chromium_factory
 from master.factory.dart import dart_commands
 from master.factory.dart.channels import CHANNELS, CHANNELS_BY_NAME
 from master.factory import gclient_factory
@@ -32,7 +29,6 @@ android_resources_rev = '@3855'
 
 chromium_git = 'http://git.chromium.org/git/'
 
-dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
 android_tools_url = chromium_git + 'android_tools.git' + android_tools_rev
 
 github_mirror = 'https://chromium.googlesource.com/external/github.com'
@@ -111,46 +107,6 @@ custom_deps_list_chromeOnAndroid = [
 if android_resources_url:
   custom_deps_list_chromeOnAndroid.append(
       ('dart/third_party/android_testing_resources', android_resources_url))
-
-def BuildChromiumFactory(channel, target_platform='win32'):
-  def new_solution(deps_url, custom_vars, custom_deps, custom_deps_file, name):
-    return  gclient_factory.GClientSolution(
-        deps_url,
-        name=name,
-        custom_vars_list=custom_vars,
-        custom_deps_list=custom_deps,
-        custom_deps_file=custom_deps_file)
-
-  class DartiumFactory(chromium_factory.ChromiumFactory):
-    def __init__(self, target_platform=None):
-      if target_platform in ['linux2', 'darwin']:
-        # We use make/ninja on our linux/mac dartium builders which use
-        # 'src/out' as build directory
-        build_directory = 'src/out'
-      else:
-        # On windows we still use msvc which uses 'src/build' as build directory
-        build_directory = 'src/build'
-      chromium_factory.ChromiumFactory.__init__(self,
-                                                build_directory,
-                                                target_platform)
-      self._solutions = []
-
-    def add_solution(self, solution):
-      self._solutions.append(solution)
-
-  factory = DartiumFactory(target_platform)
-  custom_deps_file = 'tools/deps/dartium.deps/DEPS'
-  name = 'src/dart'
-  deps_url = dart_sdk_mirror
-  if target_platform == 'win32':
-    factory.add_solution(
-        new_solution(deps_url, custom_vars_list, custom_deps_list_win,
-                     custom_deps_file, name))
-  else:
-    factory.add_solution(new_solution(deps_url, custom_vars_list, [],
-                                      custom_deps_file, name))
-
-  return factory.ChromiumFactory
 
 def AddGeneralGClientProperties(factory_properties):
   """Adds the general gclient options to ensure we get the correct revisions"""
@@ -417,88 +373,13 @@ class DartUtils(object):
     }
     return factory_base
 
-  @staticmethod
-  def get_dartium_factory_base(channel):
-    postfix = channel.builder_postfix
-
-    F_MAC_CH = BuildChromiumFactory(channel, target_platform='darwin')
-    F_LINUX_CH = BuildChromiumFactory(channel, target_platform='linux2')
-    F_WIN_CH = BuildChromiumFactory(channel, target_platform='win32')
-
-    factory_base_dartium = {
-      'dartium-mac-full' + postfix: F_MAC_CH(
-          target='Release',
-          options=DartUtils.mac_options,
-          clobber=True,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.mac_factory_properties),
-      'dartium-mac-inc' + postfix: F_MAC_CH(
-          target='Release',
-          options=DartUtils.mac_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.mac_factory_properties),
-      'dartium-mac-debug' + postfix: F_MAC_CH(
-          target='Debug',
-          compile_timeout=3600,
-          options=DartUtils.mac_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.mac_factory_properties),
-      'dartium-lucid64-full' + postfix: F_LINUX_CH(
-          target='Release',
-          clobber=True,
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux_factory_properties),
-      'dartium-lucid64-inc' + postfix: F_LINUX_CH(
-          target='Release',
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux_factory_properties),
-      'dartium-lucid64-debug' + postfix: F_LINUX_CH(
-          target='Debug',
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux_factory_properties),
-      'dartium-win-full' + postfix: F_WIN_CH(
-          target='Release',
-          options=DartUtils.win_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.win_rel_factory_properties),
-      'dartium-win-inc' + postfix: F_WIN_CH(
-          target='Release',
-          options=DartUtils.win_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.win_rel_factory_properties),
-      'dartium-win-inc-ninja' + postfix: F_WIN_CH(
-          target='Release',
-          options=DartUtils.win_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.win_rel_factory_properties_ninja),
-      'dartium-win-debug' + postfix: F_WIN_CH(
-          target='Debug',
-          options=DartUtils.win_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.win_dbg_factory_properties),
-      'dartium-lucid32-full' + postfix: F_LINUX_CH(
-          target='Release',
-          clobber=True,
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux32_factory_properties),
-    }
-    return factory_base_dartium
-
   factory_base = {}
-  factory_base_dartium = {}
 
   def __init__(self, active_master):
     self._active_master = active_master
 
     for channel in CHANNELS:
       DartUtils.factory_base.update(DartUtils.get_factory_base(channel))
-    for channel in CHANNELS:
-      DartUtils.factory_base_dartium.update(
-          DartUtils.get_dartium_factory_base(channel))
 
   @staticmethod
   def monkey_patch_remoteshell():
@@ -643,11 +524,6 @@ class DartUtils(object):
                         and not name.startswith('cross-')
                         and not name.startswith('target-'))
         setup_dart_factory(v, base, no_annotated)
-
-  def setup_dartium_factories(self, dartium_variants):
-    for variant in dartium_variants:
-      name = variant['name']
-      variant['factory_builder'] = self.factory_base_dartium[name]
 
   def get_web_statuses(self, order_console_by_time=True,
                        extra_templates=None):

@@ -54,7 +54,8 @@ def RunSteps(api):
         'dart', 'tools', 'dartium', 'buildbot_annotated_steps.py'),
       cwd=api.path['checkout'])
     if '-inc-' not in builder_name:
-      api.file.rmtree('clobber', 'out', cwd=api.path['checkout'])
+      build_dir = api.path.abspath(api.path['checkout'].join('out'))
+      api.file.rmtree('clobber', build_dir)
 
 def GenTests(api):
   yield (
