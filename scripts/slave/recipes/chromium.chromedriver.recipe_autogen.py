@@ -25,7 +25,7 @@ def Linux32_steps(api):
       'https://chromium.googlesource.com/chromium/deps/webdriver'}
   soln = src_cfg.solutions.add()
   soln.name = "src-internal"
-  soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
+  soln.url = "https://chrome-internal.googlesource.com/chrome/src-internal.git"
   soln.custom_deps = {'src/chrome/test/data/firefox2_searchplugins': None,
       'src/tools/grit/grit/test/data': None,
       'src/chrome/test/data/firefox3_searchplugins': None,
@@ -101,7 +101,7 @@ def Mac_10_6_steps(api):
       'https://chromium.googlesource.com/chromium/deps/webdriver'}
   soln = src_cfg.solutions.add()
   soln.name = "src-internal"
-  soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
+  soln.url = "https://chrome-internal.googlesource.com/chrome/src-internal.git"
   soln.custom_deps = {'src/chrome/test/data/firefox2_searchplugins': None,
       'src/tools/grit/grit/test/data': None,
       'src/chrome/test/data/firefox3_searchplugins': None,
@@ -179,7 +179,7 @@ def Win7_steps(api):
       'https://chromium.googlesource.com/chromium/deps/webdriver'}
   soln = src_cfg.solutions.add()
   soln.name = "src-internal"
-  soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
+  soln.url = "https://chrome-internal.googlesource.com/chrome/src-internal.git"
   soln.custom_deps = {'src/chrome/test/data/firefox2_searchplugins': None,
       'src/tools/grit/grit/test/data': None,
       'src/chrome/test/data/firefox3_searchplugins': None,
@@ -252,7 +252,7 @@ def Linux_steps(api):
       'https://chromium.googlesource.com/chromium/deps/webdriver'}
   soln = src_cfg.solutions.add()
   soln.name = "src-internal"
-  soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
+  soln.url = "https://chrome-internal.googlesource.com/chrome/src-internal.git"
   soln.custom_deps = {'src/chrome/test/data/firefox2_searchplugins': None,
       'src/tools/grit/grit/test/data': None,
       'src/chrome/test/data/firefox3_searchplugins': None,
