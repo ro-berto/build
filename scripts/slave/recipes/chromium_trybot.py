@@ -736,3 +736,19 @@ def GenTests(api):
     api.override_step_data('webkit_tests (without patch)',
         api.test_utils.canned_test_output(passing=True, minimal=True))
   )
+
+  yield (
+    api.test('dont_deapply_patch') +
+    props(mastername='tryserver.chromium.mac',
+          buildername='mac_optional_gpu_tests_rel') +
+    api.platform.name('mac') +
+    api.override_step_data(
+        'read test spec (chromium.gpu.fyi.json)',
+        api.json.output({
+            'Optional Mac Retina Release': {
+                'gtest_tests': ['base_unittests'],
+            },
+        })
+    ) +
+    suppress_analyze()
+  )

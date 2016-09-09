@@ -687,7 +687,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def run_tests_on_tryserver(self, bot_config, api, tests, bot_update_step,
                              affected_files, mb_mastername=None,
-                             mb_buildername=None):
+                             mb_buildername=None, disable_deapply_patch=False):
     def deapply_patch_fn(failing_tests):
       self.deapply_patch(bot_update_step)
       compile_targets = list(itertools.chain(
@@ -714,6 +714,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         deapply_patch = False
         deapply_patch_reason = 'build config changes detected'
         break
+    if disable_deapply_patch:
+      deapply_patch = False
+      deapply_patch_reason = 'disabled in recipes'
 
     with self.wrap_chromium_tests(bot_config, tests):
       if deapply_patch:
@@ -860,14 +863,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybot_steps(api):
     with api.tryserver.set_failure_hash():
       try:
-        bot_config_object, bot_update_step, affected_files, tests = \
-            ChromiumTestsApi._trybot_steps_internal(api)
+        (bot_config_object, bot_update_step, affected_files, tests,
+         disable_deapply_patch) = ChromiumTestsApi._trybot_steps_internal(api)
       finally:
         api.python.succeeding_step('mark: before_tests', '')
 
       if tests:
         api.chromium_tests.run_tests_on_tryserver(
-            bot_config_object, api, tests, bot_update_step, affected_files)
+            bot_config_object, api, tests, bot_update_step, affected_files,
+            disable_deapply_patch=disable_deapply_patch)
 
   @staticmethod
   # TODO(phajdan.jr): try to get rid of api parameter.
@@ -989,7 +993,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
-    return bot_config_object, bot_update_step, affected_files, tests
+    disable_deapply_patch = not bot_config.get('deapply_patch', True)
+    return (bot_config_object, bot_update_step, affected_files, tests,
+            disable_deapply_patch)
 
   @staticmethod
   def _all_compile_targets(api, tests):

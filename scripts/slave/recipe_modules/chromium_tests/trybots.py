@@ -438,6 +438,7 @@ TRYBOTS = freeze({
       }),
       # Optional GPU bots.
       'mac_optional_gpu_tests_rel': {
+        'deapply_patch': False,
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
