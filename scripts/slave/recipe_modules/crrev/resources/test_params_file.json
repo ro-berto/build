@@ -1,8 +1,0 @@
-{
-      "number": "375953",
-      "numbering_identifier": "refs/heads/master",
-      "numbering_type": "COMMIT_POSITION",
-      "project": "chromium",
-      "repo": "chromium/src",
-      "fields": "git_sha,numbering_type"
-}
