@@ -20,7 +20,11 @@
             {% elif cell.link %}
               <a onclick="window.open('{{cell.link}}');">{{cell.data}}</a>
             {% elif cell.action %}
-              <a>{{cell.data}}</a>
+              {% if cell.title and cell.action_argument %}
+                <a title="{{cell.title}}" data-action-argument="{{cell.action_argument}}">{{cell.data}}</a>
+              {% else %}
+                <a>{{cell.data}}</a>
+              {% endif %}
             {% else %}
               {{cell.data}}
             {% endif %}

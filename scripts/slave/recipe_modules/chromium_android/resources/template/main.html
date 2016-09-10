@@ -61,6 +61,15 @@
         );
       }
 
+      function presentTombstones(tombstonesId) {
+        var tombstonesWindow = window.open("", "_blank");
+        var tombstones = document.getElementById(tombstonesId).cloneNode(true);
+        tombstones.style.display = "inline";
+        var formattedTombstones = document.createElement("pre");
+        formattedTombstones.appendChild(tombstones);
+        tombstonesWindow.document.body.appendChild(formattedTombstones);
+      }
+
       function sortByColumn(head) {
         var tbody = head.parentNode.parentNode.nextElementSibling;
         var rows = tbody.rows;
@@ -112,16 +121,17 @@
           return (avalue == bvalue) ? 0 : ((avalue > bvalue) ? asc : -1 * asc);
         });
 
-        var tmpBody = "";
         for (var i = 0; i < arr.length; i++) {
-          tmpBody += arr[i].outerHTML;
+          tbody.appendChild(arr[i]);
         }
-        tbody.innerHTML = tmpBody;
       }
     </script>
   </head>
   <body class="interface">
     <div class="content">
+      {% for datum in hidden_data %}
+        <div id="{{datum.id}}" style="display:none;">{{datum.data}}</div>
+      {% endfor %}
       {% for tb_value in tb_values %}
         {% include 'template/table.html' %}
         <br>
@@ -131,33 +141,45 @@
     </div>
   </body>
   <script>
+    // Enable sorting for each column of tables.
     Array.prototype.slice.call(document.getElementsByTagName('th'))
         .forEach(function(head) {
             head.addEventListener(
                 "click",
-                function() { sortByColumn(head); },
-                false
-            );
+                function() { sortByColumn(head); });
         }
     );
+
+    // Show all test cases after clicking 'Total'.
     Array.prototype.slice.call(
         document.getElementsByClassName('suite-table-summary-column-0'))
         .forEach(function(summaryTotal) {
             summaryTotal.addEventListener(
                 "click",
-                function() { showAllTests(); },
-                false
-            );
+                function() { showAllTests(); });
         }
     );
+
+    // Show test cases only in the suite being clicked.
     Array.prototype.slice.call(
         document.getElementsByClassName('suite-table-body-column-0'))
         .forEach(function(suiteName) {
             suiteName.addEventListener(
                 "click",
-                function() { showTestsOfOneSuiteOnly(suiteName.innerText); },
-                false
-            );
+                function() { showTestsOfOneSuiteOnly(suiteName.innerText); });
+        }
+    );
+
+    // Show tombstones in a new window after clicking 'CRASH'.
+    Array.prototype.slice.call(
+        document.getElementsByClassName('crash'))
+        .forEach(function(crash) {
+            crash.addEventListener(
+                "click",
+                function() {
+                  var tombstones = crash.children[0].dataset.actionArgument;
+                  presentTombstones(tombstones);
+                });
         }
     );
   </script>
