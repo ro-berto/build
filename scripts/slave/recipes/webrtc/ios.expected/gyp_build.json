@@ -207,7 +207,7 @@
       "-m",
       "chromium.fake",
       "-b",
-      "ios_gyp",
+      "ios gyp",
       "--config-file",
       "[BUILDER_CACHE]/ios_gyp/src/webrtc/build/mb_config.pyl",
       "--goma-dir",

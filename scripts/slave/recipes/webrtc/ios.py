@@ -49,6 +49,7 @@ def RunSteps(api):
     api.ios.test()
   else:
     mastername = api.properties['mastername']
+    buildername = api.properties['buildername']
     api.chromium.runhooks()
     api.chromium.run_mb(mastername, buildername, mb_config_path=mb_config_path,
                         gyp_script=gyp_script)
