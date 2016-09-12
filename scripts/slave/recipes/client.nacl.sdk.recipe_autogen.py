@@ -17,7 +17,6 @@ DEPS = [
 
 def linux_sdk_multi_steps(api):
     build_properties = api.properties.legacy()
-    # update scripts step; implicitly run by recipe engine.
     # bot_update step
     src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
@@ -61,8 +60,6 @@ def linux_sdk_multi_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # gclient revert step; made unnecessary by bot_update
-    # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'LANDMINES_VERBOSE': '1',
@@ -72,14 +69,21 @@ def linux_sdk_multi_steps(api):
                api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
+
+    # generate_build_files step
+    api.chromium.run_mb(api.properties.get('mastername'),
+                        api.properties.get('buildername'))
+
     # cleanup_temp step
     api.chromium.cleanup_temp()
+
     # compile.py step
     args = ['--target', 'Release', '--compiler=goma',
             'chromium_builder_nacl_sdk']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
+
     # annotated_steps step
     api.python(
         "annotated_steps",
@@ -144,8 +148,6 @@ def mac_sdk_multi_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # gclient revert step; made unnecessary by bot_update
-    # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'GYP_GENERATORS': 'ninja',
@@ -156,8 +158,14 @@ def mac_sdk_multi_steps(api):
                api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
+
+    # generate_build_files step
+    api.chromium.run_mb(api.properties.get('mastername'),
+                        api.properties.get('buildername'))
+
     # cleanup_temp step
     api.chromium.cleanup_temp()
+
     # compile.py step
     args = ['--target', 'Release', '--build-tool=ninja',
             '--compiler=goma-clang', '--', 'chromium_builder_nacl_sdk']
@@ -229,8 +237,6 @@ def windows_sdk_multi_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # gclient revert step; made unnecessary by bot_update
-    # gclient update step; made unnecessary by bot_update
     # gclient runhooks wrapper step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'LANDMINES_VERBOSE': '1',
@@ -240,8 +246,14 @@ def windows_sdk_multi_steps(api):
                api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
+
+    # generate_build_files step
+    api.chromium.run_mb(api.properties.get('mastername'),
+                        api.properties.get('buildername'))
+
     # cleanup_temp step
     api.chromium.cleanup_temp()
+
     # compile.py step
     args = ['--target', 'Release', '--compiler=goma',
             'chromium_builder_nacl_sdk']
@@ -288,7 +300,6 @@ def linux_sdk_multirel_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # unnamed step; null converted
     # gclient runhooks wrapper step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'LANDMINES_VERBOSE': '1',
@@ -298,8 +309,14 @@ def linux_sdk_multirel_steps(api):
                api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
+
+    # generate_build_files step
+    api.chromium.run_mb(api.properties.get('mastername'),
+                        api.properties.get('buildername'))
+
     # cleanup_temp step
     api.chromium.cleanup_temp()
+
     # compile.py step
     args = ['--target', 'Release', '--compiler=goma',
             'chromium_builder_tests']
@@ -348,7 +365,6 @@ def windows_sdk_multirel_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # unnamed step; null converted
     # gclient runhooks wrapper step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'LANDMINES_VERBOSE': '1',
@@ -358,8 +374,14 @@ def windows_sdk_multirel_steps(api):
                api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
+
+    # generate_build_files step
+    api.chromium.run_mb(api.properties.get('mastername'),
+                        api.properties.get('buildername'))
+
     # cleanup_temp step
     api.chromium.cleanup_temp()
+
     # compile.py step
     args = ['--target', 'Release', '--compiler=goma',
             'chromium_builder_tests',]
@@ -406,7 +428,6 @@ def mac_sdk_multirel_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # unnamed step; null converted
     # gclient runhooks wrapper step
     env = {'LANDMINES_VERBOSE': '1',
            'GYP_GENERATORS': 'ninja',
@@ -417,8 +438,14 @@ def mac_sdk_multirel_steps(api):
                api.path["build"].join("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
+
+    # generate_build_files step
+    api.chromium.run_mb(api.properties.get('mastername'),
+                        api.properties.get('buildername'))
+
     # cleanup_temp step
     api.chromium.cleanup_temp()
+
     # compile.py step
     args = ['--target', 'Release', '--build-tool=ninja',
             '--compiler=goma-clang', '--', 'chromium_builder_tests']
@@ -458,6 +485,7 @@ def RunSteps(api):
     if api.properties["buildername"] not in dispatch_directory:
         raise api.step.StepFailure("Builder unsupported by recipe.")
     else:
+        api.chromium.set_config('chromium')
         dispatch_directory[api.properties["buildername"]](api)
 
 

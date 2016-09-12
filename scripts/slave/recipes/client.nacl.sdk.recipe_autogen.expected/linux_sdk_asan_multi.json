@@ -110,6 +110,28 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.nacl.sdk",
+      "-b",
+      "linux-sdk-asan-multi",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
