@@ -47,8 +47,8 @@ def _AddTestSpec(name, perf_id, platform,
   SPEC['builders'][name] = spec
 
 
-def _AddIsolatedTestSpec(name, platform, target_bits=64):
-  spec = chromium_perf.TestSpec('chromium_perf', None, platform, target_bits)
+def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64):
+  spec = chromium_perf.TestSpec('chromium_perf', perf_id, platform, target_bits)
   spec['parent_mastername'] = 'chromium.perf'
   spec['enable_swarming'] = True
   spec['test_generators'] = [steps.generate_isolated_script]
@@ -75,4 +75,4 @@ _AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
              parent_buildername='Win Clang Builder', target_bits=32)
 
 
-_AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win')
+_AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win-10-low-end', 'win')
