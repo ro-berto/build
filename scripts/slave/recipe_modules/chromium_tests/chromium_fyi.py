@@ -1211,21 +1211,6 @@ SPEC = {
         'platform': 'linux'
       }
     },
-    'Chromium Linux32 Goma Canary (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [ 'chromium_builder_tests' ],
-      'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
-      'testing': {
-        'platform': 'linux'
-      }
-    },
     'Chromium Linux Precise Goma LinkTest': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_canary', 'goma_linktest', 'mb'],
