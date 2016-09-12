@@ -24,15 +24,10 @@ def linux_sdk_multi_steps(api):
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
     soln.custom_deps = {'src/third_party/WebKit/LayoutTests': None}
-    soln.custom_vars = {'webkit_trunk': 'svn://svn.chromium.org/blink/trunk',
-                        'googlecode_url': 'svn://svn.chromium.org/%s',
-                        'nacl_trunk':
-                        'svn://svn.chromium.org/native_client/trunk',
-                        'sourceforge_url': 'svn://svn.chromium.org/%(repo)s',
-                        'llvm_url': 'svn://svn.chromium.org/llvm-project'}
     soln = src_cfg.solutions.add()
     soln.name = "src-internal"
-    soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
+    soln.url = "https://chrome-internal.googlesource.com/chrome/" + \
+            "src-internal.git"
     soln.custom_deps = {'src/chrome/test/data/firefox2_searchplugins': None,
                         'src/tools/grit/grit/test/data': None,
                         'src/chrome/test/data/firefox3_searchplugins': None,
@@ -112,15 +107,10 @@ def mac_sdk_multi_steps(api):
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
     soln.custom_deps = {'src/third_party/WebKit/LayoutTests': None}
-    soln.custom_vars = {'webkit_trunk': 'svn://svn.chromium.org/blink/trunk',
-                        'googlecode_url': 'svn://svn.chromium.org/%s',
-                        'nacl_trunk':
-                        'svn://svn.chromium.org/native_client/trunk',
-                        'sourceforge_url': 'svn://svn.chromium.org/%(repo)s',
-                        'llvm_url': 'svn://svn.chromium.org/llvm-project'}
     soln = src_cfg.solutions.add()
     soln.name = "src-internal"
-    soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
+    soln.url = "https://chrome-internal.googlesource.com/chrome/" + \
+            "src-internal.git"
     soln.custom_deps = {'src/chrome/test/data/firefox2_searchplugins': None,
                         'src/tools/grit/grit/test/data': None,
                         'src/chrome/test/data/firefox3_searchplugins': None,
@@ -194,8 +184,6 @@ def mac_sdk_multi_steps(api):
 
 def windows_sdk_multi_steps(api):
     build_properties = api.properties.legacy()
-    # svnkill step; not necessary in recipes
-    # update scripts step; implicitly run by recipe engine.
     # taskkill step
     api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
@@ -204,16 +192,10 @@ def windows_sdk_multi_steps(api):
     soln = src_cfg.solutions.add()
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
-    soln.custom_deps = {'src/third_party/WebKit/LayoutTests': None}
-    soln.custom_vars = {'webkit_trunk': 'svn://svn.chromium.org/blink/trunk',
-                        'googlecode_url': 'svn://svn.chromium.org/%s',
-                        'nacl_trunk':
-                        'svn://svn.chromium.org/native_client/trunk',
-                        'sourceforge_url': 'svn://svn.chromium.org/%(repo)s',
-                        'llvm_url': 'svn://svn.chromium.org/llvm-project'}
     soln = src_cfg.solutions.add()
     soln.name = "src-internal"
-    soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
+    soln.url = "https://chrome-internal.googlesource.com/chrome/" + \
+            "src-internal.git"
     soln.custom_deps = {'src/chrome/test/data/firefox2_searchplugins': None,
                         'src/tools/grit/grit/test/data': None,
                         'src/chrome/test/data/firefox3_searchplugins': None,
@@ -294,10 +276,6 @@ def linux_sdk_multirel_steps(api):
     soln.url = "svn://svn.chromium.org/chrome-internal/trunk/tools/buildspec/"+\
         "build/chrome-official"
     soln.custom_deps = {'src-pdf': None, 'src/pdf': None}
-    soln.custom_vars = {'webkit_trunk': 'svn://svn.chromium.org/blink/trunk',
-                        'googlecode_url': 'svn://svn.chromium.org/%s',
-                        'sourceforge_url': 'svn://svn.chromium.org/%(repo)s',
-                        'svn_url': 'svn://svn.chromium.org'}
     src_cfg.got_revision_mapping.update(
         {'src': 'got_revision',
          'src/third_party/WebKit': 'got_webkit_revision',
@@ -348,8 +326,6 @@ def linux_sdk_multirel_steps(api):
 
 def windows_sdk_multirel_steps(api):
     build_properties = api.properties.legacy()
-    # svnkill step; not necessary in recipes
-    # update scripts step; implicitly run by recipe engine.
     # taskkill step
     api.python("taskkill", api.path["build"].join("scripts", "slave",
                                                   "kill_processes.py"))
@@ -360,10 +336,6 @@ def windows_sdk_multirel_steps(api):
     soln.url = "svn://svn.chromium.org/chrome-internal/trunk/tools/buildspec/"+\
         "build/chrome-official"
     soln.custom_deps = {'src-pdf': None, 'src/pdf': None}
-    soln.custom_vars = {'webkit_trunk': 'svn://svn.chromium.org/blink/trunk',
-                        'googlecode_url': 'svn://svn.chromium.org/%s',
-                        'sourceforge_url': 'svn://svn.chromium.org/%(repo)s',
-                        'svn_url': 'svn://svn.chromium.org'}
     src_cfg.got_revision_mapping.update(
         {'src': 'got_revision',
          'src/third_party/WebKit': 'got_webkit_revision',
@@ -422,10 +394,6 @@ def mac_sdk_multirel_steps(api):
     soln.url = "svn://svn.chromium.org/chrome-internal/trunk/tools/buildspec/"+\
         "build/chrome-official"
     soln.custom_deps = {'src-pdf': None, 'src/pdf': None}
-    soln.custom_vars = {'webkit_trunk': 'svn://svn.chromium.org/blink/trunk',
-                        'googlecode_url': 'svn://svn.chromium.org/%s',
-                        'sourceforge_url': 'svn://svn.chromium.org/%(repo)s',
-                        'svn_url': 'svn://svn.chromium.org'}
     src_cfg.got_revision_mapping.update(
         {'src': 'got_revision',
          'src/third_party/WebKit': 'got_webkit_revision',
