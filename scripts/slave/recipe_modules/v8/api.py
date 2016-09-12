@@ -456,19 +456,21 @@ class V8Api(recipe_api.RecipeApi):
             'GYP_DEFINES=\'target_arch=x64 cool_flag=a=1\'\n'
             'moar\n'
         )
-      self.m.chromium.run_mb(
-          self.m.properties['mastername'],
-          self.m.properties['buildername'],
-          use_goma=use_goma,
-          mb_config_path=self.m.path['checkout'].join(
-              'infra', 'mb', 'mb_config.pyl'),
-          gyp_script=self.m.path.join('gypfiles', 'gyp_v8'),
-          stdout=self.m.raw_io.output(),
-          step_test_data=step_test_data,
-      )
-      # Log captured output.
-      self.m.step.active_result.presentation.logs['stdout'] = (
-        self.m.step.active_result.stdout.splitlines())
+      try:
+        self.m.chromium.run_mb(
+            self.m.properties['mastername'],
+            self.m.properties['buildername'],
+            use_goma=use_goma,
+            mb_config_path=self.m.path['checkout'].join(
+                'infra', 'mb', 'mb_config.pyl'),
+            gyp_script=self.m.path.join('gypfiles', 'gyp_v8'),
+            stdout=self.m.raw_io.output(),
+            step_test_data=step_test_data,
+        )
+      finally:
+        # Log captured output.
+        self.m.step.active_result.presentation.logs['stdout'] = (
+          self.m.step.active_result.stdout.splitlines())
 
       # Update the build environment dictionary, which is printed to the
       # user on test failures for easier build reproduction.
