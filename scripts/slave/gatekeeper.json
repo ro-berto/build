@@ -721,7 +721,8 @@
             "tree_notify": [
               "plznavigate@chromium.org"
             ],
-            "forgive_all": "true"
+            "forgive_all": "true",
+            "forgiving_optional": ["*"]
           },
           "Closure Compilation Linux": {
             "tree_notify": [
@@ -826,7 +827,8 @@
             "tree_notify": [
               "wfh@chromium.org"
             ],
-            "forgive_all": "true"
+            "forgive_all": "true",
+            "forgiving_optional": ["*"]
           }
         }
       }
