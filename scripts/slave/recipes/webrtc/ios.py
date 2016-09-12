@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'chromium',
   'chromium_checkout',
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -43,9 +44,14 @@ def RunSteps(api):
       'build',
       'gyp_webrtc.py',
   )
-  api.ios.build(mb_config_path=mb_config_path, gyp_script=gyp_script)
-  api.ios.test()
-
+  if 'gyp' not in buildername.lower():
+    api.ios.build(mb_config_path=mb_config_path, gyp_script=gyp_script)
+    api.ios.test()
+  else:
+    mastername = api.properties['mastername']
+    api.chromium.runhooks()
+    api.chromium.run_mb(mastername, buildername, mb_config_path=mb_config_path,
+                        gyp_script=gyp_script)
 
 def GenTests(api):
   yield (
@@ -88,6 +94,31 @@ def GenTests(api):
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+      path_config='kitchen',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'GYP_DEFINES': {
+      },
+      "gn_args": [
+        "is_debug=true"
+      ],
+      "mb_type": "gn",
+      'configuration': 'Debug',
+      'sdk': 'iphoneos8.0',
+      'tests': [
+      ],
+    })
+  )
+
+  yield (
+    api.test('gyp_build')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios gyp',
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
