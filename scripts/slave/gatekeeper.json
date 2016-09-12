@@ -159,6 +159,7 @@
         "forgive_all": true,
         "builders": {
           "*": {
+            "forgiving_optional": ["*"]
           }
         },
         "excluded_builders": [ "*" ]
@@ -245,8 +246,7 @@
             "categories": [
               "chromium_gnumbd_closer"
             ]
-          },
-          "*":{}
+          }
         },
         "excluded_builders": [
           "lkgr-tag-pusher",
@@ -271,12 +271,14 @@
           "Chromium Linux Codesearch": {
             "excluded_steps": [
               "run translation_unit clang tool"
-            ]
+            ],
+            "forgiving_optional": ["*"]
           },
           "ChromiumOS Codesearch": {
             "excluded_steps": [
               "run translation_unit clang tool"
-            ]
+            ],
+            "forgiving_optional": ["*"]
           }
         }
       }
@@ -399,7 +401,9 @@
 
         "forgive_all": true,
         "builders": {
-          "*": {}
+          "*": {
+            "forgiving_optional": ["*"]
+          }
         }
       }
     ],
@@ -565,7 +569,9 @@
           "catapult-sheriff@chromium.org"
         ],
         "builders": {
-          "*": {}
+          "*": {
+            "forgiving_optional": ["*"]
+          }
         }
       }
     ],
@@ -807,6 +813,7 @@
               "krasin@chromium.org"
             ],
             "forgive_all": "true",
+            "forgiving_optional": ["*"],
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
           },
           "CFI Linux ToT": {
@@ -814,6 +821,7 @@
               "krasin@chromium.org"
             ],
             "forgive_all": "true",
+            "forgiving_optional": ["*"],
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
           },
           "CFI Linux CF": {
@@ -821,6 +829,7 @@
               "krasin@chromium.org"
             ],
             "forgive_all": "true",
+            "forgiving_optional": ["*"],
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
           },
           "Win 10 Fast Ring": {

@@ -320,6 +320,25 @@ def load_gatekeeper_config(filename):
           gatekeeper_builder['closing_steps'] = set([])
           gatekeeper_builder['closing_optional'] = set([])
 
+
+        step_keys = [
+            'closing_optional',
+            'closing_steps',
+            'forgiving_optional',
+            'forgiving_steps',
+        ]
+        all_steps = reduce(
+            lambda x, y:x.union(y),
+            [gatekeeper_builder[x] for x in step_keys])
+
+        # Make sure some steps are actually specified.
+        if not all_steps and not gatekeeper_builder['respect_build_status']:
+          raise ValueError(
+            'You must specify at least one of %s or set respect_build_status '
+            'for builder "%s" on master %s.' % (
+                ','.join(step_keys), buildername, master_url))
+
+
   return gatekeeper_config
 
 

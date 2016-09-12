@@ -408,20 +408,6 @@ class GatekeeperTest(unittest.TestCase):
 
   #### Email and status.
 
-  def testIgnoreNoGatekeeper(self):
-    """Check that logs aren't read unless the builder is noted in the config."""
-
-    self.argv.extend([m.url for m in self.masters])
-    self.argv.extend(['--skip-build-db-update',
-                      '--no-email-app'])
-
-    self.add_gatekeeper_section(self.masters[0].url,
-                                self.masters[0].builders[0].name,
-                                {})
-
-    urls = self.call_gatekeeper()
-    self.assertEquals(urls, [self.masters[0].url + '/json'])
-
   def testFailedBuildDetected(self):
     """Test that an erroneous build result closes the tree."""
     self.argv.extend([m.url for m in self.masters])
@@ -768,7 +754,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].finished = False
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {})
+                                {'forgiving_optional': ['some_fake_step']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -852,7 +838,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].finished = False
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {})
+                                {'forgiving_optional': ['some_fake_step']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -2754,7 +2740,7 @@ class GatekeeperTest(unittest.TestCase):
                                       )
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {},
+                                {'forgiving_optional': ['some_fake_step']},
                                 idx=0)
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -2841,6 +2827,18 @@ class GatekeeperTest(unittest.TestCase):
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--no-email-app'])
+    with self.assertRaises(ValueError):
+      self.call_gatekeeper()
+
+  def testBuilderHasNoSteps(self):
+    """Check that gatekeeper fails if a builder doesn't specify any steps."""
+
+    self.argv.extend([m.url for m in self.masters])
+    self.argv.extend(['--skip-build-db-update',
+                      '--no-email-app'])
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {})
     with self.assertRaises(ValueError):
       self.call_gatekeeper()
 
