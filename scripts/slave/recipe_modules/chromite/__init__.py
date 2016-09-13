@@ -1,4 +1,5 @@
 DEPS = [
+  'buildbucket',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',

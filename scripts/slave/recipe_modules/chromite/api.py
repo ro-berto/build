@@ -70,9 +70,9 @@ class ChromiteApi(recipe_api.RecipeApi):
     if 'buildnumber' in self.m.properties:
       defaults['CBB_BUILD_NUMBER'] = int(self.m.properties['buildnumber'])
 
-    if 'buildbucket' in self.m.properties:
-      buildbucket_json = self.m.json.loads(self.m.properties.get('buildbucket'))
-      defaults['CBB_BUILDBUCKET_ID'] = buildbucket_json['build']['id']
+    buildbucket_props = self.m.buildbucket.properties
+    if buildbucket_props:
+      defaults['CBB_BUILDBUCKET_ID'] = buildbucket_props['build']['id']
 
     return defaults
 

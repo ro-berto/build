@@ -18,6 +18,10 @@ from recipe_engine import recipe_api
 class BuildbucketApi(recipe_api.RecipeApi):
   """A module for interacting with buildbucket."""
 
+  def __init__(self, *args, **kwargs):
+    super(BuildbucketApi, self).__init__(*args, **kwargs)
+    self._properties = None
+
   def get_config_defaults(self):
     if self.m.platform.is_win:
       return {'PLATFORM': 'win'}
@@ -37,9 +41,7 @@ class BuildbucketApi(recipe_api.RecipeApi):
       self.set_config('production_buildbucket')
 
   def _tags_for_build(self, bucket, parameters, override_tags=None):
-    buildbucket_info = self.m.properties.get('buildbucket', {})
-    if isinstance(buildbucket_info, basestring):  # pragma: no cover
-      buildbucket_info = json.loads(buildbucket_info)
+    buildbucket_info = self.properties or {}
     original_tags_list = buildbucket_info.get('build', {}).get('tags', [])
 
     original_tags = dict(t.split(':', 1) for t in original_tags_list)
@@ -56,6 +58,17 @@ class BuildbucketApi(recipe_api.RecipeApi):
     new_tags.update(override_tags or {})
     return sorted([':'.join((x, y)) for x, y in new_tags.iteritems()])
 
+  @property
+  def properties(self):
+    """Returns (dict-like or None): The BuildBucket properties, if present."""
+    if self._properties is None:
+      # Not cached, load and deserialize from properties.
+      props = self.m.properties.get('buildbucket')
+      if props is not None:
+        if isinstance(props, basestring):
+          props = json.loads(props)
+        self._properties = props
+    return self._properties
 
   def put(self, builds, service_account=None, **kwargs):
     """Puts a batch of builds.

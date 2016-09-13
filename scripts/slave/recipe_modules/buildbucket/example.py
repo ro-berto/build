@@ -19,6 +19,9 @@ DEPS = [
 
 
 def RunSteps(api):
+  if api.buildbucket.properties is None:
+    return
+
   build_parameters = {
       'builder_name': 'linux_perf_bisect',
       'properties': {
@@ -142,3 +145,5 @@ def GenTests(api):
          api.properties(
              buildbucket={'build': {'tags': [
                  'buildset:patch/rietveld/cr.chromium.org/123/10001']}}))
+
+  yield (api.test('no_properties'))
