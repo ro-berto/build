@@ -160,6 +160,8 @@ SPEC = {
     },
 
     'Marshmallow 64 bit Tester': {
+      'use_isolate': True,
+      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
