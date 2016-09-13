@@ -105,6 +105,7 @@ def RunSteps(api, mastername, buildername):
   kwargs.update(bot_config.get('kwargs', {}))
   api.chromium_android.configure_from_properties(recipe_config, **kwargs)
   api.chromium.set_config(recipe_config, **kwargs)
+  api.chromium.ensure_goma()
   api.chromium_android.c.set_val({'deps_file': 'DEPS'})
   api.gclient.set_config('chromium')
   for c in bot_config.get('gclient_apply_config', []):
