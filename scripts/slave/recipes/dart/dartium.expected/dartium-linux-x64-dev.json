@@ -58,6 +58,16 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/dart/tools/task_kill.py",
+      "--kill_browsers=True"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "taskkill before building"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/dart/tools/dartium/build.py",
       "--mode=Release"
     ],
@@ -76,6 +86,16 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "annotated steps"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/dart/tools/task_kill.py",
+      "--kill_browsers=True"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "taskkill after building"
   },
   {
     "cmd": [

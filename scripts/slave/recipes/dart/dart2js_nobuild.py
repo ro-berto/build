@@ -102,7 +102,8 @@ def RunSteps(api):
     api.python('taskkill before building',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'],
-               cwd=api.path['checkout'])
+               cwd=api.path['checkout'],
+               ok_ret='any')
     zipfile = api.path.abspath(api.path['checkout'].join('sdk.zip'))
     url = sdk_url(channel, api.platform.name, 'x64', 'release', revision)
     api.gsutil(['cp', url, zipfile], name='Download sdk',
@@ -194,7 +195,8 @@ def RunSteps(api):
     api.python('taskkill after testing',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'],
-               cwd=api.path['checkout'])
+               cwd=api.path['checkout'],
+               ok_ret='any')
     # TODO(whesse): Upload the logs to cloud storage, put a link to them
     # in the step presentation.
     if system in ['linux', 'mac10.11']:

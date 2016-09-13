@@ -42,6 +42,12 @@ def RunSteps(api):
 
   with api.step.defer_results():
     api.python(
+      'taskkill before building',
+      api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
+      args=['--kill_browsers=True'],
+      cwd=api.path['checkout'],
+      ok_ret='any')
+    api.python(
       'build dartium',
       api.path['checkout'].join('dart', 'tools', 'dartium', 'build.py'),
       args=['--mode=Release'],
@@ -53,6 +59,13 @@ def RunSteps(api):
       api.path['checkout'].join(
         'dart', 'tools', 'dartium', 'buildbot_annotated_steps.py'),
       cwd=api.path['checkout'])
+    api.python(
+      'taskkill after building',
+      api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
+      args=['--kill_browsers=True'],
+      cwd=api.path['checkout'],
+      ok_ret='any')
+
     if '-inc-' not in builder_name:
       build_dir = api.path.abspath(api.path['checkout'].join('out'))
       api.file.rmtree('clobber', build_dir)
