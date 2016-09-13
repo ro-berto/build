@@ -140,7 +140,6 @@ def RunSteps(api):
   debug_path = api.path['checkout'].join('out', 'Debug')
   targets = bot_config.get('compile_targets', [])
   api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
-  api.chromium.ensure_goma()
   api.chromium.runhooks()
 
   result = GenerateCompilationDatabase(api, debug_path, targets, platform)
