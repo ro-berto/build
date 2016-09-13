@@ -65,6 +65,7 @@ dbus_tests = freeze([
 def RunSteps(api):
 
   api.chromium.set_config('chromium', BUILD_CONFIG='Debug')
+  api.chromium.ensure_goma()
   api.gclient.set_config('chromium', BUILD_CONFIG='Debug')
 
   api.bot_update.ensure_checkout()
