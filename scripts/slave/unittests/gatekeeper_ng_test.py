@@ -493,7 +493,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[2].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper()
     self.assertNotIn(self.mailer_url, urls)
@@ -507,7 +507,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.call_gatekeeper()
 
@@ -526,7 +526,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [5, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper()
     self.assertNotIn(self.mailer_url, urls)
@@ -569,23 +569,6 @@ class GatekeeperTest(unittest.TestCase):
         self.url_calls[-1]['params'])
     self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
 
-  def testStepOmissionDetected(self):
-    """Test that the lack of a closing step closes the tree."""
-    self.argv.extend([m.url for m in self.masters])
-    self.argv.extend(['--skip-build-db-update',
-                      '--email-app-secret-file=%s' % self.email_secret_file])
-
-    self.add_gatekeeper_section(self.masters[0].url,
-                                self.masters[0].builders[0].name,
-                                {'closing_steps': ['step4']})
-
-    self.call_gatekeeper()
-
-    # Check that gatekeeper indeed sent an email.
-    self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
-    mailer_data = GatekeeperTest.decode_param_json(self.url_calls[-1]['params'])
-    self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
-
   def testStepOmissionOptional(self):
     """Test that the lack of a closing_optional step doesn't close the tree."""
     self.argv.extend([m.url for m in self.masters])
@@ -617,27 +600,6 @@ class GatekeeperTest(unittest.TestCase):
     self.assertNotIn(self.set_status_url, urls)
     self.assertNotIn(self.mailer_url, urls)
 
-  def testStepNotStarted(self):
-    """Test that a skipped closing step closes the tree."""
-    self.argv.extend([m.url for m in self.masters])
-    self.argv.extend(['--skip-build-db-update',
-                      '--email-app-secret-file=%s' % self.email_secret_file])
-
-    self.add_gatekeeper_section(self.masters[0].url,
-                                self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
-
-    self.masters[0].builders[0].builds[0].steps[1].isStarted = False
-    self.masters[0].builders[0].builds[0].steps[1].isFinished = False
-
-    self.call_gatekeeper()
-
-    # Check that gatekeeper indeed sent an email.
-    self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
-    mailer_data = GatekeeperTest.decode_param_json(
-        self.url_calls[-1]['params'])
-    self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
-
   def testGatekeeperOOO(self):
     """Test that gatekeeper_spec works even if not the first step."""
     self.argv.extend([m.url for m in self.masters])
@@ -646,7 +608,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
 
     spec = self.masters[0].builders[0].builds[0].steps
@@ -669,7 +631,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper()
     self.assertIn(self.set_status_url, urls)
@@ -688,7 +650,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step2']})
+                                {'closing_optional': ['step2']})
 
     urls = self.call_gatekeeper()
     self.assertNotIn(self.set_status_url, urls)
@@ -703,7 +665,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'excluded_steps': ['step1']})
 
     urls = self.call_gatekeeper()
@@ -719,7 +681,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'excluded_builders': [
                                      self.masters[0].builders[0].name]})
 
@@ -737,7 +699,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'excluded_builders': [glob]})
 
     urls = self.call_gatekeeper()
@@ -873,7 +835,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.masters[0].builders[0].builds[0].finished = False
@@ -905,7 +867,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].finished = False
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -953,7 +915,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': [
+                                {'closing_optional': [
                                      'step0',
                                      'step1',
                                      'step2',
@@ -1012,7 +974,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': [
+                                {'closing_optional': [
                                      'step0',
                                      'step1',
                                      'step2',
@@ -1052,7 +1014,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.call_gatekeeper()
 
@@ -1076,7 +1038,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper()
 
@@ -1095,7 +1057,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db()
     self.call_gatekeeper(build_db=build_db)
@@ -1134,9 +1096,10 @@ class GatekeeperTest(unittest.TestCase):
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
 
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step4']})
+                                {'closing_optional': ['step1']})
 
     self.call_gatekeeper()
 
@@ -1157,7 +1120,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.call_gatekeeper()
     gatekeeper_data = urlparse.parse_qs(self.url_calls[-1]['params'])
@@ -1188,7 +1151,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[1].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[1].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'status_template': template})
 
     build_db = build_scan_db.gen_db(masters={
@@ -1290,7 +1253,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db()
     urls = self.call_gatekeeper(build_db=build_db)
@@ -1308,7 +1271,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].finished = False
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db()
     urls = self.call_gatekeeper(build_db=build_db)
@@ -1327,7 +1290,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
 
     self.masters[0].builders[0].builds.append(
@@ -1364,7 +1327,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'sheriff_classes': ['sheriff_android']})
 
 
@@ -1397,7 +1360,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'sheriff_classes': ['sheriff_android']})
 
     sheriff_url = 'http://build.chromium.org/p/chromium/sheriff_android.js'
@@ -1420,7 +1383,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'sheriff_classes': ['sheriff_android']})
 
     sheriff_url = 'http://build.chromium.org/p/chromium/sheriff_android.js'
@@ -1443,7 +1406,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'sheriff_classes': ['sheriff_android',
                                                      'sheriff']})
 
@@ -1480,7 +1443,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'tree_notify': ['a_watcher@chromium.org']})
 
     sheriff_url = 'http://build.chromium.org/p/chromium/sheriff_android.js'
@@ -1508,7 +1471,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'tree_notify': ['a_watcher@chromium.org']})
 
     self.call_gatekeeper()
@@ -1531,7 +1494,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'forgiving_steps': ['step1']})
+                                {'forgiving_optional': ['step1']})
     urls = self.call_gatekeeper()
 
     self.assertNotIn(self.mailer_url, urls)
@@ -1582,7 +1545,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'forgive_all': 'true'})
     urls = self.call_gatekeeper()
 
@@ -1619,7 +1582,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper()
     self.assertIn(self.set_status_url, urls)
@@ -1637,7 +1600,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -1671,7 +1634,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -1698,7 +1661,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -1732,7 +1695,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -1760,7 +1723,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -1789,7 +1752,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -1819,7 +1782,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -1860,10 +1823,10 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[1].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[1].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -1917,13 +1880,13 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[2].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[1].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[2].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -1975,7 +1938,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
@@ -2011,7 +1974,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1', 'step2']})
+                                {'closing_optional': ['step1', 'step2']})
 
     self.masters[0].builders[0].builds[1].steps[2].results = [2, None]
 
@@ -2042,7 +2005,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
 
@@ -2062,9 +2025,10 @@ class GatekeeperTest(unittest.TestCase):
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
 
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 '*',
-                                {'closing_steps': ['step4']})
+                                {'closing_optional': ['step1']})
 
     self.call_gatekeeper()
 
@@ -2079,15 +2043,16 @@ class GatekeeperTest(unittest.TestCase):
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
 
-    # step3 won't fail the build.
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+
+    # step4 won't fail the build.
     self.add_gatekeeper_section(self.masters[0].url,
                                 '*',
-                                {'closing_steps': ['step3']})
-
-    # But step4 will.
+                                {'closing_optional': ['step4']})
+    # But step1 will.
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step4']},
+                                {'closing_optional': ['step1']},
                                 idx=0)
 
     self.call_gatekeeper()
@@ -2106,12 +2071,12 @@ class GatekeeperTest(unittest.TestCase):
     # step4 will fail the build.
     self.add_gatekeeper_section(self.masters[0].url,
                                 '*',
-                                {'closing_steps': ['step4']})
+                                {'closing_optional': ['step4']})
 
     # But step3 won't.
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step3']},
+                                {'closing_optional': ['step3']},
                                 idx=0)
 
     urls = self.call_gatekeeper()
@@ -2140,12 +2105,12 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.masters[0].builders[1].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[1].name,
-                                {'closing_steps': ['step1']},
+                                {'closing_optional': ['step1']},
                                 idx=0)
 
     urls = self.call_gatekeeper(build_db=build_db)
@@ -2182,12 +2147,12 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.masters[0].builders[1].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[1].name,
-                                {'closing_steps': ['step1']},
+                                {'closing_optional': ['step1']},
                                 idx=0)
 
     urls = self.call_gatekeeper(build_db=build_db)
@@ -2228,14 +2193,14 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.masters[1].builders[0].builds[0].blame = [
         'a_second_committer@chromium.org']
     self.masters[1].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[1].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper(build_db)
     self.assertEquals(urls.count(self.set_status_url), 1)
@@ -2267,7 +2232,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds.append(mybuild)
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step4']})
+                                {'closing_optional': ['step4']})
 
     urls = self.call_gatekeeper()
     self.assertNotIn(self.set_status_url, urls)
@@ -2282,7 +2247,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
     mybuild = self.create_generic_build(2, ['a_second_committer@chromium.org'])
     mybuild.finished = False
     mybuild.steps[1].results = [2, None]
@@ -2314,7 +2279,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds.append(mybuild)
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper(build_db=build_db)
     unfinished_new_builds, finished_new_builds = self.process_build_db(
@@ -2347,7 +2312,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds.append(mybuild)
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step4']})
+                                {'closing_optional': ['step4']})
 
     urls = self.call_gatekeeper(build_db=build_db)
     unfinished_new_builds, finished_new_builds = self.process_build_db(
@@ -2369,7 +2334,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].finished = False
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper()
     build_db = build_scan_db.get_build_db(self.build_db_file)
@@ -2401,12 +2366,12 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper(build_db=build_db)
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step2']})
+                                {'closing_optional': ['step2']})
     self.masters[0].builders[0].builds[1].steps[2].results = [2, None]
     build_db = build_scan_db.get_build_db(self.build_db_file)
     urls += self.call_gatekeeper(build_db=build_db)
@@ -2431,7 +2396,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper()
     self.assertEquals(urls.count(self.set_status_url), 1)
@@ -2458,7 +2423,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper()
     self.assertEquals(urls.count(self.set_status_url), 1)
@@ -2483,7 +2448,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[2].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1', 'step2']})
+                                {'closing_optional': ['step1', 'step2']})
 
     urls = self.call_gatekeeper()
     self.assertEquals(urls.count(self.set_status_url), 1)
@@ -2516,7 +2481,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1', 'step2']})
+                                {'closing_optional': ['step1', 'step2']})
 
     urls = self.call_gatekeeper()
     self.assertEquals(urls.count(self.set_status_url), 1)
@@ -2548,7 +2513,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1', 'step2']})
+                                {'closing_optional': ['step1', 'step2']})
 
     self.masters[0].builders[0].builds[0].finished = False
 
@@ -2577,7 +2542,7 @@ class GatekeeperTest(unittest.TestCase):
                       '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
-    self.add_gatekeeper_category('mycat', {'closing_steps': ['step1']})
+    self.add_gatekeeper_category('mycat', {'closing_optional': ['step1']})
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
                                 {'categories': ['mycat']})
@@ -2597,8 +2562,8 @@ class GatekeeperTest(unittest.TestCase):
                       '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[2].results = [2, None]
-    self.add_gatekeeper_category('mycat', {'closing_steps': ['step1']})
-    self.add_gatekeeper_category('mycat2', {'closing_steps': ['step2']})
+    self.add_gatekeeper_category('mycat', {'closing_optional': ['step1']})
+    self.add_gatekeeper_category('mycat2', {'closing_optional': ['step2']})
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
                                 {'categories': ['mycat', 'mycat2']})
@@ -2618,11 +2583,11 @@ class GatekeeperTest(unittest.TestCase):
                       '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
-    self.add_gatekeeper_category('mycat', {'closing_steps': ['step2']})
+    self.add_gatekeeper_category('mycat', {'closing_optional': ['step2']})
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
                                 {'categories': ['mycat'],
-                                 'closing_steps': ['step1']})
+                                 'closing_optional': ['step1']})
 
     self.call_gatekeeper()
 
@@ -2643,7 +2608,7 @@ class GatekeeperTest(unittest.TestCase):
                                       {'sheriff_classes': ['sheriff_android']})
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']},
+                                {'closing_optional': ['step1']},
                                 idx=0)
 
     sheriff_url = 'http://build.chromium.org/p/chromium/sheriff_android.js'
@@ -2675,7 +2640,7 @@ class GatekeeperTest(unittest.TestCase):
                                       {'sheriff_classes': ['sheriff_android']})
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'sheriff_classes': ['sheriff']},
                                 idx=0)
 
@@ -2711,7 +2676,7 @@ class GatekeeperTest(unittest.TestCase):
                       '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
-    self.add_gatekeeper_category('mycat', {'closing_steps': ['step1']})
+    self.add_gatekeeper_category('mycat', {'closing_optional': ['step1']})
     self.add_gatekeeper_master_config(self.masters[0].url,
                                       {'categories': ['mycat']})
     self.add_gatekeeper_section(self.masters[0].url,
@@ -2734,7 +2699,7 @@ class GatekeeperTest(unittest.TestCase):
                       '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
-    self.add_gatekeeper_category('mycat', {'closing_steps': ['step1']})
+    self.add_gatekeeper_category('mycat', {'closing_optional': ['step1']})
     self.add_gatekeeper_master_config(self.masters[0].url,
                                       {}
                                       )
@@ -2762,13 +2727,13 @@ class GatekeeperTest(unittest.TestCase):
                       '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
-    self.add_gatekeeper_category('mycat', {'closing_steps': ['step1']})
+    self.add_gatekeeper_category('mycat', {'closing_optional': ['step1']})
     self.add_gatekeeper_master_config(self.masters[0].url,
                                       {}
                                       )
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1'],
+                                {'closing_optional': ['step1'],
                                  'tree_notify': ['a_watcher@chromium.org']},
                                 idx=0)
 
@@ -2795,7 +2760,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     urls = self.call_gatekeeper()
     self.assertNotIn(self.mailer_url, urls)
@@ -2811,7 +2776,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.call_gatekeeper()
 
@@ -2852,7 +2817,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {'closing_steps': ['step1']})
+                                {'closing_optional': ['step1']})
 
     self.add_gatekeeper_master_section(self.masters[0].url, -1,
                                        {'close_tree': False})

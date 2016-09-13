@@ -189,7 +189,7 @@
 
         "builders": {
           "Chromium Gatekeeper Failure": {
-            "forgiving_steps": [
+            "forgiving_optional": [
               "*"
             ]
           }
@@ -737,12 +737,12 @@
               "hirono+closure-bots@chromium.org",
               "vitalyp@chromium.org"
             ],
-            "forgiving_steps": [
+            "forgiving_optional": [
               "update_scripts",
               "setup_build",
               "bot_update"
             ],
-            "closing_steps": [
+            "closing_optional": [
               "generate_gyp_files",
               "compile",
               "generate_v2_gyp_files",
@@ -775,7 +775,7 @@
               "creis+fyi-bots@chromium.org",
               "alexmos+fyi-bots@chromium.org"
             ],
-            "forgiving_steps": [
+            "forgiving_optional": [
               "*"
             ]
           },
@@ -785,7 +785,7 @@
               "creis+fyi-bots@chromium.org",
               "alexmos+fyi-bots@chromium.org"
             ],
-            "forgiving_steps": [
+            "forgiving_optional": [
               "*"
             ]
           },
@@ -794,7 +794,7 @@
               "bruening@chromium.org",
               "zhaoqin@chromium.org"
             ],
-            "forgiving_steps": [
+            "forgiving_optional": [
               "compile"
             ],
             "subject_template": "LKGR buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
@@ -803,7 +803,7 @@
             "tree_notify": [
               "syzyzy-team@chromium.org"
             ],
-            "forgiving_steps": [
+            "forgiving_optional": [
               "compile"
             ],
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"

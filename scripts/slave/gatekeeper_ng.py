@@ -158,11 +158,8 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
 
       steps = build_json['steps']
       excluded_steps = set(gatekeeper.get('excluded_steps', []))
-      forgiving = set(gatekeeper.get('forgiving_steps', [])) - excluded_steps
       forgiving_optional = (
           set(gatekeeper.get('forgiving_optional', [])) - excluded_steps)
-      closing_steps = (
-          set(gatekeeper.get('closing_steps', [])) | forgiving) - excluded_steps
       closing_optional = (
           (set(gatekeeper.get('closing_optional', [])) | forgiving_optional) -
           excluded_steps
@@ -192,10 +189,8 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
       if '*' in closing_optional:
         closing_optional = (finished_steps - excluded_steps)
 
-      unsatisfied_steps = closing_steps - successful_steps
       failed_steps = finished_steps - successful_steps
-      failed_optional_steps = failed_steps & closing_optional
-      unsatisfied_steps |= failed_optional_steps
+      unsatisfied_steps = failed_steps & closing_optional
 
       # Build is not yet finished, don't penalize on unstarted/unfinished steps.
       if build_json.get('results', None) is None:
@@ -213,8 +208,7 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
         failed_builds.append(({'base_url': buildbot_url,
                                'build': build_json,
                                'close_tree': close_tree,
-                               'forgiving_steps': (
-                                   forgiving | forgiving_optional),
+                               'forgiving_steps': forgiving_optional,
                                'project_name': project_name,
                                'sheriff_classes': sheriff_classes,
                                'subject_template': subject_template,

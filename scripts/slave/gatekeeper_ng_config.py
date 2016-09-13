@@ -11,8 +11,8 @@ but note that all nodes are optional (including the root 'masters' and
 'categories' nodes).
 
 A builder ultimately needs 4 lists (sets):
-  closing_steps: steps which close the tree on failure or omission
-  forgiving_steps: steps which close the tree but don't email committers
+  closing_optional: steps which close the tree on failure
+  forgiving_optional: steps which close the tree but don't email committers
   tree_notify: any additional emails to notify on tree failure
   sheriff_classes: classes of sheriffs to notify on build failure
 
@@ -47,15 +47,13 @@ The 'status_template' is what is sent to the status app if the tree is set to be
 closed. Its formatting arguments are found in gatekeeper_ng.py's
 close_tree_if_necessary().
 
-'forgive_all' converts all closing_steps to be forgiving_steps. Since
-forgiving_steps only email sheriffs + watchlist (not the committer), this is a
-great way to set up experimental or informational builders without spamming
+'forgive_all' converts all closing_optional to be forgiving_optional. Since
+forgiving_optional only email sheriffs + watchlist (not the committer), this is
+a great way to set up experimental or informational builders without spamming
 people. It is enabled by providing the string 'true'.
 
-'forgiving_optional' and 'closing_optional' work just like 'forgiving_steps'
-and 'closing_steps', but they won't close if the step is missing. This is like
-previous gatekeeper behavior. They can be set to '*', which will match all
-steps in the builder.
+'forgiving_optional' and 'closing_optional' won't close the tree if the step is
+missing.
 
 'respect_build_status' means to use the buildbot result of the entire build
 as an additional way to close the tree. As an example, if a build's closing
@@ -89,8 +87,8 @@ The 'comment' key can be put anywhere and is ignored by the parser.
         'builders': {
           'XP Tests (1)': {
             'categories': ['win_tests'],
-            'closing_steps': ['xp_special_step'],
-            'forgiving_steps': ['archive'],
+            'closing_optional': ['xp_special_step'],
+            'forgiving_optional': ['archive'],
             'tree_notify': ['xp_watchers@chromium.org'],
             'sheriff_classes': ['sheriff_xp'],
           }
@@ -101,21 +99,21 @@ The 'comment' key can be put anywhere and is ignored by the parser.
   'categories': {
     'win_tests': {
       'comment': 'this is for all windows testers',
-      'closing_steps': ['startup_test'],
-      'forgiving_steps': ['boot_windows'],
+      'closing_optional': ['startup_test'],
+      'forgiving_optional': ['boot_windows'],
       'tree_notify': ['win_watchers@chromium.org'],
       'sheriff_classes': ['sheriff_win_test']
     },
     'win_extra': {
-      'closing_steps': ['extra_win_step']
+      'closing_optional': ['extra_win_step']
       'subject_template': 'windows heads up on %(builder_name)',
     }
   }
 }
 
 In this case, XP Tests (1) would be flattened down to:
-  closing_steps: ['startup_test', 'win_tests']
-  forgiving_steps: ['archive', 'boot_windows']
+  closing_optional: ['startup_test', 'win_tests']
+  forgiving_optional: ['archive', 'boot_windows']
   tree_notify: ['xp_watchers@chromium.org', 'win_watchers@chromium.org',
                 'a_watcher@chromium.org']
   sheriff_classes: ['sheriff_win', 'sheriff_win_test', 'sheriff_xp']
@@ -198,12 +196,10 @@ def load_gatekeeper_config(filename):
 
   builder_keys = ['close_tree',
                   'closing_optional',
-                  'closing_steps',
                   'excluded_builders',
                   'excluded_steps',
                   'forgive_all',
                   'forgiving_optional',
-                  'forgiving_steps',
                   'respect_build_status',
                   'sheriff_classes',
                   'status_template',
@@ -313,19 +309,14 @@ def load_gatekeeper_config(filename):
 
         # Builder postprocessing.
         if gatekeeper_builder['forgive_all'] == 'true':
-          gatekeeper_builder['forgiving_steps'] |= gatekeeper_builder[
-              'closing_steps']
           gatekeeper_builder['forgiving_optional'] |= gatekeeper_builder[
               'closing_optional']
-          gatekeeper_builder['closing_steps'] = set([])
           gatekeeper_builder['closing_optional'] = set([])
 
 
         step_keys = [
             'closing_optional',
-            'closing_steps',
             'forgiving_optional',
-            'forgiving_steps',
         ]
         all_steps = reduce(
             lambda x, y:x.union(y),
