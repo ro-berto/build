@@ -113,6 +113,7 @@ def RunSteps(api):
     ]
 
   # Build all supported tests.
+  api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.isolate.clean_isolated_files(api.chromium.output_dir)
   api.chromium.compile(targets=targets)
