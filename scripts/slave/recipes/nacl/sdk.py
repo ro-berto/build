@@ -20,6 +20,7 @@ def RunSteps(api):
   api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout()
   api.tryserver.maybe_apply_issue()
+  api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.chromium.run_mb(
       api.properties.get('mastername'), api.properties.get('buildername'))

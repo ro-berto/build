@@ -57,6 +57,8 @@ def linux_sdk_multi_steps(api):
     result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
+    api.chromium.ensure_goma()
+
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
@@ -143,6 +145,8 @@ def mac_sdk_multi_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
+
+    api.chromium.ensure_goma()
 
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
@@ -233,6 +237,8 @@ def windows_sdk_multi_steps(api):
     result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
+    api.chromium.ensure_goma()
+
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
@@ -294,6 +300,8 @@ def linux_sdk_multirel_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
+
+    api.chromium.ensure_goma()
 
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
@@ -359,6 +367,8 @@ def windows_sdk_multirel_steps(api):
     result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
+    api.chromium.ensure_goma()
+
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
@@ -420,6 +430,8 @@ def mac_sdk_multirel_steps(api):
     api.gclient.c = src_cfg
     result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
+
+    api.chromium.ensure_goma()
 
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
