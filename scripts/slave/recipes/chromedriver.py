@@ -60,6 +60,7 @@ def RunSteps(api):
   api.gclient.apply_config('android')
   api.gclient.apply_config('chromedriver')
   api.bot_update.ensure_checkout()
+  api.chromium.ensure_goma()
   api.chromium_android.clean_local_files()
   api.chromium.runhooks()
   api.chromium_android.run_tree_truth()
