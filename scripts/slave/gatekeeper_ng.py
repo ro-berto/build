@@ -817,7 +817,6 @@ def get_args(argv):
                       default='https://chromium-build.appspot.com/mailer',
                       help='URL of the application to send email from')
   parser.add_argument('--email-app-secret-file',
-                      default='.mailer_password',
                       help='file containing secret used in email app auth')
   parser.add_argument('--no-email-app', action='store_true',
                       help='don\'t send emails')

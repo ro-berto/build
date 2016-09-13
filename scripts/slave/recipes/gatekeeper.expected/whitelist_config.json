@@ -41,7 +41,9 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "-v",
       "--json",
-      "[BUILD]/scripts/slave/gatekeeper.json"
+      "[BUILD]/scripts/slave/gatekeeper.json",
+      "--email-app-secret-file",
+      "/creds/gatekeeper/mailer_password"
     ],
     "name": "gatekeeper: chromium"
   },
@@ -53,6 +55,8 @@
       "-v",
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json",
+      "--email-app-secret-file",
+      "/creds/gatekeeper/mailer_password",
       "--status-url",
       "https://blink-status.appspot.com",
       "--sheriff-url",

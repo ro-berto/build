@@ -14,7 +14,12 @@ class Gatekeeper(recipe_api.RecipeApi):
     ).json.output
 
     for tree_name, tree_args in config.iteritems():
-      args = ['-v', '--json', gatekeeper_json]
+      # TODO(martiniss): create a creds recipe module to make a nice path
+      # reference to /creds
+      args = [
+          '-v', '--json', gatekeeper_json, '--email-app-secret-file',
+          '/creds/gatekeeper/mailer_password'
+      ]
 
       if tree_args.get('status-url'):
         args.extend(['--status-url', tree_args['status-url']])
