@@ -521,6 +521,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
     },
     'Site Isolation Win': {
       'chromium_config': 'chromium',
@@ -555,6 +557,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
     },
     'Browser Side Navigation Linux': {
       'chromium_config': 'chromium',
@@ -580,6 +584,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
     },
     'CrWinClang': {
       'chromium_config': 'chromium_win_clang_official',
