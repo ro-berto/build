@@ -20,6 +20,7 @@ def RunSteps(api):
 
   api.path['checkout'] = api.path['slave_build']
   api.chromium.set_config('chromium')
+  api.chromium.ensure_goma()
   api.filter.does_patch_require_compile(
       affected_files=list(api.m.properties.get('affected_files', ['foo.cc'])),
       test_targets=test_targets,
