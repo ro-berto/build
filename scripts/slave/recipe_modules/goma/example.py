@@ -11,20 +11,16 @@ DEPS = [
 
 def RunSteps(api):
   api.goma.ensure_goma()
-  api.goma.start(env={})
-  # build something using goma.
-  api.step('echo goma jobs',
-           ['echo', str(api.goma.recommended_goma_jobs)])
-  api.step('echo goma jobs second',
-           ['echo', str(api.goma.recommended_goma_jobs)])
 
-  api.goma.stop(
-      ninja_log_outdir=api.properties.get('ninja_log_outdir'),
-      ninja_log_compiler=api.properties.get('ninja_log_compiler'),
-      ninja_log_command=api.properties.get('ninja_log_command'),
-      ninja_log_exit_status=api.properties.get('ninja_log_exit_status'),
-  )
-
+  with api.goma.build_with_goma(ninja_log_outdir=api.properties.get('ninja_log_outdir'),
+                                ninja_log_compiler=api.properties.get('ninja_log_compiler'),
+                                ninja_log_command=api.properties.get('ninja_log_command'),
+                                env={}):
+    # build something using goma.
+    api.step('echo goma jobs',
+             ['echo', str(api.goma.recommended_goma_jobs)])
+    api.step('echo goma jobs second',
+             ['echo', str(api.goma.recommended_goma_jobs)])
 
 def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
@@ -43,7 +39,6 @@ def GenTests(api):
         'ninja_log_outdir': 'build_data_dir',
         'ninja_log_compiler': 'goma',
         'ninja_log_command': ['ninja', '-j', '500'],
-        'ninja_log_exit_status': '0',
     })
 
     yield (api.test('%s_upload_logs' % platform) + api.platform.name(platform) +

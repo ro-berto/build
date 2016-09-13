@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from contextlib import contextmanager
+
 from recipe_engine import recipe_api
 
 class GomaApi(recipe_api.RecipeApi):
@@ -288,3 +290,40 @@ print jobs
       args=args,
       env=self._goma_ctl_env
     )
+
+  @contextmanager
+  def build_with_goma(self, ninja_log_outdir=None, ninja_log_compiler=None,
+                      ninja_log_command=None, env=None):
+    """Make context wrapping goma start/stop.
+
+    Args ninja_log_* are NOT used to run actual build in this context.
+    These args are only used to collect log and upload them.
+
+    Args:
+      ninja_log_outdir: Directory of ninja log. (e.g. "out/Release")
+      ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
+      ninja_log_command: Command used for build.
+                         This is used only to be sent as part of log,
+                         NOT used to run actual build.
+                         (e.g. ['ninja', '-C', 'out/Release', '-j', '100'])
+
+    Raises:
+      StepFailure or InfraFailure if it fails to build.
+    """
+
+    ninja_log_exit_status = 0
+
+    self.start(env)
+    try:
+      yield
+    except self.m.step.StepFailure as e: # pragma: no cover
+      ninja_log_exit_status = e.retcode
+      raise e
+    except self.m.step.InfraFailure as e: # pragma: no cover
+      ninja_log_exit_status = -1
+      raise e
+    finally:
+      self.stop(ninja_log_outdir=ninja_log_outdir,
+                ninja_log_compiler=ninja_log_compiler,
+                ninja_log_command=ninja_log_command,
+                ninja_log_exit_status=ninja_log_exit_status)
