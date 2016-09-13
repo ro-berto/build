@@ -79,11 +79,8 @@ def linux_sdk_multi_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
 
-    # compile.py step
-    args = ['--target', 'Release', '--compiler=goma', 'chrome']
-    api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
-               args=args)
+    # compile step
+    api.chromium.compile(['chrome'])
 
     # annotated_steps step
     api.python(
@@ -169,12 +166,9 @@ def mac_sdk_multi_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
 
-    # compile.py step
-    args = ['--target', 'Release', '--build-tool=ninja',
-            '--compiler=goma-clang', '--', 'chrome']
-    api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
-               args=args)
+    # compile step
+    api.chromium.compile(['chrome'])
+
     # annotated_steps step
     api.python(
         "annotated_steps",
@@ -259,11 +253,9 @@ def windows_sdk_multi_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
 
-    # compile.py step
-    args = ['--target', 'Release', '--compiler=goma', 'chrome']
-    api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
-               args=args)
+    # compile step
+    api.chromium.compile(['chrome'])
+
     # annotated_steps step
     api.python(
         "annotated_steps",
@@ -323,11 +315,9 @@ def linux_sdk_multirel_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
 
-    # compile.py step
-    args = ['--target', 'Release', '--compiler=goma', 'chrome']
-    api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
-               args=args)
+    # compile step
+    api.chromium.compile(['chrome'])
+
     # annotated_steps step
     api.python(
         "annotated_steps",
@@ -389,11 +379,9 @@ def windows_sdk_multirel_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
 
-    # compile.py step
-    args = ['--target', 'Release', '--compiler=goma', 'chrome',]
-    api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
-               args=args)
+    # compile step
+    api.chromium.compile(['chrome'])
+
     # annotated_steps step
     api.python(
         "annotated_steps",
@@ -454,12 +442,9 @@ def mac_sdk_multirel_steps(api):
     # cleanup_temp step
     api.chromium.cleanup_temp()
 
-    # compile.py step
-    args = ['--target', 'Release', '--build-tool=ninja',
-            '--compiler=goma-clang', '--', 'chrome']
-    api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
-               args=args)
+    # compile step
+    api.chromium.compile(['chrome'])
+
     # annotated_steps step
     api.python(
         "annotated_steps",
