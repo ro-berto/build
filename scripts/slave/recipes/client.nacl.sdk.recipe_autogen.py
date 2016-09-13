@@ -78,8 +78,7 @@ def linux_sdk_multi_steps(api):
     api.chromium.cleanup_temp()
 
     # compile.py step
-    args = ['--target', 'Release', '--compiler=goma',
-            'chromium_builder_nacl_sdk']
+    args = ['--target', 'Release', '--compiler=goma', 'chrome']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
@@ -168,7 +167,7 @@ def mac_sdk_multi_steps(api):
 
     # compile.py step
     args = ['--target', 'Release', '--build-tool=ninja',
-            '--compiler=goma-clang', '--', 'chromium_builder_nacl_sdk']
+            '--compiler=goma-clang', '--', 'chrome']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
@@ -255,8 +254,7 @@ def windows_sdk_multi_steps(api):
     api.chromium.cleanup_temp()
 
     # compile.py step
-    args = ['--target', 'Release', '--compiler=goma',
-            'chromium_builder_nacl_sdk']
+    args = ['--target', 'Release', '--compiler=goma', 'chrome']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
@@ -318,8 +316,7 @@ def linux_sdk_multirel_steps(api):
     api.chromium.cleanup_temp()
 
     # compile.py step
-    args = ['--target', 'Release', '--compiler=goma',
-            'chromium_builder_tests']
+    args = ['--target', 'Release', '--compiler=goma', 'chrome']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
@@ -383,8 +380,7 @@ def windows_sdk_multirel_steps(api):
     api.chromium.cleanup_temp()
 
     # compile.py step
-    args = ['--target', 'Release', '--compiler=goma',
-            'chromium_builder_tests',]
+    args = ['--target', 'Release', '--compiler=goma', 'chrome',]
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
@@ -448,7 +444,7 @@ def mac_sdk_multirel_steps(api):
 
     # compile.py step
     args = ['--target', 'Release', '--build-tool=ninja',
-            '--compiler=goma-clang', '--', 'chromium_builder_tests']
+            '--compiler=goma-clang', '--', 'chrome']
     api.python("compile",
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)

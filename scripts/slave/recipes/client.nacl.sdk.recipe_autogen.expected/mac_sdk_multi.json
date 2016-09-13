@@ -150,7 +150,7 @@
       "--build-tool=ninja",
       "--compiler=goma-clang",
       "--",
-      "chromium_builder_nacl_sdk"
+      "chrome"
     ],
     "name": "compile"
   },

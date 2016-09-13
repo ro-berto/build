@@ -150,7 +150,7 @@
       "--build-tool=ninja",
       "--compiler=goma-clang",
       "--",
-      "chromium_builder_tests"
+      "chrome"
     ],
     "name": "compile"
   },

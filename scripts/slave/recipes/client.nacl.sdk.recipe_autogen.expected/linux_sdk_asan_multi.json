@@ -147,7 +147,7 @@
       "--target",
       "Release",
       "--compiler=goma",
-      "chromium_builder_nacl_sdk"
+      "chrome"
     ],
     "name": "compile"
   },

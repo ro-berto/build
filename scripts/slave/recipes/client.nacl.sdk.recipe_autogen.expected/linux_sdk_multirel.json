@@ -147,7 +147,7 @@
       "--target",
       "Release",
       "--compiler=goma",
-      "chromium_builder_tests"
+      "chrome"
     ],
     "name": "compile"
   },
