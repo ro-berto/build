@@ -3,14 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/kill_processes.py"
-    ],
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_deps': {'src-pdf': None, 'src/pdf': None}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'chrome-official', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/tools/buildspec/build/chrome-official'}]",
