@@ -153,15 +153,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runhooks_wrapper.py"
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
-      "GYP_DEFINES": "fastbuild=1 component=static_library",
-      "LANDMINES_VERBOSE": "1"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "LANDMINES_VERBOSE": "1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "gclient runhooks wrapper"
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -245,9 +249,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/chromium/nacl_sdk_buildbot_run.py",
-      "--build-properties={\"buildername\":\"linux-sdk-multi\",\"buildnumber\":\"42\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"client.nacl.sdk\",\"recipe\":\"client.nacl.sdk.recipe_autogen\",\"revision\":\"123456789abcdef\",\"slavename\":\"TestSlave\"}",
-      "--factory-properties={\"annotated_script\":\"nacl_sdk_buildbot_run.py\",\"blink_config\":\"chromium\",\"gclient_env\":{\"CHROMIUM_GYP_SYNTAX_CHECK\":\"1\",\"DEPOT_TOOLS_UPDATE\":\"0\",\"GYP_DEFINES\":\"fastbuild=1 component=static_library\",\"LANDMINES_VERBOSE\":\"1\"},\"no_gclient_branch\":true,\"nuke_and_pave\":false}"
+      "[BUILD]/scripts/slave/chromium/nacl_sdk_buildbot_run.py"
     ],
     "name": "annotated_steps"
   },

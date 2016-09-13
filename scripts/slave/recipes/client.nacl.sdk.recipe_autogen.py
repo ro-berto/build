@@ -62,15 +62,12 @@ def linux_sdk_multi_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # gclient runhooks wrapper step
+    # gclient runhooks step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'LANDMINES_VERBOSE': '1',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
-    api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
-                                      "runhooks_wrapper.py"),
-               env=env)
+    api.chromium.runhooks(env=env)
 
     # generate_build_files step
     api.chromium.run_mb(api.properties.get('mastername'),
@@ -87,16 +84,6 @@ def linux_sdk_multi_steps(api):
         "annotated_steps",
         api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
-        args=
-        ['--build-properties=%s' % api.json.dumps(build_properties,
-                                                  separators=(',', ':')),
-         '--factory-properties={"annotated_script":"nacl_sdk_buildbot_run.py"'+\
-             ',"blink_config":"chromium",'+\
-             '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
-             '"DEPOT_TOOLS_UPDATE":"0","GYP_DEFINES":'+\
-             '"fastbuild=1 component=static_library","LANDMINES_VERBOSE":"1"'+\
-             '},"no_gclient_branch":true,"nuke_and_pave":false}'
-         ],
         allow_subannotations=True)
 
 
@@ -148,16 +135,13 @@ def mac_sdk_multi_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # gclient runhooks wrapper step
+    # gclient runhooks step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'GYP_GENERATORS': 'ninja',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library',
            'LANDMINES_VERBOSE': '1'}
-    api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
-                                      "runhooks_wrapper.py"),
-               env=env)
+    api.chromium.runhooks(env=env)
 
     # generate_build_files step
     api.chromium.run_mb(api.properties.get('mastername'),
@@ -174,16 +158,6 @@ def mac_sdk_multi_steps(api):
         "annotated_steps",
         api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
-        args=
-        ['--build-properties=%s' % api.json.dumps(build_properties,
-                                                  separators=(',', ':')),
-         '--factory-properties={"annotated_script":"nacl_sdk_buildbot_run.py"'+\
-             ',"blink_config":"chromium","gclient_env":'+\
-             '{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0",'+\
-             '"GYP_DEFINES":"fastbuild=1 component=static_library",'+\
-             '"GYP_GENERATORS":"ninja","LANDMINES_VERBOSE":"1"},'+\
-             '"no_gclient_branch":true,"nuke_and_pave":false}'
-         ],
         allow_subannotations=True)
 
 
@@ -236,15 +210,12 @@ def windows_sdk_multi_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # gclient runhooks wrapper step
+    # gclient runhooks step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'LANDMINES_VERBOSE': '1',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
-    api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
-                                      "runhooks_wrapper.py"),
-               env=env)
+    api.chromium.runhooks(env=env)
 
     # generate_build_files step
     api.chromium.run_mb(api.properties.get('mastername'),
@@ -261,16 +232,6 @@ def windows_sdk_multi_steps(api):
         "annotated_steps",
         api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
-        args=
-        ['--build-properties=%s' % api.json.dumps(build_properties,
-                                                  separators=(',', ':')),
-         '--factory-properties={"annotated_script":"nacl_sdk_buildbot_run.py"'+\
-             ',"blink_config":"chromium","gclient_env":'+\
-             '{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0",'+\
-             '"GYP_DEFINES":"fastbuild=1 component=static_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"no_gclient_branch":true,'+\
-             '"nuke_and_pave":false}'
-         ],
         allow_subannotations=True)
 
 
@@ -298,15 +259,12 @@ def linux_sdk_multirel_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # gclient runhooks wrapper step
+    # gclient runhooks step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'LANDMINES_VERBOSE': '1',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
-    api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
-                                      "runhooks_wrapper.py"),
-               env=env)
+    api.chromium.runhooks(env=env)
 
     # generate_build_files step
     api.chromium.run_mb(api.properties.get('mastername'),
@@ -323,16 +281,6 @@ def linux_sdk_multirel_steps(api):
         "annotated_steps",
         api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
-        args=
-        ['--build-properties=%s' % api.json.dumps(build_properties,
-                                                  separators=(',', ':')),
-         '--factory-properties={"annotated_script":"nacl_sdk_buildbot_run.py"'+\
-             ',"blink_config":"chromium","gclient_env":'+\
-             '{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0",'+\
-             '"GYP_DEFINES":"fastbuild=1 component=static_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"no_gclient_branch":true,'+\
-             '"nuke_and_pave":true}'
-         ],
         allow_subannotations=True)
 
 
@@ -362,15 +310,12 @@ def windows_sdk_multirel_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # gclient runhooks wrapper step
+    # gclient runhooks step
     env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1',
            'LANDMINES_VERBOSE': '1',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
-    api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
-                                      "runhooks_wrapper.py"),
-               env=env)
+    api.chromium.runhooks(env=env)
 
     # generate_build_files step
     api.chromium.run_mb(api.properties.get('mastername'),
@@ -387,16 +332,6 @@ def windows_sdk_multirel_steps(api):
         "annotated_steps",
         api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
-        args=
-        ['--build-properties=%s' % api.json.dumps(build_properties,
-                                                  separators=(',', ':')),
-         '--factory-properties={"annotated_script":"nacl_sdk_buildbot_run.py"'+\
-             ',"blink_config":"chromium","gclient_env":'+\
-             '{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0",'+\
-             '"GYP_DEFINES":"fastbuild=1 component=static_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"no_gclient_branch":true,'+\
-             '"nuke_and_pave":true}'
-         ],
         allow_subannotations=True)
 
 
@@ -424,16 +359,13 @@ def mac_sdk_multirel_steps(api):
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
-    # gclient runhooks wrapper step
+    # gclient runhooks step
     env = {'LANDMINES_VERBOSE': '1',
            'GYP_GENERATORS': 'ninja',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library',
            'CHROMIUM_GYP_SYNTAX_CHECK': '1'}
-    api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
-                                      "runhooks_wrapper.py"),
-               env=env)
+    api.chromium.runhooks(env=env)
 
     # generate_build_files step
     api.chromium.run_mb(api.properties.get('mastername'),
@@ -450,16 +382,6 @@ def mac_sdk_multirel_steps(api):
         "annotated_steps",
         api.path["build"].join("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
-        args=
-        ['--build-properties=%s' % api.json.dumps(build_properties,
-                                                  separators=(',', ':')),
-         '--factory-properties={"annotated_script":"nacl_sdk_buildbot_run.py"'+\
-             ',"blink_config":"chromium","gclient_env":'+\
-             '{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0",'+\
-             '"GYP_DEFINES":"fastbuild=1 component=static_library",'+\
-             '"GYP_GENERATORS":"ninja","LANDMINES_VERBOSE":"1"},'+\
-             '"no_gclient_branch":true,"nuke_and_pave":true}'
-         ],
         allow_subannotations=True)
 
 
