@@ -29,6 +29,7 @@ def RunSteps(api):
 
   api.bot_update.ensure_checkout()
 
+  api.chromium.ensure_goma()
   api.chromium.runhooks()
 
   # This is needed to disable building with goma
