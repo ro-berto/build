@@ -25,6 +25,7 @@ def RunSteps(api):
   libyuv.apply_bot_config(libyuv.BUILDERS, libyuv.RECIPE_CONFIGS)
 
   api.bot_update.ensure_checkout()
+  api.chromium.cleanup_temp()
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
