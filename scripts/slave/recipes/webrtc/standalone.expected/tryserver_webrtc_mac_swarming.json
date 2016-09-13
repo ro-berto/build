@@ -231,6 +231,8 @@
       "[BUILDER_CACHE]/mac_swarming/src/webrtc/build/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
+      "--swarming-targets-file",
+      "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nvoice_engine_unittests\nxmllite_xmpp_unittests\n",
       "--gyp-script=[BUILDER_CACHE]/mac_swarming/src/webrtc/build/gyp_webrtc.py",
       "//out/Debug"
     ],
@@ -238,7 +240,25 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@audio_decoder_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_video_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@peerconnection_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_media_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_pc_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@system_wrappers_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test_support_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@tools_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@video_engine_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@voice_engine_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@xmllite_xmpp_unittests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
   },
   {
     "allow_subannotations": true,

@@ -160,7 +160,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       mb_config_path=self.m.path['checkout'].join('webrtc', 'build',
                                                   'mb_config.pyl'),
       gyp_script=self.m.path['checkout'].join('webrtc', 'build',
-                                              'gyp_webrtc.py'))
+                                              'gyp_webrtc.py'),
+      isolated_targets=self.NORMAL_TESTS if self.c.use_isolate else None)
     # GYP bots no longer compiles, we only want to ensure GYP executes.
     if 'gyp' not in self.buildername.lower():
       self.m.chromium.compile()
