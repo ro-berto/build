@@ -175,7 +175,6 @@
     "name": "gclient runhooks"
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[SLAVE_BUILD]/src/build/tree_truth.sh",
       "[SLAVE_BUILD]/src",
@@ -640,7 +639,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "fix_device_file_format"
   },
   {
@@ -942,7 +940,6 @@
     "name": "Fetch expected failures data"
   },
   {
-    "cmd": [],
     "name": "Update CTS"
   },
   {

@@ -191,7 +191,6 @@
     "name": "finalize build config"
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -454,7 +453,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "bootstrap swarming"
   },
   {
@@ -571,7 +569,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "isolate"
   },
   {
@@ -682,7 +679,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "trigger"
   },
   {

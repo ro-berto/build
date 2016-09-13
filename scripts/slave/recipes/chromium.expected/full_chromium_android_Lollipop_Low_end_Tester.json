@@ -122,7 +122,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -271,7 +270,6 @@
     ]
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[BUILDER_CACHE]/Lollipop_Low_end_Tester/src/build/tree_truth.sh",
       "[BUILDER_CACHE]/Lollipop_Low_end_Tester/src",

@@ -1605,7 +1605,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Check (flakes)",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",

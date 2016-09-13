@@ -98,7 +98,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -199,7 +198,6 @@
     "name": "gclient runhooks"
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[SLAVE_BUILD]/src/build/tree_truth.sh",
       "[SLAVE_BUILD]/src",
@@ -495,7 +493,6 @@
     "name": "install ChromePublic.apk"
   },
   {
-    "cmd": [],
     "name": "Download Prebuilts"
   },
   {
@@ -577,7 +574,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "python_tests chrome_beta"
   },
   {
@@ -633,7 +629,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "java_tests chrome_beta"
   },
   {
@@ -688,7 +683,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "python_tests chrome_stable"
   },
   {
@@ -744,7 +738,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "java_tests chrome_stable"
   },
   {
@@ -799,7 +792,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "python_tests chromedriver_webview_shell"
   },
   {
@@ -855,7 +847,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "java_tests chromedriver_webview_shell"
   },
   {
@@ -910,7 +901,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "python_tests chromium"
   },
   {
@@ -966,7 +956,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "java_tests chromium"
   },
   {
@@ -1021,7 +1010,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Download Test Results Log"
   },
   {
@@ -1067,7 +1055,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Upload Test Results Log"
   },
   {

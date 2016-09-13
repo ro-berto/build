@@ -81,7 +81,6 @@
     "name": "annotated steps"
   },
   {
-    "cmd": [],
     "name": "trigger",
     "trigger_specs": [
       {

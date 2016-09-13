@@ -140,7 +140,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -285,7 +284,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "test r2"
   },
   {
@@ -412,7 +410,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "test r2.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -861,7 +858,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "test r3"
   },
   {
@@ -988,7 +984,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "test r3.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1437,7 +1432,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "test r4"
   },
   {
@@ -1564,7 +1558,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "test r4.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

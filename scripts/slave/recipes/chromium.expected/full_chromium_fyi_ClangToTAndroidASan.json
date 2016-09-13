@@ -214,7 +214,6 @@
     ]
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[BUILDER_CACHE]/ClangToTAndroidASan/src/build/tree_truth.sh",
       "[BUILDER_CACHE]/ClangToTAndroidASan/src",

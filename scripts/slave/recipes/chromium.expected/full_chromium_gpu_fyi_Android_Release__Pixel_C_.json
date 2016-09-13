@@ -122,7 +122,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -272,7 +271,6 @@
     ]
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[BUILDER_CACHE]/Android_Release__Pixel_C_/src/build/tree_truth.sh",
       "[BUILDER_CACHE]/Android_Release__Pixel_C_/src",

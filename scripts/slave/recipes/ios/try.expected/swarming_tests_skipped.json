@@ -298,7 +298,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "bootstrap swarming"
   },
   {
@@ -415,7 +414,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "isolate"
   },
   {
@@ -464,11 +462,9 @@
     ]
   },
   {
-    "cmd": [],
     "name": "skipped"
   },
   {
-    "cmd": [],
     "name": "skipped.[skipped] fake test (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -476,7 +472,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "trigger"
   },
   {

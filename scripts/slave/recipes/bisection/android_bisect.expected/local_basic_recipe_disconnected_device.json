@@ -1,6 +1,5 @@
 [
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -519,7 +518,6 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "***BISECT***"
   },
@@ -709,7 +707,6 @@
     "name": "git checkout"
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "config",
     "~followup_annotations": [
@@ -732,7 +729,6 @@
     ]
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Resolving reference range"
   },
@@ -821,7 +817,6 @@
     ]
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Expanding revision range"
   },
@@ -853,7 +848,6 @@
     ]
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values"
   },
@@ -1915,7 +1909,6 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info",
     "~followup_annotations": [
@@ -2060,7 +2053,6 @@
     "name": "git checkout (2)"
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "config (2)",
     "~followup_annotations": [
@@ -2083,7 +2075,6 @@
     ]
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Resolving reference range (2)"
   },
@@ -2128,7 +2119,6 @@
     ]
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Expanding revision range (2)"
   },
@@ -2160,7 +2150,6 @@
     ]
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values (2)"
   },
@@ -3222,7 +3211,6 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info (2)",
     "~followup_annotations": [

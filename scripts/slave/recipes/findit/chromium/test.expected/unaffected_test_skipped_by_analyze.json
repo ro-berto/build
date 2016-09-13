@@ -129,7 +129,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -279,7 +278,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "test r1"
   },
   {
@@ -417,7 +415,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "test r1.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

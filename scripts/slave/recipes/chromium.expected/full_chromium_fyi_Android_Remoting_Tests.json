@@ -122,7 +122,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -270,7 +269,6 @@
     ]
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[BUILDER_CACHE]/Android_Remoting_Tests/src/build/tree_truth.sh",
       "[BUILDER_CACHE]/Android_Remoting_Tests/src",

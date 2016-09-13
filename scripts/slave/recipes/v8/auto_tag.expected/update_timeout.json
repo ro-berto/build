@@ -329,7 +329,6 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [],
     "name": "Waiting for commit timed out",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"

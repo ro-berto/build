@@ -53,7 +53,6 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {

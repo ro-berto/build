@@ -72,7 +72,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -483,7 +482,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisection disabled - test too slow"
   },
   {

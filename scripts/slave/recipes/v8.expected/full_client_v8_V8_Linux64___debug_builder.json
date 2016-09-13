@@ -72,7 +72,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -387,7 +386,6 @@
     "name": "package build"
   },
   {
-    "cmd": [],
     "name": "trigger",
     "trigger_specs": [
       {

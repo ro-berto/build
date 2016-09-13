@@ -128,7 +128,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -345,7 +344,6 @@
     ]
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[BUILDER_CACHE]/cast_shell_android/src/build/tree_truth.sh",
       "[BUILDER_CACHE]/cast_shell_android/src",

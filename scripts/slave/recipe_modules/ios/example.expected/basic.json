@@ -213,7 +213,6 @@
     "name": "compile"
   },
   {
-    "cmd": [],
     "name": "bootstrap swarming"
   },
   {
@@ -330,7 +329,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "isolate"
   },
   {
@@ -666,7 +664,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "trigger"
   },
   {

@@ -110,7 +110,6 @@
     "name": "clean isolated files"
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {

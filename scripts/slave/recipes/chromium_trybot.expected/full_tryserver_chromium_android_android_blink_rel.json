@@ -128,7 +128,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -354,7 +353,6 @@
     ]
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[BUILDER_CACHE]/android_blink_rel/src/build/tree_truth.sh",
       "[BUILDER_CACHE]/android_blink_rel/src",

@@ -131,7 +131,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -277,7 +276,6 @@
     ]
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "***PERF TRYJOB***"
   },
@@ -767,7 +765,6 @@
     ]
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Results",
     "~followup_annotations": [

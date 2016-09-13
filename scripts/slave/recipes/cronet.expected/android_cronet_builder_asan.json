@@ -148,7 +148,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -540,7 +539,6 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [],
     "name": "Set up ASAN on devices"
   },
   {
@@ -784,7 +782,6 @@
     "name": "stack_tool_for_asan"
   },
   {
-    "cmd": [],
     "name": "Tear down ASAN on devices"
   },
   {

@@ -1,6 +1,5 @@
 [
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -470,7 +469,6 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_s5_perf_cq",
     "name": "***PERF TRYJOB***"
   },

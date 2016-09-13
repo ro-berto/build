@@ -125,7 +125,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -274,7 +273,6 @@
     ]
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[BUILDER_CACHE]/V8_Android_GN__dbg_/src/build/tree_truth.sh",
       "[BUILDER_CACHE]/V8_Android_GN__dbg_/src",

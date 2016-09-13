@@ -61,7 +61,6 @@
     "name": "cleanup_temp"
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {

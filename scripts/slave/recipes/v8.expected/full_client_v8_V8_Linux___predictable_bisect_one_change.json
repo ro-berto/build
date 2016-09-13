@@ -51,7 +51,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -492,7 +491,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect"
   },
   {
@@ -551,7 +549,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect.disabled - less than two changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

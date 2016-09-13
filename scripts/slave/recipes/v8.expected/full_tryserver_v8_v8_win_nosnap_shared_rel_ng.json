@@ -86,7 +86,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -347,7 +346,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "trigger",
     "trigger_specs": [
       {

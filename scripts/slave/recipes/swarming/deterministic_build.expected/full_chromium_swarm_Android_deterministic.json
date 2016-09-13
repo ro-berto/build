@@ -166,7 +166,6 @@
     "name": "rmtree [SLAVE_BUILD]/src/out/Release.2"
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {

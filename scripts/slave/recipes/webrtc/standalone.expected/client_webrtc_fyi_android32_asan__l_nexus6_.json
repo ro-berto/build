@@ -109,7 +109,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -483,7 +482,6 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_",
     "name": "Set up ASAN on devices"
   },

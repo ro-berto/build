@@ -133,7 +133,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -282,7 +281,6 @@
     ]
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[BUILDER_CACHE]/Android_Builder__dbg_/src/build/tree_truth.sh",
       "[BUILDER_CACHE]/Android_Builder__dbg_/src",
@@ -390,7 +388,6 @@
     "name": "package build"
   },
   {
-    "cmd": [],
     "name": "trigger",
     "trigger_specs": [
       {

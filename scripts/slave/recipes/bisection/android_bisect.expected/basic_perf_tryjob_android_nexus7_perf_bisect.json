@@ -1,6 +1,5 @@
 [
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -470,7 +469,6 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
     "name": "***PERF TRYJOB***"
   },
@@ -1086,7 +1084,6 @@
     ]
   },
   {
-    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
     "name": "Results",
     "~followup_annotations": [

@@ -213,7 +213,6 @@
     ]
   },
   {
-    "allow_subannotations": false,
     "cmd": [
       "[BUILDER_CACHE]/Android_Asan_Builder_Tests__dbg_/src/build/tree_truth.sh",
       "[BUILDER_CACHE]/Android_Asan_Builder_Tests__dbg_/src",

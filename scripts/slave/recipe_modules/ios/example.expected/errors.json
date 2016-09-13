@@ -190,7 +190,6 @@
     "name": "compile"
   },
   {
-    "cmd": [],
     "name": "bootstrap swarming"
   },
   {
@@ -307,7 +306,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "isolate"
   },
   {
@@ -498,7 +496,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "trigger"
   },
   {
@@ -584,7 +581,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "trigger.[trigger] fake test 3 (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -742,7 +738,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "fake test 3 (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to trigger the test.@@@",
@@ -750,7 +745,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "fake test 4 (iPhone 5s iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to trigger the test.@@@",

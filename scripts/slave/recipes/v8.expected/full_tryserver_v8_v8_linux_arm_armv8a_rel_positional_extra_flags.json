@@ -78,7 +78,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -342,7 +341,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Customized run with extra flags",
     "~followup_annotations": [
       "@@@STEP_TEXT@--trace_gc --turbo_stats@@@"
@@ -931,7 +929,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "CQ integrity - used extra flags",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"

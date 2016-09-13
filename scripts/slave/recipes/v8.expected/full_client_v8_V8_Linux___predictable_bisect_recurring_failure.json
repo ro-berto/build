@@ -51,7 +51,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -492,7 +491,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect"
   },
   {
@@ -565,7 +563,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect a0"
   },
   {
@@ -619,7 +616,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect a0.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -949,7 +945,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisection disabled - recurring failure",
     "~followup_annotations": [
       "@@@STEP_WARNINGS@@@"

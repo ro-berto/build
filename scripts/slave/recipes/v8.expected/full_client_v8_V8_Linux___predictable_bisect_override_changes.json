@@ -51,7 +51,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -492,11 +491,9 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect"
   },
   {
-    "cmd": [],
     "name": "Bisect.Override changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -556,7 +553,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect a0"
   },
   {
@@ -610,7 +606,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect a0.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -898,7 +893,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Available range",
     "~followup_annotations": [
       "@@@STEP_LINK@a1@https://chromium.googlesource.com/v8/v8/+/a1@@@",
@@ -907,7 +901,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect a2"
   },
   {
@@ -961,7 +954,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect a2.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1291,7 +1283,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect a1"
   },
   {
@@ -1345,7 +1336,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Bisect a1.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1633,7 +1623,6 @@
     ]
   },
   {
-    "cmd": [],
     "name": "Suspecting a2",
     "~followup_annotations": [
       "@@@STEP_LINK@a2@https://chromium.googlesource.com/v8/v8/+/a2@@@"

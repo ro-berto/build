@@ -177,7 +177,6 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [],
     "name": "Local checkout is lagging behind.",
     "~followup_annotations": [
       "@@@STEP_WARNINGS@@@"
