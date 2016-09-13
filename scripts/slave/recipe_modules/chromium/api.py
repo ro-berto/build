@@ -476,6 +476,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       wrapper += ['--clear-sdk-cache']
     if self.c.compile_py.goma_dir:
       wrapper += ['--gomadir', self.c.compile_py.goma_dir]
+      # Since we are very sure api.chromium.compile starts compiler_proxy,
+      # and starting compiler_proxy here make it difficult for us to
+      # investigate the compiler_proxy start-up failure reason,
+      # let me stop starting compiler_proxy. (crbug.com/639432)
+      wrapper += ['--nostart-goma']
     if self.c.gyp_env.GYP_DEFINES.get('fastbuild', 0) == 1:
       wrapper += ['--fastbuild']
     wrapper += ['--']
