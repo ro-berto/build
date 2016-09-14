@@ -287,7 +287,7 @@ class StatusPush(StatusReceiverMultiService):
       send_builds.append(send_build)
 
     # Add in master builder state into the message.
-    master_data = self._getMasterData()
+    master_data = yield self._getMasterData()
 
     # Split the data into batches because PubSub has a message limit of 10MB.
     res = yield self._send_messages(master_data, send_builds)
@@ -357,6 +357,7 @@ class StatusPush(StatusReceiverMultiService):
     build = builder.getBuild(b.build_number)
     return defer.succeed((b, build.asDict()))
 
+  @defer.inlineCallbacks
   def _getMasterData(self):
     """Loads and returns a subset of the master data as a JSON.
 
@@ -368,18 +369,29 @@ class StatusPush(StatusReceiverMultiService):
                 for builder_name in self._status.getBuilderNames()}
     builder_infos = {}
     for name, builder in builders.iteritems():
-      # Not included: basedir, category, cachedBuilds, state, pendingBuilds.
+      # This requires a deferred call since the data is queried from
+      # the postgres DB (sigh).
+      pending = yield builder.getPendingBuildRequestStatuses()
+      # Optimization cheat: only get the first 75 pending builds.
+      # This caps the amount of postgres db calls for really out of
+      # control builders
+      pending = pending[:75]
+      pendingStatues = yield defer.DeferredList(
+          [p.asDict_async() for p in pending])
+      # Not included: basedir, category, cachedBuilds, state.
       # cachedBuilds isn't useful and takes a ton of resources to compute.
-      # pendingBuilds requires a deferred call.
       builder_info = {
         'slaves': builder.slavenames,
         'currentBuilds': sorted(b.getNumber() for b in builder.currentBuilds),
+        'pendingBuilds': len(pending),
+        'pendingBuildStatues': pendingStatues,
       }
       builder_infos[name] = builder_info
 
     slaves = {slave_name: self._status.getSlave(slave_name).asDict()
               for slave_name in self._status.getSlaveNames()}
-    return {'builders': builder_infos, 'slaves': slaves, 'name': self.name}
+    defer.returnValue({
+        'builders': builder_infos, 'slaves': slaves, 'name': self.name})
 
 
   def _recordBuild(self, build):
