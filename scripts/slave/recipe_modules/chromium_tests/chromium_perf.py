@@ -57,7 +57,8 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
   return spec
 
 
-def BuildSpec(config_name, perf_id, platform, target_bits):
+def BuildSpec(
+  config_name, perf_id, platform, target_bits, enable_swarming=False):
   if platform == 'android':
     # TODO: Run sizes on Android.
     tests = []
@@ -72,6 +73,9 @@ def BuildSpec(config_name, perf_id, platform, target_bits):
       tests=tests,
   )
 
+  if enable_swarming:
+    spec['enable_swarming'] = True
+    spec['use_isolate'] = True
   spec['compile_targets'] = ['chromium_builder_perf']
 
   return spec
@@ -97,14 +101,15 @@ def TestSpec(config_name, perf_id, platform, target_bits,
   return spec
 
 
-def _AddBuildSpec(name, platform, target_bits=64, add_to_bisect=False):
+def _AddBuildSpec(
+  name, platform, target_bits=64, add_to_bisect=False, enable_swarming=False):
   if target_bits == 64:
     perf_id = platform
   else:
     perf_id = '%s-%d' % (platform, target_bits)
 
   SPEC['builders'][name] = BuildSpec(
-      'chromium_perf', perf_id, platform, target_bits)
+      'chromium_perf', perf_id, platform, target_bits, enable_swarming)
   assert target_bits not in builders[platform]
   builders[platform][target_bits] = name
   if add_to_bisect:
@@ -125,7 +130,8 @@ def _AddTestSpec(name, perf_id, platform, target_bits=64,
 _AddBuildSpec('Android Builder', 'android', target_bits=32)
 _AddBuildSpec('Android arm64 Builder', 'android')
 _AddBuildSpec('Win Builder', 'win', target_bits=32)
-_AddBuildSpec('Win x64 Builder', 'win', add_to_bisect=True)
+_AddBuildSpec( \
+  'Win x64 Builder', 'win', add_to_bisect=True, enable_swarming=True)
 _AddBuildSpec('Mac Builder', 'mac', add_to_bisect=True)
 _AddBuildSpec('Linux Builder', 'linux', add_to_bisect=True)
 
