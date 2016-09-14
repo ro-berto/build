@@ -31,7 +31,7 @@ class BootstrapError(Exception):
 
 
 # CIPD tag for LogDog Butler/Annotee to use.
-_STABLE_CIPD_TAG = 'git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3'
+_STABLE_CIPD_TAG = 'git_revision:43e215ba861ba2130ffe74907d4d3c16e2791928'
 
 
 # Platform is the set of platform-specific LogDog bootstrapping
