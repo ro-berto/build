@@ -22,10 +22,12 @@ RECIPE_CONFIGS = freeze({
   },
   'libyuv_android': {
     'chromium_config': 'libyuv_android',
+    'chromium_android_config': 'libyuv',
     'gclient_config': 'libyuv_android',
   },
   'libyuv_android_clang': {
     'chromium_config': 'libyuv_android_clang',
+    'chromium_android_config': 'libyuv',
     'gclient_config': 'libyuv_android',
   },
   'libyuv_ios': {
@@ -36,6 +38,9 @@ RECIPE_CONFIGS = freeze({
 
 BUILDERS = freeze({
   'client.libyuv': {
+    'settings': {
+      'build_gs_bucket': 'chromium-libyuv',
+    },
     'builders': {
       'Win32 Debug (VS2010)': {
         'recipe_config': 'libyuv',
@@ -442,6 +447,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android Tester ARM32 Debug (Nexus 5X)',
+        ],
       },
       'Android Release': {
         'recipe_config': 'libyuv_android',
@@ -453,6 +461,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android Tester ARM32 Release (Nexus 5X)',
+        ],
       },
       'Android ARM64 Debug': {
         'recipe_config': 'libyuv_android',
@@ -464,6 +475,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android Tester ARM64 Debug (Nexus 5X)',
+        ],
       },
       'Android Clang Debug': {
         'recipe_config': 'libyuv_android_clang',
@@ -533,9 +547,48 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
+      'Android Tester ARM32 Debug (Nexus 5X)': {
+        'recipe_config': 'libyuv_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Debug',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Tester ARM32 Release (Nexus 5X)': {
+        'recipe_config': 'libyuv_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Release',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Tester ARM64 Debug (Nexus 5X)': {
+        'recipe_config': 'libyuv_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android ARM64 Debug',
+        'testing': {'platform': 'linux'},
+      },
     },
   },
   'tryserver.libyuv': {
+    'settings': {
+      'build_gs_bucket': 'chromium-libyuv',
+    },
     'builders': {
       'win': {
         'recipe_config': 'libyuv',
@@ -820,7 +873,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'android_rel': {
@@ -831,7 +884,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'android_clang': {
@@ -853,7 +906,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
      'android_x86': {

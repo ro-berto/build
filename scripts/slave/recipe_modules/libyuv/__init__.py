@@ -1,10 +1,15 @@
 DEPS = [
+  'archive',
   'chromium',
+  'chromium_android',
+  'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/tryserver',
+  'file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
-  'depot_tools/tryserver',
+  'trigger',
 ]

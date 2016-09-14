@@ -277,11 +277,11 @@ class WebRTCApi(recipe_api.RecipeApi):
   def extract_build(self):
     if not self.m.properties.get('parent_got_revision'):
       raise self.m.step.StepFailure(
-         'Testers cannot be forced without providing revision information.'
-         'Please select a previous build and click [Rebuild] or force a build'
+         'Testers cannot be forced without providing revision information. '
+         'Please select a previous build and click [Rebuild] or force a build '
          'for a Builder instead (will trigger new runs for the testers).')
 
-    # Ensure old build directory is not used is by removing it.
+    # Ensure old build directory isn't being used by removing it.
     self.m.file.rmtree(
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))

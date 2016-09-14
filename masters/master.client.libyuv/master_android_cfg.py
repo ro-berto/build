@@ -36,6 +36,18 @@ def Update(c):
     {'name': 'Android32 x86 Debug', 'slavebuilddir': 'android_x86'},
     {'name': 'Android64 x64 Debug', 'slavebuilddir': 'android_x64'},
     {'name': 'Android32 MIPS Debug', 'slavebuilddir': 'android_mips'},
+    {
+      'name': 'Android Tester ARM32 Debug (Nexus 5X)',
+      'slavebuilddir': 'android_arm32',
+    },
+    {
+      'name': 'Android Tester ARM32 Release (Nexus 5X)',
+      'slavebuilddir': 'android_arm32',
+    },
+    {
+      'name': 'Android Tester ARM64 Debug (Nexus 5X)',
+      'slavebuilddir': 'android_arm64',
+    },
   ]
 
   c['builders'].extend([
