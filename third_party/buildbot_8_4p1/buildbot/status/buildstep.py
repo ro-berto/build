@@ -419,4 +419,10 @@ class BuildStepStatus(styles.Versioned):
         result['logs'] = [[l.getName(),
             self.builder.status.getURLForThing(l)]
                 for l in self.getLogs()]
+        result['aliases'] = {
+            name: [{
+                'url': url,
+                'text': text,
+            } for url, text in entry]
+        for name, entry in self.getAliases().iteritems()}
         return result
