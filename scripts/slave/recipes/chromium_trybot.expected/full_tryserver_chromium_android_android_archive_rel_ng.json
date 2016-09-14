@@ -427,6 +427,7 @@
       "[CACHE]/cipd/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
+      "--ninja-ensure-up-to-date",
       "--",
       "all"
     ],

@@ -346,6 +346,7 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "content_browsertests_apk"
     ],
