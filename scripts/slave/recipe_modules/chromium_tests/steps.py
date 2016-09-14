@@ -880,6 +880,12 @@ class SwarmingGTestTest(SwarmingTest):
     if suffix == 'without patch':
       # If rerunning without a patch, run only tests that failed.
       test_filter = sorted(self.failures(api, 'with patch'))
+      # Make sure there's no existing --test-launcher-filter-file.
+      # http://crbug.com/587527.
+      # TODO(phajdan.jr): write test.
+      for arg in args:
+        if arg.startswith("--test-launcher-filter-file"):  # pragma: no cover
+          args.remove(arg)
     if test_filter:
       args.append('--gtest_filter=%s' % ':'.join(test_filter))
 
