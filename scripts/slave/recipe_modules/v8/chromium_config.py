@@ -34,6 +34,7 @@ def v8(c):
 @CONFIG_CTX(includes=['v8'])
 def arm_hard_float(c):
   c.gyp_env.GYP_DEFINES['arm_float_abi'] = 'hard'
+  c.gn_args.append('arm_float_abi="hard"')
 
 
 @CONFIG_CTX(includes=['v8'])
