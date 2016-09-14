@@ -423,6 +423,6 @@ class BuildStepStatus(styles.Versioned):
             name: [{
                 'url': url,
                 'text': text,
-            } for url, text in entry]
+            } for text, url in entry]
         for name, entry in self.getAliases().iteritems()}
         return result
