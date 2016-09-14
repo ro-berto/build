@@ -27,9 +27,9 @@ def chromium_perf_clang(c):
 
 
 def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
-                  target_bits=64):
+                  target_bits=64, enable_swarming=False):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
-      config_name, perf_id, platform, target_bits)
+      config_name, perf_id, platform, target_bits, enable_swarming)
 
 
 def _AddTestSpec(name, perf_id, platform,
@@ -47,9 +47,10 @@ def _AddTestSpec(name, perf_id, platform,
   SPEC['builders'][name] = spec
 
 
-def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64):
-  spec = chromium_perf.TestSpec('chromium_perf', perf_id, platform, target_bits)
-  spec['parent_mastername'] = 'chromium.perf'
+def _AddIsolatedTestSpec(name, perf_id, platform,
+                         parent_buildername, target_bits=64):
+  spec = chromium_perf.TestSpec('chromium_perf', perf_id, platform, target_bits,
+                                parent_buildername=parent_buildername)
   spec['enable_swarming'] = True
   spec['test_generators'] = [steps.generate_isolated_script]
   SPEC['builders'][name] = spec
@@ -59,6 +60,9 @@ _AddTestSpec('Android Galaxy S5 Perf (1)', 'fyi-android-galaxy-s5', 'android',
              target_bits=32)
 
 
+_AddBuildSpec('Win Builder', 'win', 'win', enable_swarming=True)
+_AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win-10-low-end', 'win',
+                     parent_buildername='Win Builder')
 _AddTestSpec('Win 7 Intel GPU Perf (Xeon)', 'chromium-rel-win7-gpu-intel',
              'win')
 _AddTestSpec('Win Power High-DPI Perf', 'win-power-high-dpi', 'win')
@@ -73,6 +77,3 @@ _AddBuildSpec('Win Clang Builder', 'win-clang-builder', 'win',
               config_name='chromium_perf_clang', target_bits=32)
 _AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
              parent_buildername='Win Clang Builder', target_bits=32)
-
-
-_AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win-10-low-end', 'win')
