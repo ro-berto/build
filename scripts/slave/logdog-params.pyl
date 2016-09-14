@@ -78,6 +78,11 @@
     # Blink
     'tryserver.blink': {},
 
+    # Dart
+    'client.dart': {},
+    'client.dart.fyi': {},
+    'client.dart.packages': {},
+
     # V8
     'client.v8': {},
     'client.v8.branches': {},
