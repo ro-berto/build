@@ -335,7 +335,6 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--ninja-ensure-up-to-date",
       "--",
       "blink_heap_unittests_apk",
       "blink_tests",

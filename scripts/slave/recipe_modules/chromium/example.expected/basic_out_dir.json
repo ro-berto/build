@@ -280,7 +280,6 @@
       "/tmp",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--ninja-ensure-up-to-date",
       "--",
       "All"
     ],
