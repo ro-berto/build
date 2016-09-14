@@ -106,6 +106,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "ensure_goma"
   },
   {

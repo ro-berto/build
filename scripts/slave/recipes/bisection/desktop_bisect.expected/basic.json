@@ -128,6 +128,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -274,6 +275,7 @@
     ]
   },
   {
+    "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "***LEGACY BISECT (deprecated)***"
   },
@@ -289,6 +291,7 @@
     "name": "Preparing for Bisection"
   },
   {
+    "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "ensure_goma (2)"
   },

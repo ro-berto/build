@@ -639,6 +639,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "fix_device_file_format"
   },
   {
@@ -867,6 +868,7 @@
     "name": "SmallTest"
   },
   {
+    "cmd": [],
     "name": "process results for SmallTest"
   },
   {

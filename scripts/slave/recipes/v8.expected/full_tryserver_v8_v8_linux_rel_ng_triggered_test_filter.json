@@ -96,18 +96,22 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Customized run with extra flags",
     "~followup_annotations": [
       "@@@STEP_TEXT@--trace_gc --turbo_stats@@@"
     ]
   },
   {
+    "cmd": [],
     "name": "Mozilla - skipped"
   },
   {
+    "cmd": [],
     "name": "Benchmarks - skipped"
   },
   {
+    "cmd": [],
     "name": "SimdJs - all - skipped"
   },
   {
@@ -1860,12 +1864,14 @@
     ]
   },
   {
+    "cmd": [],
     "name": "CQ integrity - used testfilter",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"
     ]
   },
   {
+    "cmd": [],
     "name": "CQ integrity - used extra flags",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"

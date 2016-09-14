@@ -139,6 +139,7 @@
     "name": "finalize build config"
   },
   {
+    "cmd": [],
     "name": "ensure_goma"
   },
   {

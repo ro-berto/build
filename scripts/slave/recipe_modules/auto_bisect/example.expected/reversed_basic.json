@@ -19,6 +19,7 @@
     "name": "git checkout"
   },
   {
+    "cmd": [],
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -44,6 +45,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Resolving reference range"
   },
   {
@@ -127,6 +129,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Expanding revision range"
   },
   {
@@ -245,6 +248,7 @@
     "name": "gsutil ls (3)"
   },
   {
+    "cmd": [],
     "name": "Triggering test job for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "trigger_specs": [
       {
@@ -324,6 +328,7 @@
     "name": "gsutil ls (5)"
   },
   {
+    "cmd": [],
     "name": "Triggering test job for dcdcdc0ff1122212323134879ddceeb1240b0988",
     "trigger_specs": [
       {
@@ -441,6 +446,7 @@
     "name": "gsutil ls (8)"
   },
   {
+    "cmd": [],
     "name": "Triggering test job for a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "trigger_specs": [
       {
@@ -665,6 +671,7 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [],
     "name": "Wiggling revision chromium@a6298e4afe,v8@003"
   },
   {
@@ -826,6 +833,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -945,6 +953,7 @@
     "name": "Preparing for Bisection"
   },
   {
+    "cmd": [],
     "name": "ensure_goma (2)"
   },
   {

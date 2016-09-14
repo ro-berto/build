@@ -98,6 +98,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Download Prebuilts"
   },
   {
@@ -179,6 +180,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "python_tests chrome_shell"
   },
   {
@@ -234,6 +236,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "java_tests chrome_shell"
   },
   {
@@ -288,6 +291,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "python_tests chrome_stable"
   },
   {
@@ -343,6 +347,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "java_tests chrome_stable"
   },
   {
@@ -397,6 +402,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "python_tests chrome_beta"
   },
   {
@@ -452,6 +458,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "java_tests chrome_beta"
   },
   {
@@ -506,6 +513,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "python_tests chromedriver_webview_shell"
   },
   {
@@ -561,6 +569,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "java_tests chromedriver_webview_shell"
   },
   {
@@ -615,6 +624,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Download Test Results Log"
   },
   {
@@ -660,6 +670,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Upload Test Results Log"
   },
   {

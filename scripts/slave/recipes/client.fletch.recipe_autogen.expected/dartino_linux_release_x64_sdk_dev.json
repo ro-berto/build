@@ -95,6 +95,7 @@
     "name": "Taskkill (2)"
   },
   {
+    "cmd": [],
     "name": "trigger",
     "trigger_specs": [
       {

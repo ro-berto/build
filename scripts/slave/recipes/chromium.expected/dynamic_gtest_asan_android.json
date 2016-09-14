@@ -506,6 +506,7 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES",
@@ -746,6 +747,7 @@
     "name": "stack_tool_for_asan"
   },
   {
+    "cmd": [],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES",

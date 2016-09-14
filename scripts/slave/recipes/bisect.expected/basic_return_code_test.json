@@ -99,6 +99,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -227,6 +228,7 @@
     "name": "git checkout"
   },
   {
+    "cmd": [],
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -252,6 +254,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Resolving reference range"
   },
   {
@@ -335,6 +338,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Expanding revision range"
   },
   {
@@ -368,6 +372,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Gathering reference values"
   },
   {
@@ -471,6 +476,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Gathering reference values.Triggering test job for e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "trigger_specs": [
       {
@@ -563,6 +569,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Gathering reference values.Triggering test job for a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "trigger_specs": [
       {
@@ -650,9 +657,11 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [],
     "name": "Wiggling revision chromium@00316c9ddf"
   },
   {
+    "cmd": [],
     "name": "Working on revision chromium@00316c9ddf"
   },
   {
@@ -759,6 +768,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Working on revision chromium@00316c9ddf.Triggering test job for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "trigger_specs": [
       {
@@ -846,6 +856,7 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [],
     "name": "Working on revision chromium@fc6dfc7ff5"
   },
   {
@@ -924,6 +935,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Working on revision chromium@fc6dfc7ff5.Triggering test job for fc6dfc7ff5b1073408499478969261b826441144",
     "trigger_specs": [
       {
@@ -1000,6 +1012,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Check bisect finished on revision chromium@fc6dfc7ff5"
   },
   {
@@ -1018,6 +1031,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Debug Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, values=[], overall_return_code=0, std_dev=None)@@@",

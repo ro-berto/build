@@ -99,6 +99,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -227,6 +228,7 @@
     "name": "git checkout"
   },
   {
+    "cmd": [],
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -252,6 +254,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Resolving reference range"
   },
   {
@@ -335,6 +338,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Expanding revision range"
   },
   {
@@ -368,6 +372,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Gathering reference values"
   },
   {
@@ -471,6 +476,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Gathering reference values.Triggering test job for e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "trigger_specs": [
       {
@@ -563,6 +569,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "Gathering reference values.Triggering test job for a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "trigger_specs": [
       {
@@ -710,6 +717,7 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [],
     "name": "Debug Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, values=[70, 70, 80, 90, 90], mean_value=80.0, std_dev=10.0)@@@",

@@ -301,6 +301,7 @@
     "name": "upload_symbols"
   },
   {
+    "cmd": [],
     "name": "trigger",
     "trigger_specs": [
       {

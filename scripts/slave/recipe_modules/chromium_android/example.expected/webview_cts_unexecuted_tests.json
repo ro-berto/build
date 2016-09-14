@@ -639,6 +639,7 @@
     ]
   },
   {
+    "cmd": [],
     "name": "fix_device_file_format"
   },
   {
@@ -940,6 +941,7 @@
     "name": "Fetch expected failures data"
   },
   {
+    "cmd": [],
     "name": "Update CTS"
   },
   {

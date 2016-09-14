@@ -105,6 +105,7 @@
     "name": "gsutil upoad tarball"
   },
   {
+    "cmd": [],
     "name": "trigger",
     "trigger_specs": [
       {

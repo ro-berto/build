@@ -19,6 +19,7 @@
     "name": "git checkout"
   },
   {
+    "cmd": [],
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",

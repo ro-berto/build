@@ -129,6 +129,7 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [],
     "name": "Incorrect patch levels between 3.4.3.1 and 3.4.3.3",
     "~followup_annotations": [
       "@@@STEP_WARNINGS@@@"

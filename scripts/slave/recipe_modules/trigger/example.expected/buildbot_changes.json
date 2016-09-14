@@ -1,5 +1,6 @@
 [
   {
+    "cmd": [],
     "name": "trigger",
     "trigger_specs": [
       {

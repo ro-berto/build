@@ -1,5 +1,6 @@
 [
   {
+    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -469,6 +470,7 @@
     "name": "gclient runhooks"
   },
   {
+    "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
     "name": "***PERF TRYJOB***"
   },
