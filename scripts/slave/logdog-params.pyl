@@ -73,6 +73,8 @@
     'chromium.webrtc.fyi': {},
     'chromium.webkit': {},
 
+    'chromium.gatekeeper': {},
+
     # Blink
     'tryserver.blink': {},
 
