@@ -431,8 +431,8 @@ SPEC = {
       },
     },
     'ThinLTO Linux ToT': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['clang_tot', 'mb'],
+      'chromium_config': 'clang_tot_linux_lld',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
