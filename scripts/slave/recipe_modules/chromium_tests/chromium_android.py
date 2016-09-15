@@ -28,6 +28,8 @@ SPEC = {
     },
 
     'Android arm64 Builder (dbg)': {
+      'use_isolate': True,
+      'enable_swarming': True,
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
