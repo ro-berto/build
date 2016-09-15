@@ -419,7 +419,6 @@
       "[CACHE]/cipd/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
-      "--ninja-ensure-up-to-date",
       "--",
       "blink_heap_unittests_apk",
       "blink_tests",

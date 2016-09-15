@@ -268,7 +268,6 @@
       "[GOMA_DEPS_CACHE]",
       "--build-data-dir",
       "[ROOT]/build_data_dir",
-      "--ninja-ensure-up-to-date",
       "--",
       "android_webview_test_apk",
       "chrome_public_test_apk",
