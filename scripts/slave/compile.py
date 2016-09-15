@@ -432,7 +432,7 @@ def main_ninja(options, args, env):
       # Run the build again if we want to check that the no-op build is clean.
       filter_obj = EnsureUpToDateFilter()
       # Append `-d explain` to help diagnose in the failure case.
-      command += ['-d', 'explain']
+      command += ['-d', 'explain', '-n']
       chromium_utils.RunCommand(command, env=env, filter_obj=filter_obj)
       if not filter_obj.was_up_to_date:
         print 'Failing build because ninja reported work to do.'
