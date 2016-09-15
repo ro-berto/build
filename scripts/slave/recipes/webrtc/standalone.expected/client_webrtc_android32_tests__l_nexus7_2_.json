@@ -498,6 +498,24 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/Release/bin/run_rtc_stats_unittests",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/bad_devices.json",
+      "--verbose",
+      "--adb-path",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/build/android:%(PATH)s"
+    },
+    "name": "rtc_stats_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/Release/bin/run_rtc_unittests",
       "--blacklist-file",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/out/bad_devices.json",
