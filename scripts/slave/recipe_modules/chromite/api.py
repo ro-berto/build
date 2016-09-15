@@ -77,6 +77,16 @@ class ChromiteApi(recipe_api.RecipeApi):
     return defaults
 
   def _load_config_dump(self):
+    if self.using_old_chromite_layout or self.c.cbb.config_repo:
+      # Our method of loading the configuration from the JSON dump will not
+      # work on old Chromite layout repositories.
+      #
+      # We also don't support loading our configuration from an external config
+      # repo. If we wanted to support this in the future, we would need to
+      # check out that other config repo at the correct revision and load
+      # "config_dump.json" from its root.
+      return {}
+
     if not self._cached_config:
       config_path = self.m.path.join(self.chromite_path,
                                      'cbuildbot', 'config_dump.json')
@@ -87,6 +97,8 @@ class ChromiteApi(recipe_api.RecipeApi):
 
   def load_config(self, name):
     c = self._load_config_dump()
+    assert c is not None, 'Unable to load config dump'
+
     conf = c.get(name)
     if conf is None:
       return None
@@ -252,17 +264,24 @@ class ChromiteApi(recipe_api.RecipeApi):
         "No 'master_config' configuration for '%s'" % (master,))
     self.set_config(master_config)
 
+    # If we have any specialized build type configurations for this master,
+    # load them.
+    self.c.build_type_configs = config_map.get('build_type_configs', {})
+
     # Apply any variant configurations.
+    # TODO(dnj): Deprecate variants in favor of build types once all recipes
+    # using them have moved off of them.
     if variant:
       for config_name in config_map.get('variants', {}).get(variant, ()):
         self.apply_config(config_name)
 
 
-    # If a config repo was specified, use it.
-    if 'config_repo' in properties:
-      self.c.cbb.config_repo = self.m.properties['config_repo']
-
   def run_cbuildbot(self, args=[]):
+    """Performs a Chromite repository checkout, then runs cbuildbot.
+
+    Args:
+      args (list): Additional arguments to pass to `cbuildbot` invocation.
+    """
     self.checkout_chromite()
     self.run(args=args)
 
@@ -285,7 +304,40 @@ class ChromiteApi(recipe_api.RecipeApi):
       self.m.git('pull',
           name=str('sync chromite branch [%s]' % (self.c.chromite_branch)))
     self._set_chromite_path(self.m.path['checkout'])
+
+    # If we are configured with build type configurations, we will need to load
+    # the Chromite configuration for this configuration target.
+    self._apply_build_type_config()
+
     return self.chromite_path
+
+  def _apply_build_type_config(self):
+    """Identify the "build_type" field for this config, and apply any additional
+    recipe configurations based on that value.
+
+    This is used to specialize builders based on the type of builder that they
+    are.
+
+    If no build type config is defined for this configuration's build type, or
+    if this configuration's build type could not be loaded, no additional
+    configuration will be applied.
+    """
+    if not self.c.build_type_configs:
+      # If no build type configs are defined, then there's no point doing the
+      # work of loading the configuration.
+      return
+
+    # Load our build type from the configuration JSON, if one is not already
+    # provided.
+    if not self.c.build_type:
+      assert self.c.cbb.config, 'No build configuration installed.'
+      config = self.load_config(self.c.cbb.config)
+      self.c.build_type = (config or {}).get('build_type')
+
+    # If we have a build type, and it has a configuration associated with it,
+    # apply that configuration.
+    if self.c.build_type and self.c.build_type in self.c.build_type_configs:
+      self.apply_config(self.c.build_type_configs[self.c.build_type])
 
   def run(self, args=[]):
     """Runs the configured 'cbuildbot' build.

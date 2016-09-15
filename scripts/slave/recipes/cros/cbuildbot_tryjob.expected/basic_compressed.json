@@ -69,7 +69,7 @@
       "@@@STEP_LOG_LINE@config@{@@@",
       "@@@STEP_LOG_LINE@config@  \"x86-generic-full\": {@@@",
       "@@@STEP_LOG_LINE@config@    \"_template\": \"full\", @@@",
-      "@@@STEP_LOG_LINE@config@    \"type\": \"full\"@@@",
+      "@@@STEP_LOG_LINE@config@    \"build_type\": \"full\"@@@",
       "@@@STEP_LOG_LINE@config@  }@@@",
       "@@@STEP_LOG_LINE@config@}@@@",
       "@@@STEP_LOG_END@config@@@"

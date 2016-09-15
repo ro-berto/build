@@ -8,9 +8,6 @@ import types
 from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Dict, Single, Set
 
-import DEPS
-path_api = DEPS['path'].api
-
 
 def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
                CBB_DEBUG=False, CBB_CLOBBER=False, CBB_BUILDBUCKET_ID=None,
@@ -29,6 +26,19 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
     # flags?
     read_cros_manifest = Single(bool),
 
+    # The current configuration's "build_type". If not populated, it will be
+    # loaded by looking up the current configuration in the configuration
+    # dump JSON.
+    build_type = Single(basestring),
+
+    # A map of "build_type" values to the specialized "config" names to apply
+    # for those build types. This allows build and invocation specialization
+    # based on build type.
+    #
+    # This gets applied after the specified Chromite repository is checked out.
+    build_type_configs = Dict(value_type=basestring),
+
+    # cbuildbot tool flags.
     cbb = ConfigGroup(
       # The Chromite configuration to use.
       config = Single(basestring, empty_val=CBB_CONFIG),
@@ -98,6 +108,7 @@ def base(c):
 
   c.old_chromite_branches.update((
     'firmware-uboot_v2-1299.B',
+     # TODO(dnj): Remove this once internal expectations are updated.
     'factory-1412.B',
   ))
   c.non_shared_root_branches.update(c.old_chromite_branches)
@@ -105,12 +116,14 @@ def base(c):
     'factory-2305.B',
   ))
   c.chrome_svn_branches.update((
+     # TODO(dnj): Remove this once internal expectations are updated.
     'factory-4455.B',
+     # TODO(dnj): Remove this once internal expectations are updated.
     'factory-zako-5220.B',
+
     'factory-rambi-5517.B',
     'factory-nyan-5772.B',
   ))
-
 
   # If running on a testing slave, enable "--debug" so Chromite doesn't cause
   # actual production effects.
@@ -141,16 +154,25 @@ def master_chromiumos(c):
   c.cbb.builddir = 'external_master'
   c.cbb.supports_repo_cache = True
 
-@config_ctx()
+
+@config_ctx(group='build_type')
 def chromiumos_paladin(c):
   c.read_cros_manifest = True
 
+
 @config_ctx(group='master', includes=['external'])
-def chromiumos_tryserver(c):
+def master_chromiumos_tryserver(c):
   c.cbb.disable_bootstrap = True
 
-@config_ctx()
-def chromiumos_coverage_test(c):
+
+@config_ctx(includes=['master_chromiumos'])
+def chromiumos_coverage(c):
   c.use_chrome_version = True
   c.read_cros_manifest = True
   c.cbb.chrome_rev = 'stable'
+  c.cbb.config_repo = 'https://example.com/repo.git'
+
+# TODO(dnj): Remove this config once variant support is removed.
+@config_ctx()
+def coverage_variant(c):
+  c.cbb.chrome_rev = 'canary'

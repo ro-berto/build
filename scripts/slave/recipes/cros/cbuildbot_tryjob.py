@@ -17,7 +17,7 @@ DEPS = [
 # Map master name to 'chromite' configuration name.
 _MASTER_CONFIG_MAP = {
     'chromiumos.tryserver': {
-      'master_config': 'chromiumos_tryserver',
+      'master_config': 'master_chromiumos_tryserver',
     },
 }
 
@@ -40,14 +40,14 @@ _TRYJOB_DATA = """
 # configs.
 _CHROMITE_CONFIG = {
   '_default': {
-    'type': 'undefined',
+    'build_type': 'undefined',
   },
   '_templates': {
     'full': {
-      'type': 'full',
+      'build_type': 'full',
     },
     'paladin': {
-      'type': 'paladin',
+      'build_type': 'paladin',
     },
   },
   'x86-generic-full': {

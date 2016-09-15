@@ -13,19 +13,23 @@ DEPS = [
 _MASTER_CONFIG_MAP = {
   'chromiumos': {
     'master_config': 'master_chromiumos',
-    'variants': {
-      'paladin': ['chromiumos_paladin'],
+    'build_type_configs': {
+      'paladin': 'chromiumos_paladin',
     },
   },
   'chromiumos.chromium': {
     'master_config': 'master_chromiumos_chromium',
   },
 
-  # Fake waterfall for Coverage
+  # Fake master name for Coverage.
   'chromiumos.coverage': {
-    'master_config': 'master_chromiumos',
+    'master_config': 'chromiumos_coverage',
+    'build_type_configs': {
+      'foo': 'bar',
+    },
+    # TODO(dnj): Remove this entry once we deprecate variants.
     'variants': {
-      'test': ['chromiumos_coverage_test'],
+      'coverage': ['coverage_variant'],
     },
   },
 }
@@ -38,6 +42,7 @@ def RunSteps(api):
 
   # Run 'cbuildbot' common recipe.
   api.chromite.run_cbuildbot()
+
 
 def GenTests(api):
   #
@@ -76,7 +81,6 @@ def GenTests(api):
           branch='master',
           revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-paladin',
-          cbb_variant='paladin',
       )
       + api.step_data(
           'Fetch manifest config',
@@ -88,6 +92,10 @@ def GenTests(api):
                   'CrOS-Build-Id: 1337',
               ]),
           ),
+      )
+      + api.chromite.add_chromite_config(
+          'x86-generic-paladin',
+          build_type='paladin',
       )
   )
 
@@ -104,7 +112,6 @@ def GenTests(api):
           branch='master',
           revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-paladin',
-          cbb_variant='paladin',
       )
       + api.step_data(
           'Fetch manifest config',
@@ -112,6 +119,10 @@ def GenTests(api):
               'test',
               None
           )
+      )
+      + api.chromite.add_chromite_config(
+          'x86-generic-paladin',
+          build_type='paladin',
       )
   )
 
@@ -133,8 +144,32 @@ def GenTests(api):
           revision='fdea0dde664e229976ddb2224328da152fba15b1',
           branch='master',
           cbb_config='x86-generic-full',
-          cbb_branch='factory-1412.B',
-          cbb_variant='test',
+          cbb_branch='firmware-uboot_v2-1299.B',
+          config_repo='https://fake.googlesource.com/myconfig/repo.git',
+          cbb_debug=True,
+          cbb_disable_branch=True,
+      )
+  )
+
+  # Coverage builders for a bunch of options used in other repositories.
+  # This one uses a variant system.
+  #
+  # TODO(dnj): Remove this once variant support is deleted.
+  yield (
+      api.test('chromiumos_coverage_variant')
+      + api.properties(
+          mastername='chromiumos.coverage',
+          buildername='Test',
+          slavename='test',
+          buildnumber=0,
+          clobber=None,
+          repository='https://chromium.googlesource.com/chromiumos/'
+                     'chromite.git',
+          revision='fdea0dde664e229976ddb2224328da152fba15b1',
+          branch='master',
+          cbb_variant='coverage',
+          cbb_config='x86-generic-full',
+          cbb_branch='firmware-uboot_v2-1299.B',
           cbb_debug=True,
           cbb_disable_branch=True,
           config_repo='https://fake.googlesource.com/myconfig/repo.git',

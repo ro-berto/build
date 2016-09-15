@@ -51,7 +51,7 @@
       "--buildnumber",
       "0",
       "--chrome_rev",
-      "stable",
+      "canary",
       "--debug",
       "--clobber",
       "--config_repo",
