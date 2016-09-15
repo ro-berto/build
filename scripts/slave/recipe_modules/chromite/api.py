@@ -64,6 +64,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     defaults = {
         'CBB_CONFIG': self.m.properties.get('cbb_config'),
         'CBB_BRANCH': self.m.properties.get('cbb_branch'),
+        'CBB_MASTER_BUILD_ID': self.m.properties.get('cbb_master_build_id'),
         'CBB_DEBUG': self.m.properties.get('cbb_debug') is not None,
         'CBB_CLOBBER': 'clobber' in self.m.properties,
     }
@@ -148,6 +149,17 @@ class ChromiteApi(recipe_api.RecipeApi):
       repository (str): The URL of the repository hosting the change.
       revision (str): The revision hash to load the build ID from.
     """
+    if all((self.c.chromite_branch, self.c.cbb.build_id)):
+      # They have all already been populated, so we're done (BuildBucket).
+      return
+
+    # Load our manifest fields from the formatted Gitiles commit message that
+    # scheduled this build.
+    #
+    # First, check that we are actually in a known manifest Gitiles repository.
+    if not self.check_repository('cros_manifest', repository):
+      return
+
     commit_log = self.m.gitiles.commit_log(
         repository, revision, step_name='Fetch manifest config',
         attempts=self._GITILES_ATTEMPTS)
@@ -378,8 +390,8 @@ class ChromiteApi(recipe_api.RecipeApi):
         # If our change comes from a Chromium repository, add the
         # '--chrome_version' flag.
         self.c.cbb.chrome_version = self.m.properties['revision']
-      if (self.c.read_cros_manifest and
-          self.check_repository('cros_manifest', repository)):
+
+      if self.c.read_cros_manifest:
         # This change comes from a manifest repository. Load configuration
         # parameters from the manifest command.
         self.load_manifest_config(repository, revision)

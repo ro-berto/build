@@ -45,6 +45,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  import json
+
   #
   # master.chromiumos.chromium
   #
@@ -122,6 +124,33 @@ def GenTests(api):
       )
       + api.chromite.add_chromite_config(
           'x86-generic-paladin',
+          build_type='paladin',
+      )
+  )
+
+  # Test a ChromiumOS Paladin build that was configured using BuildBucket
+  # instead of a manifest.
+  yield (
+      api.test('chromiumos_paladin_buildbucket')
+      + api.properties(
+          mastername='chromiumos',
+          buildername='Test',
+          slavename='test',
+          buildnumber='12345',
+          cbb_config='auron-paladin',
+          cbb_branch='master',
+          cbb_master_build_id='24601',
+          repository='https://chromium.googlesource.com/chromiumos/'
+                     'manifest-versions',
+          revision=api.gitiles.make_hash('test'),
+          buildbucket=json.dumps({
+            'build': {
+              'id': '1337',
+            },
+          }),
+      )
+      + api.chromite.add_chromite_config(
+          'auron-paladin',
           build_type='paladin',
       )
   )

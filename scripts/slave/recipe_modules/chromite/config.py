@@ -11,7 +11,7 @@ from recipe_engine.config import Dict, Single, Set
 
 def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
                CBB_DEBUG=False, CBB_CLOBBER=False, CBB_BUILDBUCKET_ID=None,
-               **_kwargs):
+               CBB_MASTER_BUILD_ID=None, **_kwargs):
   return ConfigGroup(
     # Base mapping of repository key to repository name.
     repositories = Dict(value_type=Set(basestring)),
@@ -47,7 +47,7 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       builddir = Single(basestring),
 
       # If supplied, forward to cbuildbot as '--master-build-id'.
-      build_id = Single(basestring),
+      build_id = Single(basestring, empty_val=CBB_MASTER_BUILD_ID),
 
       # If supplied, forward to cbuildbot as '--buildnumber'.
       build_number = Single(int, empty_val=CBB_BUILD_NUMBER),
