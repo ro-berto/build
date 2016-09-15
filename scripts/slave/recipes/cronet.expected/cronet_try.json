@@ -303,7 +303,6 @@
       "[CACHE]/cipd/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
-      "--ninja-ensure-up-to-date",
       "--",
       "cronet_package",
       "cronet_perf_test_apk",

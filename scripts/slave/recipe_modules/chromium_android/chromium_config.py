@@ -8,8 +8,7 @@ from recipe_engine import config as recipe_config
 import DEPS
 CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 
-@CONFIG_CTX(includes=['android_common', 'ninja', 'ninja_confirm_noop',
-                      'static_library'],
+@CONFIG_CTX(includes=['android_common', 'ninja', 'static_library'],
             config_vars={'TARGET_ARCH': 'arm', 'TARGET_BITS': 32,
                          'TARGET_PLATFORM': 'android', 'BUILD_CONFIG': 'Debug'})
 def base_config(c):
