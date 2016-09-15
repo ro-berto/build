@@ -333,22 +333,15 @@
       "--src-dir",
       "[BUILDER_CACHE]/Linux_Builder/src",
       "--build-url",
-      "gs://chrome-test-builds/official-by-commit/Linux Builder",
+      "gs://chrome-perf/Linux Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--include-files",
-      "chrome,chrome_100_percent.pak,chrome_200_percent.pak,default_apps,icudtl.dat,libwidevinecdm.so,locales,nacl_helper,nacl_helper_bootstrap,nacl_irt_x86_64.nexe,natives_blob.bin,PepperFlash,product_logo_48.png,resources.pak,snapshot_blob.bin,xdg-mime,xdg-settings",
-      "--strip-files",
-      "chrome,nacl_helper",
-      "--exclude-extra",
-      "--build_revision",
-      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "name": "package build for bisect"
+    "name": "package build"
   },
   {
     "allow_subannotations": true,
@@ -368,15 +361,22 @@
       "--src-dir",
       "[BUILDER_CACHE]/Linux_Builder/src",
       "--build-url",
-      "gs://chrome-perf/Linux Builder",
+      "gs://chrome-test-builds/official-by-commit/Linux Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--include-files",
+      "chrome,chrome_100_percent.pak,chrome_200_percent.pak,default_apps,icudtl.dat,libwidevinecdm.so,locales,nacl_helper,nacl_helper_bootstrap,nacl_irt_x86_64.nexe,natives_blob.bin,PepperFlash,product_logo_48.png,resources.pak,snapshot_blob.bin,xdg-mime,xdg-settings",
+      "--strip-files",
+      "chrome,nacl_helper",
+      "--exclude-extra",
+      "--build_revision",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "name": "package build"
+    "name": "package build for bisect"
   },
   {
     "cmd": [],

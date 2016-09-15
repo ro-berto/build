@@ -440,6 +440,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if not bot_config.get('cf_archive_build'):
         master_config = bot_db.get_master_settings(mastername)
         build_revision = update_step.presentation.properties['got_revision']
+        self.m.archive.zip_and_upload_build(
+            'package build',
+            self.m.chromium.c.build_config_fs,
+            build_url=self._build_gs_archive_url(
+                mastername, master_config, buildername),
+            build_revision=build_revision,
+            cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
+            # TODO(machenbach): Make asan a configuration switch.
+            package_dsym_files=(
+                self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') and
+                self.m.chromium.c.HOST_PLATFORM == 'mac'),
+        )
 
         # For archiving 'chromium.perf', the builder also archives a version
         # without perf test files for manual bisect.
@@ -457,19 +469,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               store_by_hash=False,
               platform=self.m.chromium.c.HOST_PLATFORM
           )
-
-        self.m.archive.zip_and_upload_build(
-            'package build',
-            self.m.chromium.c.build_config_fs,
-            build_url=self._build_gs_archive_url(
-                mastername, master_config, buildername),
-            build_revision=build_revision,
-            cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
-            # TODO(machenbach): Make asan a configuration switch.
-            package_dsym_files=(
-                self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') and
-                self.m.chromium.c.HOST_PLATFORM == 'mac'),
-        )
 
       trigger_specs = []
       for loop_mastername, loop_buildername, builder_dict in sorted(

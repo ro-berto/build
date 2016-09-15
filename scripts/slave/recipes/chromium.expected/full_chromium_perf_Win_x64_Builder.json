@@ -754,22 +754,15 @@
       "--src-dir",
       "[BUILDER_CACHE]\\Win_x64_Builder\\src",
       "--build-url",
-      "gs://chrome-test-builds/official-by-commit/Win x64 Builder",
+      "gs://chrome-perf/Win x64 Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--include-files",
-      "chrome.dll,chrome.exe,chrome_100_percent.pak,chrome_200_percent.pak,chrome_child.dll,chrome_elf.dll,chrome_watcher.dll,default_apps,d3dcompiler_47.dll,icudtl.dat,libEGL.dll,libGLESv2.dll,locales,nacl_irt_x86_64.nexe,natives_blob.bin,PepperFlash,resources.pak,SecondaryTile.png,snapshot_blob.bin",
-      "--whitelist",
-      "^\\d+\\.\\d+\\.\\d+\\.\\d+\\.manifest$",
-      "--exclude-extra",
-      "--build_revision",
-      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win x64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win x64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "name": "package build for bisect"
+    "name": "package build"
   },
   {
     "allow_subannotations": true,
@@ -789,15 +782,22 @@
       "--src-dir",
       "[BUILDER_CACHE]\\Win_x64_Builder\\src",
       "--build-url",
-      "gs://chrome-perf/Win x64 Builder",
+      "gs://chrome-test-builds/official-by-commit/Win x64 Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--include-files",
+      "chrome.dll,chrome.exe,chrome_100_percent.pak,chrome_200_percent.pak,chrome_child.dll,chrome_elf.dll,chrome_watcher.dll,default_apps,d3dcompiler_47.dll,icudtl.dat,libEGL.dll,libGLESv2.dll,locales,nacl_irt_x86_64.nexe,natives_blob.bin,PepperFlash,resources.pak,SecondaryTile.png,snapshot_blob.bin",
+      "--whitelist",
+      "^\\d+\\.\\d+\\.\\d+\\.\\d+\\.manifest$",
+      "--exclude-extra",
+      "--build_revision",
+      "170242",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win x64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"Win x64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
-    "name": "package build"
+    "name": "package build for bisect"
   },
   {
     "cmd": [],
