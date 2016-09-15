@@ -195,6 +195,7 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "android_webview_unittests_apk",
       "base_unittests_apk",

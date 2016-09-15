@@ -272,6 +272,7 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "cronet_package",
       "cronet_perf_test_apk",
