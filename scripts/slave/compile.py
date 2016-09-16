@@ -428,13 +428,13 @@ def main_ninja(options, args, env):
     # Run the build.
     env.print_overrides()
     exit_status = chromium_utils.RunCommand(command, env=env)
-    if exit_status == 0 and options.ninja_ensure_up_to_date:
+    if exit_status == 0:
       # Run the build again if we want to check that the no-op build is clean.
       filter_obj = EnsureUpToDateFilter()
       # Append `-d explain` to help diagnose in the failure case.
       command += ['-d', 'explain', '-n']
       chromium_utils.RunCommand(command, env=env, filter_obj=filter_obj)
-      if not filter_obj.was_up_to_date:
+      if not filter_obj.was_up_to_date and options.ninja_ensure_up_to_date:
         print 'Failing build because ninja reported work to do.'
         print 'This means that after completing a compile, another was run and'
         print 'it resulted in still having work to do (that is, a no-op build'
