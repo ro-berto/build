@@ -23,6 +23,7 @@ linux_clang_env = {
   'CPLUS_INCLUDE_PATH': 'third_party/clang/linux/lib/clang/3.4/include/',
 }
 asan64 = linux_clang_env.copy()
+asan64['GYP_DEFINES'] = 'asan=1'
 asan64['CXX'] = asan64['CXX'] + ' -fsanitize=address -fPIC'
 asan64['ASAN_OPTIONS'] = 'handle_segv=0:detect_stack_use_after_return=1'
 asan32 = asan64.copy()
