@@ -189,7 +189,7 @@
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": "android_commits",
-      "slave_pools": ["builders"],
+      "slave_pools": ["main_n5x_builder"],
       "category": "4Swarming",
       "slavebuilddir": "android_build",
     },
@@ -305,8 +305,9 @@
           "slave38-c1",
           "slave39-c1",
           "slave41-c1",
-          "slave46-c1",
-          "slave76-c1",
+          "slave125-c1",
+          "slave126-c1",
+          "slave127-c1",
         ],
     },
     "cronet_arm64": {
@@ -429,13 +430,21 @@
       },
       "slaves": ["build43-b1"],
     },
+    "main_n5x_builder": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": "64",
+      },
+      "slaves": ["slave76-c1"],
+    },
     "marshmallow_64": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
-      "slaves": ["build38-b1"],
+      "slaves": ["slave46-c1"],
     },
     "marshmallow_tablet": {
       "slave_data": {
