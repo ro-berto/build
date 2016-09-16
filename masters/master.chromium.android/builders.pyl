@@ -286,7 +286,7 @@
     "arm_builder": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
       "slaves": [
@@ -353,7 +353,7 @@
     "cronet_k_hammerhead": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build69-b1"],
@@ -361,7 +361,7 @@
     "cronet_l_hammerhead": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build86-b1"],
@@ -369,7 +369,7 @@
     "cronet_m_bullhead": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build87-b1"],
@@ -377,7 +377,7 @@
     "cronet_m_bullhead_perf": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build88-b1"],
@@ -385,7 +385,7 @@
     "jelly_bean_tester": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build40-b1"],
@@ -393,7 +393,7 @@
     "kit_kat_tablet": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build42-b1"],
@@ -401,7 +401,7 @@
     "lollipop_consumer": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build39-b1"],
@@ -409,7 +409,7 @@
     "lollipop_low_end": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build19-b1"],
@@ -417,7 +417,7 @@
     "lollipop_phone": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build41-b1"],
@@ -425,7 +425,7 @@
     "lollipop_tablet": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build43-b1"],
@@ -449,7 +449,7 @@
     "marshmallow_tablet": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": "64",
       },
       "slaves": ["build44-b1"],
@@ -467,7 +467,7 @@
     "webview_cts": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
       "slaves": ["build68-b1"],
@@ -475,7 +475,7 @@
     "webview_l": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
       "slaves": ["build62-b1"],

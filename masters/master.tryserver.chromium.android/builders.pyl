@@ -393,7 +393,7 @@
     "ccompute_optional_bots": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
       "slaves": [
@@ -406,7 +406,7 @@
     "ccompute_bots_cq": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
       "slaves": [
@@ -543,7 +543,7 @@
     "slaves_with_devices": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
       "slaves": [
@@ -555,7 +555,7 @@
     "slaves_with_nexus4_devices": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
       "slaves": [
