@@ -24,11 +24,12 @@ def RunSteps(api):
       'BUILDBOT_GOT_WATERFALL_REVISION': got_revision,
       'GOMA_DIR': goma_dir,
   }
-  api.python('annotated steps',
-             api.path['checkout'].join('src', 'build.py'),
-             allow_subannotations=True,
-             cwd=api.path['checkout'],
-             env=env)
+  with api.goma.build_with_goma():
+      api.python('annotated steps',
+                 api.path['checkout'].join('src', 'build.py'),
+                 allow_subannotations=True,
+                 cwd=api.path['checkout'],
+                 env=env)
 
 
 def GenTests(api):

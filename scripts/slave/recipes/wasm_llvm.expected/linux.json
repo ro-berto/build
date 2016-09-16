@@ -108,6 +108,33 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "restart"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "start_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "[CACHE]/cipd/goma/cloudtail"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "start cloudtail",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -123,6 +150,76 @@
       "GOMA_DIR": "[CACHE]/cipd/goma"
     },
     "name": "annotated steps"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "jsonstatus",
+      "[CACHE]/cipd/goma/jsonstatus"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "goma_jsonstatus"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "stat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "goma_stat"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "stop"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "stop_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--json-status",
+      "[CACHE]/cipd/goma/jsonstatus",
+      "--ninja-log-exit-status",
+      "-1",
+      "--buildbot-buildername",
+      "linux",
+      "--buildbot-mastername",
+      "client.wasm.llvm",
+      "--buildbot-slavename",
+      "TestSlavename"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "upload_log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid",
+      "12345"
+    ],
+    "name": "stop cloudtail"
   },
   {
     "name": "$result",
