@@ -1227,7 +1227,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     try:
       cts_v1_command = [cts_path, 'run', 'cts', '-p', 'android.webkit']
-      cts_v2_command = [cts_path, 'run', 'cts', '-m', 'CtsWebKitTestCases']
+      cts_v2_command = [cts_path, 'run', 'cts', '-m', 'CtsWebkitTestCases']
       self.m.step('Run CTS%s' % suffix,
                   cts_v2_command if is_cts_v2 else cts_v1_command,
                   env=env, stdout=self.m.raw_io.output())
