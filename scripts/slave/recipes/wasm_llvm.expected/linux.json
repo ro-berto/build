@@ -50,6 +50,64 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
+      "--platform",
+      "linux-amd64",
+      "--dest-directory",
+      "[SLAVE_BUILD]/cipd",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_goma.install cipd",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "ensure",
+      "--root",
+      "[CACHE]/cipd/goma",
+      "--list",
+      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -61,7 +119,8 @@
       "BUILDBOT_BUILDERNAME": "linux",
       "BUILDBOT_GOT_WATERFALL_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "BUILDBOT_MASTERNAME": "client.wasm.llvm",
-      "BUILDBOT_REVISION": "abcd"
+      "BUILDBOT_REVISION": "abcd",
+      "GOMA_DIR": "[CACHE]/cipd/goma"
     },
     "name": "annotated steps"
   },
