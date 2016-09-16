@@ -43,7 +43,7 @@
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
       "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -317,7 +317,7 @@
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
       "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r6.bot_update",
     "~followup_annotations": [
@@ -704,7 +704,7 @@
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
       "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r4.bot_update",
     "~followup_annotations": [
@@ -1000,7 +1000,7 @@
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
       "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r5.bot_update",
     "~followup_annotations": [

@@ -42,7 +42,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -313,7 +313,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r5.bot_update",
     "~followup_annotations": [
@@ -1052,7 +1052,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r6.bot_update",
     "~followup_annotations": [
@@ -1637,7 +1637,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r2.bot_update",
     "~followup_annotations": [
@@ -2219,7 +2219,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r3.bot_update",
     "~followup_annotations": [

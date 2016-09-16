@@ -106,7 +106,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -803,7 +803,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Gathering reference values.bot_update",
     "~followup_annotations": [
@@ -1269,7 +1269,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Gathering reference values.bot_update (2)",
     "~followup_annotations": [
@@ -1986,7 +1986,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update (2)",
     "~followup_annotations": [
