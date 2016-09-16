@@ -50,7 +50,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools];%(PATH)s"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -337,7 +337,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools];%(PATH)s"
     },
     "name": "test r1.bot_update",
     "~followup_annotations": [

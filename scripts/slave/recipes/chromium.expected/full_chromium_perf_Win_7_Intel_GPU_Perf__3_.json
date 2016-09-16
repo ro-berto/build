@@ -50,7 +50,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Win_7_Intel_GPU_Perf__3_",
     "env": {
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools];%(PATH)s"
     },
     "name": "bot_update",
     "~followup_annotations": [

@@ -20,7 +20,7 @@
       "--output_manifest"
     ],
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -589,7 +589,7 @@
       "--output_manifest"
     ],
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
     "name": "Bisect a0.bot_update",
     "~followup_annotations": [
@@ -940,7 +940,7 @@
       "--output_manifest"
     ],
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
     "name": "Bisect a2.bot_update",
     "~followup_annotations": [
@@ -1324,7 +1324,7 @@
       "--output_manifest"
     ],
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
     "name": "Bisect a1.bot_update",
     "~followup_annotations": [
