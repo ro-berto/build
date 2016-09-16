@@ -7,6 +7,7 @@
 
 DEPS = [
   'file',
+  'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -19,7 +20,7 @@ DEPS = [
 def RunSteps(api):
   """Generates the sequence of steps that will be run by the slave."""
   api.gclient.set_config('crashpad')
-  api.gclient.checkout()
+  api.bot_update.ensure_checkout()
 
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
