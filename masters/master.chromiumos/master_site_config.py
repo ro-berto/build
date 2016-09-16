@@ -13,3 +13,5 @@ class ChromiumOS(Master.ChromiumOSBase):
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'chromiumos'
+  buildbucket_bucket = 'master.chromiumos'
+  service_account_file = 'service-account-chromeos.json'
