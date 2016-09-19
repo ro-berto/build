@@ -641,6 +641,23 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
+      'Android32 Release (swarming)': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Android',
+          'device_type': 'bullhead', # Nexus 5X
+        }
+      },
       'Android32 ASan (L Nexus6)': {
         'recipe_config': 'webrtc_android_asan',
         'chromium_config_kwargs': {
@@ -1309,6 +1326,23 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
+      'android_swarming': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Android',
+          'device_type': 'bullhead', # Nexus 5X
+        }
+      }
     },
   },
 })

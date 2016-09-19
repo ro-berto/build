@@ -23,6 +23,7 @@ DEPS = [
 def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
+  webrtc.configure_swarming()
 
   if api.platform.is_mac:
     api.ios.host_info()

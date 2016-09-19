@@ -122,9 +122,17 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
+  def configure_swarming(self):
     self.c.use_isolate = self.bot_config.get('use_isolate')
+    self.c.enable_swarming = self.bot_config.get('enable_swarming')
+    # TODO(ehmaldonado): Move this to __init__.
+    self.isolated_targets = None
     if self.c.use_isolate:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
+      if self.m.chromium.c.TARGET_PLATFORM == 'android':
+        self.isolated_targets = self.ANDROID_APK_TESTS
+      else:
+        self.isolated_targets = self.NORMAL_TESTS
 
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.enable_swarming:
@@ -136,6 +144,9 @@ class WebRTCApi(recipe_api.RecipeApi):
           'os',
           self.m.swarming.prefered_os_dimension(
               self.m.platform.name).split('-', 1)[0])
+      for key, value in self.bot_config.get(
+          'swarming_dimensions', {}).iteritems():
+        self.m.swarming.set_default_dimension(key, value)
 
   def checkout(self, **kwargs):
     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
@@ -163,7 +174,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                                                   'mb_config.pyl'),
       gyp_script=self.m.path['checkout'].join('webrtc', 'build',
                                               'gyp_webrtc.py'),
-      isolated_targets=self.NORMAL_TESTS if self.c.use_isolate else None)
+      isolated_targets=self.isolated_targets)
     # GYP bots no longer compiles, we only want to ensure GYP executes.
     if 'gyp' not in self.buildername.lower():
       self.m.chromium.compile()
@@ -182,19 +193,21 @@ class WebRTCApi(recipe_api.RecipeApi):
       if self.c.use_isolate:
         self.m.isolate.remove_build_metadata()
         self.m.isolate.isolate_tests(self.m.chromium.output_dir,
-                                     targets=self.NORMAL_TESTS)
+                                     targets=self.isolated_targets)
 
       tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
                                    self.c.enable_swarming)
       with self.m.step.defer_results():
         if tests:
-          if self.m.chromium.c.TARGET_PLATFORM == 'android':
+          if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
+              not self.c.enable_swarming):
             self.m.chromium_android.common_tests_setup_steps()
 
           for test in tests:
             test.run(self, suffix='')
 
-          if self.m.chromium.c.TARGET_PLATFORM == 'android':
+          if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
+              not self.c.enable_swarming):
             self.m.chromium_android.shutdown_device_monitor()
             self.m.chromium_android.logcat_dump(
                 gs_bucket=self.master_config.get('build_gs_bucket'))

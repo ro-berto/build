@@ -25,12 +25,14 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
+          'Android32 Release (swarming)',
           'Android32 Builder',
           'Android32 ASan (L Nexus6)',
       ]),
   ])
 
   specs = [
+    {'name': 'Android32 Release (swarming)'},
     {'name': 'Android32 Builder'},
     {'name': 'Android32 ASan (L Nexus6)'},
     {'name': 'Android32 Tests (J Nexus4)'},

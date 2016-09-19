@@ -45,7 +45,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
 
   elif test_suite == 'android':
     for test in api.ANDROID_APK_TESTS:
-      tests.append(AndroidTest(test))
+      tests.append(AndroidTest(test, enable_swarming))
     if (not api.m.tryserver.is_tryserver and api.c.PERF_ID and
         api.m.chromium.c.BUILD_CONFIG == 'Release'):
       tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
@@ -116,9 +116,23 @@ def get_android_tool(api):
 
 
 class AndroidTest(Test):
+  def __init__(self, name, enable_swarming=False):
+    super(AndroidTest, self).__init__(name, enable_swarming)
+    self._swarming_task = None
+
+  # TODO(ehmaldonado): Move swarming-related logic to superclass someway?
+  @property
+  def swarming_task(self):
+    return self._swarming_task
+
   def run(self, api, suffix):
-    api.m.chromium_android.run_test_suite(self._name,
-                                          tool=get_android_tool(api))
+    if self._enable_swarming:
+      isolated_hash = api.m.isolate.isolated_tests[self._name]
+      self._swarming_task = api.m.swarming.task(self._name, isolated_hash)
+      api.m.swarming.trigger_task(self._swarming_task)
+    else:
+      api.m.chromium_android.run_test_suite(self._name,
+                                            tool=get_android_tool(api))
 
 
 class AndroidInstrumentationTest(Test):
