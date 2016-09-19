@@ -129,18 +129,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/sdk/tools/build.py",
-      "-mrelease",
-      "--arch=x64",
-      "packages"
-    ],
-    "cwd": "[SLAVE_BUILD]/sdk",
-    "name": "build dart"
-  },
-  {
-    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",

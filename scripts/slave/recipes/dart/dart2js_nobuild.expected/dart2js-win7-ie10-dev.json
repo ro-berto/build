@@ -131,18 +131,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\sdk\\tools\\build.py",
-      "-mrelease",
-      "--arch=x64",
-      "packages"
-    ],
-    "cwd": "[SLAVE_BUILD]\\sdk",
-    "name": "build dart"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]\\sdk\\tools\\test.py",
       "--mode=release",
       "--arch=x64",
