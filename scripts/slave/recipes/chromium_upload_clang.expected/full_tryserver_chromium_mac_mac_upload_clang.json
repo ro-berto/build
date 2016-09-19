@@ -107,6 +107,23 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/build/vs_toolchain.py",
+      "update"
+    ],
+    "name": "update win toolchain"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/mac_toolchain.py"
+    ],
+    "name": "update mac toolchain"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/third_party/binutils/download.py"
     ],
     "name": "download binutils"

@@ -65,6 +65,10 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(
       patch_root=bot_config.get('root_override'))
 
+  api.python('update win toolchain',
+      api.path['checkout'].join('build', 'vs_toolchain.py'), ['update'])
+  api.python('update mac toolchain',
+      api.path['checkout'].join('build', 'mac_toolchain.py'))
   api.python('download binutils',
       api.path['checkout'].join('third_party', 'binutils', 'download.py'))
 
