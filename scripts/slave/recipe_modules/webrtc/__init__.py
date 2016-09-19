@@ -7,6 +7,7 @@ DEPS = [
   'chromium_swarming',
   'commit_position',
   'file',
+  'gsutil',
   'depot_tools/gclient',
   'isolate',
   'recipe_engine/path',
@@ -18,4 +19,5 @@ DEPS = [
   'test_utils',
   'trigger',
   'depot_tools/tryserver',
+  'zip',
 ]

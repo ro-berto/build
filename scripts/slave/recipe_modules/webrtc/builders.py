@@ -401,6 +401,7 @@ BUILDERS = freeze({
           'Android32 Tests (L Nexus5)',
           'Android32 Tests (L Nexus7.2)',
         ],
+        'archive_apprtc': True,
       },
       'Android32 Builder (dbg)': {
         'recipe_config': 'webrtc_android',
@@ -416,6 +417,7 @@ BUILDERS = freeze({
           'Android32 Tests (L Nexus5)(dbg)',
           'Android32 Tests (L Nexus7.2)(dbg)',
         ],
+        'archive_apprtc': True,
       },
       'Android32 Builder x86': {
         'recipe_config': 'webrtc_android',
@@ -463,6 +465,7 @@ BUILDERS = freeze({
         'triggers': [
           'Android64 Tests (L Nexus9)',
         ],
+        'archive_apprtc': True,
       },
       'Android64 Builder (dbg)': {
         'recipe_config': 'webrtc_android',
@@ -474,6 +477,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'archive_apprtc': True,
       },
       'Android64 Builder x64 (dbg)': {
         'recipe_config': 'webrtc_android',
