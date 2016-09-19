@@ -70,7 +70,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--url",
-      "https://chromium.googlesource.com/infra/infra/+/fd119c547fd4e56eeab77d138b0426022ae1d159/bootstrap/get_appengine.py",
+      "https://chromium.googlesource.com/infra/infra/+/refs/heads/master/bootstrap/get_appengine.py",
       "--format",
       "text"
     ],

@@ -38,9 +38,7 @@ def _FetchAppEngineSDKSteps(api):
       'https://chromium.googlesource.com/infra/infra',
       'bootstrap/get_appengine.py',
       step_name='Fetch SDK downloader',
-      # This is a commit after the latest fix to the script,
-      # which includes retrying requests.
-      branch='fd119c547fd4e56eeab77d138b0426022ae1d159')
+      branch='refs/heads/master')
   api.python.inline('Run SDK downloader', script_content, args=['--dest=.'])
   return api.path['slave_build'].join('google_appengine')
 
