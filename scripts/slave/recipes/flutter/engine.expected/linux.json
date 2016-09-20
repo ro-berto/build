@@ -834,6 +834,60 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "Zip flutter_services Package",
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/android_debug/dist/packages/flutter_services\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_12/flutter_services.zip\", \"root\": \"[SLAVE_BUILD]/src/out/android_debug/dist/packages\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/tmp_tmp_12/flutter_services.zip",
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/flutter_services.zip"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gsutil upload flutter_services.zip",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/flutter_services.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[TMP_BASE]/tmp_tmp_12"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "rmtree temp dir for UploadDartPackage flutter_services",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/flutter/tools/gn",
       "--android",
       "--android-cpu=x64"
@@ -864,7 +918,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/gen/flutter/sky/shell/shell/shell/libs/x86_64/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/gen/flutter/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_12/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/gen/flutter/sky/shell/shell/shell/libs/x86_64/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/gen/flutter/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_13/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -875,7 +929,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_12/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_13/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/artifacts.zip"
     ],
     "env": {
@@ -891,7 +945,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP_BASE]/tmp_tmp_12"
+      "[TMP_BASE]/tmp_tmp_13"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
@@ -918,7 +972,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x64 symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_13/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x64/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_14/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -929,7 +983,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_13/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_14/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/symbols.zip"
     ],
     "env": {
@@ -945,7 +999,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP_BASE]/tmp_tmp_13"
+      "[TMP_BASE]/tmp_tmp_14"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
@@ -994,7 +1048,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x86 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/gen/flutter/sky/shell/shell/shell/libs/x86/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/gen/flutter/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_14/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/gen/flutter/sky/shell/shell/shell/libs/x86/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/gen/flutter/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_15/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -1005,7 +1059,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_14/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_15/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/artifacts.zip"
     ],
     "env": {
@@ -1021,7 +1075,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP_BASE]/tmp_tmp_14"
+      "[TMP_BASE]/tmp_tmp_15"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
@@ -1048,7 +1102,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x86 symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_15/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_debug_x86/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_16/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -1059,7 +1113,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_15/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_16/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/symbols.zip"
     ],
     "env": {
@@ -1075,7 +1129,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP_BASE]/tmp_tmp_15"
+      "[TMP_BASE]/tmp_tmp_16"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"

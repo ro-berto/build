@@ -157,6 +157,7 @@ def BuildLinuxAndroidArm(api):
 
   UploadDartPackage(api, 'sky_engine')
   UploadDartPackage(api, 'sky_services')
+  UploadDartPackage(api, 'flutter_services')
 
 
 def BuildLinux(api):
