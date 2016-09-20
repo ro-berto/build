@@ -44,6 +44,7 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(
       patch_root=bot_config.get('root_override'))
 
+  api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.chromium.run_mb(mastername, buildername, use_goma=False)
 
@@ -60,4 +61,3 @@ def RunSteps(api):
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield test
-
