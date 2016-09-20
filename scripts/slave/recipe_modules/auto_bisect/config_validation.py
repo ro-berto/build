@@ -106,5 +106,6 @@ def _validate_revisions(good_revision, bad_revision):  # pragma: no cover
 def _validate_metric(bisect_mode, metric):  # pragma: no cover
   if bisect_mode not in ('mean', 'std_dev'):
     return
-  if not (isinstance(metric, basestring) and metric.count('/') == 1):
+  if not (isinstance(metric, basestring) and ((metric.count('/') == 1) or
+                                              (metric.count('/') == 2))):
     raise ValidationFail('Invalid value for "metric": %s' % metric)

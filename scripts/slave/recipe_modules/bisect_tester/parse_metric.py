@@ -57,6 +57,14 @@ def parse_chartjson_metric(results, metric):  # pragma: no cover
       if escape_chars(trace) == trace_name:
         trace_name = trace  # Unescaping
         break
+
+    # This can happen if trace_name is meant to be a tir_label. This workaround
+    # is necessary because test paths are ambiguous, such that a 2-part test
+    # name can represent a tir_label-level summary or a story-level summary.
+    if trace_name not in results['charts'].get(chart_name, {}):
+      chart_name = trace_name + '@@' + chart_name
+      trace_name = 'summary'
+
     if (results['charts'][chart_name][trace_name]['type'] ==
         'list_of_scalar_values'):
       values = results['charts'][chart_name][trace_name]['values']

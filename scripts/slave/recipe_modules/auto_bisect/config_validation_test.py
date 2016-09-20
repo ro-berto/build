@@ -108,7 +108,7 @@ class ConfigValidationTest(unittest.TestCase):  # pragma: no cover
     }
     config = {
         'bisect_mode': 'mean',
-        'metric': 'a/b/c',
+        'metric': 'a/b/c/d',
     }
     with self.assertRaises(config_validation.ValidationFail):
       config_validation.validate_bisect_config(config, schema)
