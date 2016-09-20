@@ -87,7 +87,8 @@ def create_suite_row_data(results):
   for result in results:
     # Constructing suite_row_dict and suites_summary
     test_case_path = result['name']
-    suite_name = test_case_path.split('#')[0]
+    suite_name = (test_case_path.split('#')[0] if '#' in test_case_path
+                  else test_case_path.split('.')[0])
     if suite_name in suite_row_dict:
       suite_row = suite_row_dict[suite_name]
     else:

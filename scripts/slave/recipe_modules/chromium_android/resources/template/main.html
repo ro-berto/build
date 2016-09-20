@@ -40,8 +40,8 @@
             'test-table-body-row');
         Array.prototype.slice.call(testTableRows)
             .forEach(function(row) {
-                var testCasePath = row.getElementsByClassName(
-                    'test-table-body-column-0')[0].innerText.trim();
+                var testCasePath = row.firstElementChild.firstElementChild
+                    .innerHTML;
                 if (testCasePath.startsWith(suite_name)) {
                   row.style.display = 'table-row';
                 } else {
