@@ -57,6 +57,7 @@ def RunSteps(api, mastername, buildername):
   api.gclient.apply_config('android')
 
   api.bot_update.ensure_checkout()
+  api.chromium.ensure_goma()
   api.chromium.runhooks()
 
   api.emulator.install_emulator_deps(api_level=builder.get('api_level'))

@@ -67,6 +67,7 @@ def RunSteps(api, mastername, buildername):
   api.emulator.set_config('base_config')
 
   api.bot_update.ensure_checkout()
+  api.chromium.ensure_goma()
   api.chromium_android.clean_local_files()
   api.chromium.runhooks()
 
