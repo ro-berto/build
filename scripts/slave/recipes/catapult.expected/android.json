@@ -80,14 +80,20 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "\"<simulated contents of get_appengine.py>\"",
+      "[SLAVE_BUILD]/get_appengine.py"
+    ],
+    "name": "Create get_appengine.py"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/get_appengine.py",
       "--dest=."
     ],
-    "name": "Run SDK downloader",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@\"<simulated contents of get_appengine.py>\"@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "Run SDK downloader"
   },
   {
     "cmd": [
