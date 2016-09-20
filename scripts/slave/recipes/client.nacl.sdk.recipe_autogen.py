@@ -152,6 +152,7 @@ def RunSteps(api):
         raise api.step.StepFailure("Builder unsupported by recipe.")
     else:
         api.chromium.set_config('chromium')
+        api.chromium.ensure_goma()
         dispatch_directory[api.properties["buildername"]](api)
 
 
