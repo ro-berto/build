@@ -373,8 +373,7 @@
       "stepname:telemetry_gpu_unittests on Ubuntu-12.04",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -422,9 +421,7 @@
     "name": "telemetry_gpu_unittests on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"1/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy1\\\", \\\"charts\\\": {\\\"entry3\\\": \\\"chart3\\\", \\\"entry4\\\": \\\"chart4\\\"}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"successes\\\": [\\\"test3.Test3\\\", \\\"test4.Test4\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test3.Test3\\\": 0.1, \\\"test4.Test4\\\": 0.1}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}, {\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
