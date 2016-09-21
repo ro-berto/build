@@ -5,12 +5,11 @@
 from recipe_engine.types import freeze
 
 DEPS = [
+  'depot_tools/bot_update',
   'chromium',
   'commit_position',
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
   'file',
-  'goma',
+  'depot_tools/gclient',
   'gsutil',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -46,8 +45,10 @@ LINUX_GN_ARGS = [
   'is_clang=true',
   'is_component_build=true',
   'is_debug=true',
+  'goma_dir="/b/build/goma"',
   'symbol_level=1',
   'target_cpu="x64"',
+  'use_goma=true',
 ]
 
 CHROMEOS_GN_ARGS = LINUX_GN_ARGS + [
@@ -102,24 +103,15 @@ def GenerateCompilationDatabase(api, debug_path, targets, platform):
   # adjusted.
   gn_path = api.path['checkout'].join('buildtools', 'linux64', 'gn')
   args = LINUX_GN_ARGS if platform == 'linux' else CHROMEOS_GN_ARGS
-  args.extend(['use_goma=true',
-               'goma_dir=%s' % api.goma.goma_dir])
   command = [gn_path, 'gen', debug_path, '--args=%s' % ' '.join(args)]
   api.step('generate build files for %s' % platform, command,
            cwd=api.path['checkout'])
   command = ['ninja', '-C', debug_path] + list(targets)
   # Add the parameters for creating the compilation database.
   command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
-
-  command += ['-j', api.goma.recommended_goma_jobs]
-
-  with api.goma.build_with_goma(
-      ninja_log_outdir=debug_path,
-      ninja_log_command=command,
-      ninja_log_compiler='goma'):
-    return api.step('generate compilation database for %s' % platform,
-                    command,
-                    stdout=api.raw_io.output())
+  return api.step('generate compilation database for %s' % platform,
+                  command,
+                  stdout=api.raw_io.output())
 
 
 def RunSteps(api):
@@ -148,7 +140,6 @@ def RunSteps(api):
   debug_path = api.path['checkout'].join('out', 'Debug')
   targets = bot_config.get('compile_targets', [])
   api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
-  api.chromium.ensure_goma()
   api.chromium.runhooks()
 
   result = GenerateCompilationDatabase(api, debug_path, targets, platform)
