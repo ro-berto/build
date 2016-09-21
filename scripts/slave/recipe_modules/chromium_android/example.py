@@ -221,6 +221,7 @@ def RunSteps(api, buildername):
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),
       gtest_filter='WebRtc*',
+      result_details=config.get('result_details'),
       tool='asan')
   if not failure:
       api.chromium_android.run_bisect_script(extra_src='test.py',

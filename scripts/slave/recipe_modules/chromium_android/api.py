@@ -1094,7 +1094,7 @@ class AndroidApi(recipe_api.RecipeApi):
          '-w', self.m.path['slave_build']] + args, **kwargs)
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
-                     gtest_filter=None, tool=None,
+                     gtest_filter=None, tool=None, result_details=False,
                      name=None, json_results_file=None, shard_timeout=None,
                      args=None, **kwargs):
     args = args or []
@@ -1109,18 +1109,44 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--gtest_filter=%s' % gtest_filter)
     if tool:
       args.append('--tool=%s' % tool)
+    if result_details:
+      details_dir = self.m.path.mkdtemp('temp_details')
+      if not json_results_file:
+        json_results_file = self.m.path.join(details_dir, 'json_results_file')
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
     # TODO(agrieve): Remove once no more tests pass shard_timeout (contained in
     #     wrapper scripts).
     if shard_timeout:
       args.extend(['-t', str(shard_timeout)])
-    self.test_runner(
-        name or str(suite),
-        args=args,
-        wrapper_script_suite_name=suite,
-        env=self.m.chromium.get_env(),
-        **kwargs)
+    step_name = name or str(suite)
+    try:
+      self.test_runner(
+          step_name,
+          args=args,
+          wrapper_script_suite_name=suite,
+          env=self.m.chromium.get_env(),
+          **kwargs)
+    finally:
+      if result_details:
+        with self.m.step.nest('process results for %s' % step_name):
+          try:
+            details_html = details_dir.join('details.html')
+            self.m.python(
+              'Generate Result Details',
+              self.resource('test_results_presentation.py'),
+              args=['--json-file',
+                    json_results_file,
+                    '--html-file',
+                    details_html])
+            details_list = self.m.file.read(
+                'Read detail.html',
+                details_html,
+                test_data="<!DOCTYPE html><html></html>").splitlines()
+            self.m.step.active_result.presentation.logs['result_details'] = (
+                details_list)
+          finally:
+            self.m.file.rmtree('Remove details.html tmp files.', details_dir)
 
   def run_java_unit_test_suite(self, suite, verbose=True,
                                json_results_file=None, suffix=None, **kwargs):
