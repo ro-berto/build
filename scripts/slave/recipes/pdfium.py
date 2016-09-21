@@ -37,6 +37,21 @@ def _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang,
   api.gclient.runhooks()
 
 
+def _OutPath(api, memory_tool, skia, xfa, v8, clang, rel):
+  out_dir = 'release' if rel else 'debug'
+  if skia:
+    out_dir += "_skia"
+  if xfa:
+    out_dir += "_xfa"
+  if v8:
+    out_dir += "_v8"
+  if clang:
+    out_dir += "_clang"
+  if memory_tool == 'asan':
+    out_dir += "_asan"
+  return out_dir
+
+
 def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
                  target_os, out_dir):
   gn_bool = {True: 'true', False: 'false'}
@@ -148,7 +163,7 @@ def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, skip_test,
              target_os):
   _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, target_os)
 
-  out_dir = 'Release' if rel else 'Debug'
+  out_dir = _OutPath(api, memory_tool, skia, xfa, v8, clang, rel)
 
   _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
                target_os, out_dir)

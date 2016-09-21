@@ -65,7 +65,7 @@
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/pdfium",
       "gen",
-      "//out/Debug",
+      "//out/debug_xfa_v8_asan",
       "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_is_standalone=true use_sysroot=false is_asan=true"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
@@ -75,13 +75,13 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/pdfium/out/Debug"
+      "[SLAVE_BUILD]/pdfium/out/debug_xfa_v8_asan"
     ],
     "name": "compile with ninja"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pdfium/out/Debug/pdfium_unittests"
+      "[SLAVE_BUILD]/pdfium/out/debug_xfa_v8_asan/pdfium_unittests"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
@@ -91,7 +91,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pdfium/out/Debug/pdfium_embeddertests"
+      "[SLAVE_BUILD]/pdfium/out/debug_xfa_v8_asan/pdfium_embeddertests"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
@@ -105,7 +105,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
-      "out/Debug"
+      "out/debug_xfa_v8_asan"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
@@ -119,7 +119,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
-      "out/Debug"
+      "out/debug_xfa_v8_asan"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
@@ -133,7 +133,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
-      "out/Debug"
+      "out/debug_xfa_v8_asan"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {

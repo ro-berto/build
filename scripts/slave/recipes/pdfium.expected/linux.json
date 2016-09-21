@@ -59,7 +59,7 @@
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/pdfium",
       "gen",
-      "//out/Debug",
+      "//out/debug_v8",
       "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_sysroot=false"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
@@ -69,20 +69,20 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/pdfium/out/Debug"
+      "[SLAVE_BUILD]/pdfium/out/debug_v8"
     ],
     "name": "compile with ninja"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pdfium/out/Debug/pdfium_unittests"
+      "[SLAVE_BUILD]/pdfium/out/debug_v8/pdfium_unittests"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "unittests"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pdfium/out/Debug/pdfium_embeddertests"
+      "[SLAVE_BUILD]/pdfium/out/debug_v8/pdfium_embeddertests"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "embeddertests"
@@ -93,7 +93,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
-      "out/Debug"
+      "out/debug_v8"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "javascript tests"
@@ -104,7 +104,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
-      "out/Debug"
+      "out/debug_v8"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "pixel tests"
@@ -115,7 +115,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
-      "out/Debug"
+      "out/debug_v8"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "corpus tests"

@@ -59,7 +59,7 @@
       "[DEPOT_TOOLS]/gn.py",
       "--root=[SLAVE_BUILD]/pdfium",
       "gen",
-      "//out/Debug",
+      "//out/debug_skia_xfa_v8",
       "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=true pdf_is_standalone=true"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
@@ -69,7 +69,7 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/pdfium/out/Debug"
+      "[SLAVE_BUILD]/pdfium/out/debug_skia_xfa_v8"
     ],
     "name": "compile with ninja"
   },
