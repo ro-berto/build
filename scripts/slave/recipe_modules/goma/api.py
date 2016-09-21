@@ -118,6 +118,11 @@ print jobs
     return self.m.path.join(self._goma_dir, 'goma_ctl.py')
 
   @property
+  def goma_dir(self):
+    assert self._goma_dir
+    return self._goma_dir
+
+  @property
   def build_data_dir(self):
     return self.m.properties.get('build_data_dir')
 

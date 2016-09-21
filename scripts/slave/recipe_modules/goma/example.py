@@ -11,11 +11,14 @@ DEPS = [
 
 def RunSteps(api):
   api.goma.ensure_goma()
+  api.step('gn', ['gn', 'gen', 'out/Release',
+                  '--args=use_goma=true goma_dir=%s' % api.goma.goma_dir])
 
-  with api.goma.build_with_goma(ninja_log_outdir=api.properties.get('ninja_log_outdir'),
-                                ninja_log_compiler=api.properties.get('ninja_log_compiler'),
-                                ninja_log_command=api.properties.get('ninja_log_command'),
-                                env={}):
+  with api.goma.build_with_goma(
+      ninja_log_outdir=api.properties.get('ninja_log_outdir'),
+      ninja_log_compiler=api.properties.get('ninja_log_compiler'),
+      ninja_log_command=api.properties.get('ninja_log_command'),
+      env={}):
     # build something using goma.
     api.step('echo goma jobs',
              ['echo', str(api.goma.recommended_goma_jobs)])

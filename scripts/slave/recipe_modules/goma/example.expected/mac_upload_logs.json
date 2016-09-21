@@ -59,6 +59,15 @@
   },
   {
     "cmd": [
+      "gn",
+      "gen",
+      "out/Release",
+      "--args=use_goma=true goma_dir=[CACHE]/cipd/goma"
+    ],
+    "name": "gn"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[CACHE]/cipd/goma/goma_ctl.py",
