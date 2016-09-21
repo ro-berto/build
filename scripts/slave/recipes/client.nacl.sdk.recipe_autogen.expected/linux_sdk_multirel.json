@@ -63,7 +63,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_deps': {'src-pdf': None, 'src/pdf': None}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'chrome-official', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/tools/buildspec/build/chrome-official'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_deps': {'src-pdf': None, 'src/pdf': None}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'chrome-official', 'url': 'https://chrome-internal.googlesource.com/chrome/tools/buildspec.git'}]",
       "--patch_root",
       "chrome-official",
       "--revision_mapping_file",

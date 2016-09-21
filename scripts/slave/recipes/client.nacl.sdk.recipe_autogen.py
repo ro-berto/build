@@ -93,8 +93,8 @@ def sdk_multirel_steps(api):
     src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "chrome-official"
-    soln.url = "svn://svn.chromium.org/chrome-internal/trunk/tools/buildspec/"+\
-        "build/chrome-official"
+    soln.url = "https://chrome-internal.googlesource.com/chrome/tools/"+\
+        "buildspec.git"
     soln.custom_deps = {'src-pdf': None, 'src/pdf': None}
     src_cfg.got_revision_mapping.update(
         {'src': 'got_revision',
