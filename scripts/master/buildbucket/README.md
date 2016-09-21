@@ -48,7 +48,7 @@ Buildbot-buildbucket integration supports the following build parameters:
       If id and revision are specified, buildbot master will search for an
       existing buildbot change prior creating a new one. Also see implementation
       details below.
-    * revision (str): change revision, such as commit sha or svn revision.
+    * revision (str): change revision, such as commit sha.
     * author (dict): author of the change. REQUIRED.
         * email (str): change author's email. REQUIRED.
     * create_ts (int): change creation timestamp, in microseconds since Epoch.
