@@ -1259,7 +1259,7 @@ BUILDERS = {
         ],
         'enable_swarming': True,
         'swarming_properties': {
-          'default_hard_timeout': 60 * 60,
+          'default_hard_timeout': 90 * 60,
           'default_expiration': 6 * 60 * 60,
         },
         'swarming_dimensions': {
@@ -1467,6 +1467,7 @@ BUILDERS = {
         'enable_swarming': True,
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
+          'default_hard_timeout': 90 * 60,
           'default_priority': 35,
         },
         'tests': [Mjsunit_3, Webkit],
