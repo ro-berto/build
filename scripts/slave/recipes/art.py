@@ -37,6 +37,11 @@ _TARGET_DEVICE_MAP = {
       'make_jobs': 2,
       'product': 'mips32r2_fp_xburst',
       },
+    'angler': {
+      'bitness': 64,
+      'make_jobs': 8,
+      'product': 'armv8',
+      },
     }
 
 _ANDROID_CLEAN_DIRS = ['/data/local/tmp', '/data/art-test',
@@ -197,9 +202,6 @@ def setup_target(api,
   if debug and device == 'fugu':
     make_jobs = 1
 
-  if debug and device == 'mips32':
-    make_jobs = 1
-
   with api.step.defer_results():
     api.step('build target', [art_tools.join('buildbot-build.sh'),
                               '-j8', '--target'],
@@ -207,10 +209,6 @@ def setup_target(api,
 
     # Mips64 testing is broken.
     if device == 'mips64_emulator':
-      return
-
-    # Mips32 testing is broken: devices are not reliable.
-    if device == 'mips32':
       return
 
     api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
@@ -352,12 +350,12 @@ _CONFIG_MAP = {
         'device': 'hammerhead',
         'debug': True,
       },
-      'armv8-ndebug': {
+      'volantis-armv8-ndebug': {
         'serial': 'HT4CTJT03670',
         'device': 'volantis',
         'debug': False,
       },
-      'armv8-debug': {
+      'volantis-armv8-debug': {
         'serial': 'HT49CJT00070',
         'device': 'volantis',
         'debug': True,
@@ -378,26 +376,32 @@ _CONFIG_MAP = {
         'debug': True,
         'concurrent_collector': True,
       },
-      'armv8-concurrent-collector': {
+      'volantis-armv8-concurrent-collector': {
         'serial': 'HT591JT00517',
         'device': 'volantis',
         'debug': True,
         'concurrent_collector': True,
       },
-      'mips32-ndebug': {
-        'serial': 'CI20-8d58221d-1381a803-11ee0000-8a61aa4f',
-        'device': 'mips32',
-        'debug': False,
-      },
-      'mips32-debug': {
-        'serial': 'CI20-d5d90f0a-12810803-0ae90000-8a61aa4f',
-        'device': 'mips32',
-        'debug': True,
-      },
       'mips64-emulator-debug': {
         'serial': 'emulator-5554',
         'device': 'mips64_emulator',
         'debug': True,
+      },
+      'angler-armv8-ndebug': {
+        'serial': '84B7N15A28014046',
+        'device': 'angler',
+        'debug': False,
+      },
+      'angler-armv8-debug': {
+        'serial': '84B7N15B03000615',
+        'device': 'angler',
+        'debug': True,
+      },
+      'angler-armv8-concurrent-collector': {
+        'serial': '84B7N15B03000641',
+        'device': 'angler',
+        'debug': True,
+        'concurrent_collector': True,
       },
     },
 
