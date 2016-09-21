@@ -259,6 +259,7 @@ ENABLED_MASTERS = [
     'chromium.webrtc.fyi',
     'chromium.win',
     'client.catapult',
+    'client.dart',
     'client.drmemory',
     'client.mojo',
     'client.nacl',
