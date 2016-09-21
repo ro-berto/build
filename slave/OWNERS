@@ -7,6 +7,7 @@ set noparent
 # don't get landed, knocking out the bots.
 
 agable@chromium.org
+dsansome@chromium.org
 iannucci@chromium.org
 maruel@chromium.org
 stip@chromium.org
