@@ -76,7 +76,13 @@
         "os": "linux",
         "version": "precise",
       },
-      "slaves": ["slave425-c4"],
+      "slaves": [
+        "slave425-c4",
+        "slave492-c4",
+        "slave500-c4",
+        "slave546-c4",
+        "slave547-c4",
+      ],
     },
     "mac_slave_pool": {
       "slave_data": {
