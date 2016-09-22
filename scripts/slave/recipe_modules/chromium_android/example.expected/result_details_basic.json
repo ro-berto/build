@@ -938,6 +938,7 @@
       "--tool=asan",
       "--json-results-file",
       "[TMP_BASE]/temp_details_tmp_2/json_results_file",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -959,7 +960,9 @@
       "--json-file",
       "[TMP_BASE]/temp_details_tmp_2/json_results_file",
       "--html-file",
-      "[TMP_BASE]/temp_details_tmp_2/details.html"
+      "[TMP_BASE]/temp_details_tmp_2/details.html",
+      "--master-name",
+      "chromium.testing.master"
     ],
     "name": "process results for unittests.Generate Result Details",
     "~followup_annotations": [

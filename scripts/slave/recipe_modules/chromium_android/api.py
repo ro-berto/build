@@ -1095,6 +1095,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
                      gtest_filter=None, tool=None, result_details=False,
+                     store_tombstones=False,
                      name=None, json_results_file=None, shard_timeout=None,
                      args=None, **kwargs):
     args = args or []
@@ -1115,6 +1116,8 @@ class AndroidApi(recipe_api.RecipeApi):
         json_results_file = self.m.path.join(details_dir, 'json_results_file')
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
+    if store_tombstones:
+      args.append('--store-tombstones')
     # TODO(agrieve): Remove once no more tests pass shard_timeout (contained in
     #     wrapper scripts).
     if shard_timeout:
@@ -1138,7 +1141,9 @@ class AndroidApi(recipe_api.RecipeApi):
               args=['--json-file',
                     json_results_file,
                     '--html-file',
-                    details_html])
+                    details_html,
+                    '--master-name',
+                    self.m.properties.get('mastername')])
             details_list = self.m.file.read(
                 'Read detail.html',
                 details_html,
