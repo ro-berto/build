@@ -15,7 +15,7 @@ DEPS = [
 ]
 
 
-def sdk_multi_steps(api):
+def sdk_multi_steps(api, buildspec):
     build_properties = api.properties.legacy()
     # bot_update step
     src_cfg = api.gclient.make_config()
@@ -86,7 +86,7 @@ def sdk_multi_steps(api):
         allow_subannotations=True)
 
 
-def sdk_multirel_steps(api):
+def sdk_multirel_steps(api, buildspec):
     build_properties = api.properties.legacy()
     # update scripts step; implicitly run by recipe engine.
     # bot_update step
@@ -96,6 +96,7 @@ def sdk_multirel_steps(api):
     soln.url = "https://chrome-internal.googlesource.com/chrome/tools/"+\
         "buildspec.git"
     soln.custom_deps = {'src-pdf': None, 'src/pdf': None}
+    soln.deps_file = 'build/%s/DEPS' % buildspec
     src_cfg.got_revision_mapping.update(
         {'src': 'got_revision',
          'src/third_party/WebKit': 'got_webkit_revision',
@@ -140,20 +141,28 @@ dispatch_directory = {
     'linux-sdk-multi': sdk_multi_steps,
     'mac-sdk-multi': sdk_multi_steps,
     'windows-sdk-multi': sdk_multi_steps,
-    'linux-sdk-multirel': sdk_multirel_steps,
     'linux-sdk-asan-multi': sdk_multi_steps,
+    'linux-sdk-multirel': sdk_multirel_steps,
     'windows-sdk-multirel': sdk_multirel_steps,
     'mac-sdk-multirel': sdk_multirel_steps,
 }
 
+dispatch_buildspec = {
+    'linux-sdk-multirel': 'chrome-official-precise64',
+    'windows-sdk-multirel': 'chrome-official-win64',
+    'mac-sdk-multirel': 'chrome-official-mac64',
+}
+
 
 def RunSteps(api):
-    if api.properties["buildername"] not in dispatch_directory:
+    buildername = api.properties["buildername"]
+    if buildername not in dispatch_directory:
         raise api.step.StepFailure("Builder unsupported by recipe.")
     else:
         api.chromium.set_config('chromium')
         api.chromium.ensure_goma()
-        dispatch_directory[api.properties["buildername"]](api)
+        buildspec = dispatch_buildspec.get(buildername)
+        dispatch_directory[buildername](api, buildspec)
 
 
 def GenTests(api):
