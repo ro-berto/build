@@ -51,7 +51,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
                                    perf_id=api.c.PERF_ID))
     for test_name in api.ANDROID_INSTRUMENTATION_TESTS:
-      tests.append(AndroidInstrumentationTest(test_name))
+      tests.append(AndroidInstrumentationTest(test_name, enable_swarming))
 
   return tests
 

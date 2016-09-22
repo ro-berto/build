@@ -131,7 +131,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       if self.c.TEST_SUITE == 'webrtc':
         self._isolated_targets = self.NORMAL_TESTS
       elif self.c.TEST_SUITE == 'android':
-        self._isolated_targets = self.ANDROID_APK_TESTS
+        self._isolated_targets = (self.ANDROID_APK_TESTS +
+            self.ANDROID_INSTRUMENTATION_TESTS)
       else: # pragma: no cover
         raise self.m.step.StepFailure('Isolation and swarming are only '
                                       'supported for webrtc and android test '
