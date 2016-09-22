@@ -609,6 +609,11 @@ def clang_tot_android_asan(c):
   # Like android_clang, minus goma, minus static_libarary, plus asan.
   pass
 
+@config_ctx(includes=['android_common', 'ninja', 'clang', 'clang_tot'])
+def clang_tot_android_dbg(c):
+  # Like android_clang, minus goma, minus static_libarary.
+  pass
+
 # GYP_DEFINES must not include 'asan' or 'clang', else the tester bot will try
 # to compile clang.
 @config_ctx(includes=['chromium_no_goma'])

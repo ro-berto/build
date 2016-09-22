@@ -1536,6 +1536,30 @@ SPEC = {
         steps.generate_junit_test,
       ],
     },
+    'ClangToTAndroid (dbg)': {
+      'chromium_config': 'clang_tot_android_dbg',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+        'TARGET_ARCH': 'arm',
+        'TARGET_BITS': 32,
+      },
+      'GYP_DEFINES': {
+        'component': 'shared_library',
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'bot_type': 'builder',
+      'android_config': 'clang_tot_debug_builder',
+      'testing': { 'platform': 'linux', },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
     'ClangToTMac': {
       'chromium_config': 'clang_tot_mac',
       'gclient_config': 'chromium',

@@ -78,6 +78,10 @@ def clang_asan_tot_release_builder(c):  # pragma: no cover
   c.asan_symbolize = True
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
+@config_ctx(config_vars={'BUILD_CONFIG': 'Debug'})
+def clang_tot_debug_builder(c):  # pragma: no cover
+  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+
 @config_ctx()
 def x86_base(c):
   pass
