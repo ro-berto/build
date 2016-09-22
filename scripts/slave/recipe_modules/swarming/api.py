@@ -784,7 +784,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         # Check if it's an internal failure.
         summary = self.m.json.loads(
             step_result.raw_io.output_dir['summary.json'])
-        if any(shard['internal_failure'] for shard in summary['shards']):
+        if any(not shard or shard['internal_failure']
+               for shard in summary['shards']):
           raise recipe_api.InfraFailure('Internal swarming failure.')
 
         # Always show the shards' links in the collect step. (It looks
@@ -793,8 +794,12 @@ class SwarmingApi(recipe_api.RecipeApi):
         links = step_result.presentation.links
         for index in xrange(task.shards):
           url = task.get_shard_view_url(index)
+          if summary['shards'][index].get('exit_code', None) != 0:
+            display_text = 'shard #%d (failed)' % index
+          else:
+            display_text = 'shard #%d' % index
           if url:
-            links['shard #%d' % index] = url
+            links[display_text] = url
 
         step_result.isolated_script_results = \
           self._merge_isolated_script_shards(task, step_result)
