@@ -377,6 +377,7 @@ BUILDERS = freeze({
       },
       'Linux64 Release [large tests]': {
         'recipe_config': 'webrtc_baremetal',
+        'chromium_apply_config': ['webrtc_use_src_side_runtest_py'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

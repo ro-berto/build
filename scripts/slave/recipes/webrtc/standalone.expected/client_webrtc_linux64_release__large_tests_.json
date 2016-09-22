@@ -247,7 +247,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "[BUILDER_CACHE]/Linux64_Release__large_tests_/src/infra/scripts/runtest_wrapper.py",
+      "--",
       "--target",
       "Release",
       "--xvfb",
@@ -284,7 +285,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "[BUILDER_CACHE]/Linux64_Release__large_tests_/src/infra/scripts/runtest_wrapper.py",
+      "--",
       "--target",
       "Release",
       "--xvfb",
@@ -317,7 +319,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "[BUILDER_CACHE]/Linux64_Release__large_tests_/src/infra/scripts/runtest_wrapper.py",
+      "--",
       "--target",
       "Release",
       "--xvfb",
@@ -346,7 +349,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "[BUILDER_CACHE]/Linux64_Release__large_tests_/src/infra/scripts/runtest_wrapper.py",
+      "--",
       "--target",
       "Release",
       "--xvfb",
@@ -374,7 +378,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "[BUILDER_CACHE]/Linux64_Release__large_tests_/src/infra/scripts/runtest_wrapper.py",
+      "--",
       "--target",
       "Release",
       "--xvfb",
