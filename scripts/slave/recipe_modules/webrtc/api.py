@@ -12,6 +12,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(WebRTCApi, self).__init__(**kwargs)
     self._env = {}
+    self._isolated_targets = None
 
     # Keep track of working directory (which contains the checkout).
     # None means "default value".
@@ -57,10 +58,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     'webrtc_nonparallel_tests',
   )
 
-  ANDROID_INSTRUMENTATION_TESTS = [
+  ANDROID_INSTRUMENTATION_TESTS = (
     'AppRTCDemoTest',
     'libjingle_peerconnection_android_unittest',
-  ]
+  )
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
@@ -125,14 +126,16 @@ class WebRTCApi(recipe_api.RecipeApi):
   def configure_swarming(self):
     self.c.use_isolate = self.bot_config.get('use_isolate')
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
-    # TODO(ehmaldonado): Move this to __init__.
-    self.isolated_targets = None
     if self.c.use_isolate:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
-      if self.m.chromium.c.TARGET_PLATFORM == 'android':
-        self.isolated_targets = self.ANDROID_APK_TESTS
-      else:
-        self.isolated_targets = self.NORMAL_TESTS
+      if self.c.TEST_SUITE == 'webrtc':
+        self._isolated_targets = self.NORMAL_TESTS
+      elif self.c.TEST_SUITE == 'android':
+        self._isolated_targets = self.ANDROID_APK_TESTS
+      else: # pragma: no cover
+        raise self.m.step.StepFailure('Isolation and swarming are only '
+                                      'supported for webrtc and android test '
+                                      'suites.')
 
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.enable_swarming:
@@ -174,7 +177,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                                                   'mb_config.pyl'),
       gyp_script=self.m.path['checkout'].join('webrtc', 'build',
                                               'gyp_webrtc.py'),
-      isolated_targets=self.isolated_targets)
+      isolated_targets=self._isolated_targets)
     # GYP bots no longer compiles, we only want to ensure GYP executes.
     if 'gyp' not in self.buildername.lower():
       self.m.chromium.compile()
@@ -193,7 +196,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       if self.c.use_isolate:
         self.m.isolate.remove_build_metadata()
         self.m.isolate.isolate_tests(self.m.chromium.output_dir,
-                                     targets=self.isolated_targets)
+                                     targets=self._isolated_targets)
 
       tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
                                    self.c.enable_swarming)

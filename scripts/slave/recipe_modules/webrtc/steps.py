@@ -62,6 +62,7 @@ class Test(object):
   def __init__(self, name, enable_swarming=False):
     self._name = name
     self._enable_swarming = enable_swarming
+    self._swarming_task = None
 
   @property
   def name(self):  # pragma: no cover
@@ -71,6 +72,20 @@ class Test(object):
   def enable_swarming(self):
     return self._enable_swarming
 
+  @property
+  def swarming_task(self):
+    return self._swarming_task
+
+  def run_nonswarming(self, api, suffix): # pragma: no cover:
+    raise NotImplementedError()
+
+  def run(self, api, suffix):
+    if self._enable_swarming:
+      isolated_hash = api.m.isolate.isolated_tests[self._name]
+      self._swarming_task = api.m.swarming.task(self._name, isolated_hash)
+      api.m.swarming.trigger_task(self._swarming_task)
+    else:
+      self.run_nonswarming(api, suffix)
 
 class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
@@ -83,22 +98,12 @@ class WebRTCTest(Test):
     self._custom_executable = custom_executable
     self._perf_test = perf_test
     self._runtest_kwargs = runtest_kwargs
-    self._swarming_task = None
 
-  @property
-  def swarming_task(self):
-    return self._swarming_task
-
-  def run(self, api, suffix):
-    if self._enable_swarming:
-      isolated_hash = api.m.isolate.isolated_tests[self._name]
-      self._swarming_task = api.m.swarming.task(self._name, isolated_hash)
-      api.m.swarming.trigger_task(self._swarming_task)
-    else:
-      self._runtest_kwargs['test'] = self._custom_executable or self._name
-      api.add_test(name=self._name, revision=self._revision,
-                   parallel=self._parallel, perf_test=self._perf_test,
-                   **self._runtest_kwargs)
+  def run_nonswarming(self, api, suffix):
+    self._runtest_kwargs['test'] = self._custom_executable or self._name
+    api.add_test(name=self._name, revision=self._revision,
+                 parallel=self._parallel, perf_test=self._perf_test,
+                 **self._runtest_kwargs)
 
 
 class BaremetalTest(WebRTCTest):
@@ -110,9 +115,9 @@ class BaremetalTest(WebRTCTest):
 
 
 def get_android_tool(api):
-    if api.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
-      return 'asan'
-    return None
+  if api.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+    return 'asan'
+  return None
 
 
 class AndroidTest(Test):
@@ -120,25 +125,15 @@ class AndroidTest(Test):
     super(AndroidTest, self).__init__(name, enable_swarming)
     self._swarming_task = None
 
-  # TODO(ehmaldonado): Move swarming-related logic to superclass someway?
-  @property
-  def swarming_task(self):
-    return self._swarming_task
-
-  def run(self, api, suffix):
-    if self._enable_swarming:
-      isolated_hash = api.m.isolate.isolated_tests[self._name]
-      self._swarming_task = api.m.swarming.task(self._name, isolated_hash)
-      api.m.swarming.trigger_task(self._swarming_task)
-    else:
-      api.m.chromium_android.run_test_suite(self._name,
-                                            tool=get_android_tool(api))
+  def run_nonswarming(self, api, suffix):
+    api.m.chromium_android.run_test_suite(self._name,
+                                          tool=get_android_tool(api))
 
 
 class AndroidInstrumentationTest(Test):
   """Installs the APK on the device and runs the test."""
 
-  def run(self, api, suffix):
+  def run_nonswarming(self, api, suffix):
     api.m.chromium_android.run_instrumentation_suite(
         name=self._name,
         wrapper_script_suite_name=self._name,
@@ -161,7 +156,7 @@ class AndroidPerfTest(Test):
     self._perf_id = perf_id
     assert perf_id, 'You must specify a Perf ID for builders running perf tests'
 
-  def run(self, api, suffix):
+  def run_nonswarming(self, api, suffix):
     assert api.m.chromium.c.BUILD_CONFIG == 'Release', (
         'Perf tests should only be run with Release builds.')
     wrapper_script = api.m.chromium.output_dir.join('bin',
