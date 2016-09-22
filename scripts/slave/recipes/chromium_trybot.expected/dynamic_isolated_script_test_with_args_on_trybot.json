@@ -573,7 +573,8 @@
       "--these-args-should-be-present",
       "--test-machine-name=\"linux_chromium_rel_ng\"",
       "--build-revision=\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
