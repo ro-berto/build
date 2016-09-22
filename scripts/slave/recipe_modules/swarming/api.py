@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import logging
 import datetime
 import functools
 
@@ -408,19 +407,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         self._gtest_collect_step(test_launcher_summary_output, *args, **kw))
     return task
 
-  def _check_and_set_output_flag(self, extra_args, flag, output_file_name):
-    extra_args = list(extra_args or [])
-    # Ensure flag is not already passed. We are going to overwrite it.
-    flag_value = '--%s=' % flag
-    bad_args = any(x.startswith(flag_value) for x in extra_args)
-    if bad_args: # pragma: no cover
-      raise ValueError('--%s should not be used' % flag)
-
-    # Append it.
-    output_arg = '--%s=${ISOLATED_OUTDIR}/%s' % (flag, output_file_name)
-    extra_args.append(output_arg)
-    return extra_args
-
   def isolated_script_task(self, title, isolated_hash, extra_args=None,
                            idempotent=False, **kwargs):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
@@ -432,18 +418,18 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     For meaning of the rest of the arguments see 'task' method.
     """
+    extra_args = list(extra_args or [])
 
-    # Ensure output flags are not already passed. We are going
-    # to overwrite them.
-    # output.json name is expected by collect_gtest_task.py.
-    extra_args = self._check_and_set_output_flag(
-      extra_args, 'isolated-script-test-output', 'output.json')
-    # chartjson-output.json name is expected by benchmarks generating chartjson
-    # output
-    extra_args = self._check_and_set_output_flag(
-      extra_args,
-      'isolated-script-test-chartjson-output',
-      'chartjson-output.json')
+    # Ensure --isolated-script-test-output is not already passed. We are going
+    # to overwrite it.
+    bad_args = any(
+        x.startswith('--isolated-script-test-output=') for x in extra_args)
+    if bad_args:  # pragma: no cover
+      raise ValueError('--isolated-script-test-output should not be used.')
+
+    # Append it. output.json name is expected by collect_gtest_task.py.
+    extra_args.append(
+        '--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json')
 
     task = self.task(title, isolated_hash, extra_args=extra_args,
                      idempotent=idempotent, **kwargs)
@@ -731,46 +717,6 @@ class SwarmingApi(recipe_api.RecipeApi):
             p.links[link_name] = outputs_ref['view_url']
 
 
-  def _merge_isolated_script_chartjson_ouput_shards(self, task, step_result):
-    # Taken from third_party/catapult/telemetry/telemetry/internal/results/
-    # chart_json_output_formatter.py, the json entries are as follows:
-    # result_dict = {
-    #   'format_version': '0.1',
-    #   'next_version': '0.2',
-    #   'benchmark_name': benchmark_metadata.name,
-    #   'benchmark_description': benchmark_metadata.description,
-    #   'trace_rerun_options': benchmark_metadata.rerun_options,
-    #   'benchmark_metadata': benchmark_metadata.AsDict(),
-    #   'charts': charts,
-    # }
-    #
-    # Therefore, all entries should be the same and we should only need to merge
-    # the chart from each shard.
-    merged_results = {}
-    seen_first_shard = False
-    for i in xrange(task.shards):
-      path = self.m.path.join(str(i), 'chartjson-output.json')
-      if path not in step_result.raw_io.output_dir:
-        # chartjson results were not written for this shard, not an error,
-        # just continue to the next shard
-        continue
-      results_raw = step_result.raw_io.output_dir[path]
-      try:
-        chartjson_results_json = self.m.json.loads(results_raw)
-      except Exception as e:
-        raise Exception('error decoding chart JSON results from shard #%d' % i)
-      if not seen_first_shard:
-        merged_results = chartjson_results_json
-        seen_first_shard = True
-        continue
-      for key in chartjson_results_json:
-        if key == 'charts':
-          # Append each additional chart to our merged results
-          for add_key in chartjson_results_json[key]:
-            merged_results[key][add_key] = chartjson_results_json[key][add_key]
-    return merged_results
-
-
   def _merge_isolated_script_shards(self, task, step_result):
     # This code is unfortunately specialized to the "simplified"
     # JSON format that used to be the standard for recipes. The
@@ -852,10 +798,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
         step_result.isolated_script_results = \
           self._merge_isolated_script_shards(task, step_result)
-
-        # Obtain chartjson results if present
-        step_result.isolated_script_chartjson_results = \
-          self._merge_isolated_script_chartjson_ouput_shards(task, step_result)
 
         self._display_pending(summary, step_result.presentation)
       except Exception as e:

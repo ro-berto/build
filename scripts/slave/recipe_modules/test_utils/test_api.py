@@ -116,14 +116,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     shards=1, swarming_internal_failure=False,
                                     isolated_script_passing=True, valid=True,
                                     missing_shards=[],
-                                    empty_shards=[],
-                                    output_chartjson=False):
+                                    empty_shards=[]):
     """Produces a test results' compatible json for isolated script tests. """
     per_shard_results = []
-    per_shard_chartjson_results = []
     for i in xrange(shards):
       jsonish_results = {}
-      chartjsonish_results = {}
       jsonish_results['valid'] = valid
       # Keep shard 0's results equivalent to the old code to minimize
       # expectation diffs.
@@ -137,11 +134,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         jsonish_results['failures'] = tests_run
         jsonish_results['successes'] = []
       jsonish_results['times'] = {t : 0.1 for t in tests_run}
-      chartjsonish_results['dummy'] =  'dummy%d' % i
-      chartjsonish_results['charts'] = {'entry%d' % idx: 'chart%d' % idx,
-        'entry%d' % (idx + 1): 'chart%d' % (idx + 1)}
       per_shard_results.append(jsonish_results)
-      per_shard_chartjson_results.append(chartjsonish_results)
     if swarming:
       jsonish_shards = []
       files_dict = {}
@@ -150,28 +143,14 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
           'failure': not passing,
           'internal_failure': swarming_internal_failure
         })
-        swarming_path = str(i)
-        swarming_path += '\\output.json' if is_win else '/output.json'
-
-        chartjson_swarming_path = str(i)
-        chartjson_swarming_path += \
-          '\\chartjson-output.json' \
-            if is_win else '/chartjson-output.json'
-
-        # Determine what output we are writing and if it is empty or not
-        output_missing = i in missing_shards and not output_chartjson
-        chartjson_output_missing = i in missing_shards and output_chartjson
-        output_empty = i in empty_shards and not output_chartjson
-        chartjson_output_empty = i in empty_shards and output_chartjson
-
-        if not output_missing:
-          files_dict[swarming_path] = \
-            '' if output_empty else json.dumps(per_shard_results[i])
-        if not chartjson_output_missing and output_chartjson:
-          files_dict[chartjson_swarming_path] = \
-            '' if chartjson_output_empty \
-              else json.dumps(per_shard_chartjson_results[i])
-
+        if i not in missing_shards:
+          swarming_path = str(i)
+          swarming_path += '\\output.json' if is_win else '/output.json'
+          if i not in empty_shards:
+            files_dict[swarming_path] = json.dumps(per_shard_results[i])
+          else:
+            # Simulate a complete harness failure.
+            files_dict[swarming_path] = ''
       jsonish_summary = {'shards': jsonish_shards}
       files_dict['summary.json'] = json.dumps(jsonish_summary)
       return self.m.raw_io.output_dir(files_dict)
