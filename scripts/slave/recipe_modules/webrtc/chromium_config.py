@@ -37,10 +37,6 @@ def webrtc_libfuzzer(c):
     'is_asan=true',
   ])
 
-@CONFIG_CTX()
-def webrtc_use_src_side_runtest_py(c):
-  c.runtest_py.src_side = True
-
 # TODO(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
 @CONFIG_CTX()
 def webrtc_openh264(c):
