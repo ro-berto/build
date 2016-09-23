@@ -41,25 +41,6 @@
       "category": "1default",
     },
 
-    "Linux ChromiumOS GN": {
-      "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
-      "use_remote_run": True,
-      "scheduler": "chromium",
-      "slave_pools": ["linux_gn"],
-      "category": "2gn",
-    },
-    "Linux ChromiumOS GN (dbg)": {
-      "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
-      "use_remote_run": True,
-      "scheduler": "chromium",
-      "slave_pools": ["linux_gn_dbg"],
-      "category": "2gn",
-    },
-
     "Linux ChromiumOS Ozone Builder": {
       "recipe": "chromium",
       "remote_run_sync_revision": True,
@@ -160,24 +141,6 @@
       },
       "slaves": ["vm911-m1"],
     },
-
-    "linux_gn": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["vm829-m1"],
-    },
-    "linux_gn_dbg": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["slave19-c1"],
-    },
-
     "linux_ozone": {
       "slave_data": {
         "os": "linux",

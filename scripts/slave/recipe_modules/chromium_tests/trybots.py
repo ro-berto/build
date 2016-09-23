@@ -258,14 +258,6 @@ TRYBOTS = freeze({
         'buildername': 'Linux Builder (dbg)',
         'tester': 'Linux Tests (dbg)(1)',
       }),
-      'linux_chromium_gn_chromeos_dbg': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'Linux ChromiumOS GN (dbg)',
-      }),
-      'linux_chromium_gn_chromeos_rel': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'Linux ChromiumOS GN',
-      }),
       'linux_chromium_rel_ng': {
         'bot_ids': [
           {

@@ -106,26 +106,6 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Linux ChromiumOS GN': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'chromeos',
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'enable_swarming': True,
-      'checkout_dir': 'linux_chromium_gn_chromeos',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Linux ChromiumOS Ozone Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['chromeos', 'mb', 'ninja_confirm_noop', 'ozone'],
@@ -204,25 +184,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-    },
-    'Linux ChromiumOS GN (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'chromeos',
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'enable_swarming': True,
-      'checkout_dir': 'linux_chromium_gn_chromeos',
-      'testing': {
-        'platform': 'linux',
-      },
     },
   },
 }
