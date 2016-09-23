@@ -96,11 +96,36 @@
       "--builder-tag=win7",
       "html",
       "pkg",
-      "samples",
-      "co19"
+      "samples"
     ],
     "cwd": "[SLAVE_BUILD]\\sdk",
     "name": "dart2js ie10 tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\sdk\\tools\\test.py",
+      "--mode=release",
+      "--arch=ia32",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=ie10",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--builder-tag=win7",
+      "--append_logs",
+      "co19"
+    ],
+    "cwd": "[SLAVE_BUILD]\\sdk",
+    "name": "dart2js ie10 co19 tests"
   },
   {
     "cmd": [

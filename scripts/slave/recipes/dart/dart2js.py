@@ -149,10 +149,17 @@ def RunSteps(api):
 
       if runtime in ['ie10', 'ie11']:
         test_specs = [{'name': 'dart2js %s tests' % runtime,
-                  'tests': ['html', 'pkg', 'samples', 'co19']}]
+                       'tests': ['html', 'pkg', 'samples']},
+                      {'name': 'dart2js %s co19 tests' % runtime,
+                       'tests': ['co19']}]
       else:
         test_specs = [
-          {'name': 'dart2js %s tests' % runtime, 'tests': []},
+          {'name': 'dart2js %s tests' % runtime,
+           'tests': ['--exclude-suite=observatory_ui,co19']},
+          {'name': 'dart2js %s observatory_ui tests' % runtime,
+           'tests': ['observatory_ui']},
+          {'name': 'dart2js %s co19 tests' % runtime,
+           'tests': ['co19']},
           {'name': 'dart2js %s extra tests' % runtime,
            'tests': ['dart2js_extra', 'dart2js_native']},
           {'name': 'dart2js %s try tests' % runtime, 'tests': ['try']}

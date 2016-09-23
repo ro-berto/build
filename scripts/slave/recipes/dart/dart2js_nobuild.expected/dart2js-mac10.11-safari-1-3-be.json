@@ -148,10 +148,67 @@
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--shards=3",
-      "--shard=1"
+      "--shard=1",
+      "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "dart2js safari tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=safari",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=3",
+      "--shard=1",
+      "--append_logs",
+      "observatory_ui"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "dart2js safari observatory_ui tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=safari",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=3",
+      "--shard=1",
+      "--append_logs",
+      "co19"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "dart2js safari co19 tests"
   },
   {
     "cmd": [
@@ -205,10 +262,69 @@
       "--shards=3",
       "--shard=1",
       "--fast-startup",
-      "--append_logs"
+      "--append_logs",
+      "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "dart2js safari fast-startup tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=safari",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=3",
+      "--shard=1",
+      "--fast-startup",
+      "--append_logs",
+      "observatory_ui"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "dart2js safari observatory_ui fast-startup tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=safari",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=3",
+      "--shard=1",
+      "--fast-startup",
+      "--append_logs",
+      "co19"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "dart2js safari co19 fast-startup tests"
   },
   {
     "cmd": [
