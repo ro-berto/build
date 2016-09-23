@@ -16,4 +16,5 @@ DEPOT_PATH_MAP = {
     'angle': 'angle/angle',
     'v8': 'v8/v8.git',
     'skia': 'skia',
+    'catapult': 'external/github.com/catapult-project/catapult',
 }
