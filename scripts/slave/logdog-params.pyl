@@ -106,4 +106,15 @@
     'client.webrtc.fyi': {},
     'tryserver.webrtc': {},
   },
+
+  'chromiumos': {
+    'chromiumos',
+    'chromiumos.chromium',
+  },
+
+  # The CrOS tryserver is considered "internal" for viewing purposes, even
+  # though it is described in Chromium's build repository.
+  'chromeos': {
+    'chromiumos.tryserver',
+  },
 }
