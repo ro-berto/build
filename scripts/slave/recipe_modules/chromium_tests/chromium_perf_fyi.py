@@ -16,7 +16,7 @@ SPEC = {
 }
 
 
-@CHROMIUM_CONFIG_CTX(includes=['chromium_win_clang_official'])
+@CHROMIUM_CONFIG_CTX(includes=['chromium_win_clang_official', 'mb'])
 def chromium_perf_clang(c):
   pass
 
