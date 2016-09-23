@@ -350,6 +350,22 @@ class TestPublicParams(unittest.TestCase):
     params = ldbs._load_params_dict('chromium')
     self.assertIsInstance(params, dict)
 
+    # Get a list of all defined master/builders, plus a "TESTING" builder to
+    # test '*' defaults.
+    combos = set()
+    for _, masters in params.iteritems():
+      for master, builders in masters.iteritems():
+        for builder in builders.iterkeys():
+          combos.add((master, builder))
+        combos.add((master, 'TESTING'))
+
+    for master, builder in sorted(combos):
+      params = ldbs._get_params({
+          'mastername': master,
+          'buildername': builder,
+          'buildnumber': 24601,
+      })
+      self.assertIsInstance(params, ldbs.Params)
 
 
 if __name__ == '__main__':

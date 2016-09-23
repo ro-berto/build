@@ -207,7 +207,7 @@ def _get_params(properties):
 
   # Find our project name and master config.
   project = None
-  for project, masters in sorted(_load_params_dict(mastername).iteritems()):
+  for project, masters in sorted(_load_params_dict(mastername).items()):
     master_config = masters.get(mastername)
     if master_config is not None:
       break
