@@ -141,8 +141,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       for i in xrange(shards):
         jsonish_shards.append({
           'failure': not passing,
-          'internal_failure': swarming_internal_failure,
-          'exit_code': (1 if (not passing or swarming_internal_failure) else 0)
+          'internal_failure': swarming_internal_failure
         })
         if i not in missing_shards:
           swarming_path = str(i)
