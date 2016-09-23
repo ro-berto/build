@@ -11,12 +11,14 @@ DEPS = [
   'chromium',
   'depot_tools/gclient',
   'file',
+  'gsutil',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
   'v8',
+  'zip',
 ]
 
 BUILDERS = freeze({
@@ -44,6 +46,49 @@ def _build_and_test(api, suffix=''):
     ['make', '-j8', 'test'],
     cwd=api.path['slave_build'].join('node.js'),
   )
+
+def _build_and_upload(api):
+  api.step(
+    'configure node.js - install',
+    [
+      api.path['slave_build'].join('node.js', 'configure'),
+      '--prefix=/',
+      '--tag=v8-build-%s' % api.v8.revision,
+    ],
+    cwd=api.path['slave_build'].join('node.js'),
+  )
+
+  archive_dir = api.path['slave_build'].join('archive-build')
+  archive_name = ('node-linux-rel-%s-%s.zip' %
+                  (api.v8.revision_number, api.v8.revision))
+  zip_file = api.path['slave_build'].join(archive_name)
+
+  # Make archive directory.
+  api.file.makedirs('install directory', archive_dir)
+
+  # Build and install.
+  api.step(
+    'build and install node.js',
+    ['make', '-j8', 'install', 'DESTDIR=%s' % archive_dir],
+    cwd=api.path['slave_build'].join('node.js'),
+  )
+
+  # Zip build.
+  package = api.zip.make_package(archive_dir, zip_file)
+  package.add_directory(archive_dir)
+  package.zip('zipping')
+
+  # Upload to google storage bucket.
+  api.gsutil.upload(
+    zip_file,
+    'chromium-v8/node-linux-rel',
+    archive_name,
+    args=['-a', 'public-read'],
+  )
+
+  # Clean up.
+  api.file.remove('cleanup archive', zip_file)
+  api.file.rmtree('archive directory', archive_dir)
 
 
 def RunSteps(api):
@@ -79,6 +124,9 @@ def RunSteps(api):
 
   # Build and test node.js with the checked-out v8.
   _build_and_test(api)
+
+  # Build and upload node.js distribution with the checked-out v8.
+  _build_and_upload(api)
 
 
 def _sanitize_nonalpha(text):
