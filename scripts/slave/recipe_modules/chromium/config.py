@@ -300,12 +300,6 @@ def goma(c):
   else:  # pragma: no cover
     raise BadConf('goma config doesn\'t understand %s' % c.compile_py.compiler)
 
-  c.gyp_env.GYP_DEFINES['use_goma'] = 1
-
-  goma_dir = c.BUILD_PATH.join('goma')
-  c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
-  c.compile_py.goma_dir = goma_dir
-
   if c.TARGET_PLATFORM == 'win' and c.compile_py.compiler != 'goma-clang':
     fastbuild(c)
 

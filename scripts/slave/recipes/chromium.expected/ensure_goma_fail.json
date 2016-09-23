@@ -194,7 +194,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "archive_gpu_tests=1 component=static_library ffmpeg_branding=Chrome gomadir='RECIPE_PACKAGE_REPO[build]/goma' proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "archive_gpu_tests=1 component=static_library ffmpeg_branding=Chrome proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -258,8 +258,6 @@
       "Linux remote_run Builder",
       "--config-file",
       "[BUILDER_CACHE]/Linux_remote_run_Builder/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "RECIPE_PACKAGE_REPO[build]/goma",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_remote_run_Builder/src",
@@ -294,14 +292,6 @@
       "build1-a1",
       "--goma-deps-cache-dir",
       "[GOMA_DEPS_CACHE]",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
-      "--goma-dir",
-      "RECIPE_PACKAGE_REPO[build]/goma",
       "--ninja-ensure-up-to-date",
       "--",
       "base_unittests"
@@ -309,11 +299,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
+    "name": "compile"
   },
   {
     "allow_subannotations": true,

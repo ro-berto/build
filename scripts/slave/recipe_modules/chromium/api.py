@@ -487,11 +487,27 @@ class ChromiumApi(recipe_api.RecipeApi):
     return wrapper
 
   def ensure_goma(self, canary=False):
+    no_goma_compiler = self.c.compile_py.compiler or ''
+    if no_goma_compiler == 'goma-clang':
+      no_goma_compiler = 'clang'
+    elif no_goma_compiler == 'goma':
+      no_goma_compiler = None
+
+    if ('use_goma' in self.c.gyp_env.GYP_DEFINES and
+        self.c.gyp_env.GYP_DEFINES['use_goma'] == 0):
+      self.c.compile_py.compiler = no_goma_compiler
+      return
+
     goma_dir = self.m.goma.ensure_goma(canary=canary)
+
     if goma_dir:
       # TODO(phajdan.jr): goma_dir should always be non-empty.
       self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
+      self.c.gyp_env.GYP_DEFINES['use_goma'] = 1
       self.c.compile_py.goma_dir = goma_dir
+    else:
+      self.c.gyp_env.GYP_DEFINES['use_goma'] = 0
+      self.c.compile_py.compiler = no_goma_compiler
 
   def clobber_if_needed(self):
     """Add an explicit clobber step if requested."""
@@ -628,10 +644,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         # src-side, and so it might be actually using goma.
         self.ensure_goma()
         goma_dir = self.c.compile_py.goma_dir
-      if not goma_dir:  # pragma: no cover
-        # TODO(phajdan.jr): remove fallback when we always use cipd for goma.
-        goma_dir = self.m.path['build'].join('goma')
-      args += ['--goma-dir', goma_dir]
+      if goma_dir:
+        args += ['--goma-dir', goma_dir]
 
     if isolated_targets:
       sorted_isolated_targets = sorted(set(isolated_targets))
