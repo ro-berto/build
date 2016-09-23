@@ -921,7 +921,8 @@ class AndroidApi(recipe_api.RecipeApi):
           **kwargs)
     finally:
       if result_details:
-        with self.m.step.nest('process results for %s' % step_name):
+        with self.m.step.nest(
+            'process results for %s' % step_name) as nest_step:
           try:
             details_html = details_dir.join('details.html')
             presentation_args = ['--json-file',
@@ -941,6 +942,8 @@ class AndroidApi(recipe_api.RecipeApi):
                 details_html,
                 test_data="<!DOCTYPE html><html></html>").splitlines()
             self.m.step.active_result.presentation.logs['result_details'] = (
+                details_list)
+            nest_step.presentation.logs['result_details'] = (
                 details_list)
           finally:
             self.m.file.rmtree('Remove details.html tmp files.', details_dir)
@@ -1132,7 +1135,8 @@ class AndroidApi(recipe_api.RecipeApi):
           **kwargs)
     finally:
       if result_details:
-        with self.m.step.nest('process results for %s' % step_name):
+        with self.m.step.nest(
+            'process results for %s' % step_name) as nest_step:
           try:
             details_html = details_dir.join('details.html')
             self.m.python(
@@ -1149,6 +1153,8 @@ class AndroidApi(recipe_api.RecipeApi):
                 details_html,
                 test_data="<!DOCTYPE html><html></html>").splitlines()
             self.m.step.active_result.presentation.logs['result_details'] = (
+                details_list)
+            nest_step.presentation.logs['result_details'] = (
                 details_list)
           finally:
             self.m.file.rmtree('Remove details.html tmp files.', details_dir)

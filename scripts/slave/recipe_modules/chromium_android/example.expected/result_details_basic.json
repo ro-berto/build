@@ -869,7 +869,11 @@
   },
   {
     "cmd": [],
-    "name": "process results for SmallTest"
+    "name": "process results for SmallTest",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
   },
   {
     "cmd": [
@@ -950,7 +954,11 @@
   },
   {
     "cmd": [],
-    "name": "process results for unittests"
+    "name": "process results for unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
   },
   {
     "cmd": [
