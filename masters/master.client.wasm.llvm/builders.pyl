@@ -14,6 +14,18 @@
       "scheduler": "llvm_commits",
       "slave_pools": ["linux"],
     },
+    "windows": {
+      "category": "continuous",
+      "recipe": "wasm_llvm",
+      "scheduler": "llvm_commits",
+      "slave_pools": ["windows"],
+    },
+    "mac": {
+      "category": "continuous",
+      "recipe": "wasm_llvm",
+      "scheduler": "llvm_commits",
+      "slave_pools": ["mac"],
+    },
   },
 
   "schedulers": {
@@ -32,6 +44,22 @@
         "version": "trusty",
       },
       "slaves": ["slave92-c3", "slave93-c3", "slave73-c3", "slave74-c3"],
+    },
+    "windows": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "windows",
+        "version": "7",
+      },
+      "slaves": ["vm1-m3"],
+    },
+    "mac": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "osx",
+        "version":  "10.9.5",
+      },
+      "slaves": ["vm14-m3"],
     },
   },
 }
