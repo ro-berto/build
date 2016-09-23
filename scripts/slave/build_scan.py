@@ -31,10 +31,16 @@ BUILDER_WILDCARD = '*'
 
 
 def _url_open_json(url):
+  headers = {
+    'Accept': 'application/json',
+    'User-Agent': 'Python-urllib/2.7 -- build_scan.py',
+  }
+
   attempts = 0
   while True:
     try:
-      with closing(urllib2.urlopen(url, timeout=URL_TIMEOUT)) as f:
+      r = urllib2.Request(url, headers=headers)
+      with closing(urllib2.urlopen(r, timeout=URL_TIMEOUT)) as f:
         return json.load(f)
     except (urllib2.URLError, IOError) as f:
       if attempts > MAX_ATTEMPTS:
@@ -49,9 +55,21 @@ def _url_open_json(url):
       time.sleep(time_to_sleep)
 
 
+# A whitelist of masters which get master json information from CBE rather than
+# by directly polling. Note that right now CBE only works for external masters.
+CBE_WHITELIST = set([
+  'chromium.perf'
+])
+
 def get_root_json(master_url):
   """Pull down root JSON which contains builder and build info."""
   url = master_url + '/json'
+
+  # Assumes we have something like https://build.chromium.org/p/chromium.perf
+  name = master_url.rstrip('/').split('/')[-1]
+  if name in CBE_WHITELIST:
+    url = 'https://chrome-build-extract.appspot.com/get_master/' + name
+
   logging.info('opening %s' % url)
   return _url_open_json(url)
 
