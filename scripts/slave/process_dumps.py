@@ -57,6 +57,10 @@ def ProbeDebuggerDir():
   debugger_dir = '%s\\Windows Kits\\8.1\\Debuggers\\x64' % program_files
   if CdbExistsAtLocation(debugger_dir):
     return debugger_dir
+  # windows 10 64 bit
+  debugger_dir = '%s\\Windows Kits\\10\\Debuggers\\x64' % program_files
+  if CdbExistsAtLocation(debugger_dir):
+    return debugger_dir
   program_files = os.environ.get('PROGRAMW6432')
   if not program_files:
     return None
