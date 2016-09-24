@@ -113,12 +113,6 @@ def v8_ninja(c):
     c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
 
-@CONFIG_CTX(includes=['ninja'])
-def v8_xcode_ninja(c):
-  c.gyp_env.GYP_GENERATORS.add('ninja')
-  c.gyp_env.GYP_GENERATORS.add('xcode-ninja')
-
-
 # Work-around for obtaining the right build dir on linux slave that trigger
 # windows 64 bit swarming jobs.
 @CONFIG_CTX(includes=['v8'])

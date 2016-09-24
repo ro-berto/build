@@ -792,16 +792,6 @@ BUILDERS = {
         },
         'testing': {'platform': 'mac'},
       },
-      'V8 Mac64 - xcode': {
-        'chromium_apply_config': [
-          'v8_xcode_ninja', 'default_compiler', 'goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-      },
 ####### Category: Misc
       'V8 Fuzzer': {
         'v8_config_kwargs': {
