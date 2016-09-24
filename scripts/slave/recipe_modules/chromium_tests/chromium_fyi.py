@@ -2166,7 +2166,39 @@ SPEC = {
         'platform': 'linux',
       },
     },
-
+    'Blimp Client Android': {
+      'android_config': 'main_builder_rel_mb',
+      'bot_type': 'builder_tester',
+      'chromium_config': 'android',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'enable_swarming': True,
+      'gclient_apply_config': ['android'],
+      'gclient_config': 'chromium',
+      'testing': {
+        'platform': 'linux',
+      },
+      'use_isolate': True,
+    },
+    'Blimp Linux Engine': {
+      'bot_type': 'builder_tester',
+      'chromium_apply_config': [ 'mb' ],
+      'chromium_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'linux',
+      },
+      'enable_swarming': True,
+      'gclient_config': 'chromium',
+      'testing': {
+        'platform': 'linux'
+      },
+      'use_isolate': True,
+    },
     'Linux remote_run Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
