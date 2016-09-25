@@ -2166,7 +2166,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Blimp Client Android': {
+    'Blimp Android Client': {
       'android_config': 'main_builder_rel_mb',
       'bot_type': 'builder_tester',
       'chromium_config': 'android',

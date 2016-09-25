@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/Blimp_Client_Android",
+      "[BUILDER_CACHE]/Blimp_Android_Client",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -40,7 +40,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/Blimp_Client_Android",
+    "cwd": "[BUILDER_CACHE]/Blimp_Android_Client",
     "env": {
       "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -183,7 +183,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -199,13 +199,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Blimp_Client_Android/src",
+    "cwd": "[BUILDER_CACHE]/Blimp_Android_Client/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm64 test_isolation_mode=prepare use_goma=1",
-      "PATH": "[BUILDER_CACHE]/Blimp_Client_Android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Blimp_Client_Android/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[BUILDER_CACHE]/Blimp_Android_Client/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Blimp_Android_Client/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -213,16 +213,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/Blimp_Client_Android/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Blimp_Android_Client/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Blimp Client Android\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Blimp Android Client\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -235,14 +235,14 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src/testing/buildbot/chromium.fyi.json",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Blimp_Client_Android/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Blimp_Android_Client/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Blimp Client Android\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Blimp Android Client\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -272,10 +272,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src/out/Release/debug_info_dumps",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src/out/Release/test_logs",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src/out/build_product.zip",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src"
+      "[BUILDER_CACHE]/Blimp_Android_Client/src/out/Release/debug_info_dumps",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src/out/Release/test_logs",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src/out/build_product.zip",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -296,8 +296,8 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Blimp_Client_Android/src/build/tree_truth.sh",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src/build/tree_truth.sh",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src",
       "src"
     ],
     "name": "tree truth steps"
@@ -306,19 +306,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fyi",
       "-b",
-      "Blimp Client Android",
+      "Blimp Android Client",
       "--config-file",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/Blimp_Client_Android/src",
+    "cwd": "[BUILDER_CACHE]/Blimp_Android_Client/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -339,11 +339,11 @@
       "--target",
       "Release",
       "--src-dir",
-      "[BUILDER_CACHE]/Blimp_Client_Android/src",
+      "[BUILDER_CACHE]/Blimp_Android_Client/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "Blimp Client Android",
+      "Blimp Android Client",
       "--buildbot-mastername",
       "chromium.fyi",
       "--buildbot-slavename",
@@ -364,7 +364,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Blimp_Client_Android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Blimp_Client_Android/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Blimp_Android_Client/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Blimp_Android_Client/src/build/android:%(PATH)s"
     },
     "name": "compile",
     "~followup_annotations": [
