@@ -3,10 +3,20 @@
 # found in the LICENSE file.
 
 import os
-import types
+import re
 
 from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Dict, Single, Set
+
+
+# Regular expression to match branch versions.
+#
+# Examples:
+# - release-R54-8743.B
+# - stabilize-8743.B
+# - factory-gale-8743.19.B
+# - stabilize-8743.25.B
+_VERSION_RE = re.compile(r'^.*-(\d+)\.(\d+\.)?B$')
 
 
 def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
@@ -75,6 +85,9 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # https://chromium-review.googlesource.com/#/c/348011
       supports_repo_cache = Single(bool),
 
+      # If set, supply the "--git-cache-dir" option with this value.
+      git_cache_dir = Single(basestring),
+
       # If supplied, forward to cbuildbot as '--buildbucket-id'
       buildbucket_id = Single(basestring, empty_val=CBB_BUILDBUCKET_ID)
     ),
@@ -90,10 +103,20 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
     # A list of branches whose builders checkout Chrome from SVN instead of Git.
     chrome_svn_branches = Set(basestring),
 
+    # If "chromite_branch" includes a branch version, this will be set to the
+    # version value. Otherwise, this will be None.
+    #
+    # Set in "base".
+    branch_version = Single(int),
+
     # Directory where a warm repo cache is stored. If set, and if the current
     # build supports a warm cache, this will be used to bootstrap the Chromite
     # checkout.
-    repo_cache_dir = Single(basestring)
+    repo_cache_dir = Single(basestring),
+
+    # The branch version where the "--git-cache" flag was introduced.
+    # Set to a ToT build after R54 branch, "release-R54-8743.B".
+    git_cache_min_branch_version = Single(int, empty_val=8829),
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -125,6 +148,12 @@ def base(c):
     'factory-nyan-5772.B',
   ))
 
+  # Resolve branch version, if available.
+  assert c.chromite_branch, "A Chromite branch must be configured."
+  version = _VERSION_RE.match(c.chromite_branch)
+  if version:
+    c.branch_version = int(version.group(1))
+
   # If running on a testing slave, enable "--debug" so Chromite doesn't cause
   # actual production effects.
   if 'TESTING_MASTER_HOST' in os.environ:  # pragma: no cover
@@ -132,6 +161,15 @@ def base(c):
 
 
 @config_ctx(includes=['base'])
+def cros(c):
+  """Base configuration for CrOS builders to inherit from."""
+  # Enable Git cache on all ToT builds and release branches that support it.
+  if not (c.branch_version and
+          c.branch_version < c.git_cache_min_branch_version):
+    c.cbb.git_cache_dir = '/b/cros_git_cache'
+
+
+@config_ctx(includes=['cros'])
 def external(c):
   c.repositories['tryjob'].extend([
       'https://chromium.googlesource.com/chromiumos/tryjobs',

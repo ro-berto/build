@@ -107,8 +107,8 @@
       "master",
       "--buildnumber",
       "12345",
-      "--repo-cache",
-      "/var/cache/chrome-infra/ccompute-setup/cros-internal",
+      "--git-cache-dir",
+      "/b/cros_git_cache",
       "--master-build-id",
       "1337",
       "x86-generic-paladin"

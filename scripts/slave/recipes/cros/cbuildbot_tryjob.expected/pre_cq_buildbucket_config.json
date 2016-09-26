@@ -75,6 +75,8 @@
       "--clobber",
       "--buildbucket-id",
       "12345",
+      "--git-cache-dir",
+      "/b/cros_git_cache",
       "--timeout",
       "14400",
       "--remote-trybot",

@@ -82,6 +82,8 @@
       "[SLAVE_BUILD]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/internal_master",
+      "--git-cache-dir",
+      "/b/cros_git_cache",
       "--timeout",
       "14400",
       "--remote-trybot",

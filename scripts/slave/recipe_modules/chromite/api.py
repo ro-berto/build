@@ -418,7 +418,12 @@ class ChromiteApi(recipe_api.RecipeApi):
       cbb_args.extend(['--config_repo', self.c.cbb.config_repo])
     if self.c.cbb.buildbucket_id:
       cbb_args.extend(['--buildbucket-id', self.c.cbb.buildbucket_id])
-    if self.c.repo_cache_dir and self.c.cbb.supports_repo_cache:
+
+    # These flags are mutually exclusive.
+    # TODO(nxia): Remove "repo_cache" support after "git_cache" has rolled out.
+    if self.c.cbb.git_cache_dir:
+      cbb_args.extend(['--git-cache-dir', self.c.cbb.git_cache_dir])
+    elif self.c.repo_cache_dir and self.c.cbb.supports_repo_cache:
       cbb_args.extend(['--repo-cache', self.c.repo_cache_dir])
 
     # Set the build ID, if specified.

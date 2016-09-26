@@ -146,6 +146,38 @@ def GenTests(api):
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
+  yield (
+      api.test('release')
+      + api.properties(
+          mastername='chromiumos.tryserver',
+          buildername='paladin',
+          slavename='test',
+          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
+          revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-full',
+          cbb_branch='release-R55-9999.B',
+          cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
+                         '"--remote-version=4"]',
+      )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
+  )
+
+  yield (
+      api.test('pre_git_cache_release')
+      + api.properties(
+          mastername='chromiumos.tryserver',
+          buildername='paladin',
+          slavename='test',
+          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
+          revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-full',
+          cbb_branch='release-R54-8743.B',
+          cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
+                         '"--remote-version=4"]',
+      )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
+  )
+
   # Test a CrOS tryjob with compressed "cbb_extra_args".
   yield (
       api.test('basic_compressed')

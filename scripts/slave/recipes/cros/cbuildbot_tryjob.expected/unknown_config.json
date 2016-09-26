@@ -73,6 +73,8 @@
       "--buildroot",
       "[ROOT]/cbuild/etc_master",
       "--clobber",
+      "--git-cache-dir",
+      "/b/cros_git_cache",
       "--timeout",
       "14400",
       "--remote-trybot",

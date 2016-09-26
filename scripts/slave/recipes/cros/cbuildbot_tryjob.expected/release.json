@@ -15,7 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chromite@master:",
+      "chromite@release-R55-9999.B:",
       "--output_manifest"
     ],
     "env": {
@@ -27,7 +27,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chromite\": \"master:\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromite\": \"release-R55-9999.B:\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -43,10 +43,10 @@
     "cmd": [
       "git",
       "checkout",
-      "master"
+      "release-R55-9999.B"
     ],
     "cwd": "[SLAVE_BUILD]/chromite",
-    "name": "checkout chromite branch [master]"
+    "name": "checkout chromite branch [release-R55-9999.B]"
   },
   {
     "cmd": [
@@ -54,7 +54,7 @@
       "pull"
     ],
     "cwd": "[SLAVE_BUILD]/chromite",
-    "name": "sync chromite branch [master]"
+    "name": "sync chromite branch [release-R55-9999.B]"
   },
   {
     "cmd": [
