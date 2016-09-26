@@ -39,7 +39,7 @@ _TARGET_DEVICE_MAP = {
       },
     'angler': {
       'bitness': 64,
-      'make_jobs': 8,
+      'make_jobs': 4,
       'product': 'armv8',
       },
     }

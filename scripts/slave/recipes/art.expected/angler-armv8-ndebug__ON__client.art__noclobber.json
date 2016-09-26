@@ -157,7 +157,7 @@
   {
     "cmd": [
       "make",
-      "-j8",
+      "-j4",
       "test-art-target-gtest64"
     ],
     "env": {
@@ -295,7 +295,7 @@
   {
     "cmd": [
       "make",
-      "-j8",
+      "-j4",
       "test-art-target-run-test-optimizing",
       "dist"
     ],
@@ -435,7 +435,7 @@
   {
     "cmd": [
       "make",
-      "-j8",
+      "-j4",
       "test-art-target-run-test-interpreter",
       "dist"
     ],
@@ -574,7 +574,7 @@
   {
     "cmd": [
       "make",
-      "-j8",
+      "-j4",
       "test-art-target-run-test-jit",
       "dist"
     ],
