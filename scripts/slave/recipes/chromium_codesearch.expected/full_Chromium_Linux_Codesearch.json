@@ -258,7 +258,7 @@
       "ninja",
       "-C",
       "[SLAVE_BUILD]/src/out/Debug",
-      "All",
+      "all",
       "-t",
       "compdb",
       "cc",
@@ -321,7 +321,7 @@
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['ninja', '-C', Path('checkout', 'out','Debug'), 'All', '-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx', '-j', 50]",
+      "['ninja', '-C', Path('checkout', 'out','Debug'), 'all', '-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx', '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -404,7 +404,7 @@
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--",
-      "All"
+      "all"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

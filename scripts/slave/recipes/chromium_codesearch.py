@@ -64,7 +64,7 @@ SPEC = freeze({
   'builders': {
     'Chromium Linux Codesearch': {
       'compile_targets': [
-        'All',
+        'all',
       ],
       'environment': 'prod',
       'package_filename': 'chromium-src',
@@ -72,7 +72,7 @@ SPEC = freeze({
     },
     'ChromiumOS Codesearch': {
       'compile_targets': [
-        'All',
+        'all',
       ],
       'environment': 'prod',
       'package_filename': 'chromiumos-src',
@@ -80,7 +80,7 @@ SPEC = freeze({
     },
     'Chromium Linux Codesearch Builder': {
       'compile_targets': [
-        'All',
+        'all',
       ],
       'environment': 'staging',
       'package_filename': 'chromium-src',
@@ -88,7 +88,7 @@ SPEC = freeze({
     },
     'ChromiumOS Codesearch Builder': {
       'compile_targets': [
-        'All',
+        'all',
       ],
       'environment': 'staging',
       'package_filename': 'chromiumos-src',
