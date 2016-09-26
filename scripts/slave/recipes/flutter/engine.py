@@ -101,10 +101,11 @@ def BuildLinuxAndroidx86(api):
     folder = 'android-' + x86_variant
     UploadArtifacts(api, folder, [
       'build/android/ant/chromium-debug.keystore',
-      ('out/%s/gen/flutter/sky/shell/shell/shell/libs/%s/libsky_shell.so' %
-       (out_dir, abi)),
+      ('out/%s/gen/flutter/shell/platform/android/android/android/libs/%s/'
+       'libsky_shell.so' % (out_dir, abi)),
       'out/%s/icudtl.dat' % out_dir,
-      'out/%s/gen/flutter/sky/shell/shell/classes.dex.jar' % out_dir,
+      ('out/%s/gen/flutter/shell/platform/android/android/classes.dex.jar'
+       % out_dir),
     ])
     UploadArtifacts(api, folder, [
       'out/%s/libsky_shell.so' % out_dir
@@ -118,9 +119,10 @@ def AddPathPrefix(api, prefix, paths):
 def BuildLinuxAndroidArm(api):
   out_paths = [
     'flutter.jar',
-    'gen/flutter/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so',
+    ('gen/flutter/shell/platform/android/android/android/libs/armeabi-v7a/'
+     'libsky_shell.so'),
     'icudtl.dat',
-    'gen/flutter/sky/shell/shell/classes.dex.jar',
+    'gen/flutter/shell/platform/android/android/classes.dex.jar',
   ]
   RunGN(api, '--android')
   Build(api, 'android_debug')
@@ -174,8 +176,8 @@ def TestObservatory(api):
   checkout = api.path['slave_build'].join('src')
   sky_shell_path = checkout.join('out/host_debug_unopt/sky_shell')
   empty_main_path = \
-      checkout.join('flutter/sky/shell/testing/observatory/empty_main.dart')
-  test_path = checkout.join('flutter/sky/shell/testing/observatory/test.dart')
+      checkout.join('flutter/shell/testing/observatory/empty_main.dart')
+  test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
   test_cmd = ['dart', test_path, sky_shell_path, empty_main_path]
   api.step('test observatory and service protocol', test_cmd, cwd=checkout)
 
