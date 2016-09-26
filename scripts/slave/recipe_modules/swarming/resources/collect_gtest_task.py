@@ -94,12 +94,18 @@ def merge_shard_results(output_dir):
     merged[key] = sorted(merged[key])
   return merged
 
+OUTPUT_JSON_SIZE_LIMIT = 2e7
+
 
 def load_shard_json(output_dir, index):
   """Reads JSON output of a single shard."""
   # 'output.json' is set in swarming/api.py, gtest_task method.
   path = os.path.join(output_dir, str(index), 'output.json')
   try:
+    filesize = os.stat(path).st_size
+    if filesize > OUTPUT_JSON_SIZE_LIMIT:
+      raise ValueError()
+
     with open(path) as f:
       return json.load(f)
   except (IOError, ValueError):
