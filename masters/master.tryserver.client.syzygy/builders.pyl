@@ -30,7 +30,21 @@
       "slave_pools": ["win7"],
       "trybot": True,
     },
-    "win_official_try": {
+    "win_x64_dbg_try": {
+      "category": "trybots",
+      "recipe": "syzygy/continuous",
+      "scheduler": None,
+      "slave_pools": ["win7"],
+      "trybot": True,
+    },
+    "win_x64_rel_try": {
+      "category": "trybots",
+      "recipe": "syzygy/continuous",
+      "scheduler": None,
+      "slave_pools": ["win7"],
+      "trybot": True,
+    },
+   "win_official_try": {
       "category": "trybots",
       "recipe": "syzygy/continuous",
       "scheduler": None,
