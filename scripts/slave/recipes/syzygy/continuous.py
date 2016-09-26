@@ -39,6 +39,8 @@ BUILDERS = freeze({
   'win_dbg_try': ('syzygy', {'BUILD_CONFIG': 'Debug'}),
   'win_rel_try': ('syzygy', {'BUILD_CONFIG': 'Release'}),
   'win_official_try': ('syzygy_official', {}),
+  'win_x64_dbg_try': ('syzygy_x64', {'BUILD_CONFIG': 'Debug'}),
+  'win_x64_rel_try': ('syzygy_x64', {'BUILD_CONFIG': 'Release'}),
   'win8_rel_try': ('syzygy', {'BUILD_CONFIG': 'Release'}),
 })
 
@@ -62,6 +64,7 @@ def RunSteps(api, buildername, blamelist, revision):
   s.set_config(config, **kwargs)
   api.chromium.set_config(config, **kwargs)
   api.gclient.set_config(config, **kwargs)
+  is_x64_build = 'x64' in buildername
 
   # Clean up any running processes on the slave.
   s.taskkill()
@@ -73,7 +76,11 @@ def RunSteps(api, buildername, blamelist, revision):
 
   # Load and run the unittests.
   s.clobber_metrics()
-  unittests = s.read_unittests_gypi()
+  if is_x64_build:
+    unittests = ['syzyasan_rtl_unittests']
+  else:
+    unittests = s.read_unittests_gypi()
+
   s.run_unittests(unittests)
   s.archive_metrics()
 

@@ -24,7 +24,7 @@ config_ctx = config_item_context(BaseConfig)
 
 
 @config_ctx(is_root=True)
-def BASE(c):
+def BASE(dummy_c):
   pass
 
 
@@ -33,6 +33,11 @@ def syzygy(c):
   c.official_build = False
   c.unittests_gypi = c.CHECKOUT_PATH.join('syzygy', 'unittests.gypi')
   c.version_file = c.CHECKOUT_PATH.join('syzygy', 'SYZYGY_VERSION')
+
+
+@config_ctx(includes=['syzygy'])
+def syzygy_x64(dummy_c):
+  pass
 
 
 @config_ctx()

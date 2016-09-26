@@ -28,6 +28,10 @@ def syzygy(c):
   s.managed = False
 
 @CONFIG_CTX(includes=['syzygy'])
+def syzygy_x64(dummy_c):
+  pass
+
+@CONFIG_CTX(includes=['syzygy'])
 def syzygy_official(dummy_c):
   pass
 

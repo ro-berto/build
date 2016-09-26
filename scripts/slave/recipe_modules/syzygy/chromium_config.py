@@ -30,6 +30,16 @@ def syzygy(c):
   c.compile_py.default_targets.add('build_all')
 
 
+@CONFIG_CTX(includes=['_syzygy'],
+            config_vars={'TARGET_BITS': 64,
+                         'HOST_BITS': 64})
+def syzygy_x64(c):
+  assert 'official_build' not in c.gyp_env.GYP_DEFINES
+  c.compile_py.default_targets.clear()
+  # TODO(sebmarchand): Add a 'build_all_x64' config to Syzygy.
+  c.compile_py.default_targets.add('syzyasan_rtl_unittests')
+
+
 @CONFIG_CTX(includes=['_syzygy', 'clobber'],
             config_vars={'BUILD_CONFIG': 'Release'})
 def syzygy_official(c):
