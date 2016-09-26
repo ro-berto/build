@@ -60,9 +60,9 @@ _AddTestSpec('Android Galaxy S5 Perf (1)', 'fyi-android-galaxy-s5', 'android',
              target_bits=32)
 
 
-_AddBuildSpec('Win Builder', 'win', 'win', enable_swarming=True)
+_AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True)
 _AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win-10-low-end', 'win',
-                     parent_buildername='Win Builder')
+                     parent_buildername='Win Builder FYI')
 _AddTestSpec('Win 7 Intel GPU Perf (Xeon)', 'chromium-rel-win7-gpu-intel',
              'win')
 _AddTestSpec('Win Power High-DPI Perf', 'win-power-high-dpi', 'win')
