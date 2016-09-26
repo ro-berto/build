@@ -378,7 +378,8 @@
       "stepname:telemetry_gpu_unittests on NVIDIA GPU on Linux on Linux",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

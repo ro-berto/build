@@ -383,7 +383,8 @@
       "stepname:telemetry_gpu_unittests on Windows",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"

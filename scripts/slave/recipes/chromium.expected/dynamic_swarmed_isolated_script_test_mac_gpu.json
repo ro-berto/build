@@ -387,7 +387,8 @@
       "stepname:telemetry_gpu_unittests on Intel GPU on Mac on Mac-10.10",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -472,7 +473,8 @@
       "stepname:telemetry_gpu_unittests on NVIDIA GPU on Mac Retina on Mac-10.9",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
