@@ -37,3 +37,4 @@ per-file ct_top1k_perf.py=rmistry@chromium.org
 per-file client.fletch.recipe_autogen.py=whesse@chromium.org
 per-file client.fletch.recipe_autogen.py=aneeshm@chromium.org
 per-file devtools.py=chenwilliam@chromium.org
+per-file chromium_codesearch.py=emso@chromium.org
