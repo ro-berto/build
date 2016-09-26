@@ -61,11 +61,6 @@ PATCH=1
     return self.m.path['checkout'].join('out')
 
   @property
-  def output_dir(self):
-    """Returns the configuration-specific output directory for the project."""
-    return self.build_dir.join(self.m.chromium.c.BUILD_CONFIG)
-
-  @property
   def public_scripts_dir(self):
     """Returns the public Syzygy build scripts directory."""
     return self.m.path['checkout'].join('syzygy', 'build')
@@ -193,7 +188,7 @@ PATCH=1
 
     # Generate a test step for each unittest.
     for unittest in unittests:
-      unittest_path = self.output_dir.join(unittest + '.exe')
+      unittest_path = self.m.chromium.output_dir.join(unittest + '.exe')
       args = ['--single-process-tests',  # Our VMs are single core.
               '--test-launcher-timeout=300000',  # 5 minutes in milliseconds.
               '--gtest_print_time']
@@ -228,7 +223,7 @@ PATCH=1
         'generate_coverage.py')
     args = ['--verbose',
             '--syzygy',
-            '--build-dir', self.output_dir]
+            '--build-dir', self.m.chromium.output_dir]
     return self.m.python(
         'capture_unittest_coverage', generate_coverage_py, args)
 
@@ -238,7 +233,7 @@ PATCH=1
     Only meant to be called from the 'Coverage' configuration.
     """
     assert self.m.chromium.c.BUILD_CONFIG == 'Coverage'
-    cov_dir = self.output_dir.join('cov')
+    cov_dir = self.m.chromium.output_dir.join('cov')
     archive_path = 'builds/coverage/%s' % self.revision
     if self.m.properties['slavename'] == 'fake_slave':
       archive_path = 'test/' + archive_path
@@ -254,7 +249,7 @@ PATCH=1
     Only meant to be called from an official build.
     """
     assert self.m.chromium.c.BUILD_CONFIG == 'Release' and self.c.official_build
-    bin_dir = self.output_dir.join('archive')
+    bin_dir = self.m.chromium.output_dir.join('archive')
     archive_path = 'builds/official/%s' % self.revision
     if self.m.properties['slavename'] == 'fake_slave':
       archive_path = 'test/' + archive_path
@@ -274,8 +269,8 @@ PATCH=1
     assert self.m.chromium.c.BUILD_CONFIG == 'Release' and self.c.official_build
     archive_symbols_py = self.m.path['checkout'].join(
         'syzygy', 'internal', 'scripts', 'archive_symbols.py')
-    asan_rtl_dll = self.output_dir.join('*asan_rtl.dll')
-    client_dlls = self.output_dir.join('*client.dll')
+    asan_rtl_dll = self.m.chromium.output_dir.join('*asan_rtl.dll')
+    client_dlls = self.m.chromium.output_dir.join('*client.dll')
     args = ['-s', '-b', asan_rtl_dll, client_dlls]
     return self.m.python('upload_symbols', archive_symbols_py, args)
 
@@ -287,14 +282,14 @@ PATCH=1
     assert self.m.chromium.c.BUILD_CONFIG == 'Release' and self.c.official_build
     archive_symbols_py = self.m.path['checkout'].join(
         'syzygy', 'internal', 'scripts', 'archive_symbols.py')
-    kasko_dll = self.output_dir.join('*kasko.dll')
+    kasko_dll = self.m.chromium.output_dir.join('*kasko.dll')
     args = ['-s', '-b', kasko_dll]
     return self.m.python('upload_symbols', archive_symbols_py, args)
 
   def clobber_metrics(self):
     """Returns a step that clobbers an existing metrics file."""
     # TODO(chrisha): Make this whole thing use the JSON output mechanism.
-    return self.m.file.rmwildcard('metrics.csv', self.output_dir)
+    return self.m.file.rmwildcard('metrics.csv', self.m.chromium.output_dir)
 
   def archive_metrics(self):
     """Returns a step that archives any metrics collected by the unittests.
@@ -306,7 +301,8 @@ PATCH=1
       config = 'Official'
     archive_path = 'builds/metrics/%s/%s.csv' % (self.revision, config.lower())
     step = self._gen_step_gs_util_cp(
-        'archive_metrics', self.output_dir.join('metrics.csv'), archive_path)
+        'archive_metrics', self.m.chromium.output_dir.join('metrics.csv'),
+                                                           archive_path)
     url = '%s/index.html?path=%s/' % (
         self._SYZYGY_ARCHIVE_URL, archive_path)
     step.presentation.links['archive'] = url
