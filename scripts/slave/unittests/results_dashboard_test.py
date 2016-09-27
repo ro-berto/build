@@ -42,6 +42,12 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     self.mox.UnsetStubs()
 
   def test_MakeDashboardJsonV1(self):
+    self.internal_Test_MakeDashboardJsonV1()
+
+  def test_MakeDashboardJsonV1WithDisabledBenchmark(self):
+    self.internal_Test_MakeDashboardJsonV1(False)
+
+  def internal_Test_MakeDashboardJsonV1(self, enabled=True):
     self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
     slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
     self.mox.StubOutWithMock(results_dashboard, '_GetTimestamp')
@@ -51,7 +57,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     self.mox.ReplayAll()
 
     v1json = results_dashboard.MakeDashboardJsonV1(
-        {'some_json': 'from_telemetry'},
+        {'some_json': 'from_telemetry', 'enabled': enabled},
         {
             'rev': 'f46bf3c',
              'git_revision': 'f46bf3c',
@@ -68,7 +74,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
         {
             'master': 'ChromiumPerf',
             'bot': 'my-bot',
-            'chart_data': {'some_json': 'from_telemetry'},
+            'chart_data': {'some_json': 'from_telemetry', 'enabled': enabled},
             'is_ref': True,
             'test_suite_name': 'foo_test',
             'point_id': 307226,

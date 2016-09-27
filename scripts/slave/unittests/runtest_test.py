@@ -170,13 +170,15 @@ class SendResultsToDashboardTest(unittest.TestCase):
     """Tests that the right methods get called in _SendResultsToDashboard."""
     # Since this method just tests that certain methods get called when
     # a call to _SendResultsDashboard is made, the data used below is arbitrary.
-    fake_json_data = {'chart': {'traces': {'x': [1, 0]}, 'rev': 1000}}
+    fake_json_data = {
+        'chart': {'traces': {'x': [1, 0]}, 'rev': 1000}, 'enabled': True}
     fake_results_tracker = mock.Mock()
     fake_results_tracker.IsChartJson = mock.MagicMock(return_value=True)
     fake_results_tracker.ChartJson = mock.MagicMock(return_value=fake_json_data)
     fake_results_tracker.IsReferenceBuild = mock.MagicMock(return_value=False)
     fake_results_tracker.Cleanup = mock.MagicMock()
-    MakeDashboardJsonV1.return_value = {'doesnt': 'matter'}
+    fake_results = {'doesnt': 'matter', 'chart_data': {'enabled': True}}
+    MakeDashboardJsonV1.return_value = fake_results
 
     result = runtest._SendResultsToDashboard(
         fake_results_tracker, {
@@ -197,10 +199,50 @@ class SendResultsToDashboardTest(unittest.TestCase):
 
     # Then a function is called to send the data (and any cached data).
     SendResults.assert_called_with(
-        {'doesnt': 'matter'}, 'http://x.com', 'builddir')
+        fake_results, 'http://x.com', 'builddir')
     fake_results_tracker.Cleanup.assert_called_with()
 
     # No errors, should return True.
+    self.assertTrue(result)
+
+  @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
+  @mock.patch('slave.results_dashboard.SendResults')
+  def test_SendResultsToDashboard_DisabledBenchmark(
+      self, SendResults, MakeDashboardJsonV1):
+    """Tests that the right methods get called in _SendResultsToDashboard."""
+    # Since this method just tests that certain methods get called when
+    # a call to _SendResultsDashboard is made, the data used below is arbitrary.
+    fake_json_data = {'chart': {'traces': {'x': [1, 0]}, 'rev': 1000},
+        'enabled': True}
+    fake_results_tracker = mock.Mock()
+    fake_results_tracker.IsChartJson = mock.MagicMock(return_value=True)
+    fake_results_tracker.ChartJson = mock.MagicMock(return_value=fake_json_data)
+    fake_results_tracker.IsReferenceBuild = mock.MagicMock(return_value=False)
+    fake_results_tracker.Cleanup = mock.MagicMock()
+    fake_results = {'doesnt': 'matter', 'chart_data': {'enabled': False}}
+    MakeDashboardJsonV1.return_value = fake_results
+
+    result = runtest._SendResultsToDashboard(
+        fake_results_tracker, {
+            'system': 'linux',
+            'test': 'sunspider',
+            'url': 'http://x.com',
+            'build_dir': 'builddir',
+            'mastername': 'my.master',
+            'buildername': 'Builder',
+            'buildnumber': 123,
+            'revisions': {'rev': 343},
+            'supplemental_columns': {}})
+
+    # Then the data is re-formatted to a format that the dashboard accepts.
+    MakeDashboardJsonV1.assert_called_with(
+        fake_json_data, {'rev': 343}, 'sunspider', 'linux',
+        'Builder', 123, {}, False)
+
+    # Make sure SendResults isn't called because the benchmarks is disabled
+    self.assertFalse(SendResults.called)
+
+    # No errors, should return True since disabled run is successful.
     self.assertTrue(result)
 
   @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')

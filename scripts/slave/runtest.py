@@ -677,9 +677,9 @@ def _WriteChartJsonToOutput(chartjson_file, log_processor, args):
   assert log_processor.IsChartJson()
 
   chartjson_data = _GenerateDashboardJson(log_processor, args)
-
-  with open(chartjson_file, 'w') as f:
-    json.dump(chartjson_data, f)
+  if chartjson_data:
+    with open(chartjson_file, 'w') as f:
+      json.dump(chartjson_data, f)
 
 
 def _SendResultsToDashboard(log_processor, args):
@@ -705,6 +705,8 @@ def _SendResultsToDashboard(log_processor, args):
       print 'Error: No json output from telemetry.'
       print '@@@STEP_FAILURE@@@'
     log_processor.Cleanup()
+    if results and not results['chart_data'].get('enabled', True):
+      return True # A successful run, but the benchmark was disabled.
   else:
     charts = _GetDataFromLogProcessor(log_processor)
     results = results_dashboard.MakeListOfPoints(
