@@ -120,15 +120,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/download_android_tools.py"
-    ],
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
-    },
-    "name": "download android tools"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/src/flutter/tools/gn",
       "--runtime-mode",
       "debug",
