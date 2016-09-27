@@ -12,12 +12,6 @@
       "{}",
       "--git-cache-dir",
       "[GIT_CACHE]",
-      "--issue",
-      "12853011",
-      "--patchset",
-      "1",
-      "--rietveld_server",
-      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -66,7 +60,7 @@
       "--root=[SLAVE_BUILD]/pdfium",
       "gen",
       "//out/debug_xfa_v8_asan",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_is_standalone=true use_sysroot=false is_asan=true"
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_is_standalone=true use_sysroot=false is_asan=true is_lsan=true"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "gn gen"
@@ -85,7 +79,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=0:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
     },
     "name": "unittests"
   },
@@ -95,7 +89,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=0:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
     },
     "name": "embeddertests"
   },
@@ -109,7 +103,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=0:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
     },
     "name": "javascript tests"
   },
@@ -123,7 +117,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=0:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
     },
     "name": "pixel tests"
   },
@@ -137,7 +131,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=0:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
     },
     "name": "corpus tests"
   },

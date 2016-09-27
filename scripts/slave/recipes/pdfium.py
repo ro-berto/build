@@ -75,7 +75,7 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
   if clang:
     args.append('is_clang=true')
   if memory_tool == 'asan':
-    args.append('is_asan=true')
+    args.append('is_asan=true is_lsan=true')
   if target_os:
     args.append('target_os="%s"' % target_os)
   if target_cpu == 'x86':
@@ -122,9 +122,8 @@ def _RunTests(api, memory_tool, v8, out_dir):
 
   env = {}
   if memory_tool == 'asan':
-    # TODO(ochang): Once PDFium is less leaky, remove the detect_leaks flag.
     env.update({
-        'ASAN_OPTIONS': 'detect_leaks=0:allocator_may_return_null=1'})
+        'ASAN_OPTIONS': 'detect_leaks=1:allocator_may_return_null=1'})
 
   unittests_path = str(api.path['checkout'].join('out', out_dir,
                                                  'pdfium_unittests'))
@@ -347,11 +346,11 @@ def GenTests(api):
   )
 
   yield (
-      api.test('linux_asan') +
+      api.test('linux_asan_lsan') +
       api.platform('linux', 64) +
       api.properties(memory_tool='asan',
                      mastername="client.pdfium",
-                     buildername='linux_asan',
+                     buildername='linux_asan_lsan',
                      slavename="test_slave")
   )
 
@@ -367,22 +366,22 @@ def GenTests(api):
   )
 
   yield (
-      api.test('linux_xfa_asan') +
+      api.test('linux_xfa_asan_lsan') +
       api.platform('linux', 64) +
       api.properties(xfa=True,
                      memory_tool='asan',
                      mastername="client.pdfium",
-                     buildername='linux_xfa_asan',
+                     buildername='linux_xfa_asan_lsan',
                      slavename="test_slave")
   )
 
   yield (
-       api.test('try-linux_xfa_asan') +
+       api.test('try-linux_xfa_asan_lsan') +
        api.platform('linux', 64) +
        api.properties.tryserver(xfa=True,
                                 memory_tool='asan',
                                 mastername='tryserver.client.pdfium',
-                                buildername='linux_xfa_asan')
+                                buildername='linux_xfa_asan_lsan')
   )
 
   yield (

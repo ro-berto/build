@@ -34,7 +34,7 @@
       "slave_pools": ["linux_trusty"],
       "category": "0main",
     },
-    "linux_asan": {
+    "linux_asan_lsan": {
       "recipe": "pdfium",
       "scheduler": "pdfium_commits",
       "slave_pools": ["linux_trusty"],
@@ -61,7 +61,7 @@
         "xfa": True,
       },
     },
-    "linux_xfa_asan": {
+    "linux_xfa_asan_lsan": {
       "recipe": "pdfium",
       "scheduler": "pdfium_commits",
       "slave_pools": ["linux_trusty"],
