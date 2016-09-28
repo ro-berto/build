@@ -106,11 +106,13 @@ def load_shard_json(output_dir, index):
   try:
     filesize = os.stat(path).st_size
     if filesize > OUTPUT_JSON_SIZE_LIMIT:
-      raise ValueError()
+      print >> sys.stderr, 'output.json is %d bytes. Max size is %d' % (
+           filesize, OUTPUT_JSON_SIZE_LIMIT)
+      return None
 
     with open(path) as f:
       return json.load(f)
-  except (IOError, ValueError):
+  except (IOError, ValueError, OSError):
     print >> sys.stderr, 'Missing or invalid gtest JSON file: %s' % path
     return None
 
