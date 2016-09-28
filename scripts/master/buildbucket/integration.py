@@ -228,9 +228,6 @@ class BuildBucketIntegrator(object):
       builder_name = params.get('builder_name')
       if not builder_name:
         raise ValueError('builder_name parameter is not set')
-      builder = self.buildbot.get_builders().get(builder_name)
-      if builder is None:
-        raise ValueError('Builder %s not found' % builder_name)
 
       properties = params.get('properties')
       if properties is not None and not isinstance(properties, dict):
@@ -247,10 +244,22 @@ class BuildBucketIntegrator(object):
               raise ValueError(
                   'A change is invalid: %s\nChange:%s' % (ex, change))
 
+    def validate_builder(params):
+      """Validate the builder_name.
+
+      The build_params_hook may overwrite the builder_name. Validate
+      the builder_name after it's processed by build_params_hook.
+      """
+      builder_name = params.get('builder_name')
+      builder = self.buildbot.get_builders().get(builder_name)
+      if builder is None:
+        raise ValueError('Builder %s not found' % builder_name)
+
     validate_inner(params)
     if callable(self.build_params_hook):
       self.build_params_hook(params, build.copy())
       validate_inner(params)
+    validate_builder(params)
     return params
 
   def _check_error(self, res):
