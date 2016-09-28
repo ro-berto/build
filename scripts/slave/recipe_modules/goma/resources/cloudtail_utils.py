@@ -20,7 +20,10 @@ def start_cloudtail(args):
                            'tail',
                            '--log-id', 'goma_compiler_proxy',
                            '--path',
-                           goma_utils.GetLatestGomaCompilerProxyInfo()])
+                           goma_utils.GetLatestGomaCompilerProxyInfo()],
+                          stdout=open(os.devnull, 'w'),
+                          stderr=open(os.devnull, 'w'),
+                          close_fds=True)
 
   sys.stdout.write(str(proc.pid))
 
