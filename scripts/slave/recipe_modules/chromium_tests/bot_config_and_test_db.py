@@ -62,18 +62,26 @@ class BotConfig(object):
     test_spec_file = self.get('testing', {}).get(
         'test_spec_file', '%s.json' % mastername)
 
-    # TODO(phajdan.jr): Bots should have no generators instead.
+    # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
       return {}
     return chromium_tests_api.read_test_spec(chromium_tests_api.m, test_spec_file)
 
   def initialize_bot_db(self, chromium_tests_api, bot_db, bot_update_step):
-    # TODO(phajdan.jr): Bots should have no generators instead.
+    # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
       scripts_compile_targets = {}
     else:
       scripts_compile_targets = \
           chromium_tests_api.get_compile_targets_for_scripts().json.output
+
+    test_generators = [
+      chromium_tests_api.steps.generate_gtest,
+      chromium_tests_api.steps.generate_instrumentation_test,
+      chromium_tests_api.steps.generate_junit_test,
+      chromium_tests_api.steps.generate_script,
+      chromium_tests_api.steps.generate_isolated_script,
+    ]
 
     masternames = set(bot_id['mastername'] for bot_id in self._bot_ids)
     for mastername in sorted(self._bots_dict):
@@ -98,7 +106,7 @@ class BotConfig(object):
                   self.get('enable_swarming', False),
                   builder_dict.get('swarming_dimensions', {}),
                   scripts_compile_targets,
-                  builder_dict.get('test_generators', []),
+                  test_generators,
                   bot_update_step
               ))
       else:

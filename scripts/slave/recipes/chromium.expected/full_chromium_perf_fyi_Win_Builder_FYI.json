@@ -277,6 +277,17 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
+      "--build-dir",
+      "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\out\\Release_x64",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
@@ -287,13 +298,19 @@
       "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
+      "--swarming-targets-file",
+      "browser_tests\n",
       "//out/Release_x64"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_Builder_FYI\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
   },
   {
     "cmd": [
@@ -334,6 +351,8 @@
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "--",
+      "browser_tests",
+      "browser_tests_run",
       "chrome",
       "chromium_builder_perf"
     ],
@@ -344,6 +363,39 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\tools\\determinism\\remove_build_metadata.py",
+      "--build-dir",
+      "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\out\\Release_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
+      "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\tools\\swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\out\\Release_x64\\browser_tests.isolated.gen.json"
+    ],
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

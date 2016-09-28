@@ -90,12 +90,6 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
 
   spec['parent_buildername'] = parent_builder
 
-  spec['test_generators'] = [
-    steps.generate_gtest,
-    steps.generate_script,
-    steps.generate_isolated_script,
-  ]
-
   if platform == 'android':
     spec['root_devices'] = True
     spec['tests'] = [

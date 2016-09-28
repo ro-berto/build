@@ -46,11 +46,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
       'testing': {
@@ -69,11 +64,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
       'testing': {
@@ -91,11 +81,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
       'testing': {
@@ -133,11 +118,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',
       'testing': {

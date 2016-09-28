@@ -234,7 +234,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                           bot_update_step, enable_swarming=enable_swarming,
                           swarming_dimensions=swarming_dimensions,
                           scripts_compile_targets=scripts_compile_targets)) +
-          tests)
+          tuple(tests))
     return tests
 
   def read_test_spec(self, api, test_spec_file):

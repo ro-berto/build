@@ -95,11 +95,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux ChromiumOS Builder',
       'testing': {
         'platform': 'linux',
@@ -134,11 +129,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux ChromiumOS Ozone Builder',
       'testing': {
         'platform': 'linux',
@@ -174,11 +164,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
       'testing': {
         'platform': 'linux',

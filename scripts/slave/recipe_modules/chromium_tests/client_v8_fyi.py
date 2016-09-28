@@ -102,11 +102,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux Debug Builder',
       'testing': {
         'platform': 'linux',
@@ -147,11 +142,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux ASAN Builder',
       'testing': {
         'platform': 'linux',

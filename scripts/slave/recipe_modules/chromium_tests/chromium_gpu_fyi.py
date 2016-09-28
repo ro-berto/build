@@ -73,11 +73,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
@@ -94,11 +89,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder (dbg)',
       'testing': {
         'platform': 'win',
@@ -115,11 +105,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
@@ -136,11 +121,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder (dbg)',
       'testing': {
         'platform': 'win',
@@ -157,11 +137,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
@@ -178,11 +153,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder (dbg)',
       'testing': {
         'platform': 'win',
@@ -199,11 +169,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
@@ -221,11 +186,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
@@ -243,11 +203,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder (dbg)',
       'testing': {
         'platform': 'win',
@@ -265,11 +220,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
@@ -338,11 +288,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win x64 Builder',
       'testing': {
         'platform': 'win',
@@ -359,11 +304,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win x64 Builder (dbg)',
       'testing': {
         'platform': 'win',
@@ -455,11 +395,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Linux Builder',
       'testing': {
         'platform': 'linux',
@@ -476,11 +411,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Linux Builder',
       'testing': {
         'platform': 'linux',
@@ -499,11 +429,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Linux Builder',
       'testing': {
         'platform': 'linux',
@@ -521,11 +446,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Linux Builder (dbg)',
       'testing': {
         'platform': 'linux',
@@ -542,11 +462,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Linux Builder',
       'testing': {
         'platform': 'linux',
@@ -565,11 +480,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Linux Builder (dbg)',
       'testing': {
         'platform': 'linux',
@@ -588,11 +498,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Linux Builder',
       'testing': {
         'platform': 'linux',
@@ -656,11 +561,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder',
       'testing': {
@@ -677,11 +577,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder (dbg)',
       'testing': {
@@ -698,11 +593,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder',
       'testing': {
@@ -721,11 +611,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder (dbg)',
       'testing': {
@@ -744,11 +629,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder',
       'testing': {
@@ -765,11 +645,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder (dbg)',
       'testing': {
@@ -786,11 +661,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder',
       'testing': {
@@ -807,11 +677,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder (dbg)',
       'testing': {
@@ -828,11 +693,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder',
       'testing': {
@@ -852,11 +712,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'mac',
@@ -878,11 +733,6 @@ SPEC = {
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_isolated_script,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -900,11 +750,6 @@ SPEC = {
       'android_config': 'arm64_builder_rel_mb',
       'bot_type': 'builder_tester',
       'compile_targets': [
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_isolated_script,
-        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -927,11 +772,6 @@ SPEC = {
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_isolated_script,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -949,11 +789,6 @@ SPEC = {
       'android_config': 'arm64_builder_rel_mb',
       'bot_type': 'builder_tester',
       'compile_targets': [
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_isolated_script,
-        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -973,11 +808,6 @@ SPEC = {
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_isolated_script,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -995,11 +825,6 @@ SPEC = {
       'android_config': 'arm64_builder_rel_mb',
       'bot_type': 'builder_tester',
       'compile_targets': [
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_isolated_script,
-        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -1035,11 +860,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Fake Linux Builder',
       'testing': {
         'platform': 'linux',
@@ -1060,11 +880,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
@@ -1080,11 +895,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
@@ -1100,11 +910,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'GPU Linux Builder',
       'testing': {
         'platform': 'linux',
@@ -1119,11 +924,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder',
       'testing': {
@@ -1139,11 +939,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder',
       'testing': {
@@ -1159,11 +954,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'GPU Mac Builder',
       'testing': {

@@ -145,19 +145,6 @@ Add it to the JSON test spec. Example ([`src/testing/buildbot/chromium.linux.jso
       ]
     }
 
-Note that this relies on gtest generator in the bot configuration in the
-`chromium_tests` module. For example, given the file [`scripts/slave/recipe_modules/chromium_tests/chromium_linux.py`](https://code.google.com/p/chromium/codesearch#chromium/build/scripts/slave/recipe_modules/chromium_tests/chromium_linux.py)
-, you would need:
-
-    'Linux Builder': {
-      ...
-      'test_generators': [
-        steps.generate_gtest,
-        ...
-      ],
-      ...
-    },
-
 Changes to the JSON file can be tested on the trybots, and you can verify that
 they take effect and build still passes.
 

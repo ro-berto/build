@@ -48,11 +48,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'checkout_dir': 'mac',
       'testing': {
         'platform': 'mac',
@@ -66,10 +61,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -82,10 +73,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -105,11 +92,6 @@ SPEC = {
       },
       'archive_build': True,
       'gs_bucket': 'chromium-fyi-archive',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'use_isolate': True,
       'enable_swarming': True,
       'swarming_dimensions': {
@@ -148,10 +130,6 @@ SPEC = {
       'compile_targets': [
         'blink_tests',
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-      ],
       'tests': [
         steps.BlinkTest(extra_args=[
           '--additional-driver-flag=--enable-slimming-paint-v2',
@@ -174,10 +152,6 @@ SPEC = {
       'compile_targets': [
         'blink_tests',
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-      ],
       'tests': [
         steps.BlinkTest(extra_args=[
           '--enable-wptserve',
@@ -199,10 +173,6 @@ SPEC = {
       },
       'compile_targets': [
         'blink_tests',
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
       ],
       'tests': [
         steps.BlinkTest(extra_args=[
@@ -227,10 +197,6 @@ SPEC = {
       'compile_targets': [
         'blink_tests',
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-      ],
       'tests': [
         steps.BlinkTest(extra_args=[
           '--enable-wptserve',
@@ -252,10 +218,6 @@ SPEC = {
       },
       'compile_targets': [
         'blink_tests',
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
       ],
       'tests': [
         steps.BlinkTest(extra_args=[
@@ -334,11 +296,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -352,11 +309,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -370,11 +322,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -405,11 +352,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -438,11 +380,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -456,11 +393,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -477,11 +409,6 @@ SPEC = {
       'GYP_DEFINES': {
         'use_openssl': '1',
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -511,11 +438,6 @@ SPEC = {
           '--options',
           'http/tests',
         ]),
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
       ],
       'checkout_dir': 'linux',
       'testing': {
@@ -549,11 +471,6 @@ SPEC = {
           'src\\third_party\\WebKit\\LayoutTests\\FlagExpectations\\site-per-process',
         ]),
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -575,11 +492,6 @@ SPEC = {
       ],
       'tests': [
         steps.BlinkTest(["--additional-driver-flag=--enable-browser-side-navigation"]),
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -617,9 +529,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang',
       'testing': {
@@ -657,9 +566,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang(dbg)',
       'testing': {
@@ -696,9 +602,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang(shared)',
       'testing': {
@@ -736,9 +639,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang64',
       'testing': {
@@ -776,9 +676,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang64(dbg)',
       'testing': {
@@ -815,9 +712,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang64(dll)',
       'testing': {
@@ -854,9 +748,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClangLLD',
       'testing': {
@@ -893,9 +784,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClngLLDdbg',
       'testing': {
@@ -932,9 +820,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClangLLD64',
       'testing': {
@@ -971,9 +856,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClngLLD64dbg',
       'testing': {
@@ -1006,9 +888,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinAsan',
       'testing': {
@@ -1042,9 +921,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinAsan(dll)',
       'testing': {
@@ -1077,9 +953,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinAsanCov',
       'testing': {
@@ -1358,11 +1231,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinux',
       'testing': {
@@ -1422,11 +1290,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'chromium_apply_config': ['lsan'],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinuxASan',
       'testing': { 'platform': 'linux', },
@@ -1458,11 +1321,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinuxLLD',
       'testing': { 'platform': 'linux', },
@@ -1497,11 +1355,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinuxUBSanVptr',
       'testing': { 'platform': 'linux', },
@@ -1531,10 +1384,6 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
       'root_devices': True,
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_junit_test,
-      ],
     },
     'ClangToTAndroid (dbg)': {
       'chromium_config': 'clang_tot_android_dbg',
@@ -1592,11 +1441,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTMac',
       'testing': {
@@ -1655,11 +1499,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTMacASan',
       'testing': { 'platform': 'mac', },
@@ -1693,7 +1532,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin',
       'testing': { 'platform': 'win' },
@@ -1726,7 +1564,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
-      'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin(dbg)',
       'testing': { 'platform': 'win' },
@@ -1760,7 +1597,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin(dll)',
       'testing': { 'platform': 'win' },
@@ -1794,7 +1630,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin64',
       'testing': { 'platform': 'win' },
@@ -1827,7 +1662,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin64(dbg)',
       'testing': { 'platform': 'win' },
@@ -1861,7 +1695,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin64(dll)',
       'testing': { 'platform': 'win' },
@@ -1895,11 +1728,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Win Builder (ANGLE)',
       'testing': {
         'platform': 'win',
@@ -1918,9 +1746,6 @@ SPEC = {
         'TARGET_PLATFORM': 'linux',
       },
       'bot_type': 'builder_tester',
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -1961,11 +1786,6 @@ SPEC = {
       'root_devices': True,
       'tests': [
         steps.GTestTest('gfx_unittests'),
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -2037,12 +1857,6 @@ SPEC = {
         steps.AndroidInstrumentationTest('ContentShellTest', tool='asan'),
         steps.AndroidInstrumentationTest('ChromeSyncShellTest', tool='asan'),
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -2058,11 +1872,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -2089,11 +1898,6 @@ SPEC = {
         steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
         steps.IncrementalCoverageTest(),
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -2109,13 +1913,6 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
       'android_config': 'x86_builder_mb',
-      'tests': [],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-        steps.generate_instrumentation_test,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -2156,12 +1953,6 @@ SPEC = {
       'parent_buildername': 'Android Builder (dbg)',
       'android_config': 'main_builder_mb',
       'root_devices': True,
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-        steps.generate_instrumentation_test,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -2237,12 +2028,6 @@ SPEC = {
       'tests': [
         steps.GTestTest('base_unittests'),
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-        steps.generate_instrumentation_test,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -2259,11 +2044,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'testing': { 'platform': 'linux', },
       'use_isolate': True,
       'enable_swarming': True,
@@ -2278,11 +2058,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder_tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'testing': { 'platform': 'win', },
       'use_isolate': True,
       'enable_swarming': True,

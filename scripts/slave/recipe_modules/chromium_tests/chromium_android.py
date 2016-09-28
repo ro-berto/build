@@ -125,13 +125,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'test_results_config': 'public_server',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -149,13 +142,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'test_results_config': 'public_server',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -174,13 +160,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
       'test_results_config': 'public_server',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -198,13 +177,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
       'test_results_config': 'public_server',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -222,13 +194,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'test_results_config': 'public_server',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -246,13 +211,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'test_results_config': 'public_server',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -270,13 +228,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'test_results_config': 'public_server',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -294,13 +245,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'test_results_config': 'public_server',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -324,15 +268,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'tests': [
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
     },
 
     'Android N5X Swarm Builder': {
@@ -353,15 +288,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'tests': [
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
     },
 
     'Android Webview L (dbg)': {
@@ -379,12 +305,6 @@ SPEC = {
       'remove_system_webview': True,
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
       ],
       'testing': {
         'platform': 'linux',
@@ -407,12 +327,6 @@ SPEC = {
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -433,12 +347,6 @@ SPEC = {
       'remove_system_webview': True,
       'tests': [
         steps.WebViewCTSTest(),
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
       ],
       'testing': {
         'platform': 'linux',

@@ -23,11 +23,6 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_acl': 'public-read',
@@ -52,11 +47,6 @@ SPEC = {
       },
       'compile_targets': [
         'all',
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
       ],
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
@@ -83,11 +73,6 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_acl': 'public-read',
@@ -110,11 +95,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_acl': 'public-read',
@@ -141,11 +121,6 @@ SPEC = {
       'android_config': 'main_builder',
       'compile_targets': [
         'all',
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
       ],
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',

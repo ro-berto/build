@@ -52,7 +52,6 @@ def _AddIsolatedTestSpec(name, perf_id, platform,
   spec = chromium_perf.TestSpec('chromium_perf', perf_id, platform, target_bits,
                                 parent_buildername=parent_buildername)
   spec['enable_swarming'] = True
-  spec['test_generators'] = [steps.generate_isolated_script]
   SPEC['builders'][name] = spec
 
 

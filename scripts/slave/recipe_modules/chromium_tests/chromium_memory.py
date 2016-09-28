@@ -39,11 +39,6 @@ SPEC = {
       # http://crbug.com/336218
       'chromium_apply_config': ['lsan'],
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux ASan LSan Builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
@@ -58,11 +53,6 @@ SPEC = {
       # We want to test ASan+sandbox as well, so run browser tests again, this
       # time with LSan disabled.
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux ASan LSan Builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
@@ -89,11 +79,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Mac ASan 64 Builder',
       'testing': {'platform': 'mac'},
       'enable_swarming': True,
@@ -119,11 +104,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'chromium_apply_config': ['lsan'],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux Chromium OS ASan LSan Builder',
       'bot_type': 'tester',
       'testing': {'platform': 'linux'},

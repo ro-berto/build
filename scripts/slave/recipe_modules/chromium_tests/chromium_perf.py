@@ -96,7 +96,6 @@ def TestSpec(config_name, perf_id, platform, target_bits,
   spec['parent_buildername'] = parent_buildername
   spec['perf-id'] = perf_id
   spec['results-url'] = 'https://chromeperf.appspot.com'
-  spec['test_generators'] = [steps.generate_script]
 
   return spec
 

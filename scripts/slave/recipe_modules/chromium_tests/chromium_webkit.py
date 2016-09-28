@@ -38,10 +38,6 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Win Builder',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -62,10 +58,6 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Win Builder',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -89,10 +81,6 @@ SPEC['builders'] = {
       'blink_tests',
     ],
     'bot_type': 'builder_tester',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'testing': {
       'platform': 'win',
     },
@@ -126,10 +114,6 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Win Builder (dbg)',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -153,10 +137,6 @@ SPEC['builders'] = {
       'blink_tests',
     ],
     'bot_type': 'builder_tester',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'testing': {
       'platform': 'win',
     },
@@ -194,10 +174,6 @@ SPEC['builders'] = {
     'compile_targets': [
       'blink_tests',
     ],
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -221,10 +197,6 @@ SPEC['builders'] = {
       'TARGET_BITS': 64,
     },
     'bot_type': 'builder',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -248,10 +220,6 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Mac Builder',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -275,10 +243,6 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Mac Builder',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -321,10 +285,6 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Mac Builder (dbg)',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -349,10 +309,6 @@ SPEC['builders'] = {
     'compile_targets': [
       'blink_tests',
     ],
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -374,10 +330,6 @@ SPEC['builders'] = {
     'compile_targets': [
       'blink_tests',
     ],
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -396,10 +348,6 @@ SPEC['builders'] = {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 64,
     },
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(extra_args=[
           '--additional-expectations',
@@ -429,10 +377,6 @@ SPEC['builders'] = {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 64,
     },
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(extra_args=[
           '--additional-expectations',
@@ -458,10 +402,6 @@ SPEC['builders'] = {
       'BUILD_CONFIG': 'Debug',
       'TARGET_BITS': 64,
     },
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'tests': [
       steps.BlinkTest(),
     ],
@@ -507,10 +447,6 @@ SPEC['builders'] = {
       steps.GTestTest('webkit_unit_tests'),
       steps.BlinkTest(),
     ],
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
     'testing': {
       'platform': 'linux',
     },
@@ -525,10 +461,6 @@ SPEC['builders'] = {
     },
     'compile_targets': [
       'blink_tests',
-    ],
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
     ],
     'tests': [
       steps.BlinkTest(extra_args=[

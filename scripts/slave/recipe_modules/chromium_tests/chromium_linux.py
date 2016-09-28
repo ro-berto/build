@@ -46,11 +46,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux Builder',
       'testing': {
         'platform': 'linux',
@@ -90,11 +85,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux Builder (dbg)(32)',
       'testing': {
         'platform': 'linux',
@@ -127,11 +117,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Linux Builder (dbg)',
       'testing': {
         'platform': 'linux',
@@ -188,13 +173,6 @@ SPEC = {
       'android_config': 'main_builder',
       'root_devices': True,
       'tests': [],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -234,14 +212,6 @@ SPEC = {
       'parent_buildername': 'Android Builder',
       'android_config': 'main_builder',
       'root_devices': True,
-      'tests': [],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_instrumentation_test,
-        steps.generate_isolated_script,
-        steps.generate_junit_test,
-        steps.generate_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -275,9 +245,6 @@ SPEC = {
         'TARGET_PLATFORM': 'linux',
       },
       'bot_type': 'builder_tester',
-      'test_generators': [
-        steps.generate_gtest,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -293,11 +260,6 @@ SPEC = {
       },
       'compile_targets': [
         'cast_shell',
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',

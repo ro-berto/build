@@ -33,11 +33,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
@@ -67,11 +62,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
@@ -99,11 +89,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'parent_buildername': 'Chromium Linux TSan Builder',
       'testing': {
         'platform': 'linux',
