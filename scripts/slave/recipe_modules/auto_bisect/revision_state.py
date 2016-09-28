@@ -72,12 +72,27 @@ class RevisionState(object):
     self.commit_hash = str(commit_hash)
     self._rev_str = None
     self.base_revision = base_revision
+    self.top_revision = self
+    # The difference between revsion overrides and revsion ladder is that the
+    # former is indexed by paths, e.g. 'src/third_party/skia' and the latter is
+    # indexed by depot name, e.g. 'skia'.
     self.revision_overrides = {}
+    self.revision_ladder = {self.depot_name: self.commit_hash}
     self.build_id = None
     if self.base_revision:
       assert self.base_revision.deps_file_contents
       self.needs_patch = True
       self.revision_overrides[self.depot['src']] = self.commit_hash
+      # To allow multiple nested levels, we go to the topmost revision.
+      while self.top_revision.base_revision:
+        self.top_revision = self.top_revision.base_revision
+        # We want to carry over any overrides from the base revision(s) without
+        # overwriting any overrides specified at the self level.
+        self.revision_ladder[self.top_revision.depot_name] = (
+            self.top_revision.commit_hash)
+        self.revision_overrides = dict(
+            self.top_revision.revision_overrides.items() +
+            self.revision_overrides.items())
       self.deps_patch, self.deps_file_contents = self.bisector.make_deps_patch(
           self.base_revision, self.base_revision.deps_file_contents,
           self.depot, self.commit_hash)
@@ -304,10 +319,7 @@ class RevisionState(object):
 
     This takes into account whether the build has a deps patch.
     """
-    top_revision = self
-    while top_revision.base_revision:
-      top_revision = top_revision.base_revision
-    name_parts = [top_revision.commit_hash]
+    name_parts = [self.top_revision.commit_hash]
     if self.needs_patch:
       name_parts.append(self.deps_sha)
     return '%s.zip' % '_'.join(name_parts)
@@ -369,23 +381,13 @@ class RevisionState(object):
     """Posts a request to buildbot to build this revision and archive it."""
     api = self.bisector.api
     bot_name = self.bisector.get_builder_bot_for_this_platform()
-
-    # To allow multiple nested levels, we go to the topmost revision.
-    top_revision = self
-    while top_revision.base_revision:
-      top_revision = top_revision.base_revision
-      # We want to carry over any overrides from the base revision(s) without
-      # overwriting any overrides specified at the self level.
-      self.revision_overrides = dict(top_revision.revision_overrides.items() +
-                                     self.revision_overrides.items())
-
     operation_id = 'dummy' if self.bisector.dummy_tests else uuid.uuid4().hex
     build_details = {
         'bucket': 'master.' + api.m.properties['mastername'],
         'parameters': {
             'builder_name': bot_name,
             'properties': {
-                'parent_got_revision': top_revision.commit_hash,
+                'parent_got_revision': self.top_revision.commit_hash,
                 'clobber': True,
                 'build_archive_url': self.build_url,
             },
@@ -436,22 +438,16 @@ class RevisionState(object):
     else:  # pragma: no cover
       self.job_name = uuid.uuid4().hex
     api = self.bisector.api
-    # Stores revision map for different repos eg, android-chrome, src, v8 etc.
-    revision_ladder = {}
-    top_revision = self
-    revision_ladder[top_revision.depot_name] = top_revision.commit_hash
-    while top_revision.base_revision:  # pragma: no cover
-      revision_ladder[top_revision.depot_name] = top_revision.commit_hash
-      top_revision = top_revision.base_revision
     perf_test_properties = {
         'builder_name': self.bisector.get_perf_tester_name(),
         'properties': {
-            'revision': top_revision.commit_hash,
-            'parent_got_revision': top_revision.commit_hash,
+            'revision': self.top_revision.commit_hash,
+            'parent_got_revision': self.top_revision.commit_hash,
             'parent_build_archive_url': self.build_url,
             'bisect_config': self._get_bisect_config_for_tester(),
             'job_name': self.job_name,
-            'revision_ladder': revision_ladder,
+            'revision_ladder': self.revision_ladder,
+            'deps_revision_overrides': self.revision_overrides,
         },
     }
     self.test_results_url = (self.bisector.api.GS_RESULTS_URL +

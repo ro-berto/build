@@ -488,6 +488,7 @@
             "repeat_count": 5,
             "test_type": "perf"
           },
+          "deps_revision_overrides": {},
           "job_name": "e28dc0d49c331def2a3bbf3ddd0096eb51551155-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
           "parent_got_revision": "e28dc0d49c331def2a3bbf3ddd0096eb51551155",
@@ -581,6 +582,7 @@
             "repeat_count": 5,
             "test_type": "perf"
           },
+          "deps_revision_overrides": {},
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
           "parent_got_revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222",

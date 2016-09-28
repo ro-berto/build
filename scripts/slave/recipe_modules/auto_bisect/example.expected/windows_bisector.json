@@ -262,6 +262,7 @@
             "repeat_count": 5,
             "test_type": "perf"
           },
+          "deps_revision_overrides": {},
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
           "parent_build_archive_url": "gs://chrome-perf/Win Builder/full-build-win32_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
           "parent_got_revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222",
@@ -342,6 +343,7 @@
             "repeat_count": 5,
             "test_type": "perf"
           },
+          "deps_revision_overrides": {},
           "job_name": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
           "parent_build_archive_url": "gs://chrome-perf/Win Builder/full-build-win32_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
           "parent_got_revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
@@ -460,6 +462,7 @@
             "repeat_count": 5,
             "test_type": "perf"
           },
+          "deps_revision_overrides": {},
           "job_name": "dcdcdc0ff1122212323134879ddceeb1240b0988-test",
           "parent_build_archive_url": "gs://chrome-perf/Win Builder/full-build-win32_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
           "parent_got_revision": "dcdcdc0ff1122212323134879ddceeb1240b0988",

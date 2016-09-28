@@ -227,6 +227,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
 
   def _SyncRevisionToTest(self, test_config_params):  # pragma: no cover
     if not self.internal_bisect:
+      self.m.gclient.c.revisions.update(
+          test_config_params['deps_revision_overrides'])
       return self.ensure_checkout(
           root_solution_revision=test_config_params['revision'])
     else:
