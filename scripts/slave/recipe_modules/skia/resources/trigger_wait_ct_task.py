@@ -77,12 +77,8 @@ def _CreateTaskJSON(options):
   task_params["repeat_runs"] = "3"
   task_params["run_in_parallel"] = str(options.parallel)
   task_params["benchmark_args"] = "--output-format=csv-pivot-table"
-  task_params["browser_args_nopatch"] = (
-      "--disable-setuid-sandbox --enable-threaded-compositing "
-      "--enable-impl-side-painting")
-  task_params["browser_args_withpatch"] = (
-      "--disable-setuid-sandbox --enable-threaded-compositing "
-      "--enable-impl-side-painting")
+  task_params["browser_args_nopatch"] = "--disable-setuid-sandbox"
+  task_params["browser_args_withpatch"] = "--disable-setuid-sandbox"
 
   trybot_params = {}
   trybot_params["issue"] = options.issue
