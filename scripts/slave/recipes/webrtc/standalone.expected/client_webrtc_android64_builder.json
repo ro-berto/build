@@ -285,8 +285,8 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
-    "name": "AppRTCDemo zip archive",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/Android64_Builder/src/out/Release/apks/AppRTCDemo.apk\", \"type\": \"file\"}], \"output\": \"[SLAVE_BUILD]/AppRTCDemo_apk.zip\", \"root\": \"[BUILDER_CACHE]/Android64_Builder/src/out/Release/apks\"}"
+    "name": "AppRTCMobile zip archive",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/Android64_Builder/src/out/Release/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"output\": \"[SLAVE_BUILD]/AppRTCMobile_apk.zip\", \"root\": \"[BUILDER_CACHE]/Android64_Builder/src/out/Release/apks\"}"
   },
   {
     "cmd": [
@@ -299,12 +299,12 @@
       "cp",
       "-a",
       "public-read",
-      "[SLAVE_BUILD]/AppRTCDemo_apk.zip",
-      "gs://chromium-webrtc/client.webrtc/Android64 Builder/AppRTCDemo_apk_170242.zip"
+      "[SLAVE_BUILD]/AppRTCMobile_apk.zip",
+      "gs://chromium-webrtc/client.webrtc/Android64 Builder/AppRTCMobile_apk_170242.zip"
     ],
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android64 Builder/AppRTCDemo_apk_170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android64 Builder/AppRTCMobile_apk_170242.zip@@@"
     ]
   },
   {

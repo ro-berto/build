@@ -837,7 +837,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_AppRTCDemoTest",
+      "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/Release/bin/run_AppRTCMobileTest",
       "--blacklist-file",
       "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/out/bad_devices.json",
       "--tool=asan",
@@ -846,7 +846,7 @@
       "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_ASan__L_Nexus6_",
-    "name": "AppRTCDemoTest"
+    "name": "AppRTCMobileTest"
   },
   {
     "cmd": [

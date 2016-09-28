@@ -733,7 +733,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_arm64_rel/src/out/Release/bin/run_AppRTCDemoTest",
+      "[BUILDER_CACHE]/android_arm64_rel/src/out/Release/bin/run_AppRTCMobileTest",
       "--blacklist-file",
       "[BUILDER_CACHE]/android_arm64_rel/src/out/bad_devices.json",
       "--verbose",
@@ -741,7 +741,7 @@
       "[BUILDER_CACHE]/android_arm64_rel/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "cwd": "[BUILDER_CACHE]/android_arm64_rel",
-    "name": "AppRTCDemoTest"
+    "name": "AppRTCMobileTest"
   },
   {
     "cmd": [

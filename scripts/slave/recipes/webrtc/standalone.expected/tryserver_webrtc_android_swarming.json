@@ -227,7 +227,7 @@
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--swarming-targets-file",
-      "AppRTCDemoTest\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlibjingle_peerconnection_android_unittest\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nvoice_engine_unittests\nwebrtc_nonparallel_tests\n",
+      "AppRTCMobileTest\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlibjingle_peerconnection_android_unittest\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nvoice_engine_unittests\nwebrtc_nonparallel_tests\n",
       "--gyp-script=[BUILDER_CACHE]/android_swarming/src/webrtc/build/gyp_webrtc.py",
       "//out/Release"
     ],
@@ -237,7 +237,7 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@AppRTCDemoTest@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@AppRTCMobileTest@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@audio_decoder_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_video_unittests@@@",
@@ -340,14 +340,14 @@
       "[BUILDER_CACHE]/android_swarming/src/out/Release/video_engine_tests.isolated.gen.json",
       "[BUILDER_CACHE]/android_swarming/src/out/Release/voice_engine_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/android_swarming/src/out/Release/webrtc_nonparallel_tests.isolated.gen.json",
-      "[BUILDER_CACHE]/android_swarming/src/out/Release/AppRTCDemoTest.isolated.gen.json",
+      "[BUILDER_CACHE]/android_swarming/src/out/Release/AppRTCMobileTest.isolated.gen.json",
       "[BUILDER_CACHE]/android_swarming/src/out/Release/libjingle_peerconnection_android_unittest.isolated.gen.json"
     ],
     "cwd": "[BUILDER_CACHE]/android_swarming",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"AppRTCDemoTest\": \"[dummy hash for AppRTCDemoTest]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"AppRTCMobileTest\": \"[dummy hash for AppRTCMobileTest]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", @@@",
@@ -365,7 +365,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCDemoTest\": \"[dummy hash for AppRTCDemoTest]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"libjingle_peerconnection_android_unittest\": \"[dummy hash for libjingle_peerconnection_android_unittest]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"voice_engine_unittests\": \"[dummy hash for voice_engine_unittests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobileTest\": \"[dummy hash for AppRTCMobileTest]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"libjingle_peerconnection_android_unittest\": \"[dummy hash for libjingle_peerconnection_android_unittest]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"voice_engine_unittests\": \"[dummy hash for voice_engine_unittests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"}@@@"
     ]
   },
   {
@@ -1503,7 +1503,7 @@
       "--shards",
       "1",
       "--task-name",
-      "AppRTCDemoTest/Android/[dummy has/android_swarming/1337",
+      "AppRTCMobileTest/Android/[dummy has/android_swarming/1337",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1529,11 +1529,11 @@
       "--tag",
       "buildnumber:1337",
       "--tag",
-      "data:[dummy hash for AppRTCDemoTest]",
+      "data:[dummy hash for AppRTCMobileTest]",
       "--tag",
       "master:tryserver.webrtc",
       "--tag",
-      "name:AppRTCDemoTest",
+      "name:AppRTCMobileTest",
       "--tag",
       "os:Android",
       "--tag",
@@ -1547,17 +1547,17 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:AppRTCDemoTest on Android",
+      "stepname:AppRTCMobileTest on Android",
       "--idempotent",
-      "[dummy hash for AppRTCDemoTest]"
+      "[dummy hash for AppRTCMobileTest]"
     ],
     "cwd": "[BUILDER_CACHE]/android_swarming",
-    "name": "[trigger] AppRTCDemoTest on Android",
+    "name": "[trigger] AppRTCMobileTest on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"AppRTCDemoTest/Android/[dummy has/android_swarming/1337\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"AppRTCMobileTest/Android/[dummy has/android_swarming/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"AppRTCDemoTest/Android/[dummy has/android_swarming/1337\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"AppRTCMobileTest/Android/[dummy has/android_swarming/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -2499,12 +2499,12 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"AppRTCDemoTest/Android/[dummy has/android_swarming/1337\", \"tasks\": {\"AppRTCDemoTest/Android/[dummy has/android_swarming/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"AppRTCMobileTest/Android/[dummy has/android_swarming/1337\", \"tasks\": {\"AppRTCMobileTest/Android/[dummy has/android_swarming/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_swarming",
-    "name": "AppRTCDemoTest on Android",
+    "name": "AppRTCMobileTest on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
