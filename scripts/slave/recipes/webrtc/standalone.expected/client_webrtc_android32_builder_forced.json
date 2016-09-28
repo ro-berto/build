@@ -308,6 +308,24 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/bin/run_android_junit_tests",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/Android32_Builder/src/out/bad_devices.json",
+      "--verbose",
+      "--adb-path",
+      "[BUILDER_CACHE]/Android32_Builder/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android32_Builder",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android32_Builder/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Builder/src/build/android:%(PATH)s"
+    },
+    "name": "android_junit_tests"
+  },
+  {
     "cmd": [],
     "name": "trigger",
     "trigger_specs": [

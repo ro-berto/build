@@ -32,7 +32,7 @@ RECIPE_CONFIGS = freeze({
     'chromium_android_config': 'webrtc',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
-    'test_suite': 'android',
+    'test_suite': 'android_device',
   },
   'webrtc_android_clang': {
     'chromium_config': 'android_clang',
@@ -45,7 +45,21 @@ RECIPE_CONFIGS = freeze({
     'chromium_android_config': 'webrtc',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
-    'test_suite': 'android',
+    'test_suite': 'android_device',
+  },
+  'webrtc_android_linux': {
+    'chromium_config': 'android',
+    'chromium_android_config': 'webrtc',
+    'gclient_config': 'webrtc',
+    'gclient_apply_config': ['android'],
+    'test_suite': 'android_linux',
+  },
+  'webrtc_android_swarming': {
+    'chromium_config': 'android',
+    'chromium_android_config': 'webrtc',
+    'gclient_config': 'webrtc',
+    'gclient_apply_config': ['android'],
+    'test_suite': 'android_swarming',
   },
 })
 
@@ -388,14 +402,14 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Builder': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_linux',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android32 Tests (L Nexus5)',
@@ -404,14 +418,14 @@ BUILDERS = freeze({
         'archive_apprtc': True,
       },
       'Android32 Builder (dbg)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_linux',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android32 Tests (L Nexus5)(dbg)',
@@ -453,14 +467,14 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android64 Builder': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_linux',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android64 Tests (L Nexus9)',
@@ -468,14 +482,14 @@ BUILDERS = freeze({
         'archive_apprtc': True,
       },
       'Android64 Builder (dbg)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_linux',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'archive_apprtc': True,
       },
@@ -642,7 +656,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Release (swarming)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -1327,7 +1341,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'android_swarming': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
