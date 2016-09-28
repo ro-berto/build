@@ -142,31 +142,6 @@ def RunSteps(api):
       archive_subdir_suffix=bot_config['upload_directory'],
       gs_acl='public-read')
 
-  # Zip sources for coverage reports.
-  for target in targets:
-    api.python(
-        "zip_src_%s" % target,
-        api.path['checkout'].join('testing', 'libfuzzer', 'zip_sources.py'),
-        ["--binary",
-         build_dir.join(target),
-         "--workdir",
-         build_dir,
-         "--srcdir",
-         api.path['checkout'],
-         "--output",
-         build_dir.join(target + ".src.zip")
-        ])
-
-  # Upload sources.
-  api.archive.clusterfuzz_archive(
-      build_dir=build_dir,
-      update_properties=checkout_results.json.output['properties'],
-      gs_bucket=bot_config['upload_bucket'],
-      archive_prefix='libfuzzer-src',
-      archive_subdir_suffix=bot_config['upload_directory'],
-      gs_acl='public-read',
-      file_filter=re.compile(r'^.*\.src\.zip$'))
-
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield (test +
