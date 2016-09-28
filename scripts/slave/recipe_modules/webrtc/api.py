@@ -40,7 +40,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     'xmllite_xmpp_unittests',
   )
 
-  ANDROID_DEVICE_TESTS = (
+  # Android APK tests.
+  ANDROID_APK_TESTS = (
     'audio_decoder_unittests',
     'common_audio_unittests',
     'common_video_unittests',
@@ -55,10 +56,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     'video_engine_tests',
     'voice_engine_unittests',
     'webrtc_nonparallel_tests',
-  )
-
-  ANDROID_LINUX_TESTS = (
-    'android_junit_tests',
   )
 
   ANDROID_INSTRUMENTATION_TESTS = (
@@ -131,18 +128,15 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.use_isolate:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
-      self._isolated_targets = tuple()
       if self.c.TEST_SUITE == 'webrtc':
-        self._isolated_targets += self.NORMAL_TESTS
-      if self.c.TEST_SUITE in ('android_linux', 'android_swarming'):
-        self._isolated_targets += self.ANDROID_LINUX_TESTS
-      if self.c.TEST_SUITE in ('android_device', 'android_swarming'):
-        self._isolated_targets += (self.ANDROID_DEVICE_TESTS +
+        self._isolated_targets = self.NORMAL_TESTS
+      elif self.c.TEST_SUITE == 'android':
+        self._isolated_targets = (self.ANDROID_APK_TESTS +
             self.ANDROID_INSTRUMENTATION_TESTS)
-      if not self._isolated_targets: # pragma: no cover
+      else: # pragma: no cover
         raise self.m.step.StepFailure('Isolation and swarming are only '
-                                      'supported for webrtc, android_linux and '
-                                      'android_device test suites.')
+                                      'supported for webrtc and android test '
+                                      'suites.')
 
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.enable_swarming:
@@ -209,17 +203,15 @@ class WebRTCApi(recipe_api.RecipeApi):
                                    self.c.enable_swarming)
       with self.m.step.defer_results():
         if tests:
-          run_android_device_steps = (not self.c.enable_swarming and
-              self.m.chromium.c.TARGET_PLATFORM == 'android' and
-              self.c.TEST_SUITE != 'android_linux')
-
-          if run_android_device_steps:
+          if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
+              not self.c.enable_swarming):
             self.m.chromium_android.common_tests_setup_steps()
 
           for test in tests:
             test.run(self, suffix='')
 
-          if run_android_device_steps:
+          if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
+              not self.c.enable_swarming):
             self.m.chromium_android.shutdown_device_monitor()
             self.m.chromium_android.logcat_dump(
                 gs_bucket=self.master_config.get('build_gs_bucket'))

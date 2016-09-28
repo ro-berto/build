@@ -7,9 +7,11 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
   if test_suite == 'webrtc':
     for test in api.NORMAL_TESTS:
-      tests.append(WebRTCTest(test, revision, enable_swarming=enable_swarming))
+      tests.append(WebRTCTest(test, revision,
+                              enable_swarming=enable_swarming))
     tests.append(WebRTCTest('webrtc_nonparallel_tests', revision,
-                            parallel=False, enable_swarming=False))
+                            parallel=False,
+                            enable_swarming=False))
   elif test_suite == 'webrtc_baremetal':
     if api.m.platform.is_linux:
       f = api.m.path['checkout'].join
@@ -40,8 +42,9 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     ])
     if not api.m.tryserver.is_tryserver:
       tests.append(BaremetalTest('webrtc_perf_tests', revision, perf_test=True))
-  if test_suite in ('android_device', 'android_swarming'):
-    for test in api.ANDROID_DEVICE_TESTS:
+
+  elif test_suite == 'android':
+    for test in api.ANDROID_APK_TESTS:
       tests.append(AndroidTest(test, enable_swarming))
     if (not api.m.tryserver.is_tryserver and api.c.PERF_ID and
         api.m.chromium.c.BUILD_CONFIG == 'Release'):
@@ -49,9 +52,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                                    perf_id=api.c.PERF_ID))
     for test_name in api.ANDROID_INSTRUMENTATION_TESTS:
       tests.append(AndroidInstrumentationTest(test_name, enable_swarming))
-  if test_suite in ('android_linux', 'android_swarming'):
-    for test in api.ANDROID_LINUX_TESTS:
-      tests.append(AndroidTest(test, enable_swarming))
 
   return tests
 
