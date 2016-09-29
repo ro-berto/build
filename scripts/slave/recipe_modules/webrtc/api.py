@@ -21,50 +21,75 @@ class WebRTCApi(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
-  NORMAL_TESTS = (
-    'audio_decoder_unittests',
-    'common_audio_unittests',
-    'common_video_unittests',
-    'modules_tests',
-    'modules_unittests',
-    'peerconnection_unittests',
-    'rtc_media_unittests',
-    'rtc_pc_unittests',
-    'rtc_stats_unittests',
-    'rtc_unittests',
-    'system_wrappers_unittests',
-    'test_support_unittests',
-    'tools_unittests',
-    'video_engine_tests',
-    'voice_engine_unittests',
-    'xmllite_xmpp_unittests',
-  )
+  NORMAL_TESTS = freeze({
+    'audio_decoder_unittests': {},
+    'common_audio_unittests': {},
+    'common_video_unittests': {},
+    'modules_tests': {
+      'shards': 2,
+    },
+    'modules_unittests': {
+      'shards': 6,
+    },
+    'peerconnection_unittests': {
+      'shards': 4,
+    },
+    'rtc_media_unittests': {},
+    'rtc_pc_unittests': {},
+    'rtc_stats_unittests': {},
+    'rtc_unittests': {
+      'shards': 6,
+    },
+    'system_wrappers_unittests': {},
+    'test_support_unittests': {},
+    'tools_unittests': {},
+    'video_engine_tests': {
+      'shards': 4,
+    },
+    'voice_engine_unittests': {},
+    'webrtc_nonparallel_tests': {
+      'parallel': False,
+    },
+    'xmllite_xmpp_unittests': {},
+  })
 
-  ANDROID_DEVICE_TESTS = (
-    'audio_decoder_unittests',
-    'common_audio_unittests',
-    'common_video_unittests',
-    'modules_tests',
-    'modules_unittests',
-    'peerconnection_unittests',
-    'rtc_stats_unittests',
-    'rtc_unittests',
-    'system_wrappers_unittests',
-    'test_support_unittests',
-    'tools_unittests',
-    'video_engine_tests',
-    'voice_engine_unittests',
-    'webrtc_nonparallel_tests',
-  )
+  ANDROID_DEVICE_TESTS = freeze({
+    'audio_decoder_unittests': {},
+    'common_audio_unittests': {},
+    'common_video_unittests': {},
+    'modules_tests': {
+      'shards': 2,
+    },
+    'modules_unittests': {
+      'shards': 6,
+    },
+    'peerconnection_unittests': {
+      'shards': 4,
+    },
+    'rtc_stats_unittests': {},
+    'rtc_unittests': {
+      'shards': 6,
+    },
+    'system_wrappers_unittests': {},
+    'test_support_unittests': {},
+    'tools_unittests': {},
+    'video_engine_tests': {
+      'shards': 4,
+    },
+    'voice_engine_unittests': {},
+    'webrtc_nonparallel_tests': {},
+  })
 
-  ANDROID_INSTRUMENTATION_TESTS = (
-    'AppRTCMobileTest',
-    'libjingle_peerconnection_android_unittest',
-  )
+  ANDROID_INSTRUMENTATION_TESTS = freeze({
+    'AppRTCMobileTest': {},
+    'libjingle_peerconnection_android_unittest': {
+      'shards': 4,
+    },
+  })
 
-  ANDROID_JUNIT_TESTS = (
-    'android_junit_tests',
-  )
+  ANDROID_JUNIT_TESTS = freeze({
+    'android_junit_tests': {},
+  })
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
@@ -131,14 +156,15 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.use_isolate:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
-      self._isolated_targets = tuple()
+      self._isolated_targets = []
       if self.c.TEST_SUITE == 'webrtc':
-        self._isolated_targets += self.NORMAL_TESTS
+        self._isolated_targets += self.NORMAL_TESTS.keys()
       if self.c.TEST_SUITE in ('android_linux', 'android_swarming'):
-        self._isolated_targets += self.ANDROID_JUNIT_TESTS
+        self._isolated_targets += self.ANDROID_JUNIT_TESTS.keys()
       if self.c.TEST_SUITE in ('android_device', 'android_swarming'):
-        self._isolated_targets += (self.ANDROID_DEVICE_TESTS +
-            self.ANDROID_INSTRUMENTATION_TESTS)
+        self._isolated_targets += (self.ANDROID_DEVICE_TESTS.keys() +
+                                   self.ANDROID_INSTRUMENTATION_TESTS.keys())
+      self._isolated_targets = sorted(self._isolated_targets)
       if not self._isolated_targets: # pragma: no cover
         raise self.m.step.StepFailure('Isolation and swarming are only '
                                       'supported for webrtc, android_linux and '

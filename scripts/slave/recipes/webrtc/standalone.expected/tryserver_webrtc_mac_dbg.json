@@ -661,6 +661,30 @@
     "name": "voice_engine_unittests"
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=webrtc_nonparallel_tests",
+      "--step-name=webrtc_nonparallel_tests",
+      "--builder-name=mac_dbg",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "webrtc_nonparallel_tests"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac_dbg",
+    "name": "webrtc_nonparallel_tests"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -684,30 +708,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac_dbg",
     "name": "xmllite_xmpp_unittests"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
-      "--test-type=webrtc_nonparallel_tests",
-      "--step-name=webrtc_nonparallel_tests",
-      "--builder-name=mac_dbg",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "webrtc_nonparallel_tests"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac_dbg",
-    "name": "webrtc_nonparallel_tests"
   },
   {
     "name": "$result",

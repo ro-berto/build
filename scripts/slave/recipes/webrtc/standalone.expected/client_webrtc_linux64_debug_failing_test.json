@@ -628,32 +628,6 @@
     "name": "voice_engine_unittests"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--test-type=xmllite_xmpp_unittests",
-      "--step-name=xmllite_xmpp_unittests",
-      "--builder-name=Linux64 Debug",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[BUILDER_CACHE]/Linux64_Debug/src/third_party/gtest-parallel/gtest-parallel",
-      "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/xmllite_xmpp_unittests",
-      "--"
-    ],
-    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
-    "name": "xmllite_xmpp_unittests"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -680,6 +654,32 @@
     ],
     "cwd": "[BUILDER_CACHE]/Linux64_Debug",
     "name": "webrtc_nonparallel_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux64 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--test-type=xmllite_xmpp_unittests",
+      "--step-name=xmllite_xmpp_unittests",
+      "--builder-name=Linux64 Debug",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[BUILDER_CACHE]/Linux64_Debug/src/third_party/gtest-parallel/gtest-parallel",
+      "[BUILDER_CACHE]/Linux64_Debug/src/out/Debug/xmllite_xmpp_unittests",
+      "--"
+    ],
+    "cwd": "[BUILDER_CACHE]/Linux64_Debug",
+    "name": "xmllite_xmpp_unittests"
   },
   {
     "name": "$result",
