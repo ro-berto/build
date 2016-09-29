@@ -189,6 +189,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     if 'gyp' not in self.buildername.lower():
       self.m.chromium.compile()
 
+    if self.c.use_isolate:
+      self.m.isolate.remove_build_metadata()
+      self.m.isolate.isolate_tests(self.m.chromium.output_dir,
+                                   targets=self._isolated_targets)
+
+
   def runtests(self):
     """Add a suite of test steps.
 
@@ -200,11 +206,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       context['cwd'] = self._working_dir
 
     with self.m.step.context(context):
-      if self.c.use_isolate:
-        self.m.isolate.remove_build_metadata()
-        self.m.isolate.isolate_tests(self.m.chromium.output_dir,
-                                     targets=self._isolated_targets)
-
       tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
                                    self.c.enable_swarming)
       with self.m.step.defer_results():

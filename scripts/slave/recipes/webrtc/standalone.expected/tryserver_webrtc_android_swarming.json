@@ -345,7 +345,6 @@
       "[BUILDER_CACHE]/android_swarming/src/out/Release/AppRTCMobileTest.isolated.gen.json",
       "[BUILDER_CACHE]/android_swarming/src/out/Release/libjingle_peerconnection_android_unittest.isolated.gen.json"
     ],
-    "cwd": "[BUILDER_CACHE]/android_swarming",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

@@ -369,7 +369,6 @@
       "[BUILDER_CACHE]/mac_swarming/src/out/Debug/voice_engine_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/mac_swarming/src/out/Debug/xmllite_xmpp_unittests.isolated.gen.json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_swarming",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

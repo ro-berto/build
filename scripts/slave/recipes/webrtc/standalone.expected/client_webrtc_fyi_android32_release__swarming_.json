@@ -337,7 +337,6 @@
       "[BUILDER_CACHE]/Android32_Release__swarming_/src/out/Release/AppRTCMobileTest.isolated.gen.json",
       "[BUILDER_CACHE]/Android32_Release__swarming_/src/out/Release/libjingle_peerconnection_android_unittest.isolated.gen.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Release__swarming_",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
