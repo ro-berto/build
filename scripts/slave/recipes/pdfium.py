@@ -5,6 +5,7 @@
 DEPS = [
   'depot_tools/gclient',
   'depot_tools/bot_update',
+  'goma',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -54,6 +55,7 @@ def _OutPath(api, memory_tool, skia, xfa, v8, clang, rel):
 
 def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
                  target_os, out_dir):
+  api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
   checkout = api.path['checkout']
@@ -67,6 +69,8 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
       'pdf_enable_xfa=%s' % gn_bool[xfa],
       'pdf_use_skia=%s' % gn_bool[skia],
       'pdf_is_standalone=true',
+      'use_goma=true',
+      'goma_dir="%s"' % api.goma.goma_dir,
   ]
   if api.platform.is_win and not memory_tool:
     args.append('symbol_level=1')
@@ -86,10 +90,17 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
               '--args=' + ' '.join(args)],
              cwd=checkout)
 
-def _BuildSteps(api, out_dir):
+def _BuildSteps(api, clang, out_dir):
   # Build sample file using Ninja
   debug_path = api.path['checkout'].join('out', out_dir)
-  api.step('compile with ninja', ['ninja', '-C', debug_path])
+  ninja_cmd = ['ninja', '-C', debug_path,
+               '-j', api.goma.recommended_goma_jobs]
+
+  with api.goma.build_with_goma(
+      ninja_log_outdir=debug_path,
+      ninja_log_compiler='clang' if clang else 'unknown',
+      ninja_log_command=ninja_cmd):
+    api.step('compile with ninja', ninja_cmd)
 
 
 def _RunDrMemoryTests(api, v8):
@@ -167,7 +178,7 @@ def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, skip_test,
   _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
                target_os, out_dir)
 
-  _BuildSteps(api, out_dir)
+  _BuildSteps(api, clang, out_dir)
 
   if skip_test:
     return
