@@ -70,7 +70,7 @@ def get_root_json(master_url):
   # Assumes we have something like https://build.chromium.org/p/chromium.perf
   name = master_url.rstrip('/').split('/')[-1]
   if name in CBE_WHITELIST:
-    url = '%s/get_master/%s' (CBE_URL, name)
+    url = '%s/get_master/%s' % (CBE_URL, name)
 
   logging.info('opening %s' % url)
   return _url_open_json(url)
