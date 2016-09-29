@@ -341,12 +341,12 @@ _CONFIG_MAP = {
 
     'target': {
       'hammerhead-ndebug': {
-        'serial': '06ad0731003b6dbd',
+        'serial': '84B7N15A28014510',
         'device': 'hammerhead',
         'debug': False,
       },
       'hammerhead-debug': {
-        'serial': '06ad123b003ba37b',
+        'serial': '84B7N15B03000729',
         'device': 'hammerhead',
         'debug': True,
       },
@@ -371,7 +371,7 @@ _CONFIG_MAP = {
         'debug': True,
       },
       'hammerhead-concurrent-collector': {
-        'serial': '0cbbd9170c3719c0',
+        'serial': '84B7N15B03000347',
         'device': 'hammerhead',
         'debug': True,
         'concurrent_collector': True,
