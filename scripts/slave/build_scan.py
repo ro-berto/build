@@ -61,6 +61,8 @@ CBE_WHITELIST = set([
   'chromium.perf'
 ])
 
+CBE_URL = 'https://chrome-build-extract.appspot.com'
+
 def get_root_json(master_url):
   """Pull down root JSON which contains builder and build info."""
   url = master_url + '/json'
@@ -68,7 +70,7 @@ def get_root_json(master_url):
   # Assumes we have something like https://build.chromium.org/p/chromium.perf
   name = master_url.rstrip('/').split('/')[-1]
   if name in CBE_WHITELIST:
-    url = 'https://chrome-build-extract.appspot.com/get_master/' + name
+    url = '%s/get_master/%s' (CBE_URL, name)
 
   logging.info('opening %s' % url)
   return _url_open_json(url)
@@ -150,6 +152,13 @@ def find_new_builds_per_master(masters, build_db):
 def get_build_json(url_tuple):
   """Downloads the json of a specific build."""
   url, master, builder, buildnum = url_tuple
+
+  # Assumes we have something like https://build.chromium.org/p/chromium.perf
+  name = master.rstrip('/').split('/')[-1]
+  if name in CBE_WHITELIST:
+    url = '%s/p/%s/builders/%s/builds/%d?json=1' % (
+        CBE_URL, name, builder, buildnum)
+
   logging.debug('opening %s...' % url)
   return _url_open_json(url), master, builder, buildnum
 
