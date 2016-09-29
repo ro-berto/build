@@ -67,8 +67,6 @@
 
     'chromium.fyi': {},
     'chromium.gpu': {},
-    'chromium.perf': {},
-    'chromium.perf.fyi': {},
     'chromium.webrtc': {},
     'chromium.webrtc.fyi': {},
     'chromium.webkit': {},
@@ -110,6 +108,13 @@
   'chromiumos': {
     'chromiumos': {},
     'chromiumos.chromium': {},
+  },
+
+  # chromium.perf logs are considered "internal" for viewing purposes, even
+  # though they are described in Chromium's build repository.
+  'chrome': {
+    'chromium.perf': {},
+    'chromium.perf.fyi': {},
   },
 
   # The CrOS tryserver is considered "internal" for viewing purposes, even
