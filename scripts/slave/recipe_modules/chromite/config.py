@@ -6,7 +6,7 @@ import os
 import re
 
 from recipe_engine.config import config_item_context, ConfigGroup
-from recipe_engine.config import Dict, Single, Set
+from recipe_engine.config import Dict, Single, List, Set
 
 
 # Regular expression to match branch versions.
@@ -21,8 +21,8 @@ _VERSION_RE = re.compile(r'^.*-(\d+)\.(\d+\.)?B$')
 
 def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
                CBB_DEBUG=False, CBB_CLOBBER=False, CBB_BUILDBUCKET_ID=None,
-               CBB_MASTER_BUILD_ID=None, **_kwargs):
-  return ConfigGroup(
+               CBB_MASTER_BUILD_ID=None, CBB_EXTRA_ARGS=None, **_kwargs):
+  cgrp = ConfigGroup(
     # Base mapping of repository key to repository name.
     repositories = Dict(value_type=Set(basestring)),
 
@@ -89,7 +89,10 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       git_cache_dir = Single(basestring),
 
       # If supplied, forward to cbuildbot as '--buildbucket-id'
-      buildbucket_id = Single(basestring, empty_val=CBB_BUILDBUCKET_ID)
+      buildbucket_id = Single(basestring, empty_val=CBB_BUILDBUCKET_ID),
+
+      # Extra arguments passed to cbuildbot.
+      extra_args = List(basestring),
     ),
 
     # A list of branches whose Chromite version is "old". Old Chromite
@@ -118,6 +121,11 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
     # Set to a ToT build after R54 branch, "release-R54-8743.B".
     git_cache_min_branch_version = Single(int, empty_val=8829),
   )
+
+  if CBB_EXTRA_ARGS:
+    cgrp.cbb.extra_args = CBB_EXTRA_ARGS
+  return cgrp
+
 
 config_ctx = config_item_context(BaseConfig)
 
@@ -148,9 +156,26 @@ def base(c):
     'factory-nyan-5772.B',
   ))
 
+  # Determine if we're manually specifying the tryjob branch in the extra
+  # args. If we are, use that as the branch version.
+  chromite_branch = c.chromite_branch
+  for idx, arg in enumerate(c.cbb.extra_args):
+    if arg == '--branch':
+      # Two-argument form: "--branch master"
+      idx += 1
+      if idx < len(c.cbb.extra_args):
+        chromite_branch = c.cbb.extra_args[idx]
+        break
+
+    # One-argument form: "--branch=master"
+    branch_flag = '--branch'
+    if arg.startswith(branch_flag):
+      chromite_branch = arg[len(branch_flag):]
+      break
+
   # Resolve branch version, if available.
   assert c.chromite_branch, "A Chromite branch must be configured."
-  version = _VERSION_RE.match(c.chromite_branch)
+  version = _VERSION_RE.match(chromite_branch)
   if version:
     c.branch_version = int(version.group(1))
 
@@ -164,7 +189,7 @@ def base(c):
 def cros(c):
   """Base configuration for CrOS builders to inherit from."""
   # Enable Git cache on all ToT builds and release branches that support it.
-  if not (c.branch_version and
+  if not (c.branch_version is not None and
           c.branch_version < c.git_cache_min_branch_version):
     c.cbb.git_cache_dir = '/b/cros_git_cache'
 

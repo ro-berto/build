@@ -259,12 +259,13 @@ class ChromiteApi(recipe_api.RecipeApi):
                   ['./build_packages', '--board', board],
                   args, **kwargs)
 
-  def configure(self, properties, config_map):
+  def configure(self, properties, config_map, **KWARGS):
     """Loads configuration from build properties into this recipe config.
 
     Args:
       properties (Properties): The build properties object.
       config_map (dict): The configuration map to use.
+      KWARGS: Additional keyword arguments to forward to the configuration.
     """
     master = properties['mastername']
     variant = properties.get('cbb_variant')
@@ -274,7 +275,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     master_config = config_map.get('master_config')
     assert master_config, (
         "No 'master_config' configuration for '%s'" % (master,))
-    self.set_config(master_config)
+    self.set_config(master_config, **KWARGS)
 
     # If we have any specialized build type configurations for this master,
     # load them.
@@ -288,14 +289,11 @@ class ChromiteApi(recipe_api.RecipeApi):
         self.apply_config(config_name)
 
 
-  def run_cbuildbot(self, args=[]):
+  def run_cbuildbot(self):
     """Performs a Chromite repository checkout, then runs cbuildbot.
-
-    Args:
-      args (list): Additional arguments to pass to `cbuildbot` invocation.
     """
     self.checkout_chromite()
-    self.run(args=args)
+    self.run()
 
   def checkout_chromite(self):
     """Checks out the configured Chromite branch.
@@ -431,7 +429,7 @@ class ChromiteApi(recipe_api.RecipeApi):
       cbb_args.extend(['--master-build-id', self.c.cbb.build_id])
 
     # Add custom args, if there are any.
-    cbb_args.extend(args)
+    cbb_args.extend(self.c.cbb.extra_args)
 
     # Run cbuildbot.
     return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),

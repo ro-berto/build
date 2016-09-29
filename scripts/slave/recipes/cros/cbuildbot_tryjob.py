@@ -71,22 +71,23 @@ def RunSteps(api):
   cbb_config_name = api.properties.get('cbb_config')
   assert cbb_config_name, "No configuration name specified."
 
-  # Apply our generic configuration.
-  api.chromite.configure(
-      api.properties,
-      _MASTER_CONFIG_MAP)
-  api.chromite.c.cbb.config = cbb_config_name
-
-  # Load the Chromite configuration for our target.
-  api.chromite.checkout_chromite()
-  cbb_config = api.chromite.load_config(cbb_config_name)
-
-  # Add parameters specified in the tryjob description.
+  # Get parameters specified in the tryjob description.
   tryjob_args = api.properties.get('cbb_extra_args', [])
   if tryjob_args:
     if tryjob_args.startswith('z:'):
       tryjob_args = zlib.decompress(base64.b64decode(tryjob_args[2:]))
     tryjob_args = api.json.loads(tryjob_args)
+
+  # Apply our generic configuration.
+  api.chromite.configure(
+      api.properties,
+      _MASTER_CONFIG_MAP,
+      CBB_EXTRA_ARGS=tryjob_args)
+  api.chromite.c.cbb.config = cbb_config_name
+
+  # Load the Chromite configuration for our target.
+  api.chromite.checkout_chromite()
+  cbb_config = api.chromite.load_config(cbb_config_name)
 
   # Determine our build directory name based on whether this build is internal
   # or external.
@@ -158,6 +159,40 @@ def GenTests(api):
           cbb_branch='release-R55-9999.B',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
+      )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
+  )
+
+  yield (
+      api.test('release_branch_one_param')
+      + api.properties(
+          mastername='chromiumos.tryserver',
+          buildername='paladin',
+          slavename='test',
+          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
+          revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-full',
+          cbb_branch='master',
+          cbb_extra_args=json.dumps([
+              '--timeout', '14400', '--remote-trybot',
+              '--remote-version=4', '--branch=release-R00-0000.B']),
+      )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
+  )
+
+  yield (
+      api.test('release_branch_two_params')
+      + api.properties(
+          mastername='chromiumos.tryserver',
+          buildername='paladin',
+          slavename='test',
+          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
+          revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-full',
+          cbb_branch='master',
+          cbb_extra_args=json.dumps([
+              '--timeout', '14400', '--remote-trybot',
+              '--remote-version=4', '--branch', 'release-R00-0000.B']),
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
