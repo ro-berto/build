@@ -58,7 +58,8 @@ def _url_open_json(url):
 # A whitelist of masters which get master json information from CBE rather than
 # by directly polling. Note that right now CBE only works for external masters.
 CBE_WHITELIST = set([
-  'chromium.perf'
+  'chromium.perf',
+  'chromium.fyi',
 ])
 
 CBE_URL = 'https://chrome-build-extract.appspot.com'

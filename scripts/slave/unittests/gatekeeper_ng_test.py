@@ -17,8 +17,10 @@ import utils  # "relative import" pylint: disable=W0403
 import copy
 import contextlib
 import json
+import logging
 import mock
 import os
+import re
 import StringIO
 import sys
 import tempfile
@@ -31,6 +33,7 @@ import test_env  # pylint: disable=W0403,W0611
 
 from slave import gatekeeper_ng
 from slave import gatekeeper_ng_config
+from slave import build_scan
 from slave import build_scan_db
 
 
@@ -123,6 +126,9 @@ class Master(object):
 
 class GatekeeperTest(unittest.TestCase):
   def setUp(self):
+    self._old_attempts = build_scan.MAX_ATTEMPTS
+    build_scan.MAX_ATTEMPTS = 0
+
     self.files_to_cleanup = []
     patcher = mock.patch('urllib2.urlopen')
     self.urlopen = patcher.start()
@@ -158,6 +164,14 @@ class GatekeeperTest(unittest.TestCase):
 
     self._gatekeeper_config = None
 
+    self.cbe_master_json_re = re.compile(
+        '%s/get_master/([a-zA-Z.]+)' % build_scan.CBE_URL)
+    #reg = r'%s/p/([a-zA-Z.]+)/builders/([a-zA-Z.]+)/builds/([0-9]+)' % (
+    reg = r'%s/p/([a-zA-Z.]+)/builders/(.+)/builds/([\d]+)' % (
+            build_scan.CBE_URL)
+    print reg
+    self.cbe_build_json_re = re.compile(reg)
+
   def fill_tempfile(self, content):
     fd, filename = tempfile.mkstemp()
     os.write(fd, content)
@@ -170,6 +184,8 @@ class GatekeeperTest(unittest.TestCase):
     for filename in self.files_to_cleanup:
       if os.path.exists(filename):
         os.remove(filename)
+
+    build_scan.MAX_ATTEMPTS = self._old_attempts
 
   def handle_build_tree(self, masters):
     """Before calling gatekeeper, synthesize master and build json.
@@ -240,13 +256,14 @@ class GatekeeperTest(unittest.TestCase):
 
     return Build(number, [step0, step1, step2, step3], committers)
 
-  def create_generic_build_tree(self, master_title, master_url_chunk):
+  def create_generic_build_tree(self, master_title, master_name):
     build = GatekeeperTest.create_generic_build(1, ['a_committer@chromium.org'])
 
     builder = Builder('mybuilder', [build])
 
-    return Master(master_title, self.master_url_root + master_url_chunk,
-                  [builder])
+    url = self.master_url_root + master_name
+
+    return Master(master_title, url, [builder])
 
   def call_gatekeeper(self, build_db=None, json=None):
     # pylint: disable=W0621
@@ -372,11 +389,21 @@ class GatekeeperTest(unittest.TestCase):
 
     self.url_calls.append(call)
 
+    master_json_url = self.cbe_master_json_re.match(url)
+    if master_json_url:
+      url = self.master_url_root + master_json_url.group(1) + '/json'
+
+    build_json_url = self.cbe_build_json_re.match(url)
+    if build_json_url:
+      g = build_json_url.group
+      url = '%s%s/json/builders/%s/builds/%s' % (
+          self.master_url_root, g(1), g(2), g(3))
+
     if url in self.urls:
       return copy.copy(self.urls[url](params))
-    else:
-      raise urllib2.HTTPError(url, 404, 'Not Found: %s' % url,
-                              None, StringIO.StringIO(''))
+
+    raise urllib2.HTTPError(url, 404, 'Not Found: %s' % url,
+                            None, StringIO.StringIO(''))
 
   @staticmethod
   def decode_param_json(param):
