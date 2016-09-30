@@ -61,30 +61,26 @@ class WebRTCApi(recipe_api.RecipeApi):
       'shards': 2,
     },
     'modules_unittests': {
-      'shards': 6,
+      'shards': 3,
     },
     'peerconnection_unittests': {
-      'shards': 4,
+      'shards': 3,
     },
     'rtc_stats_unittests': {},
     'rtc_unittests': {
-      'shards': 6,
+      'shards': 2,
     },
     'system_wrappers_unittests': {},
     'test_support_unittests': {},
     'tools_unittests': {},
-    'video_engine_tests': {
-      'shards': 4,
-    },
+    'video_engine_tests': {},
     'voice_engine_unittests': {},
     'webrtc_nonparallel_tests': {},
   })
 
   ANDROID_INSTRUMENTATION_TESTS = freeze({
     'AppRTCMobileTest': {},
-    'libjingle_peerconnection_android_unittest': {
-      'shards': 4,
-    },
+    'libjingle_peerconnection_android_unittest': {},
   })
 
   ANDROID_JUNIT_TESTS = freeze({
