@@ -761,7 +761,7 @@
             ],
             "subject_template": "V8 API checker %(result)s in %(project_name)s, revision %(revision)s"
           },
-          "WebKit Linux - TraceWrappables": {
+          "WebKit Linux Precise - TraceWrappables": {
             "tree_notify": [
               "hlopko@chromium.org"
             ],

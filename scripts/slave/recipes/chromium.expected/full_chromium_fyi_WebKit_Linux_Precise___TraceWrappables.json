@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/linux_layout",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -40,7 +40,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_layout",
+    "cwd": "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables",
     "env": {
       "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -183,7 +183,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux_layout/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -199,11 +199,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_layout/src",
+    "cwd": "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' msan=1 msan_track_origins=2 target_arch=x64 test_isolation_mode=prepare use_goma=1 use_prebuilt_instrumented_libraries=1",
+      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -212,16 +212,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux_layout/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/linux_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"WebKit Linux MSAN\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"WebKit Linux Precise - TraceWrappables\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -234,14 +234,14 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/linux_layout/src/testing/buildbot/chromium.webkit.json",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.webkit.json)",
+    "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux_layout/src/testing/buildbot/chromium.webkit.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"WebKit Linux MSAN\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"WebKit Linux Precise - TraceWrappables\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -272,7 +272,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/linux_layout/src/out/Release",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/out/Release",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -281,21 +281,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux_layout/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.webkit",
+      "chromium.fyi",
       "-b",
-      "WebKit Linux MSAN",
+      "WebKit Linux Precise - TraceWrappables",
       "--config-file",
-      "[BUILDER_CACHE]/linux_layout/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--swarming-targets-file",
       "browser_tests\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_layout/src",
+    "cwd": "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -303,28 +303,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[BUILDER_CACHE]/linux_layout/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -342,13 +320,13 @@
       "--target",
       "Release",
       "--src-dir",
-      "[BUILDER_CACHE]/linux_layout/src",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "WebKit Linux MSAN",
+      "WebKit Linux Precise - TraceWrappables",
       "--buildbot-mastername",
-      "chromium.webkit",
+      "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
       "--goma-deps-cache-dir",
@@ -356,13 +334,14 @@
       "--build-data-dir",
       "[ROOT]/build_data_dir",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "blink_tests",
       "browser_tests",
@@ -381,9 +360,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux_layout/src/tools/determinism/remove_build_metadata.py",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/linux_layout/src/out/Release"
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
@@ -393,14 +372,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/linux_layout/src/tools/swarming_client",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[BUILDER_CACHE]/linux_layout/src/out/Release/browser_tests.isolated.gen.json"
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/out/Release/browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -416,11 +395,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/linux_layout/src/out/Release",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/out/Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_layout",
+    "cwd": "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -441,7 +420,7 @@
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
       "browser_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_layout",
+    "cwd": "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -463,22 +442,21 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Linux MSAN\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Linux Precise - TraceWrappables\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Linux MSAN\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Linux Precise - TraceWrappables\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests",
-      "--builder-name=WebKit Linux MSAN",
+      "--builder-name=WebKit Linux Precise - TraceWrappables",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "--enable-msan",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",
       "--target",
       "Release",
       "-o",
       "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]/linux_layout/src/out",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -486,16 +464,13 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux MSAN",
+      "WebKit Linux Precise - TraceWrappables",
       "--step-name",
       "webkit_tests",
-      "--additional-expectations",
-      "src/third_party/WebKit/LayoutTests/MSANExpectations",
-      "--time-out-ms",
-      "66000",
-      "--options=--enable-sanitizer"
+      "--additional-driver-flag",
+      "--enable-blink-features=TraceWrappables"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_layout",
+    "cwd": "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -512,26 +487,24 @@
       "--results-dir",
       "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]/linux_layout/src/out",
+      "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables/src/out",
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux MSAN",
+      "WebKit Linux Precise - TraceWrappables",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--staging-dir",
-      "[CACHE]/chrome_staging",
-      "--gs-acl",
-      "public-read"
+      "[CACHE]/chrome_staging"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_layout",
+    "cwd": "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_MSAN/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_MSAN/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Precise_-_TraceWrappables/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Precise_-_TraceWrappables/571/layout-test-results.zip@@@"
     ]
   },
   {
@@ -541,7 +514,7 @@
       "\nimport sys\nprint '%s wasn\\'t triggered' % sys.argv[1]\nsys.exit(1)\n",
       "browser_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_layout",
+    "cwd": "[BUILDER_CACHE]/WebKit_Linux_Precise___TraceWrappables",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

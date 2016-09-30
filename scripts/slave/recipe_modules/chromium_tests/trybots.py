@@ -17,19 +17,19 @@ TRYBOTS = freeze({
     'builders': {
       'linux_precise_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux (dbg)',
+        'buildername': 'WebKit Linux Precise (dbg)',
       }),
       'linux_precise_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux',
+        'buildername': 'WebKit Linux Precise',
       }),
       'linux_precise_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux (dbg)',
+        'buildername': 'WebKit Linux Precise (dbg)',
       }, analyze_mode='compile'),
       'linux_precise_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux',
+        'buildername': 'WebKit Linux Precise',
       }, analyze_mode='compile'),
       'linux_trusty_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
@@ -366,7 +366,7 @@ TRYBOTS = freeze({
       }),
       'linux_layout_tests_slimming_paint_v2': simple_bot({
         'mastername': 'chromium.fyi',
-        'buildername': 'WebKit Linux slimming_paint_v2 Dummy Builder',
+        'buildername': 'WebKit Linux Precise slimming_paint_v2 Dummy Builder',
       }),
       # Optional GPU bots.
       'linux_optional_gpu_tests_rel': {
@@ -558,7 +558,7 @@ TRYBOTS = freeze({
     'builders': {
       'v8_linux_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux',
+        'buildername': 'WebKit Linux Precise',
       }),
       'v8_linux_chromium_gn_rel': simple_bot({
         'mastername': 'client.v8.fyi',

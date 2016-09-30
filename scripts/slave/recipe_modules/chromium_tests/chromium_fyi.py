@@ -119,7 +119,7 @@ SPEC = {
     # There are no slaves for this builder and this builder doesn't
     # appear on the actual continuous waterfall; this configuration
     # is here so that a try bot can be added.
-    'WebKit Linux slimming_paint_v2 Dummy Builder': {
+    'WebKit Linux Precise slimming_paint_v2 Dummy Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb','ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -141,7 +141,7 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'WebKit Linux - WPTServe':{
+    'WebKit Linux Precise - WPTServe':{
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb','ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -163,7 +163,7 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'WebKit Linux - TraceWrappables': {
+    'WebKit Linux Precise - TraceWrappables': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',

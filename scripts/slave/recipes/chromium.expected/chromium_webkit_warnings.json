@@ -198,7 +198,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"WebKit Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"WebKit Linux Precise\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -241,7 +241,7 @@
       "-m",
       "chromium.webkit",
       "-b",
-      "WebKit Linux",
+      "WebKit Linux Precise",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -273,7 +273,7 @@
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "WebKit Linux",
+      "WebKit Linux Precise",
       "--buildbot-mastername",
       "chromium.webkit",
       "--buildbot-slavename",
@@ -308,11 +308,11 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux Precise\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux Precise\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests",
-      "--builder-name=WebKit Linux",
+      "--builder-name=WebKit Linux Precise",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -330,7 +330,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux",
+      "WebKit Linux Precise",
       "--step-name",
       "webkit_tests"
     ],
@@ -355,7 +355,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux",
+      "WebKit Linux Precise",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--staging-dir",
@@ -366,8 +366,8 @@
     },
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Precise/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Precise/571/layout-test-results.zip@@@"
     ]
   },
   {

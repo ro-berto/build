@@ -298,7 +298,7 @@ SPEC['builders'] = {
     'use_isolate': True,
     'checkout_dir': 'mac_layout',
   },
-  'WebKit Linux': {
+  'WebKit Linux Precise': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
     'gclient_config': 'chromium',
@@ -340,7 +340,7 @@ SPEC['builders'] = {
     'use_isolate': True,
     'checkout_dir': 'linux_layout',
   },
-  'WebKit Linux ASAN': {
+  'WebKit Linux Precise ASAN': {
     'chromium_config': 'chromium_clang',
     'chromium_apply_config': ['asan', 'mb'],
     'gclient_config': 'chromium',
@@ -364,7 +364,7 @@ SPEC['builders'] = {
     'use_isolate': True,
     'checkout_dir': 'linux_layout',
   },
-  'WebKit Linux MSAN': {
+  'WebKit Linux Precise MSAN': {
     'chromium_config': 'chromium_clang',
     'gclient_config': 'chromium',
     'chromium_apply_config': [
@@ -394,7 +394,7 @@ SPEC['builders'] = {
     'use_isolate': True,
     'checkout_dir': 'linux_layout',
   },
-  'WebKit Linux (dbg)': {
+  'WebKit Linux Precise (dbg)': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
@@ -451,7 +451,7 @@ SPEC['builders'] = {
       'platform': 'linux',
     },
   },
-  'WebKit Linux Leak': {
+  'WebKit Linux Precise Leak': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
