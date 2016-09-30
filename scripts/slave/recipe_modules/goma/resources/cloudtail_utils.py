@@ -20,13 +20,9 @@ def start_cloudtail(args):
                            'tail',
                            '--log-id', 'goma_compiler_proxy',
                            '--path',
-                           goma_utils.GetLatestGomaCompilerProxyInfo()],
-                          stdout=open(os.devnull, 'w'),
-                          stderr=open(os.devnull, 'w'),
-                          close_fds=True)
-
-  sys.stdout.write(str(proc.pid))
-
+                           goma_utils.GetLatestGomaCompilerProxyInfo()])
+  with open(args.pid_file, 'w') as f:
+    f.write(str(proc.pid))
 
 def main():
   parser = argparse.ArgumentParser(
@@ -39,25 +35,24 @@ def main():
   parser_start.set_defaults(command='start')
   parser_start.add_argument('--cloudtail-path', required=True,
                             help='path of cloudtail binary')
+  parser_start.add_argument('--pid-file', required=True,
+                            help='file written pid')
 
   parser_stop = subparsers.add_parser('stop',
                                       help='subcommand to stop cloudtail')
   parser_stop.set_defaults(command='stop')
-  parser_stop.add_argument('--killed-pid', type=int, required=True,
-                           help='pid that is killed.')
+  parser_stop.add_argument('--killed-pid-file', required=True,
+                           help='file written the pid to be killed.')
 
   args = parser.parse_args()
 
   if args.command == 'start':
     start_cloudtail(args)
   elif args.command == 'stop':
-    try:
-      os.kill(args.killed_pid, signal.SIGKILL)
-    except OSError as e:
-      if e.errno != errno.ESRCH:
-        # TODO(tikuta): Resolve https://crbug.com/639910.
-        raise
-
+    with open(args.killed_pid_file) as f:
+      # cloudtail flushes log and terminates
+      # within 5 seconds when it recieves SIGINT.
+      os.kill(int(f.read()), signal.SIGINT)
 
 if '__main__' == __name__:
   sys.exit(main())

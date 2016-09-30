@@ -85,13 +85,14 @@
       "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]\\cipd\\goma\\cloudtail"
+      "[CACHE]\\cipd\\goma\\cloudtail",
+      "--pid-file",
+      "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "start cloudtail",
-    "stdout": "/path/to/tmp/"
+    "name": "start cloudtail"
   },
   {
     "cmd": [
@@ -201,8 +202,8 @@
       "-u",
       "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
       "stop",
-      "--killed-pid",
-      "12345"
+      "--killed-pid-file",
+      "[TMP_BASE]\\cloudtail.pid"
     ],
     "name": "stop cloudtail"
   },

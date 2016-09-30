@@ -15,7 +15,6 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_started = False
 
     self._goma_ctl_env = {}
-    self._cloudtail_pid = None
     self._goma_jobs = None
 
   @property
@@ -28,6 +27,10 @@ class GomaApi(recipe_api.RecipeApi):
   def cloudtail_path(self):
     assert self._goma_dir
     return self.m.path.join(self._goma_dir, 'cloudtail')
+
+  @property
+  def cloudtail_pid_file(self):
+    return self.m.path['tmp_base'].join('cloudtail.pid')
 
   @property
   def json_path(self):
@@ -133,20 +136,17 @@ print jobs
       InfraFailure if it fails to start cloudtail
     """
 
-    assert self._cloudtail_pid is None
-
-    step_result = self.m.python(
+    self.m.python(
       name='start cloudtail',
       script=self.resource('cloudtail_utils.py'),
       args=['start',
-            '--cloudtail-path', self.cloudtail_path],
+            '--cloudtail-path', self.cloudtail_path,
+            '--pid-file', self.m.raw_io.output(
+                leak_to=self.cloudtail_pid_file)],
       env=self._goma_ctl_env,
-      stdout=self.m.raw_io.output(),
       step_test_data=(
-          lambda: self.m.raw_io.test_api.stream_output('12345')),
+          lambda: self.m.raw_io.test_api.output('12345')),
       infra_step=True)
-
-    self._cloudtail_pid = step_result.stdout
 
   def _stop_cloudtail(self):
     """Stop cloudtail started by _start_cloudtail
@@ -155,16 +155,12 @@ print jobs
       InfraFailure if it fails to stop cloudtail
     """
 
-    assert self._cloudtail_pid is not None
-
     self.m.python(
         name='stop cloudtail',
         script=self.resource('cloudtail_utils.py'),
         args=['stop',
-              '--killed-pid', self._cloudtail_pid],
+              '--killed-pid-file', self.cloudtail_pid_file],
         infra_step=True)
-
-    self._cloudtail_pid = None
 
   def start(self, env=None, **kwargs):
     """Start goma compiler_proxy.
