@@ -39,7 +39,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     ])
     if not api.m.tryserver.is_tryserver:
       tests.append(BaremetalTest('webrtc_perf_tests', revision, perf_test=True))
-  if test_suite in ('android_device', 'android_swarming'):
+  if test_suite in ('android_device', 'android_linux'):
     for test, extra_args in sorted(api.ANDROID_DEVICE_TESTS.items()):
       tests.append(AndroidTest(test, enable_swarming, **extra_args))
     if (not api.m.tryserver.is_tryserver and api.c.PERF_ID and
@@ -49,9 +49,9 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     for test, extra_args in sorted(api.ANDROID_INSTRUMENTATION_TESTS.items()):
       tests.append(AndroidInstrumentationTest(test, enable_swarming,
                                               **extra_args))
-  if test_suite in ('android_linux', 'android_swarming'):
+  if test_suite == 'android_linux':
     for test, extra_args in sorted(api.ANDROID_JUNIT_TESTS.items()):
-      tests.append(AndroidJunitTest(test, enable_swarming, **extra_args))
+      tests.append(AndroidJunitTest(test, False, **extra_args))
 
   return tests
 

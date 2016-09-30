@@ -54,13 +54,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_apply_config': ['android'],
     'test_suite': 'android_linux',
   },
-  'webrtc_android_swarming': {
-    'chromium_config': 'android',
-    'chromium_android_config': 'webrtc',
-    'gclient_config': 'webrtc',
-    'gclient_apply_config': ['android'],
-    'test_suite': 'android_swarming',
-  },
 })
 
 WEBRTC_REVISION_PERF_CONFIG = '{\'a_default_rev\': \'r_webrtc_rev\'}'
@@ -656,7 +649,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Release (swarming)': {
-        'recipe_config': 'webrtc_android_swarming',
+        'recipe_config': 'webrtc_android_linux',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -698,6 +691,12 @@ BUILDERS = freeze({
           'Android32 Tests (K Nexus5)',
           'Android32 Tests (L Nexus6)',
         ],
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Android',
+          'device_type': 'bullhead', # Nexus 5X
+        }
       },
       'Android32 Tests (J Nexus4)': {
         'recipe_config': 'webrtc_android',
@@ -1341,7 +1340,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'android_swarming': {
-        'recipe_config': 'webrtc_android_swarming',
+        'recipe_config': 'webrtc_android_linux',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
