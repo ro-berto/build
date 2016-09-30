@@ -159,9 +159,9 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@deps@{@@@",
-      "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"https://repo2.git@beefdead\", @@@",
-      "@@@STEP_LOG_LINE@deps@  \"odd/dep\": \"odd@weird\", @@@",
-      "@@@STEP_LOG_LINE@deps@  \"yet/another/dep\": \"repo3@deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@deps@  \"buildtools\": \"https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"third_party/snappy/src\": \"https://chromium.googlesource.com/external/snappy.git@762bb32f0c9d2f31ba4958c7c0933d22e80c20bf\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"tools/gyp\": \"https://chromium.googlesource.com/external/gyp.git@e7079f0e0e14108ab0dba58728ff219637458563\"@@@",
       "@@@STEP_LOG_LINE@deps@}@@@",
       "@@@STEP_LOG_END@deps@@@"
     ]
@@ -185,60 +185,75 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@deps@{@@@",
-      "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"https://repo2.git@deadbeef\", @@@",
-      "@@@STEP_LOG_LINE@deps@  \"another/dep\": \"repo3@deadbeef\", @@@",
-      "@@@STEP_LOG_LINE@deps@  \"odd/dep\": \"odd@odd\", @@@",
-      "@@@STEP_LOG_LINE@deps@  \"test/test262/data\": \"repo4@ignore\"@@@",
+      "@@@STEP_LOG_LINE@deps@  \"base/trace_event/common\": \"https://chromium.googlesource.com/chromium/src/base/trace_event/common.git@08b7b94e88aecc99d435af7f29fda86bd695c4bd\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"build\": \"https://chromium.googlesource.com/chromium/src/build.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"buildtools\": \"https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"test/test262/data\": \"https://chromium.googlesource.com/external/github.com/tc39/test262.git@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"tools/gyp\": \"https://chromium.googlesource.com/external/gyp.git@702ac58e477214c635d9b541932e75a95d349352\"@@@",
       "@@@STEP_LOG_LINE@deps@}@@@",
       "@@@STEP_LOG_END@deps@@@"
     ]
   },
   {
     "cmd": [
-      "roll-dep-svn",
-      "--no-verify-revision",
-      "v8/a/dep",
-      "beefdead"
+      "git",
+      "ls-remote",
+      "https://chromium.googlesource.com/chromium/src/base/trace_event/common.git",
+      "HEAD"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "roll dependency a_dep"
+    "name": "look up base_trace_event_common",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@deadbeef@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "roll-dep-svn",
+      "--no-verify-revision",
+      "v8/base/trace_event/common",
+      "deadbeef"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "roll dependency base_trace_event_common",
+    "~followup_annotations": [
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [
       "git",
       "ls-remote",
-      "repo3",
+      "https://chromium.googlesource.com/chromium/src/build.git",
       "HEAD"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "look up another_dep",
+    "name": "look up build",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@deadbeaf@@@"
+      "@@@STEP_TEXT@deadbeef@@@"
     ]
   },
   {
     "cmd": [
       "roll-dep-svn",
       "--no-verify-revision",
-      "v8/another/dep",
-      "deadbeaf"
+      "v8/build",
+      "deadbeef"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "roll dependency another_dep"
+    "name": "roll dependency build"
   },
   {
     "cmd": [
       "roll-dep-svn",
       "--no-verify-revision",
-      "v8/odd/dep",
-      "weird"
+      "v8/tools/gyp",
+      "e7079f0e0e14108ab0dba58728ff219637458563"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "roll dependency odd_dep",
-    "~followup_annotations": [
-      "@@@STEP_WARNINGS@@@"
-    ]
+    "name": "roll dependency tools_gyp"
   },
   {
     "cmd": [
@@ -261,9 +276,9 @@
       "-m",
       "Update V8 DEPS.",
       "-m",
-      "Rolling v8/a/dep: https://repo2/+log/deadbee..beefdea",
+      "Rolling v8/build: https://chromium.googlesource.com/chromium/src/build/+log/d3f34f8..deadbee",
       "-m",
-      "Rolling v8/another/dep: repo3/+log/deadbee..deadbea",
+      "Rolling v8/tools/gyp: https://chromium.googlesource.com/external/gyp/+log/702ac58..e7079f0",
       "-m",
       "TBR=machenbach@chromium.org,vogelheim@chromium.org,hablich@chromium.org"
     ],

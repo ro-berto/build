@@ -27,9 +27,6 @@ BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
 LOG_TEMPLATE = 'Rolling v8/%s: %s/+log/%s..%s'
-V8_DEPS_DIFFS = freeze({
-  'tools/gyp': 'build/gyp',
-})
 
 # Skip these dependencies (list without solution name prefix).
 BLACKLIST = [
@@ -125,9 +122,6 @@ def RunSteps(api):
   v8_deps = GetDEPS(
       api, 'v8', V8_REPO)
 
-  # Transform deps names that exist in src but have a different path in v8.
-  cr_deps = dict((V8_DEPS_DIFFS.get(k, k), v) for k, v in cr_deps.iteritems())
-
   commit_message = []
 
   # Iterate over all v8 deps.
@@ -194,19 +188,17 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  v8_deps_info = (
-    'v8: repo1@v8_rev\n'
-    'v8/a/dep: https://repo2.git@deadbeef\n'
-    'v8/odd/dep: odd@odd\n'
-    'v8/another/dep: repo3@deadbeef\n'
-    'v8/test/test262/data: repo4@ignore\n'
-  )
-  cr_deps_info = (
-    'src: repo3@cr_rev\n'
-    'src/a/dep: https://repo2.git@beefdead\n'
-    'src/yet/another/dep: repo3@deadbeef\n'
-    'src/odd/dep: odd@weird\n'
-  )
+  v8_deps_info = """v8: https://chromium.googlesource.com/v8/v8.git
+v8/base/trace_event/common: https://chromium.googlesource.com/chromium/src/base/trace_event/common.git@08b7b94e88aecc99d435af7f29fda86bd695c4bd
+v8/build: https://chromium.googlesource.com/chromium/src/build.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
+v8/buildtools: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
+v8/test/test262/data: https://chromium.googlesource.com/external/github.com/tc39/test262.git@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7
+v8/tools/gyp: https://chromium.googlesource.com/external/gyp.git@702ac58e477214c635d9b541932e75a95d349352"""
+  cr_deps_info = """src: https://chromium.googlesource.com/chromium/src.git
+src/buildtools: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
+src/third_party/snappy/src: https://chromium.googlesource.com/external/snappy.git@762bb32f0c9d2f31ba4958c7c0933d22e80c20bf
+src/tools/gyp: https://chromium.googlesource.com/external/gyp.git@e7079f0e0e14108ab0dba58728ff219637458563"""
+
   yield (
       api.test('roll') +
       api.properties.generic(mastername='client.v8.fyi',
@@ -220,12 +212,16 @@ def GenTests(api):
           api.raw_io.stream_output(cr_deps_info, stream='stdout'),
       ) +
       api.override_step_data(
-          'roll dependency odd_dep',
+          'roll dependency base_trace_event_common',
           retcode=1,
       ) +
       api.override_step_data(
-          'look up another_dep',
-          api.raw_io.stream_output('deadbeaf\tHEAD', stream='stdout'),
+          'look up build',
+          api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
+      ) +
+      api.override_step_data(
+          'look up base_trace_event_common',
+          api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
       ) +
       api.override_step_data(
           'git diff',
