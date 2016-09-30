@@ -26,6 +26,7 @@ AUTO_REVIEWERS = [
 BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
+LOG_TEMPLATE = 'Rolling v8/%s: ' + BASE_URL + '/%s/+log/%s..%s'
 V8_DEPS_DIFFS = freeze({
   'tools/gyp': 'build/gyp',
 })
@@ -163,7 +164,8 @@ def RunSteps(api):
           cwd=api.path['checkout'],
       )
       if step_result.retcode == 0:
-        commit_message.append('Rolling %s to %s' % ('v8/%s' % name, new_rev))
+        commit_message.append(LOG_TEMPLATE % (
+            name, v8_repo.rstrip('.git'), v8_rev[:7], new_rev[:7]))
       else:
         step_result.presentation.status = api.step.WARNING
 
@@ -194,14 +196,14 @@ def RunSteps(api):
 def GenTests(api):
   v8_deps_info = (
     'v8: repo1@v8_rev\n'
-    'v8/a/dep: repo2@deadbeef\n'
+    'v8/a/dep: repo2.git@deadbeef\n'
     'v8/odd/dep: odd@odd\n'
     'v8/another/dep: repo3@deadbeef\n'
     'v8/test/test262/data: repo4@ignore\n'
   )
   cr_deps_info = (
     'src: repo3@cr_rev\n'
-    'src/a/dep: repo2@beefdead\n'
+    'src/a/dep: repo2.git@beefdead\n'
     'src/yet/another/dep: repo3@deadbeef\n'
     'src/odd/dep: odd@weird\n'
   )

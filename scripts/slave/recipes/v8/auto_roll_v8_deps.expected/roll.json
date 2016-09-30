@@ -159,7 +159,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@deps@{@@@",
-      "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"repo2@beefdead\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"repo2.git@beefdead\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"odd/dep\": \"odd@weird\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"yet/another/dep\": \"repo3@deadbeef\"@@@",
       "@@@STEP_LOG_LINE@deps@}@@@",
@@ -185,7 +185,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@deps@{@@@",
-      "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"repo2@deadbeef\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"a/dep\": \"repo2.git@deadbeef\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"another/dep\": \"repo3@deadbeef\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"odd/dep\": \"odd@odd\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"test/test262/data\": \"repo4@ignore\"@@@",
@@ -261,9 +261,9 @@
       "-m",
       "Update V8 DEPS.",
       "-m",
-      "Rolling v8/a/dep to beefdead",
+      "Rolling v8/a/dep: https://chromium.googlesource.com/repo2/+log/deadbee..beefdea",
       "-m",
-      "Rolling v8/another/dep to deadbeaf",
+      "Rolling v8/another/dep: https://chromium.googlesource.com/repo3/+log/deadbee..deadbea",
       "-m",
       "TBR=machenbach@chromium.org,vogelheim@chromium.org,hablich@chromium.org"
     ],
