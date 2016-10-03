@@ -905,8 +905,9 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.coverage or self.c.incremental_coverage:
       args.extend(['--coverage-dir', self.coverage_dir])
     if result_details:
-      details_dir = self.m.path.mkdtemp('temp_details')
+      details_dir = None
       if not json_results_file:
+        details_dir = self.m.path.mkdtemp('temp_details')
         json_results_file = self.m.path.join(details_dir, 'json_results_file')
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
@@ -950,30 +951,30 @@ class AndroidApi(recipe_api.RecipeApi):
         with self.m.step.nest(
             'process results for %s' % step_name) as nest_step:
           try:
-            details_html = details_dir.join('details.html')
-            presentation_args = ['--json-file',
-                                 json_results_file,
-                                 '--html-file',
-                                 details_html,
-                                 '--master-name',
-                                 self.m.properties.get('mastername')]
-            if cs_base_url:
-              presentation_args.extend(['--cs-base-url', cs_base_url])
-            self.m.python(
-                'Generate Result Details',
-                self.resource('test_results_presentation.py'),
-                args=presentation_args)
-            details_list = self.m.file.read(
-                'Read detail.html',
-                details_html,
-                test_data="<!DOCTYPE html><html></html>").splitlines()
-            self.m.step.active_result.presentation.logs['result_details'] = (
-                details_list)
-            nest_step.presentation.logs['result_details'] = (
-                details_list)
+            details = self.create_result_details(json_results_file,
+                                                 cs_base_url)
+            nest_step.presentation.logs['result_details'] = details
           finally:
-            self.m.file.rmtree('Remove details.html tmp files.', details_dir)
+            if details_dir:
+              self.m.file.rmtree('remove temporary directory', details_dir)
     return step_result
+
+  def create_result_details(self, json_results_file, cs_base_url):
+    presentation_args = ['--json-file',
+                         json_results_file,
+                         '--master-name',
+                         self.m.properties.get('mastername')]
+    if cs_base_url:
+      presentation_args.extend(['--cs-base-url', cs_base_url])
+    result_details = self.m.python(
+        'generate result details',
+        self.resource('test_results_presentation.py'),
+        args=presentation_args,
+        stdout=self.m.raw_io.output(),
+        step_test_data=(
+            lambda: self.m.raw_io.test_api.stream_output(
+                '<!DOCTYPE html><html></html>')))
+    return result_details.stdout.splitlines()
 
   def logcat_dump(self, gs_bucket=None):
     if gs_bucket:
@@ -1140,8 +1141,9 @@ class AndroidApi(recipe_api.RecipeApi):
     if tool:
       args.append('--tool=%s' % tool)
     if result_details:
-      details_dir = self.m.path.mkdtemp('temp_details')
+      details_dir = None
       if not json_results_file:
+        details_dir = self.m.path.mkdtemp('temp_details')
         json_results_file = self.m.path.join(details_dir, 'json_results_file')
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
@@ -1164,26 +1166,12 @@ class AndroidApi(recipe_api.RecipeApi):
         with self.m.step.nest(
             'process results for %s' % step_name) as nest_step:
           try:
-            details_html = details_dir.join('details.html')
-            self.m.python(
-              'Generate Result Details',
-              self.resource('test_results_presentation.py'),
-              args=['--json-file',
-                    json_results_file,
-                    '--html-file',
-                    details_html,
-                    '--master-name',
-                    self.m.properties.get('mastername')])
-            details_list = self.m.file.read(
-                'Read detail.html',
-                details_html,
-                test_data="<!DOCTYPE html><html></html>").splitlines()
-            self.m.step.active_result.presentation.logs['result_details'] = (
-                details_list)
-            nest_step.presentation.logs['result_details'] = (
-                details_list)
+            details = self.create_result_details(json_results_file,
+                                                 None)
+            nest_step.presentation.logs['result_details'] = details
           finally:
-            self.m.file.rmtree('Remove details.html tmp files.', details_dir)
+            if details_dir:
+                self.m.file.rmtree('remove temporary directory', details_dir)
 
   def run_java_unit_test_suite(self, suite, verbose=True,
                                json_results_file=None, suffix=None, **kwargs):

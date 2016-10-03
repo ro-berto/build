@@ -160,8 +160,6 @@ def main():
   logging.basicConfig(level=logging.INFO)
   parser = argparse.ArgumentParser()
   parser.add_argument('--json-file', help='Path of json file.', required=True)
-  parser.add_argument('--html-file', help='Path to store html file.',
-                      required=True)
   parser.add_argument('--cs-base-url', help='Base url for code search.',
                       default='http://cs.chromium.org')
   parser.add_argument('--master-name', help='Master name in urls.')
@@ -170,8 +168,7 @@ def main():
   if os.path.exists(args.json_file):
     result_html_string = result_details(args.json_file, args.cs_base_url,
                                         args.master_name)
-    with open(args.html_file, 'w') as html:
-      html.write(result_html_string)
+    print result_html_string
   else:
     raise Exception('Json file of result details is not found.')
 

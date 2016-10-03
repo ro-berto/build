@@ -882,31 +882,15 @@
       "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
       "--json-file",
       "[TMP_BASE]/temp_details_tmp_1/json_results_file",
-      "--html-file",
-      "[TMP_BASE]/temp_details_tmp_1/details.html",
       "--master-name",
       "chromium.testing.master",
       "--cs-base-url",
       "cs_base_url"
     ],
-    "name": "process results for SmallTest.Generate Result Details",
+    "name": "process results for SmallTest.generate result details",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/temp_details_tmp_1/details.html",
-      "/path/to/tmp/"
-    ],
-    "name": "process results for SmallTest.Read detail.html",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {
@@ -916,7 +900,7 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]/temp_details_tmp_1"
     ],
-    "name": "process results for SmallTest.rmtree Remove details.html tmp files.",
+    "name": "process results for SmallTest.rmtree remove temporary directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -967,29 +951,13 @@
       "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
       "--json-file",
       "[TMP_BASE]/temp_details_tmp_2/json_results_file",
-      "--html-file",
-      "[TMP_BASE]/temp_details_tmp_2/details.html",
       "--master-name",
       "chromium.testing.master"
     ],
-    "name": "process results for unittests.Generate Result Details",
+    "name": "process results for unittests.generate result details",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/temp_details_tmp_2/details.html",
-      "/path/to/tmp/"
-    ],
-    "name": "process results for unittests.Read detail.html",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {
@@ -999,7 +967,7 @@
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]/temp_details_tmp_2"
     ],
-    "name": "process results for unittests.rmtree Remove details.html tmp files.",
+    "name": "process results for unittests.rmtree remove temporary directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
