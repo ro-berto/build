@@ -1913,7 +1913,7 @@ def DatabaseSetup(buildmaster_config):
   # By default nothing is ever deleted from the database.  We set a
   # changeHorizon here to put an upper bound on the database size.
   if 'changeHorizon' not in buildmaster_config:
-    buildmaster_config['changeHorizon'] = 3000
+    buildmaster_config['changeHorizon'] = 30000
 
   # Read database credentials in the master directory.
   if os.path.isfile('.dbconfig'):
