@@ -167,12 +167,6 @@ def goma_setup(options, env):
   env['GOMA_DEPS_CACHE_DIR'] = (
       options.goma_deps_cache_dir or options.target_output_dir)
 
-  # HACK(shinyak): Temporarily disable CompilerInfoCache.
-  # current goma (version 112) is not invalidating older pnacl-clang
-  # CompilerInfo, and still using it. This could cause invalid compile result.
-  # See b/31535945
-  env['GOMA_COMPILER_INFO_CACHE_FILE'] = ''
-
   if options.goma_hermetic:
     env['GOMA_HERMETIC'] = options.goma_hermetic
   if options.goma_enable_remote_link:
