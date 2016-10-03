@@ -22,31 +22,6 @@ def sdk_multi_steps(api, buildspec):
     soln = src_cfg.solutions.add()
     soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
-    soln = src_cfg.solutions.add()
-    soln.name = "src-internal"
-    soln.url = "https://chrome-internal.googlesource.com/chrome/" + \
-            "src-internal.git"
-    soln.custom_deps = {'src/chrome/test/data/firefox2_searchplugins': None,
-                        'src/tools/grit/grit/test/data': None,
-                        'src/chrome/test/data/firefox3_searchplugins': None,
-                        'src/webkit/data/test_shell/plugins': None,
-                        'src/data/page_cycler': None,
-                        'src/data/mozilla_js_tests': None,
-                        'src/chrome/test/data/firefox2_profile/searchplugins':
-                        None,
-                        'src/data/esctf': None,
-                        'src/data/memory_test': None,
-                        'src/data/mach_ports': None,
-                        'src/webkit/data/xbm_decoder': None,
-                        'src/webkit/data/ico_decoder': None,
-                        'src/data/selenium_core': None,
-                        'src/chrome/test/data/ssl/certs': None,
-                        'src/chrome/test/data/osdd': None,
-                        'src/webkit/data/bmp_decoder': None,
-                        'src/chrome/test/data/firefox3_profile/searchplugins':
-                        None,
-                        'src/data/autodiscovery': None}
-    soln.custom_vars = {}
     src_cfg.got_revision_mapping.update(
         {'src': 'got_revision',
          'src/third_party/WebKit': 'got_webkit_revision',
@@ -93,10 +68,8 @@ def sdk_multirel_steps(api, buildspec):
     src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
     soln.name = "chrome-official"
-    soln.url = "https://chrome-internal.googlesource.com/chrome/tools/"+\
-        "buildspec.git"
-    soln.custom_deps = {'src-pdf': None, 'src/pdf': None}
-    soln.deps_file = 'build/%s/DEPS' % buildspec
+    soln.url = "https://chromium.googlesource.com/chromium/src.git"
+    soln.deps_file = 'DEPS'
     src_cfg.got_revision_mapping.update(
         {'src': 'got_revision',
          'src/third_party/WebKit': 'got_webkit_revision',
