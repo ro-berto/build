@@ -57,19 +57,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     'audio_decoder_unittests': {},
     'common_audio_unittests': {},
     'common_video_unittests': {},
-    'modules_tests': {
-      'shards': 2,
-    },
-    'modules_unittests': {
-      'shards': 3,
-    },
-    'peerconnection_unittests': {
-      'shards': 3,
-    },
+    'modules_tests': {},
+    'modules_unittests': {},
+    'peerconnection_unittests': {},
     'rtc_stats_unittests': {},
-    'rtc_unittests': {
-      'shards': 2,
-    },
+    'rtc_unittests': {},
     'system_wrappers_unittests': {},
     'test_support_unittests': {},
     'tools_unittests': {},
