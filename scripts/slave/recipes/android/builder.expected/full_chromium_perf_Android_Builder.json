@@ -610,6 +610,41 @@
       "--target",
       "Release",
       "--name",
+      "build_product.zip",
+      "--files",
+      "apks",
+      "--ignore-subfolder-names"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "package_apks_for_bisect"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/src/out/build_product.zip",
+      "gs://chrome-test-builds/official-by-commit/Android Builder/full-build-linux_170242.zip"
+    ],
+    "name": "gsutil upload_apks_for_bisect",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/official-by-commit/Android Builder/full-build-linux_170242.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/archive_build.py",
+      "--target",
+      "Release",
+      "--name",
       "build_product.zip"
     ],
     "cwd": "[SLAVE_BUILD]/src",

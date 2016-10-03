@@ -228,6 +228,32 @@ class AndroidApi(recipe_api.RecipeApi):
         args=['scan'],
         cwd=self.m.path['checkout'])
 
+  def upload_apks_for_bisect(self, update_properties, bucket, path):
+    """Uploads android apks for functional bisects."""
+    archive_name = 'build_product.zip'
+    zipfile = self.m.path['checkout'].join('out', archive_name)
+    self.make_zip_archive(
+      'package_apks_for_bisect',
+      archive_name,
+      files=['apks'],
+      preserve_paths=False,
+      cwd=self.m.path['checkout']
+    )
+    # Get the commit postion for the revision to be used in archive name,
+    # if not found use the git hash.
+    try:
+      branch, rev = self.m.commit_position.parse(
+          update_properties.get('got_revision_cp'))
+    except ValueError:  # pragma: no cover
+      rev = update_properties.get('got_revision')
+
+    self.m.gsutil.upload(
+        name='upload_apks_for_bisect',
+        source=zipfile,
+        bucket=bucket,
+        dest=path % rev,
+        version='4.7')
+
   def upload_build(self, bucket, path):
     archive_name = 'build_product.zip'
 

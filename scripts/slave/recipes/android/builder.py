@@ -50,6 +50,11 @@ BUILDERS = freeze({
       'kwargs': {
         'BUILD_CONFIG': 'Release',
       },
+      'upload_for_bisect': {
+        'bucket': 'chrome-test-builds',
+        'path': lambda api: (
+            'official-by-commit/Android Builder/full-build-linux_%s.zip'),
+      },
       'upload': {
         'bucket': 'chrome-perf',
         'path': lambda api: ('Android Builder/full-build-linux_%s.zip'
@@ -82,6 +87,11 @@ BUILDERS = freeze({
       'gclient_apply_config': ['android', 'perf'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
+      },
+      'upload_for_bisect': {
+        'bucket': 'chrome-test-builds',
+        'path': lambda api: (
+            'official-by-commit/Android arm64 Builder/full-build-linux_%s.zip'),
       },
       'upload': {
         'bucket': 'chrome-perf',
@@ -201,7 +211,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
     api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   api.chromium.ensure_goma()
-  api.bot_update.ensure_checkout()
+  update_step = api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
 
   api.chromium.runhooks()
@@ -217,6 +227,12 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   for apk_name in bot_config.get('resource_sizes_apks', ()):
     apk_path = api.chromium_android.apk_path(apk_name)
     api.chromium_android.resource_sizes(apk_path, chartjson_file=True)
+
+  upload_for_bisect = bot_config.get('upload_for_bisect')
+  if upload_for_bisect:
+    droid.upload_apks_for_bisect(update_step.presentation.properties,
+                                 upload_for_bisect['bucket'],
+                                 upload_for_bisect['path'](api))
 
   upload_config = bot_config.get('upload')
   if upload_config:

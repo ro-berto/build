@@ -6,6 +6,7 @@ DEPS = [
   'adb',
   'depot_tools/bot_update',
   'chromium',
+  'commit_position',
   'file',
   'depot_tools/gclient',
   'recipe_engine/generator_script',
