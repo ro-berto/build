@@ -61,6 +61,30 @@ DETERMINISTIC_BUILDERS = freeze({
     'platform': 'win',
     'targets': ['all'],
   },
+
+  # Debug builder.
+  'Android deterministic (dbg)': {
+    'chromium_config': 'android',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Debug',
+      'TARGET_BITS': 32,
+      'TARGET_PLATFORM': 'android',
+    },
+    'platform': 'linux',
+    'targets': ['all'],
+  },
+  'Linux deterministic (dbg)': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
+    'platform': 'linux',
+    'targets': ['all'],
+  },
+  'Mac deterministic (dbg)': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
+    'platform': 'mac',
+    'targets': ['all'],
+  },
 })
 
 
