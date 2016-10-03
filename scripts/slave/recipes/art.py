@@ -74,11 +74,12 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
             'TARGET_BUILD_TYPE': 'release',
             'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
             'ANDROID_BUILD_TOP': build_top_dir,
-            'LEGACY_USE_JAVA7': 'true',
             'JACK_SERVER': 'false',
             'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                       'tools', 'jacks')),
             'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                        api.path.pathsep +
+                        '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
                         api.path.pathsep + '%(PATH)s',
             'ART_USE_OPTIMIZING_COMPILER' : 'true',
             'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
@@ -157,8 +158,9 @@ def setup_target(api,
          'ANDROID_SERIAL': serial,
          'ANDROID_BUILD_TOP': build_top_dir,
          'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                     api.path.pathsep +
+                     '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
                      api.path.pathsep + '%(PATH)s',
-         'LEGACY_USE_JAVA7': 'true',
          'JACK_SERVER': 'false',
          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
                                                    'jacks')),
