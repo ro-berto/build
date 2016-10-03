@@ -63,9 +63,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'chrome-official', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
-      "chrome-official",
+      "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
@@ -73,7 +73,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chrome-official@123456789abcdef",
+      "src@123456789abcdef",
       "--output_manifest"
     ],
     "env": {
@@ -85,7 +85,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome-official\": \"123456789abcdef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"123456789abcdef\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -106,7 +106,7 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"chrome-official\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\", @@@",
@@ -117,7 +117,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"got_webkit_revision\": \"5e2293dffc3cd07d37fbedea3b500f0eb650614d\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_webkit_revision_cp\": \"refs/heads/master@{#124383}\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"root\": \"chrome-official\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
@@ -194,7 +194,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/chrome-official/out/Release"
+      "[SLAVE_BUILD]/src/out/Release"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -215,7 +215,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/chrome-official",
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
@@ -230,19 +230,19 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/chrome-official/tools/mb/mb.py",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "client.nacl.sdk",
       "-b",
       "windows-sdk-multirel",
       "--config-file",
-      "[SLAVE_BUILD]/chrome-official/tools/mb/mb_config.pyl",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/chrome-official",
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -274,7 +274,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/chrome-official",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",

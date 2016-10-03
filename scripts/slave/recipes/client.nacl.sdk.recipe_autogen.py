@@ -15,7 +15,7 @@ DEPS = [
 ]
 
 
-def sdk_multi_steps(api, buildspec):
+def sdk_multi_steps(api):
     build_properties = api.properties.legacy()
     # bot_update step
     src_cfg = api.gclient.make_config()
@@ -61,13 +61,13 @@ def sdk_multi_steps(api, buildspec):
         allow_subannotations=True)
 
 
-def sdk_multirel_steps(api, buildspec):
+def sdk_multirel_steps(api):
     build_properties = api.properties.legacy()
     # update scripts step; implicitly run by recipe engine.
     # bot_update step
     src_cfg = api.gclient.make_config()
     soln = src_cfg.solutions.add()
-    soln.name = "chrome-official"
+    soln.name = "src"
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
     soln.deps_file = 'DEPS'
     src_cfg.got_revision_mapping.update(
@@ -120,12 +120,6 @@ dispatch_directory = {
     'mac-sdk-multirel': sdk_multirel_steps,
 }
 
-dispatch_buildspec = {
-    'linux-sdk-multirel': 'chrome-official-precise64',
-    'windows-sdk-multirel': 'chrome-official-win64',
-    'mac-sdk-multirel': 'chrome-official-mac64',
-}
-
 
 def RunSteps(api):
     buildername = api.properties["buildername"]
@@ -134,8 +128,7 @@ def RunSteps(api):
     else:
         api.chromium.set_config('chromium')
         api.chromium.ensure_goma()
-        buildspec = dispatch_buildspec.get(buildername)
-        dispatch_directory[buildername](api, buildspec)
+        dispatch_directory[buildername](api)
 
 
 def GenTests(api):
