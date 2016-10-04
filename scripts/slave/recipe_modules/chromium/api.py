@@ -215,7 +215,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--goma-enable-remote-link']
     if self.c.compile_py.goma_store_local_run_output:
       args += ['--goma-store-local-run-output']
-    if self.c.compile_py.goma_failfast:
+    if self.c.compile_py.goma_canary:
       args += ['--goma-disable-local-fallback']
     if self.m.tryserver.is_tryserver:
       # We rely on goma to meet cycle time goals on the tryserver. It's better
