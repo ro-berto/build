@@ -39,7 +39,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       compiler = Single(basestring, required=False),
       mode = Single(basestring, required=False),
       goma_dir = Single(Path, required=False),
-      goma_canary = Single(bool, empty_val=False, required=False),
+      goma_failfast = Single(bool, empty_val=False, required=False),
       goma_hermetic = Single(basestring, required=False),
       goma_enable_remote_link = Single(bool, empty_val=False, required=False),
       goma_store_local_run_output = Single(bool, empty_val=False, required=False),
@@ -248,11 +248,12 @@ def msvs2015(c):
 
 @config_ctx()
 def goma_canary(c):
-  c.compile_py.goma_canary = True
+  c.compile_py.goma_failfast = True
   c.compile_py.goma_hermetic = 'error'
 
 @config_ctx()
 def goma_staging(c):
+  c.compile_py.goma_failfast = True
   c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'sandbox.google.com'
 
 @config_ctx()
