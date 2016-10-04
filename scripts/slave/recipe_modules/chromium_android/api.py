@@ -740,7 +740,8 @@ class AndroidApi(recipe_api.RecipeApi):
                              upload_archives_to_bucket=None,
                              known_devices_file=None,
                              enable_platform_mode=False,
-                             timestamp_as_point_id=False, **kwargs):
+                             timestamp_as_point_id=False,
+                             pass_adb_path=True, **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -754,13 +755,19 @@ class AndroidApi(recipe_api.RecipeApi):
     timestamp_as_point_id: If True, will use a unix timestamp as a point_id to
       identify values in the perf dashboard; otherwise the default (commit
       position) is used.
+    pass_adb_path: If True, will pass the configured adb binary to the test
+      runner via --adb-path.
     """
+    # TODO(jbudorick): Remove pass_adb_path once telemetry can use a
+    # configurable adb path.
+
     # test_runner.py actually runs the tests and records the results
     self._run_sharded_tests(config=config, flaky_config=flaky_config,
                             chartjson_output=chartjson_file,
                             max_battery_temp=max_battery_temp,
                             known_devices_file=known_devices_file,
-                            enable_platform_mode=enable_platform_mode, **kwargs)
+                            enable_platform_mode=enable_platform_mode,
+                            pass_adb_path=pass_adb_path, **kwargs)
 
     # now obtain the list of tests that were executed.
     result = self.test_runner(
@@ -1547,7 +1554,7 @@ class AndroidApi(recipe_api.RecipeApi):
       raise
 
   def test_runner(self, step_name, args=None, wrapper_script_suite_name=None,
-                  **kwargs):
+                  pass_adb_path=True, **kwargs):
     """Wrapper for the python testrunner script.
 
     Args:
@@ -1556,7 +1563,8 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     if not args: # pragma: no cover
       args = []
-    args.extend(['--adb-path', self.m.adb.adb_path()])
+    if pass_adb_path:
+      args.extend(['--adb-path', self.m.adb.adb_path()])
     with self.handle_exit_codes():
       script = self.c.test_runner
       if wrapper_script_suite_name:
