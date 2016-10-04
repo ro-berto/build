@@ -55,8 +55,9 @@ def _AddIsolatedTestSpec(name, perf_id, platform,
   SPEC['builders'][name] = spec
 
 
+_AddBuildSpec('Android Builder FYI', 'android', 'android', target_bits=32)
 _AddTestSpec('Android Galaxy S5 Perf (1)', 'fyi-android-galaxy-s5', 'android',
-             target_bits=32)
+             target_bits=32, parent_buildername='Android Builder FYI')
 
 
 _AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True)
