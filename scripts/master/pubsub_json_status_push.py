@@ -378,13 +378,15 @@ class StatusPush(StatusReceiverMultiService):
       pending = pending[:75]
       pendingStatues = yield defer.DeferredList(
           [p.asDict_async() for p in pending])
-      # Not included: basedir, category, cachedBuilds, state.
+      # Not included: basedir, cachedBuilds.
       # cachedBuilds isn't useful and takes a ton of resources to compute.
       builder_info = {
         'slaves': builder.slavenames,
         'currentBuilds': sorted(b.getNumber() for b in builder.currentBuilds),
         'pendingBuilds': len(pending),
         'pendingBuildStatues': pendingStatues,
+        'state': builder.getState()[0],
+        'category': builder.category,
       }
       builder_infos[name] = builder_info
 
