@@ -74,7 +74,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\unzip.py"
     ],
     "name": "unzipping",
-    "stdin": "{\"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output\", \"zip_file\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output\", \"quiet\": true, \"zip_file\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\"}"
   },
   {
     "cmd": [

@@ -125,7 +125,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\unzip.py"
     ],
     "name": "Unzip sdk",
-    "stdin": "{\"output\": \"[SLAVE_BUILD]\\\\sdk\\\\out\\\\ReleaseX64\", \"zip_file\": \"[SLAVE_BUILD]\\\\sdk\\\\sdk.zip\"}"
+    "stdin": "{\"output\": \"[SLAVE_BUILD]\\\\sdk\\\\out\\\\ReleaseX64\", \"quiet\": false, \"zip_file\": \"[SLAVE_BUILD]\\\\sdk\\\\sdk.zip\"}"
   },
   {
     "cmd": [

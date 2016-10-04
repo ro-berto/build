@@ -32,7 +32,8 @@ def RunSteps(api):
   api.step('report', ['echo', package.output])
 
   # Unzip the package.
-  api.zip.unzip('unzipping', temp.join('output.zip'), temp.join('output'))
+  api.zip.unzip('unzipping', temp.join('output.zip'), temp.join('output'),
+                quiet=True)
   # List unzipped content.
   api.step('listing', ['find'], cwd=temp.join('output'))
   # Clean up.

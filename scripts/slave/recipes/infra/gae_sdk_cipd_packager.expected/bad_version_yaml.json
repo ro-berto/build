@@ -1,0 +1,35 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cat",
+      "gs://appengine-sdks/featured/VERSION"
+    ],
+    "name": "gsutil Get Latest",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "name": "Version Fetch",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@Failed to fetch latest version: Could not parse release version from YAML.@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Step('Version Fetch') failed with return_code 1",
+    "recipe_result": null,
+    "status_code": 1
+  }
+]

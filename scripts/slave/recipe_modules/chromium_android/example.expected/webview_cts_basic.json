@@ -1011,7 +1011,7 @@
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
     "name": "Update CTS.Extract new CTS",
-    "stdin": "{\"output\": \"[CACHE]/android_cts/unzipped\", \"zip_file\": \"[CACHE]/android_cts/cts_arm64_L.zip\"}",
+    "stdin": "{\"output\": \"[CACHE]/android_cts/unzipped\", \"quiet\": false, \"zip_file\": \"[CACHE]/android_cts/cts_arm64_L.zip\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

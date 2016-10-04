@@ -41,7 +41,7 @@ class ZipApi(recipe_api.RecipeApi):
     pkg.add_directory(directory)
     pkg.zip(step_name)
 
-  def unzip(self, step_name, zip_file, output):
+  def unzip(self, step_name, zip_file, output, quiet=False):
     """Step to uncompress |zip_file| into |output| directory.
 
     Zip package will be unpacked to |output| so that root of an archive is in
@@ -53,11 +53,14 @@ class ZipApi(recipe_api.RecipeApi):
       step_name: display name of a step.
       zip_file: path to a zip file to uncompress, should exist.
       output: path to a directory to unpack to, it should NOT exist.
+      quiet (bool): If True, print terse output instead of the name
+          of each unzipped file.
     """
     # TODO(vadimsh): Use 7zip on Windows if available?
     script_input = {
       'output': str(output),
       'zip_file': str(zip_file),
+      'quiet': quiet,
     }
     self.m.python(
         name=step_name,

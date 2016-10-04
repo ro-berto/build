@@ -1,0 +1,43 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::cipd]\\resources\\bootstrap.py",
+      "--platform",
+      "windows-amd64",
+      "--dest-directory",
+      "[SLAVE_BUILD]\\cipd",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "install cipd",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "name": "Failed to fetch",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@No go package for win / 64@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Step('Failed to fetch') failed with return_code 1",
+    "recipe_result": null,
+    "status_code": 1
+  }
+]

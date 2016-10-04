@@ -149,7 +149,7 @@
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
     "name": "Download Prebuilts.unzip prebuilt",
-    "stdin": "{\"output\": \"[TMP_BASE]/prebuilt_tmp_1/unzipped\", \"zip_file\": \"[TMP_BASE]/prebuilt_tmp_1/r111111.zip\"}",
+    "stdin": "{\"output\": \"[TMP_BASE]/prebuilt_tmp_1/unzipped\", \"quiet\": false, \"zip_file\": \"[TMP_BASE]/prebuilt_tmp_1/r111111.zip\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
