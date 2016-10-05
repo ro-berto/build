@@ -309,6 +309,7 @@
       "[CACHE]\\cipd\\goma",
       "--goma-hermetic",
       "error",
+      "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "base_unittests",

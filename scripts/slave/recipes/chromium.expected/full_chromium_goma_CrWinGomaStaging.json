@@ -327,6 +327,8 @@
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
       "--",
       "base_unittests",
       "chromium_builder_tests",

@@ -304,6 +304,7 @@
       "error",
       "--goma-enable-remote-link",
       "--goma-store-local-run-output",
+      "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "base_unittests",
