@@ -5,8 +5,10 @@
 DEPS = [
   'chromium',
   'depot_tools/bot_update',
+  'depot_tools/cipd',
   'depot_tools/gclient',
   'file',
+  'gae_sdk',
   'gitiles',
   'recipe_engine/generator_script',
   'recipe_engine/path',
@@ -27,26 +29,6 @@ def _CheckoutSteps(api):
   api.gclient.set_config('catapult')
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
-
-
-def _FetchAppEngineSDKSteps(api):
-  """Fetches the App Engine SDK and returns its path.
-
-  This uses a downloader script in the infra repo to download a script
-  which is then used to download and unpack the SDK itself.
-  """
-  script_content = api.gitiles.download_file(
-      'https://chromium.googlesource.com/infra/infra',
-      'bootstrap/get_appengine.py',
-      step_name='Fetch SDK downloader',
-      branch='refs/heads/master')
-  slave_build_path = api.path['slave_build']
-  api.file.write('Create get_appengine.py',
-                 path=slave_build_path.join('get_appengine.py'),
-                 data=script_content)
-  api.python('Run SDK downloader',
-             slave_build_path.join('get_appengine.py'), args=['--dest=.'])
-  return slave_build_path.join('google_appengine')
 
 
 def _RemoteSteps(api, app_engine_sdk_path, platform):
@@ -77,7 +59,9 @@ def RunSteps(api, platform):
 
   # The dashboard unit tests depend on Python modules in the App Engine SDK,
   # and the unit test runner script assumes that the SDK is in PYTHONPATH.
-  sdk_path = _FetchAppEngineSDKSteps(api)
+  api.cipd.install_client()
+  sdk_path = api.path['slave_build'].join('google_appengine')
+  api.gae_sdk.fetch(api.gae_sdk.PLAT_PYTHON, sdk_path)
   app_engine_sdk_path = api.path.pathsep.join([
       '%(PYTHONPATH)s', str(sdk_path)])
   _RemoteSteps(api, app_engine_sdk_path, platform)
@@ -89,9 +73,6 @@ def GenTests(api):
     api.properties(mastername='master.client.catapult',
                    buildername='windows',
                    slavename='windows_slave') +
-    api.step_data('Fetch SDK downloader',
-                  api.gitiles.make_encoded_file(
-                      '"<simulated contents of get_appengine.py>"')) +
     api.generator_script(
       'build_steps.py',
       {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
@@ -104,9 +85,6 @@ def GenTests(api):
                    buildername='android',
                    slavename='android_slave',
                    platform='android') +
-    api.step_data('Fetch SDK downloader',
-                  api.gitiles.make_encoded_file(
-                      '"<simulated contents of get_appengine.py>"')) +
     api.generator_script(
         'build_steps.py',
         {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
