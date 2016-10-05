@@ -199,7 +199,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Linux Tests\", \"buildnumber\": \"1234\", \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -286,7 +286,7 @@
       "--master-name",
       "chromium.linux",
       "--build-number",
-      "1234"
+      "571"
     ],
     "name": "extract build"
   },
@@ -328,7 +328,7 @@
       "--shards",
       "2",
       "--task-name",
-      "telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234",
+      "telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -352,7 +352,7 @@
       "--tag",
       "buildername:Linux Tests",
       "--tag",
-      "buildnumber:1234",
+      "buildnumber:571",
       "--tag",
       "data:eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--tag",
@@ -382,14 +382,14 @@
     "name": "[trigger] telemetry_gpu_unittests on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
@@ -412,7 +412,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
@@ -422,9 +422,9 @@
     "name": "telemetry_gpu_unittests on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"1/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy1\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry3\\\": \\\"chart3\\\", \\\"entry4\\\": \\\"chart4\\\"}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy1\\\", \\\"charts\\\": {\\\"entry3\\\": \\\"chart3\\\", \\\"entry4\\\": \\\"chart4\\\"}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"successes\\\": [\\\"test3.Test3\\\", \\\"test4.Test4\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test3.Test3\\\": 0.1, \\\"test4.Test4\\\": 0.1}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
@@ -432,39 +432,6 @@
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
-      "--results",
-      "{\"dummy\": \"dummy0\", \"enabled\": true, \"charts\": {\"entry2\": \"chart2\", \"entry3\": \"chart3\", \"entry1\": \"chart1\", \"entry4\": \"chart4\"}}",
-      "--perf-id",
-      "testid",
-      "--results-url",
-      "http://test-results-url",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out",
-      "--got-revision-cp",
-      "refs/heads/master@{#291141}",
-      "--version",
-      "v23523",
-      "--git-revision",
-      "asdfawe2342",
-      "--buildername",
-      "Linux Tests",
-      "--buildnumber",
-      "1234",
-      "--got-webrtc-revision",
-      "asdfas",
-      "--got-v8-revision",
-      "asdfadsfa4e3w"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Upload Perf Dashboard Results"
   },
   {
     "name": "$result",

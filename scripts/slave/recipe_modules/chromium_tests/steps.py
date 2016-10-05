@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import datetime
-import json
 import re
 import string
 
@@ -1092,7 +1091,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       if not failures and step_result.retcode != 0:
         failures = ['%s (entire test suite)' % self.name]
         valid = False
-
     except (ValueError, KeyError) as e:
       step_result.presentation.logs['invalid_results_exc'] = [str(e)]
       valid = False
@@ -1101,45 +1099,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       step_result.presentation.step_text += api.test_utils.format_step_text([
         ['failures:', failures]
       ])
-    # Check for chartjson results and upload to results dashboard if present.
-    self._output_chartjson_results_if_present(api, step_result)
     return valid, failures
-
-  def _output_chartjson_results_if_present(self, api, step_result):
-    results = \
-      getattr(step_result, 'isolated_script_chartjson_results', None) or {}
-    try:
-      if not 'charts' in results:
-        print 'Info: No chart json present'
-        return
-
-      if not results.get('enabled', True):
-        print 'Info: Benchmark disabled, not sending results to dashboard'
-        return
-
-      """Produces a step that uploads results to dashboard"""
-      args = [
-        '--results', json.dumps(results),
-        '--perf-id', api.properties['perf-id'],
-        '--results-url', api.properties['results-url'],
-        '--build-dir', api.chromium.c.build_dir,
-        '--got-revision-cp', api.properties['got_revision_cp'],
-        '--version', api.properties['version'],
-        '--git-revision', api.properties['git_revision'],
-        '--buildername', api.properties['buildername'],
-        '--buildnumber', api.properties['buildnumber'],
-        '--got-webrtc-revision', api.properties['got_webrtc_revision'],
-        '--got-v8-revision', api.properties['got_v8_revision'],
-      ]
-
-      api.python(
-        'Upload Perf Dashboard Results',
-        api.chromium.package_repo_resource(
-            'scripts', 'slave', 'upload_perf_dashboard_results.py'),
-        args)
-
-    except (ValueError, KeyError) as e:
-      print 'Error: Unable to upload chartjson results to perf dashboard'
 
 
 def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
