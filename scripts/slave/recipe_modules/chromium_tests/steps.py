@@ -544,7 +544,8 @@ def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
 class DynamicPerfTests(Test):
   def __init__(self, perf_id, platform, target_bits, max_battery_temp=350,
                num_device_shards=1, num_host_shards=1, shard_index=0,
-               override_browser_name=None, enable_platform_mode=False):
+               override_browser_name=None, enable_platform_mode=False,
+               pass_adb_path=True):
     self._perf_id = perf_id
     self._platform = platform
     self._target_bits = target_bits
@@ -553,6 +554,7 @@ class DynamicPerfTests(Test):
     self._max_battery_temp = max_battery_temp
     self._num_host_shards = num_host_shards
     self._num_device_shards = num_device_shards
+    self._pass_adb_path = pass_adb_path
     self._shard_index = shard_index
 
     if override_browser_name:
@@ -608,7 +610,8 @@ class DynamicPerfTests(Test):
       chartjson_file=True,
       max_battery_temp=self._max_battery_temp,
       known_devices_file=api.chromium_android.known_devices_file,
-      enable_platform_mode=self._enable_platform_mode)
+      enable_platform_mode=self._enable_platform_mode,
+      pass_adb_path=self._pass_adb_path)
 
   def _run_serially(self, api, tests):
     failure = None
