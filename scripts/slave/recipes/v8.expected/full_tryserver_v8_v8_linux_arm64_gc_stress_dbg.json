@@ -292,6 +292,8 @@
       "tryserver.v8",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "v8_linux_arm64_gc_stress_dbg.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

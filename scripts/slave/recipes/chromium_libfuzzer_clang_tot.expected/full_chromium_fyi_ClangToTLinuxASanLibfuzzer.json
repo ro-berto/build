@@ -239,6 +239,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "ClangToTLinuxASanLibfuzzer.gomadeps",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",

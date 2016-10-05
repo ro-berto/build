@@ -277,6 +277,8 @@
       "client.dart.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "v8_win_release.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

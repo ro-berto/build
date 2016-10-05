@@ -287,6 +287,8 @@
       "chromium.testing.master",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Android_Cronet_Marshmallow_64bit_Perf.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

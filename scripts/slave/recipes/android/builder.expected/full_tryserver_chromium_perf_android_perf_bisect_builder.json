@@ -249,6 +249,8 @@
       "tryserver.chromium.perf",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "android_perf_bisect_builder.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

@@ -303,6 +303,8 @@
       "tryserver.v8",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "v8_win_dbg.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

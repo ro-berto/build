@@ -184,12 +184,9 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--buildbot-%s' % key, self.m.properties[key]
         ])
 
-    # Use explicit goma deps cache dir if it's set in the path config.
-    # Otherwise use the default one inside build output directory.
-    try:
-      args.extend(['--goma-deps-cache-dir', self.m.path['goma_deps_cache']])
-    except KeyError:
-      pass
+    safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
+                              self.m.properties['buildername']) + '.gomadeps'
+    args.extend(['--goma-deps-cache-file', safe_buildername])
 
     if self.c.compile_py.build_args:
       args += ['--build-args', self.c.compile_py.build_args]

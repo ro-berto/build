@@ -158,6 +158,8 @@
       "client.libyuv",
       "--buildbot-slavename",
       "slavename",
+      "--goma-deps-cache-file",
+      "Win64_Release__VS2010_.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

@@ -266,6 +266,8 @@
       "client.dart.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "v8_linux_release.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

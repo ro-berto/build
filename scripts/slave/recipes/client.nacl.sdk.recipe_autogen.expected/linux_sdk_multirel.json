@@ -283,6 +283,8 @@
       "client.nacl.sdk",
       "--buildbot-slavename",
       "TestSlave",
+      "--goma-deps-cache-file",
+      "linux_sdk_multirel.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

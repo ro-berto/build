@@ -303,6 +303,8 @@
       "tryserver.v8",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "v8_win_nosnap_shared_rel_ng.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

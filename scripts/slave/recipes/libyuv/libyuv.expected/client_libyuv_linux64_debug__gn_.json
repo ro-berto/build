@@ -171,6 +171,8 @@
       "client.libyuv",
       "--buildbot-slavename",
       "slavename",
+      "--goma-deps-cache-file",
+      "Linux64_Debug__GN_.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

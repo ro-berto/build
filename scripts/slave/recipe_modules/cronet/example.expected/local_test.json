@@ -206,6 +206,8 @@
       "chromium.testing.master",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "local_test.gomadeps",
       "--",
       "cronet_package",
       "cronet_perf_test_apk",

@@ -307,6 +307,8 @@
       "chromium.memory",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Linux_ASan_LSan_Builder.gomadeps",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",

@@ -205,6 +205,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Chromium_Win_PGO_Builder.gomadeps",
       "--",
       "chrome"
     ],
@@ -709,6 +711,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Chromium_Win_PGO_Builder.gomadeps",
       "--",
       "chrome"
     ],

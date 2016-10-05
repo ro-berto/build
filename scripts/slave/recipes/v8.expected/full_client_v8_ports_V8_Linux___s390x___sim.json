@@ -265,6 +265,8 @@
       "client.v8.ports",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "V8_Linux___s390x___sim.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

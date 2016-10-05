@@ -365,6 +365,8 @@
       "tryserver.chromium.linux",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "linux_chromium_chromeos_rel_ng.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

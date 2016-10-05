@@ -181,6 +181,8 @@
       "client.webrtc",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Linux64_Release__Libfuzzer_.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

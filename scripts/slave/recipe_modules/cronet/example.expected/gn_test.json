@@ -276,6 +276,8 @@
       "chromium.testing.master",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "gn_test.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

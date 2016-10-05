@@ -136,6 +136,8 @@
       "tryserver.chromium.linux",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "closure_compilation.gomadeps",
       "--"
     ],
     "env": {
@@ -174,6 +176,8 @@
       "tryserver.chromium.linux",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "closure_compilation.gomadeps",
       "--"
     ],
     "env": {

@@ -314,6 +314,8 @@
       "tryserver.v8",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "v8_mac_dbg.gomadeps",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",

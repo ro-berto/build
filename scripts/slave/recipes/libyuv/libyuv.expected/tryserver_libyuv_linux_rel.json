@@ -163,6 +163,8 @@
       "tryserver.libyuv",
       "--buildbot-slavename",
       "slavename",
+      "--goma-deps-cache-file",
+      "linux_rel.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

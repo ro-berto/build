@@ -261,6 +261,8 @@
       "chromium.testing.master",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "TestBuilder.gomadeps",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",

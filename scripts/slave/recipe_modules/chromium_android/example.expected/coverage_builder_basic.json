@@ -276,6 +276,8 @@
       "chromium.testing.master",
       "--buildbot-slavename",
       "tehslave",
+      "--goma-deps-cache-file",
+      "coverage_builder.gomadeps",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--"

@@ -278,6 +278,8 @@
       "chromium.webkit",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "WebKit_Linux_Precise.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

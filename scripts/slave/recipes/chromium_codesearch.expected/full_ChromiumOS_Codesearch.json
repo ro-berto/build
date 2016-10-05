@@ -394,6 +394,8 @@
       "chromium.infra.cron",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "ChromiumOS_Codesearch.gomadeps",
       "--build-args",
       "-k 0",
       "--compiler",

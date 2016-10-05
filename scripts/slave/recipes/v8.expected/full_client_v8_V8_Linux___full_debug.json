@@ -265,6 +265,8 @@
       "client.v8",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "V8_Linux___full_debug.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

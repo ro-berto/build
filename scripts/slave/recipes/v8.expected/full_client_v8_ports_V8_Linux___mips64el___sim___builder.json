@@ -265,6 +265,8 @@
       "client.v8.ports",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "V8_Linux___mips64el___sim___builder.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

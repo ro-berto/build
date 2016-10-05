@@ -178,6 +178,8 @@
       "tryserver.libyuv",
       "--buildbot-slavename",
       "slavename",
+      "--goma-deps-cache-file",
+      "android_gn_rel.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

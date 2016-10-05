@@ -163,8 +163,12 @@ def goma_setup(options, env):
 
   # Enable DepsCache. DepsCache caches the list of files to send goma server.
   # This will greatly improve build speed when cache is warmed.
-  # The cache file is stored in the target output directory.
-  env['GOMA_DEPS_CACHE_DIR'] = (
+  if options.goma_deps_cache_file:
+    env['GOMA_DEPS_CACHE_FILE'] = options.goma_deps_cache_file
+  else:
+    # TODO(shinyak): GOMA_DEPS_CACHE_DIR will be removed from goma in future.
+    # GOMA_DEPS_CACHE_FILE should be used.
+    env['GOMA_DEPS_CACHE_DIR'] = (
       options.goma_deps_cache_dir or options.target_output_dir)
 
   if options.goma_hermetic:
@@ -497,8 +501,11 @@ def get_parsed_options():
   option_parser.add_option('--goma-cache-dir',
                            default=DEFAULT_GOMA_CACHE_DIR,
                            help='specify goma cache directory')
+  option_parser.add_option('--goma-deps-cache-file',
+                           help='specify goma deps cache file')
   option_parser.add_option('--goma-deps-cache-dir',
-                           help='specify goma deps cache directory')
+                           help='specify goma deps cache directory. '
+                                'DEPRECATED. Use --goma-deps-cache-file')
   option_parser.add_option('--goma-hermetic', default='error',
                            help='Set goma hermetic mode')
   option_parser.add_option('--goma-enable-remote-link', default=None,

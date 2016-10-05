@@ -185,6 +185,8 @@
       "tryserver.libyuv",
       "--buildbot-slavename",
       "slavename",
+      "--goma-deps-cache-file",
+      "win_clang.gomadeps",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",

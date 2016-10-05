@@ -266,6 +266,8 @@
       "client.v8.branches",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "V8_arm___sim___stable_branch.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

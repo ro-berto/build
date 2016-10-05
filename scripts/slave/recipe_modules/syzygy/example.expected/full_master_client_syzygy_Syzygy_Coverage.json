@@ -102,6 +102,8 @@
       "master.client.syzygy",
       "--buildbot-slavename",
       "fake_slave",
+      "--goma-deps-cache-file",
+      "Syzygy_Coverage.gomadeps",
       "--ninja-ensure-up-to-date",
       "--",
       "build_all"

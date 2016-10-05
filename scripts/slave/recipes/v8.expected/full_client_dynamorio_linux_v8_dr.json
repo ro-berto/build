@@ -265,6 +265,8 @@
       "client.dynamorio",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "linux_v8_dr.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

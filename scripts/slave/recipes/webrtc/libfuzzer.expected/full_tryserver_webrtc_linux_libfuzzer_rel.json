@@ -187,6 +187,8 @@
       "tryserver.webrtc",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "linux_libfuzzer_rel.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

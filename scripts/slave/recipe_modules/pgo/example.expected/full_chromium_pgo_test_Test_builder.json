@@ -205,6 +205,8 @@
       "chromium_pgo.test",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Test_builder.gomadeps",
       "--",
       "chrome"
     ],
@@ -709,6 +711,8 @@
       "chromium_pgo.test",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Test_builder.gomadeps",
       "--",
       "chrome"
     ],

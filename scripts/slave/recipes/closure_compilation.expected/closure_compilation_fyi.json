@@ -136,6 +136,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Closure_Compilation_Linux.gomadeps",
       "--"
     ],
     "env": {
@@ -174,6 +176,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Closure_Compilation_Linux.gomadeps",
       "--"
     ],
     "env": {

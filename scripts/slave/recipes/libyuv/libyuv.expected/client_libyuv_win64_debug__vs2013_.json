@@ -158,6 +158,8 @@
       "client.libyuv",
       "--buildbot-slavename",
       "slavename",
+      "--goma-deps-cache-file",
+      "Win64_Debug__VS2013_.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

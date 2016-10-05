@@ -277,6 +277,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "ClangToTAndroidASan.gomadeps",
       "--compiler",
       "clang",
       "--",

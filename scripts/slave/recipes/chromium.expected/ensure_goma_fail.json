@@ -290,8 +290,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "build1-a1",
-      "--goma-deps-cache-dir",
-      "[GOMA_DEPS_CACHE]",
+      "--goma-deps-cache-file",
+      "Linux_remote_run_Builder.gomadeps",
       "--ninja-ensure-up-to-date",
       "--",
       "base_unittests"

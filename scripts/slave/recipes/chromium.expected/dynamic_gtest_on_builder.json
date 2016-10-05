@@ -290,6 +290,8 @@
       "chromium.linux",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Linux_Builder.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

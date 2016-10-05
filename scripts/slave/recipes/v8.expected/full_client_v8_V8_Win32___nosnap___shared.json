@@ -297,6 +297,8 @@
       "client.v8",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "V8_Win32___nosnap___shared.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

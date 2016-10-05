@@ -293,6 +293,8 @@
       "client.v8",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "V8_Linux64___gcov_coverage.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

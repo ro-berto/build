@@ -405,6 +405,8 @@
       "tryserver.chromium.win",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "win_chromium_rel_ng.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

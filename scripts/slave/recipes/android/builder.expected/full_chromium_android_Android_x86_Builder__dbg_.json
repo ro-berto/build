@@ -237,6 +237,8 @@
       "chromium.android",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Android_x86_Builder__dbg_.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

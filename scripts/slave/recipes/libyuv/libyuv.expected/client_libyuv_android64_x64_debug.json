@@ -158,6 +158,8 @@
       "client.libyuv",
       "--buildbot-slavename",
       "slavename",
+      "--goma-deps-cache-file",
+      "Android64_x64_Debug.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

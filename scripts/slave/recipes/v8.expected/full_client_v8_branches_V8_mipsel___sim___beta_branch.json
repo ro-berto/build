@@ -266,6 +266,8 @@
       "client.v8.branches",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "V8_mipsel___sim___beta_branch.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

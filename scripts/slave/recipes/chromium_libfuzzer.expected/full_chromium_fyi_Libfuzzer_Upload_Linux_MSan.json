@@ -280,6 +280,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Libfuzzer_Upload_Linux_MSan.gomadeps",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",

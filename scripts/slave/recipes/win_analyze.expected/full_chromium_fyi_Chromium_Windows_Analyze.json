@@ -176,6 +176,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Chromium_Windows_Analyze.gomadeps",
       "--",
       "chrome"
     ],

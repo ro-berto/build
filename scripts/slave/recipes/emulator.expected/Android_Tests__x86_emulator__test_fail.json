@@ -245,6 +245,8 @@
       "chromium.fyi",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "Android_Tests__x86_emulator_.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

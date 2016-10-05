@@ -242,6 +242,8 @@
       "tryserver.chromium.win",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "win8_chromium_gn_upload.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

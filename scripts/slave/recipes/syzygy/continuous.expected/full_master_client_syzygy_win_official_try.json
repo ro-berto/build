@@ -117,6 +117,8 @@
       "master.client.syzygy",
       "--buildbot-slavename",
       "vm331-m3",
+      "--goma-deps-cache-file",
+      "win_official_try.gomadeps",
       "--ninja-ensure-up-to-date",
       "--",
       "official_build"

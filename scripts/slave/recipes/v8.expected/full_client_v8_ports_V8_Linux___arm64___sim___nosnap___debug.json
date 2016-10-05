@@ -286,6 +286,8 @@
       "client.v8.ports",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "V8_Linux___arm64___sim___nosnap___debug.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

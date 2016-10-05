@@ -203,6 +203,8 @@
       "client.v8.ports",
       "--buildbot-slavename",
       "TestSlavename",
+      "--goma-deps-cache-file",
+      "V8_Mips___builder.gomadeps",
       "--"
     ],
     "env": {

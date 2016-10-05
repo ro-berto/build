@@ -98,6 +98,8 @@
       "master.client.syzygy",
       "--buildbot-slavename",
       "vm331-m3",
+      "--goma-deps-cache-file",
+      "win_x64_rel_try.gomadeps",
       "--ninja-ensure-up-to-date",
       "--",
       "syzyasan_rtl_unittests"
