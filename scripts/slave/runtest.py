@@ -70,10 +70,6 @@ HTTPD_CONF = {
     'mac': 'httpd2_mac.conf',
     'win': 'httpd.conf'
 }
-# Regex matching git comment lines containing svn revision info.
-GIT_SVN_ID_RE = re.compile(r'^git-svn-id: .*@([0-9]+) .*$')
-# Regex for the master branch commit position.
-GIT_CR_POS_RE = re.compile(r'^Cr-Commit-Position: refs/heads/master@{#(\d+)}$')
 
 # The directory that this script is in.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -208,97 +204,6 @@ def _GetMasterString(master):
   return '[Running for master: "%s"]' % master
 
 
-def _GetGitCommitPositionFromLog(log):
-  """Returns either the commit position or svn rev from a git log."""
-  # Parse from the bottom up, in case the commit message embeds the message
-  # from a different commit (e.g., for a revert).
-  for r in [GIT_CR_POS_RE, GIT_SVN_ID_RE]:
-    for line in reversed(log.splitlines()):
-      m = r.match(line.strip())
-      if m:
-        return m.group(1)
-  return None
-
-
-def _GetGitCommitPosition(dir_path):
-  """Extracts the commit position or svn revision number of the HEAD commit."""
-  git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
-  p = subprocess.Popen(
-      [git_exe, 'log', '-n', '1', '--pretty=format:%B', 'HEAD'],
-      cwd=dir_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  (log, _) = p.communicate()
-  if p.returncode != 0:
-    return None
-  return _GetGitCommitPositionFromLog(log)
-
-
-def _IsGitDirectory(dir_path):
-  """Checks whether the given directory is in a git repository.
-
-  Args:
-    dir_path: The directory path to be tested.
-
-  Returns:
-    True if given directory is in a git repository, False otherwise.
-  """
-  git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
-  with open(os.devnull, 'w') as devnull:
-    p = subprocess.Popen([git_exe, 'rev-parse', '--git-dir'],
-                         cwd=dir_path, stdout=devnull, stderr=devnull)
-    return p.wait() == 0
-
-
-def _GetRevision(in_directory):
-  """Returns the SVN revision, git commit position, or git hash.
-
-  Args:
-    in_directory: A directory in the repository to be checked.
-
-  Returns:
-    An SVN revision as a string if the given directory is in a SVN repository,
-    or a git commit position number, or if that's not available, a git hash.
-    If all of that fails, an empty string is returned.
-  """
-  import xml.dom.minidom
-  if not os.path.exists(os.path.join(in_directory, '.svn')):
-    if _IsGitDirectory(in_directory):
-      svn_rev = _GetGitCommitPosition(in_directory)
-      if svn_rev:
-        return svn_rev
-      return _GetGitRevision(in_directory)
-    else:
-      return ''
-
-  # Note: Not thread safe: http://bugs.python.org/issue2320
-  output = subprocess.Popen(['svn', 'info', '--xml'],
-                            cwd=in_directory,
-                            shell=(sys.platform == 'win32'),
-                            stdout=subprocess.PIPE).communicate()[0]
-  try:
-    dom = xml.dom.minidom.parseString(output)
-    return dom.getElementsByTagName('entry')[0].getAttribute('revision')
-  except xml.parsers.expat.ExpatError:
-    return ''
-  return ''
-
-
-def _GetGitRevision(in_directory):
-  """Returns the git hash tag for the given directory.
-
-  Args:
-    in_directory: The directory where git is to be run.
-
-  Returns:
-    The git SHA1 hash string.
-  """
-  git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
-  p = subprocess.Popen(
-      [git_exe, 'rev-parse', 'HEAD'],
-      cwd=in_directory, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  (stdout, _) = p.communicate()
-  return stdout.strip()
-
-
 def _GenerateJSONForTestResults(options, log_processor):
   """Generates or updates a JSON file from the gtest results XML and upload the
   file to the archive server.
@@ -360,14 +265,16 @@ def _GenerateJSONForTestResults(options, log_processor):
       generate_json_options.chrome_revision = options.revision
     else:
       chrome_dir = chromium_utils.FindUpwardParent(build_dir, 'third_party')
-      generate_json_options.chrome_revision = _GetRevision(chrome_dir)
+      generate_json_options.chrome_revision = \
+        slave_utils.GetRevision(chrome_dir)
 
     if options.webkit_revision:
       generate_json_options.webkit_revision = options.webkit_revision
     else:
       webkit_dir = chromium_utils.FindUpward(
         build_dir, 'third_party', 'WebKit', 'Source')
-      generate_json_options.webkit_revision = _GetRevision(webkit_dir)
+      generate_json_options.webkit_revision = \
+        slave_utils.GetRevision(webkit_dir)
 
     # Generate results JSON file and upload it to the appspot server.
     generator = gtest_slave_utils.GenerateJSONResults(
@@ -477,65 +384,21 @@ def _SelectLogProcessor(options, is_telemetry):
   return None
 
 
-def _GetCommitPos(build_properties):
-  """Extracts the commit position from the build properties, if its there."""
-  if 'got_revision_cp' not in build_properties:
-    return None
-  commit_pos = build_properties['got_revision_cp']
-  return int(re.search(r'{#(\d+)}', commit_pos).group(1))
-
-
 def _GetMainRevision(options):
-  """Return revision to use as the numerical x-value in the perf dashboard.
-
-  This will be used as the value of "rev" in the data passed to
-  results_dashboard.SendResults.
-
-  In order or priority, this function could return:
-    1. The value of the --revision flag (IF it can be parsed as an int).
-    2. The value of "got_revision_cp" in build properties.
-    3. An SVN number, git commit position, or git commit hash.
-  """
-  if options.revision and options.revision.isdigit():
-    return options.revision
-  commit_pos_num = _GetCommitPos(options.build_properties)
-  if commit_pos_num is not None:
-    return commit_pos_num
-  # TODO(sullivan,qyearsley): Don't fall back to _GetRevision if it returns
-  # a git commit, since this should be a numerical revision. Instead, abort
-  # and fail.
-  return _GetRevision(os.path.dirname(os.path.abspath(options.build_dir)))
+  slave_utils.GetMainRevision(
+    options.build_properties, options.build_dir, options.revision)
 
 
 def _GetBlinkRevision(options):
-  if options.webkit_revision:
-    webkit_revision = options.webkit_revision
-  else:
-    try:
-      webkit_dir = chromium_utils.FindUpward(
-          os.path.abspath(options.build_dir), 'third_party', 'WebKit', 'Source')
-      webkit_revision = _GetRevision(webkit_dir)
-    except Exception:
-      webkit_revision = None
-  return webkit_revision
+  slave_utils.GetBlinkRevision(options.build_dir, options.webkit_revision)
 
 
-def _GetTelemetryRevisions(options):
-  """Fills in the same revisions fields that process_log_utils does."""
-
-  versions = {}
-  versions['rev'] = _GetMainRevision(options)
-  versions['webkit_rev'] = _GetBlinkRevision(options)
-  versions['webrtc_rev'] = options.build_properties.get('got_webrtc_revision')
-  versions['v8_rev'] = options.build_properties.get('got_v8_revision')
-  versions['ver'] = options.build_properties.get('version')
-  versions['git_revision'] = options.build_properties.get('git_revision')
-  versions['point_id'] = options.point_id
-  # There are a lot of "bad" revisions to check for, so clean them all up here.
-  for key in versions.keys():
-    if not versions[key] or versions[key] == 'undefined':
-      del versions[key]
-  return versions
+def _GetPerfDashboardRevisions(options):
+  return slave_utils.GetPerfDashboardRevisions(
+    options.build_properties,
+    _GetMainRevision(options),
+    _GetBlinkRevision(options),
+    options.point_id)
 
 
 def _CreateLogProcessor(log_processor_class, options, telemetry_info):
@@ -623,7 +486,7 @@ def _ResultsDashboardDict(options):
       'buildnumber': options.build_properties.get('buildnumber'),
       'build_dir': build_dir,
       'supplemental_columns': supplemental_columns,
-      'revisions': _GetTelemetryRevisions(options),
+      'revisions': _GetPerfDashboardRevisions(options),
   }
   return fields
 
