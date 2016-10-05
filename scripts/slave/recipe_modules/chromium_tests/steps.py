@@ -517,9 +517,7 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
       yield AndroidInstrumentationTest(
           test_name,
           compile_targets=test.get('override_compile_targets'),
-          timeout_scale=test.get('timeout_scale'),
-          result_details=True,
-          store_tombstones=True)
+          timeout_scale=test.get('timeout_scale'))
 
 
 def generate_junit_test(api, chromium_tests_api, mastername, buildername,
@@ -1461,8 +1459,7 @@ class AndroidInstrumentationTest(AndroidTest):
   def __init__(self, name, compile_targets=None, apk_under_test=None,
                test_apk=None, isolate_file_path=None, timeout_scale=None,
                annotation=None, except_annotation=None, screenshot=False,
-               verbose=True, tool=None, additional_apks=None,
-               store_tombstones=False, result_details=False):
+               verbose=True, tool=None, additional_apks=None):
     suite_defaults = (
         AndroidInstrumentationTest._DEFAULT_SUITES.get(name)
         or AndroidInstrumentationTest._DEFAULT_SUITES_BY_TARGET.get(name)
@@ -1488,8 +1485,6 @@ class AndroidInstrumentationTest(AndroidTest):
     self._tool = tool
     self._verbose = verbose
     self._wrapper_script_suite_name = compile_targets[0]
-    self._store_tombstones = store_tombstones
-    self._result_details = result_details
 
   @property
   def uses_local_devices(self):
@@ -1510,8 +1505,6 @@ class AndroidInstrumentationTest(AndroidTest):
         screenshot=self._screenshot, verbose=self._verbose, tool=self._tool,
         json_results_file=json_results_file,
         timeout_scale=self._timeout_scale,
-        result_details=self._result_details,
-        store_tombstones=self._store_tombstones,
         wrapper_script_suite_name=self._wrapper_script_suite_name,
         step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False))
 

@@ -954,7 +954,6 @@ class AndroidApi(recipe_api.RecipeApi):
           wrapper_script_suite_name=wrapper_script_suite_name,
           **kwargs)
     finally:
-      result_step = self.m.step.active_result
       if result_details:
         with self.m.step.nest(
             'process results for %s' % step_name) as nest_step:
@@ -965,15 +964,7 @@ class AndroidApi(recipe_api.RecipeApi):
           finally:
             if details_dir:
               self.m.file.rmtree('remove temporary directory', details_dir)
-        self.copy_gtest_results(result_step,
-                                         self.m.step.active_result)
     return step_result
-
-  def copy_gtest_results(self, result_step, active_step):
-    if (hasattr(result_step, 'test_utils') and
-        hasattr(result_step.test_utils, 'gtest_results')):
-      active_step.test_utils.gtest_results = (
-          result_step.test_utils.gtest_results)
 
   def create_result_details(self, json_results_file, cs_base_url):
     presentation_args = ['--json-file',
@@ -1178,7 +1169,6 @@ class AndroidApi(recipe_api.RecipeApi):
           env=self.m.chromium.get_env(),
           **kwargs)
     finally:
-      result_step = self.m.step.active_result
       if result_details:
         with self.m.step.nest(
             'process results for %s' % step_name) as nest_step:
@@ -1189,8 +1179,6 @@ class AndroidApi(recipe_api.RecipeApi):
           finally:
             if details_dir:
                 self.m.file.rmtree('remove temporary directory', details_dir)
-        self.copy_gtest_results(result_step,
-                                         self.m.step.active_result)
 
   def run_java_unit_test_suite(self, suite, verbose=True,
                                json_results_file=None, suffix=None, **kwargs):
