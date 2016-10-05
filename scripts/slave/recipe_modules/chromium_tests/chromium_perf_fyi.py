@@ -43,6 +43,8 @@ def _AddTestSpec(name, perf_id, platform,
       parent_buildername=parent_buildername, tests=tests)
   if not parent_buildername:
     spec['parent_mastername'] = 'chromium.perf'
+  else:
+    spec['parent_mastername'] = 'chromium.perf.fyi'
 
   SPEC['builders'][name] = spec
 
