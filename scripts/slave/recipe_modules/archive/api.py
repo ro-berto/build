@@ -270,6 +270,15 @@ class ArchiveApi(recipe_api.RecipeApi):
     else:
       staging_dir = self.m.path.mkdtemp('chrome_staging')
 
+    llvm_tools_to_copy = ['llvm-symbolizer', 'sancov']
+    llvm_bin_dir = self.m.path['checkout'].join('third_party', 'llvm-build',
+                                                'Release+Asserts', 'bin')
+    ext = '.exe' if self.m.platform.is_win else ''
+
+    for tool in llvm_tools_to_copy:
+      self.m.file.copy('Copy ' + tool,
+                       self.m.path.join(llvm_bin_dir, tool + ext), build_dir)
+
     # Build the list of files to archive.
     zip_file_list = [f for f in self.m.file.listdir('build_dir', build_dir)
                      if self._cf_should_package_file(f)]

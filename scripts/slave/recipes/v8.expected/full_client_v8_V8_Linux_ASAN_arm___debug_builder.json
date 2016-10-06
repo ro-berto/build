@@ -332,6 +332,26 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
+      "[SLAVE_BUILD]/v8/out/Debug"
+    ],
+    "name": "Copy llvm-symbolizer"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/v8/third_party/llvm-build/Release+Asserts/bin/sancov",
+      "[SLAVE_BUILD]/v8/out/Debug"
+    ],
+    "name": "Copy sancov"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
       "[SLAVE_BUILD]/v8/out/Debug",
       "/path/to/tmp/json"
