@@ -594,7 +594,7 @@ BUILDERS = freeze({
         'parent_buildername': 'Android32 Builder Release',
         'testing': {'platform': 'linux'},
       },
-      'Android32 Tests (M Nexus 5X)(dbg)': {
+      'Android32 Tests (M Nexus5X)(dbg)': {
         'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -613,7 +613,7 @@ BUILDERS = freeze({
           'os': 'Android',
         }
       },
-      'Android32 Tests (M Nexus 5X)': {
+      'Android32 Tests (M Nexus5X)': {
         'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -647,7 +647,7 @@ BUILDERS = freeze({
         'parent_buildername': 'Android64 Builder',
         'testing': {'platform': 'linux'},
       },
-      'Android64 Tests (M Nexus 5X)(dbg)': {
+      'Android64 Tests (M Nexus5X)(dbg)': {
         'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -666,7 +666,7 @@ BUILDERS = freeze({
           'os': 'Android',
         }
       },
-      'Android64 Tests (M Nexus 5X)': {
+      'Android64 Tests (M Nexus5X)': {
         'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
