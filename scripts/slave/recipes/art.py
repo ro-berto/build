@@ -368,7 +368,7 @@ _CONFIG_MAP = {
         'debug': False,
       },
       'fugu-debug': {
-        'serial': '1FF17015',
+        'serial': 'E6B27F19',
         'device': 'fugu',
         'debug': True,
       },

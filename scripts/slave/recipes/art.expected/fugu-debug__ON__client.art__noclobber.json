@@ -26,7 +26,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -55,7 +55,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -90,7 +90,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -120,7 +120,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -152,7 +152,7 @@
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -186,7 +186,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -215,7 +215,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -246,7 +246,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -279,7 +279,7 @@
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -314,7 +314,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -343,7 +343,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -374,7 +374,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -407,7 +407,7 @@
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -441,7 +441,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -470,7 +470,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -501,7 +501,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -534,7 +534,7 @@
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -568,7 +568,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -597,7 +597,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -628,7 +628,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -661,7 +661,7 @@
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -695,7 +695,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -724,7 +724,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -755,7 +755,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -788,7 +788,7 @@
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -822,7 +822,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -851,7 +851,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -882,7 +882,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -916,7 +916,7 @@
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -950,7 +950,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -979,7 +979,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -1010,7 +1010,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
       "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/silvermont",
-      "ANDROID_SERIAL": "1FF17015",
+      "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
