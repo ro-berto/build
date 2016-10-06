@@ -117,7 +117,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     isolated_script_passing=True, valid=True,
                                     missing_shards=[],
                                     empty_shards=[],
-                                    output_chartjson=False):
+                                    output_chartjson=False,
+                                    benchmark_enabled=True):
     """Produces a test results' compatible json for isolated script tests. """
     per_shard_results = []
     per_shard_chartjson_results = []
@@ -138,6 +139,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         jsonish_results['successes'] = []
       jsonish_results['times'] = {t : 0.1 for t in tests_run}
       chartjsonish_results['dummy'] =  'dummy%d' % i
+      chartjsonish_results['enabled'] = benchmark_enabled
       chartjsonish_results['charts'] = {'entry%d' % idx: 'chart%d' % idx,
         'entry%d' % (idx + 1): 'chart%d' % (idx + 1)}
       per_shard_results.append(jsonish_results)

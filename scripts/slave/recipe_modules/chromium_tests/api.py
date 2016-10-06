@@ -797,9 +797,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for name in ('buildername', 'slavename', 'buildnumber', 'mastername'):
       properties[name] = self.m.properties[name]
 
-    # Optional properties 
-    for name in ('perf-id', 'results-url'): 
-      if bot_config.get(name):  
+    # Optional properties
+    for name in ('perf-id', 'results-url'):
+      if bot_config.get(name):
         properties[name] = bot_config[name]
 
     properties['target_platform'] = self.m.chromium.c.TARGET_PLATFORM

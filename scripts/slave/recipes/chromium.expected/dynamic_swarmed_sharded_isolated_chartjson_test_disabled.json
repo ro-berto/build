@@ -421,32 +421,21 @@
     },
     "name": "telemetry_gpu_unittests on Ubuntu-12.04",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": false, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"1/chartjson-output.json\": \"\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy1\\\", \\\"enabled\\\": false, \\\"charts\\\": {\\\"entry3\\\": \\\"chart3\\\", \\\"entry4\\\": \\\"chart4\\\"}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"successes\\\": [\\\"test3.Test3\\\", \\\"test4.Test4\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test3.Test3\\\": 0.1, \\\"test4.Test4\\\": 0.1}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"2/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy2\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry6\\\": \\\"chart6\\\", \\\"entry5\\\": \\\"chart5\\\"}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"2/output.json\": \"{\\\"successes\\\": [\\\"test5.Test5\\\", \\\"test6.Test6\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test6.Test6\\\": 0.1, \\\"test5.Test5\\\": 0.1}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"3/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy3\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry8\\\": \\\"chart8\\\", \\\"entry7\\\": \\\"chart7\\\"}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"3/output.json\": \"{\\\"successes\\\": [\\\"test7.Test7\\\", \\\"test8.Test8\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test7.Test7\\\": 0.1, \\\"test8.Test8\\\": 0.1}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@error decoding chart JSON results from shard #1@@@",
-      "@@@STEP_LOG_END@no_results_exc@@@",
-      "@@@STEP_LOG_LINE@invalid_results_exc@'failures'@@@",
-      "@@@STEP_LOG_END@invalid_results_exc@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['telemetry_gpu_unittests']",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]
