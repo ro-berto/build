@@ -27,9 +27,11 @@ def chromium_perf_clang(c):
 
 
 def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
-                  target_bits=64, enable_swarming=False):
+                  target_bits=64, enable_swarming=False,
+                  extra_compile_targets=None):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
-      config_name, perf_id, platform, target_bits, enable_swarming)
+      config_name, perf_id, platform, target_bits, enable_swarming,
+      extra_compile_targets=extra_compile_targets)
 
 
 def _AddTestSpec(name, perf_id, platform,
@@ -57,7 +59,14 @@ def _AddIsolatedTestSpec(name, perf_id, platform,
   SPEC['builders'][name] = spec
 
 
-_AddBuildSpec('Android Builder FYI', 'android', 'android', target_bits=32)
+_AddBuildSpec('Android Builder FYI', 'android', 'android', target_bits=32,
+              extra_compile_targets=['android_tools',
+                                     'cc_perftests',
+                                     'chrome_public_apk',
+                                     'gpu_perftests',
+                                     'push_apps_to_background_apk',
+                                     'system_webview_apk',
+                                     'system_webview_shell_apk',])
 _AddTestSpec('Android Galaxy S5 Perf (1)', 'fyi-android-galaxy-s5', 'android',
              target_bits=32, parent_buildername='Android Builder FYI')
 

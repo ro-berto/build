@@ -58,7 +58,8 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
 
 
 def BuildSpec(
-  config_name, perf_id, platform, target_bits, enable_swarming=False):
+  config_name, perf_id, platform, target_bits, enable_swarming=False,
+  extra_compile_targets=None):
   if platform == 'android':
     # TODO: Run sizes on Android.
     tests = []
@@ -77,6 +78,8 @@ def BuildSpec(
     spec['enable_swarming'] = True
     spec['use_isolate'] = True
   spec['compile_targets'] = ['chromium_builder_perf']
+  if extra_compile_targets:
+    spec['compile_targets'] += extra_compile_targets
 
   return spec
 
