@@ -32,7 +32,7 @@ RECIPE_CONFIGS = freeze({
     'chromium_android_config': 'webrtc',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
-    'test_suite': 'android_device',
+    'test_suite': 'android_perf',
   },
   'webrtc_android_clang': {
     'chromium_config': 'android_clang',
@@ -45,14 +45,14 @@ RECIPE_CONFIGS = freeze({
     'chromium_android_config': 'webrtc',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
-    'test_suite': 'android_device',
+    'test_suite': 'android_perf',
   },
-  'webrtc_android_linux': {
+  'webrtc_android_swarming': {
     'chromium_config': 'android',
     'chromium_android_config': 'webrtc',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
-    'test_suite': 'android_linux',
+    'test_suite': 'android_swarming',
   },
 })
 
@@ -395,7 +395,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Builder': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -407,11 +407,13 @@ BUILDERS = freeze({
         'triggers': [
           'Android32 Tests (L Nexus5)',
           'Android32 Tests (L Nexus7.2)',
+          'Android32 Tests (M Nexus5X)',
         ],
         'archive_apprtc': True,
+        'use_isolate': True,
       },
       'Android32 Builder (dbg)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -423,8 +425,10 @@ BUILDERS = freeze({
         'triggers': [
           'Android32 Tests (L Nexus5)(dbg)',
           'Android32 Tests (L Nexus7.2)(dbg)',
+          'Android32 Tests (M Nexus5X)(dbg)',
         ],
         'archive_apprtc': True,
+        'use_isolate': True,
       },
       'Android32 Builder x86': {
         'recipe_config': 'webrtc_android',
@@ -460,7 +464,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android64 Builder': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -470,12 +474,14 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
         'triggers': [
+          'Android64 Tests (M Nexus5X)',
           'Android64 Tests (L Nexus9)',
         ],
         'archive_apprtc': True,
+        'use_isolate': True,
       },
       'Android64 Builder (dbg)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -484,7 +490,11 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android64 Tests (M Nexus5X)(dbg)',
+        ],
         'archive_apprtc': True,
+        'use_isolate': True,
       },
       'Android64 Builder x64 (dbg)': {
         'recipe_config': 'webrtc_android',
@@ -584,6 +594,44 @@ BUILDERS = freeze({
         'parent_buildername': 'Android32 Builder Release',
         'testing': {'platform': 'linux'},
       },
+      'Android32 Tests (M Nexus 5X)(dbg)': {
+        'recipe_config': 'webrtc_android_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder (dbg)',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'use_isolate': True,
+        'swarming_dimensions': {
+          'device_os': 'M',
+          'device_type': 'bullhead', # Nexus 5X
+          'os': 'Android',
+        }
+      },
+      'Android32 Tests (M Nexus 5X)': {
+        'recipe_config': 'webrtc_android_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'use_isolate': True,
+        'swarming_dimensions': {
+          'device_os': 'M',
+          'device_type': 'bullhead', # Nexus 5X
+          'os': 'Android',
+        }
+      },
       'Android64 Tests (L Nexus9)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
@@ -598,6 +646,44 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Android64 Builder',
         'testing': {'platform': 'linux'},
+      },
+      'Android64 Tests (M Nexus 5X)(dbg)': {
+        'recipe_config': 'webrtc_android_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android64 Builder (dbg)',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'use_isolate': True,
+        'swarming_dimensions': {
+          'device_type': 'bullhead', # Nexus 5X
+          'device_os': 'M',
+          'os': 'Android',
+        }
+      },
+      'Android64 Tests (M Nexus 5X)': {
+        'recipe_config': 'webrtc_android_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android64 Builder',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'use_isolate': True,
+        'swarming_dimensions': {
+          'device_type': 'bullhead', # Nexus 5X
+          'device_os': 'M',
+          'os': 'Android',
+        }
       },
     },
   },
@@ -649,7 +735,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Release (swarming)': {
-        'recipe_config': 'webrtc_android_linux',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -677,26 +763,20 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Builder': {
-        'recipe_config': 'webrtc_android_linux',
+        'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android32 Tests (J Nexus4)',
           'Android32 Tests (K Nexus5)',
           'Android32 Tests (L Nexus6)',
         ],
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Android',
-          'device_type': 'bullhead', # Nexus 5X
-        }
       },
       'Android32 Tests (J Nexus4)': {
         'recipe_config': 'webrtc_android',
@@ -1263,7 +1343,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'android_dbg': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -1272,9 +1352,16 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'device_type': 'bullhead', # Nexus 5X
+          'device_os': 'M',
+          'os': 'Android',
+        }
       },
       'android_rel': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -1283,6 +1370,13 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'device_type': 'bullhead', # Nexus 5X
+          'device_os': 'M',
+          'os': 'Android',
+        }
       },
       'android_clang_dbg': {
         'recipe_config': 'webrtc_android_clang',
@@ -1296,7 +1390,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'android_arm64_rel': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -1305,6 +1399,13 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'device_type': 'bullhead', # Nexus 5X
+          'device_os': 'M',
+          'os': 'Android',
+        }
       },
       'android_n6': {
         'recipe_config': 'webrtc_android',
@@ -1339,23 +1440,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
-      'android_swarming': {
-        'recipe_config': 'webrtc_android_linux',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Android',
-          'device_type': 'bullhead', # Nexus 5X
-        }
-      }
     },
   },
 })

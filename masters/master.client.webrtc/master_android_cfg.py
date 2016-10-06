@@ -55,9 +55,13 @@ def Update(c):
     {'name': 'Android32 GYP (dbg)', 'slavebuilddir': 'android_gyp'},
     {'name': 'Android32 Tests (L Nexus5)(dbg)'},
     {'name': 'Android32 Tests (L Nexus7.2)(dbg)'},
-    {'name': 'Android64 Tests (L Nexus9)'},
+    {'name': 'Android32 Tests (M Nexus 5X)(dbg)'},
     {'name': 'Android32 Tests (L Nexus5)'},
     {'name': 'Android32 Tests (L Nexus7.2)'},
+    {'name': 'Android32 Tests (M Nexus 5X)'},
+    {'name': 'Android64 Tests (L Nexus9)'},
+    {'name': 'Android64 Tests (M Nexus 5X)(dbg)'},
+    {'name': 'Android64 Tests (M Nexus 5X)'},
   ]
 
   c['builders'].extend([

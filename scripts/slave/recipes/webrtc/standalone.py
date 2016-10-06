@@ -113,8 +113,7 @@ def GenTests(api):
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced')
   yield generate_builder(mastername, buildername, revision='12345',
-                         failing_test='tools_unittests',
-                         suffix='_failing_test')
+                         failing_test='tools_unittests', suffix='_failing_test')
 
   yield generate_builder(mastername, 'Android32 Builder', revision=None,
                          suffix='_forced')

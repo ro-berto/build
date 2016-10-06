@@ -147,16 +147,15 @@ class WebRTCApi(recipe_api.RecipeApi):
       self._isolated_targets = []
       if self.c.TEST_SUITE == 'webrtc':
         self._isolated_targets += self.NORMAL_TESTS.keys()
-      if self.c.TEST_SUITE == 'android_linux':
-        self._isolated_targets += self.ANDROID_JUNIT_TESTS.keys()
-      if self.c.TEST_SUITE in ('android_device', 'android_linux'):
-        self._isolated_targets += (self.ANDROID_DEVICE_TESTS.keys() +
+      if self.c.TEST_SUITE == 'android_swarming':
+        self._isolated_targets += (self.ANDROID_JUNIT_TESTS.keys() +
+                                   self.ANDROID_DEVICE_TESTS.keys() +
                                    self.ANDROID_INSTRUMENTATION_TESTS.keys())
       self._isolated_targets = sorted(self._isolated_targets)
       if not self._isolated_targets: # pragma: no cover
         raise self.m.step.StepFailure('Isolation and swarming are only '
-                                      'supported for webrtc, android_linux and '
-                                      'android_device test suites.')
+                                      'supported for webrtc and '
+                                      'android_swarming test suites.')
 
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.enable_swarming:
@@ -220,13 +219,16 @@ class WebRTCApi(recipe_api.RecipeApi):
       context['cwd'] = self._working_dir
 
     with self.m.step.context(context):
+      if self.should_download_build and self.c.use_isolate:
+        self.m.isolate.find_isolated_tests(self.m.chromium.output_dir,
+                                           self._isolated_targets)
       tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
                                    self.c.enable_swarming)
       with self.m.step.defer_results():
         if tests:
           run_android_device_steps = (not self.c.enable_swarming and
               self.m.chromium.c.TARGET_PLATFORM == 'android' and
-              self.c.TEST_SUITE != 'android_linux')
+              self.c.TEST_SUITE != 'android_swarming')
 
           if run_android_device_steps:
             self.m.chromium_android.common_tests_setup_steps()
