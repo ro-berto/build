@@ -39,17 +39,14 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     ])
     if not api.m.tryserver.is_tryserver:
       tests.append(BaremetalTest('webrtc_perf_tests', revision, perf_test=True))
-  elif test_suite == 'android_swarming' or test_suite == 'android_perf':
-    for test, extra_args in sorted(api.ANDROID_DEVICE_TESTS.items()):
-      tests.append(AndroidTest(test, enable_swarming, **extra_args))
-    if (test_suite == 'android_perf' and not api.m.tryserver.is_tryserver
-        and api.c.PERF_ID and api.m.chromium.c.BUILD_CONFIG == 'Release'):
-      tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
-                                   perf_id=api.c.PERF_ID))
-    for test, extra_args in sorted(api.ANDROID_INSTRUMENTATION_TESTS.items()):
-      tests.append(AndroidInstrumentationTest(test, enable_swarming,
-                                              **extra_args))
-  if test_suite == 'android_swarming':
+  elif (test_suite == 'android_perf' and not api.m.tryserver.is_tryserver
+      and api.c.PERF_ID and api.m.chromium.c.BUILD_CONFIG == 'Release'):
+    tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
+                                 perf_id=api.c.PERF_ID))
+  elif test_suite == 'android_swarming':
+    for test, extra_args in (sorted(api.ANDROID_DEVICE_TESTS.items()) +
+                             sorted(api.ANDROID_INSTRUMENTATION_TESTS.items())):
+      tests.append(Test(test, enable_swarming, **extra_args))
     for test, extra_args in sorted(api.ANDROID_JUNIT_TESTS.items()):
       tests.append(AndroidJunitTest(test, False, **extra_args))
 
@@ -112,31 +109,6 @@ class BaremetalTest(WebRTCTest):
     # Tests accessing hardware devices shouldn't be run in parallel.
     super(BaremetalTest, self).__init__(name, revision, parallel=False,
                                         perf_test=perf_test, **runtest_kwargs)
-
-
-def get_android_tool(api):
-  if api.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
-    return 'asan'
-  return None
-
-
-class AndroidTest(Test):
-  """Runs a simple Android test."""
-
-  def run_nonswarming(self, api, suffix):
-    api.m.chromium_android.run_test_suite(self._name,
-                                          tool=get_android_tool(api))
-
-
-class AndroidInstrumentationTest(Test):
-  """Installs the APK on the device and runs the test."""
-
-  def run_nonswarming(self, api, suffix):
-    api.m.chromium_android.run_instrumentation_suite(
-        name=self._name,
-        wrapper_script_suite_name=self._name,
-        tool=get_android_tool(api),
-        verbose=True)
 
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""

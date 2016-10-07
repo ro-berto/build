@@ -37,7 +37,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@12345",
+      "src@HEAD",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Builder",
@@ -50,7 +50,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"12345\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -107,17 +107,6 @@
       "@@@STEP_LOG_LINE@python.inline@      os.remove(os.path.join(base, f))@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release",
-      "--clean-isolated-files"
-    ],
-    "name": "clean isolated files"
   },
   {
     "cmd": [],
@@ -188,7 +177,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/Android32_Builder/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Builder/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -200,15 +189,13 @@
       "[BUILDER_CACHE]/Android32_Builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "client.webrtc",
+      "client.webrtc.perf",
       "-b",
       "Android32 Builder",
       "--config-file",
       "[BUILDER_CACHE]/Android32_Builder/src/webrtc/build/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--swarming-targets-file",
-      "AppRTCMobileTest\nandroid_junit_tests\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlibjingle_peerconnection_android_unittest\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nvoice_engine_unittests\nwebrtc_nonparallel_tests\n",
       "--gyp-script=[BUILDER_CACHE]/Android32_Builder/src/webrtc/build/gyp_webrtc.py",
       "//out/Release"
     ],
@@ -216,27 +203,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@AppRTCMobileTest@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@android_junit_tests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@audio_decoder_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_video_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@libjingle_peerconnection_android_unittest@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_tests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@peerconnection_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_stats_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@system_wrappers_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test_support_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@tools_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@video_engine_tests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@voice_engine_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_nonparallel_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
+    "name": "generate_build_files"
   },
   {
     "cmd": [
@@ -259,7 +226,7 @@
       "--buildbot-buildername",
       "Android32 Builder",
       "--buildbot-mastername",
-      "client.webrtc",
+      "client.webrtc.perf",
       "--buildbot-slavename",
       "slavename",
       "--goma-deps-cache-file",
@@ -285,71 +252,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Builder/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/Android32_Builder/src/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/AppRTCMobileTest.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/android_junit_tests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/audio_decoder_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/common_audio_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/common_video_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/libjingle_peerconnection_android_unittest.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/modules_tests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/modules_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/peerconnection_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/rtc_stats_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/rtc_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/system_wrappers_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/test_support_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/tools_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/video_engine_tests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/voice_engine_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/webrtc_nonparallel_tests.isolated.gen.json"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"AppRTCMobileTest\": \"[dummy hash for AppRTCMobileTest]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"android_junit_tests\": \"[dummy hash for android_junit_tests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"libjingle_peerconnection_android_unittest\": \"[dummy hash for libjingle_peerconnection_android_unittest]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"modules_tests\": \"[dummy hash for modules_tests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"modules_unittests\": \"[dummy hash for modules_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tools_unittests\": \"[dummy hash for tools_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"voice_engine_unittests\": \"[dummy hash for voice_engine_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobileTest\": \"[dummy hash for AppRTCMobileTest]\", \"android_junit_tests\": \"[dummy hash for android_junit_tests]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"libjingle_peerconnection_android_unittest\": \"[dummy hash for libjingle_peerconnection_android_unittest]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"voice_engine_unittests\": \"[dummy hash for voice_engine_unittests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"}@@@"
-    ]
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -367,43 +269,15 @@
       "--src-dir",
       "[BUILDER_CACHE]/Android32_Builder/src",
       "--build-url",
-      "gs://chromium-webrtc/client.webrtc/Android32 Builder",
+      "gs://chromium-webrtc/client.webrtc.perf/Android32 Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}"
     ],
     "name": "package build"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "name": "AppRTCMobile zip archive",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/Android32_Builder/src/out/Release/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"output\": \"[SLAVE_BUILD]/AppRTCMobile_apk.zip\", \"root\": \"[BUILDER_CACHE]/Android32_Builder/src/out/Release/apks\"}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "-a",
-      "public-read",
-      "[SLAVE_BUILD]/AppRTCMobile_apk.zip",
-      "gs://chromium-webrtc/client.webrtc/Android32 Builder/AppRTCMobile_apk_170242.zip"
-    ],
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android32 Builder/AppRTCMobile_apk_170242.zip@@@"
-    ]
   },
   {
     "cmd": [],
@@ -424,18 +298,10 @@
           "parent_got_revision_cp": "refs/heads/master@{#170242}",
           "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
         }
-      },
-      {
-        "builder_name": "Android32 Tests (M Nexus5X)",
-        "properties": {
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
-        }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android32 Tests (L Nexus5)<br />Android32 Tests (L Nexus7.2)<br />Android32 Tests (M Nexus5X)@@@"
+      "@@@STEP_TEXT@Android32 Tests (L Nexus5)<br />Android32 Tests (L Nexus7.2)@@@"
     ]
   },
   {

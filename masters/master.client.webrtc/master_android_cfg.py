@@ -25,14 +25,10 @@ def Update(c):
                             branch='master',
                             treeStableTimer=30,
                             builderNames=[
-          'Android32 Builder',
-          'Android32 Builder (dbg)',
           'Android32 Builder x86',
           'Android32 Builder x86 (dbg)',
           'Android32 Builder MIPS (dbg)',
           'Android32 Clang (dbg)',
-          'Android64 Builder',
-          'Android64 Builder (dbg)',
           'Android64 Builder x64 (dbg)',
           'Android32 GYP',
           'Android32 GYP (dbg)',
@@ -42,37 +38,28 @@ def Update(c):
   # 'slavebuilddir' below is used to reduce the number of checkouts since some
   # of the builders are pooled over multiple slave machines.
   specs = [
-    {'name': 'Android32 Builder', 'slavebuilddir': 'android_arm32'},
-    {'name': 'Android32 Builder (dbg)', 'slavebuilddir': 'android_arm32'},
     {'name': 'Android32 Builder x86', 'slavebuilddir': 'android_x86'},
     {'name': 'Android32 Builder x86 (dbg)', 'slavebuilddir': 'android_x86'},
     {'name': 'Android32 Builder MIPS (dbg)', 'slavebuilddir': 'android_mips'},
     {'name': 'Android32 Clang (dbg)', 'slavebuilddir': 'android_clang'},
-    {'name': 'Android64 Builder', 'slavebuilddir': 'android_arm64'},
-    {'name': 'Android64 Builder (dbg)', 'slavebuilddir': 'android_arm64'},
     {'name': 'Android64 Builder x64 (dbg)', 'slavebuilddir': 'android_x64'},
     {'name': 'Android32 GYP', 'slavebuilddir': 'android_gyp'},
     {'name': 'Android32 GYP (dbg)', 'slavebuilddir': 'android_gyp'},
-    {'name': 'Android32 Tests (L Nexus5)(dbg)'},
-    {'name': 'Android32 Tests (L Nexus7.2)(dbg)'},
     {
-      'name': 'Android32 Tests (M Nexus5X)(dbg)',
+      'name': 'Android32 (M Nexus5X)(dbg)',
       'slavebuilddir': 'android_arm32',
     },
-    {'name': 'Android32 Tests (L Nexus5)'},
-    {'name': 'Android32 Tests (L Nexus7.2)'},
     {
-      'name': 'Android32 Tests (M Nexus5X)',
+      'name': 'Android32 (M Nexus5X)',
       'slavebuilddir': 'android_arm32',
     },
-    {'name': 'Android64 Tests (L Nexus9)'},
     {
-      'name': 'Android64 Tests (M Nexus5X)(dbg)',
+      'name': 'Android64 (M Nexus5X)(dbg)',
       'slavebuilddir': 'android_arm64',
     },
     {
-      'name': 'Android64 Tests (M Nexus5X)',
-      'slavebuilddir': 'android_arm32',
+      'name': 'Android64 (M Nexus5X)',
+      'slavebuilddir': 'android_arm64',
     },
   ]
 

@@ -42,6 +42,8 @@ def RunSteps(api):
 
   if webrtc.should_upload_build:
     webrtc.package_build()
+  if webrtc.should_upload_apprtcmobile:
+    webrtc.package_apprtcmobile()
   if webrtc.should_download_build:
     webrtc.extract_build()
 
@@ -115,6 +117,7 @@ def GenTests(api):
   yield generate_builder(mastername, buildername, revision='12345',
                          failing_test='tools_unittests', suffix='_failing_test')
 
+  mastername = 'client.webrtc.perf'
   yield generate_builder(mastername, 'Android32 Builder', revision=None,
                          suffix='_forced')
 
@@ -124,4 +127,5 @@ def GenTests(api):
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced_invalid')
   yield generate_builder(mastername, buildername, revision='12345',
-                         failing_test='tools_unittests', suffix='_failing_test')
+                         failing_test='webrtc_perf_tests',
+                         suffix='_failing_test')

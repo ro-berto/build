@@ -94,6 +94,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.bot_config.get('triggers')
 
   @property
+  def should_upload_apprtcmobile(self):
+    return self.bot_config.get('archive_apprtc')
+
+  @property
   def should_download_build(self):
     return self.bot_config.get('parent_buildername')
 
@@ -219,9 +223,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       context['cwd'] = self._working_dir
 
     with self.m.step.context(context):
-      if self.should_download_build and self.c.use_isolate:
-        self.m.isolate.find_isolated_tests(self.m.chromium.output_dir,
-                                           self._isolated_targets)
       tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
                                    self.c.enable_swarming)
       with self.m.step.defer_results():
@@ -318,20 +319,20 @@ class WebRTCApi(recipe_api.RecipeApi):
         upload_url,
         build_revision=self.revision)
 
+  def package_apprtcmobile(self):
     # Zip and upload out/{Debug,Release}/apks/AppRTCMobile.apk
-    if self.bot_config.get('archive_apprtc', False):
-      apk_root = self.m.chromium.c.build_dir.join(
-          self.m.chromium.c.build_config_fs, 'apks')
-      zip_path = self.m.path['slave_build'].join('AppRTCMobile_apk.zip')
+    apk_root = self.m.chromium.c.build_dir.join(
+        self.m.chromium.c.build_config_fs, 'apks')
+    zip_path = self.m.path['slave_build'].join('AppRTCMobile_apk.zip')
 
-      pkg = self.m.zip.make_package(apk_root, zip_path)
-      pkg.add_file(apk_root.join('AppRTCMobile.apk'))
-      pkg.zip('AppRTCMobile zip archive')
+    pkg = self.m.zip.make_package(apk_root, zip_path)
+    pkg.add_file(apk_root.join('AppRTCMobile.apk'))
+    pkg.zip('AppRTCMobile zip archive')
 
-      apk_upload_url = 'client.webrtc/%s/AppRTCMobile_apk_%s.zip' % (
-          self.buildername, self.revision_number)
-      self.m.gsutil.upload(zip_path, 'chromium-webrtc', apk_upload_url,
-                           args=['-a', 'public-read'], unauthenticated_url=True)
+    apk_upload_url = 'client.webrtc/%s/AppRTCMobile_apk_%s.zip' % (
+        self.buildername, self.revision_number)
+    self.m.gsutil.upload(zip_path, 'chromium-webrtc', apk_upload_url,
+                         args=['-a', 'public-read'], unauthenticated_url=True)
 
   def extract_build(self):
     if not self.m.properties.get('parent_got_revision'):

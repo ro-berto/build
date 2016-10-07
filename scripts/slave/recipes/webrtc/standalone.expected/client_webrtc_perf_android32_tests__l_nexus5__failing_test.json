@@ -158,11 +158,11 @@
       "--src-dir",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src",
       "--build-url",
-      "gs://chromium-webrtc/client.webrtc/Android32 Builder/full-build-linux.zip",
+      "gs://chromium-webrtc/client.webrtc.perf/Android32 Builder/full-build-linux.zip",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--master-name",
-      "client.webrtc",
+      "client.webrtc.perf",
       "--build-number",
       "1337"
     ],
@@ -387,258 +387,6 @@
     "name": "spawn_device_monitor"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_audio_decoder_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "audio_decoder_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_common_audio_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "common_audio_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_common_video_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "common_video_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_modules_tests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "modules_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_modules_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "modules_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_peerconnection_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "peerconnection_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_rtc_stats_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "rtc_stats_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_rtc_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "rtc_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_system_wrappers_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "system_wrappers_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_test_support_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "test_support_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_tools_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "tools_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_video_engine_tests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "video_engine_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_voice_engine_unittests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "voice_engine_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_webrtc_nonparallel_tests",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s"
-    },
-    "name": "webrtc_nonparallel_tests"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -650,15 +398,13 @@
       "android",
       "--xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android32 Builder\", \"parent_got_revision\": \"12345\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"parent_buildername\": \"Android32 Builder\", \"parent_got_revision\": \"12345\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android32 Builder\", \"parent_got_revision\": \"12345\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Tests (L Nexus5)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"parent_buildername\": \"Android32 Builder\", \"parent_got_revision\": \"12345\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=webrtc_perf_tests",
       "--perf-id=webrtc-android-tests-nexus5",
-      "--perf-config",
-      "{'a_default_rev': 'r_webrtc_rev'}",
       "--test-type=webrtc_perf_tests",
       "--step-name=webrtc_perf_tests",
       "--builder-name=Android32 Tests (L Nexus5)",
@@ -670,35 +416,11 @@
       "--verbose"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "name": "webrtc_perf_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_AppRTCMobileTest",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "name": "AppRTCMobileTest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_libjingle_peerconnection_android_unittest",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "name": "libjingle_peerconnection_android_unittest"
+    "name": "webrtc_perf_tests",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -802,7 +524,8 @@
   },
   {
     "name": "$result",
+    "reason": "1 out of 6 aggregated steps failed. Failures: Step('webrtc_perf_tests') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]
