@@ -320,32 +320,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
       "@@@STEP_LOG_LINE@excluded_files@third_party/webrtc/foo.cc (regex = 'third_party/webrtc/f.*')@@@",
-      "@@@STEP_LOG_END@excluded_files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/send_analyze_event.py",
-      "--event-mon-run-type",
-      "test",
-      "--master-name",
-      "tryserver.chromium.linux",
-      "--builder-name",
-      "linux_chromium_rel_ng",
-      "--build-id",
-      "571",
-      "--analyze-input",
-      "{\"additional_compile_targets\": [\"chromium_swarm_tests\"], \"files\": [\"third_party/webrtc/foo.cc\"], \"test_targets\": []}",
-      "--analyze-output",
-      "{\"status\": \"Analyze disabled: matched exclusion\"}"
-    ],
-    "name": "analyze report",
-    "~followup_annotations": [
+      "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\"@@@",

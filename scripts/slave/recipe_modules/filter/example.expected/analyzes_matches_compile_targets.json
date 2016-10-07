@@ -111,29 +111,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/send_analyze_event.py",
-      "--event-mon-run-type",
-      "test",
-      "--master-name",
-      "",
-      "--builder-name",
-      "",
-      "--build-id",
-      "",
-      "--analyze-input",
-      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": []}",
-      "--analyze-output",
-      "{\"compile_targets\": [\"bar\"], \"status\": \"Found dependency\", \"test_targets\": [\"foo\"]}"
-    ],
-    "name": "analyze report"
-  },
-  {
-    "cmd": [
       "echo",
       "Why hello, there."
     ],

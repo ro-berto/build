@@ -291,24 +291,5 @@ class FilterApi(recipe_api.RecipeApi):
     return self.test_targets, compile_targets
 
   def _report_analyze_result(self, analyze_input, analyze_output):
-    try:
-      self.m.python(
-          'analyze report',
-          self.package_repo_resource('scripts', 'tools', 'runit.py'),
-          [
-              '--show-path',
-              'python',
-              self.package_repo_resource(
-                  'scripts', 'slave', 'send_analyze_event.py'),
-              # TODO(phajdan.jr): switch to prod.
-              '--event-mon-run-type', 'test',
-              '--master-name', self.m.properties.get('mastername', ''),
-              '--builder-name', self.m.properties.get('buildername', ''),
-              '--build-id', self.m.properties.get('buildnumber', ''),
-              '--analyze-input', self.m.json.input(analyze_input),
-              '--analyze-output', self.m.json.input(analyze_output),
-          ],
-      )
-    except self.m.step.StepFailure:  # pragma: no cover
-      # TODO(phajdan.jr): make report failures fatal.
-      pass
+    # TODO(phajdan.jr): send data to event_mon.
+    return

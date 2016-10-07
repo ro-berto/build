@@ -319,32 +319,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/send_analyze_event.py",
-      "--event-mon-run-type",
-      "test",
-      "--master-name",
-      "tryserver.blink",
-      "--builder-name",
-      "mac10.9_blink_rel",
-      "--build-id",
-      "571",
-      "--analyze-input",
-      "{\"additional_compile_targets\": [], \"files\": [\"third_party/skia/foo.cc\"], \"test_targets\": [\"blink_tests\"]}",
-      "--analyze-output",
-      "{\"compile_targets\": [], \"status\": \"No dependency\", \"test_targets\": []}"
-    ],
-    "name": "analyze report",
-    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
