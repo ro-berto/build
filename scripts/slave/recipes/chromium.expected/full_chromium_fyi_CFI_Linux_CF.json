@@ -296,26 +296,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/CFI_Linux_CF/src/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
-      "[BUILDER_CACHE]/CFI_Linux_CF/src/out/Release"
-    ],
-    "name": "Copy llvm-symbolizer"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/CFI_Linux_CF/src/third_party/llvm-build/Release+Asserts/bin/sancov",
-      "[BUILDER_CACHE]/CFI_Linux_CF/src/out/Release"
-    ],
-    "name": "Copy sancov"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
       "[BUILDER_CACHE]/CFI_Linux_CF/src/out/Release",
       "/path/to/tmp/json"
