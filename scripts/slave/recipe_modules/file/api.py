@@ -18,6 +18,11 @@ class FileApi(recipe_api.RecipeApi):
         """
         import shutil
         import sys
+        # Apparently, shutil.copy fails if files are binary-equal on *nix OSes.
+        # See http://crbug.com/636168#c8.
+        if hasattr(shutil, '_samefile'):
+          if shutil._samefile(sys.argv[1], sys.argv[2]):
+            sys.exit(0)
         shutil.copy(sys.argv[1], sys.argv[2])
         """,
         args=[source, dest],

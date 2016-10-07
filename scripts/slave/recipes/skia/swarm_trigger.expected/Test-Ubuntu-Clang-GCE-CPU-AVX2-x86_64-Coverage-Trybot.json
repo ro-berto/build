@@ -463,7 +463,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "\nimport shutil\nimport sys\n# Apparently, shutil.copy fails if files are binary-equal on *nix OSes.\n# See http://crbug.com/636168#c8.\nif hasattr(shutil, '_samefile'):\n  if shutil._samefile(sys.argv[1], sys.argv[2]):\n    sys.exit(0)\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
@@ -473,7 +473,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "\nimport shutil\nimport sys\n# Apparently, shutil.copy fails if files are binary-equal on *nix OSes.\n# See http://crbug.com/636168#c8.\nif hasattr(shutil, '_samefile'):\n  if shutil._samefile(sys.argv[1], sys.argv[2]):\n    sys.exit(0)\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
@@ -782,7 +782,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "\nimport shutil\nimport sys\n# Apparently, shutil.copy fails if files are binary-equal on *nix OSes.\n# See http://crbug.com/636168#c8.\nif hasattr(shutil, '_samefile'):\n  if shutil._samefile(sys.argv[1], sys.argv[2]):\n    sys.exit(0)\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/nanobench_9046e2e693bb92a76e972b694580e5d17ad10748.json",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/nanobench_9046e2e693bb92a76e972b694580e5d17ad10748_1408633190.json"
     ],
@@ -827,7 +827,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "\nimport shutil\nimport sys\n# Apparently, shutil.copy fails if files are binary-equal on *nix OSes.\n# See http://crbug.com/636168#c8.\nif hasattr(shutil, '_samefile'):\n  if shutil._samefile(sys.argv[1], sys.argv[2]):\n    sys.exit(0)\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748.json",
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748_1408633190.json"
     ],
