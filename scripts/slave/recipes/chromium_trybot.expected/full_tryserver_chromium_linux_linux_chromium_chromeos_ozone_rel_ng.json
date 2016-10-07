@@ -301,7 +301,32 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
-      "@@@STEP_LOG_END@excluded_files@@@",
+      "@@@STEP_LOG_END@excluded_files@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/send_analyze_event.py",
+      "--event-mon-run-type",
+      "test",
+      "--master-name",
+      "tryserver.chromium.linux",
+      "--builder-name",
+      "linux_chromium_chromeos_ozone_rel_ng",
+      "--build-id",
+      "571",
+      "--analyze-input",
+      "{\"additional_compile_targets\": [\"aura_builder\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
+      "--analyze-output",
+      "{\"status\": \"Analyze disabled: matched exclusion\"}"
+    ],
+    "name": "analyze report",
+    "~followup_annotations": [
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"aura_builder\"@@@",

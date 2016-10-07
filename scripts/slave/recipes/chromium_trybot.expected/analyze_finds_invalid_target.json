@@ -346,6 +346,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/send_analyze_event.py",
+      "--event-mon-run-type",
+      "test",
+      "--master-name",
+      "tryserver.chromium.linux",
+      "--builder-name",
+      "linux_chromium_rel_ng",
+      "--build-id",
+      "571",
+      "--analyze-input",
+      "{\"additional_compile_targets\": [\"chromium_swarm_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
+      "--analyze-output",
+      "{\"invalid_targets\": [\"invalid target\", \"another one\"]}"
+    ],
+    "name": "analyze report"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "import sys; sys.exit(0)"
     ],
     "name": "mark: before_tests",

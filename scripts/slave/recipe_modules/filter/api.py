@@ -131,6 +131,12 @@ class FilterApi(recipe_api.RecipeApi):
     self._compile_targets = []
     self._paths = affected_files
 
+    analyze_input = {
+        'files': self.paths,
+        'test_targets': test_targets,
+        'additional_compile_targets': additional_compile_targets,
+    }
+
     # Check the path of each file against the exclusion list. If found, no need
     # to check dependencies.
     exclusion_regexs = [re.compile(exclusion) for exclusion in exclusions]
@@ -139,28 +145,24 @@ class FilterApi(recipe_api.RecipeApi):
     for path in self.paths:
       first_match = self.__is_path_in_regex_list(path, exclusion_regexs)
       if first_match:
+        analyze_result = 'Analyze disabled: matched exclusion'
         # TODO(phajdan.jr): consider using plain api.step here, not python.
-        step_result = self.m.python.succeeding_step(
-            'analyze', 'Analyze disabled: matched exclusion')
+        step_result = self.m.python.succeeding_step('analyze', analyze_result)
         step_result.presentation.logs.setdefault('excluded_files', []).append(
             '%s (regex = \'%s\')' % (path, first_match))
         self._compile_targets = sorted(all_targets)
         self._test_targets = sorted(test_targets)
+        self._report_analyze_result(analyze_input, {'status': analyze_result})
         return
 
       if not self.__is_path_in_regex_list(path, ignore_regexs):
         ignored = False
 
     if ignored:
-      self.m.python.succeeding_step(
-          'analyze', 'No compile necessary (all files ignored)')
+      analyze_result = 'No compile necessary (all files ignored)'
+      self.m.python.succeeding_step('analyze', analyze_result)
+      self._report_analyze_result(analyze_input, {'status': analyze_result})
       return
-
-    analyze_input = {
-        'files': self.paths,
-        'test_targets': test_targets,
-        'additional_compile_targets': additional_compile_targets,
-    }
 
     test_output = {
         'status': 'No dependency',
@@ -215,31 +217,34 @@ class FilterApi(recipe_api.RecipeApi):
             test_output),
           **kwargs)
 
-    if 'error' in step_result.json.output:
-      step_result.presentation.step_text = 'Error: ' + \
-          step_result.json.output['error']
-      raise self.m.step.StepFailure(
-          'Error: ' + step_result.json.output['error'])
+    try:
+      if 'error' in step_result.json.output:
+        step_result.presentation.step_text = ('Error: ' +
+            step_result.json.output['error'])
+        raise self.m.step.StepFailure(
+            'Error: ' + step_result.json.output['error'])
 
-    if 'invalid_targets' in step_result.json.output:
-      raise self.m.step.StepFailure('Error, following targets were not ' + \
-          'found: ' + ', '.join(step_result.json.output['invalid_targets']))
+      if 'invalid_targets' in step_result.json.output:
+        raise self.m.step.StepFailure('Error, following targets were not '
+            'found: ' + ', '.join(step_result.json.output['invalid_targets']))
 
-    if (step_result.json.output['status'] == 'Found dependency' or
-        step_result.json.output['status'] == 'Found dependency (all)'):
-      self._compile_targets = step_result.json.output['compile_targets']
-      self._test_targets = step_result.json.output['test_targets']
+      if (step_result.json.output['status'] in (
+          'Found dependency', 'Found dependency (all)')):
+        self._compile_targets = step_result.json.output['compile_targets']
+        self._test_targets = step_result.json.output['test_targets']
 
-      # TODO(dpranke) crbug.com/557505 - we need to not prune meta
-      # targets that are part of 'test_targets', because otherwise
-      # we might not actually build all of the binaries needed for
-      # a given test, even if they aren't affected by the patch.
-      # Until the GYP code is updated, we will merge the returned
-      # test_targets into compile_targets to be safe.
-      self._compile_targets = sorted(set(self._compile_targets +
-                                         self._test_targets))
-    else:
-      step_result.presentation.step_text = 'No compile necessary'
+        # TODO(dpranke) crbug.com/557505 - we need to not prune meta
+        # targets that are part of 'test_targets', because otherwise
+        # we might not actually build all of the binaries needed for
+        # a given test, even if they aren't affected by the patch.
+        # Until the GYP code is updated, we will merge the returned
+        # test_targets into compile_targets to be safe.
+        self._compile_targets = sorted(set(self._compile_targets +
+                                           self._test_targets))
+      else:
+        step_result.presentation.step_text = 'No compile necessary'
+    finally:
+      self._report_analyze_result(analyze_input, step_result.json.output)
 
   # TODO(phajdan.jr): Merge with does_patch_require_compile.
   def analyze(self, affected_files, test_targets, additional_compile_targets,
@@ -284,3 +289,26 @@ class FilterApi(recipe_api.RecipeApi):
     step_result.presentation.logs['analyze_details'] = listio.lines
 
     return self.test_targets, compile_targets
+
+  def _report_analyze_result(self, analyze_input, analyze_output):
+    try:
+      self.m.python(
+          'analyze report',
+          self.package_repo_resource('scripts', 'tools', 'runit.py'),
+          [
+              '--show-path',
+              'python',
+              self.package_repo_resource(
+                  'scripts', 'slave', 'send_analyze_event.py'),
+              # TODO(phajdan.jr): switch to prod.
+              '--event-mon-run-type', 'test',
+              '--master-name', self.m.properties.get('mastername', ''),
+              '--builder-name', self.m.properties.get('buildername', ''),
+              '--build-id', self.m.properties.get('buildnumber', ''),
+              '--analyze-input', self.m.json.input(analyze_input),
+              '--analyze-output', self.m.json.input(analyze_output),
+          ],
+      )
+    except self.m.step.StepFailure:  # pragma: no cover
+      # TODO(phajdan.jr): make report failures fatal.
+      pass

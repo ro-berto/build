@@ -18,7 +18,7 @@ deps = {
     '@98fc59a5896f4ea990a4d527548204fed8f06c64',
   'build/third_party/infra_libs':
     'https://chromium.googlesource.com/infra/infra/packages/infra_libs.git'
-    '@15ea0920b5f83d0aff4bd042e95bc388d069d51c',
+    '@2710608310a96b58d4c5999f7f793ed97b048eca',
   'build/third_party/lighttpd':
     'https://chromium.googlesource.com/chromium/deps/lighttpd.git'
     '@9dfa55d15937a688a92cbf2b7a8621b0927d06eb',
