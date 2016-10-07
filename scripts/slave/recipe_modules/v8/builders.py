@@ -576,6 +576,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'build_gs_archive': 'win32_rel_archive',
         'parent_buildername': 'V8 Win32 - builder',
         'enable_swarming': True,
         'tests': [
@@ -616,6 +617,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'build_gs_archive': 'win32_dbg_archive',
         'parent_buildername': 'V8 Win32 - debug builder',
         'enable_swarming': True,
         'tests': [
@@ -1238,6 +1240,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'build_gs_archive': 'arm_rel_archive',
         'parent_buildername': 'V8 Arm - builder',
         'tests': [
           V8Testing,
@@ -1265,6 +1268,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'build_gs_archive': 'arm_dbg_archive',
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [
           V8Testing_2,
@@ -1291,6 +1295,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'build_gs_archive': 'arm_dbg_archive',
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [Mjsunit_2, Webkit],
         'variants': V8Variant('default'),
