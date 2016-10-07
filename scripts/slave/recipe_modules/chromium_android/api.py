@@ -322,14 +322,26 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def spawn_device_monitor(self):
     script = self.package_repo_resource('scripts', 'slave', 'daemonizer.py')
-    args = [
-        '--action', 'restart',
-        '--pid-file-path', '/tmp/device_monitor.pid',
-        '--', self.resource('spawn_device_monitor.py'),
-        self.m.adb.adb_path(),
-        json.dumps(self._devices),
-        '--blacklist-file', self.blacklist_file
-    ]
+    # TODO(bpastene) Enable everywhere.
+    if self.m.properties.get('buildername') == 'Android Tests (trial)(dbg)':
+      args = [
+          '--action', 'restart',
+          '--pid-file-path', '/tmp/device_monitor.pid', '--',
+          self.m.path['checkout'].join('third_party', 'catapult', 'devil',
+                                       'devil', 'android', 'tools',
+                                       'device_monitor.py'),
+          '--adb-path', self.m.adb.adb_path(),
+          '--blacklist-file', self.blacklist_file
+      ]
+    else:
+      args = [
+          '--action', 'restart',
+          '--pid-file-path', '/tmp/device_monitor.pid',
+          '--', self.resource('spawn_device_monitor.py'),
+          self.m.adb.adb_path(),
+          json.dumps(self._devices),
+          '--blacklist-file', self.blacklist_file
+      ]
     self.m.python('spawn_device_monitor', script, args, infra_step=True)
 
   def shutdown_device_monitor(self):
