@@ -25,6 +25,10 @@ def Update(c):
                             branch='master',
                             treeStableTimer=30,
                             builderNames=[
+          'Android32 (M Nexus5X)(dbg)',
+          'Android32 (M Nexus5X)',
+          'Android64 (M Nexus5X)(dbg)',
+          'Android64 (M Nexus5X)',
           'Android32 Builder x86',
           'Android32 Builder x86 (dbg)',
           'Android32 Builder MIPS (dbg)',
@@ -38,6 +42,10 @@ def Update(c):
   # 'slavebuilddir' below is used to reduce the number of checkouts since some
   # of the builders are pooled over multiple slave machines.
   specs = [
+    {'name': 'Android32 (M Nexus5X)(dbg)', 'slavebuilddir': 'android_arm32'},
+    {'name': 'Android32 (M Nexus5X)', 'slavebuilddir': 'android_arm32'},
+    {'name': 'Android64 (M Nexus5X)(dbg)', 'slavebuilddir': 'android_arm64'},
+    {'name': 'Android64 (M Nexus5X)', 'slavebuilddir': 'android_arm64'},
     {'name': 'Android32 Builder x86', 'slavebuilddir': 'android_x86'},
     {'name': 'Android32 Builder x86 (dbg)', 'slavebuilddir': 'android_x86'},
     {'name': 'Android32 Builder MIPS (dbg)', 'slavebuilddir': 'android_mips'},
@@ -45,22 +53,6 @@ def Update(c):
     {'name': 'Android64 Builder x64 (dbg)', 'slavebuilddir': 'android_x64'},
     {'name': 'Android32 GYP', 'slavebuilddir': 'android_gyp'},
     {'name': 'Android32 GYP (dbg)', 'slavebuilddir': 'android_gyp'},
-    {
-      'name': 'Android32 (M Nexus5X)(dbg)',
-      'slavebuilddir': 'android_arm32',
-    },
-    {
-      'name': 'Android32 (M Nexus5X)',
-      'slavebuilddir': 'android_arm32',
-    },
-    {
-      'name': 'Android64 (M Nexus5X)(dbg)',
-      'slavebuilddir': 'android_arm64',
-    },
-    {
-      'name': 'Android64 (M Nexus5X)',
-      'slavebuilddir': 'android_arm64',
-    },
   ]
 
   c['builders'].extend([
