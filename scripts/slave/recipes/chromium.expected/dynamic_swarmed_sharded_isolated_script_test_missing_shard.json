@@ -429,7 +429,7 @@
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@no_results_exc@no results from shard #1@@@",
       "@@@STEP_LOG_END@no_results_exc@@@",
-      "@@@STEP_LOG_LINE@invalid_results_exc@'failures'@@@",
+      "@@@STEP_LOG_LINE@invalid_results_exc@KeyError('valid',)@@@",
       "@@@STEP_LOG_END@invalid_results_exc@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",

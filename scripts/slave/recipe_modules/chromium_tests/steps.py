@@ -1083,20 +1083,34 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         title=self._step_name(suffix), isolated_hash=isolated_hash,
         shards=self._shards, idempotent=False, extra_args=args)
 
+  def validate_simplified_results(self, results):
+    return results['valid'], results['failures']
+
+  def validate_json_test_results(self, api, results):
+    test_results = api.test_utils.create_results_from_json(results)
+    tests = test_results.tests
+    failures = list(
+      t for t in tests
+      if all(res not in tests[t]['expected'].split()
+             for res in tests[t]['actual'].split()))
+    return True, failures
+
   def validate_task_results(self, api, step_result):
     results = getattr(step_result, 'isolated_script_results', None) or {}
-
+    valid = True
+    failures = []
     try:
-      failures = results['failures']
-      valid = results['valid']
-      if not failures and step_result.retcode != 0:
-        failures = ['%s (entire test suite)' % self.name]
-        valid = False
-
+      if results.get('version', 0) == 3:
+        valid, failures = self.validate_json_test_results(api, results)
+      else:
+        valid, failures = self.validate_simplified_results(results)
     except (ValueError, KeyError) as e:
-      step_result.presentation.logs['invalid_results_exc'] = [str(e)]
+      step_result.presentation.logs['invalid_results_exc'] = [repr(e)]
       valid = False
       failures = None
+    if not failures and step_result.retcode != 0:
+      failures = ['%s (entire test suite)' % self.name]
+      valid = False
     if valid:
       step_result.presentation.step_text += api.test_utils.format_step_text([
         ['failures:', failures]

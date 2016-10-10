@@ -195,6 +195,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
       elif ignored_failures:
         self.m.step.active_result.presentation.status = self.m.step.WARNING
 
+  def create_results_from_json(self, data):
+    return TestResults(data)
+
   @recipe_util.returns_placeholder
   def test_results(self, add_json_log=True):
     """A placeholder which will expand to '/tmp/file'.

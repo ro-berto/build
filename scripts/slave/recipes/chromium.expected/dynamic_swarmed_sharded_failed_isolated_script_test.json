@@ -422,10 +422,10 @@
     "name": "telemetry_gpu_unittests on Ubuntu-12.04",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>test1.Test1<br/>test2.Test2<br/>test3.Test3<br/>test4.Test4<br/>@@@",
+      "@@@STEP_TEXT@<br/>failures:<br/>test3.Test3<br/>test1.Test1<br/>test1.Test2<br/>test3.Test4<br/>@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [], \\\"failures\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"successes\\\": [], \\\"failures\\\": [\\\"test3.Test3\\\", \\\"test4.Test4\\\"], \\\"valid\\\": true, \\\"times\\\": {\\\"test3.Test3\\\": 0.1, \\\"test4.Test4\\\": 0.1}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL TIMEOUT\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"FAIL FAIL FAIL\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 2, \\\"PASS\\\": 0}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test3\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL TIMEOUT\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"FAIL FAIL FAIL\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 2, \\\"PASS\\\": 0}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": true, \\\"exit_code\\\": \\\"1\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": true, \\\"exit_code\\\": \\\"1\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",

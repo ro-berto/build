@@ -8,6 +8,7 @@ import functools
 
 from recipe_engine import recipe_api
 
+from . import results_merger
 
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
@@ -730,7 +731,6 @@ class SwarmingApi(recipe_api.RecipeApi):
             link_name = 'shard #%d isolated out' % index
             p.links[link_name] = outputs_ref['view_url']
 
-
   def _merge_isolated_script_chartjson_ouput_shards(self, task, step_result):
     # Taken from third_party/catapult/telemetry/telemetry/internal/results/
     # chart_json_output_formatter.py, the json entries are as follows:
@@ -770,23 +770,8 @@ class SwarmingApi(recipe_api.RecipeApi):
             merged_results[key][add_key] = chartjson_results_json[key][add_key]
     return merged_results
 
-
   def _merge_isolated_script_shards(self, task, step_result):
-    # This code is unfortunately specialized to the "simplified"
-    # JSON format that used to be the standard for recipes. The
-    # isolated scripts should be changed to use the now-standard
-    # Chromium JSON test results format:
-    # https://www.chromium.org/developers/the-json-test-results-format
-    # . Note that gtests, above, don't seem to conform to this
-    # format yet, so it didn't seem like a good prerequisite to
-    # switch the isolated tests over when adding sharding support.
-    #
-    # These are the only keys we pay attention to in the output JSON.
-    merged_results = {
-      'successes': [],
-      'failures': [],
-      'valid': True,
-    }
+    shard_results_list = []
     for i in xrange(task.shards):
       path = self.m.path.join(str(i), 'output.json')
       if path not in step_result.raw_io.output_dir:
@@ -794,19 +779,10 @@ class SwarmingApi(recipe_api.RecipeApi):
       results_raw = step_result.raw_io.output_dir[path]
       try:
         results_json = self.m.json.loads(results_raw)
+        shard_results_list.append(results_json)
       except Exception as e:
         raise Exception('error decoding JSON results from shard #%d' % i)
-      for key in merged_results:
-        if key in results_json:
-          if isinstance(merged_results[key], list):
-            merged_results[key].extend(results_json[key])
-          elif isinstance(merged_results[key], bool):
-            merged_results[key] = merged_results[key] and results_json[key]
-          else:
-            raise recipe_api.InfraFailure(
-              'Unknown key type ' + type(merged_results[key]) +
-              ' when handling key ' + key + '.')  # pragma: no cover
-    return merged_results
+    return results_merger.merge_test_results(shard_results_list)
 
   def _isolated_script_collect_step(self, task, **kwargs):
     step_test_data = kwargs.pop('step_test_data', None)

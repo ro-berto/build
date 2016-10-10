@@ -112,19 +112,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     ret.retcode = retcode
     return ret
 
-  def canned_isolated_script_output(self, passing, is_win, swarming=False,
-                                    shards=1, swarming_internal_failure=False,
-                                    isolated_script_passing=True, valid=True,
-                                    missing_shards=[],
-                                    empty_shards=[],
-                                    output_chartjson=False,
-                                    benchmark_enabled=True):
-    """Produces a test results' compatible json for isolated script tests. """
+  def generate_simplified_json_results(self, shards, isolated_script_passing,
+                                       valid):
     per_shard_results = []
-    per_shard_chartjson_results = []
     for i in xrange(shards):
       jsonish_results = {}
-      chartjsonish_results = {}
       jsonish_results['valid'] = valid
       # Keep shard 0's results equivalent to the old code to minimize
       # expectation diffs.
@@ -138,12 +130,90 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         jsonish_results['failures'] = tests_run
         jsonish_results['successes'] = []
       jsonish_results['times'] = {t : 0.1 for t in tests_run}
+      per_shard_results.append(jsonish_results)
+    return per_shard_results
+
+  def generate_json_test_results(self, shards, isolated_script_passing,
+                                 valid):
+    per_shard_results = []
+    for i in xrange(shards):
+      jsonish_results = {
+        'interrupted': False,
+        'path_delimiter': '.',
+        'version': 3,
+        'seconds_since_epoch': 14000000 + i,
+        'num_failures_by_type': {
+           'FAIL': 0,
+           'PASS': 0
+        }
+      }
+      if not valid:
+        del jsonish_results['path_delimiter']
+      idx = 1 + (2 * i)
+      if isolated_script_passing:
+        tests_run = {
+          'test_common': {
+            'Test%d' % idx: {
+              'expected': 'PASS',
+              'actual': 'FAIL FAIL PASS',
+            },
+          },
+          'test%d' % idx: {
+            'Test%d' % idx: {
+              'expected': 'PASS',
+              'actual': 'PASS',
+            },
+            'Test%d' % (idx + 1): {
+              'expected': 'PASS TIMEOUT',
+              'actual': 'TIMEOUT',
+             },
+          }
+        }
+        jsonish_results['num_failures_by_type']['PASS'] = 2
+      else:
+        tests_run = {
+          'test%d' % idx: {
+            'Test%d' % idx: {
+              'expected': 'PASS',
+              'actual': 'FAIL FAIL TIMEOUT',
+            },
+            'Test%d' % (idx + 1): {
+              'expected': 'PASS TIMEOUT',
+               'actual': 'FAIL FAIL FAIL',
+             },
+          }
+        }
+
+        jsonish_results['num_failures_by_type']['FAIL'] = 2
+      jsonish_results['tests'] = tests_run
+      per_shard_results.append(jsonish_results)
+    return per_shard_results
+
+  def canned_isolated_script_output(self, passing, is_win, swarming=False,
+                                    shards=1, swarming_internal_failure=False,
+                                    isolated_script_passing=True, valid=True,
+                                    missing_shards=[],
+                                    empty_shards=[],
+                                    use_json_test_format=False,
+                                    output_chartjson=False,
+                                    benchmark_enabled=True):
+    """Produces a test results' compatible json for isolated script tests. """
+    per_shard_results = []
+    per_shard_chartjson_results = []
+    for i in xrange(shards):
+      chartjsonish_results = {}
+      idx = 1 + (2 * i)
       chartjsonish_results['dummy'] =  'dummy%d' % i
       chartjsonish_results['enabled'] = benchmark_enabled
       chartjsonish_results['charts'] = {'entry%d' % idx: 'chart%d' % idx,
         'entry%d' % (idx + 1): 'chart%d' % (idx + 1)}
-      per_shard_results.append(jsonish_results)
       per_shard_chartjson_results.append(chartjsonish_results)
+    if use_json_test_format:
+      per_shard_results = self.generate_json_test_results(
+          shards, isolated_script_passing, valid)
+    else:
+      per_shard_results = self.generate_simplified_json_results(
+          shards, isolated_script_passing, valid)
     if swarming:
       jsonish_shards = []
       files_dict = {}
