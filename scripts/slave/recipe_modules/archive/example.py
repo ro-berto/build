@@ -23,8 +23,17 @@ def RunSteps(api):
         step_name='zip build',
         target=api.path['checkout'].join('/Release/out'))
     return
+
+  if 'no_llvm' not in api.properties:
+    llvm_bin_dir = api.path['checkout'].join('third_party', 'llvm-build',
+                                             'Release+Asserts', 'bin')
+    api.path.mock_add_paths(api.path.join(llvm_bin_dir, 'llvm-symbolizer'))
+    api.path.mock_add_paths(api.path.join(llvm_bin_dir, 'sancov'))
+
+  build_dir = api.path['slave_build'].join('src', 'out', 'Release')
+
   api.archive.clusterfuzz_archive(
-      build_dir=api.path['slave_build'].join('src', 'out', 'Release'),
+      build_dir=build_dir,
       update_properties=api.properties.get('update_properties'),
       gs_bucket='chromium',
       gs_acl=api.properties.get('gs_acl', ''),
@@ -116,6 +125,21 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'listdir build_dir', api.json.output(['chrome']))
+  )
+
+  update_properties = {
+    'got_revision': TEST_HASH_MAIN,
+    'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+  }
+  yield (
+    api.test('cf_archiving_no_llvm') +
+    api.platform('linux', 64) +
+    api.properties(
+      update_properties=update_properties,
+      no_llvm=True,
+    ) +
+    api.override_step_data(
+      'listdir build_dir', api.json.output(['chrome']))
   )
 
   yield(

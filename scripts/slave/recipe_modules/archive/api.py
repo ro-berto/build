@@ -270,6 +270,26 @@ class ArchiveApi(recipe_api.RecipeApi):
     else:
       staging_dir = self.m.path.mkdtemp('chrome_staging')
 
+    llvm_tools_to_copy = ['llvm-symbolizer', 'sancov']
+    llvm_bin_dir = self.m.path['checkout'].join('third_party', 'llvm-build',
+                                                'Release+Asserts', 'bin')
+    ext = '.exe' if self.m.platform.is_win else ''
+
+    for tool in llvm_tools_to_copy:
+      tool_src = self.m.path.join(llvm_bin_dir, tool + ext)
+      tool_dst = self.m.path.join(build_dir, tool + ext)
+
+      if not self.m.path.exists(tool_src):
+        continue
+
+      try:
+        self.m.file.copy('Copy ' + tool, tool_src, tool_dst)
+      except self.m.step.StepFailure:  # pragma: no cover
+        # On some builds, it appears that a soft/hard link of llvm-symbolizer
+        # exists in the build directory, which causes shutil.copy to raise an
+        # exception. Either way, this shouldn't cause the whole build to fail.
+        pass
+
     # Build the list of files to archive.
     zip_file_list = [f for f in self.m.file.listdir('build_dir', build_dir)
                      if self._cf_should_package_file(f)]
