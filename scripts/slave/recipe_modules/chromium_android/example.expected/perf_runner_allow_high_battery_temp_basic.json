@@ -845,6 +845,8 @@
       "fake_config.json",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--num-retries",
+      "0",
       "--flaky-steps",
       "flake_fakes.json",
       "--adb-path",

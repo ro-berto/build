@@ -359,6 +359,8 @@
       "{\"steps\": {\"resource_sizes (CronetSample.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[SLAVE_BUILD]/src/out/Release/apks/CronetSample.apk'\", \"device_affinity\": null}}, \"version\": 1}",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--num-retries",
+      "0",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],

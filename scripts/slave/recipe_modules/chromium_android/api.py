@@ -718,13 +718,15 @@ class AndroidApi(recipe_api.RecipeApi):
                          known_devices_file=None,
                          enable_platform_mode=False,
                          write_buildbot_json=False,
+                         num_retries=0,
                          **kwargs):
     args = [
         'perf',
         '--release',
         '--verbose',
         '--steps', config,
-        '--blacklist-file', self.blacklist_file
+        '--blacklist-file', self.blacklist_file,
+        '--num-retries', num_retries
     ]
     if flaky_config:
       args.extend(['--flaky-steps', flaky_config])
@@ -753,7 +755,8 @@ class AndroidApi(recipe_api.RecipeApi):
                              known_devices_file=None,
                              enable_platform_mode=False,
                              timestamp_as_point_id=False,
-                             pass_adb_path=True, **kwargs):
+                             pass_adb_path=True,
+                             num_retries=0, **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -779,7 +782,8 @@ class AndroidApi(recipe_api.RecipeApi):
                             max_battery_temp=max_battery_temp,
                             known_devices_file=known_devices_file,
                             enable_platform_mode=enable_platform_mode,
-                            pass_adb_path=pass_adb_path, **kwargs)
+                            pass_adb_path=pass_adb_path,
+                            num_retries=num_retries, **kwargs)
 
     # now obtain the list of tests that were executed.
     result = self.test_runner(

@@ -547,7 +547,7 @@ class DynamicPerfTests(Test):
   def __init__(self, perf_id, platform, target_bits, max_battery_temp=350,
                num_device_shards=1, num_host_shards=1, shard_index=0,
                override_browser_name=None, enable_platform_mode=False,
-               pass_adb_path=True):
+               pass_adb_path=True, num_retries=0):
     self._perf_id = perf_id
     self._platform = platform
     self._target_bits = target_bits
@@ -556,6 +556,7 @@ class DynamicPerfTests(Test):
     self._max_battery_temp = max_battery_temp
     self._num_host_shards = num_host_shards
     self._num_device_shards = num_device_shards
+    self._num_retries = num_retries
     self._pass_adb_path = pass_adb_path
     self._shard_index = shard_index
 
@@ -613,7 +614,8 @@ class DynamicPerfTests(Test):
       max_battery_temp=self._max_battery_temp,
       known_devices_file=api.chromium_android.known_devices_file,
       enable_platform_mode=self._enable_platform_mode,
-      pass_adb_path=self._pass_adb_path)
+      pass_adb_path=self._pass_adb_path,
+      num_retries=self._num_retries)
 
   def _run_serially(self, api, tests):
     failure = None
