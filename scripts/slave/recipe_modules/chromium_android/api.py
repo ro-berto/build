@@ -322,26 +322,15 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def spawn_device_monitor(self):
     script = self.package_repo_resource('scripts', 'slave', 'daemonizer.py')
-    # TODO(bpastene) Enable everywhere.
-    if self.m.properties.get('buildername') == 'Android Tests (trial)(dbg)':
-      args = [
-          '--action', 'restart',
-          '--pid-file-path', '/tmp/device_monitor.pid', '--',
-          self.m.path['checkout'].join('third_party', 'catapult', 'devil',
-                                       'devil', 'android', 'tools',
-                                       'device_monitor.py'),
-          '--adb-path', self.m.adb.adb_path(),
-          '--blacklist-file', self.blacklist_file
-      ]
-    else:
-      args = [
-          '--action', 'restart',
-          '--pid-file-path', '/tmp/device_monitor.pid',
-          '--', self.resource('spawn_device_monitor.py'),
-          self.m.adb.adb_path(),
-          json.dumps(self._devices),
-          '--blacklist-file', self.blacklist_file
-      ]
+    args = [
+        '--action', 'restart',
+        '--pid-file-path', '/tmp/device_monitor.pid', '--',
+        self.m.path['checkout'].join('third_party', 'catapult', 'devil',
+                                     'devil', 'android', 'tools',
+                                     'device_monitor.py'),
+        '--adb-path', self.m.adb.adb_path(),
+        '--blacklist-file', self.blacklist_file
+    ]
     self.m.python('spawn_device_monitor', script, args, infra_step=True)
 
   def shutdown_device_monitor(self):
@@ -1105,6 +1094,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                remove_system_webview=False, skip_wipe=False):
     self.create_adb_symlink()
     self.spawn_logcat_monitor()
+    self.spawn_device_monitor()
     self.authorize_adb_devices()
     # TODO(jbudorick): Restart USB only on perf bots while we
     # figure out the fate of the usb reset in general.
@@ -1124,8 +1114,6 @@ class AndroidApi(recipe_api.RecipeApi):
     self.device_status()
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
       self.asan_device_setup()
-
-    self.spawn_device_monitor()
 
   def common_tests_final_steps(self, logcat_gs_bucket='chromium-android'):
     self.shutdown_device_monitor()

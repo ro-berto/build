@@ -257,6 +257,25 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "spawn_device_monitor"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
@@ -343,25 +362,6 @@
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
-      "--action",
-      "restart",
-      "--pid-file-path",
-      "/tmp/device_monitor.pid",
-      "--",
-      "RECIPE_MODULE[build::chromium_android]/resources/spawn_device_monitor.py",
-      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools/adb",
-      "[]",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "spawn_device_monitor"
   },
   {
     "cmd": [
