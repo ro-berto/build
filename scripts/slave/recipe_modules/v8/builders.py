@@ -31,6 +31,7 @@ Mjsunit = TestStepConfig('mjsunit')
 Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
 Mjsunit_4 = TestStepConfig('mjsunit', shards=4)
+Mjsunit_5 = TestStepConfig('mjsunit', shards=5)
 MjsunitExtra_3 = TestStepConfig('mjsunit_extra', shards=3)
 MjsunitIgnitionTurbofan_2 = TestStepConfig(
     'mjsunit_ignition_turbofan', shards=2)
@@ -1465,7 +1466,7 @@ BUILDERS = {
           'default_hard_timeout': 90 * 60,
           'default_priority': 35,
         },
-        'tests': [Mjsunit_3, Webkit],
+        'tests': [Mjsunit_4, Webkit],
         'testing': {'platform': 'linux'},
       },
 ####### Category: MIPS
@@ -2619,7 +2620,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [Mjsunit_3, Webkit],
+        'tests': [Mjsunit_5, Webkit],
         'testing': {'platform': 'linux'},
       },
       'v8_android_arm_compile_rel': {
