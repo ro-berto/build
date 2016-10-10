@@ -847,7 +847,7 @@
       "FlakyTest",
       "--screenshot",
       "--json-results-file",
-      "[TMP_BASE]/temp_details_tmp_1/json_results_file",
+      "/path/to/tmp/json",
       "--store-tombstones",
       "--test-apk",
       "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
@@ -868,49 +868,22 @@
     "name": "SmallTest"
   },
   {
-    "cmd": [],
-    "name": "process results for SmallTest",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@result_details@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
       "--json-file",
-      "[TMP_BASE]/temp_details_tmp_1/json_results_file",
+      "{}",
       "--master-name",
       "chromium.testing.master",
       "--cs-base-url",
       "cs_base_url"
     ],
-    "name": "process results for SmallTest.generate result details",
+    "name": "SmallTest: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP_BASE]/temp_details_tmp_1"
-    ],
-    "name": "process results for SmallTest.rmtree remove temporary directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {
@@ -925,7 +898,7 @@
       "--gtest_filter=WebRtc*",
       "--tool=asan",
       "--json-results-file",
-      "[TMP_BASE]/temp_details_tmp_2/json_results_file",
+      "/path/to/tmp/json",
       "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
@@ -937,47 +910,20 @@
     "name": "unittests"
   },
   {
-    "cmd": [],
-    "name": "process results for unittests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@result_details@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
       "--json-file",
-      "[TMP_BASE]/temp_details_tmp_2/json_results_file",
+      "{}",
       "--master-name",
       "chromium.testing.master"
     ],
-    "name": "process results for unittests.generate result details",
+    "name": "unittests: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP_BASE]/temp_details_tmp_2"
-    ],
-    "name": "process results for unittests.rmtree remove temporary directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {

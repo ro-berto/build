@@ -923,11 +923,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--verbose')
     if self.c.coverage or self.c.incremental_coverage:
       args.extend(['--coverage-dir', self.coverage_dir])
-    if result_details:
-      details_dir = None
-      if not json_results_file:
-        details_dir = self.m.path.mkdtemp('temp_details')
-        json_results_file = self.m.path.join(details_dir, 'json_results_file')
+    if result_details and not json_results_file:
+        json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
     if store_tombstones:
@@ -966,19 +963,27 @@ class AndroidApi(recipe_api.RecipeApi):
           wrapper_script_suite_name=wrapper_script_suite_name,
           **kwargs)
     finally:
+      result_step = self.m.step.active_result
       if result_details:
-        with self.m.step.nest(
-            'process results for %s' % step_name) as nest_step:
-          try:
-            details = self.create_result_details(json_results_file,
-                                                 cs_base_url)
-            nest_step.presentation.logs['result_details'] = details
-          finally:
-            if details_dir:
-              self.m.file.rmtree('remove temporary directory', details_dir)
+        if (hasattr(result_step, 'test_utils') and
+            hasattr(result_step.test_utils, 'gtest_results')):
+          json_results = self.m.json.input(
+              result_step.test_utils.gtest_results.raw)
+          details = self.create_result_details(step_name,
+                                               json_results,
+                                               cs_base_url)
+          self.m.step.active_result.presentation.logs[
+              'result_details'] = details
+        self.copy_gtest_results(result_step,
+                                self.m.step.active_result)
     return step_result
 
-  def create_result_details(self, json_results_file, cs_base_url):
+  def copy_gtest_results(self, result_step, active_step):
+    if (hasattr(result_step, 'test_utils') and
+        hasattr(result_step.test_utils, 'gtest_results')):
+      active_step.test_utils = result_step.test_utils
+
+  def create_result_details(self, step_name, json_results_file, cs_base_url):
     presentation_args = ['--json-file',
                          json_results_file,
                          '--master-name',
@@ -986,7 +991,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if cs_base_url:
       presentation_args.extend(['--cs-base-url', cs_base_url])
     result_details = self.m.python(
-        'generate result details',
+        '%s: generate result details' % step_name,
         self.resource('test_results_presentation.py'),
         args=presentation_args,
         stdout=self.m.raw_io.output(),
@@ -1159,11 +1164,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--gtest_filter=%s' % gtest_filter)
     if tool:
       args.append('--tool=%s' % tool)
-    if result_details:
-      details_dir = None
-      if not json_results_file:
-        details_dir = self.m.path.mkdtemp('temp_details')
-        json_results_file = self.m.path.join(details_dir, 'json_results_file')
+    if result_details and not json_results_file:
+        json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
     if store_tombstones:
@@ -1181,16 +1183,19 @@ class AndroidApi(recipe_api.RecipeApi):
           env=self.m.chromium.get_env(),
           **kwargs)
     finally:
+      result_step = self.m.step.active_result
       if result_details:
-        with self.m.step.nest(
-            'process results for %s' % step_name) as nest_step:
-          try:
-            details = self.create_result_details(json_results_file,
-                                                 None)
-            nest_step.presentation.logs['result_details'] = details
-          finally:
-            if details_dir:
-                self.m.file.rmtree('remove temporary directory', details_dir)
+        if (hasattr(result_step, 'test_utils') and
+            hasattr(result_step.test_utils, 'gtest_results')):
+          json_results = self.m.json.input(
+              result_step.test_utils.gtest_results.raw)
+          details = self.create_result_details(step_name,
+                                               json_results,
+                                               None)
+          self.m.step.active_result.presentation.logs[
+              'result_details'] = details
+        self.copy_gtest_results(result_step,
+                                self.m.step.active_result)
 
   def run_java_unit_test_suite(self, suite, verbose=True,
                                json_results_file=None, suffix=None, **kwargs):
