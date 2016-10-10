@@ -10,7 +10,8 @@ import re
 class CrrevApi(recipe_api.RecipeApi):
   """Recipe module for making requests to crrev.com."""
 
-  def __call__(self, step_name, request_path, request_params=None, attempts=3):
+  def __call__(self, step_name, request_path, request_params=None, attempts=3,
+               **kwargs):
     step_result = self.m.python(
         step_name,
         self.resource('crrev_client.py'),
@@ -19,12 +20,12 @@ class CrrevApi(recipe_api.RecipeApi):
             '--params-file', self.m.json.input(request_params or {}),
             '--attempts', str(attempts),
         ],
-        stdout=self.m.json.output())
+        stdout=self.m.json.output(), **kwargs)
     return step_result.stdout
 
   def to_commit_hash(
       self, commit_position, project='chromium', repo='chromium/src',
-      attempts=3, step_name=None):
+      attempts=3, step_name=None, **kwargs):
     """Fetches the corresponding commit hash for a commit position."""
     branch, number = self.m.commit_position.parse(commit_position)
     params = {
@@ -36,7 +37,7 @@ class CrrevApi(recipe_api.RecipeApi):
     }
     step_name = step_name or 'crrev get commit hash for ' + commit_position
     try:
-      result = self(step_name, 'get_numbering', params, attempts)
+      result = self(step_name, 'get_numbering', params, attempts, **kwargs)
       return result['git_sha']
     except (self.m.step.StepFailure, KeyError):
       raise self.m.step.StepFailure('Could not resolve ' + commit_position)
