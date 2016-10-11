@@ -376,7 +376,7 @@ class StatusPush(StatusReceiverMultiService):
       # This caps the amount of postgres db calls for really out of
       # control builders
       pending = pending[:75]
-      pendingStatues = yield defer.DeferredList(
+      pendingStates = yield defer.DeferredList(
           [p.asDict_async() for p in pending])
       # Not included: basedir, cachedBuilds.
       # cachedBuilds isn't useful and takes a ton of resources to compute.
@@ -384,7 +384,8 @@ class StatusPush(StatusReceiverMultiService):
         'slaves': builder.slavenames,
         'currentBuilds': sorted(b.getNumber() for b in builder.currentBuilds),
         'pendingBuilds': len(pending),
-        'pendingBuildStatues': pendingStatues,
+        # p is a tuple of (success, payload)
+        'pendingBuildStates': [p[1] for p in pendingStates if p[0]],
         'state': builder.getState()[0],
         'category': builder.category,
       }
