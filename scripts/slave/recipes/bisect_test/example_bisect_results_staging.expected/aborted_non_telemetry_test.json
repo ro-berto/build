@@ -1,0 +1,149 @@
+[
+  {
+    "cmd": [
+      "git",
+      "update-ref",
+      "refs/heads/master",
+      "refs/remotes/origin/master"
+    ],
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
+    "name": "git update-ref"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "master"
+    ],
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
+    "name": "git checkout"
+  },
+  {
+    "cmd": [],
+    "name": "config",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"bad_revision\": \"314017\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"builder_host\": \"master4.golo.chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"builder_port\": \"8341\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"bypass_stats_check\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"command\": \"src/tools/dummy_command\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_builds\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_job_names\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"good_revision\": \"314015\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"gs_bucket\": \"chrome-perf\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"max_time_minutes\": \"5\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"metric\": \"mean_input_event_latency/mean_input_event_latency\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"repeat_count\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"skip_gclient_ops\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"test_type\": \"perf\"@@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@}@@@",
+      "@@@STEP_LOG_END@Bisect job configuration@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Resolving reference range"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::crrev]/resources/crrev_client.py",
+      "get_numbering",
+      "--params-file",
+      "{\"number\": 314017, \"numbering_identifier\": \"refs/heads/master\", \"numbering_type\": \"COMMIT_POSITION\", \"project\": \"chromium\", \"repo\": \"chromium/src\"}",
+      "--attempts",
+      "3"
+    ],
+    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314017}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"git_sha\": \"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::crrev]/resources/crrev_client.py",
+      "get_numbering",
+      "--params-file",
+      "{\"number\": 314015, \"numbering_identifier\": \"refs/heads/master\", \"numbering_type\": \"COMMIT_POSITION\", \"project\": \"chromium\", \"repo\": \"chromium/src\"}",
+      "--attempts",
+      "3"
+    ],
+    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314015}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"git_sha\": \"c001c0de\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::auto_bisect_staging]/resources/fetch_file.py",
+      "DEPS",
+      "--commit",
+      "deadbeef"
+    ],
+    "name": "Resolving reference range.fetch file deadbeef:DEPS",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@catapult: None@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
+      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::auto_bisect_staging]/resources/fetch_file.py",
+      "DEPS",
+      "--commit",
+      "c001c0de"
+    ],
+    "name": "Resolving reference range.fetch file c001c0de:DEPS",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@catapult: None@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
+      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
+    ],
+    "name": "Post bisect results",
+    "stdin": "{\"data\": {\"aborted_reason\": \"The metric values for the initial \\\"good\\\" and \\\"bad\\\" revisions do not represent a clear regression.\", \"bad_revision\": \"deadbeef\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": null, \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders//builds/\", \"change\": null, \"command\": \"src/tools/dummy_command\", \"culprit_data\": null, \"good_revision\": \"c001c0de\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [], \"score\": 0, \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": [\"This is a demo warning\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

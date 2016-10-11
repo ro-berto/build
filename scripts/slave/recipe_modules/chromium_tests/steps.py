@@ -1410,6 +1410,22 @@ class BisectTest(Test):  # pylint: disable=W0232
   def failures(self, *_):
     return self._failures  # pragma: no cover
 
+class BisectTestStaging(BisectTest):
+  def pre_run(self, api, _, test_filter=None):
+    self.test_config = api.bisect_tester_staging.load_config_from_dict(
+        self._test_parameters.get('bisect_config',
+                                  api.properties.get('bisect_config')))
+
+  def run(self, api, _, test_filter=None):
+    self._run_results, self.test_output, self.retcodes = (
+        api.bisect_tester_staging.run_test(self.test_config))
+
+  def post_run(self, api, _, test_filter=None):
+      self.values = api.bisect_tester_staging.digest_run_results(
+          self._run_results, self.retcodes, self.test_config)
+      api.bisect_tester_staging.upload_results(
+          self.test_output, self.values, self.retcodes, self._test_parameters)
+
 
 class AndroidTest(Test):
   def __init__(self, name, compile_targets, isolate_file_path=None):
