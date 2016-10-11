@@ -1144,18 +1144,25 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
       """Produces a step that uploads results to dashboard"""
       args = [
-        '--results', json.dumps(results),
-        '--perf-id', api.properties['perf-id'],
-        '--results-url', api.properties['results-url'],
-        '--build-dir', api.chromium.c.build_dir,
-        '--got-revision-cp', api.properties['got_revision_cp'],
-        '--version', api.properties['version'],
-        '--git-revision', api.properties['git_revision'],
-        '--buildername', api.properties['buildername'],
-        '--buildnumber', api.properties['buildnumber'],
-        '--got-webrtc-revision', api.properties['got_webrtc_revision'],
-        '--got-v8-revision', api.properties['got_v8_revision'],
+          '--results', json.dumps(results),
+          '--perf-id', api.properties['perf-id'],
+          '--results-url', api.properties['results-url'],
+          '--buildername', api.properties['buildername'],
+          '--buildnumber', api.properties['buildnumber'],
       ]
+      if api.chromium.c.build_dir:
+        args.extend(['--build-dir', api.chromium.c.build_dir])
+      if 'got_revision_cp' in api.properties:
+        args.extend(['--got-revision-cp', api.properties['got_revision_cp']])
+      if 'version' in api.properties:
+        args.extend(['--version', api.properties['version']])
+      if 'git_revision' in api.properties:
+        args.extend(['--git-revision', api.properties['git_revision']])
+      if 'got_webrtc_revision' in api.properties:
+        args.extend(['--got-webrtc-revision',
+            api.properties['got_webrtc_revision']])
+      if 'got_v8_revision' in api.properties:
+        args.extend(['--got-v8-revision', api.properties['got_v8_revision']])
 
       step_result.presentation.logs['chartjson_info'].append(
           "Info: Setting up arguments for perf dashboard")
