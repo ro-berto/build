@@ -244,7 +244,6 @@ class GClient(SourceBaseCommand):
     self.was_patched = False
     self.no_gclient_branch = False
     self.no_gclient_revision = False
-    self.gclient_transitive = False
     self.delete_unversioned_trees_when_updating = True
     self.gclient_jobs = None
     self.project = None
@@ -274,7 +273,6 @@ class GClient(SourceBaseCommand):
     self.env['CHROMIUM_GYP_SYNTAX_CHECK'] = '1'
     self.no_gclient_branch = args.get('no_gclient_branch')
     self.no_gclient_revision = args.get('no_gclient_revision', False)
-    self.gclient_transitive = args.get('gclient_transitive')
     self.gclient_jobs = args.get('gclient_jobs')
     self.project = args.get('project', None)
 
@@ -390,10 +388,6 @@ class GClient(SourceBaseCommand):
         # Make the revision look like branch@revision.
         prefix = self.project if self.project else self.branch
         command.append('%s@%s' % (prefix, self.revision))
-      # We only add the transitive flag if we have a revision, otherwise it is
-      # meaningless.
-      if self.gclient_transitive:
-        command.append('--transitive')
 
     if self.gclient_deps:
       command.append('--deps=' + self.gclient_deps)
