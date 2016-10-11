@@ -73,3 +73,7 @@ _AddTestSpec('mac_retina_perf_bisect', 'mac')
 _AddTestSpec('mac_hdd_perf_bisect', 'mac')
 
 _AddTestSpec('linux_perf_bisect', 'linux')
+
+_AddTestSpec('staging_linux_perf_bisect', 'linux')
+_AddTestSpec('staging_mac_10_10_perf_bisect', 'mac')
+_AddTestSpec('staging_win_perf_bisect', 'win', target_bits=32)
