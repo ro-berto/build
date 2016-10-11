@@ -387,6 +387,8 @@ class ArchiveUtilsTest(unittest.TestCase):
     self.assertTrue(fparser.IsOptional(optional_fn))
     non_existent_fn = 'non_existent_fn.txt'
     self.assertFalse(fparser.IsOptional(non_existent_fn))
+    not_optional_fn = 'archive_allany.txt'
+    self.assertFalse(fparser.IsOptional(not_optional_fn))
 
     # It's only optional for 'dev' builds.
     buildtype = 'official'

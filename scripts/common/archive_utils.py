@@ -137,7 +137,7 @@ class FilesCfgParser(object):
     for fileobj in self._files_list:
       if fileobj['filename'] == filename:
         found_optional = True
-        if self._buildtype not in fileobj['optional']:
+        if self._buildtype not in fileobj.get('optional', []):
           return False
     return found_optional
 
