@@ -183,7 +183,7 @@
         "os": "win",
         "version": "win7",
       },
-      "slaves": ["vm345-m4", "vm155-m4"],
+      "slaves": ["vm345-m4", "vm155-m4", "vm1081-m4", "vm1082-m4"],
     },
   },
 }
