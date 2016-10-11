@@ -110,6 +110,26 @@ TEST_FILES_CFG = [
     'buildtype': ['dev'],
     'archive': 'dev64_implied_direct_archive.txt',
   },
+  {
+    'filename': 'archive_1.txt',
+    'buildtype': ['dev'],
+    'archive': 'archive_1.zip',
+  },
+  {
+    'filename': 'archive_2.txt',
+    'buildtype': ['dev'],
+    'archive': 'archive_2.zip',
+  },
+  {
+    'filename': 'multiple_archive.txt',
+    'buildtype': ['dev'],
+    'archive': 'archive_1.zip',
+  },
+  {
+    'filename': 'multiple_archive.txt',
+    'buildtype': ['dev'],
+    'archive': 'archive_2.zip',
+  },
 ]
 
 
@@ -331,14 +351,17 @@ class ArchiveUtilsTest(unittest.TestCase):
     self.assertEqual(len(files_list), 0)
 
   def testParseArchiveLists(self):
-    ARCHIVENAME = 'static_archive.zip'
+    STATIC_ARCHIVE = 'static_archive.zip'
+    ARCHIVE_1 = 'archive_1.zip'
+    ARCHIVE_2 = 'archive_2.zip'
+    ARCHIVENAMES = [STATIC_ARCHIVE, ARCHIVE_1, ARCHIVE_2]
     files_cfg = CreateTestFilesCfg(self.temp_dir)
     arch = '64bit'
     buildtype = 'official'
     fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
     archives = fparser.ParseArchiveLists()
-    self.assertEqual(archives.keys(), [ARCHIVENAME])
-    self.assertEqual([x['filename'] for x in archives[ARCHIVENAME]],
+    self.assertEqual(archives.keys(), [STATIC_ARCHIVE])
+    self.assertItemsEqual([x['filename'] for x in archives[STATIC_ARCHIVE]],
                      ['archive_allany.txt', 'subdirectory/archive_allany.txt'])
 
     # 32bit dev has additional files under the same archive name.
@@ -346,10 +369,14 @@ class ArchiveUtilsTest(unittest.TestCase):
     buildtype = 'dev'
     fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
     archives = fparser.ParseArchiveLists()
-    self.assertEqual(archives.keys(), [ARCHIVENAME])
-    self.assertEqual([x['filename'] for x in archives[ARCHIVENAME]],
+    self.assertEqual(archives.keys(), ARCHIVENAMES)
+    self.assertItemsEqual([x['filename'] for x in archives[STATIC_ARCHIVE]],
                      ['archive_allany.txt', 'subdirectory/archive_allany.txt',
                       'subdirectory/archive_dev32.txt'])
+    self.assertItemsEqual([x['filename'] for x in archives[ARCHIVE_1]],
+                     ['multiple_archive.txt', 'archive_1.txt'])
+    self.assertItemsEqual([x['filename'] for x in archives[ARCHIVE_2]],
+                     ['multiple_archive.txt', 'archive_2.txt'])
 
   def testOptionalFiles(self):
     files_cfg = CreateTestFilesCfg(self.temp_dir)
@@ -358,6 +385,8 @@ class ArchiveUtilsTest(unittest.TestCase):
     buildtype = 'dev'
     fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
     self.assertTrue(fparser.IsOptional(optional_fn))
+    non_existent_fn = 'non_existent_fn.txt'
+    self.assertFalse(fparser.IsOptional(non_existent_fn))
 
     # It's only optional for 'dev' builds.
     buildtype = 'official'

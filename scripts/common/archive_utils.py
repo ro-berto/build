@@ -78,33 +78,33 @@ class FilesCfgParser(object):
     self._buildtype = buildtype
     self._arch = arch
     self._files_cfg = self._ParseFilesCfg(files_file)
-    self.files_dict = self._FilterFilesCfg()
+    self._files_list = self._FilterFilesCfg()
 
   def _SetArch(self, value):
-    """Set build arch and reset files_dict to reflect new build criteria."""
+    """Set build arch and reset files_list to reflect new build criteria."""
     self._arch = value
-    self.files_dict.clear()
-    self.files_dict.update(self._FilterFilesCfg())
+    del self._files_list[:]
+    self._files_list.extend(self._FilterFilesCfg())
 
   arch = property(fset=_SetArch)
 
   def _SetBuildType(self, value):
-    """Set build type and reset files_dict to reflect new build criteria."""
+    """Set build type and reset files_list to reflect new build criteria."""
     self._buildtype = value
-    self.files_dict.clear()
-    self.files_dict.update(self._FilterFilesCfg())
+    del self._files_list[:]
+    self._files_list.extend(self._FilterFilesCfg())
 
   buildtype = property(fset=_SetBuildType)
 
   def _FilterFilesCfg(self):
-    """Return a dict of file items that match the current build criteria."""
-    files_dict = {}
+    """Return a list of file items that match the current build criteria."""
+    files_list = []
     for fileobj in self._files_cfg:
       if self._buildtype not in fileobj['buildtype']:
         continue
       if not fileobj.get('arch') or self._arch in fileobj['arch']:
-        files_dict[fileobj['filename']] = fileobj
-    return files_dict
+        files_list.append(fileobj)
+    return files_list
 
   @staticmethod
   def _ParseFilesCfg(files_file):
@@ -133,19 +133,24 @@ class FilesCfgParser(object):
 
   def IsOptional(self, filename):
     """Determine if the given filename is marked optional for this config."""
-    return (self.files_dict.get(filename) and self._buildtype in
-            self.files_dict[filename].get('optional', []))
+    found_optional = False
+    for fileobj in self._files_list:
+      if fileobj['filename'] == filename:
+        found_optional = True
+        if self._buildtype not in fileobj['optional']:
+          return False
+    return found_optional
 
   def ParseGroup(self, filegroup):
     """Return the list of filenames in the given group (e.g. "symbols")."""
-    return [fileobj['filename'] for fileobj in self.files_dict.itervalues()
+    return [fileobj['filename'] for fileobj in self._files_list
         if (fileobj.get('filegroup') and filegroup in fileobj.get('filegroup'))
     ]
 
   def ParseArchiveLists(self):
     """Generate a dict of all the file items in all archives."""
     archive_lists = {}
-    for fileobj in self.files_dict.itervalues():
+    for fileobj in self._files_list:
       if fileobj.get('archive'):
         archive_lists.setdefault(fileobj['archive'], []).append(fileobj)
     return archive_lists
@@ -157,7 +162,7 @@ class FilesCfgParser(object):
     filegroup (i.e. legacy entries from before the filegroup field was added.)
     """
     files_list = [
-        fileobj['filename'] for fileobj in self.files_dict.itervalues()
+        fileobj['filename'] for fileobj in self._files_list
         if (not fileobj.get('archive') and
             (not fileobj.get('filegroup') or 'default' in
              fileobj.get('filegroup')))
