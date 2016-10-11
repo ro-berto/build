@@ -31,6 +31,15 @@ def RunSteps(api):
     checkout_kwargs['cwd'] = checkout_dir
   update_step = api.bot_update.ensure_checkout(**checkout_kwargs)
 
+  # TODO(ehmaldonado): Remove when the iOS API framework script is ported over
+  # to GN. See bugs.webrtc.org/6372
+  if api.properties['buildername'] == 'iOS API Framework Builder':
+    step_result = api.step('Disabled until the iOS API framework script is '
+                           'ported over to GN. See bugs.webrtc.org/6372',
+                           cmd=None)
+    step_result.presentation.status = api.step.WARNING
+    return
+
   revs = update_step.presentation.properties
   commit_pos = api.commit_position.parse_revision(revs['got_revision_cp'])
   api.gclient.runhooks()
@@ -60,17 +69,30 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  # TODO(ehmaldonado): Rename to 'iOS API Framework Builder' when the iOS API
+  # framework script is ported over to GN. See bugs.webrtc.org/6372
   yield (
     api.test('build_ok') +
+    api.properties.generic(mastername='client.webrtc',
+                           buildername='iOS API Framework',
+                           path_config='kitchen')
+  )
+
+  # TODO(ehmaldonado): Remove when the iOS API framework script is ported over
+  # to GN. See bugs.webrtc.org/6372
+  yield (
+    api.test('build_disabled') +
     api.properties.generic(mastername='client.webrtc',
                            buildername='iOS API Framework Builder',
                            path_config='kitchen')
   )
 
+  # TODO(ehmaldonado): Rename to 'iOS API Framework Builder' when the iOS API
+  # framework script is ported over to GN. See bugs.webrtc.org/6372
   yield (
     api.test('build_failure') +
     api.properties.generic(mastername='client.webrtc',
-                           buildername='iOS API Framework Builder',
+                           buildername='iOS API Framework',
                            path_config='kitchen') +
     api.step_data('build', retcode=1)
   )
