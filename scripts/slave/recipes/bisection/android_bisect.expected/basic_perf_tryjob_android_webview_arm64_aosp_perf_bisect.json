@@ -760,7 +760,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
     "env": {
-      "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update (without patch)",

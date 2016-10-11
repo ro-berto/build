@@ -48,7 +48,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
-      "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
@@ -497,7 +496,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
-      "GCLIENT_KILL_GIT_FETCH_AFTER": "1200",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

@@ -65,9 +65,6 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     if self._working_dir:
       kwargs['cwd'] = self._working_dir
 
-    if self.m.platform.is_linux:
-      kwargs['env'] = {'GCLIENT_KILL_GIT_FETCH_AFTER': '1200'}  # 20 minutes.
-
     # Bot Update re-uses the gclient configs.
     update_step = self.m.bot_update.ensure_checkout(
         patch_root=bot_config.get('patch_root'),
