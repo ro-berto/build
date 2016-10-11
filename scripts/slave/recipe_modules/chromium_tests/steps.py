@@ -1128,12 +1128,19 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       getattr(step_result, 'isolated_script_chartjson_results', None) or {}
     try:
       if not 'charts' in results:
-        print 'Info: No chart json present'
+        step_result.presentation.logs['chartjson_info'] = \
+            ['Info: No chart json present']
         return
 
       if not results.get('enabled', True):
-        print 'Info: Benchmark disabled, not sending results to dashboard'
+        step_result.presentation.logs['chartjson_info'] = \
+           ['Info: Benchmark disabled, not sending results to dashboard']
         return
+
+      # TODO(eyaich): Remove logging once we debug uploading chartjson
+      # to perf dashboard
+      step_result.presentation.logs['chartjson_info'] = \
+          ['Info: Setting up arguments for perf dashboard']
 
       """Produces a step that uploads results to dashboard"""
       args = [
@@ -1150,14 +1157,18 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         '--got-v8-revision', api.properties['got_v8_revision'],
       ]
 
+      step_result.presentation.logs['chartjson_info'].append(
+          "Info: Setting up arguments for perf dashboard")
       api.python(
         'Upload Perf Dashboard Results',
         api.chromium.package_repo_resource(
             'scripts', 'slave', 'upload_perf_dashboard_results.py'),
         args)
 
-    except (ValueError, KeyError) as e:
-      print 'Error: Unable to upload chartjson results to perf dashboard'
+    except Exception as e:
+      step_result.presentation.logs['chartjson_info'].append(
+        'Error: Unable to upload chartjson results to perf dashboard')
+      step_result.presentation.logs['chartjson_info'].append('%r' % e)
 
 
 def generate_isolated_script(api, chromium_tests_api, mastername, buildername,

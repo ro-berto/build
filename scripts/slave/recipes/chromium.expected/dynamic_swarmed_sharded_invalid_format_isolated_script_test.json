@@ -440,6 +440,8 @@
       "@@@STEP_LOG_END@no_results_exc@@@",
       "@@@STEP_LOG_LINE@invalid_results_exc@KeyError('valid',)@@@",
       "@@@STEP_LOG_END@invalid_results_exc@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: No chart json present@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
       "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@"

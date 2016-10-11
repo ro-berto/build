@@ -423,6 +423,8 @@
       "@@@STEP_LOG_END@no_results_exc@@@",
       "@@@STEP_LOG_LINE@invalid_results_exc@KeyError('valid',)@@@",
       "@@@STEP_LOG_END@invalid_results_exc@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: No chart json present@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
