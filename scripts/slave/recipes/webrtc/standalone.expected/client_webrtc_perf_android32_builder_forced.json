@@ -292,6 +292,14 @@
         }
       },
       {
+        "builder_name": "Android32 Tests (L Nexus6)",
+        "properties": {
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      },
+      {
         "builder_name": "Android32 Tests (L Nexus7.2)",
         "properties": {
           "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
@@ -301,7 +309,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android32 Tests (L Nexus5)<br />Android32 Tests (L Nexus7.2)@@@"
+      "@@@STEP_TEXT@Android32 Tests (L Nexus5)<br />Android32 Tests (L Nexus6)<br />Android32 Tests (L Nexus7.2)@@@"
     ]
   },
   {
