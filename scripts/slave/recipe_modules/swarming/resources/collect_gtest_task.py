@@ -112,8 +112,9 @@ def load_shard_json(output_dir, index):
 
     with open(path) as f:
       return json.load(f)
-  except (IOError, ValueError, OSError):
+  except (IOError, ValueError, OSError) as e:
     print >> sys.stderr, 'Missing or invalid gtest JSON file: %s' % path
+    print >> sys.stderr, '%s: %s' % (type(e).__name__, e)
     return None
 
 
