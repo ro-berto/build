@@ -144,11 +144,7 @@ def _MaybeMakeDirectoryOnArchiveHost(dest_dir):
         'Platform "%s" is not currently supported.' % sys.platform)
 
 
-def archive_layout(options, args):
-  logging.basicConfig(level=logging.INFO,
-                      format='%(asctime)s %(filename)s:%(lineno)-3d'
-                             ' %(levelname)s %(message)s',
-                      datefmt='%y%m%d %H:%M:%S')
+def archive_layout(options):
   chrome_dir = os.path.abspath(options.build_dir)
   results_dir_basename = os.path.basename(options.results_dir)
   if options.results_dir is not None:
@@ -249,7 +245,7 @@ def archive_layout(options, args):
   return 0
 
 
-def main():
+def _ParseOptions():
   option_parser = optparse.OptionParser()
   option_parser.add_option('', '--build-dir', help='ignored')
   option_parser.add_option('', '--results-dir',
@@ -275,7 +271,7 @@ def main():
                                 'Default behavior is to automatically detect '
                                 'slave\'s build directory.')
   chromium_utils.AddPropertiesOptions(option_parser)
-  options, args = option_parser.parse_args()
+  options, _ = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
 
   # To continue supporting buildbot, initialize these from the
@@ -284,8 +280,16 @@ def main():
     options.gs_bucket = options.factory_properties.get('gs_bucket')
   if not options.gs_acl:
     options.gs_acl = options.factory_properties.get('gs_acl')
+  return options
 
-  return archive_layout(options, args)
+
+def main():
+  options = _ParseOptions()
+  logging.basicConfig(level=logging.INFO,
+                      format='%(asctime)s %(filename)s:%(lineno)-3d'
+                             ' %(levelname)s %(message)s',
+                      datefmt='%y%m%d %H:%M:%S')
+  return archive_layout(options)
 
 
 if '__main__' == __name__:
