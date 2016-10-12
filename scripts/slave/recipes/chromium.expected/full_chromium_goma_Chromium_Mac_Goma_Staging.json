@@ -206,6 +206,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Staging/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -279,6 +280,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Staging/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files"
@@ -295,6 +297,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
     },
@@ -350,6 +353,7 @@
       "content_unittests"
     ],
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
     },
@@ -383,6 +387,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Staging",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
     },
@@ -412,6 +417,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Staging",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
     },

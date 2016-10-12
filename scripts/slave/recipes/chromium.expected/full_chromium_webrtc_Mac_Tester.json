@@ -195,6 +195,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Tester/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=static_library ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -321,6 +322,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Tester",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "content_browsertests"
@@ -358,6 +360,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Tester",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "browser_tests"
@@ -390,6 +393,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Tester",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "capture_unittests"
@@ -418,6 +422,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Tester",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "content_unittests"
@@ -447,6 +452,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Tester",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "remoting_unittests"

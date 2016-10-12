@@ -187,6 +187,9 @@ def BASE(c):
   if gyp_arch:
     c.gyp_env.GYP_DEFINES['target_arch'] = gyp_arch
 
+  if c.TARGET_PLATFORM == 'mac':
+    c.env.FORCE_MAC_TOOLCHAIN = 1
+
   if c.BUILD_CONFIG in ['Coverage', 'Release']:
     # The 'Coverage' target is not explicitly used by Chrome, but by some other
     # projects in the Chrome ecosystem (ie: Syzygy).
@@ -803,8 +806,3 @@ def internal_gles2_conform_tests(c):
 @config_ctx()
 def build_angle_deqp_tests(c):
   c.gyp_env.GYP_DEFINES['build_angle_deqp_tests'] = 1
-
-@config_ctx()
-def force_mac_toolchain(c):
-  c.env.FORCE_MAC_TOOLCHAIN = 1
-  c.gyp_env.FORCE_MAC_TOOLCHAIN = 1
