@@ -3,21 +3,21 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Unit tests for upload_gtest_test_results.py."""
+"""Unit tests for upload_test_results.py."""
 
 import json
 import unittest
 
-import upload_gtest_test_results
+import upload_test_results
 
 
-class UploadGtestTestResultsTest(unittest.TestCase):
+class UploadTestResultsTest(unittest.TestCase):
 
   def setUp(self):
     pass
 
   def test_no_test_data(self):
-    results = upload_gtest_test_results.get_results_map_from_json(
+    results = upload_test_results.get_results_map_from_json(
         json.dumps({}))
     self.assertEquals({}, results)
 
@@ -30,7 +30,7 @@ class UploadGtestTestResultsTest(unittest.TestCase):
             ],
         }],
     }
-    results = upload_gtest_test_results.get_results_map_from_json(
+    results = upload_test_results.get_results_map_from_json(
         json.dumps(contents))
     self.assertEquals('FAIL', results['Fake.Test'][0].status)
     self.assertEquals(1, results['Fake.Test'][0].test_run_time)
@@ -45,7 +45,7 @@ class UploadGtestTestResultsTest(unittest.TestCase):
             ],
         }],
     }
-    results = upload_gtest_test_results.get_results_map_from_json(
+    results = upload_test_results.get_results_map_from_json(
         json.dumps(contents))
     self.assertEquals('UNKNOWN', results['Fake.Test'][0].status)
     self.assertEquals(1, results['Fake.Test'][0].test_run_time)
@@ -61,7 +61,7 @@ class UploadGtestTestResultsTest(unittest.TestCase):
             ],
         }],
     }
-    results = upload_gtest_test_results.get_results_map_from_json(
+    results = upload_test_results.get_results_map_from_json(
         json.dumps(contents))
     self.assertEquals(results['Disabled.Test'][0].DISABLED,
                       results['Disabled.Test'][0].modifier)

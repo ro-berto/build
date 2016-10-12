@@ -815,8 +815,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
-      "--input-gtest-json",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
       "--master-name",
       "tryserver.chromium.mac",
@@ -1394,8 +1394,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
-      "--input-gtest-json",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
       "--master-name",
       "tryserver.chromium.mac",
