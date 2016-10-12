@@ -49,7 +49,7 @@ def RunSteps(api):
   with api.step.defer_results():
     api.python('gn build tests',
                api.path['checkout'].join('tools', 'bots', 'gn_tests.py'),
-               args=[],
+               args=['-mrelease'],
                cwd=api.path['checkout'])
 
     api.python('taskkill after testing',

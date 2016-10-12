@@ -78,7 +78,8 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/bots/gn_tests.py"
+      "[SLAVE_BUILD]/sdk/tools/bots/gn_tests.py",
+      "-mrelease"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "gn build tests"
