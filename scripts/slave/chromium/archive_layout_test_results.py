@@ -41,42 +41,55 @@ RESULT_DIR = 'layout-test-results'
 
 
 def _CollectArchiveFiles(output_dir):
-  """Returns a tuple containing two lists list of file paths to archive,
-  relative to the output_dir. The first list is all the actual results from the
-  test run. The second list is the diffs from the expected results.
+  """Returns a pair of lists of file paths to archive.
 
-  Files in the output_dir or one of its subdirectories, whose names end with
-  '-actual.txt' but not '-simp-actual.txt' or '-jsfilt-actual.txt',
-  will be included in the list.
+  The first list is all the actual results from the test run;
+  the second list is the diffs from the expected results.
+
+  Files in |output_dir| or one of its subdirectories whose names end with
+  '-actual.txt' but not '-simp-actual.txt' or '-jsfilt-actual.txt' will
+  be included in the list.
   """
   actual_file_list = []
   diff_file_list = []
+
   for path, _, files in os.walk(output_dir):
     rel_path = path[len(output_dir + '\\'):]
     for name in files:
-      if ('-stack.' in name or
-          '-crash-log.' in name or
-          ('-actual.' in name and
-           (os.path.splitext(name)[1] in
-            ('.txt', '.png', '.checksum', '.wav')) and
-           '-simp-actual.' not in name and
-           '-jsfilt-actual.' not in name)):
+      if _IsActualResultFile(name):
         actual_file_list.append(os.path.join(rel_path, name))
-      elif ('-wdiff.' in name or
-            '-expected.' in name or
-            name.endswith('-diff.txt') or
-            name.endswith('-diff.png')):
+      if _IsDiffFile(name):
         diff_file_list.append(os.path.join(rel_path, name))
       elif name.endswith('.json'):
         actual_file_list.append(os.path.join(rel_path, name))
+
   if os.path.exists(os.path.join(output_dir, 'results.html')):
     actual_file_list.append('results.html')
+
   if sys.platform == 'win32':
     if os.path.exists(os.path.join(output_dir, 'access_log.txt')):
       actual_file_list.append('access_log.txt')
     if os.path.exists(os.path.join(output_dir, 'error_log.txt')):
       actual_file_list.append('error_log.txt')
+
   return (actual_file_list, diff_file_list)
+
+
+def _IsActualResultFile(name):
+  return ('-stack.' in name or
+          '-crash-log.' in name or
+          ('-actual.' in name and
+           (os.path.splitext(name)[1] in
+            ('.txt', '.png', '.checksum', '.wav')) and
+           '-simp-actual.' not in name and
+           '-jsfilt-actual.' not in name))
+
+
+def _IsDiffFile(name):
+  return ('-wdiff.' in name or
+          '-expected.' in name or
+          name.endswith('-diff.txt') or
+          name.endswith('-diff.png'))
 
 
 def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
@@ -104,7 +117,9 @@ def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
 
 def _CopyFileToArchiveHost(src, dest_dir):
   """A wrapper method to copy files to the archive host.
+
   It calls CopyFileToDir on Windows and SshCopyFiles on Linux/Mac.
+
   TODO: we will eventually want to change the code to upload the
   data to appengine.
 
@@ -127,6 +142,7 @@ def _CopyFileToArchiveHost(src, dest_dir):
 
 def _MaybeMakeDirectoryOnArchiveHost(dest_dir):
   """A wrapper method to create a directory on the archive host.
+
   It calls MaybeMakeDirectory on Windows and SshMakeDirectory on Linux/Mac.
 
   Args:
