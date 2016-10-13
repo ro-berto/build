@@ -179,8 +179,7 @@ def archive_layout(options):
                                     results_dir_basename,
                                     actual_file_list,
                                     options.results_dir)[1]
-  # TODO(ojan): Stop separately uploading full_results.json once garden-o-matic
-  # switches to using failing_results.json.
+  # TODO(crbug.com/655202): Stop separately uploading failing_results.json.
   full_results_json = os.path.join(options.results_dir, 'full_results.json')
   failing_results_json = os.path.join(options.results_dir,
       'failing_results.json')
