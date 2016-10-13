@@ -22,18 +22,17 @@ class ArchiveLayoutTestResultsTest(unittest.TestCase):
         'foo-crash-log.txt'))
     self.assertTrue(archive_layout_test_results._IsActualResultFile(
         'foo-stack.txt'))
+
     self.assertFalse(archive_layout_test_results._IsActualResultFile(
         'crash-logging-foo.txt'))
     self.assertFalse(archive_layout_test_results._IsActualResultFile(
         'stack-foo.txt'))
+
     self.assertTrue(archive_layout_test_results._IsActualResultFile(
         'foo-actual.txt'))
     self.assertTrue(archive_layout_test_results._IsActualResultFile(
         'foo-actual.png'))
-    self.assertFalse(archive_layout_test_results._IsActualResultFile(
-        'foo-simp-actual.txt'))
-    self.assertFalse(archive_layout_test_results._IsActualResultFile(
-        'foo-jsfilt-actual.txt'))
+
     self.assertFalse(archive_layout_test_results._IsActualResultFile(
         'foo-actual.jpg'))
     self.assertFalse(archive_layout_test_results._IsActualResultFile(
@@ -45,6 +44,7 @@ class ArchiveLayoutTestResultsTest(unittest.TestCase):
     self.assertTrue(archive_layout_test_results._IsDiffFile('a-wdiff.txt'))
     self.assertTrue(archive_layout_test_results._IsDiffFile('a-expected.txt'))
     self.assertTrue(archive_layout_test_results._IsDiffFile('a-expected.html'))
+
     self.assertFalse(archive_layout_test_results._IsDiffFile('a-diff.png.foo'))
     self.assertFalse(archive_layout_test_results._IsDiffFile('a-diff.png.foo'))
     self.assertFalse(archive_layout_test_results._IsDiffFile('foo-actual.html'))
