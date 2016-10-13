@@ -770,10 +770,22 @@
               "webkit_tests"
             ]
           },
+          "Site Isolation Android": {
+            "tree_notify": [
+              "nasko+fyi-bots@chromium.org",
+              "creis+fyi-bots@chromium.org",
+              "lukasza+fyi-bots@chromium.org",
+              "alexmos+fyi-bots@chromium.org"
+            ],
+            "forgiving_optional": [
+              "*"
+            ]
+          },
           "Site Isolation Linux": {
             "tree_notify": [
               "nasko+fyi-bots@chromium.org",
               "creis+fyi-bots@chromium.org",
+              "lukasza+fyi-bots@chromium.org",
               "alexmos+fyi-bots@chromium.org"
             ],
             "forgiving_optional": [
@@ -784,6 +796,7 @@
             "tree_notify": [
               "nasko+fyi-bots@chromium.org",
               "creis+fyi-bots@chromium.org",
+              "lukasza+fyi-bots@chromium.org",
               "alexmos+fyi-bots@chromium.org"
             ],
             "forgiving_optional": [

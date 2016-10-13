@@ -413,6 +413,28 @@ SPEC = {
         'platform': 'mac',
       },
     },
+    'Site Isolation Android': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'content_unittests',
+        'content_browsertests',
+      ],
+      'android_config': 'arm64_builder_mb',
+      'root_devices': True,
+      'testing': {
+        'platform': 'linux',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+    },
     'Site Isolation Linux': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
