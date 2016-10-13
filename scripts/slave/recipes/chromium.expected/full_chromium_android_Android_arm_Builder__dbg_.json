@@ -182,19 +182,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
@@ -203,7 +190,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=arm test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -240,98 +227,7 @@
     "name": "read test spec (chromium.android.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/Android_arm_Builder__dbg_/src/testing/buildbot/chromium.android.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android WebView CTS L-MR1 (dbg)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android Webview L (dbg)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android Webview M (dbg)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Jelly Bean Tester\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"KitKat Tablet Tester\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Lollipop Low-end Tester\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Lollipop Phone Tester\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Lollipop Tablet Tester\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Marshmallow Tablet Tester\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -385,17 +281,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug",
-      "--clean-isolated-files"
-    ],
-    "name": "clean isolated files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/tools/mb/mb.py",
       "gen",
       "-m",
@@ -406,19 +291,13 @@
       "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--swarming-targets-file",
-      "browser_tests_apk\n",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests_apk@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
+    "name": "generate_build_files"
   },
   {
     "cmd": [
@@ -458,7 +337,6 @@
       "[CACHE]/cipd/goma",
       "--",
       "android_tools",
-      "browser_tests_apk_run",
       "system_webview_apk",
       "system_webview_shell_apk",
       "system_webview_shell_layout_test_apk"
@@ -471,39 +349,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug/browser_tests_apk.isolated.gen.json"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests_apk\": \"[dummy hash for browser_tests_apk]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

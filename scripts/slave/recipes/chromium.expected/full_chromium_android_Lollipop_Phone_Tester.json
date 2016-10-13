@@ -182,19 +182,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Lollipop_Phone_Tester/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
@@ -203,7 +190,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/Lollipop_Phone_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Lollipop_Phone_Tester/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -240,18 +227,7 @@
     "name": "read test spec (chromium.android.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/Lollipop_Phone_Tester/src/testing/buildbot/chromium.android.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Lollipop Phone Tester\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -342,97 +318,6 @@
       "571"
     ],
     "name": "extract build"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/Lollipop_Phone_Tester/src/out/Debug",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[BUILDER_CACHE]/Lollipop_Phone_Tester",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Lollipop_Phone_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Lollipop_Phone_Tester/src/build/android:%(PATH)s"
-    },
-    "name": "find isolated tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "browser_tests_apk"
-    ],
-    "cwd": "[BUILDER_CACHE]/Lollipop_Phone_Tester",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Lollipop_Phone_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Lollipop_Phone_Tester/src/build/android:%(PATH)s"
-    },
-    "name": "[error] browser_tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print '*.isolated file for target %s is missing' % sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nprint '%s wasn\\'t triggered' % sys.argv[1]\nsys.exit(1)\n",
-      "browser_tests"
-    ],
-    "cwd": "[BUILDER_CACHE]/Lollipop_Phone_Tester",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Lollipop_Phone_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Lollipop_Phone_Tester/src/build/android:%(PATH)s"
-    },
-    "name": "[collect error] browser_tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print '%s wasn\\'t triggered' % sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[BUILDER_CACHE]/Lollipop_Phone_Tester/src/out/Debug/test_logs/*.log"
-    ],
-    "cwd": "[BUILDER_CACHE]/Lollipop_Phone_Tester",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Lollipop_Phone_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Lollipop_Phone_Tester/src/build/android:%(PATH)s"
-    },
-    "name": "test_report",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@for report in glob.glob(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  with open(report, 'r') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
-      "@@@STEP_LOG_LINE@python.inline@      print l@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
   },
   {
     "name": "$result",

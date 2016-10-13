@@ -12,7 +12,6 @@ SPEC = {
   'builders': {
     'Android arm Builder (dbg)': {
       'chromium_config': 'android',
-      'enable_swarming': True,
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -201,8 +200,6 @@ SPEC = {
     },
 
     'Lollipop Phone Tester': {
-      'use_isolate': True,
-      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
