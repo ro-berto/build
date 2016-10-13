@@ -9,12 +9,11 @@ Actual result files (*-actual.txt), but not results from simplified diff
 tests (*-simp-actual.txt) or JS-filtered diff tests (*-jsfilt.txt), will
 be included in the archive.
 
-To archive files on Google Storage, set the 'gs_bucket' key in the
---factory-properties to 'gs://<bucket-name>'. To control access to archives,
-set the 'gs_acl' key to the desired canned-acl (e.g. 'public-read', see
-https://developers.google.com/storage/docs/accesscontrol#extension for other
-supported canned-acl values). If no 'gs_acl' key is set, the bucket's default
-object ACL will be applied (see
+To archive files on Google Storage, pass a GS bucket name via --gs-bucket.
+To control access to archives, pass a value for --gs-acl (e.g. 'public-read',
+see https://developers.google.com/storage/docs/accesscontrol#extension
+for other supported canned-acl values). If no gs_acl key is given,
+then the bucket's default object ACL will be applied (see
 https://developers.google.com/storage/docs/accesscontrol#defaultobjects).
 
 When this is run, the current directory (cwd) should be the outer build
@@ -288,13 +287,6 @@ def _ParseOptions():
   chromium_utils.AddPropertiesOptions(option_parser)
   options, _ = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
-
-  # To continue supporting buildbot, initialize these from the
-  # factory_properties if they were not supplied on the command line.
-  if not options.gs_bucket:
-    options.gs_bucket = options.factory_properties.get('gs_bucket')
-  if not options.gs_acl:
-    options.gs_acl = options.factory_properties.get('gs_acl')
   return options
 
 
