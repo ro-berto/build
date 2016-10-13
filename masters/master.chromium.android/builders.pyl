@@ -420,7 +420,7 @@
         "version": "trusty",
         "bits": "64",
       },
-      "slaves": ["build41-b1"],
+      "slaves": ["slave145-c1"],
     },
     "lollipop_tablet": {
       "slave_data": {
