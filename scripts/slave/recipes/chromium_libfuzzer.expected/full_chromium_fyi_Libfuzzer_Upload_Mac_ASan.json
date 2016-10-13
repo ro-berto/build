@@ -164,7 +164,6 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
@@ -188,7 +187,6 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files"
@@ -248,7 +246,6 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "clang_revision",
@@ -298,7 +295,6 @@
       "target3"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile",

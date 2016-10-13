@@ -200,7 +200,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
@@ -320,7 +319,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "find isolated tests",
@@ -398,7 +396,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "[trigger] browser_tests on Mac-10.10",
@@ -453,7 +450,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "webkit_tests",
@@ -483,7 +479,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "archive_webkit_tests_results",
@@ -517,7 +512,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "browser_tests on Mac-10.10",
@@ -547,7 +541,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Upload to test-results [browser_tests on Mac-10.10]"

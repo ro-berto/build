@@ -187,7 +187,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_HDD_Perf__2_/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
@@ -299,7 +298,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_HDD_Perf__2_",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "List Perf Tests",
@@ -367,7 +365,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_HDD_Perf__2_",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "blink_perf.all.exact",
@@ -406,7 +403,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_HDD_Perf__2_",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "blink_perf.dom",
@@ -443,7 +439,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_HDD_Perf__2_",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "dromaeo.cssqueryjquery.release",

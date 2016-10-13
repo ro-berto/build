@@ -200,7 +200,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTMacASan_tester/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "asan=1 clang=1 component=static_library fastbuild=0 gomadir='[CACHE]/cipd/goma' host_arch=x64 target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -319,7 +318,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTMacASan_tester",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "find isolated tests",
@@ -400,7 +398,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTMacASan_tester",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "[trigger] browser_tests on Mac-10.9",
@@ -444,7 +441,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTMacASan_tester",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "browser_tests on Mac-10.9",
@@ -474,7 +470,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTMacASan_tester",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Upload to test-results [browser_tests on Mac-10.9]"

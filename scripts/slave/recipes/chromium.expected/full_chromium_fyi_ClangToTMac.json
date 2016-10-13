@@ -142,7 +142,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTMac/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=shared_library fastbuild=1 target_arch=x64 test_isolation_mode=prepare",
@@ -238,7 +237,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTMac/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files",
@@ -259,7 +257,6 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
@@ -305,7 +302,6 @@
       "all"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
@@ -431,7 +427,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/ClangToTMac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },

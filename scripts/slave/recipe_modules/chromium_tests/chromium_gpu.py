@@ -170,6 +170,7 @@ SPEC = {
         'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
+        'force_mac_toolchain',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -193,6 +194,7 @@ SPEC = {
         'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
+        'force_mac_toolchain',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

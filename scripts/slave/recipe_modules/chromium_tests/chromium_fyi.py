@@ -42,6 +42,7 @@ SPEC = {
       'chromium_apply_config': [
         'chromium_mac_mac_views',
         'mb',
+        'force_mac_toolchain'
       ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -54,7 +55,7 @@ SPEC = {
     },
     'Chromium Mac 10.11': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -66,7 +67,7 @@ SPEC = {
     },
     'Chromium Mac 10.11 Force Mac Toolchain': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -251,6 +252,7 @@ SPEC = {
     'Print Preview Mac': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
+      'chromium_apply_config': ['force_mac_toolchain'],
       'GYP_DEFINES': {
         'component': 'shared_library',
       },
@@ -399,6 +401,7 @@ SPEC = {
     'Mac OpenSSL': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
+      'chromium_apply_config': ['force_mac_toolchain'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -1122,7 +1125,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb'],
+      'chromium_apply_config': ['goma_canary', 'mb', 'force_mac_toolchain'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1137,7 +1140,7 @@ SPEC = {
     },
     'Chromium Mac 10.9 Goma Canary (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb'],
+      'chromium_apply_config': ['goma_canary', 'mb', 'force_mac_toolchain'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -1156,6 +1159,7 @@ SPEC = {
         'clobber',
         'goma_canary',
         'mb',
+        'force_mac_toolchain',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1175,6 +1179,7 @@ SPEC = {
         'clobber',
         'goma_canary',
         'mb',
+        'force_mac_toolchain',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

@@ -48,7 +48,7 @@ SPEC = {
     },
     'Google Chrome Mac': {
       'chromium_config': 'chromium_official',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'force_mac_toolchain'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
