@@ -9,6 +9,7 @@ import os
 import signal
 import subprocess
 import sys
+import time
 
 from slave import goma_utils
 
@@ -23,6 +24,67 @@ def start_cloudtail(args):
                            goma_utils.GetLatestGomaCompilerProxyInfo()])
   with open(args.pid_file, 'w') as f:
     f.write(str(proc.pid))
+
+
+def is_running_posix(pid):
+  """Return True if process of pid is running.
+
+  Args:
+    pid(int): pid of process which this function checks
+              whether it is running or not.
+
+  Returns:
+    bool: True if process of pid is running.
+
+  Raises:
+    OSError if something happens in os.kill(pid, 0)
+  """
+
+  try:
+    os.kill(pid, 0)
+  except OSError as e:
+    if e.errno == errno.ESRCH or e.errno == errno.EPERM:
+      return False
+    raise e
+  return True
+
+
+class NotDiedError(Exception):
+  def __str__(self):
+    return "NotDiedError"
+
+
+def wait_termination(pid):
+  """Send SIGINT to pid and wait termination of pid.
+
+  Args:
+    pid(int): pid of process which this function waits termination.
+
+  Raises:
+    OSError: is_running_posix, os.waitpid and os.kill may throw OSError.
+    NotDiedError: if cloudtail is running after 10 seconds waiting,
+                  NotDiedError is raised.
+  """
+
+  os.kill(pid, signal.SIGINT)
+
+  if os.name == 'nt':
+    try:
+      os.waitpid(pid, 0)
+    except OSError as e:
+      if e.errno == errno.ECHILD:
+        print('process of pid %d died before waitpitd' % pid)
+        return
+      raise e
+  else:
+    for _ in xrange(10):
+      time.sleep(1)
+      if not is_running_posix(pid):
+        return
+
+    print('process %d running more than 10 seconds' % pid)
+    raise NotDiedError()
+
 
 def main():
   parser = argparse.ArgumentParser(
@@ -52,7 +114,14 @@ def main():
     with open(args.killed_pid_file) as f:
       # cloudtail flushes log and terminates
       # within 5 seconds when it recieves SIGINT.
-      os.kill(int(f.read()), signal.SIGINT)
+      pid = int(f.read())
+      try:
+        wait_termination(int(f.read()))
+      except (OSError, NotDiedError) as e:
+        os.kill(pid, signal.SIGKILL)
+        print('killed process %d due to Error %s' % (pid, e))
+        raise e
+
 
 if '__main__' == __name__:
   sys.exit(main())
