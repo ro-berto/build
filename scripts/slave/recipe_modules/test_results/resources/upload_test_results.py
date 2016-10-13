@@ -87,7 +87,7 @@ def main():
                                 ' e.g. unit-tests.')
   option_parser.add_option('--results-directory', default=os.getcwd(),
                            help='Output results directory source dir.')
-  option_parser.add_option('--input-gtest-json',
+  option_parser.add_option('--input-json',
                            help='Test results json file (input for us).')
   option_parser.add_option('--builder-name',
                            default='DUMMY_BUILDER_NAME',
@@ -115,8 +115,8 @@ def main():
     option_parser.error('--test-type needs to be specified.')
     return 1
 
-  if not options.input_gtest_json:
-    option_parser.error('--input-gtest-json needs to be specified.')
+  if not options.input_json:
+    option_parser.error('--input-json needs to be specified.')
     return 1
 
   if options.test_results_server and not options.master_name:
@@ -124,7 +124,7 @@ def main():
                  '--master-name is not specified; the results won\'t be '
                  'uploaded to the server.')
 
-  with file(options.input_gtest_json) as json_file:
+  with file(options.input_json) as json_file:
     results_map = get_results_map_from_json(json_file.read())
 
   generate_json_results(results_map, options.builder_name,
