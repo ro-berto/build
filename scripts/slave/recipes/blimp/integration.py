@@ -57,20 +57,20 @@ def RunSteps(api):
   api.chromium_android.clean_local_files()
   api.chromium.runhooks()
 
-  android_build = api.path['checkout'].join(
-      'out-android', api.chromium.c.build_config_fs)
-  linux_build = api.path['checkout'].join(
-      'out-linux', api.chromium.c.build_config_fs)
+  android_build = api.path['checkout'].join('out-android')
+  linux_build = api.path['checkout'].join('out-linux')
 
   api.chromium.run_mb(mastername=mastername,
                       buildername=buildername,
-                      build_dir=linux_build,
+                      build_dir=linux_build.join(
+                          api.chromium.c.build_config_fs),
                       phase='engine')
   api.chromium.compile(targets=['blimp'],
                        out_dir=linux_build)
   api.chromium.run_mb(mastername=mastername,
                       buildername=buildername,
-                      build_dir=android_build,
+                      build_dir=android_build.join(
+                          api.chromium.c.build_config_fs),
                       phase='client')
   api.chromium.compile(targets=['blimp', 'chrome_public_apk'],
                        out_dir=android_build)
