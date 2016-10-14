@@ -372,10 +372,10 @@ class StatusPush(StatusReceiverMultiService):
       # This requires a deferred call since the data is queried from
       # the postgres DB (sigh).
       pending = yield builder.getPendingBuildRequestStatuses()
-      # Optimization cheat: only get the first 75 pending builds.
-      # This caps the amount of postgres db calls for really out of
-      # control builders
-      pending = pending[:75]
+      # Optimization cheat: only get the first 25 pending builds.
+      # This caps the amount of postgres db calls and json size for really out
+      # of control builders
+      pending = pending[:25]
       pendingStates = yield defer.DeferredList(
           [p.asDict_async() for p in pending])
       # Not included: basedir, cachedBuilds.
