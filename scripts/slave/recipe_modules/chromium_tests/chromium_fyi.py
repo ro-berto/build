@@ -1215,6 +1215,27 @@ SPEC = {
         'platform': 'mac'
       }
     },
+    'Android Builder Goma Canary (dbg)': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['goma_canary', 'chrome_with_codecs', 'mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder',
+      'compile_targets': [
+        'chromedriver_webview_shell_apk',
+        'gn_all',
+      ],
+      'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'ClangToTLinux': {
       'chromium_config': 'clang_tot_linux',
       'chromium_apply_config': ['mb'],
