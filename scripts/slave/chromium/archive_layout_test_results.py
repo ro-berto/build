@@ -27,6 +27,7 @@ import sys
 
 from common import archive_utils
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 
 # Directory name, above the build directory, in which test results can be
@@ -250,8 +251,7 @@ def archive_layout(options):
 
 def _ParseOptions():
   option_parser = optparse.OptionParser()
-  option_parser.add_option('', '--build-dir',
-                           help='Build dir path, relative to checkout root.')
+  option_parser.add_option('', '--build-dir', help='ignored')
   option_parser.add_option('', '--results-dir',
                            help='path to layout test results, relative to '
                                 'the build_dir')
@@ -276,6 +276,7 @@ def _ParseOptions():
                                 'slave\'s build directory.')
   chromium_utils.AddPropertiesOptions(option_parser)
   options, _ = option_parser.parse_args()
+  options.build_dir = build_directory.GetBuildOutputDirectory()
   return options
 
 
