@@ -11,6 +11,7 @@ SPEC = {
   },
   'builders': {
     'Android arm Builder (dbg)': {
+      'use_isolate': True,
       'chromium_config': 'android',
       'enable_swarming': True,
       'chromium_apply_config': ['chrome_with_codecs'],
