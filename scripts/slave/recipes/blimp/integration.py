@@ -39,11 +39,10 @@ BUILDERS = freeze({
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 def RunSteps(api):
-  android_build = api.path['slave_build'].join('src', 'out-android', 'Debug')
-  linux_build = api.path['slave_build'].join('src', 'out-linux', 'Debug')
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   builder = BUILDERS[mastername][buildername]
+  api.chromium.set_config('chromium')
   api.chromium_android.configure_from_properties(
       builder['config'],
       REPO_NAME='src',
@@ -51,13 +50,17 @@ def RunSteps(api):
       INTERNAL=False,
       BUILD_CONFIG=builder['target'])
 
-  api.chromium.set_config('chromium')
   api.gclient.set_config(builder['gclient_config'])
   api.gclient.apply_config(builder['gclient_apply_config'])
   api.bot_update.ensure_checkout()
   api.chromium.ensure_goma()
   api.chromium_android.clean_local_files()
   api.chromium.runhooks()
+
+  android_build = api.path['checkout'].join(
+      'out-android', api.chromium.c.build_config_fs)
+  linux_build = api.path['checkout'].join(
+      'out-linux', api.chromium.c.build_config_fs)
 
   api.chromium.run_mb(mastername=mastername,
                       buildername=buildername,
@@ -77,7 +80,7 @@ def GenTests(api):
   sanitize = lambda s: ''.join(c if c.isalnum() else '_' for c in s)
 
   yield (
-      api.test('%s_test_pass' % sanitize('Blimp Android Tester')) +
+      api.test('%s_test_pass' % sanitize('Blimp Client Engine Integration')) +
       api.properties.generic(
         buildername='Blimp Client Engine Integration',
         mastername='chromium.fyi')
