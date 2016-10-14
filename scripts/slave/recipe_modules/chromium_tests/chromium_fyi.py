@@ -168,7 +168,7 @@ SPEC = {
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
+        'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
       'compile_targets': [

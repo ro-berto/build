@@ -202,7 +202,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -216,7 +216,7 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Debug",
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
@@ -271,7 +271,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src/out/Release",
+      "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src/out/Debug",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -292,7 +292,7 @@
       "[CACHE]/cipd/goma",
       "--swarming-targets-file",
       "browser_tests\n",
-      "//out/Release"
+      "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src",
     "env": {
@@ -317,7 +317,7 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src",
       "--goma-cache-dir",
@@ -361,7 +361,7 @@
       "-u",
       "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src/out/Release"
+      "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src/out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
@@ -378,7 +378,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src/out/Release/browser_tests.isolated.gen.json"
+      "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src/out/Debug/browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -394,7 +394,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src/out/Release",
+      "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables/src/out/Debug",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -438,7 +438,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
-      "Release",
+      "Debug",
       "--no-xvfb",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Linux - TraceWrappables\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
@@ -451,7 +451,7 @@
       "--run-python-script",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",
       "--target",
-      "Release",
+      "Debug",
       "-o",
       "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",
