@@ -22,7 +22,10 @@ def _sanitize_nonalpha(text):
 
 class V8TestApi(recipe_test_api.RecipeTestApi):
   BUILDERS = builders.BUILDERS
-  SLOWEST_TESTS = [
+
+  @staticmethod
+  def SLOWEST_TESTS():
+    return [
     {
       'name': 'mjsunit/Cool.Test',
       'flags': ['-f'],
@@ -42,7 +45,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
   def output_json(self, has_failures=False, wrong_results=False, flakes=False,
                   unmarked_slow_test=False):
-    slowest_tests = V8TestApi.SLOWEST_TESTS
+    slowest_tests = V8TestApi.SLOWEST_TESTS()
     if unmarked_slow_test:
       slowest_tests += [{
         'name': 'mjsunit/slow',
@@ -211,7 +214,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'exit_code': 1,
         },
       ],
-      'slowest_tests': V8TestApi.SLOWEST_TESTS,
+      'slowest_tests': V8TestApi.SLOWEST_TESTS(),
     }])
 
   def failures_example(self, variant='default'):
@@ -250,7 +253,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'exit_code': 1,
         },
       ],
-      'slowest_tests': V8TestApi.SLOWEST_TESTS,
+      'slowest_tests': V8TestApi.SLOWEST_TESTS(),
     }])
 
   def example_buildbot_changes(self):
@@ -312,7 +315,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
   def _make_dummy_swarm_hashes(self, bot_config):
     """Makes dummy isolate hashes for all tests of a bot.
- 
+
     Either an explicit isolate target must be defined or the naming
     convention "test name == isolate target name" will be used.
     """
