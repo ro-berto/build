@@ -15,6 +15,7 @@ TEST_UNKNOWN_LABEL = 'UNKNOWN'
 TEST_SUCCESS_LABEL = 'SUCCESS'
 TEST_FAILURE_LABEL = 'FAILURE'
 TEST_FAILURE_ON_EXIT_LABEL = 'FAILURE_ON_EXIT'
+TEST_EXCESSIVE_OUTPUT_LABEL = 'EXCESSIVE_OUTPUT'
 TEST_CRASH_LABEL = 'CRASH'
 TEST_TIMEOUT_LABEL = 'TIMEOUT'
 TEST_SKIPPED_LABEL = 'SKIPPED'
@@ -467,6 +468,7 @@ class GTestJSONParser(object):
                              TEST_SUCCESS_LABEL,
                              TEST_FAILURE_LABEL,
                              TEST_FAILURE_ON_EXIT_LABEL,
+                             TEST_EXCESSIVE_OUTPUT_LABEL,
                              TEST_CRASH_LABEL,
                              TEST_TIMEOUT_LABEL,
                              TEST_SKIPPED_LABEL)
