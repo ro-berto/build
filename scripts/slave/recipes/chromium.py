@@ -477,7 +477,7 @@ def GenTests(api):
     api.properties(
       swarm_hashes={
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-      }, **{'perf-id': 'testid', 'results-url': 'http://test-results-url'}) +
+      }) +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -501,6 +501,57 @@ def GenTests(api):
             passing=True, is_win=False, swarming=True,
             shards=2, isolated_script_passing=True, valid=True,
             use_json_test_format=True, output_chartjson=True),
+        retcode=0)
+  )
+
+  yield (
+    api.test('dynamic_swarmed_sharded_passed_isolated_script_perf_test') +
+    api.properties.generic(mastername='chromium.perf.fyi',
+                           buildername='Win 10 Low-End Perf Tests',
+                           parent_buildername='Win Builder FYI',
+                           got_revision_cp='refs/heads/master@{#291141}',
+                           buildnumber='1234',
+                           version='v23523',
+                           git_revision='asdfawe2342',
+                           got_webrtc_revision='asdfas',
+                           got_v8_revision='asdfadsfa4e3w') +
+
+    api.properties(
+      swarm_hashes={
+      'telemetry_perf_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      }, **{'perf-id': 'testid', 'results-url': 'http://test-results-url'}) +
+    api.platform('win', 64) +
+    api.override_step_data(
+        'read test spec (chromium.perf.fyi.json)',
+        api.json.output({
+            'Win 10 Low-End Perf Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_perf_tests',
+                        'name': 'benchmark',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                            'dimension_sets': [
+                                {
+                                    'gpu': '8086:22b1',
+                                    'id': "build187-b4",
+                                    'os': "Windows-10-10586",
+                                    'pool': "Chrome-perf"
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.override_step_data(
+        'benchmark on Intel GPU on Windows on Windows-10-10586',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=True, swarming=True,
+            shards=2, isolated_script_passing=True, valid=True,
+            output_chartjson=True),
         retcode=0)
   )
 

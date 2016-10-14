@@ -3,9 +3,17 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
+    ],
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -19,7 +27,7 @@
       "--output_manifest"
     ],
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -105,11 +113,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
+      "RECIPE_MODULE[depot_tools::cipd]\\resources\\bootstrap.py",
       "--platform",
-      "linux-amd64",
+      "windows-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[SLAVE_BUILD]\\cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -118,7 +126,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -126,16 +134,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[SLAVE_BUILD]\\cipd\\cipd",
       "ensure",
       "--root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]\\cipd\\goma",
       "--list",
-      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
+      "infra/tools/cloudtail/windows-amd64 goma_recipe_module\ninfra_internal/goma/client/windows-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
+      "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -144,11 +152,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -159,7 +167,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -172,15 +180,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -188,17 +196,16 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
-      "--use-src-side-runtest-py",
+      "Release_x64",
       "--paths",
-      "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Linux Tests\", \"buildnumber\": \"1234\", \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Win 10 Low-End Perf Tests\", \"buildnumber\": \"1234\", \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"win-10-low-end\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -211,20 +218,28 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.perf.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.linux.json)",
+    "name": "read test spec (chromium.perf.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.perf.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win 10 Low-End Perf Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"telemetry_gpu_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"telemetry_perf_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"benchmark\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"dimension_sets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            {@@@",
+      "@@@STEP_LOG_LINE@json.output@              \"gpu\": \"8086:22b1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@              \"id\": \"build187-b4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@              \"os\": \"Windows-10-10586\", @@@",
+      "@@@STEP_LOG_LINE@json.output@              \"pool\": \"Chrome-perf\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            }@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
@@ -238,10 +253,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
     "name": "cleanup_temp"
   },
@@ -250,7 +265,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]\\src\\out\\Release_x64"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -268,22 +283,22 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\extract_build.py",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--build-url",
-      "gs://chromium-linux-archive/chromium.linux/Linux Builder/full-build-linux.zip",
+      "gs://chrome-perf/Win Builder FYI/full-build-win32.zip",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--master-name",
-      "chromium.linux",
+      "chromium.perf.fyi",
       "--build-number",
       "1234"
     ],
@@ -293,14 +308,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--output-json",
       "/path/to/tmp/json"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "find isolated tests",
     "~followup_annotations": [
@@ -316,7 +331,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -327,7 +342,7 @@
       "--shards",
       "2",
       "--task-name",
-      "telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234",
+      "benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -341,25 +356,28 @@
       "x86-64",
       "--dimension",
       "gpu",
-      "none",
+      "8086:22b1",
+      "--dimension",
+      "id",
+      "build187-b4",
       "--dimension",
       "os",
-      "Ubuntu-12.04",
+      "Windows-10-10586",
       "--dimension",
       "pool",
-      "Chrome",
+      "Chrome-perf",
       "--tag",
-      "buildername:Linux Tests",
+      "buildername:Win 10 Low-End Perf Tests",
       "--tag",
       "buildnumber:1234",
       "--tag",
       "data:eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--tag",
-      "master:chromium.linux",
+      "master:chromium.perf.fyi",
       "--tag",
-      "name:telemetry_gpu_unittests",
+      "name:benchmark",
       "--tag",
-      "os:Ubuntu-12.04",
+      "os:Windows-10-10586",
       "--tag",
       "project:chromium",
       "--tag",
@@ -369,26 +387,26 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:telemetry_gpu_unittests on Ubuntu-12.04",
+      "stepname:benchmark on Intel GPU on Windows on Windows-10-10586",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "[trigger] telemetry_gpu_unittests on Ubuntu-12.04",
+    "name": "[trigger] benchmark on Intel GPU on Windows on Windows-10-10586",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
@@ -404,38 +422,82 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/1234:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "{\"base_task_name\": \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234\", \"tasks\": {\"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
       "--task-output-dir",
       "/path/to/tmp/"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "telemetry_gpu_unittests on Ubuntu-12.04",
+    "name": "benchmark on Intel GPU on Windows on Windows-10-10586",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"1/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy1\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry3\\\": \\\"chart3\\\", \\\"entry4\\\": \\\"chart4\\\"}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test3\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1\\\\chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy1\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry3\\\": \\\"chart3\\\", \\\"entry4\\\": \\\"chart4\\\"}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1\\\\output.json\": \"{\\\"successes\\\": [\\\"test3.Test3\\\", \\\"test4.Test4\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test3.Test3\\\": 0.1, \\\"test4.Test4\\\": 0.1}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
       "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
-      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
-      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
       "@@@STEP_LOG_END@chartjson_info@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_perf_dashboard_results.py",
+      "--results",
+      "{\"dummy\": \"dummy0\", \"enabled\": true, \"charts\": {\"entry2\": \"chart2\", \"entry3\": \"chart3\", \"entry1\": \"chart1\", \"entry4\": \"chart4\"}}",
+      "--perf-id",
+      "win-10-low-end",
+      "--results-url",
+      "https://chromeperf.appspot.com",
+      "--buildername",
+      "Win 10 Low-End Perf Tests",
+      "--buildnumber",
+      "1234",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--got-revision-cp",
+      "refs/heads/master@{#291141}",
+      "--version",
+      "v23523",
+      "--git-revision",
+      "asdfawe2342",
+      "--got-webrtc-revision",
+      "asdfas",
+      "--got-v8-revision",
+      "asdfadsfa4e3w"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "Upload Perf Dashboard Results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release_x64"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "process_dumps"
   },
   {
     "name": "$result",

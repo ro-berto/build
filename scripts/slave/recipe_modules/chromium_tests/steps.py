@@ -1053,13 +1053,16 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None, priority=None,
                expiration=None, hard_timeout=None, upload_test_results=True,
-               override_compile_targets=None):
+               override_compile_targets=None, perf_id=None,
+               results_url=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration, hard_timeout)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
+    self._perf_id=perf_id
+    self._results_url = results_url
 
   @property
   def target_name(self):
@@ -1145,8 +1148,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       """Produces a step that uploads results to dashboard"""
       args = [
           '--results', json.dumps(results),
-          '--perf-id', api.properties['perf-id'],
-          '--results-url', api.properties['results-url'],
+          '--perf-id', self._perf_id,
+          '--results-url', self._results_url,
           '--buildername', api.properties['buildername'],
           '--buildnumber', api.properties['buildnumber'],
       ]
@@ -1182,6 +1185,11 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
                              test_spec, bot_update_step, enable_swarming=False,
                              swarming_dimensions=None,
                              scripts_compile_targets=None):
+  # Get the perf id and results url if present.
+  bot_config = (chromium_tests_api.builders.get(mastername, {})
+      .get('builders', {}).get(buildername, {}))
+  perf_id = bot_config.get('perf-id')
+  results_url = bot_config.get('results-url')
   for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
     use_swarming = False
     swarming_shards = 1
@@ -1222,14 +1230,16 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
               shards=swarming_shards, dimensions=new_dimensions,
               override_compile_targets=override_compile_targets,
               priority=swarming_priority, expiration=swarming_expiration,
-              hard_timeout=swarming_hard_timeout)
+              hard_timeout=swarming_hard_timeout, perf_id=perf_id,
+              results_url=results_url)
       else:
         yield SwarmingIsolatedScriptTest(
             name=name, args=args, target_name=target_name,
             shards=swarming_shards, dimensions=swarming_dimensions,
             override_compile_targets=override_compile_targets,
             priority=swarming_priority, expiration=swarming_expiration,
-            hard_timeout=swarming_hard_timeout)
+            hard_timeout=swarming_hard_timeout, perf_id=perf_id,
+            results_url=results_url)
     else:
       yield LocalIsolatedScriptTest(
           name=name, args=args, target_name=target_name,
