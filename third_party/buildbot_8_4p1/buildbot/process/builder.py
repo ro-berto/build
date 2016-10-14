@@ -856,9 +856,24 @@ class Builder(pb.Referenceable, service.MultiService):
         # gather the mergeable requests
         merged_request_objects = [breq_object]
         for other_breq_object in unclaimed_request_objects:
-            wfd = defer.waitForDeferred(
-                defer.maybeDeferred(lambda :
-                    mergeRequests_fn(breq_object, other_breq_object)))
+            if getattr(mergeRequests_fn, 'with_length', False):
+                # If supported, we also pass the number of unclaimed and
+                # the number of already merged builds. The first might not
+                # reflect the exact number that could be merged (this
+                # depends on the canBeMergedWith algorithm), but it can help
+                # indicating how loaded this builder is.
+                to_defer = lambda : mergeRequests_fn(
+                    breq_object,
+                    other_breq_object,
+                    len(unclaimed_request_objects), 
+                    len(merged_request_objects),
+                )
+            else:
+                to_defer = lambda : mergeRequests_fn(
+                    breq_object,
+                    other_breq_object,
+                )
+            wfd = defer.waitForDeferred(defer.maybeDeferred(to_defer))
             yield wfd
             if wfd.getResult():
                 merged_request_objects.append(other_breq_object)
