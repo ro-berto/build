@@ -303,6 +303,8 @@
       "[CACHE]/cipd/goma",
       "--goma-hermetic",
       "fallback",
+      "--goma-max-active-fail-fallback-tasks",
+      "1024",
       "--",
       "chrome",
       "chromium_builder_perf"

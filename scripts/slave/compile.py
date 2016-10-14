@@ -145,14 +145,9 @@ def goma_setup(options, env):
     # as error.
     env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
 
-  # HACK(shinyak): In perf builder, goma often fails with 'reached max
-  # number of active fail fallbacks'. In fail fast mode, we cannot make the
-  # number infinite currently.
-  #
-  # After the goma side fix, this env should be removed.
-  # See http://crbug.com/606987
-  if options.buildbot_mastername == 'tryserver.chromium.perf':
-    env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = '1024'
+  if options.goma_max_active_fail_fallback_tasks:
+    env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = (
+        options.goma_max_active_fail_fallback_tasks)
 
   # Caches CRLs in GOMA_CACHE_DIR.
   # Since downloading CRLs is usually slow, caching them may improves
@@ -519,6 +514,9 @@ def get_parsed_options():
   option_parser.add_option('--goma-service-account-json-file',
                            help='Specify a file containing goma service account'
                                 ' credentials')
+  option_parser.add_option('--goma-max-active-fail-fallback-tasks',
+                           help='Specify GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS '
+                                'for goma')
   option_parser.add_option('--goma-jobs', default=None,
                            help='The number of jobs for ninja -j.')
   option_parser.add_option('--gsutil-py-path',

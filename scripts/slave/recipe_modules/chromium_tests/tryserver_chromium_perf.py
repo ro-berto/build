@@ -19,7 +19,14 @@ SPEC = {
 def tryserver_chromium_perf(c):
   # Bisects may build using old toolchains, so goma_hermetic_fallback is
   # required. See https://codereview.chromium.org/1015633002
-  pass
+
+  # HACK(shinyak): In perf builder, goma often fails with 'reached max
+  # number of active fail fallbacks'. In fail fast mode, we cannot make the
+  # number infinite currently.
+  #
+  # After the goma side fix, this env should be removed.
+  # See http://crbug.com/606987
+  c.compile_py.goma_max_active_fail_fallback_tasks = 1024
 
 
 @GCLIENT_CONFIG_CTX(includes=['chromium_perf'])
