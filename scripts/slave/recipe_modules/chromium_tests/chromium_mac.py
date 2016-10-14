@@ -20,7 +20,6 @@ SPEC = {
         'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
-        'force_mac_toolchain',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -40,7 +39,7 @@ SPEC = {
     },
     'Mac10.9 Tests': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'force_mac_toolchain'],
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -58,7 +57,7 @@ SPEC = {
     },
     'Mac10.10 Tests': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'force_mac_toolchain'],
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -75,7 +74,7 @@ SPEC = {
     },
     'Mac10.11 Tests': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'force_mac_toolchain'],
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -92,7 +91,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'force_mac_toolchain'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -112,7 +110,7 @@ SPEC = {
     },
     'Mac10.9 Tests (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'force_mac_toolchain'],
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
