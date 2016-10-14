@@ -763,7 +763,8 @@
           },
           "WebKit Linux - TraceWrappables": {
             "tree_notify": [
-              "hlopko@chromium.org"
+              "hlopko@chromium.org",
+              "mlippautz@chromium.org"
             ],
             "forgive_all": "true",
             "closing_optional": [
