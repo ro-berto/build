@@ -631,7 +631,8 @@ def RunSteps(api):
 
   infrabots_dir = api.path['checkout'].join('infra', 'bots')
   recipes_py = infrabots_dir.join('recipes.py')
-  if api.path.exists(recipes_py):
+  swarm_trigger = infrabots_dir.join('recipes', 'swarm_trigger.py')
+  if api.path.exists(swarm_trigger):
     forward_to_recipe_in_repo(api, recipes_py)
     return
 
@@ -872,7 +873,8 @@ def GenTests(api):
                    revision='abc123') +
     api.path.exists(
         api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'recipes.py'),
+        api.path['slave_build'].join(
+            'skia', 'infra', 'bots', 'recipes', 'swarm_trigger.py'),
     )
   )
   yield test
