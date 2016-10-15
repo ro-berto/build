@@ -28,6 +28,16 @@
       "slavebuilddir": "pdfium",
       "category": "0main",
     },
+    "linux_asan_lsan": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "0main",
+      "properties": {
+        "memory_tool": "asan",
+      },
+    },
     "linux_no_v8": {
       "recipe": "pdfium",
       "scheduler": None,
@@ -59,6 +69,16 @@
       "properties": {
         "xfa": True,
       }
+    },
+    "linux_xfa_asan_lsan": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["linux_slave_pool"],
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "memory_tool": "asan",
+      },
     },
     "mac": {
       "recipe": "pdfium",
