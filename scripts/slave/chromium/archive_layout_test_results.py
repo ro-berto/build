@@ -36,21 +36,14 @@ RESULT_DIR = 'layout-test-results'
 
 
 def _CollectArchiveFiles(output_dir):
-  """Returns a pair of lists of file paths to archive.
-
-  The first list is all the actual results from the test run;
-  the second list is the diffs from the expected results.
-  """
+  """Returns a list of actual layout test result files to archive."""
   actual_file_list = []
-  diff_file_list = []
 
   for path, _, files in os.walk(output_dir):
     rel_path = path[len(output_dir + '\\'):]
     for name in files:
       if _IsActualResultFile(name):
         actual_file_list.append(os.path.join(rel_path, name))
-      if _IsDiffFile(name):
-        diff_file_list.append(os.path.join(rel_path, name))
       elif name.endswith('.json'):
         actual_file_list.append(os.path.join(rel_path, name))
 
@@ -63,7 +56,7 @@ def _CollectArchiveFiles(output_dir):
     if os.path.exists(os.path.join(output_dir, 'error_log.txt')):
       actual_file_list.append('error_log.txt')
 
-  return (actual_file_list, diff_file_list)
+  return actual_file_list
 
 
 def _IsActualResultFile(name):
@@ -72,81 +65,6 @@ def _IsActualResultFile(name):
   extension = os.path.splitext(name)[1]
   return ('-actual.' in name and extension in
           ('.txt', '.png', '.checksum', '.wav'))
-
-
-def _IsDiffFile(name):
-  return ('-wdiff.' in name or
-          '-expected.' in name or
-          name.endswith('-diff.txt') or
-          name.endswith('-diff.png'))
-
-
-def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
-    options):
-  # Copy the actual and diff files to the web server.
-  # Don't clobber the staging_dir in the MakeZip call so that it keeps the
-  # files from the previous MakeZip call on diff_file_list.
-  print "archiving results + diffs"
-  full_zip_file = chromium_utils.MakeZip(staging_dir,
-      'layout-test-results', diff_file_list, options.results_dir,
-      remove_archive_directory=False)[1]
-  slave_utils.CopyFileToArchiveHost(full_zip_file, dest_dir)
-
-  # Extract the files on the web server.
-  extract_dir = os.path.join(dest_dir, 'results')
-  print 'extracting zip file to %s' % extract_dir
-
-  if chromium_utils.IsWindows():
-    chromium_utils.ExtractZip(full_zip_file, extract_dir)
-  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-    remote_zip_file = os.path.join(dest_dir, os.path.basename(full_zip_file))
-    chromium_utils.SshExtractZip(archive_utils.Config.archive_host,
-                                 remote_zip_file, extract_dir)
-
-
-def _CopyFileToArchiveHost(src, dest_dir):
-  """A wrapper method to copy files to the archive host.
-
-  It calls CopyFileToDir on Windows and SshCopyFiles on Linux/Mac.
-
-  TODO: we will eventually want to change the code to upload the
-  data to appengine.
-
-  Args:
-      src: full path to the src file.
-      dest_dir: destination directory on the host.
-  """
-  host = archive_utils.Config.archive_host
-  if not os.path.exists(src):
-    raise chromium_utils.ExternalError('Source path "%s" does not exist' % src)
-  chromium_utils.MakeWorldReadable(src)
-  if chromium_utils.IsWindows():
-    chromium_utils.CopyFileToDir(src, dest_dir)
-  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-    chromium_utils.SshCopyFiles(src, host, dest_dir)
-  else:
-    raise NotImplementedError(
-        'Platform "%s" is not currently supported.' % sys.platform)
-
-
-def _MaybeMakeDirectoryOnArchiveHost(dest_dir):
-  """A wrapper method to create a directory on the archive host.
-
-  It calls MaybeMakeDirectory on Windows and SshMakeDirectory on Linux/Mac.
-
-  Args:
-      dest_dir: destination directory on the host.
-  """
-  host = archive_utils.Config.archive_host
-  if chromium_utils.IsWindows():
-    chromium_utils.MaybeMakeDirectory(dest_dir)
-    print 'saving results to %s' % dest_dir
-  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-    chromium_utils.SshMakeDirectory(host, dest_dir)
-    print 'saving results to "%s" on "%s"' % (dest_dir, host)
-  else:
-    raise NotImplementedError(
-        'Platform "%s" is not currently supported.' % sys.platform)
 
 
 def archive_layout(options):
@@ -163,7 +81,7 @@ def archive_layout(options):
   if not os.path.exists(staging_dir):
     os.makedirs(staging_dir)
 
-  (actual_file_list, diff_file_list) = _CollectArchiveFiles(options.results_dir)
+  actual_file_list = _CollectArchiveFiles(options.results_dir)
   zip_file = chromium_utils.MakeZip(staging_dir,
                                     results_dir_basename,
                                     actual_file_list,
@@ -171,7 +89,7 @@ def archive_layout(options):
   # TODO(crbug.com/655202): Stop separately uploading failing_results.json.
   full_results_json = os.path.join(options.results_dir, 'full_results.json')
   failing_results_json = os.path.join(options.results_dir,
-      'failing_results.json')
+                                      'failing_results.json')
 
   # Extract the build name of this slave (e.g., 'chrome-release') from its
   # configuration file if not provided as a param.
@@ -189,63 +107,49 @@ def archive_layout(options):
   print 'build number: %s' % build_number
   print 'host name: %s' % socket.gethostname()
 
-  if options.gs_bucket:
-    # Create a file containing last_change revision. This file will be uploaded
-    # after all layout test results are uploaded so the client can check this
-    # file to see if the upload for the revision is complete.
-    # See crbug.com/574272 for more details.
-    last_change_file = os.path.join(staging_dir, 'LAST_CHANGE')
-    with open(last_change_file, 'w') as f:
-      f.write(last_change)
+  # Create a file containing last_change revision. This file will be uploaded
+  # after all layout test results are uploaded so the client can check this
+  # file to see if the upload for the revision is complete.
+  # See crbug.com/574272 for more details.
+  last_change_file = os.path.join(staging_dir, 'LAST_CHANGE')
+  with open(last_change_file, 'w') as f:
+    f.write(last_change)
 
-    # Copy the results to a directory archived by build number.
-    gs_base = '/'.join([options.gs_bucket, build_name, build_number])
-    gs_acl = options.gs_acl
-    # These files never change, cache for a year.
-    cache_control = "public, max-age=31556926"
-    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
-      cache_control=cache_control)
-    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
-      cache_control=cache_control)
+  # Copy the results to a directory archived by build number.
+  gs_base = '/'.join([options.gs_bucket, build_name, build_number])
+  gs_acl = options.gs_acl
+  # These files never change, cache for a year.
+  cache_control = "public, max-age=31556926"
+  slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
+                             cache_control=cache_control)
+  slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
+                            cache_control=cache_control)
 
-    # TODO(dpranke): Remove these two lines once clients are fetching the
-    # files from the layout-test-results dir.
-    slave_utils.GSUtilCopyFile(full_results_json, gs_base, gs_acl=gs_acl,
-      cache_control=cache_control)
-    slave_utils.GSUtilCopyFile(failing_results_json, gs_base, gs_acl=gs_acl,
-      cache_control=cache_control)
+  # TODO(dpranke): Remove these two lines once clients are fetching the
+  # files from the layout-test-results dir.
+  slave_utils.GSUtilCopyFile(full_results_json, gs_base, gs_acl=gs_acl,
+                             cache_control=cache_control)
+  slave_utils.GSUtilCopyFile(failing_results_json, gs_base, gs_acl=gs_acl,
+                             cache_control=cache_control)
 
-    slave_utils.GSUtilCopyFile(last_change_file,
-      gs_base + '/' + results_dir_basename, gs_acl=gs_acl,
-      cache_control=cache_control)
+  slave_utils.GSUtilCopyFile(last_change_file,
+                             gs_base + '/' + results_dir_basename,
+                             gs_acl=gs_acl,
+                             cache_control=cache_control)
 
-    # And also to the 'results' directory to provide the 'latest' results
-    # and make sure they are not cached at all (Cloud Storage defaults to
-    # caching w/ a max-age=3600).
-    gs_base = '/'.join([options.gs_bucket, build_name, 'results'])
-    cache_control = 'no-cache'
-    slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
-        cache_control=cache_control)
-    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
-        cache_control=cache_control)
-
-    slave_utils.GSUtilCopyFile(last_change_file,
-        gs_base + '/' + results_dir_basename, gs_acl=gs_acl,
-        cache_control=cache_control)
-
-  else:
-    # Where to save layout test results.
-    dest_parent_dir = os.path.join(archive_utils.Config.www_dir_base,
-        results_dir_basename.replace('-', '_'), build_name)
-    dest_dir = os.path.join(dest_parent_dir, last_change)
-
-    _MaybeMakeDirectoryOnArchiveHost(dest_dir)
-    _CopyFileToArchiveHost(zip_file, dest_dir)
-    _CopyFileToArchiveHost(full_results_json, dest_dir)
-    _CopyFileToArchiveHost(failing_results_json, dest_dir)
-    # Not supported on Google Storage yet.
-    _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
-                                  options)
+  # And also to the 'results' directory to provide the 'latest' results
+  # and make sure they are not cached at all (Cloud Storage defaults to
+  # caching w/ a max-age=3600).
+  gs_base = '/'.join([options.gs_bucket, build_name, 'results'])
+  cache_control = 'no-cache'
+  slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
+                             cache_control=cache_control)
+  slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
+                            cache_control=cache_control)
+  slave_utils.GSUtilCopyFile(last_change_file,
+                             gs_base + '/' + results_dir_basename,
+                             gs_acl=gs_acl,
+                             cache_control=cache_control)
   return 0
 
 
@@ -276,6 +180,8 @@ def _ParseOptions():
                                 'slave\'s build directory.')
   chromium_utils.AddPropertiesOptions(option_parser)
   options, _ = option_parser.parse_args()
+  if not options.gs_bucket:
+      option_parser.error('--gs-bucket is required.')
   options.build_dir = build_directory.GetBuildOutputDirectory()
   return options
 

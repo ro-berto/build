@@ -38,17 +38,6 @@ class ArchiveLayoutTestResultsTest(unittest.TestCase):
     self.assertFalse(archive_layout_test_results._IsActualResultFile(
         'foo-actual.html'))
 
-  def test_IsDiffFile(self):
-    self.assertTrue(archive_layout_test_results._IsDiffFile('a-diff.png'))
-    self.assertTrue(archive_layout_test_results._IsDiffFile('a-diff.txt'))
-    self.assertTrue(archive_layout_test_results._IsDiffFile('a-wdiff.txt'))
-    self.assertTrue(archive_layout_test_results._IsDiffFile('a-expected.txt'))
-    self.assertTrue(archive_layout_test_results._IsDiffFile('a-expected.html'))
-
-    self.assertFalse(archive_layout_test_results._IsDiffFile('a-diff.png.foo'))
-    self.assertFalse(archive_layout_test_results._IsDiffFile('a-diff.png.foo'))
-    self.assertFalse(archive_layout_test_results._IsDiffFile('foo-actual.html'))
-    self.assertFalse(archive_layout_test_results._IsDiffFile('results.html'))
 
 if __name__ == '__main__':
   unittest.main()
