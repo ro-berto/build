@@ -348,6 +348,7 @@ BUILDERS = {
       },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
+        'gclient_apply_config': ['v8_valgrind'],
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
@@ -1859,6 +1860,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel_ng': {
+        'gclient_apply_config': ['v8_valgrind'],
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
