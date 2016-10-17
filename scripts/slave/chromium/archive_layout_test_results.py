@@ -86,10 +86,6 @@ def archive_layout(options):
                                     results_dir_basename,
                                     actual_file_list,
                                     options.results_dir)[1]
-  # TODO(crbug.com/655202): Stop separately uploading failing_results.json.
-  full_results_json = os.path.join(options.results_dir, 'full_results.json')
-  failing_results_json = os.path.join(options.results_dir,
-                                      'failing_results.json')
 
   # Extract the build name of this slave (e.g., 'chrome-release') from its
   # configuration file if not provided as a param.
@@ -124,14 +120,6 @@ def archive_layout(options):
                              cache_control=cache_control)
   slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
                             cache_control=cache_control)
-
-  # TODO(dpranke): Remove these two lines once clients are fetching the
-  # files from the layout-test-results dir.
-  slave_utils.GSUtilCopyFile(full_results_json, gs_base, gs_acl=gs_acl,
-                             cache_control=cache_control)
-  slave_utils.GSUtilCopyFile(failing_results_json, gs_base, gs_acl=gs_acl,
-                             cache_control=cache_control)
-
   slave_utils.GSUtilCopyFile(last_change_file,
                              gs_base + '/' + results_dir_basename,
                              gs_acl=gs_acl,
