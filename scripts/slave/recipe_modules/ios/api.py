@@ -241,7 +241,7 @@ class iOSApi(recipe_api.RecipeApi):
       # chromium.c.compile_py.goma_dir, but calling ensure_goma() after
       # that fixes things, and makes sure that goma is actually
       # available as well.
-      self.m.chromium.ensure_goma()
+      self.m.chromium.ensure_goma(canary=self.__config.get('use_goma_canary'))
 
     return copy.deepcopy(self.__config)
 
