@@ -52,6 +52,7 @@ def libyuv_ios(c):
   if c.TARGET_BITS == 64:
     gyp_defs['target_subarch'] = 'arm64'
 
+  c.gn_args.append('ios_enable_code_signing=false')
   c.gn_args.append('target_os="%s"' % c.TARGET_PLATFORM)
   _libyuv_common(c)
   _libyuv_static_build(c)
