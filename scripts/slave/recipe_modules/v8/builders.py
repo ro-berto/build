@@ -348,9 +348,8 @@ BUILDERS = {
       },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
-        'gclient_apply_config': ['v8_valgrind'],
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'has_valgrind', 'mb'],
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -422,7 +421,6 @@ BUILDERS = {
           IgnitionTurbofan,
           MjsunitSPFrameAccess,
           Test262IgnitionTurbofan,
-          SimpleLeak,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1861,9 +1859,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel_ng': {
-        'gclient_apply_config': ['v8_valgrind'],
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'has_valgrind', 'mb'],
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1895,7 +1892,6 @@ BUILDERS = {
           IgnitionTurbofan,
           MjsunitSPFrameAccess,
           Test262IgnitionTurbofan,
-          SimpleLeak,
         ],
         'testing': {'platform': 'linux'},
       },
