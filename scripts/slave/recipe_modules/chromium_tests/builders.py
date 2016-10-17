@@ -60,6 +60,9 @@ BUILDERS = freeze({
   # Note that this master is not real, and consequently this build configuration
   # will never be used in production.
   'bot_update.always_on': {
+    'settings': {
+      'build_gs_bucket': '!fake-coverage-bucket',
+    },
     'builders': {
       'coverage_clobber': {
         'chromium_config': 'chromium',
@@ -70,6 +73,24 @@ BUILDERS = freeze({
           'platform': 'linux',
         },
         'gs_bucket': 'invalid',
+      },
+
+      # Add a coverage builder to exercise configs that are leveraged in other
+      # recipe collections to build chrome packages:
+      # - "ignore_deps_changes"
+      'Package Builder (Coverage)': {
+        'chromium_config': 'chromium',
+        'chromium_apply_config': ['chromeos', 'ninja_confirm_noop',
+                                  'ignore_deps_changes', 'mb'],
+        'gclient_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
       },
     },
   },

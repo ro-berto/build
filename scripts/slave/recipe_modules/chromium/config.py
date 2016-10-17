@@ -71,6 +71,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
+      IGNORE_DEPS_CHANGES = Single(bool, required=False),
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='gyp'),
@@ -819,3 +820,7 @@ def internal_gles2_conform_tests(c):
 @config_ctx()
 def build_angle_deqp_tests(c):
   c.gyp_env.GYP_DEFINES['build_angle_deqp_tests'] = 1
+
+@config_ctx()
+def ignore_deps_changes(c):
+  c.env.IGNORE_DEPS_CHANGES = True
