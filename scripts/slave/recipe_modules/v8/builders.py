@@ -1449,7 +1449,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
-          'default_hard_timeout': 60 * 60,
+          'default_hard_timeout': 90 * 60,
           'default_priority': 35,
         },
       },
