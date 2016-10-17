@@ -31,6 +31,18 @@ B('Syzygy Debug', 'f_syzygy_win_dbg', scheduler='syzygy_cont',
 F('f_syzygy_win_dbg', AF.BaseFactory(recipe='syzygy/continuous'))
 
 
+## Windows continuous Release x64 builder.
+B('Syzygy Release x64', 'f_syzygy_win_rel', scheduler='syzygy_cont',
+  auto_reboot=False)
+F('f_syzygy_win_rel_x64', AF.BaseFactory(recipe='syzygy/continuous'))
+
+
+# Windows continuous Debug x64 builder.
+B('Syzygy Debug x64', 'f_syzygy_win_dbg', scheduler='syzygy_cont',
+  auto_reboot=False)
+F('f_syzygy_win_dbg_x64', AF.BaseFactory(recipe='syzygy/continuous'))
+
+
 # Windows continuous code coverage builder.
 B('Syzygy Coverage', 'f_syzygy_win_cov', scheduler='syzygy_cont',
   auto_reboot=False)

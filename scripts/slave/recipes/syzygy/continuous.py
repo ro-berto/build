@@ -32,7 +32,9 @@ DEPS = [
 # Valid continuous builders and the Syzygy configurations they load.
 BUILDERS = freeze({
   'Syzygy Debug': ('syzygy', {'BUILD_CONFIG': 'Debug'}),
+  'Syzygy Debug x64': ('syzygy_x64', {'BUILD_CONFIG': 'Debug'}),
   'Syzygy Release': ('syzygy', {'BUILD_CONFIG': 'Release'}),
+  'Syzygy Release x64': ('syzygy_x64', {'BUILD_CONFIG': 'Release'}),
   'Syzygy Official': ('syzygy_official', {}),
 
   # Trybots.
@@ -85,7 +87,8 @@ def RunSteps(api, buildername, blamelist, revision):
   s.archive_metrics()
 
   build_config = api.chromium.c.BUILD_CONFIG
-  if build_config == 'Release' and not buildername.endswith('_try'):
+  if (build_config == 'Release' and not buildername.endswith('_try')
+      and not is_x64_build):
     s.randomly_reorder_chrome()
     s.benchmark_chrome()
 
