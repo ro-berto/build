@@ -79,8 +79,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.m.goma.service_account_json_path
     if self.c.env.FORCE_MAC_TOOLCHAIN:
       ret['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
-    if self.c.env.IGNORE_DEPS_CHANGES:
-      ret['IGNORE_DEPS_CHANGES'] = '1'
     return ret
 
   @property
