@@ -14,7 +14,6 @@
 import multiprocessing
 import optparse
 import os
-import re
 import signal
 import subprocess
 import sys
@@ -22,6 +21,7 @@ import sys
 from common import chromium_utils
 from slave import build_directory
 from slave import goma_utils
+from slave import update_windows_env
 
 # Define a bunch of directory paths (same as bot_update.py)
 CURRENT_DIR = os.path.abspath(os.getcwd())
@@ -260,76 +260,6 @@ class EnsureUpToDateFilter(chromium_utils.RunCommandFilter):
     return a_line
 
 
-def NeedEnvFileUpdateOnWin(env):
-  """Returns true if environment file need to be updated."""
-  # Following GOMA_* are applied to compiler_proxy not gomacc,
-  # you do not need to update environment files.
-  ignore_envs = (
-      'GOMA_API_KEY_FILE',
-      'GOMA_DEPS_CACHE_DIR',
-      'GOMA_HERMETIC',
-      'GOMA_RPC_EXTRA_PARAMS',
-      'GOMA_ALLOWED_NETWORK_ERROR_DURATION'
-  )
-  for key in env.overrides:
-    if key not in ignore_envs:
-      return True
-  return False
-
-
-def UpdateWindowsEnvironment(envfile_dir, env):
-  """Update windows environment in environment.{x86,x64}.
-
-  Args:
-    envfile_dir: a directory name environment.{x86,x64} are stored.
-    env: an instance of EchoDict that represents environment.
-  """
-  # envvars_to_save come from _ExtractImportantEnvironment in
-  # https://chromium.googlesource.com/external/gyp/+/\
-  # master/pylib/gyp/msvs_emuation.py
-  # You must update this when the original code is updated.
-  envvars_to_save = (
-      'goma_.*', # TODO(scottmg): This is ugly, but needed for goma.
-      'include',
-      'lib',
-      'libpath',
-      'path',
-      'pathext',
-      'systemroot',
-      'temp',
-      'tmp',
-  )
-  env_to_store = {}
-  for envvar in envvars_to_save:
-    compiled = re.compile(envvar, re.IGNORECASE)
-    for key in env.overrides:
-      if compiled.match(key):
-        if envvar == 'path':
-          env_to_store[key] = (os.path.dirname(sys.executable) +
-                               os.pathsep + env[key])
-        else:
-          env_to_store[key] = env[key]
-
-  if not env_to_store:
-    return
-
-  nul = '\0'
-  for arch in ['x86', 'x64']:
-    path = os.path.join(envfile_dir, 'environment.%s' % arch)
-    print '%s will be updated with %s.' % (path, env_to_store)
-    env_in_file = {}
-    with open(path) as f:
-      for entry in f.read().split(nul):
-        if not entry:
-          continue
-        key, value = entry.split('=', 1)
-        env_in_file[key] = value
-    env_in_file.update(env_to_store)
-    with open(path, 'wb') as f:
-      f.write(nul.join(['%s=%s' % (k, v) for k, v in env_in_file.iteritems()]))
-      f.write(nul * 2)
-
-
 # TODO(tikuta): move to goma_utils
 def determine_goma_jobs():
   # We would like to speed up build on Windows a bit, since it is slowest.
@@ -397,9 +327,11 @@ def main_ninja(options, args, env):
     # It means even if enviroment such as GOMA_DISABLED is updated in
     # compile.py, the update will be ignored.
     # We need to update environment files to reflect the update.
-    if chromium_utils.IsWindows() and NeedEnvFileUpdateOnWin(env):
+    if (chromium_utils.IsWindows() and
+        update_windows_env.NeedEnvFileUpdateOnWin(env.overrides)):
       print 'Updating environment.{x86,x64} files.'
-      UpdateWindowsEnvironment(options.target_output_dir, env)
+      update_windows_env.UpdateWindowsEnvironment(
+          options.target_output_dir, env, env.overrides)
 
     if options.clobber:
       print 'Removing %s' % options.target_output_dir

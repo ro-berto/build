@@ -157,7 +157,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     return (buildername, bot_config)
 
   def compile(self, targets=None, name=None, out_dir=None,
-              target=None, **kwargs):
+              target=None, use_goma_module=False, **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -166,6 +166,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       # Get the Clang revision before compiling.
       self._clang_version = self.get_clang_version()
 
+    goma_env = self.get_env()
+    goma_env.update(kwargs.get('env', {}))
+    ninja_env = goma_env.copy()
+
+    # TODO(tikuta): remove args if compile.py is removed.
     args = [
       '--show-path',
       'python',
@@ -177,6 +182,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       '--goma-cache-dir', self.m.path['goma_cache'],
     ]
 
+    goma_env['GOMA_CACHE_DIR'] = self.m.path['goma_cache']
+
     # Set some buildbot info used in goma_utils.
     for key in ['buildername', 'mastername', 'slavename', 'clobber']:
       if key in self.m.properties:
@@ -187,9 +194,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
                               self.m.properties['buildername']) + '.gomadeps'
     args.extend(['--goma-deps-cache-file', safe_buildername])
+    goma_env['GOMA_DEPS_CACHE_FILE'] = safe_buildername
 
     if self.c.compile_py.build_args:
-      args += ['--build-args', self.c.compile_py.build_args]
+      args += ['--build-args', ' '.join(self.c.compile_py.build_args)]
     if self.m.properties.get('build_data_dir'):
       args += ['--build-data-dir', self.m.properties.get('build_data_dir')]
     if self.c.compile_py.compiler:
@@ -204,22 +212,36 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--out-dir', out_dir]
     if self.c.compile_py.mode:
       args += ['--mode', self.c.compile_py.mode]
+      if (self.c.compile_py.mode == 'google_chrome' or
+          self.c.compile_py.mode == 'official'):
+        ninja_env['CHROMIUM_BUILD'] = '_google_chrome'
+
+      if self.c.compile_py.mode == 'official':
+        # Official builds are always Google Chrome.
+        ninja_env['CHROME_BUILD_TYPE'] = '_official'
+
     if self.c.compile_py.goma_dir:
       args += ['--goma-dir', self.c.compile_py.goma_dir]
     if self.c.compile_py.goma_hermetic:
       args += ['--goma-hermetic', self.c.compile_py.goma_hermetic]
+      goma_env['GOMA_HERMETIC'] = self.c.compile_py.goma_hermetic
     if self.c.compile_py.goma_enable_remote_link:
       args += ['--goma-enable-remote-link']
+      goma_env['GOMA_ENABLE_REMOTE_LINK'] = 'true'
     if self.c.compile_py.goma_store_local_run_output:
       args += ['--goma-store-local-run-output']
     if self.c.compile_py.goma_max_active_fail_fallback_tasks:
       args += ['--goma-max-active-fail-fallback-tasks',
                self.c.compile_py.goma_max_active_fail_fallback_tasks]
+      goma_env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = 'true'
     if (self.m.tryserver.is_tryserver or
         self.c.compile_py.goma_failfast):
       # We rely on goma to meet cycle time goals on the tryserver. It's better
       # to fail early.
       args += ['--goma-fail-fast', '--goma-disable-local-fallback']
+      goma_env['GOMA_FAIL_FAST'] = 'true'
+    else:
+      goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
     if self.c.compile_py.ninja_confirm_noop:
       args.append('--ninja-ensure-up-to-date')
     if self.c.TARGET_CROS_BOARD:
@@ -232,6 +254,61 @@ class ChromiumApi(recipe_api.RecipeApi):
       # Wrap 'compile' through 'cros chrome-sdk'
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
       kwargs.setdefault('cwd', self.m.path['checkout'])
+
+    if use_goma_module:
+      # TODO(tikuta):
+      # Make it possible to build with TARGET_CROS_BOARD using goma module.
+      assert not self.c.TARGET_CROS_BOARD
+
+      # TODO(tikuta): Use build_args with goma module.
+      assert not self.c.compile_py.build_args
+
+      if out_dir is None:
+        out_dir = 'out'
+
+      target_output_dir = self.m.path.abspath(
+          self.m.path.join(self.m.path['checkout'], out_dir,
+                           target or self.c.build_config_fs))
+
+      command = [str(self.m.depot_tools.ninja_path), '-w', 'dupbuild=err',
+                 '-C', target_output_dir]
+
+      # Set -j just before 'with self.m.goma.build_with_goma('
+      # for ninja_log_command being set correctly if starting goma
+      # fails.
+      command += ['-j', self.m.goma.recommended_goma_jobs]
+
+      # TODO(tikuta): Set disable_local_fallback option appropriately.
+      with self.m.goma.build_with_goma(
+          env=goma_env,
+          ninja_log_outdir=target_output_dir,
+          ninja_log_compiler=self.c.compile_py.compiler or 'goma',
+          ninja_log_command=command):
+        if 'GOMA_DISABLED' in goma_env:
+          # Remove -j flag from command.
+          parallel_arg_regexp = re.compile('-j\d*')
+          for i in range(len(command)):
+            if  (isinstance(command[i], str) and
+                 parallel_arg_regexp.match(command[i])):
+              if command[i] == '-j':
+                # If '-j', '80' style is used, remove '80' here.
+                command.pop(i + 1)
+              # Remove '-j' or '-j80'.
+              command.pop(i)
+              break
+
+          if self.m.platform.is_win:
+            self.m.python('update windows env',
+                          script=self.package_repo_resource(
+                              'scripts', 'slave', 'update_windows_env.py'),
+                          args=['--envfile-dir', str(target_output_dir)],
+                          env=goma_env)
+        ninja_env.update(kwargs.pop('env', {}))
+        self.m.step(name or 'compile with ninja',
+                    command,
+                    env=ninja_env,
+                    **kwargs)
+      return
 
     env = self.get_env()
     env.update(kwargs.pop('env', {}))
