@@ -3,10 +3,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
   },
@@ -14,7 +14,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/libyuv/libyuv'}]",
       "--patch_root",
@@ -23,6 +23,12 @@
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
+      "--issue",
+      "123456789",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://rietveld.example.com",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -30,7 +36,7 @@
       "--output_manifest"
     ],
     "env": {
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -68,11 +74,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::cipd]\\resources\\bootstrap.py",
+      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
-      "windows-amd64",
+      "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]\\cipd",
+      "[SLAVE_BUILD]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -81,7 +87,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -89,16 +95,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\cipd\\cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "ensure",
       "--root",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]/cipd/goma",
       "--list",
-      "infra/tools/cloudtail/windows-amd64 goma_recipe_module\ninfra_internal/goma/client/windows-amd64 release",
+      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "/creds/service_accounts/service-account-goma-client.json"
     ],
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -107,11 +113,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -122,15 +128,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[SLAVE_BUILD]/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=x64 use_goma=1",
-      "GYP_MSVS_VERSION": "2010",
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -138,66 +143,48 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
-      "Release_x64",
+      "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "Win64 Release (VS2010)",
+      "linux_gyp_rel",
       "--buildbot-mastername",
-      "client.libyuv",
+      "tryserver.libyuv",
       "--buildbot-slavename",
       "slavename",
       "--goma-deps-cache-file",
-      "Win64_Release__VS2010_.gomadeps",
+      "linux_gyp_rel.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
-      "[CACHE]\\cipd\\goma",
-      "--",
-      "All"
+      "[CACHE]/cipd/goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release_x64",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win64 Release (VS2010)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win64 Release (VS2010)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
-      "--step-name=libyuv_unittest",
-      "--builder-name=Win64 Release (VS2010)",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "libyuv_unittest.exe"
-    ],
-    "name": "libyuv_unittest"
   },
   {
     "name": "$result",

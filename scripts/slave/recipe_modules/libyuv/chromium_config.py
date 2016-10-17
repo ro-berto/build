@@ -29,10 +29,13 @@ def libyuv_gcc(c):
 def libyuv_android(c):
   if c.TARGET_ARCH == 'intel' and c.TARGET_BITS == 32:
     c.gyp_env.GYP_DEFINES['android_full_debug'] = 1
+    c.gn_args.append('android_full_debug=true')
+
+  _libyuv_static_build(c)
 
 @CONFIG_CTX(includes=['android_clang'])
 def libyuv_android_clang(c):
-  pass
+  _libyuv_static_build(c)
 
 @CONFIG_CTX(includes=['chromium', 'static_library'])
 def libyuv_ios(c):
@@ -49,7 +52,17 @@ def libyuv_ios(c):
   if c.TARGET_BITS == 64:
     gyp_defs['target_subarch'] = 'arm64'
 
+  c.gn_args.append('target_os=%s' % c.TARGET_PLATFORM)
   _libyuv_common(c)
+  _libyuv_static_build(c)
 
 def _libyuv_common(c):
-  c.compile_py.default_targets = ['All']
+  c.compile_py.default_targets = []
+
+def _libyuv_static_build(c):
+  # TODO(kjellander): Investigate moving this into chromium recipe module's
+  # static_library config instead.
+  if c.BUILD_CONFIG == 'Debug':
+    # GN defaults to component builds for Debug, but some build configurations
+    # (Android and iOS) needs it to be static.
+    c.gn_args.append('is_component_build=false')

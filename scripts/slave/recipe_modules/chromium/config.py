@@ -245,10 +245,12 @@ def msvs2012(c):
 
 @config_ctx()
 def msvs2013(c):
+  c.gn_args.append('visual_studio_version=2013')
   c.gyp_env.GYP_MSVS_VERSION = '2013'
 
 @config_ctx()
 def msvs2015(c):
+  c.gn_args.append('visual_studio_version=2015')
   c.gyp_env.GYP_MSVS_VERSION = '2015'
 
 @config_ctx()
@@ -283,6 +285,7 @@ def xcode(c):  # pragma: no cover
 
 def _clang_common(c):
   c.compile_py.compiler = 'clang'
+  c.gn_args.append('is_clang=true')
   c.gyp_env.GYP_DEFINES['clang'] = 1
 
 @config_ctx(group='compiler')
@@ -291,6 +294,7 @@ def clang(c):
 
 @config_ctx(group='compiler')
 def gcc(c):
+  c.gn_args.append('is_clang=false')
   c.gyp_env.GYP_DEFINES['clang'] = 0
 
 @config_ctx(group='compiler')
@@ -312,10 +316,12 @@ def goma(c):
 
 @config_ctx()
 def dcheck(c, invert=False):
+  c.gn_args.append('dcheck_always_on=%s' % str(not invert).lower())
   c.gyp_env.GYP_DEFINES['dcheck_always_on'] = int(not invert)
 
 @config_ctx()
 def fastbuild(c, invert=False):
+  c.gn_args.append('symbol_level=%d' % (1 if invert else 2))
   c.gyp_env.GYP_DEFINES['fastbuild'] = int(not invert)
 
 @config_ctx()
@@ -385,9 +391,11 @@ def asan(c):
     # Set fastbuild=0 and prevent other configs from changing it.
     fastbuild(c, invert=True, optional=False)
 
+  c.gn_args.append('is_asan=true')
   c.gyp_env.GYP_DEFINES['asan'] = 1
   if c.TARGET_PLATFORM != 'android' and c.TARGET_BITS == 64:
     # LSAN isn't supported on Android or 32 bits platforms.
+    c.gn_args.append('is_lsan=true')
     c.gyp_env.GYP_DEFINES['lsan'] = 1
 
 @config_ctx(deps=['compiler'])
@@ -413,6 +421,7 @@ def msan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('msan requires clang')
   c.runtests.swarming_tags |= {'msan:1'}
+  c.gn_args.append('is_msan=true')
   c.gyp_env.GYP_DEFINES['msan'] = 1
 
 @config_ctx()
@@ -438,12 +447,14 @@ def ubsan_fail_on_errors(c):
 def ubsan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('ubsan requires clang')
+  c.gn_args.append('is_ubsan=true')
   c.gyp_env.GYP_DEFINES['ubsan'] = 1
 
 @config_ctx(deps=['compiler'], includes=['ubsan_fail_on_errors'])
 def ubsan_vptr(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('ubsan_vptr requires clang')
+  c.gn_args.append('is_ubsan_vptr=true')
   c.gyp_env.GYP_DEFINES['ubsan_vptr'] = 1
 
 @config_ctx()
@@ -460,6 +471,7 @@ def tsan2(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('tsan2 requires clang')
   c.runtests.swarming_tags |= {'tsan:1'}
+  c.gn_args.append('is_tsan=true')
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['tsan'] = 1
   gyp_defs['disable_nacl'] = 1

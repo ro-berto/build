@@ -45,6 +45,9 @@ class LibyuvApi(recipe_api.RecipeApi):
     for c in self.bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
+    if 'gyp' not in buildername.lower():
+      self.m.chromium.apply_config('gn')
+
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 

@@ -35,9 +35,7 @@ def RunSteps(api):
   if libyuv.should_build:
     if api.chromium.c.project_generator.tool == 'gn':
       api.chromium.run_gn(use_goma=True)
-      api.chromium.compile(targets=['all'])
-    else:
-      api.chromium.compile()
+    api.chromium.compile()
     if libyuv.should_upload_build:
       libyuv.package_build()
 

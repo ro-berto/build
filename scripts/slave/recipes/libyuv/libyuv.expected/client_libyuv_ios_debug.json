@@ -128,12 +128,26 @@
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=ios clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
+      "gen",
+      "//out/Debug-iphoneos",
+      "--args=is_clang=true target_os=ios is_component_build=false is_debug=true target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "gn"
   },
   {
     "allow_subannotations": true,
@@ -191,8 +205,7 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--",
-      "All"
+      "--"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

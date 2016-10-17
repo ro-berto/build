@@ -128,10 +128,24 @@
     "cwd": "[SLAVE_BUILD]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
+      "--root=[SLAVE_BUILD]\\src",
+      "gen",
+      "//out/Debug",
+      "--args=is_clang=true is_debug=true target_cpu=\"x86\" use_goma=true goma_dir=\"[CACHE]\\cipd\\goma\""
+    ],
+    "cwd": "[SLAVE_BUILD]\\src",
+    "name": "gn"
   },
   {
     "allow_subannotations": true,
@@ -189,8 +203,7 @@
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
-      "--",
-      "All"
+      "--"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"

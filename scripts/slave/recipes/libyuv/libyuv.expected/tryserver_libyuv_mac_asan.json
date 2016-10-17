@@ -135,10 +135,24 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=0 gomadir='[CACHE]/cipd/goma' lsan=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
+      "gen",
+      "//out/Release",
+      "--args=is_clang=true symbol_level=1 is_asan=true is_lsan=true dcheck_always_on=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "gn"
   },
   {
     "allow_subannotations": true,
@@ -199,8 +213,7 @@
       "[CACHE]/cipd/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
-      "--",
-      "All"
+      "--"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",

@@ -129,24 +129,10 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "gen",
-      "//out/Release",
-      "--args=is_clang=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "gn"
   },
   {
     "allow_subannotations": true,
@@ -190,13 +176,13 @@
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "Mac64 Release",
+      "Mac64 Release (GYP)",
       "--buildbot-mastername",
       "client.libyuv",
       "--buildbot-slavename",
       "slavename",
       "--goma-deps-cache-file",
-      "Mac64_Release.gomadeps",
+      "Mac64_Release__GYP_.gomadeps",
       "--compiler",
       "goma-clang",
       "--goma-jsonstatus",
@@ -216,25 +202,6 @@
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
-      "--step-name=libyuv_unittest",
-      "--builder-name=Mac64 Release",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "libyuv_unittest"
-    ],
-    "name": "libyuv_unittest"
   },
   {
     "name": "$result",

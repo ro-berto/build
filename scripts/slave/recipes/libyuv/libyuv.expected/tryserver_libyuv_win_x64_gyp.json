@@ -23,6 +23,12 @@
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
+      "--issue",
+      "123456789",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://rietveld.example.com",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -128,11 +134,32 @@
     "cwd": "[SLAVE_BUILD]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=x64 use_goma=1",
-      "GYP_MSVS_VERSION": "2012",
+      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -147,29 +174,30 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "--target",
-      "Release_x64",
+      "Debug_x64",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "Win64 Release (VS2012)",
+      "win_x64_gyp",
       "--buildbot-mastername",
-      "client.libyuv",
+      "tryserver.libyuv",
       "--buildbot-slavename",
       "slavename",
       "--goma-deps-cache-file",
-      "Win64_Release__VS2012_.gomadeps",
+      "win_x64_gyp.gomadeps",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
-      "--",
-      "All"
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -179,25 +207,6 @@
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release_x64",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win64 Release (VS2012)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win64 Release (VS2012)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
-      "--step-name=libyuv_unittest",
-      "--builder-name=Win64 Release (VS2012)",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "libyuv_unittest.exe"
-    ],
-    "name": "libyuv_unittest"
   },
   {
     "name": "$result",

@@ -23,12 +23,6 @@
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
-      "--issue",
-      "123456789",
-      "--patchset",
-      "1",
-      "--rietveld_server",
-      "https://rietveld.example.com",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -134,25 +128,11 @@
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "gen",
-      "//out/Release",
-      "--args=is_debug=false target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "gn"
   },
   {
     "cmd": [
@@ -167,19 +147,19 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "android_gn_rel",
+      "Android Debug (GYP)",
       "--buildbot-mastername",
-      "tryserver.libyuv",
+      "client.libyuv",
       "--buildbot-slavename",
       "slavename",
       "--goma-deps-cache-file",
-      "android_gn_rel.gomadeps",
+      "Android_Debug__GYP_.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",
@@ -188,10 +168,7 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--goma-fail-fast",
-      "--goma-disable-local-fallback",
-      "--",
-      "all"
+      "--"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

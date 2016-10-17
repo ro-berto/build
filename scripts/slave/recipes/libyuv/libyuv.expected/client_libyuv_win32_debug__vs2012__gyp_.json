@@ -129,7 +129,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "component=shared_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 use_goma=1",
-      "GYP_MSVS_VERSION": "2010",
+      "GYP_MSVS_VERSION": "2012",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -153,13 +153,13 @@
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "Win32 Debug (VS2010)",
+      "Win32 Debug (VS2012, GYP)",
       "--buildbot-mastername",
       "client.libyuv",
       "--buildbot-slavename",
       "slavename",
       "--goma-deps-cache-file",
-      "Win32_Debug__VS2010_.gomadeps",
+      "Win32_Debug__VS2012__GYP_.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",
@@ -168,8 +168,7 @@
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
-      "--",
-      "All"
+      "--"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -188,11 +187,11 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win32 Debug (VS2010)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win32 Debug (VS2012, GYP)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win32 Debug (VS2010)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win32 Debug (VS2012, GYP)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
       "--step-name=libyuv_unittest",
-      "--builder-name=Win32 Debug (VS2010)",
+      "--builder-name=Win32 Debug (VS2012, GYP)",
       "--slave-name=slavename",
       "--build-number=1337",
       "libyuv_unittest.exe"
