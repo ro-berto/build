@@ -16,8 +16,8 @@ def Update(c):
                             builderNames=[
           'Mac64 Debug',
           'Mac64 Release',
-          'Mac64 Debug (GN)',
-          'Mac64 Release (GN)',
+          'Mac64 Debug (GYP)',
+          'Mac64 Release (GYP)',
           'Mac Asan',
           'iOS Debug',
           'iOS Release',
@@ -29,8 +29,8 @@ def Update(c):
   specs = [
     {'name': 'Mac64 Debug', 'slavebuilddir': 'mac64'},
     {'name': 'Mac64 Release', 'slavebuilddir': 'mac64'},
-    {'name': 'Mac64 Debug (GN)', 'slavebuilddir': 'mac64_gn'},
-    {'name': 'Mac64 Release (GN)', 'slavebuilddir': 'mac64_gn'},
+    {'name': 'Mac64 Debug (GYP)', 'slavebuilddir': 'mac64_gyp'},
+    {'name': 'Mac64 Release (GYP)', 'slavebuilddir': 'mac64_gyp'},
     {'name': 'Mac Asan', 'slavebuilddir': 'mac_asan'},
     {'name': 'iOS Debug', 'slavebuilddir': 'mac32'},
     {'name': 'iOS Release', 'slavebuilddir': 'mac32'},

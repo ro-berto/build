@@ -121,7 +121,7 @@ class LibyuvApi(recipe_api.RecipeApi):
     with self.m.step.defer_results():
       if self.m.chromium.c.TARGET_PLATFORM == 'android':
         self.m.chromium_android.common_tests_setup_steps()
-        self.m.chromium_android.run_test_suite('yuv_unittest')
+        self.m.chromium_android.run_test_suite('libyuv_unittest')
         self.m.chromium_android.shutdown_device_monitor()
         self.m.chromium_android.logcat_dump(
             gs_bucket=self.master_config.get('build_gs_bucket'))
