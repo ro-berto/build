@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
 import urllib
 
 from recipe_engine import recipe_api
@@ -55,7 +56,14 @@ class PerfDashboardApi(recipe_api.RecipeApi):
 
   def set_default_config(self):
     """If in golo, use real perf server, otherwise use testing perf server."""
-    if self.m.properties.get('use_mirror', True):  # We're on a bot
+    # TODO: This property should be passed explicitly supplied by the recipe
+    # scheduler, not inferred from arbitrary bot environment.
+    on_production_bot = self.m.properties.get('perf_production',
+        not any(v in os.environ for v in (
+          'TESTING_MASTERNAME',
+          'TESTING_SLAVENAME',
+        )))
+    if on_production_bot:  # We're on a bot
       self.set_config('production')
     else:
       self.set_config('testing')

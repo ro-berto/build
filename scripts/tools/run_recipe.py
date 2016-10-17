@@ -111,7 +111,6 @@ def get_properties_from_file(filename):
 def main(args):
   """Gets the recipe name and properties and runs an annotated run."""
   properties, master_overrides_slave = parse_args(args)
-  properties.setdefault('use_mirror', False)
 
   if not os.path.exists(SLAVE_DIR):
     os.makedirs(SLAVE_DIR)

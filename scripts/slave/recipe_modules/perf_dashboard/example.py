@@ -58,9 +58,10 @@ def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
     for production in (True, False):
       yield (api.test('%s%s' %
-                      (platform, '_use_mirror'
-                       if production else '')) + api.platform.name(platform) +
-             api.properties(use_mirror=production,
+                      (platform, '_testing'
+                       if not production else '')) +
+             api.platform.name(platform) +
+             api.properties(perf_production=production,
                             slavename='multivm-windows-release',
                             buildername='multivm-windows-perf-be',
                             buildnumber=75,
