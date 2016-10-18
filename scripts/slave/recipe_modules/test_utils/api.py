@@ -195,6 +195,25 @@ class TestUtilsApi(recipe_api.RecipeApi):
       elif ignored_failures:
         self.m.step.active_result.presentation.status = self.m.step.WARNING
 
+    if test.name == 'webkit_tests':
+        self._archive_retry_summary({
+            'failures': sorted(new_failures),
+            'ignored': sorted(ignored_failures)
+        })
+
+  def _archive_retry_summary(self, retry_summary):
+    """Archives the retry summary as JSON, storing it alongside the results
+    from the first run."""
+    script = self.m.chromium.package_repo_resource(
+        'scripts', 'slave', 'chromium', 'archive_layout_test_retry_summary.py')
+    args = [
+        '--retry-summary-json', self.m.json.input(retry_summary),
+        '--build-number', self.m.properties['buildnumber'],
+        '--builder-name', self.m.properties['buildername'],
+        '--gs-bucket', 'gs://chromium-layout-test-archives',
+    ]
+    self.m.python('archive_retry_summary', script, args)
+
   def create_results_from_json(self, data):
     return TestResults(data)
 
@@ -219,4 +238,3 @@ class TestUtilsApi(recipe_api.RecipeApi):
     The test_results will be an instance of the GTestResults class.
     """
     return GTestResultsOutputPlaceholder(self, add_json_log)
-
