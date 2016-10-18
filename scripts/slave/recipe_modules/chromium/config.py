@@ -236,14 +236,6 @@ def ninja(c):
   c.build_dir = c.CHECKOUT_PATH.join(out_path)
 
 @config_ctx()
-def msvs2010(c):
-  c.gyp_env.GYP_MSVS_VERSION = '2010'
-
-@config_ctx()
-def msvs2012(c):
-  c.gyp_env.GYP_MSVS_VERSION = '2012'
-
-@config_ctx()
 def msvs2013(c):
   c.gn_args.append('visual_studio_version=2013')
   c.gyp_env.GYP_MSVS_VERSION = '2013'

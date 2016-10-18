@@ -28,7 +28,6 @@ def libyuv_gcc(c):
 @CONFIG_CTX(includes=['android'])
 def libyuv_android(c):
   if c.TARGET_ARCH == 'intel' and c.TARGET_BITS == 32:
-    c.gyp_env.GYP_DEFINES['android_full_debug'] = 1
     c.gn_args.append('android_full_debug=true')
 
   _libyuv_static_build(c)
@@ -46,11 +45,6 @@ def libyuv_ios(c):
     raise BadConf('Only "ios" target platform is supported (got: "%s")' %
                   c.TARGET_PLATFORM)  # pragma: no cover
   c.build_config_fs = c.BUILD_CONFIG + '-iphoneos'
-
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['OS'] = c.TARGET_PLATFORM
-  if c.TARGET_BITS == 64:
-    gyp_defs['target_subarch'] = 'arm64'
 
   c.gn_args.append('ios_enable_code_signing=false')
   c.gn_args.append('target_os="%s"' % c.TARGET_PLATFORM)

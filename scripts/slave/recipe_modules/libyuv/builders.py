@@ -42,86 +42,6 @@ BUILDERS = freeze({
       'build_gs_bucket': 'chromium-libyuv',
     },
     'builders': {
-      'Win32 Debug (VS2010, GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2010'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'Win32 Release (VS2010, GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2010'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'Win64 Debug (VS2010, GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2010'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'Win64 Release (VS2010, GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2010'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'Win32 Debug (VS2012, GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2012'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'Win32 Release (VS2012, GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2012'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'Win64 Debug (VS2012, GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2012'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'Win64 Release (VS2012, GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2012'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
       'Win32 Debug (VS2013)': {
         'recipe_config': 'libyuv',
         'chromium_apply_config': ['msvs2013'],
@@ -216,24 +136,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
-      'Mac64 Debug (GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'Mac64 Release (GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
       'Mac Asan': {
         'recipe_config': 'libyuv_clang',
         'chromium_apply_config': ['asan'],
@@ -288,28 +190,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
-      'iOS Debug (GYP)': {
-        'recipe_config': 'libyuv_ios',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'TARGET_ARCH': 'arm',
-          'TARGET_PLATFORM': 'ios',
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'iOS Release (GYP)': {
-        'recipe_config': 'libyuv_ios',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-          'TARGET_ARCH': 'arm',
-          'TARGET_PLATFORM': 'ios',
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
       'Linux32 Debug': {
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
@@ -344,24 +224,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux64 Debug (GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux64 Release (GYP)': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
       'Linux GCC': {
@@ -521,28 +383,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
-      'Android Debug (GYP)': {
-        'recipe_config': 'libyuv_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Release (GYP)': {
-        'recipe_config': 'libyuv_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
       'Android Tester ARM32 Debug (Nexus 5X)': {
         'recipe_config': 'libyuv_android',
         'chromium_config_kwargs': {
@@ -640,24 +480,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'win_x64_gyp': {
-        'recipe_config': 'libyuv_clang',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
-      },
-      'win_x64_gyp_rel': {
-        'recipe_config': 'libyuv_clang',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
-      },
       'mac': {
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
@@ -674,24 +496,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-      },
-      'mac_gyp': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'mac_gyp_rel': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
       'mac_asan': {
@@ -748,28 +552,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
-      'ios_gyp': {
-        'recipe_config': 'libyuv_ios',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'TARGET_ARCH': 'arm',
-          'TARGET_PLATFORM': 'ios',
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'ios_gyp_rel': {
-        'recipe_config': 'libyuv_ios',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-          'TARGET_ARCH': 'arm',
-          'TARGET_PLATFORM': 'ios',
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
       'linux': {
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
@@ -786,24 +568,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'linux_gyp': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'linux_gyp_rel': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
       'linux_gcc': {
@@ -949,28 +713,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'mipsel',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'android_gyp': {
-        'recipe_config': 'libyuv_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'android_gyp_rel': {
-        'recipe_config': 'libyuv_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',

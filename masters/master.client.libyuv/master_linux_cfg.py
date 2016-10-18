@@ -18,8 +18,6 @@ def Update(c):
           'Linux32 Release',
           'Linux64 Debug',
           'Linux64 Release',
-          'Linux64 Debug (GYP)',
-          'Linux64 Release (GYP)',
           # TODO(kjellander): Add when trybot is green (crbug.com/625889).
           #'Linux GCC',
           'Linux Asan',
@@ -36,8 +34,6 @@ def Update(c):
     {'name': 'Linux32 Release', 'slavebuilddir': 'linux32'},
     {'name': 'Linux64 Debug', 'slavebuilddir': 'linux64'},
     {'name': 'Linux64 Release', 'slavebuilddir': 'linux64'},
-    {'name': 'Linux64 Debug (GYP)', 'slavebuilddir': 'linux64_gyp'},
-    {'name': 'Linux64 Release (GYP)', 'slavebuilddir': 'linux64_gyp'},
     # TODO(kjellander): Add when trybot is green (crbug.com/625889).
     #{'name': 'Linux GCC', 'slavebuilddir': 'linux_gcc'},
     {'name': 'Linux Asan', 'slavebuilddir': 'linux_asan'},
