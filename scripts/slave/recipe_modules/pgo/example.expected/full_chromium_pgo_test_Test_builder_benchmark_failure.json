@@ -430,7 +430,11 @@
       "--benchmark",
       "sunspider"
     ],
-    "name": "Telemetry benchmark: sunspider"
+    "name": "Telemetry benchmark: sunspider",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [

@@ -220,15 +220,433 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\build\\win\\run_pgo_profiling_benchmarks.py",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
       "--browser-type",
       "release",
-      "--target-cpu",
-      "ia32",
+      "--target-bits",
+      "32",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.jslibstyleprototype"
     ],
-    "name": "Profiling benchmarks."
+    "name": "Telemetry benchmark: dromaeo.jslibstyleprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.jslibeventprototype"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibeventprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "speedometer"
+    ],
+    "name": "Telemetry benchmark: speedometer"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "smoothness.top_25_smooth"
+    ],
+    "name": "Telemetry benchmark: smoothness.top_25_smooth"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "octane"
+    ],
+    "name": "Telemetry benchmark: octane"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "blink_perf.svg"
+    ],
+    "name": "Telemetry benchmark: blink_perf.svg"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.jslibtraverseprototype"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibtraverseprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "blink_style.top_25"
+    ],
+    "name": "Telemetry benchmark: blink_style.top_25"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.domcoreattr"
+    ],
+    "name": "Telemetry benchmark: dromaeo.domcoreattr"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.cssqueryjquery"
+    ],
+    "name": "Telemetry benchmark: dromaeo.cssqueryjquery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.jslibattrprototype"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibattrprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "sunspider"
+    ],
+    "name": "Telemetry benchmark: sunspider"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.domcoretraverse"
+    ],
+    "name": "Telemetry benchmark: dromaeo.domcoretraverse"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.domcoremodify"
+    ],
+    "name": "Telemetry benchmark: dromaeo.domcoremodify"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "blink_perf.dom"
+    ],
+    "name": "Telemetry benchmark: blink_perf.dom"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "indexeddb_perf"
+    ],
+    "name": "Telemetry benchmark: indexeddb_perf"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "blink_perf.canvas"
+    ],
+    "name": "Telemetry benchmark: blink_perf.canvas"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.domcorequery"
+    ],
+    "name": "Telemetry benchmark: dromaeo.domcorequery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "blink_perf.bindings"
+    ],
+    "name": "Telemetry benchmark: blink_perf.bindings"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.jslibtraversejquery"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "dromaeo.jslibmodifyprototype"
+    ],
+    "name": "Telemetry benchmark: dromaeo.jslibmodifyprototype"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "media.tough_video_cases"
+    ],
+    "name": "Telemetry benchmark: media.tough_video_cases"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "blink_perf.css"
+    ],
+    "name": "Telemetry benchmark: blink_perf.css"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release",
+      "--target-bits",
+      "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--benchmark",
+      "blink_perf.paint"
+    ],
+    "name": "Telemetry benchmark: blink_perf.paint"
   },
   {
     "cmd": [
