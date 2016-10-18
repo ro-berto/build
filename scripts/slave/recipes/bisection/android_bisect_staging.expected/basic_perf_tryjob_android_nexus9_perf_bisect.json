@@ -489,7 +489,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"client_operation_id\": \"12345726327327\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=android-chrome sunspider\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"max_time_minutes\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"repeat_count\": \"1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"target_arch\": \"ia32\", @@@",
@@ -714,10 +714,12 @@
       "[BUILDER_CACHE]/android_nexus9_perf_bisect/src/tools/perf/run_benchmark",
       "-v",
       "--browser=android-chrome",
+      "--output-format=chartjson",
       "sunspider",
       "--reset-results",
       "--upload-results",
-      "--results-label=Patch"
+      "--results-label=Patch",
+      "--output-dir=[TMP_BASE]/perf-test-output_tmp_1"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
     "env": {
@@ -736,6 +738,17 @@
       "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\n",
+      "[TMP_BASE]/perf-test-output_tmp_1/results.txt"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
+    "name": "write buildbot output to disk"
   },
   {
     "cmd": [
@@ -1062,9 +1075,11 @@
       "[BUILDER_CACHE]/android_nexus9_perf_bisect/src/tools/perf/run_benchmark",
       "-v",
       "--browser=android-chrome",
+      "--output-format=chartjson",
       "sunspider",
       "--upload-results",
-      "--results-label=TOT"
+      "--results-label=TOT",
+      "--output-dir=[TMP_BASE]/perf-test-output_tmp_2"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
     "env": {
@@ -1083,6 +1098,17 @@
       "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\n",
+      "[TMP_BASE]/perf-test-output_tmp_2/results.txt"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
+    "name": "write buildbot output to disk (2)"
   },
   {
     "cmd": [],
@@ -1120,7 +1146,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"bisect_bot\": \"android_nexus9_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_nexus9_perf_bisect/builds/571\", \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome sunspider\", \"metric\": null, \"status\": \"completed\", \"try_job_id\": null, \"warnings\": [\"No values from test with patch, or none from test without patch.\\n Output with patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\n\\n\\nOutput without patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\n\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"bisect_bot\": \"android_nexus9_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_nexus9_perf_bisect/builds/571\", \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\", \"metric\": null, \"status\": \"completed\", \"try_job_id\": null, \"warnings\": [\"No values from test with patch, or none from test without patch.\\n Output with patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\n\\n\\nOutput without patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\n\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",

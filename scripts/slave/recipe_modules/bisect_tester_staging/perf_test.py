@@ -6,8 +6,6 @@ import os
 import re
 import time
 
-from . import parse_metric
-
 
 class Metric(object):  # pragma: no cover
   OLD_STYLE_DELIMITER = '-'
@@ -72,23 +70,22 @@ def _is_telemetry_command(command):
   """Attempts to discern whether or not a given command is running telemetry."""
   return 'run_benchmark' in command
 
-
 def run_perf_test(api, test_config, **kwargs):
   """Runs the command N times and parses a metric from the output."""
   # TODO(prasadv):  Consider extracting out the body of the for loop into
   # a helper method, or extract the metric-extraction to make this more
   # cleaner.
   limit = test_config['max_time_minutes'] * kwargs.get('time_multiplier', 1)
-  run_results = {'measured_values': [], 'errors': set()}
-  values = run_results['measured_values']
+  results = {'valueset_paths': [], 'chartjson_paths': [], 'errors': set(),
+             'retcodes': [], 'stdout_paths': [], 'output': []}
   metric = test_config.get('metric')
-  retcodes = []
-  output_for_all_runs = []
   temp_dir = None
-  repeat_cnt = test_config['repeat_count']
+  repeat_count = test_config['repeat_count']
 
   command = test_config['command']
   use_chartjson = bool('chartjson' in command)
+  use_valueset = bool('valueset' in command)
+  use_buildbot = bool('buildbot' in command)
   is_telemetry = _is_telemetry_command(command)
   start_time = time.time()
 
@@ -97,7 +94,7 @@ def run_perf_test(api, test_config, **kwargs):
     if device_serial_number:
       command += ' --device ' + device_serial_number # pragma: no cover
 
-  for i in range(repeat_cnt):
+  for i in range(repeat_count):
     elapsed_minutes = (time.time() - start_time) / 60.0
     # A limit of 0 means 'no timeout set'.
     if limit and elapsed_minutes >= limit:  # pragma: no cover
@@ -105,88 +102,52 @@ def run_perf_test(api, test_config, **kwargs):
     if is_telemetry:
       if i == 0 and kwargs.get('reset_on_first_run'):
         command += ' --reset-results'
-      if i == repeat_cnt - 1 and kwargs.get('upload_on_last_run'):
+      if i == repeat_count - 1 and kwargs.get('upload_on_last_run'):
         command += ' --upload-results'
       if kwargs.get('results_label'):
         command += ' --results-label=%s' % kwargs.get('results_label')
-    if use_chartjson:  # pragma: no cover
-      temp_dir = api.m.path.mkdtemp('perf-test-output')
+    temp_dir = api.m.path.mkdtemp('perf-test-output')
+    if use_chartjson or use_valueset:  # pragma: no cover
       command = _set_output_dir(command, str(temp_dir))
-      results_path = temp_dir.join('results-chart.json')
+      chartjson_path = temp_dir.join('results-chart.json')
+      valueset_path = temp_dir.join('results-valueset.json')
 
     step_name = "Performance Test%s %d of %d" % (
-        ' (%s)' % kwargs['name'] if 'name' in kwargs else '', i + 1, repeat_cnt)
+        ' (%s)' % kwargs['name'] if 'name' in kwargs else '', i + 1, repeat_count)
     if api.m.platform.is_linux:
       os.environ['CHROME_DEVEL_SANDBOX'] = api.m.path.join(
           '/opt', 'chromium', 'chrome_sandbox')
-    out, err, retcode = _run_command(api, command, step_name)
+    out, err, retcode = _run_command(api, command, step_name, **kwargs)
+    results['output'].append(out or '')
+    if out:
+      # Write stdout to a local temp location for possible buildbot parsing
+      stdout_path = temp_dir.join('results.txt')
+      api.m.file.write('write buildbot output to disk', stdout_path, out)
+      results['stdout_paths'].append(stdout_path)
 
-    if out is None and err is None:
-      # dummy value when running test TODO: replace with a mock
-      values.append(0)
-    elif metric:  # pragma: no cover
+    if metric:
       if use_chartjson:
-        step_result = api.m.json.read(
-            'Reading chartjson results', results_path)
-        has_valid_value, value = find_values(
-            step_result.json.output, Metric(metric))
-      else:
-        has_valid_value, value = parse_metric.parse_metric(
-            out, err, metric.split('/'))
-      output_for_all_runs.append(out)
-      if has_valid_value:
-        values.extend(value)
-      else:
-        # This means the metric was not found in the output.
-        if not retcode:
-          # If all tests passed, but the metric was not found, this means that
-          # something changed on the test, or the given metric name was
-          # incorrect, we need to surface this on the bisector.
-          run_results['errors'].add('MISSING_METRIC')
-    else:
-      output_for_all_runs.append(out)
-    retcodes.append(retcode)
-
-  return run_results, output_for_all_runs, retcodes
-
-
-def find_values(results, metric):  # pragma: no cover
-  """Tries to extract the given metric from the given results.
-
-  This method tries several different possible chart names depending
-  on the given metric.
-
-  Args:
-    results: The chartjson dict.
-    metric: A Metric instance.
-
-  Returns:
-    A pair (has_valid_value, value), where has_valid_value is a boolean,
-    and value is the value(s) extracted from the results.
-  """
-  has_valid_value, value, _ = parse_metric.parse_chartjson_metric(
-      results, metric.as_pair())
-  if has_valid_value:
-    return True, value
-
-  # TODO(eakuefner): Get rid of this fallback when bisect uses ToT Telemetry.
-  has_valid_value, value, _ = parse_metric.parse_chartjson_metric(
-        results, metric.as_pair(Metric.OLD_STYLE_DELIMITER))
-  if has_valid_value:
-    return True, value
-
-  # If we still haven't found a valid value, it's possible that the metric was
-  # specified as interaction-chart/trace or interaction-chart/interaction-chart,
-  # and the chartjson chart names use @@ as the separator between interaction
-  # and chart names.
-  if Metric.OLD_STYLE_DELIMITER not in metric.chart_name:
-    return False, []  # Give up; no results found.
-  interaction, chart = metric.chart_name.split(Metric.OLD_STYLE_DELIMITER, 1)
-  metric.interaction_record_name = interaction
-  metric.chart_name = chart
-  has_valid_value, value, _ = parse_metric.parse_chartjson_metric(
-      results, metric.as_pair())
-  return has_valid_value, value
+        try:
+          step_result = api.m.json.read(
+              'Reading chartjson results', chartjson_path)
+        except api.m.step.StepFailure:  # pragma: no cover
+          pass
+        else:
+          if step_result.json.output:  # pragma: no cover
+            results['chartjson_paths'].append(chartjson_path)
+      if use_valueset:
+        try:
+          step_result = api.m.json.read(
+              'Reading valueset results', valueset_path,
+              step_test_data=lambda: api.m.json.test_api.output(
+                  {'dummy':'dict'}))
+        except api.m.step.StepFailure:  # pragma: no cover
+          pass
+        else:
+          if step_result.json.output:
+            results['valueset_paths'].append(valueset_path)
+    results['retcodes'].append(retcode)
+  return results
 
 def _rebase_path(api, file_path):
   """Attempts to make an absolute path for the command.
@@ -202,16 +163,18 @@ def _rebase_path(api, file_path):
         *file_path.split('src', 1)[1].split('\\')[1:])
   return file_path
 
-def _run_command(api, command, step_name):
+def _run_command(api, command, step_name, **kwargs):
   command_parts = command.split()
   stdout = api.m.raw_io.output()
   stderr = api.m.raw_io.output()
 
+  inner_kwargs = {}
+  if 'step_test_data' in kwargs:
+    inner_kwargs['step_test_data'] = kwargs['step_test_data']
   # TODO(prasadv): Remove this once bisect runs are no longer running
   # against revisions from February 2016 or earlier.
-  kwargs = {}
   if 'android-chrome' in command:  # pragma: no cover
-    kwargs['env'] = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
+    inner_kwargs['env'] = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
 
   # By default, we assume that the test to run is an executable binary. In the
   # case of python scripts, runtest.py will guess based on the extension.
@@ -237,7 +200,7 @@ def _run_command(api, command, step_name):
         python_mode=python_mode,
         stdout=stdout,
         stderr=stderr,
-        **kwargs)
+        **inner_kwargs)
     step_result.presentation.logs['Captured Output'] = (
         step_result.stdout or '').splitlines()
   except api.m.step.StepFailure as sf:

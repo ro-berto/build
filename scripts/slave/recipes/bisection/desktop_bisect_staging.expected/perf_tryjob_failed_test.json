@@ -292,7 +292,7 @@
     "name": "load config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=release sunspider\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"max_time_minutes\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"metric\": \"dummy/dummy\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"repeat_count\": \"1\", @@@",
@@ -470,9 +470,11 @@
       "-v",
       "--browser=release",
       "sunspider",
+      "--output_format=valueset",
       "--reset-results",
       "--upload-results",
-      "--results-label=Patch"
+      "--results-label=Patch",
+      "--output-dir=[TMP_BASE]/perf-test-output_tmp_1"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Performance Test (With Patch) 1 of 1",
@@ -482,6 +484,23 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/perf-test-output_tmp_1/results-valueset.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Reading valueset results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -760,8 +779,10 @@
       "-v",
       "--browser=release",
       "sunspider",
+      "--output_format=valueset",
       "--upload-results",
-      "--results-label=TOT"
+      "--results-label=TOT",
+      "--output-dir=[TMP_BASE]/perf-test-output_tmp_2"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Performance Test (Without Patch) 1 of 1",
@@ -772,9 +793,124 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/perf-test-output_tmp_2/results-valueset.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Reading valueset results (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/parse_metric_cmdline",
+      "[TMP_BASE]/perf-test-output_tmp_1/results-valueset.json",
+      "dummy/dummy",
+      "--valueset"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Parse metric values",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  1, @@@",
+      "@@@STEP_LOG_LINE@json.output@  1, @@@",
+      "@@@STEP_LOG_LINE@json.output@  1@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/parse_metric_cmdline",
+      "[TMP_BASE]/perf-test-output_tmp_2/results-valueset.json",
+      "dummy/dummy",
+      "--valueset"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Parse metric values (2)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  9, @@@",
+      "@@@STEP_LOG_LINE@json.output@  9, @@@",
+      "@@@STEP_LOG_LINE@json.output@  9@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Results"
+    "name": "Results",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@",
+      "===== PERF TRY JOB RESULTS =====",
+      "",
+      "Test Command: src/tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset",
+      "Test Metric: dummy/dummy",
+      "Relative Change: 88.88889%",
+      "Standard Error: +- 0.00000 delta",
+      "",
+      "Revision    Mean        Std.Error",
+      "Patch       1.0         0.0",
+      "No Patch    9.0         0.0",
+      "@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/parse_metric_cmdline",
+      "[TMP_BASE]/perf-test-output_tmp_1/results-valueset.json",
+      "dummy/dummy",
+      "--valueset"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Parse metric values (3)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  1, @@@",
+      "@@@STEP_LOG_LINE@json.output@  1, @@@",
+      "@@@STEP_LOG_LINE@json.output@  1@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/parse_metric_cmdline",
+      "[TMP_BASE]/perf-test-output_tmp_2/results-valueset.json",
+      "dummy/dummy",
+      "--valueset"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Parse metric values (4)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  9, @@@",
+      "@@@STEP_LOG_LINE@json.output@  9, @@@",
+      "@@@STEP_LOG_LINE@json.output@  9@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -784,7 +920,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"bisect_bot\": \"linux_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\", \"cloud_link\": \"\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release sunspider\", \"metric\": \"dummy/dummy\", \"profiler_links\": [], \"status\": \"completed\", \"try_job_id\": null}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"bisect_bot\": \"linux_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\", \"change\": 88.88888888888889, \"cloud_link\": \"\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset\", \"metric\": \"dummy/dummy\", \"profiler_links\": [], \"result\": \"Revision    Mean        Std.Error\\nPatch       1.0         0.0\\nNo Patch    9.0         0.0\", \"status\": \"completed\", \"std_err\": 0.0, \"try_job_id\": null}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
