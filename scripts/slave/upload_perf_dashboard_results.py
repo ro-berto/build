@@ -16,10 +16,8 @@ from slave import slave_utils
 
 def _GetMainRevision(commit_pos, build_dir, revision=None):
   """Return revision to use as the numerical x-value in the perf dashboard.
-
   This will be used as the value of "rev" in the data passed to
   results_dashboard.SendResults.
-
   In order or priority, this function could return:
     1. The value of "got_revision_cp" in build properties.
     3. An SVN number, git commit position, or git commit hash.
@@ -80,4 +78,4 @@ def main(args):
 
 
 if __name__ == '__main__':
-  sys.exit(main((sys.argv)))
+  sys.exit(main((sys.argv[1:])))
