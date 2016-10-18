@@ -352,7 +352,7 @@ TRYBOTS = freeze({
         'buildername': 'Chromium Linux TSan Builder',
         'tester': 'Linux TSan Tests',
       }),
-      'linux_chromium_headless_dbg': simple_bot({
+      'linux_chromium_headless_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Headless Linux (dbg)',
       }),

@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/linux_chromium_headless_dbg",
+      "[BUILDER_CACHE]/linux_chromium_headless_rel",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -46,7 +46,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_chromium_headless_dbg",
+    "cwd": "[BUILDER_CACHE]/linux_chromium_headless_rel",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -191,7 +191,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_chromium_headless_dbg/src",
+    "cwd": "[BUILDER_CACHE]/linux_chromium_headless_rel/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -204,16 +204,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux_chromium_headless_dbg/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/linux_chromium_headless_rel/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/linux_chromium_headless_dbg/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/linux_chromium_headless_rel/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"linux_chromium_headless_dbg\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"linux_chromium_headless_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -226,12 +226,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/linux_chromium_headless_dbg/src/testing/buildbot/chromium.fyi.json",
+      "[BUILDER_CACHE]/linux_chromium_headless_rel/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux_chromium_headless_dbg/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux_chromium_headless_rel/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -243,7 +243,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_chromium_headless_dbg/src",
+    "cwd": "[BUILDER_CACHE]/linux_chromium_headless_rel/src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -257,7 +257,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/linux_chromium_headless_dbg/src/testing/buildbot/trybot_analyze_config.json",
+      "[BUILDER_CACHE]/linux_chromium_headless_rel/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
