@@ -19,7 +19,7 @@ For a list of command-line options, call this script with '--help'.
 """
 
 import logging
-import optparse
+import argparse
 import os
 import re
 import socket
@@ -29,10 +29,6 @@ from common import archive_utils
 from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
-
-# Directory name, above the build directory, in which test results can be
-# found if no --results-dir option is given.
-RESULT_DIR = 'layout-test-results'
 
 
 def _CollectArchiveFiles(output_dir):
@@ -67,39 +63,30 @@ def _IsActualResultFile(name):
           ('.txt', '.png', '.checksum', '.wav'))
 
 
-def archive_layout(options):
-  chrome_dir = os.path.abspath(options.build_dir)
-  results_dir_basename = os.path.basename(options.results_dir)
-  if options.results_dir is not None:
-    options.results_dir = os.path.abspath(os.path.join(options.build_dir,
-                                                       options.results_dir))
-  else:
-    options.results_dir = chromium_utils.FindUpward(chrome_dir, RESULT_DIR)
-  print 'Archiving results from %s' % options.results_dir
-  staging_dir = options.staging_dir or slave_utils.GetStagingDir(chrome_dir)
+def archive_layout(args):
+  chrome_dir = os.path.abspath(args.build_dir)
+  results_dir_basename = os.path.basename(args.results_dir)
+  args.results_dir = os.path.abspath(args.results_dir)
+  print 'Archiving results from %s' % args.results_dir
+  staging_dir = args.staging_dir or slave_utils.GetStagingDir(chrome_dir)
   print 'Staging in %s' % staging_dir
   if not os.path.exists(staging_dir):
     os.makedirs(staging_dir)
 
-  actual_file_list = _CollectArchiveFiles(options.results_dir)
+  actual_file_list = _CollectArchiveFiles(args.results_dir)
   zip_file = chromium_utils.MakeZip(staging_dir,
                                     results_dir_basename,
                                     actual_file_list,
-                                    options.results_dir)[1]
-
-  # Extract the build name of this slave (e.g., 'chrome-release') from its
-  # configuration file if not provided as a param.
-  build_name = options.builder_name or slave_utils.SlaveBuildName(chrome_dir)
-  build_name = re.sub('[ .()]', '_', build_name)
+                                    args.results_dir)[1]
 
   wc_dir = os.path.dirname(chrome_dir)
   last_change = slave_utils.GetHashOrRevision(wc_dir)
 
-  # TODO(dpranke): Is it safe to assume build_number is not blank? Should we
-  # assert() this ?
-  build_number = str(options.build_number)
+  builder_name = re.sub('[ .()]', '_', args.builder_name)
+  build_number = str(args.build_number)
+
   print 'last change: %s' % last_change
-  print 'build name: %s' % build_name
+  print 'build name: %s' % builder_name
   print 'build number: %s' % build_number
   print 'host name: %s' % socket.gethostname()
 
@@ -112,13 +99,13 @@ def archive_layout(options):
     f.write(last_change)
 
   # Copy the results to a directory archived by build number.
-  gs_base = '/'.join([options.gs_bucket, build_name, build_number])
-  gs_acl = options.gs_acl
+  gs_base = '/'.join([args.gs_bucket, builder_name, build_number])
+  gs_acl = args.gs_acl
   # These files never change, cache for a year.
   cache_control = "public, max-age=31556926"
   slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
                              cache_control=cache_control)
-  slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
+  slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
                             cache_control=cache_control)
   slave_utils.GSUtilCopyFile(last_change_file,
                              gs_base + '/' + results_dir_basename,
@@ -128,11 +115,11 @@ def archive_layout(options):
   # And also to the 'results' directory to provide the 'latest' results
   # and make sure they are not cached at all (Cloud Storage defaults to
   # caching w/ a max-age=3600).
-  gs_base = '/'.join([options.gs_bucket, build_name, 'results'])
+  gs_base = '/'.join([args.gs_bucket, builder_name, 'results'])
   cache_control = 'no-cache'
   slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
                              cache_control=cache_control)
-  slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl,
+  slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
                             cache_control=cache_control)
   slave_utils.GSUtilCopyFile(last_change_file,
                              gs_base + '/' + results_dir_basename,
@@ -141,46 +128,36 @@ def archive_layout(options):
   return 0
 
 
-def _ParseOptions():
-  option_parser = optparse.OptionParser()
-  option_parser.add_option('', '--build-dir', help='ignored')
-  option_parser.add_option('', '--results-dir',
-                           help='path to layout test results, relative to '
-                                'the build_dir')
-  option_parser.add_option('', '--builder-name',
-                           default=None,
-                           help='The name of the builder running this script.')
-  option_parser.add_option('', '--build-number',
-                           default=None,
-                           help=('The build number of the builder running'
-                                 'this script.'))
-  option_parser.add_option('', '--gs-bucket',
-                           default=None,
-                           help=('The google storage bucket to upload to. '
-                                 'If provided, this script will upload to gs '
-                                 'instead of the master.'))
-  option_parser.add_option('', '--gs-acl',
-                           default=None,
-                           help=('The ACL of the google storage files.'))
-  option_parser.add_option('--staging-dir',
-                           help='Directory to use for staging the archives. '
-                                'Default behavior is to automatically detect '
-                                'slave\'s build directory.')
-  chromium_utils.AddPropertiesOptions(option_parser)
-  options, _ = option_parser.parse_args()
-  if not options.gs_bucket:
-      option_parser.error('--gs-bucket is required.')
-  options.build_dir = build_directory.GetBuildOutputDirectory()
-  return options
+def _ParseArgs():
+  parser = argparse.ArgumentParser()
+  # TODO(crbug.com/655798): Make --build-dir not ignored.
+  parser.add_argument('--build-dir', help='ignored')
+  parser.add_argument('--results-dir', required=True,
+                      help='path to layout test results')
+  parser.add_argument('--builder-name', required=True,
+                      help='The name of the builder running this script.')
+  parser.add_argument('--build-number', type=int, required=True,
+                      help='Build number of the builder running this script.')
+  parser.add_argument('--gs-bucket', required=True,
+                      help='The Google Storage bucket to upload to.')
+  parser.add_argument('--gs-acl',
+                      help='The access policy for Google Storage files.')
+  parser.add_argument('--staging-dir',
+                      help='Directory to use for staging the archives. '
+                           'Default behavior is to automatically detect '
+                           'slave\'s build directory.')
+  args = parser.parse_args()
+  args.build_dir = build_directory.GetBuildOutputDirectory()
+  return args
 
 
 def main():
-  options = _ParseOptions()
+  args = _ParseArgs()
   logging.basicConfig(level=logging.INFO,
                       format='%(asctime)s %(filename)s:%(lineno)-3d'
                              ' %(levelname)s %(message)s',
                       datefmt='%y%m%d %H:%M:%S')
-  return archive_layout(options)
+  return archive_layout(args)
 
 
 if '__main__' == __name__:
