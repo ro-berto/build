@@ -30,9 +30,6 @@ def libyuv_android(c):
   if c.TARGET_ARCH == 'intel' and c.TARGET_BITS == 32:
     c.gn_args.append('android_full_debug=true')
 
-  # Needs minimal symbols due to 4GB file size limit, see crbug.com/648948.
-  c.gn_args.append('symbol_level=1')
-
   _libyuv_static_build(c)
 
 @CONFIG_CTX(includes=['android_clang'])

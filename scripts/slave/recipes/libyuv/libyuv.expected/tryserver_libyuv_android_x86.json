@@ -149,7 +149,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Debug",
-      "--args=android_full_debug=true symbol_level=1 is_component_build=false symbol_level=2 dcheck_always_on=true is_debug=true target_os=\"android\" target_cpu=\"x86\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+      "--args=android_full_debug=true is_component_build=false symbol_level=2 dcheck_always_on=true is_debug=true target_os=\"android\" target_cpu=\"x86\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "gn"
