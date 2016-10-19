@@ -109,6 +109,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bucket\": \"mock-gcs-bucket\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
@@ -165,7 +166,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test 1\", \n      \"device type\": \"fake device 1\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake included test 1\", \n      \"device type\": \"fake device 1\", \n      \"id\": \"1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake included test 2\", \n      \"device type\": \"fake device 1\", \n      \"id\": \"2\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 2\", \n      \"device type\": \"fake device 2\", \n      \"id\": \"3\", \n      \"os\": \"7.1\"\n    }, \n    {\n      \"app\": \"fake included test 1\", \n      \"device type\": \"fake device 2\", \n      \"id\": \"4\", \n      \"os\": \"7.1\"\n    }, \n    {\n      \"app\": \"fake included test 2\", \n      \"device type\": \"fake device 2\", \n      \"id\": \"5\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"bucket\": \"mock-gcs-bucket\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test 1\", \n      \"device type\": \"fake device 1\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake included test 1\", \n      \"device type\": \"fake device 1\", \n      \"id\": \"1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake included test 2\", \n      \"device type\": \"fake device 1\", \n      \"id\": \"2\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 2\", \n      \"device type\": \"fake device 2\", \n      \"id\": \"3\", \n      \"os\": \"7.1\"\n    }, \n    {\n      \"app\": \"fake included test 1\", \n      \"device type\": \"fake device 2\", \n      \"id\": \"4\", \n      \"os\": \"7.1\"\n    }, \n    {\n      \"app\": \"fake included test 2\", \n      \"device type\": \"fake device 2\", \n      \"id\": \"5\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -1184,6 +1185,45 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "archive fake test 1 (fake device 1 iOS 8.1)"
+  },
+  {
+    "cmd": [
+      "tar",
+      "--create",
+      "--directory",
+      "[TMP_BASE]/0_tmp_2/0",
+      "--file",
+      "[TMP_BASE]/0_tmp_2/test_data.tar.gz",
+      "--gzip",
+      "--verbose",
+      "."
+    ],
+    "name": "archive fake test 1 (fake device 1 iOS 8.1).tar",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/0_tmp_2/test_data.tar.gz",
+      "gs://mock-gcs-bucket/chromium.fake/ios/0/fake test 1 (fake device 1 iOS 8.1)/test_data.tar.gz"
+    ],
+    "name": "archive fake test 1 (fake device 1 iOS 8.1).gsutil upload test_data.tar.gz",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@test_data.tar.gz@https://storage.cloud.google.com/mock-gcs-bucket/chromium.fake/ios/0/fake test 1 (fake device 1 iOS 8.1)/test_data.tar.gz@@@"
     ]
   },
   {

@@ -3,18 +3,19 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
+  'build/file',
+  'build/filter',
+  'build/gsutil',
+  'build/isolate',
+  'build/swarming',
+  'build/swarming_client',
   'chromium',
   'chromium_checkout',
+  'depot_tools/bot_update',
   'depot_tools/gclient',
-  'build/file',
-  'filter',
-  'isolate',
+  'depot_tools/tryserver',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'swarming',
-  'swarming_client',
-  'depot_tools/tryserver',
 ]

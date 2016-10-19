@@ -5,6 +5,7 @@
 DEPS = [
   'ios',
   'recipe_engine/json',
+  'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
@@ -32,6 +33,7 @@ def GenTests(api):
       },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
+      'bucket': 'mock-gcs-bucket',
       'tests': [
         {
           'app': 'fake test 1',
@@ -58,6 +60,9 @@ def GenTests(api):
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output('1.2.3'),
+    )
+    + api.path.exists(
+        api.path['tmp_base'].join('0_tmp_2', '0'),
     )
   )
 

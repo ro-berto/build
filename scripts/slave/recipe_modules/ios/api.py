@@ -48,6 +48,11 @@ class iOSApi(recipe_api.RecipeApi):
     return self.m.bot_update.ensure_checkout(**kwargs)
 
   @property
+  def bucket(self):
+    assert self.__config is not None
+    return self.__config.get('bucket')
+
+  @property
   def configuration(self):
     assert self.__config is not None
     return self.__config['configuration']
@@ -735,12 +740,45 @@ class iOSApi(recipe_api.RecipeApi):
           step_result.presentation.step_text = '%s<br />%s' % (
             step_result.presentation.step_text, test_summary_json['step_text'])
 
+      # Upload any test data.
+      task_output = self.m.path.join(task.task.task_output_dir, '0')
+      if self.bucket and self.m.path.exists(task_output):
+        with self.m.step.nest('archive %s' % task.step_name):
+          local_archive = self.m.path.join(
+              task.task.task_output_dir, 'test_data.tar.gz')
+          self.m.step('tar', [
+            'tar',
+            '--create',
+            '--directory', task_output,
+            '--file', local_archive,
+            '--gzip',
+            '--verbose',
+            '.',
+          ])
+          self.m.gsutil.upload(
+            local_archive,
+            self.bucket,
+            self.m.path.join(
+                self.archive_path, task.step_name, 'test_data.tar.gz'),
+            link_name='test_data.tar.gz',
+            name='upload test_data.tar.gz',
+          )
+
     if test_failures:
       raise self.m.step.StepFailure(
         'Failed %s.' % ', '.join(sorted(set(test_failures + infra_failures))))
     elif infra_failures:
       raise self.m.step.InfraFailure(
         'Failed %s.' % ', '.join(sorted(set(infra_failures))))
+
+  @property
+  def archive_path(self):
+    """Returns the path on Google Storage to archive artifacts to."""
+    return '%s/%s/%s' % (
+        self.m.properties['mastername'],
+        self.m.properties['buildername'],
+        str(self.m.properties['buildnumber'] or 0),
+    )
 
   @property
   def most_recent_app_dir(self):
