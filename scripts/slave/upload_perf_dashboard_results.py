@@ -64,7 +64,7 @@ def main(args):
       json.loads(options.chartjson_results),
       revisions, stripped_test_name, options.perf_id,
       options.buildername, options.buildnumber,
-      None, reference_build)
+      {}, reference_build)
   if dashboard_json:
     logging.debug(json.dumps(dashboard_json , indent=2))
     results_dashboard.SendResults(
