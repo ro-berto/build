@@ -66,14 +66,17 @@ def wait_termination(pid):
                   NotDiedError is raised.
   """
 
+  # TODO(yyanagisawa): need to handle the case cloudtail is not running?
   os.kill(pid, signal.SIGINT)
 
+  print('SIGINT has been sent to process %d. '
+        'Going to wait for the process finishes.' % pid)
   if os.name == 'nt':
     try:
       os.waitpid(pid, 0)
     except OSError as e:
       if e.errno == errno.ECHILD:
-        print('process of pid %d died before waitpitd' % pid)
+        print('process %d died before waitpitd' % pid)
         return
       raise e
   else:
@@ -115,12 +118,14 @@ def main():
       # cloudtail flushes log and terminates
       # within 5 seconds when it recieves SIGINT.
       pid = int(f.read())
-      try:
-        wait_termination(pid)
-      except (OSError, NotDiedError) as e:
-        os.kill(pid, signal.SIGKILL)
-        print('killed process %d due to Error %s' % (pid, e))
-        raise e
+    try:
+      wait_termination(pid)
+    except (OSError, NotDiedError) as e:
+      print('Going to send SIGTERM to process %d due to Error %s' % (pid, e))
+      # Since Windows does not have SIGKILL, we need to use SIGTERM.
+      os.kill(pid, signal.SIGTERM)
+      # We do not reraise because I believe not suspending the process
+      # is more important than completely killing cloudtail.
 
 
 if '__main__' == __name__:
