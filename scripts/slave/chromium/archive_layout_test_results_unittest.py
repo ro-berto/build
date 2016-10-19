@@ -12,31 +12,43 @@ BASE_DIR = os.path.join(
 sys.path.append(os.path.join(BASE_DIR, 'scripts'))
 sys.path.append(os.path.join(BASE_DIR, 'site_config'))
 
-from slave.chromium import archive_layout_test_results
+from slave.chromium import archive_layout_test_results as archive_module
 
 
 class ArchiveLayoutTestResultsTest(unittest.TestCase):
 
-  def test_IsActualResultFile(self):
-    self.assertTrue(archive_layout_test_results._IsActualResultFile(
-        'foo-crash-log.txt'))
-    self.assertTrue(archive_layout_test_results._IsActualResultFile(
-        'foo-stack.txt'))
+  def testIsIncludedInZipArchiveFilesCrashLogs(self):
+    self.assertTrue(archive_module._IsIncludedInZipArchive('foo-crash-log.txt'))
+    self.assertTrue(archive_module._IsIncludedInZipArchive('foo-stack.txt'))
 
-    self.assertFalse(archive_layout_test_results._IsActualResultFile(
-        'crash-logging-foo.txt'))
-    self.assertFalse(archive_layout_test_results._IsActualResultFile(
-        'stack-foo.txt'))
+  def testIsIncludedInZipArchiveFilesNonCrashLogFiles(self):
+    self.assertFalse(archive_module._IsIncludedInZipArchive('crashlog-foo.txt'))
+    self.assertFalse(archive_module._IsIncludedInZipArchive('stack-foo.txt'))
 
-    self.assertTrue(archive_layout_test_results._IsActualResultFile(
-        'foo-actual.txt'))
-    self.assertTrue(archive_layout_test_results._IsActualResultFile(
-        'foo-actual.png'))
+  def testIsIncludedInZipArchiveFilesActualFiles(self):
+    self.assertTrue(archive_module._IsIncludedInZipArchive('foo-actual.txt'))
+    self.assertTrue(archive_module._IsIncludedInZipArchive('foo-actual.png'))
 
-    self.assertFalse(archive_layout_test_results._IsActualResultFile(
-        'foo-actual.jpg'))
-    self.assertFalse(archive_layout_test_results._IsActualResultFile(
-        'foo-actual.html'))
+  def testIsIncludedInZipArchiveFilesActualFilesWrongExtension(self):
+    self.assertFalse(archive_module._IsIncludedInZipArchive('foo-actual.jpg'))
+    self.assertFalse(archive_module._IsIncludedInZipArchive('foo-actual.html'))
+
+  def testIsIncludedInZipArchiveFilesExpectedFiles(self):
+    self.assertTrue(archive_module._IsIncludedInZipArchive('a-expected.txt'))
+    self.assertTrue(archive_module._IsIncludedInZipArchive('a-expected.html'))
+
+  def testIsIncludedInZipArchiveFilesDiffFiles(self):
+    self.assertTrue(archive_module._IsIncludedInZipArchive('a-diff.png'))
+    self.assertTrue(archive_module._IsIncludedInZipArchive('a-diff.txt'))
+    self.assertTrue(archive_module._IsIncludedInZipArchive('a-wdiff.txt'))
+    self.assertFalse(archive_module._IsIncludedInZipArchive('a-diff.png.foo'))
+
+  def testIsIncludedInZipArchiveFilesOtherNegativeCases(self):
+    self.assertFalse(archive_module._IsIncludedInZipArchive('results.html'))
+    self.assertFalse(archive_module._IsIncludedInZipArchive('my-test.html'))
+
+  def testIsIncludedInZipArchiveFilesJson(self):
+    self.assertTrue(archive_module._IsIncludedInZipArchive('results.json'))
 
 
 if __name__ == '__main__':

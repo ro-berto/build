@@ -31,36 +31,44 @@ from slave import build_directory
 from slave import slave_utils
 
 
-def _CollectArchiveFiles(output_dir):
-  """Returns a list of actual layout test result files to archive."""
-  actual_file_list = []
+def _CollectZipArchiveFiles(output_dir):
+  """Returns a list of layout test result files to archive in a zip file."""
+  file_list = []
 
   for path, _, files in os.walk(output_dir):
     rel_path = path[len(output_dir + '\\'):]
     for name in files:
-      if _IsActualResultFile(name):
-        actual_file_list.append(os.path.join(rel_path, name))
-      elif name.endswith('.json'):
-        actual_file_list.append(os.path.join(rel_path, name))
+      if _IsIncludedInZipArchive(name):
+        file_list.append(os.path.join(rel_path, name))
 
   if os.path.exists(os.path.join(output_dir, 'results.html')):
-    actual_file_list.append('results.html')
+    file_list.append('results.html')
 
   if sys.platform == 'win32':
     if os.path.exists(os.path.join(output_dir, 'access_log.txt')):
-      actual_file_list.append('access_log.txt')
+      file_list.append('access_log.txt')
     if os.path.exists(os.path.join(output_dir, 'error_log.txt')):
-      actual_file_list.append('error_log.txt')
+      file_list.append('error_log.txt')
 
-  return actual_file_list
+  return file_list
 
 
-def _IsActualResultFile(name):
+def _IsIncludedInZipArchive(name):
+  """Returns True if a file should be included in the zip, False otherwise."""
   if '-stack.' in name or '-crash-log.' in name:
     return True
   extension = os.path.splitext(name)[1]
-  return ('-actual.' in name and extension in
-          ('.txt', '.png', '.checksum', '.wav'))
+  if '-actual.' in name and extension in ('.txt', '.png', '.checksum', '.wav'):
+    return True
+  if '-expected.' in name:
+    return True
+  if '-wdiff.' in name:
+    return True
+  if name.endswith('-diff.txt') or name.endswith('-diff.png'):
+    return True
+  if name.endswith('.json'):
+    return True
+  return False
 
 
 def archive_layout(args):
@@ -73,10 +81,10 @@ def archive_layout(args):
   if not os.path.exists(staging_dir):
     os.makedirs(staging_dir)
 
-  actual_file_list = _CollectArchiveFiles(args.results_dir)
+  file_list = _CollectZipArchiveFiles(args.results_dir)
   zip_file = chromium_utils.MakeZip(staging_dir,
                                     results_dir_basename,
-                                    actual_file_list,
+                                    file_list,
                                     args.results_dir)[1]
 
   wc_dir = os.path.dirname(chrome_dir)
