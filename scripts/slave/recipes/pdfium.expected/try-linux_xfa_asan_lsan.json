@@ -276,7 +276,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "unittests"
   },
@@ -286,7 +286,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "embeddertests"
   },
@@ -300,7 +300,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "javascript tests"
   },
@@ -314,7 +314,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "pixel tests"
   },
@@ -328,7 +328,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1:allocator_may_return_null=1"
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "corpus tests"
   },

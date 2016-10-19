@@ -27,8 +27,7 @@ PROPERTIES = {
   'target_os': Property(default=None, kind=str),
 }
 
-def _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang,
-                   target_os):
+def _CheckoutSteps(api, target_os):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient.
   api.gclient.set_config('pdfium')
   if target_os:
@@ -38,7 +37,7 @@ def _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang,
   api.gclient.runhooks()
 
 
-def _OutPath(api, memory_tool, skia, xfa, v8, clang, rel):
+def _OutPath(memory_tool, skia, xfa, v8, clang, rel):
   out_dir = 'release' if rel else 'debug'
   if skia:
     out_dir += "_skia"
@@ -133,8 +132,12 @@ def _RunTests(api, memory_tool, v8, out_dir):
 
   env = {}
   if memory_tool == 'asan':
-    env.update({
-        'ASAN_OPTIONS': 'detect_leaks=1:allocator_may_return_null=1'})
+    options = ['detect_leaks=1',
+               'allocator_may_return_null=1',
+               'symbolize=1',
+               'external_symbolizer_path='
+               'third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer']
+    env.update({'ASAN_OPTIONS': ' '.join(options)})
 
   unittests_path = str(api.path['checkout'].join('out', out_dir,
                                                  'pdfium_unittests'))
@@ -171,9 +174,9 @@ def _RunTests(api, memory_tool, v8, out_dir):
 
 def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, skip_test,
              target_os):
-  _CheckoutSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, target_os)
+  _CheckoutSteps(api, target_os)
 
-  out_dir = _OutPath(api, memory_tool, skia, xfa, v8, clang, rel)
+  out_dir = _OutPath(memory_tool, skia, xfa, v8, clang, rel)
 
   _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
                target_os, out_dir)
