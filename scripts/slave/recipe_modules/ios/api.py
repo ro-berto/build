@@ -633,6 +633,19 @@ class iOSApi(recipe_api.RecipeApi):
             'Requested unsupported device type.')
           continue
 
+      spec = [
+        self.m.properties['mastername'],
+        self.m.properties['buildername'],
+        task.test['app'],
+        self.platform,
+        task.test['device type'],
+        task.test['os'],
+        swarming_task.dimensions['xcode_version'],
+      ]
+      # e.g.
+      # chromium.mac:ios-simulator:base_unittests:simulator:iPad Air:10.0:8.0
+      swarming_task.tags.add('spec_name:%s' % str(':'.join(spec)))
+
       swarming_task.tags.add('device_type:%s' % str(task.test['device type']))
       swarming_task.tags.add('ios_version:%s' % str(task.test['os']))
       swarming_task.tags.add('platform:%s' % self.platform)

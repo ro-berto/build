@@ -744,6 +744,8 @@
       "--tag",
       "slavename:fake-vm",
       "--tag",
+      "spec_name:tryserver.fake:ios-simulator:fake tests:simulator:fake device:8.1:fake xcode version",
+      "--tag",
       "stepname:fake tests (fake device iOS 8.1) on Mac",
       "--tag",
       "test:fake tests",
