@@ -31,6 +31,8 @@ MASTERS = freeze({
 
 AFFECTED_PATHS = (
   'third_party/WebKit/Source/devtools',
+  'third_party/WebKit/Source/core/inspector/browser_protocol.json',
+  'v8/src/inspector/js_protocol.json',
 )
 
 def should_skip_checks(api):
@@ -54,25 +56,11 @@ def RunSteps(api):
     joined_path = devtools_sub_path + sub_paths
     return api.path['checkout'].join(*joined_path)
 
-  devtools_path = get_devtools_path()
-  node_path = get_devtools_path('scripts', 'buildbot', 'node.py')
-  npm_modules_checkout_path = get_devtools_path('npm_modules')
-  eslint_path = get_devtools_path(
-      'npm_modules', 'node_modules', '.bin', 'eslint')
+  compile_frontend_path = get_devtools_path('scripts', 'compile_frontend.py')
+  api.python('compile frontend (closure compiler)', compile_frontend_path)
 
-  api.python('install node.js and npm', node_path, ['--version'])
-
-  # TODO(chenwilliam): instead of checkout here, add it as DEPS
-  api.git.checkout(
-      url='https://chromium.googlesource.com/deps/third_party/npm_modules',
-      ref='8451e3a3fae09eaa18ddeed0c069a8e2f0e3541c',
-      dir_path=npm_modules_checkout_path)
-
-  eslint_args = [
-    eslint_path, '-c', 'front_end/.eslintrc.js',
-    '--ignore-path', 'front_end/.eslintignore', 'front_end'
-  ]
-  api.python('run eslint', node_path, eslint_args, cwd=devtools_path)
+  # TODO(chenwilliam): re-enable npm step after open source approval
+  # See crbug.com/655848
 
 def GenTests(api):
   for mastername, config in MASTERS.iteritems():
