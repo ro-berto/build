@@ -277,11 +277,11 @@ class WebRTCApi(recipe_api.RecipeApi):
       annotate = 'gtest'
       test_type = test
       flakiness_dash = (not self.m.tryserver.is_tryserver and
-                        not self.m.chromium.c.runtests.memory_tool)
+                        not self.m.chromium.c.runtests.enable_memcheck)
 
-      # Dr Memory and Memcheck memory tools uses special scripts that doesn't
-      # play well with the gtest-parallel script.
-      if parallel and not self.m.chromium.c.runtests.memory_tool:
+      # Memcheck uses special scripts that don't play well with
+      # the gtest-parallel script.
+      if parallel and not self.m.chromium.c.runtests.enable_memcheck:
         test_executable = self.m.chromium.c.build_dir.join(
           self.m.chromium.c.build_config_fs, test)
         args = [test_executable, '--'] + args

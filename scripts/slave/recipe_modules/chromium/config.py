@@ -19,7 +19,6 @@ HOST_ARCHS = ('intel',)
 TARGET_ARCHS = HOST_ARCHS + ('arm', 'mips', 'mipsel')
 TARGET_CROS_BOARDS = (None, 'x86-generic')
 BUILD_CONFIGS = ('Release', 'Debug', 'Coverage')
-MEMORY_TOOLS = ('memcheck', 'drmemory_full', 'drmemory_light')
 PROJECT_GENERATORS = ('gyp', 'gn', 'mb')
 
 def check(val, potentials):
@@ -82,7 +81,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       args = List(basestring),
     ),
     runtests = ConfigGroup(
-      memory_tool = Single(basestring, required=False),
+      enable_memcheck = Single(bool, empty_val=False, required=False),
       memory_tests_runner = Single(Path),
       enable_lsan = Single(bool, empty_val=False, required=False),
       test_args = List(basestring),
@@ -455,7 +454,7 @@ def prebuilt_instrumented_libraries(c):
 
 @config_ctx(group='memory_tool')
 def memcheck(c):
-  _memory_tool(c, 'memcheck')
+  c.runtests.enable_memcheck = True
   c.gyp_env.GYP_DEFINES['build_for_tool'] = 'memcheck'
 
 @config_ctx(deps=['compiler'], group='memory_tool')
@@ -482,22 +481,6 @@ def syzyasan(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['win_z7'] = 1
   gyp_defs['chromium_win_pch'] = 0
-
-@config_ctx(group='memory_tool')
-def drmemory_full(c):
-  _memory_tool(c, 'drmemory_full')
-  c.gyp_env.GYP_DEFINES['build_for_tool'] = 'drmemory'
-
-@config_ctx(group='memory_tool')
-def drmemory_light(c):
-  _memory_tool(c, 'drmemory_light')
-  c.gyp_env.GYP_DEFINES['build_for_tool'] = 'drmemory'
-
-def _memory_tool(c, tool):
-  if tool not in MEMORY_TOOLS:  # pragma: no cover
-    raise BadConf('"%s" is not a supported memory tool, the supported ones '
-                  'are: %s' % (tool, ','.join(MEMORY_TOOLS)))
-  c.runtests.memory_tool = tool
 
 @config_ctx()
 def lto(c):

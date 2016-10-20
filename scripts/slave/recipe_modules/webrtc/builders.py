@@ -168,26 +168,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'Win DrMemory Full': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['drmemory_full'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'Win DrMemory Light': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['drmemory_light'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
       'Win SyzyASan': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['syzyasan'],
@@ -929,26 +909,6 @@ BUILDERS = freeze({
         'chromium_apply_config': ['syzyasan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'win_drmemory_light': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['drmemory_light'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-      'win_drmemory_full': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['drmemory_full'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',

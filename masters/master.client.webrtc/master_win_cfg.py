@@ -36,8 +36,6 @@ def Update(c):
           'Win32 Release (Clang)',
           'Win64 Debug (Clang)',
           'Win64 Release (Clang)',
-          'Win DrMemory Light',
-          'Win DrMemory Full',
           'Win SyzyASan',
       ]),
   ])
@@ -60,16 +58,6 @@ def Update(c):
     {'name': 'Win32 Release (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win64 Debug (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win64 Release (Clang)', 'slavebuilddir': 'win_clang'},
-    {
-      'name': 'Win DrMemory Light',
-      'category': 'compile',
-      'slavebuilddir': 'win-drmem',
-    },
-    {
-      'name': 'Win DrMemory Full',
-      'category': 'compile',
-      'slavebuilddir': 'win-drmem',
-    },
     {'name': 'Win SyzyASan', 'slavebuilddir': 'win-syzyasan'},
   ]
 
