@@ -103,6 +103,12 @@ def TestSpec(config_name, perf_id, platform, target_bits,
   return spec
 
 
+def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64):
+  spec = TestSpec('chromium_perf', perf_id, platform, target_bits)
+  spec['enable_swarming'] = True
+  SPEC['builders'][name] = spec
+
+
 def _AddBuildSpec(
   name, platform, target_bits=64, add_to_bisect=False, enable_swarming=False):
   if target_bits == 64:
@@ -182,6 +188,8 @@ _AddTestSpec('Mac Retina Perf', 'chromium-rel-mac-retina', 'mac',
              num_host_shards=5)
 _AddTestSpec('Mac HDD Perf', 'chromium-rel-mac-hdd', 'mac',
              num_host_shards=5)
+_AddIsolatedTestSpec('Mac Pro 10.11 Perf', 'chromium-rel-mac11-pro', 'mac')
+_AddIsolatedTestSpec('Mac Air 10.11 Perf', 'chromium-rel-mac11-air', 'mac')
 
 
 _AddTestSpec('Linux Perf', 'linux-release', 'linux',
