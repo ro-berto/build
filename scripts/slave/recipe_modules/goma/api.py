@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
 from contextlib import contextmanager
 
 from recipe_engine import recipe_api
@@ -76,6 +77,23 @@ print jobs
     self._goma_jobs = int(step_result.stdout)
 
     return self._goma_jobs
+
+  def remove_j_flag(self, command):
+    """Remove -j flag from command.
+    This function elimitnates -j flag from command for
+    '-j', '80' style and '-j80' style.
+
+    Args:
+      command: List of command line arg.
+    """
+    parallel_flag_regexp = re.compile('-j\d*')
+    for i in range(len(command)):
+      if (isinstance(command[i], str) and
+          parallel_flag_regexp.match(command[i])):
+        if command[i] == '-j':
+          command.pop(i + 1)
+        command.pop(i)
+        return
 
   def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):
@@ -294,7 +312,8 @@ print jobs
 
   @contextmanager
   def build_with_goma(self, ninja_log_outdir=None, ninja_log_compiler=None,
-                      ninja_log_command=None, env=None):
+                      ninja_log_command=None, env=None,
+                      allow_build_without_goma=False):
     """Make context wrapping goma start/stop.
 
     Args ninja_log_* are NOT used to run actual build in this context.
@@ -307,14 +326,44 @@ print jobs
                          This is used only to be sent as part of log,
                          NOT used to run actual build.
                          (e.g. ['ninja', '-C', 'out/Release', '-j', '100'])
+      env: Environment controlling goma behavior.
+           This should be used for ninja if allow_build_without_goma is True.
+           Otherwise, only used for goma behavior control.
+      allow_build_without_goma (bool):
+        If this is not True, goma starting failure is ignored.
+        This argument should be used with env.
+        If starting goma fails, env and ninja_log_command are modified.
 
     Raises:
       StepFailure or InfraFailure if it fails to build.
     """
-
     ninja_log_exit_status = 0
 
-    self.start(env)
+    if allow_build_without_goma:
+      assert(env is not None)
+      try:
+        self.start(env)
+      except:
+        env['GOMA_DISABLED'] = 'true'
+        self.remove_j_flag(ninja_log_command)
+        try:
+          yield
+        except self.m.step.StepFailure as e: # pragma: no cover
+          ninja_log_exit_status = e.retcode
+          raise e
+        except self.m.step.InfraFailure as e: # pragma: no cover
+          ninja_log_exit_status = -1
+          raise e
+        finally:
+          self._upload_logs(ninja_log_outdir=ninja_log_outdir,
+                            ninja_log_compiler=ninja_log_compiler,
+                            ninja_log_command=ninja_log_command,
+                            ninja_log_exit_status=ninja_log_exit_status,
+                            name='upload log goma start failed')
+        return
+    else:
+      self.start(env)
+
     try:
       yield
     except self.m.step.StepFailure as e: # pragma: no cover

@@ -74,6 +74,8 @@
       "restart"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "start_goma"
@@ -90,6 +92,8 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "start cloudtail"
@@ -137,6 +141,16 @@
   },
   {
     "cmd": [
+      "ninja",
+      "-C",
+      "out/Release",
+      "-j",
+      "500"
+    ],
+    "name": "ninja"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[CACHE]/cipd/goma/goma_ctl.py",
@@ -144,6 +158,8 @@
       "[CACHE]/cipd/goma/jsonstatus"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "goma_jsonstatus"
@@ -156,6 +172,8 @@
       "stat"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "goma_stat"
@@ -168,6 +186,8 @@
       "stop"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "stop_goma"
@@ -180,8 +200,20 @@
       "--upload-compiler-proxy-info",
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
+      "--ninja-log-outdir",
+      "out/Release",
+      "--ninja-log-compiler",
+      "goma",
+      "--ninja-log-command",
+      "['ninja', '-C', 'out/Release', '-j', '500']",
       "--ninja-log-exit-status",
-      "-1",
+      "0",
+      "--goma-stats-file",
+      "build_data_dir/goma_stats_proto",
+      "--goma-crash-report-id-file",
+      "build_data_dir/crash_report_id_file",
+      "--build-data-dir",
+      "build_data_dir",
       "--buildbot-buildername",
       "test_builder",
       "--buildbot-mastername",
@@ -192,6 +224,8 @@
       "1"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "upload_log"
