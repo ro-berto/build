@@ -333,7 +333,8 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "All"
     ],
     "env": {
       "GOMA_DISABLED": "true",
@@ -391,7 +392,7 @@
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]\\\\src\\\\out\\\\Release']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]\\\\src\\\\out\\\\Release', 'All']",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",

@@ -278,6 +278,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       # fails.
       command += ['-j', self.m.goma.recommended_goma_jobs]
 
+      if targets is not None:
+        # Add build targets to command ('All', 'chrome' etc).
+        command += targets
+
       # TODO(tikuta): Set disable_local_fallback option appropriately.
       with self.m.goma.build_with_goma(
           env=goma_env,
