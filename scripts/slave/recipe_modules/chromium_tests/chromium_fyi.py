@@ -177,6 +177,8 @@ SPEC = {
         steps.BlinkTest(extra_args=[
           '--additional-driver-flag',
           '--enable-blink-features=TraceWrappables',
+          '--additional-driver-flag',
+          '--js-flags=--incremental-marking-wrappers',
         ]),
       ],
       'testing': {
