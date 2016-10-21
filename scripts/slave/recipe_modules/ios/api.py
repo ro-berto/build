@@ -231,6 +231,7 @@ class iOSApi(recipe_api.RecipeApi):
         cfg.gyp_env.GYP_DEFINES = dict(v.split('=') for
                                        v in self.__config['GYP_DEFINES'])
     self.m.chromium.c = cfg
+    self.m.chromium.apply_config('force_mac_toolchain_off')
 
     use_goma = (cfg.gyp_env.GYP_DEFINES.get('use_goma') == '1' or
                 'use_goma=true' in self.__config['gn_args'])

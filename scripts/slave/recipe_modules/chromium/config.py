@@ -62,7 +62,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_MSVS_VERSION = Single(basestring, required=False),
       GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
       LLVM_DOWNLOAD_GOLD_PLUGIN = Single(int, required=False),
-      FORCE_MAC_TOOLCHAIN = Single(int, required=False),
     ),
     env = ConfigGroup(
       PATH = List(Path),
@@ -233,6 +232,10 @@ def ninja(c):
   if c.TARGET_CROS_BOARD:
     out_path += '_%s' % (c.TARGET_CROS_BOARD,)
   c.build_dir = c.CHECKOUT_PATH.join(out_path)
+
+@config_ctx()
+def force_mac_toolchain_off(c):
+  c.env.FORCE_MAC_TOOLCHAIN = 0
 
 @config_ctx()
 def msvs2013(c):

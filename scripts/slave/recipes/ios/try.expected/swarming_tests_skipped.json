@@ -271,7 +271,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=ios component=static_library fake gyp define 1='fake value 1' fake gyp define 2='fake value 2'"
+      "GYP_DEFINES": "OS=ios component=static_library fake gyp define 1='fake value 1' fake gyp define 2='fake value 2' target_arch=x64"
     },
     "name": "analyze",
     "~followup_annotations": [
