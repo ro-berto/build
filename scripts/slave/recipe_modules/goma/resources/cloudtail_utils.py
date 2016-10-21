@@ -65,11 +65,14 @@ def wait_termination(pid):
     NotDiedError: if cloudtail is running after 10 seconds waiting,
                   NotDiedError is raised.
   """
+
   try:
     os.kill(pid, signal.SIGINT)
   except OSError as e:
     # Already dead?
     if e.errno in (errno.ECHILD, errno.EPERM, errno.ESRCH):
+      print('Can\'t send SIGINT to process %d. Already dead? Errno %d.' %
+            (pid, e.errno))
       return
     raise
 
