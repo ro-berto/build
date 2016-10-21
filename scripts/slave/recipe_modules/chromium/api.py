@@ -285,17 +285,7 @@ class ChromiumApi(recipe_api.RecipeApi):
           ninja_log_compiler=self.c.compile_py.compiler or 'goma',
           ninja_log_command=command):
         if 'GOMA_DISABLED' in goma_env:
-          # Remove -j flag from command.
-          parallel_arg_regexp = re.compile('-j\d*')
-          for i in range(len(command)):
-            if  (isinstance(command[i], str) and
-                 parallel_arg_regexp.match(command[i])):
-              if command[i] == '-j':
-                # If '-j', '80' style is used, remove '80' here.
-                command.pop(i + 1)
-              # Remove '-j' or '-j80'.
-              command.pop(i)
-              break
+          self.m.goma.remove_j_flag(command)
 
           if self.m.platform.is_win:
             self.m.python('update windows env',
