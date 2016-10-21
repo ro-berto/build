@@ -24,14 +24,20 @@ class ChromiumPerfFyi(Master.Master1):
   # for each commit, so it uses buildbot "merge requests" feature that collapses
   # multiple build requests into a single build.
   #
-  # The chromium.perf -> chromium.perf.fyi build triggering is implemented using
-  # buildbucket which does not support build request merging. As a result,
-  # buildbucket builds are converted to buildbot build requests, one buildbot
-  # build is run (with a proper blamelist) and then, due to the issue,
-  # only one buildbucket build is updated with the build result and the rest
-  # are marked cancelled.
+  # The chromium.perf -> chromium.perf.fyi build triggering is implemented
+  # using buildbucket. Each buildbucket build is converted to one buildbot
+  # build request. When a slave becomes available, all build requests are
+  # merged into one build which is associated with combined changes of all
+  # build requests, aka blamelist. However buildbucket-buildbot integration
+  # does not support build request merging (crbug.com/451259), thus when the
+  # buildbot build is complete, only one buildbucket build is updated with the
+  # result and the rest of buildbucket builds stay leased in the buildbot
+  # process. They do not get rescheduled, but buildbot keeps extending their
+  # leases. In 48 hours buildbucket server forcibly cancels them by timeout. As
+  # a result, if the buildbot process was not restarted during these 48 hours,
+  # a single build is executed per revision.
   #
-  # However, nothing consumes buildbucket build results, including the builds
+  # Luckily, nothing consumes buildbucket build results, including the builds
   # that trigger them. Only humans care about the triggered builds and they
   # consume them by looking at the buildbot pages which don't have the issue,
   # because the build requests are correctly scheduled, and the build with a
