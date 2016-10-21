@@ -195,7 +195,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       elif ignored_failures:
         self.m.step.active_result.presentation.status = self.m.step.WARNING
 
-    if test.name == 'webkit_tests':
+      if test.name == 'webkit_tests':
         self._archive_retry_summary({
             'failures': sorted(new_failures),
             'ignored': sorted(ignored_failures)
