@@ -1146,36 +1146,39 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       step_result.presentation.logs['chartjson_info'] = \
           ['Info: Setting up arguments for perf dashboard']
 
-      """Produces a step that uploads results to dashboard"""
-      args = [
-          '--chartjson-results', json.dumps(results),
-          '--perf-id', self._perf_id,
-          '--results-url', self._results_url,
-          '--name', self._perf_dashboard_id,
-          '--buildername', api.properties['buildername'],
-          '--buildnumber', api.properties['buildnumber'],
-      ]
-      if api.chromium.c.build_dir:
-        args.extend(['--build-dir', api.chromium.c.build_dir])
-      if 'got_revision_cp' in api.properties:
-        args.extend(['--got-revision-cp', api.properties['got_revision_cp']])
-      if 'version' in api.properties:
-        args.extend(['--version', api.properties['version']])
-      if 'git_revision' in api.properties:
-        args.extend(['--git-revision', api.properties['git_revision']])
-      if 'got_webrtc_revision' in api.properties:
-        args.extend(['--got-webrtc-revision',
-            api.properties['got_webrtc_revision']])
-      if 'got_v8_revision' in api.properties:
-        args.extend(['--got-v8-revision', api.properties['got_v8_revision']])
+      with api.tempfile.temp_dir('chartjson_results_output') as temp_output_dir:
+        filepath = temp_output_dir.join('chartjson-results.json')
+        api.file.write(name='write results to file',
+                       path=filepath,
+                       data=json.dumps(results))
+        """Produces a step that uploads results to dashboard"""
+        args = [
+            '--chartjson-results-file', filepath,
+            '--perf-id', self._perf_id,
+            '--results-url', self._results_url,
+            '--name', self._perf_dashboard_id,
+            '--buildername', api.properties['buildername'],
+            '--buildnumber', api.properties['buildnumber'],
+        ]
+        if api.chromium.c.build_dir:
+          args.extend(['--build-dir', api.chromium.c.build_dir])
+        if 'got_revision_cp' in api.properties:
+          args.extend(['--got-revision-cp', api.properties['got_revision_cp']])
+        if 'version' in api.properties:
+          args.extend(['--version', api.properties['version']])
+        if 'git_revision' in api.properties:
+          args.extend(['--git-revision', api.properties['git_revision']])
+        if 'got_webrtc_revision' in api.properties:
+          args.extend(['--got-webrtc-revision',
+              api.properties['got_webrtc_revision']])
+        if 'got_v8_revision' in api.properties:
+          args.extend(['--got-v8-revision', api.properties['got_v8_revision']])
 
-      step_result.presentation.logs['chartjson_info'].append(
-          "Info: Setting up arguments for perf dashboard")
-      api.python(
-        'Upload Perf Dashboard Results',
-        api.chromium.package_repo_resource(
-            'scripts', 'slave', 'upload_perf_dashboard_results.py'),
-        args)
+        api.python(
+          'Upload Perf Dashboard Results',
+          api.chromium.package_repo_resource(
+              'scripts', 'slave', 'upload_perf_dashboard_results.py'),
+          args)
 
     except Exception as e:
       step_result.presentation.logs['chartjson_info'].append(

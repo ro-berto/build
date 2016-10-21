@@ -34,7 +34,7 @@ def main(args):
   # Parse options
   parser = optparse.OptionParser()
   parser.add_option('--name')
-  parser.add_option('--chartjson-results')
+  parser.add_option('--chartjson-results-file')
   parser.add_option('--got-revision-cp')
   parser.add_option('--build-dir')
   parser.add_option('--perf-id')
@@ -60,8 +60,11 @@ def main(args):
     options.git_revision, main_revision, blink_revision)
   reference_build = 'reference' in options.name
   stripped_test_name = options.name.replace('.reference', '')
+  results = {}
+  with open(options.chartjson_results_file) as f:
+    results = json.load(f)
   dashboard_json = results_dashboard.MakeDashboardJsonV1(
-      json.loads(options.chartjson_results),
+      results,
       revisions, stripped_test_name, options.perf_id,
       options.buildername, options.buildnumber,
       {}, reference_build)
