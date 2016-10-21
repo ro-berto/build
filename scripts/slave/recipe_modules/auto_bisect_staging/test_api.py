@@ -188,7 +188,12 @@ index 029be3b..2b3ea0a 100644
       if 'build_status' in item:
         result[item['hash']] = []
         for entry in item['build_status']:
-          result[item['hash']].append(self.m.json.output_stream(entry))
+          if type(entry) == type(dict()):
+            result[item['hash']].append(self.m.json.output_stream(entry))
+          else:
+            result[item['hash']].append(
+                self.m.json.output(entry, retcode=1) +
+                self.m.json.output_stream(entry, retcode=1))
     return result
 
   def __call__(self, config_items):

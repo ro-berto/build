@@ -297,12 +297,16 @@ class RevisionState(object):
 
   def _is_build_failed(self):
     api = self.bisector.api
-    result = api.m.buildbucket.get_build(
-        self.build_id,
-        api.m.service_account.get_json_path(api.SERVICE_ACCOUNT),
-        step_test_data=lambda: api.m.json.test_api.output_stream(
-            {'build': {'result': 'SUCCESS', 'status': 'COMPLETED'}}
-        ))
+    try:
+      result = api.m.buildbucket.get_build(
+          self.build_id,
+          api.m.service_account.get_json_path(api.SERVICE_ACCOUNT),
+          step_test_data=lambda: api.m.json.test_api.output_stream(
+              {'build': {'result': 'SUCCESS', 'status': 'COMPLETED'}}
+          ))
+    except api.m.step.StepFailure:  # pragma: no cover
+      # If the check fails, we cannot assume that the build is failed.
+      return False
     return (result.stdout['build']['status'] == 'COMPLETED' and
             result.stdout['build'].get('result') != 'SUCCESS')
 
