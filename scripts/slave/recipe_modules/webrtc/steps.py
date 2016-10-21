@@ -8,7 +8,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
 
   if test_suite == 'webrtc':
     for test, extra_args in sorted(api.NORMAL_TESTS.items()):
-      tests.append(WebRTCTest(test, revision, enable_swarming, **extra_args))
+      tests.append(WebRTCTest(test, enable_swarming=enable_swarming,
+                              revision=revision, **extra_args))
   elif test_suite == 'webrtc_baremetal':
     if api.m.platform.is_linux:
       f = api.m.path['checkout'].join
@@ -44,11 +45,11 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
                                  perf_id=api.c.PERF_ID))
   elif test_suite == 'android_swarming':
-    for test, extra_args in (sorted(api.ANDROID_DEVICE_TESTS.items()) +
-                             sorted(api.ANDROID_INSTRUMENTATION_TESTS.items())):
-      tests.append(Test(test, enable_swarming, **extra_args))
-    for test, extra_args in sorted(api.ANDROID_JUNIT_TESTS.items()):
-      tests.append(AndroidJunitTest(test, False, **extra_args))
+    for test in (api.ANDROID_DEVICE_TESTS +
+                 api.ANDROID_INSTRUMENTATION_TESTS):
+      tests.append(Test(test, enable_swarming=enable_swarming))
+    for test in api.ANDROID_JUNIT_TESTS:
+      tests.append(AndroidJunitTest(test))
 
   return tests
 
@@ -56,11 +57,11 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
 # TODO(kjellander): Continue refactoring an integrate the classes in the
 # chromium_tests recipe module instead (if possible).
 class Test(object):
-  def __init__(self, name, enable_swarming=False, shards=1):
+  def __init__(self, name, enable_swarming=False, swarming_shards=1):
     self._name = name
     self._enable_swarming = enable_swarming
     self._swarming_task = None
-    self._shards = shards
+    self._swarming_shards = swarming_shards
 
   @property
   def name(self):  # pragma: no cover
@@ -77,20 +78,27 @@ class Test(object):
   def run_nonswarming(self, api, suffix): # pragma: no cover:
     raise NotImplementedError()
 
+  def pre_run(self, api, suffix):
+    return []
+
   def run(self, api, suffix):
     if self._enable_swarming:
       isolated_hash = api.m.isolate.isolated_tests[self._name]
       self._swarming_task = api.m.swarming.task(self._name, isolated_hash,
-                                                shards=self._shards)
+                                                shards=self._swarming_shards)
       api.m.swarming.trigger_task(self._swarming_task)
     else:
       self.run_nonswarming(api, suffix)
 
+  def post_run(self, api, suffix):
+    return []
+
 class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
-  def __init__(self, name, revision, enable_swarming=False, shards=1,
-               parallel=True, perf_test=False, **runtest_kwargs):
-    super(WebRTCTest, self).__init__(name, enable_swarming, shards)
+  def __init__(self, name, revision=None, enable_swarming=False,
+               swarming_shards=1, parallel=True, perf_test=False,
+               **runtest_kwargs):
+    super(WebRTCTest, self).__init__(name, enable_swarming, swarming_shards)
     self._revision = revision
     self._parallel = parallel
     self._perf_test = perf_test
