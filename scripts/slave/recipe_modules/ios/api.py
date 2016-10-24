@@ -481,9 +481,6 @@ class iOSApi(recipe_api.RecipeApi):
     cmd = [
       'src/ios/build/bots/scripts/run.py',
       '--app', '<(app_path)',
-      '--args-json', self.m.json.dumps({
-          'xctest': '<(xctest)',
-      }),
       '--out-dir', '${ISOLATED_OUTDIR}',
       '--xcode-version', '<(xcode_version)',
     ]
@@ -547,7 +544,6 @@ class iOSApi(recipe_api.RecipeApi):
           '--config-variable', 'app_path', app_path,
           '--config-variable', 'xcode_version', test.get(
             'xcode version', self.__config['xcode version']),
-          '--config-variable', 'xctest', test.get('xctest', False),
           '--isolate', isolate_template,
           '--isolated', tmp_dir.join('%s.isolated' % test['id']),
           '--path-variable', 'app_path', app_path,

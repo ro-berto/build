@@ -3,14 +3,14 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'ios',
   'depot_tools/gclient',
-  'depot_tools/tryserver',
+  'ios',
   'recipe_engine/json',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
   'recipe_engine/step',
+  'depot_tools/tryserver',
 ]
 
 def RunSteps(api):
@@ -74,7 +74,6 @@ def GenTests(api):
           'app': 'fake tests',
           'device type': 'fake device',
           'os': '8.1',
-          'xctest': True,
         },
       ],
     })
