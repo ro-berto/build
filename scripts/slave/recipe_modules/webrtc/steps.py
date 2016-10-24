@@ -14,12 +14,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     if api.m.platform.is_linux:
       f = api.m.path['checkout'].join
       tests.extend([
-          BaremetalTest('audioproc',
-                        revision,
-                        args=['-aecm', '-ns', '-agc', '--fixed_digital',
-                              '--perf', '-pb',
-                              f('resources', 'audioproc.aecdump')],
-                        perf_test=True),
           BaremetalTest('isac_fix_test',
                         revision,
                         args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
