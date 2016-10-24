@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
 import os
 import random
 import re
@@ -667,6 +668,45 @@ class PreferredBuilderNextSlaveFunc(object):
         s for s in slave_builders
         if s.slave.properties.getProperty('preferred_builder') == builder.name]
     return random.choice(preferred_slaves or slave_builders)
+
+
+class PreferredBuilderNextSlaveFuncNG(object):
+  """
+  This object, when used as a Builder's 'nextSlave' function, will choose
+  a slave whose 'preferred_builder' value is the same as the builder
+  name. If there is no such slave, a slave is randomly chosen that doesn't
+  prefer any builder. If there is no such slave, a slave is randomly
+  chosen with preference on slaves whose preferred builder has largest
+  currently available capacity. If several sets of slaves have equally large
+  capacity, a set is chosen arbitrarily dependent on internal dictionary order.
+  """
+
+  def __init__(self, choice=random.choice):
+    # Allow overriding the choice function for testability.
+    self._choice = choice
+
+  def __call__(self, builder, slave_builders):
+    if not slave_builders:
+      return None
+
+    prefs = collections.Counter(
+        s.slave.properties.getProperty('preferred_builder')
+        for s in slave_builders)
+    if builder.name in prefs:
+       # First choice: Slaves that prefer this builder.
+      key = builder.name
+    elif None in prefs:
+      # Second choice: Slaves that don't prefer any builders.
+      key = None
+    else:
+      # Third choice: Slaves that prefer other builders but have largest
+      # capacity left. If several groups of slaves with equal capacity exist,
+      # one group will be chosen arbitrarily, the actual slave will be chosen
+      # randomly.
+      key = prefs.most_common()[0][0]
+    return self._choice(
+        s for s in slave_builders
+        if s.slave.properties.getProperty('preferred_builder') == key)
 
 
 def SetMasterProcessName():
