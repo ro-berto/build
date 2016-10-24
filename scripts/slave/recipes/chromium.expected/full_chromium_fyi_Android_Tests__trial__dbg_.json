@@ -467,6 +467,7 @@
       "/path/to/tmp/json",
       "-t",
       "Debug",
+      "--remove-system-webview",
       "--chrome-specific-wipe"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Tests__trial__dbg_",
@@ -617,6 +618,58 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/out/Debug/bin/run_webview_ui_test_app_test_apk",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/out/bad_devices.json",
+      "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--adb-path",
+      "[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_Tests__trial__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "WebViewUiTest",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
+      "--master-name",
+      "chromium.fyi",
+      "--builder-name",
+      "Android Tests (trial)(dbg)",
+      "--build-number",
+      "571",
+      "--test-type",
+      "WebViewUiTest",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_Tests__trial__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "Upload to test-results [WebViewUiTest]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--action",
       "stop",
@@ -744,7 +797,8 @@
   },
   {
     "name": "$result",
+    "reason": "1 tests failed: ['WebViewUiTest']",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

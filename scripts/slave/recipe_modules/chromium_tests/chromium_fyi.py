@@ -1823,9 +1823,11 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Android Builder (dbg)',
       'android_config': 'non_device_wipe_provisioning',
+      'remove_system_webview': True,
       'root_devices': True,
       'tests': [
         steps.GTestTest('gfx_unittests'),
+        steps.AndroidInstrumentationTest('WebViewUiTest'),
       ],
       'testing': {
         'platform': 'linux',
@@ -1876,8 +1878,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-
-
     'Android Asan Builder Tests (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['mb'],

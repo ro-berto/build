@@ -460,7 +460,6 @@
       "android_tools",
       "browser_tests_apk_run",
       "system_webview_apk",
-      "system_webview_shell_apk",
       "system_webview_shell_layout_test_apk"
     ],
     "env": {

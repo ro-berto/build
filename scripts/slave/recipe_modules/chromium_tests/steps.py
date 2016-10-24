@@ -1558,13 +1558,15 @@ class AndroidInstrumentationTest(AndroidTest):
     'ContentShellTest': {
       'compile_target': 'content_shell_test_apk',
     },
+    'MojoTest': {
+      'compile_target': 'mojo_test_apk',
+    },
     'SystemWebViewShellLayoutTest': {
       'compile_target': 'system_webview_shell_layout_test_apk',
       # TODO(agrieve): These should be listed as deps for
       #     system_webview_shell_layout_test_apk.
       'additional_compile_targets': [
         'system_webview_apk',
-        'system_webview_shell_apk',
         'android_tools'
       ],
       # TODO(jbudorick): Remove this once it's handled by the generated script.
@@ -1572,8 +1574,8 @@ class AndroidInstrumentationTest(AndroidTest):
         'SystemWebView.apk',
       ],
     },
-    'MojoTest': {
-      'compile_target': 'mojo_test_apk',
+    'WebViewUiTest': {
+      'compile_target': 'webview_ui_test_app_test_apk',
     }
   }
 
@@ -1586,6 +1588,7 @@ class AndroidInstrumentationTest(AndroidTest):
     'remoting_test_apk': _DEFAULT_SUITES['ChromotingTest'],
     'system_webview_shell_layout_test_apk':
         _DEFAULT_SUITES['SystemWebViewShellLayoutTest'],
+    'webview_ui_test_app_test_apk': _DEFAULT_SUITES['WebViewUiTest'],
   }
 
   def __init__(self, name, compile_targets=None, apk_under_test=None,
