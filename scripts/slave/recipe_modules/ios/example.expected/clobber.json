@@ -294,7 +294,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--xcode-version\", \n            \"<(xcode_version)\", \n            \"--iossim\", \n            \"src/out/Debug-iphonesimulator/iossim\", \n            \"--platform\", \n            \"<(platform)\", \n            \"--version\", \n            \"<(version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\", \n            \"src/out/Debug-iphonesimulator/iossim\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
+      "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--args-json\", \n            \"{\\\"xctest\\\": <(xctest)}\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--xcode-version\", \n            \"<(xcode_version)\", \n            \"--iossim\", \n            \"src/out/Debug-iphonesimulator/iossim\", \n            \"--platform\", \n            \"<(platform)\", \n            \"--version\", \n            \"<(version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\", \n            \"src/out/Debug-iphonesimulator/iossim\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
       "[SLAVE_BUILD]/template.isolate"
     ],
     "name": "isolate.generate template.isolate",
@@ -310,6 +310,8 @@
       "@@@STEP_LOG_LINE@template.isolate@            \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--app\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"--args-json\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"xctest\\\": <(xctest)}\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--out-dir\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"${ISOLATED_OUTDIR}\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--xcode-version\", @@@",
