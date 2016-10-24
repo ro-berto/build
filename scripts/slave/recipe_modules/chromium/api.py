@@ -240,8 +240,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       # to fail early.
       args += ['--goma-fail-fast', '--goma-disable-local-fallback']
       goma_env['GOMA_FAIL_FAST'] = 'true'
+      allow_build_without_goma = False
     else:
       goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
+      allow_build_without_goma = True
     if self.c.compile_py.ninja_confirm_noop:
       args.append('--ninja-ensure-up-to-date')
     if self.c.TARGET_CROS_BOARD:
@@ -287,7 +289,8 @@ class ChromiumApi(recipe_api.RecipeApi):
           env=goma_env,
           ninja_log_outdir=target_output_dir,
           ninja_log_compiler=self.c.compile_py.compiler or 'goma',
-          ninja_log_command=command):
+          ninja_log_command=command,
+          allow_build_without_goma=allow_build_without_goma):
         if 'GOMA_DISABLED' in goma_env:
           self.m.goma.remove_j_flag(command)
 
