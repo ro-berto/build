@@ -9,7 +9,6 @@ from buildbot.changes.filter import ChangeFilter
 from buildbot.process.properties import WithProperties
 from buildbot.schedulers.basic import SingleBranchScheduler
 from buildbot.schedulers.timed import Nightly
-from buildbot.status.mail import MailNotifier
 from buildbot import util
 
 from config_bootstrap import Master
@@ -74,10 +73,13 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
                                      'public_html')
   public_html = builders.get('public_html', default_public_html)
 
+  mail_notifier = builders.get('mail_notifier')
+
   # Adds common status and tools to this master.
   # TODO: Look at the logic in this routine to see if any of the logic
   # in this routine can be moved there to simplify things.
   master_utils.AutoSetupMaster(c, active_master_cls,
+      mail_notifier=mail_notifier,
       public_html=public_html,
       templates=builders['templates'],
       tagComparator=tag_comparator,
