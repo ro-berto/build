@@ -208,22 +208,34 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Mac64 Debug': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.11',
+          'cpu': 'x86-64',
+        }
       },
       'Mac64 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.11',
+          'cpu': 'x86-64',
+        }
       },
       'Mac64 Debug (GYP)': {
         'recipe_config': 'webrtc',
@@ -612,6 +624,10 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
         'use_isolate': True,
         'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.11',
+          'cpu': 'x86-64',
+        }
       },
       'Linux64 Release (swarming)': {
         'recipe_config': 'webrtc_swarming',
@@ -1029,22 +1045,34 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'mac_dbg': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.11',
+          'cpu': 'x86-64',
+        }
       },
       'mac_rel': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.11',
+          'cpu': 'x86-64',
+        }
       },
       'mac_gyp_dbg': {
         'recipe_config': 'webrtc',
@@ -1093,6 +1121,10 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
         'use_isolate': True,
         'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.11',
+          'cpu': 'x86',
+        }
       },
       'linux_compile_dbg': {
         'recipe_config': 'webrtc',
