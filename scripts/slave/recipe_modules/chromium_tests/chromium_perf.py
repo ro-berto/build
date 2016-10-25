@@ -118,8 +118,13 @@ def _AddBuildSpec(
 
   SPEC['builders'][name] = BuildSpec(
       'chromium_perf', perf_id, platform, target_bits, enable_swarming)
-  assert target_bits not in builders[platform]
-  builders[platform][target_bits] = name
+
+  # TODO(martiniss): re-enable assertion once android has switched to the
+  # chromium recipe
+  # assert target_bits not in builders[platform]
+
+  if not builders[platform].get(target_bits, None):
+    builders[platform][target_bits] = name
   if add_to_bisect:
     SPEC['settings']['bisect_builders'].append(name)
 
@@ -136,6 +141,7 @@ def _AddTestSpec(name, perf_id, platform, target_bits=64,
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)
+_AddBuildSpec('Android Compile', 'android', target_bits=32)
 _AddBuildSpec('Android arm64 Builder', 'android')
 _AddBuildSpec('Win Builder', 'win', target_bits=32)
 _AddBuildSpec( \
