@@ -233,13 +233,13 @@ class WebRTCApi(recipe_api.RecipeApi):
             self.m.chromium_android.common_tests_setup_steps()
 
           for test in tests:
-            test.pre_run(self, suffix='')
+            test.pre_run(self.m, suffix='')
 
           for test in tests:
             test.run(self, suffix='')
 
           for test in tests:
-            test.post_run(self, suffix='')
+            test.post_run(self.m, suffix='')
 
           if run_android_device_steps:
             self.m.chromium_android.shutdown_device_monitor()
@@ -247,11 +247,6 @@ class WebRTCApi(recipe_api.RecipeApi):
                 gs_bucket=self.master_config.get('build_gs_bucket'))
             self.m.chromium_android.stack_tool_steps(force_latest_version=True)
             self.m.chromium_android.test_report()
-
-      with self.m.step.defer_results():
-        for test in tests:
-          if test.enable_swarming:
-            self.m.swarming.collect_task(test.swarming_task)
 
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,

@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
 
@@ -39,9 +38,11 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
                                  perf_id=api.c.PERF_ID))
   elif test_suite == 'android_swarming':
+    GTestTest = api.m.chromium_tests.steps.GTestTest
     for test in (api.ANDROID_DEVICE_TESTS +
                  api.ANDROID_INSTRUMENTATION_TESTS):
-      tests.append(Test(test, enable_swarming=enable_swarming))
+      tests.append(GTestTest(test, enable_swarming=enable_swarming,
+                             override_isolate_target=test))
     for test in api.ANDROID_JUNIT_TESTS:
       tests.append(AndroidJunitTest(test))
 
@@ -56,18 +57,6 @@ class Test(object):
     self._enable_swarming = enable_swarming
     self._swarming_task = None
     self._swarming_shards = swarming_shards
-
-  @property
-  def name(self):  # pragma: no cover
-    return self._name
-
-  @property
-  def enable_swarming(self):
-    return self._enable_swarming
-
-  @property
-  def swarming_task(self):
-    return self._swarming_task
 
   def run_nonswarming(self, api, suffix): # pragma: no cover:
     raise NotImplementedError()
@@ -85,7 +74,10 @@ class Test(object):
       self.run_nonswarming(api, suffix)
 
   def post_run(self, api, suffix):
-    return []
+    if self._enable_swarming:
+      api.swarming.collect_task(self._swarming_task)
+    else:
+      return []
 
 class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
@@ -103,7 +95,6 @@ class WebRTCTest(Test):
     api.add_test(name=self._name, revision=self._revision,
                  parallel=self._parallel, perf_test=self._perf_test,
                  **self._runtest_kwargs)
-
 
 class BaremetalTest(WebRTCTest):
   """A WebRTC desktop test that uses audio and/or video devices."""
