@@ -27,6 +27,11 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc',
   },
+  'webrtc_swarming': {
+    'chromium_config': 'webrtc_standalone',
+    'gclient_config': 'webrtc',
+    'test_suite': 'desktop_swarming',
+  },
   'webrtc_android': {
     'chromium_config': 'android',
     'chromium_android_config': 'webrtc',
@@ -237,40 +242,64 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'Linux32 Debug': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86',
+        }
       },
       'Linux32 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86',
+        }
       },
       'Linux64 Debug': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86-64',
+        }
       },
       'Linux64 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86-64',
+        }
       },
       'Linux64 Debug (GYP)': {
         'recipe_config': 'webrtc',
@@ -535,7 +564,7 @@ BUILDERS = freeze({
     },
     'builders':  {
       'Win32 Release (swarming)': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -546,7 +575,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
       },
       'Mac64 Release (swarming)': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -557,7 +586,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
       },
       'Linux64 Release (swarming)': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -915,7 +944,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_swarming': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -999,7 +1028,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'mac_swarming': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1028,40 +1057,64 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_dbg': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86-64',
+        }
       },
       'linux_rel': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86-64',
+        }
       },
       'linux32_dbg': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86',
+        }
       },
       'linux32_rel': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86',
+        }
       },
       'linux_gyp_dbg': {
         'recipe_config': 'webrtc',
@@ -1163,7 +1216,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_swarming': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,

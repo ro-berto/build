@@ -148,7 +148,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.use_isolate:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
-      if self.c.TEST_SUITE == 'webrtc':
+      if self.c.TEST_SUITE == 'desktop_swarming':
         self._isolated_targets = (self.NORMAL_TESTS.keys())
       elif self.c.TEST_SUITE == 'android_swarming':
         self._isolated_targets = (self.ANDROID_DEVICE_TESTS +
@@ -156,7 +156,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self._isolated_targets = sorted(self._isolated_targets)
       if not self._isolated_targets: # pragma: no cover
         raise self.m.step.StepFailure('Isolation and swarming are only '
-                                      'supported for webrtc and '
+                                      'supported for desktop_swarming and '
                                       'android_swarming test suites.')
 
     self.c.enable_swarming = self.bot_config.get('enable_swarming')

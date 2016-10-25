@@ -5,10 +5,22 @@
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
 
-  if test_suite == 'webrtc':
+  if test_suite in ('webrtc', 'desktop_swarming'):
     for test, extra_args in sorted(api.NORMAL_TESTS.items()):
+      # Skip rtc_unittests on swarming because it's flaky.
+      # TODO(ehmaldonado): Get rid of this when http://bugs.webrtc.org/6500 is
+      # fixed.
+      if (test == 'rtc_unittests' and test_suite == 'desktop_swarming' and
+          api.mastername != 'client.webrtc.fyi'):
+        continue
       tests.append(WebRTCTest(test, enable_swarming=enable_swarming,
                               revision=revision, **extra_args))
+    # Execute rtc_unittests locally instead.
+    # TODO(ehmaldonado): Get rid of this when http://bugs.webrtc.org/6500 is
+    # fixed.
+    if (test_suite == 'desktop_swarming' and
+        api.mastername != 'client.webrtc.fyi'):
+      tests.append(WebRTCTest('rtc_unittests', revision=revision))
   elif test_suite == 'webrtc_baremetal':
     if api.m.platform.is_linux:
       f = api.m.path['checkout'].join
