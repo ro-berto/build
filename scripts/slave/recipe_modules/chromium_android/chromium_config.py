@@ -67,10 +67,6 @@ def mipsel_builder(c):
 def mipsel_builder_mb(c):
   pass
 
-@CONFIG_CTX(includes=['main_builder'])
-def dartium_builder(c):
-  c.compile_py.default_targets=['chrome_apk', 'content_shell_apk']
-
 @CONFIG_CTX(includes=['clobber'])
 def cronet_builder(c):
   c.gyp_env.GYP_DEFINES['disable_brotli_filter'] = 1
