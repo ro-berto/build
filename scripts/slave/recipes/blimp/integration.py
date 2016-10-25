@@ -66,14 +66,16 @@ def RunSteps(api):
                           api.chromium.c.build_config_fs),
                       phase='engine')
   api.chromium.compile(targets=['blimp'],
-                       out_dir=linux_build)
+                       out_dir=linux_build,
+                       use_goma_module=True)
   api.chromium.run_mb(mastername=mastername,
                       buildername=buildername,
                       build_dir=android_build.join(
                           api.chromium.c.build_config_fs),
                       phase='client')
   api.chromium.compile(targets=['blimp', 'chrome_public_apk'],
-                       out_dir=android_build)
+                       out_dir=android_build,
+                       use_goma_module=True)
 
 
 def GenTests(api):
