@@ -428,8 +428,8 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@chartjson_info@Info: Benchmark disabled, not sending results to dashboard@@@",
-      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LOG_LINE@DISABLED_BENCHMARK@Info: Benchmark disabled, not sending results to dashboard@@@",
+      "@@@STEP_LOG_END@DISABLED_BENCHMARK@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
     ]

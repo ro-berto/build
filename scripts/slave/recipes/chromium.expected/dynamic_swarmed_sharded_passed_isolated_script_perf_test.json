@@ -456,22 +456,9 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"dummy\": \"dummy0\", \"enabled\": true, \"charts\": {\"entry2\": \"chart2\", \"entry3\": \"chart3\", \"entry1\": \"chart1\", \"entry4\": \"chart4\"}}",
-      "[TMP_BASE]\\chartjson_results_output_tmp_1\\chartjson-results.json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "write results to file"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_perf_dashboard_results.py",
       "--chartjson-results-file",
-      "[TMP_BASE]\\chartjson_results_output_tmp_1\\chartjson-results.json",
+      "{\"dummy\": \"dummy0\", \"enabled\": true, \"charts\": {\"entry2\": \"chart2\", \"entry3\": \"chart3\", \"entry1\": \"chart1\", \"entry4\": \"chart4\"}}",
       "--perf-id",
       "win-10-low-end",
       "--results-url",
@@ -499,18 +486,6 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "Upload Perf Dashboard Results"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]\\resources\\rmtree.py",
-      "[TMP_BASE]\\chartjson_results_output_tmp_1"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "rmtree [TMP_BASE]\\chartjson_results_output_tmp_1"
   },
   {
     "cmd": [
