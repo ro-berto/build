@@ -48,7 +48,8 @@ def RunSteps(api):
   api.chromium.runhooks()
   api.chromium.run_mb(mastername, buildername, use_goma=False)
 
-  api.chromium.compile(targets=['empty_fuzzer'])
+  api.chromium.compile(targets=['empty_fuzzer'],
+                       use_goma_module=True)
 
   config_kwargs = bot_config.get('chromium_config_kwargs', dict())
   build_config = config_kwargs.get('BUILD_CONFIG', 'Release')
