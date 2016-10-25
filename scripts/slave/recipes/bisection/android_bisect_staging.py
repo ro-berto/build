@@ -123,6 +123,8 @@ def RunSteps(api, mastername, buildername):
   bot_db = api.chromium_tests.create_bot_db_from_master_dict(mastername,
                                                              master_dict)
 
+  api.chromium_android.use_devil_adb()
+
   api.auto_bisect_staging.start_try_job(api, update_step=update_step,
                                         bot_db=bot_db,
                                         do_not_nest_wait_for_revision=True)

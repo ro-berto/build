@@ -302,6 +302,23 @@ class AndroidApi(recipe_api.RecipeApi):
         src_dir=self.m.path['slave_build'].join('src'),
         exclude_files='lib.target,gen,android_webview,jingle_unittests')
 
+  def use_devil_adb(self):
+    # TODO(jbudorick): Remove this after resolving
+    # https://github.com/catapult-project/catapult/issues/2901
+    devil_path = self.m.path['checkout'].join('third_party', 'catapult', 'devil')
+    self.m.python.inline(
+        'initialize devil',
+        """
+        import sys
+        sys.path.append(sys.argv[1])
+        from devil import devil_env
+        devil_env.config.Initialize()
+        devil_env.config.PrefetchPaths(dependencies=['adb'])
+        """,
+        args=[devil_path])
+    self.m.adb.set_adb_path(
+        devil_path.join('bin', 'deps', 'linux2', 'x86_64', 'bin', 'adb'))
+
   def create_adb_symlink(self):
     # Creates a sym link to the adb executable in the home dir
     self.m.python(
