@@ -117,42 +117,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('swarming')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios-simulator-swarming',
-      buildnumber='0',
-      issue=123456,
-      mastername='tryserver.fake',
-      patchset=1,
-      rietveld='fake://rietveld.url',
-      slavename='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.0',
-      'tests': [
-        {
-          'app': 'fake test',
-          'device type': 'fake device',
-          'os': '8.1',
-        },
-      ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
-    )
-    + suppress_analyze()
-  )
-
-  yield (
     api.test('swarming_tests_skipped')
     + api.platform('mac', 64)
     + api.properties(

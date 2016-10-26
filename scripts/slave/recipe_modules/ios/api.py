@@ -381,7 +381,7 @@ class iOSApi(recipe_api.RecipeApi):
         ),
         '--json_file', self.m.json.output(),
       ]
-      if test.get('xctest'):
+      if test.get('xctest'): # pragma: no cover
         cmd.extend([
           '--test-host', test['app'],
           '--dummyproj', self.package_repo_resource(
