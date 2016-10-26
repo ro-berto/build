@@ -44,6 +44,7 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     gce_snapshot = Single(basestring, required=False),
     gce_count = Single(int, required=False),
     restart_usb = Single(bool, required=False, empty_val=False),
+    use_devil_adb = Single(bool, required=False, empty_val=False),
   )
 
 
@@ -233,3 +234,7 @@ def cast_builder(c):
 @config_ctx()
 def restart_usb(c):
   c.restart_usb = True
+
+@config_ctx()
+def use_devil_adb(c):
+  c.use_devil_adb = True

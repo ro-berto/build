@@ -730,7 +730,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
-      'android_apply_config': ['restart_usb'],
+      'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
@@ -749,7 +749,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'arm64_builder_rel_mb',
-      'android_apply_config': ['restart_usb'],
+      'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
@@ -771,7 +771,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
-      'android_apply_config': ['restart_usb'],
+      'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
@@ -790,7 +790,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'arm64_builder_rel_mb',
-      'android_apply_config': ['restart_usb'],
+      'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
@@ -809,7 +809,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'arm64_builder_rel_mb',
-      'android_apply_config': ['restart_usb'],
+      'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
@@ -828,7 +828,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'arm64_builder_rel_mb',
-      'android_apply_config': ['restart_usb'],
+      'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],

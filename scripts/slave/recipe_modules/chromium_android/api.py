@@ -1110,6 +1110,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def common_tests_setup_steps(self, perf_setup=False,
                                remove_system_webview=False, skip_wipe=False):
+    if self.c.use_devil_adb:
+      self.use_devil_adb()
     self.create_adb_symlink()
     self.spawn_logcat_monitor()
     self.spawn_device_monitor()

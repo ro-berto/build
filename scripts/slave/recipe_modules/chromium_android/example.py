@@ -109,6 +109,9 @@ BUILDERS = freeze({
     'telemetry_browser_tests_tester': {
         'run_telemetry_browser_tests': True,
     },
+    'use_devil_adb': {
+      'android_apply_config': ['use_devil_adb'],
+    }
 })
 
 from recipe_engine.recipe_api import Property
@@ -135,6 +138,9 @@ def RunSteps(api, buildername):
     # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
     api.chromium.c.env.ADB_VENDOR_KEYS = api.path['build'].join(
       'site_config', '.adb_key')
+
+  for c in config.get('android_apply_config', []):
+    api.chromium_android.apply_config(c)
 
   api.chromium_android.init_and_sync(
       use_bot_update=False, use_git_cache=config.get('use_git_cache', True))
@@ -178,6 +184,8 @@ def RunSteps(api, buildername):
         reboot_timeout=1800,
         remove_system_webview=config.get('remove_system_webview', False),
         disable_system_chrome=config.get('disable_system_chrome', False))
+
+    api.chromium_android.common_tests_setup_steps()
 
   except api.step.StepFailure as f:
     failure = f
