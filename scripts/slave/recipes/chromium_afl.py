@@ -81,7 +81,7 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
   api.step.active_result.presentation.logs['targets'] = targets
-  api.chromium.compile(targets=targets)
+  api.chromium.compile(targets=targets, use_goma_module=True)
 
   api.archive.clusterfuzz_archive(
           build_dir=api.chromium.output_dir,
