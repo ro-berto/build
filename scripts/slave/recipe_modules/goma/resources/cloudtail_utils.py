@@ -54,6 +54,63 @@ class NotDiedError(Exception):
     return "NotDiedError"
 
 
+class Error(Exception):
+  """Raised on something unexpected happens."""
+
+
+def wait_termination_win(pid):
+  """Send CTRL_C_EVENT or SIGINT to pid and wait termination of pid.
+
+  Args:
+    pid(int): pid of process which this function waits termination.
+
+  Raises:
+    Error: WaitForSingleObject to wait process termination returns neigher of
+           WAIT_TIMEOUT or WAIT_OBJECT_0 (i.e. termination succeeded).
+    NotDiedError: if cloudtail kept on running 10 seconds after it signaled.
+  """
+  import win32api
+  import win32con
+  import win32event
+  import winerror
+  import pywintypes
+  handle = None
+  try:
+    handle = win32api.OpenProcess(
+        win32con.PROCESS_QUERY_INFORMATION | win32con.SYNCHRONIZE,
+        False, pid)
+    try:
+      os.kill(pid, signal.CTRL_C_EVENT)
+      print('CTRL_C_EVENT has been sent to process %d. '
+            'Going to wait for the process finishes.' % pid)
+    except WindowsError as e:  # pylint: disable=E0602
+      # If a target process does not share terminal, we cannot send Ctrl-C.
+      if e[0] == winerror.ERROR_INVALID_PARAMETER:
+        os.kill(pid, signal.SIGINT)
+        print('SIGINT has been sent to process %d.' % pid)
+    ret = win32event.WaitForSingleObject(handle, 10 * 10**3)
+    if ret == win32event.WAIT_TIMEOUT:
+      print('process %d running more than 10 seconds' % pid)
+      raise NotDiedError()
+    elif ret == win32event.WAIT_OBJECT_0:
+      return
+    raise Error('Unexpected return code %d for pid %d.' % (ret, pid))
+  except pywintypes.error as e:
+    if e[0] == winerror.ERROR_INVALID_PARAMETER and e[1] == 'OpenProcess':
+      print('Can\'t open process %d. Already dead? error %s.' % (pid, e))
+      return
+    raise
+  except OSError as e:
+    if e.errno in (errno.ECHILD, errno.EPERM, errno.ESRCH):
+      print('Can\'t send SIGINT to process %d. Already dead? Errno %d.' %
+            (pid, e.errno))
+      return
+    raise
+  finally:
+    if handle:
+      win32api.CloseHandle(handle)
+
+
 def wait_termination(pid):
   """Send SIGINT to pid and wait termination of pid.
 
@@ -65,33 +122,21 @@ def wait_termination(pid):
     NotDiedError: if cloudtail is running after 10 seconds waiting,
                   NotDiedError is raised.
   """
-
-  try:
-    os.kill(pid, signal.SIGINT)
-  except OSError as e:
-    # Already dead?
-    if e.errno in (errno.ECHILD, errno.EPERM, errno.ESRCH):
-      print('Can\'t send SIGINT to process %d. Already dead? Errno %d.' %
-            (pid, e.errno))
-      return
-    raise
-
-  print('SIGINT has been sent to process %d. '
-        'Going to wait for the process finishes.' % pid)
   if os.name == 'nt':
-    try:
-      os.waitpid(pid, 0)
-    except OSError as e:
-      if e.errno == errno.ECHILD:
-        print('process %d died before waitpitd' % pid)
-        return
-      raise e
+    wait_termination_win(pid)
   else:
+    try:
+      os.kill(pid, signal.SIGINT)
+    except OSError as e:
+      if e.errno in (errno.ECHILD, errno.EPERM, errno.ESRCH):
+        print('Can\'t send SIGINT to process %d. Already dead? Errno %d.' %
+              (pid, e.errno))
+        return
+      raise
     for _ in xrange(10):
       time.sleep(1)
       if not is_running_posix(pid):
         return
-
     print('process %d running more than 10 seconds' % pid)
     raise NotDiedError()
 
@@ -127,7 +172,7 @@ def main():
       pid = int(f.read())
     try:
       wait_termination(pid)
-    except (OSError, NotDiedError) as e:
+    except Exception as e:
       print('Going to send SIGTERM to process %d due to Error %s' % (pid, e))
       # Since Windows does not have SIGKILL, we need to use SIGTERM.
       try:
