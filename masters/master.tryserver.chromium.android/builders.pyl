@@ -23,7 +23,6 @@
     "android_compile_mips_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -33,7 +32,6 @@
     "android_compile_x64_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -43,7 +41,6 @@
     "android_compile_x86_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -53,7 +50,6 @@
     "android_archive_rel_ng": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -62,7 +58,6 @@
     "android_arm64_dbg_recipe": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -71,7 +66,6 @@
     "android_clang_dbg_recipe": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -80,7 +74,6 @@
     "android_compile_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -90,7 +83,6 @@
     "android_compile_rel": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -100,7 +92,6 @@
     "cast_shell_android": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -109,7 +100,6 @@
     "android_blink_rel": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -118,7 +108,6 @@
     "android_coverage": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -142,7 +131,6 @@
     "linux_android_dbg_ng": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -152,7 +140,6 @@
     "linux_android_rel_ng": {
       "builder_timeout_s": 11400,  # 60 * 190
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -162,7 +149,6 @@
     "android_n5x_swarming_rel": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
@@ -228,7 +214,6 @@
     "android_optional_gpu_tests_rel": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
-      "repository": "https://chromium.googlesource.com/chromium/src.git",
       "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
