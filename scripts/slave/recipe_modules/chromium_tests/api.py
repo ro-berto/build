@@ -143,6 +143,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
+    for c in bot_config.get('android_apply_config', []):
+      self.m.chromium_android.apply_config(c)
+
     # WARNING: src-side runtest.py is only tested with chromium CQ builders.
     # Usage not covered by chromium CQ is not supported and can break
     # without notice.

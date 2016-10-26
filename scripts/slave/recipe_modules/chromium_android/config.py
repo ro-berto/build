@@ -43,6 +43,7 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     gce_setup = Single(bool, required=False, empty_val=False),
     gce_snapshot = Single(basestring, required=False),
     gce_count = Single(int, required=False),
+    restart_usb = Single(bool, required=False, empty_val=False),
   )
 
 
@@ -228,3 +229,7 @@ def chromium_perf(c):
 @config_ctx()
 def cast_builder(c):
   pass
+
+@config_ctx()
+def restart_usb(c):
+  c.restart_usb = True

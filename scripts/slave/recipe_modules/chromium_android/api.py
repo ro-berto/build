@@ -471,6 +471,7 @@ class AndroidApi(recipe_api.RecipeApi):
         f.result.presentation.logs[failure] = [failure]
       f.result.presentation.status = self.m.step.EXCEPTION
 
+  # TODO(jbudorick): Remove restart_usb once it's unused.
   def device_recovery(self, restart_usb=False, **kwargs):
     args = [
         '--blacklist-file', self.blacklist_file,
@@ -478,7 +479,7 @@ class AndroidApi(recipe_api.RecipeApi):
         '--adb-path', self.m.adb.adb_path(),
         '-v'
     ]
-    if restart_usb:
+    if self.c.restart_usb or restart_usb:
       args += ['--enable-usb-reset']
     self.m.step(
         'device_recovery',
