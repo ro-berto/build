@@ -705,8 +705,8 @@ class PreferredBuilderNextSlaveFuncNG(object):
       # randomly.
       key = prefs.most_common()[0][0]
     return self._choice(
-        s for s in slave_builders
-        if s.slave.properties.getProperty('preferred_builder') == key)
+        [s for s in slave_builders
+         if s.slave.properties.getProperty('preferred_builder') == key])
 
 
 def SetMasterProcessName():

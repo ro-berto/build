@@ -96,11 +96,14 @@ class PreferredBuilderNextSlaveFuncTest(unittest.TestCase):
         MockSlaveBuilder('s8', {'preferred_builder': None}),
     ]
 
-    # Mock random.choice on function return for determinism and to check the
-    # full choice range.
-    f = lambda builder, slaves: (
-        set([s.name for s in master_utils.PreferredBuilderNextSlaveFuncNG(
-            choice=list)(builder, slaves)]))
+    def f(builder, slaves):
+      # Call original method for code coverage only.
+      master_utils.PreferredBuilderNextSlaveFuncNG()(builder, slaves)
+
+      # Mock random.choice on function return for determinism and to check the
+      # full choice range.
+      mocked_func = master_utils.PreferredBuilderNextSlaveFuncNG(choice=list)
+      return set([s.name for s in mocked_func(builder, slaves)])
 
     self.assertEqual(set(['s1', 's4']), f(builder1, slaves))
     self.assertEqual(set(['s2', 's5']), f(builder2, slaves))
