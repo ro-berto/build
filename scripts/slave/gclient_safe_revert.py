@@ -43,6 +43,10 @@ def main():
          'if [ -e .git ]; then git remote update; fi']
   chromium_utils.RunCommand(cmd, cwd=build_directory)
 
+  # Work around http://crbug.com/642711
+  cmd = [gclient_command, 'recurse', '-v', 'git', 'update-index', '--refresh']
+  chromium_utils.RunCommand(cmd, cwd=build_directory)
+
   cmd = [gclient_command, 'revert', '-v', '-v', '-v', '--nohooks', '--upstream']
   return chromium_utils.RunCommand(cmd, cwd=build_directory)
 
