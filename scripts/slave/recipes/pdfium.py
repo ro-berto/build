@@ -89,6 +89,7 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
               '--args=' + ' '.join(args)],
              cwd=checkout)
 
+
 def _BuildSteps(api, clang, out_dir):
   # Build sample file using Ninja
   debug_path = api.path['checkout'].join('out', out_dir)
@@ -102,34 +103,7 @@ def _BuildSteps(api, clang, out_dir):
     api.step('compile with ninja', ninja_cmd)
 
 
-def _RunDrMemoryTests(api, v8):
-  pdfium_tests_py = str(api.path['checkout'].join('tools',
-                                                  'drmemory',
-                                                  'scripts',
-                                                  'pdfium_tests.py'))
-  api.python('unittests', pdfium_tests_py,
-             args=['--test', 'pdfium_unittests'],
-             cwd=api.path['checkout'])
-  api.python('embeddertests', pdfium_tests_py,
-             args=['--test', 'pdfium_embeddertests'],
-             cwd=api.path['checkout'])
-  if v8:
-    api.python('javascript tests', pdfium_tests_py,
-               args=['--test', 'pdfium_javascript'],
-               cwd=api.path['checkout'])
-  api.python('pixel tests', pdfium_tests_py,
-             args=['--test', 'pdfium_pixel'],
-             cwd=api.path['checkout'])
-  api.python('corpus tests', pdfium_tests_py,
-             args=['--test', 'pdfium_corpus'],
-             cwd=api.path['checkout'])
-
-
 def _RunTests(api, memory_tool, v8, out_dir):
-  if memory_tool == 'drmemory':
-    _RunDrMemoryTests(api, v8)
-    return
-
   env = {}
   if memory_tool == 'asan':
     options = ['detect_leaks=1',
@@ -365,17 +339,6 @@ def GenTests(api):
       api.properties(memory_tool='asan',
                      mastername="client.pdfium",
                      buildername='linux_asan_lsan',
-                     slavename="test_slave")
-  )
-
-  yield (
-      api.test('drm_win_xfa') +
-      api.platform('win', 64) +
-      api.properties(xfa=True,
-                     memory_tool='drmemory',
-                     target_cpu='x86',
-                     mastername="client.pdfium",
-                     buildername='drm_win_xfa',
                      slavename="test_slave")
   )
 

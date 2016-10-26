@@ -17,17 +17,6 @@
         "target_os": "android",
       },
     },
-    "drm_win_xfa": {
-      "recipe": "pdfium",
-      "scheduler": "pdfium_commits",
-      "slave_pools": ["drmemory_win"],
-      "category": "1xfa",
-      "properties": {
-        "xfa": True,
-        "memory_tool": "drmemory",
-        "target_cpu": "x86",
-      },
-    },
     "linux": {
       "recipe": "pdfium",
       "scheduler": "pdfium_commits",
@@ -240,16 +229,6 @@
         "vm119-m3",
         "vm121-m3",
         "vm144-m3",
-      ],
-    },
-    "drmemory_win": {
-      "slave_data": {
-        "bits": 64,
-        "os": "win",
-        "version": "win7",
-      },
-      "slaves": [
-        "vm270-m3",
       ],
     },
   },
