@@ -18,8 +18,8 @@
     "cmd": [
       "git",
       "fetch",
-      "https://chromium-review.googlesource.com/infra/infra",
-      "refs/changes/11/338811/3"
+      "https://chromium.googlesource.com/infra/infra",
+      "refs/changes/89/456789/12"
     ],
     "name": "git fetch"
   },

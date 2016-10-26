@@ -13,25 +13,26 @@ DEPS = [
 ]
 
 PROPERTIES = {
-  'gerrit': Property(kind=str, help='Gerrit host', default=None,
-                     param_name='gerrit_host'),
-  'patch_project': Property(kind=str, help='Gerrit project', default=None,
-                            param_name='gerrit_project'),
-  'event.patchSet.ref': Property(kind=str, help='Gerrit patch ref',
-                                 default=None, param_name='gerrit_patch_ref'),
+  # New Gerrit patch properties.
+  'patch_storage': Property(kind=str, default=None),
+  'patch_gerrit_url': Property(kind=str, default=None),
+  'patch_repository_url': Property(kind=str, default=None),
+  'patch_ref': Property(kind=str, default=None),
+
+  # Non-patch jobs properties.
   'repository': Property(kind=str, help='Full url to a Git repository',
                          default=None, param_name='repo_url'),
   'refspec': Property(kind=str, help='Refspec to checkout', default='master'),
-  'category': Property(kind=str, help='Build category', default=None),
 }
 
 
-def RunSteps(api, category, repo_url, refspec, gerrit_host, gerrit_project,
-             gerrit_patch_ref):
-  if category == 'cq':
-    assert gerrit_host.startswith('https://')
-    repo_url = '%s/%s' % (gerrit_host.rstrip('/'), gerrit_project)
-    refspec = gerrit_patch_ref
+def RunSteps(api, repo_url, refspec,  patch_storage, patch_repository_url,
+             patch_ref):
+  if patch_storage:
+    assert patch_storage == 'gerrit'
+    assert patch_repository_url and patch_ref
+    repo_url = patch_repository_url
+    refspec = patch_ref
 
   assert repo_url and refspec, 'repository url and refspec must be given'
   assert repo_url.startswith('https://')
@@ -71,8 +72,8 @@ def GenTests(api):
   yield api.test('ci') + api.properties(
       repository='https://chromium.googlesource.com/infra/infra',
   )
-  yield api.test('cq_try') + api.properties.tryserver_gerrit(
-      full_project_name='infra/infra',
+  yield api.test('cq_try') + api.properties.tryserver(
+      gerrit_project='infra/infra',
   )
   yield api.test('ci_fail_but_run_all') + api.properties(
       repository='https://chromium.googlesource.com/infra/infra',

@@ -63,12 +63,19 @@ def _RunStepsInternal(api):
     else:
       presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
   elif patch_storage == 'gerrit':
-    # Field event.patchSet.ref looks like 'refs/changes/11/338811/4'
-    issue, patchset = api.properties['event.patchSet.ref'].split('/')[-2:]
+    gerrit_url = api.properties.get('patch_gerrit_url')
+    if not gerrit_url:
+      # TODO(tandrii): clean up old Gerrit patch properties.
+      # Field event.patchSet.ref looks like 'refs/changes/11/338811/4'
+      issue, patchset = api.properties['event.patchSet.ref'].split('/')[-2:]
+      gerrit_url = api.properties['gerrit']
+    else:
+      issue = api.properties.get('patch_issue')
+      patchset = api.properties.get('patch_set')
     presubmit_args = [
       '--issue', issue,
       '--patchset', patchset,
-      '--gerrit_url', api.properties['gerrit'],
+      '--gerrit_url', gerrit_url,
       '--gerrit_fetch',
     ]
   else:  # pragma: no cover
@@ -166,7 +173,7 @@ def GenTests(api):
   )
 
   yield (
-    api.test('infra_with_runhooks_and_gerrit') +
+    api.test('infra_with_runhooks_and_gerrit_deprecated') +
     api.properties.tryserver_gerrit(
         full_project_name='infra/infra',
         repo_name='infra',
@@ -178,9 +185,21 @@ def GenTests(api):
   )
 
   yield (
+    api.test('infra_with_runhooks_and_gerrit') +
+    api.properties.tryserver(
+        gerrit_project='infra/infra',
+        repo_name='infra',
+        mastername='tryserver.infra',
+        buildername='infra_presubmit',
+        runhooks=True) +
+    api.step_data('presubmit', api.json.output([['infra_presubmit',
+                                                 ['compile']]]))
+  )
+
+  yield (
     api.test('depot_tools_and_gerrit') +
-    api.properties.tryserver_gerrit(
-        full_project_name='chromium/tools/depot_tools',
+    api.properties.tryserver(
+        gerrit_project='chromium/tools/depot_tools',
         repo_name='depot_tools',
         mastername='tryserver.infra',
         buildername='presubmit_depot_tools',
