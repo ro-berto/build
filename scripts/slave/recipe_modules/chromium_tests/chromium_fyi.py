@@ -1228,7 +1228,6 @@ SPEC = {
         'gn_all',
       ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'testing': {
         'platform': 'linux',
       },
