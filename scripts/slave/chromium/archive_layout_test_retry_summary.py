@@ -4,17 +4,19 @@
 # found in the LICENSE file.
 
 """This script is intended to archive retry summary results from
-try bot retries for layout tests along with layout test results.
+try bot retries of layout tests.
 
-The purpose if this is so that these retry results can be fetched
-from the same place that the first run results are fetched.
+By keeping these retry summary results in the same place as the
+layout test results from the first try (with patch), the retry
+results can be easily fetched from the same location as the results.
 """
 
-import logging
 import argparse
+import logging
 import os
 import re
 import socket
+import shutil
 import sys
 
 from slave import slave_utils
@@ -27,11 +29,9 @@ def ArchiveRetrySummary(args):
   print 'Host name: %s' % socket.gethostname()
 
   gs_base = '/'.join([args.gs_bucket, args.builder_name, args.build_number])
-  slave_utils.GSUtilCopyFile(args.retry_summary_json,
-                             gs_base,
-                             cache_control="public, max-age=31556926")
-  slave_utils.GSUtilMoveFile(os.path.join(gs_base, args.retry_summary_json),
-                             os.path.join(gs_base, 'retry_summary.json'))
+  slave_utils.GSUtilCopyFile(args.retry_summary_json, gs_base,
+                             cache_control='public, max-age=31556926',
+                             dest_filename='retry_summary.json')
   return 0
 
 

@@ -388,7 +388,7 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
   Runs the following command:
     gsutil -h Content-Type:<mimetype> \
            -h Cache-Control:<cache_control> \
-        cp -a <gs_acl> file://<filename> <gs_base>/<subdir>/<filename w/o path>
+        cp -a <gs_acl> file://<filename> <dest>
 
   Args:
     source: the source URI
@@ -399,6 +399,7 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
     metadata: (dict) A dictionary of string key/value metadata entries to set
         (see `gsutil cp' '-h' option)
     override_gsutil (list): optional argv to run gsutil
+
   Returns:
     The status code returned from running the generated gsutil command.
   """
@@ -431,13 +432,14 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
 
 
 def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
-                   cache_control=None, metadata=None, override_gsutil=None):
+                   cache_control=None, metadata=None, override_gsutil=None,
+                   dest_filename=None):
   """Copy a file to Google Storage.
 
   Runs the following command:
     gsutil -h Content-Type:<mimetype> \
         -h Cache-Control:<cache_control> \
-        cp -a <gs_acl> file://<filename> <gs_base>/<subdir>/<filename w/o path>
+        cp -a <gs_acl> file://<filename> <gs_base>/<subdir>/<dest_filename>
 
   Args:
     filename: the file to upload
@@ -446,6 +448,9 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
     mimetype: optional value to add as a Content-Type header
     gs_acl: optional value to add as a canned-acl
     override_gsutil (list): optional argv to run gsutil
+    dest_filename: optional destination filename; if not specified, then the
+        destination filename will be the source filename without the path
+
   Returns:
     The status code returned from running the generated gsutil command.
   """
@@ -459,7 +464,9 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
       dest = os.path.dirname(gs_base)
     else:
       dest = '/'.join([gs_base, subdir])
-  dest = '/'.join([dest, os.path.basename(filename)])
+  if dest_filename is None:
+    dest_filename = os.path.basename(filename)
+  dest = '/'.join([dest, dest_filename])
   return GSUtilCopy(source, dest, mimetype, gs_acl, cache_control,
                     metadata=metadata, override_gsutil=override_gsutil)
 

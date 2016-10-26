@@ -114,20 +114,45 @@ class TestGetBuildRevisions(unittest.TestCase):
     self.assertEquals(None, webkit_revision)
 
 
+@mock.patch('__main__.slave_utils.GSUtilSetup',
+            mock.MagicMock(return_value='/mock/gsutil'))
+@mock.patch('__main__.chromium_utils.RunCommand')
 class TestGSUtil(unittest.TestCase):
-  @mock.patch('__main__.slave_utils.GSUtilSetup', return_value='/mock/gsutil')
-  @mock.patch('__main__.chromium_utils.RunCommand')
+
   def testGSUtilCopyCacheControl(self, # pylint: disable=R0201
-                                 run_command_mock, gs_util_setup_mock):
-    slave_utils.GSUtilCopyFile('foo', 'bar',
-      cache_control='mock_cache')
-    run_command_mock.assert_called_with(['/mock/gsutil', '-h',
-      'Cache-Control:mock_cache', 'cp', 'file://foo',
-      'file://bar/foo'])
-    slave_utils.GSUtilCopyDir('foo', 'bar',
-      cache_control='mock_cache')
-    run_command_mock.assert_called_with(['/mock/gsutil', '-m', '-h',
-      'Cache-Control:mock_cache', 'cp', '-R', 'foo', 'bar'])
+                                 run_command_mock):
+    slave_utils.GSUtilCopyFile('foo', 'bar', cache_control='mock_cache')
+    run_command_mock.assert_called_with([
+      '/mock/gsutil',
+      '-h',
+      'Cache-Control:mock_cache',
+      'cp',
+      'file://foo',
+      'file://bar/foo',
+    ])
+    slave_utils.GSUtilCopyDir('foo', 'bar', cache_control='mock_cache')
+    run_command_mock.assert_called_with([
+      '/mock/gsutil',
+      '-m',
+      '-h',
+      'Cache-Control:mock_cache',
+      'cp',
+      '-R',
+      'foo',
+      'bar',
+    ])
+
+  def testGSUtilCopyFileWithDestFilename(self, # pylint: disable=R0201
+                                         run_command_mock):
+    slave_utils.GSUtilCopyFile(
+        '/my/local/path/foo.txt', 'gs://bucket/dest/dir',
+        dest_filename='bar.txt')
+    run_command_mock.assert_called_with([
+      '/mock/gsutil',
+      'cp',
+      'file:///my/local/path/foo.txt',
+      'gs://bucket/dest/dir/bar.txt',
+    ])
 
 
 class GetGitRevisionTest(unittest.TestCase):
