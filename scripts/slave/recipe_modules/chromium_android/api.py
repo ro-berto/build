@@ -9,6 +9,7 @@ import os
 import pipes
 import re
 import sys
+import textwrap
 import urllib
 
 from recipe_engine.types import freeze
@@ -137,31 +138,36 @@ class AndroidApi(recipe_api.RecipeApi):
 
     return result
 
-  def clean_local_files(self):
+  def clean_local_files(self, clean_pyc_files=True):
     target = self.c.BUILD_CONFIG
     debug_info_dumps = self.m.path['checkout'].join('out',
                                                     target,
                                                     'debug_info_dumps')
     test_logs = self.m.path['checkout'].join('out', target, 'test_logs')
     build_product = self.m.path['checkout'].join('out', 'build_product.zip')
-    self.m.python.inline(
-        'clean local files',
-        """
-          import shutil, sys, os
-          shutil.rmtree(sys.argv[1], True)
-          shutil.rmtree(sys.argv[2], True)
-          try:
-            os.remove(sys.argv[3])
-          except OSError:
-            pass
+    python_inline_script = textwrap.dedent("""
+        import shutil, sys, os
+        shutil.rmtree(sys.argv[1], True)
+        shutil.rmtree(sys.argv[2], True)
+        try:
+          os.remove(sys.argv[3])
+        except OSError:
+          pass
+        """)
+    if clean_pyc_files:
+      python_inline_script += textwrap.dedent("""\
           for base, _dirs, files in os.walk(sys.argv[4]):
             for f in files:
               if f.endswith('.pyc'):
                 os.remove(os.path.join(base, f))
-        """,
-        args=[debug_info_dumps, test_logs, build_product,
-              self.m.path['checkout']],
-        infra_step=True,
+      """)
+
+    self.m.python.inline(
+      'clean local files',
+      python_inline_script,
+      args=[debug_info_dumps, test_logs, build_product,
+            self.m.path['checkout']],
+      infra_step=True,
     )
 
   def run_tree_truth(self, additional_repos=None):
