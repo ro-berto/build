@@ -30,7 +30,7 @@ def m_remote_run_chromium_src(recipe, **kwargs):
   kwargs.setdefault('revision', revision_getter)
   return remote_run_factory.RemoteRunFactory(
       active_master=ActiveMaster,
-      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      repository='https://chromium.googlesource.com/chromium/src.git',
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
       use_gitiles=True,

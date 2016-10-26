@@ -9,7 +9,7 @@
   "default_remote_run_properties": {
     "path_config": "kitchen",
   },
-  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/src.git",
 
   "builders": {
      "Chromium Linux Goma Staging": {
