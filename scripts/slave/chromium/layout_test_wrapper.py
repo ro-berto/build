@@ -47,7 +47,6 @@ def layout_test(options, args):
 
   command = [run_blink_tests,
              '--no-show-results',
-             '--no-new-test-results',
              '--full-results-html',    # For the dashboards.
              '--clobber-old-results',  # Clobber test results before each run.
              '--exit-after-n-failures', '5000',
