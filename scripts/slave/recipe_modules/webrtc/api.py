@@ -198,6 +198,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.mastername, self.buildername, use_goma=True,
       mb_config_path=self.m.path['checkout'].join('webrtc', 'build',
                                                   'mb_config.pyl'),
+      gn_isolate_map_path=self.m.path['checkout'].join('webrtc', 'build',
+                                                       'gn_isolate_map.pyl'),
       gyp_script=self.m.path['checkout'].join('webrtc', 'build',
                                               'gyp_webrtc.py'),
       isolated_targets=self._isolated_targets)

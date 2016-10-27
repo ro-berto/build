@@ -201,6 +201,7 @@
       "[BUILDER_CACHE]/Mac64_Release__large_tests_/src/webrtc/build/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
+      "--isolate-map-file=[BUILDER_CACHE]/Mac64_Release__large_tests_/src/webrtc/build/gn_isolate_map.pyl",
       "--gyp-script=[BUILDER_CACHE]/Mac64_Release__large_tests_/src/webrtc/build/gyp_webrtc.py",
       "//out/Release"
     ],
