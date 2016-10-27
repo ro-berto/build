@@ -245,27 +245,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux (more configs)\", \"buildnumber\": 571, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/more_configs\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux (more configs)\", \"buildnumber\": 571, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/more_configs\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=modules_unittests",
-      "--builder-name=Linux (more configs)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "modules_unittests",
-      "--gtest_filter=Intelligibility*"
-    ],
-    "name": "modules_unittests"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

@@ -255,27 +255,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"linux_more_configs\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.webrtc\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"webrtc/more_configs\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"linux_more_configs\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.webrtc\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"webrtc/more_configs\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=modules_unittests",
-      "--builder-name=linux_more_configs",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "modules_unittests",
-      "--gtest_filter=Intelligibility*"
-    ],
-    "name": "modules_unittests"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
