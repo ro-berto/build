@@ -1263,16 +1263,26 @@ class AndroidApi(recipe_api.RecipeApi):
         'android_webview', 'tools', 'cts_config')
     cts_filenames_json = self.m.file.read(
         'Fetch CTS filename data',
-        _CTS_CONFIG_SRC_PATH.join('webview_cts_gcs_path.json'),
+        _CTS_CONFIG_SRC_PATH.join('webview_cts_gcs_path_new.json'),
         test_data='''
                       {
                         "arm_64": {
-                          "L": "cts_arm64_L.zip"
+                          "L": {
+                            "filename": "cts_arm64_L.zip",
+                            "_origin": "aosp-lollipop-mr1-cts-dev@12345"
+                          },
+                          "N": {
+                            "filename": "cts_arm64_N.zip",
+                            "_origin": "aosp-nougat-cts-release@67890"
+                          }
                         }
                       }''')
     cts_filenames = self.m.json.loads(cts_filenames_json)
+    result = self.m.step.active_result
+    result.presentation.logs['webview_cts_gcs_path.json'] = (
+          cts_filenames_json.splitlines())
     try:
-      cts_filename = cts_filenames[arch][android_platform]
+      cts_filename = cts_filenames[arch][android_platform]["filename"]
     except KeyError:
       raise self.m.step.StepFailure(
           'No CTS test found to use for arch:%s android:%s' % (
@@ -1329,7 +1339,7 @@ class AndroidApi(recipe_api.RecipeApi):
       if result.stdout:
         result.presentation.logs['stdout'] = result.stdout.splitlines()
       result.presentation.logs['disabled_tests'] = (
-          expected_failure_json.split('\n'))
+          expected_failure_json.splitlines())
 
     from xml.etree import ElementTree
 

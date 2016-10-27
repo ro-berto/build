@@ -1136,10 +1136,26 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/android_webview/tools/cts_config/webview_cts_gcs_path.json",
+      "[SLAVE_BUILD]/src/android_webview/tools/cts_config/webview_cts_gcs_path_new.json",
       "/path/to/tmp/"
     ],
-    "name": "Fetch CTS filename data"
+    "name": "Fetch CTS filename data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                      {@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                        \"arm_64\": {@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          \"L\": {@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"filename\": \"cts_arm64_L.zip\",@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"_origin\": \"aosp-lollipop-mr1-cts-dev@12345\"@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          },@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          \"N\": {@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"filename\": \"cts_arm64_N.zip\",@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"_origin\": \"aosp-nougat-cts-release@67890\"@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          }@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                        }@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                      }@@@",
+      "@@@STEP_LOG_END@webview_cts_gcs_path.json@@@"
+    ]
   },
   {
     "cmd": [
