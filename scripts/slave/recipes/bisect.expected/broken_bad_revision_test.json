@@ -696,6 +696,10 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [],
+    "name": "Resolving hashes"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -703,8 +707,11 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving hash fc6dfc7ff5b1073408499478969261b826441144",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving hashes.resolving hash fc6dfc7ff5b1073408499478969261b826441144",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -714,8 +721,11 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving hashes.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],

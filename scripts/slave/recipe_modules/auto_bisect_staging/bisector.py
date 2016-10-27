@@ -538,7 +538,9 @@ class Bisector(object):
   def _revision_value_table(self):
     """Returns a string table showing revisions and their values."""
     header = [['Revision', 'Values']]
-    rows = [[r.revision_string(), str(r.debug_values)] for r in self.revisions]
+    with self._api.m.step.nest('Resolving hashes'):
+      rows = [[r.revision_string(), str(r.debug_values)]
+              for r in self.revisions]
     return self._pretty_table(header + rows)
 
   def _pretty_table(self, data):

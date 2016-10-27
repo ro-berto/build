@@ -1867,6 +1867,11 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving hashes"
+  },
+  {
     "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
       "footers",
@@ -1874,8 +1879,11 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[SLAVE_BUILD]\\src",
-    "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving hashes.resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],

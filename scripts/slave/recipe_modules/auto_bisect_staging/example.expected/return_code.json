@@ -2242,6 +2242,11 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving hashes"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Debug Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@0a1b2c3d4f, mean=None, overall_return_code=0, std_dev=None)@@@",

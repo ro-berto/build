@@ -1922,6 +1922,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Resolving hashes"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -1929,8 +1934,11 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "resolving hash fc6dfc7ff5b1073408499478969261b826441144",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving hashes.resolving hash fc6dfc7ff5b1073408499478969261b826441144",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],

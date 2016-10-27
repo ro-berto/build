@@ -1035,6 +1035,10 @@
   },
   {
     "cmd": [],
+    "name": "Resolving hashes"
+  },
+  {
+    "cmd": [],
     "name": "Debug Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, values=[], overall_return_code=0, std_dev=None)@@@",

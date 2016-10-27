@@ -2126,6 +2126,11 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Resolving hashes"
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

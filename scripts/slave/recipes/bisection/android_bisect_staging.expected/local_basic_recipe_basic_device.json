@@ -2224,6 +2224,11 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Resolving hashes"
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, mean_value=11.0, std_dev=11.40175425099138)@@@",
