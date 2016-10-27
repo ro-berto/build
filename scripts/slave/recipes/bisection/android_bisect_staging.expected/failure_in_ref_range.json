@@ -1756,7 +1756,7 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@Failure Output@benchmark fail@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -1837,7 +1837,7 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@Failure Output@benchmark fail@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -1918,7 +1918,7 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@Failure Output@benchmark fail@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -1999,7 +1999,7 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@Failure Output@benchmark fail@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -2080,7 +2080,7 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@Failure Output@benchmark fail@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {

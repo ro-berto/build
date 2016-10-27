@@ -204,6 +204,7 @@ def _run_command(api, command, step_name, **kwargs):
     step_result.presentation.logs['Captured Output'] = (
         step_result.stdout or '').splitlines()
   except api.m.step.StepFailure as sf:
+    sf.result.presentation.status = api.m.step.WARNING
     sf.result.presentation.logs['Failure Output'] = (
         sf.result.stdout or '').splitlines()
     if sf.result.stderr:  # pragma: no cover
