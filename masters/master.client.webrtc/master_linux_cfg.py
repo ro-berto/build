@@ -40,6 +40,7 @@ def Update(c):
           'Linux Tsan v2',
           'Linux UBSan',
           'Linux UBSan vptr',
+          'Linux (more configs)',
           'Linux64 Release [large tests]',
           'Linux64 Debug (GYP)',
           'Linux64 Release (GYP)',
@@ -61,6 +62,11 @@ def Update(c):
     {'name': 'Linux Tsan v2', 'slavebuilddir': 'linux_tsan2'},
     {'name': 'Linux UBSan', 'slavebuilddir': 'linux_ubsan'},
     {'name': 'Linux UBSan vptr', 'slavebuilddir': 'linux_ubsan_vptr'},
+    {
+      'name': 'Linux (more configs)',
+      'recipe': 'webrtc/more_configs',
+      'slavebuilddir': 'linux64',
+    },
     {
       'name': 'Linux64 Release [large tests]',
       'category': 'compile|baremetal',

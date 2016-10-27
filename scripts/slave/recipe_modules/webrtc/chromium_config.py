@@ -11,11 +11,12 @@ CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 
 SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
 
-
-@CONFIG_CTX(includes=['chromium', 'dcheck', 'webrtc_openh264'])
-def webrtc_standalone(c):
+@CONFIG_CTX(includes=['chromium'])
+def webrtc_minimal(c):
   _compiler_defaults(c)
 
+@CONFIG_CTX(includes=['webrtc_minimal', 'dcheck', 'webrtc_openh264'])
+def webrtc_standalone(c):
   c.runtests.memory_tests_runner = c.CHECKOUT_PATH.join(
       'tools', 'valgrind-webrtc', 'webrtc_tests',
       platform_ext={'win': '.bat', 'mac': '.sh', 'linux': '.sh'})
