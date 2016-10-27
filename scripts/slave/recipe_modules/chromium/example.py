@@ -14,10 +14,15 @@ def RunSteps(api):
   buildername = api.properties.get('buildername')
   use_goma_module = api.properties.get('use_goma_module', False)
   out_dir = api.properties.get('out_dir', None)
-  bot_config = api.chromium_tests.create_bot_config_object(
-      mastername, buildername)
-  api.chromium_tests.configure_build(bot_config)
-  update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
+
+  if api.properties.get('codesearch'):
+    api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
+  else:
+    bot_config = api.chromium_tests.create_bot_config_object(
+        mastername, buildername)
+    api.chromium_tests.configure_build(bot_config)
+
+    update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
 
   if api.platform.is_win:
     api.chromium.run_mb(mastername, buildername, use_goma=True)
@@ -58,6 +63,15 @@ def GenTests(api):
       slavename='build1-a1',
       buildnumber='77457',
       use_goma_module=True,
+  )
+
+  yield api.test('codesearch') + api.properties(
+      mastername='tryserver.chromium.linux',
+      buildername='Chromium Linux Codesearch Builder',
+      slavename='build1-a1',
+      buildnumber='77457',
+      use_goma_module=True,
+      codesearch=True,
   )
 
   yield (api.test('basic_no_out_dir_with_goma_module_goma_disabled_win') +

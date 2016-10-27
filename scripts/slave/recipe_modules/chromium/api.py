@@ -262,9 +262,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       # Make it possible to build with TARGET_CROS_BOARD using goma module.
       assert not self.c.TARGET_CROS_BOARD
 
-      # TODO(tikuta): Use build_args with goma module.
-      assert not self.c.compile_py.build_args
-
       if out_dir is None:
         out_dir = 'out'
 
@@ -274,6 +271,9 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       command = [str(self.m.depot_tools.ninja_path), '-w', 'dupbuild=err',
                  '-C', target_output_dir]
+
+      if self.c.compile_py.build_args:
+        command.extend(self.c.compile_py.build_args)
 
       # Set -j just before 'with self.m.goma.build_with_goma('
       # for ninja_log_command being set correctly if starting goma
