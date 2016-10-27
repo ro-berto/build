@@ -8,6 +8,7 @@ from common.skia import global_constants
 DEPS = [
   'ct',
   'file',
+  'depot_tools/bot_update',
   'depot_tools/gclient',
   'gsutil',
   'recipe_engine/json',
@@ -99,7 +100,8 @@ def RunSteps(api):
   for repo in (skia, src):
     api.skia.update_repo(api.path['slave_build'], repo)
 
-  update_step = api.gclient.checkout(gclient_config=gclient_cfg)
+  update_step = api.bot_update.ensure_checkout(gclient_config=gclient_cfg,
+                                               cwd=api.path['slave_build'])
   skia_hash = update_step.presentation.properties['got_revision']
 
   # Checkout Swarming scripts.
@@ -113,9 +115,6 @@ def RunSteps(api):
   # Setup Go isolate binary.
   chromium_checkout = api.path['slave_build'].join('src')
   api.skia_swarming.setup_go_isolate(chromium_checkout.join('tools', 'luci-go'))
-
-  # Apply issue to the Skia checkout if this is a trybot run.
-  api.tryserver.maybe_apply_issue()
 
   # Build the tool.
   api.step('build %s' % build_target,

@@ -348,12 +348,13 @@ class SkiaApi(recipe_api.RecipeApi):
     gclient_cfg.target_os.add('llvm')
     checkout_kwargs = {}
     checkout_kwargs['env'] = self.default_env
-    update_step = self.m.gclient.checkout(gclient_config=gclient_cfg,
-                                          cwd=self.checkout_root,
-                                          **checkout_kwargs)
+
+    update_step = self.m.bot_update.ensure_checkout(
+        gclient_config=gclient_cfg,
+        cwd=self.checkout_root,
+        **checkout_kwargs)
 
     self.got_revision = update_step.presentation.properties['got_revision']
-    self.m.tryserver.maybe_apply_issue()
 
     if self._need_chromium_checkout:
       self.m.gclient.runhooks(cwd=self.checkout_root, env=self.gclient_env)

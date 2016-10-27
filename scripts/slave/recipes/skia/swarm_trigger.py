@@ -258,13 +258,12 @@ def checkout_steps(api):
     gclient_cfg.target_os.add('llvm')
 
   api.skia.update_repo(api.path['slave_build'], repo)
-  update_step = api.gclient.checkout(gclient_config=gclient_cfg)
+
+  update_step = api.bot_update.ensure_checkout(
+      gclient_config=gclient_cfg,
+      cwd=api.path['slave_build'])
+
   got_revision = update_step.presentation.properties['got_revision']
-  api.tryserver.maybe_apply_issue()
-  # TODO(rmistry): Remove after skbug.com/5588 is resolved.
-  if api.properties.get('patch_storage') == 'gerrit':
-    api.bot_update.apply_gerrit_ref(
-        root=str(api.path['slave_build'].join(repo.name)))
 
   return got_revision
 
