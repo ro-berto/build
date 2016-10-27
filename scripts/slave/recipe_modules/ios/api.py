@@ -119,14 +119,15 @@ class iOSApi(recipe_api.RecipeApi):
       ).json.output
 
       for key in (
-        'xcode version',
-        'GYP_DEFINES',
+        'additional_compile_targets',
+        'bucket',
         'configuration',
-        'sdk',
         'gn_args',
         'gn_args_file',
-        'additional_compile_targets',
+        'GYP_DEFINES',
         'mb_type',
+        'sdk',
+        'xcode version',
       ):
         if key in parent_config:
           self.__config[key] = parent_config[key]
