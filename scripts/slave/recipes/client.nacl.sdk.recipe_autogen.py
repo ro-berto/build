@@ -31,8 +31,6 @@ def sdk_multi_steps(api):
     result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
-    api.chromium.ensure_goma()
-
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
@@ -51,7 +49,7 @@ def sdk_multi_steps(api):
     api.chromium.cleanup_temp()
 
     # compile step
-    api.chromium.compile(['chrome'])
+    api.chromium.compile(['chrome'], use_goma_module=True)
 
     # annotated_steps step
     api.python(
@@ -79,8 +77,6 @@ def sdk_multirel_steps(api):
     result = api.bot_update.ensure_checkout()
     build_properties.update(result.json.output.get("properties", {}))
 
-    api.chromium.ensure_goma()
-
     # clobber before runhooks
     api.file.rmtree('clobber', api.path['checkout'].join('out', 'Release'))
 
@@ -99,7 +95,7 @@ def sdk_multirel_steps(api):
     api.chromium.cleanup_temp()
 
     # compile step
-    api.chromium.compile(['chrome'])
+    api.chromium.compile(['chrome'], use_goma_module=True)
 
     # annotated_steps step
     api.python(
