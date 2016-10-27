@@ -10,8 +10,10 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       # Skip rtc_unittests on swarming because it's flaky.
       # TODO(ehmaldonado): Get rid of this when http://bugs.webrtc.org/6500 is
       # fixed.
-      if (test == 'rtc_unittests' and test_suite == 'desktop_swarming' and
-          api.mastername != 'client.webrtc.fyi'):
+      if ((test == 'rtc_unittests' and test_suite == 'desktop_swarming' and
+           api.mastername != 'client.webrtc.fyi') or
+          (test == 'rtc_stats_unittests' and
+           api.buildername in ('win_x64_dbg', 'Win64 Debug'))):
         continue
       tests.append(WebRTCTest(test, enable_swarming=enable_swarming,
                               revision=revision, **extra_args))
@@ -21,6 +23,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     if (test_suite == 'desktop_swarming' and
         api.mastername != 'client.webrtc.fyi'):
       tests.append(WebRTCTest('rtc_unittests', revision=revision))
+    if api.buildername in ('win_x64_dbg', 'Win64 Debug'):
+      tests.append(WebRTCTest('rtc_stats_unittests', revision=revision))
   elif test_suite == 'webrtc_baremetal':
     if api.m.platform.is_linux:
       f = api.m.path['checkout'].join
