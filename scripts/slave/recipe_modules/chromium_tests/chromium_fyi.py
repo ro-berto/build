@@ -1448,6 +1448,22 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
     },
+    'ClangToTAndroid x64': {
+      'chromium_config': 'clang_tot_android',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'android_config': 'clang_builder_mb_x64',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'ClangToTMac': {
       'chromium_config': 'clang_tot_mac',
       'gclient_config': 'chromium',

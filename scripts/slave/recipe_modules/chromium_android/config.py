@@ -84,6 +84,10 @@ def clang_asan_tot_release_builder(c):  # pragma: no cover
 def clang_tot_debug_builder(c):  # pragma: no cover
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
+@config_ctx(includes=['x64_builder_mb'])
+def clang_builder_mb_x64(c):
+  pass
+
 @config_ctx()
 def x86_base(c):
   pass

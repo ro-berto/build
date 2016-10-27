@@ -595,12 +595,16 @@ def clang_tot_mac_asan(c):
   # Clear lsan configuration for mac.
   del c.gyp_env.GYP_DEFINES['lsan']
 
-@config_ctx(includes=['android_common', 'ninja', 'clang', 'asan', 'clang_tot'])
+@config_ctx(includes=['android_common', 'ninja', 'clang', 'clang_tot'])
+def clang_tot_android(c):
+  pass
+
+@config_ctx(includes=['clang_tot_android', 'asan'])
 def clang_tot_android_asan(c):
   # Like android_clang, minus goma, minus static_libarary, plus asan.
   pass
 
-@config_ctx(includes=['android_common', 'ninja', 'clang', 'clang_tot'])
+@config_ctx(includes=['clang_tot_android'])
 def clang_tot_android_dbg(c):
   # Like android_clang, minus goma, minus static_libarary.
   pass
