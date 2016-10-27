@@ -10,6 +10,10 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       # Skip rtc_unittests on swarming because it's flaky.
       # TODO(ehmaldonado): Get rid of this when http://bugs.webrtc.org/6500 is
       # fixed.
+      # Also skip rtc_stats_unittests on Windows64 Debug bots. It crashes with
+      # return code -1073741819.
+      # TODO(ehmaldonado): Get rid of this when http://crbug.com/660031 is
+      # fixed.
       if ((test == 'rtc_unittests' and test_suite == 'desktop_swarming' and
            api.mastername != 'client.webrtc.fyi') or
           (test == 'rtc_stats_unittests' and
@@ -23,6 +27,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     if (test_suite == 'desktop_swarming' and
         api.mastername != 'client.webrtc.fyi'):
       tests.append(WebRTCTest('rtc_unittests', revision=revision))
+    # Execute rtc_status_unittests locally instead.
+    # TODO(ehmaldonado): Get rid of this when http://crbug.com/660031 is fixed.
     if api.buildername in ('win_x64_dbg', 'Win64 Debug'):
       tests.append(WebRTCTest('rtc_stats_unittests', revision=revision))
   elif test_suite == 'webrtc_baremetal':
