@@ -560,6 +560,7 @@
       "--workdir",
       "../../..",
       "skia/swarm_compile",
+      "patch_set=12",
       "buildername=Build-Ubuntu-GCC-x86_64-Release-Trybot",
       "mastername=client.skia.compile",
       "patch_issue=456789",

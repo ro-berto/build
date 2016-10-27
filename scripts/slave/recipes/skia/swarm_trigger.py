@@ -197,6 +197,7 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
     if api.properties.get('patch_storage') == 'gerrit':
       properties['patch_storage'] = api.properties['patch_storage']
       properties['patch_ref'] = api.properties['patch_ref']
+      properties['patch_set'] = api.properties['patch_set']
       properties['patch_issue'] = api.properties['patch_issue']
     else:
       properties['issue'] = str(api.properties['issue'])
