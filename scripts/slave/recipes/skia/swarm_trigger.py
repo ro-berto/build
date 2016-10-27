@@ -245,7 +245,9 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
 def checkout_steps(api):
   """Run the steps to obtain a checkout of Skia."""
   gclient_cfg = api.gclient.make_config(
-      CACHE_DIR='/home/default/storage/skia-repo/cache')
+      CACHE_DIR=(
+          '/home/default/storage/skia-repo/buildbot/%s/cache' %
+          api.properties['slavename']))
   repo = gclient_cfg.solutions.add()
   repo.managed = False
   repo.revision = api.properties.get('revision') or 'origin/master'
