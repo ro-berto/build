@@ -57,13 +57,9 @@ def git_checkout(api, url, dest, ref=None):
   api.path['checkout'] = dest
 
   # Maybe apply a patch.
-  if (api.properties.get('rietveld') and
-      api.properties.get('issue') and
-      api.properties.get('patchset')):
+  if (api.properties.get('patch_storage') == 'rietveld'):
     api.rietveld.apply_issue()
-  elif (api.properties.get('repository') and
-        api.properties.get('event.patchSet.ref') and
-        api.properties.get('event.change.number')):
+  elif (api.properties.get('patch_storage') == 'gerrit'):
     api.bot_update.apply_gerrit_ref(root=dest)
     # Applying gerrit ref puts us in a detached branch. Go back to the master.
     git(api, 'checkout', 'master', cwd=dest)
@@ -155,22 +151,23 @@ def GenTests(api):
   )
   yield (
       api.test('Infra-PerCommit_try') +
-      api.properties(rietveld='https://codereview.chromium.org',
+      api.properties(patch_storage='rietveld',
+                     rietveld='https://codereview.chromium.org',
                      issue=1234,
                      patchset=1,
                      revision=REF_HEAD,
                      slavename='skiabot-linux-infra-001',
                      path_config='kitchen')
   )
-  gerrit_kwargs = {
-      'repository': 'skia',
-      'event.patchSet.ref': 'refs/changes/00/2100/2',
-      'event.change.number': '2100',
-  }
   yield (
       api.test('Infra-PerCommit_try_gerrit') +
-      api.properties(revision=REF_HEAD,
-                     slavename='skiabot-linux-infra-001',
-                     path_config='kitchen',
-                     **gerrit_kwargs)
+      api.properties(
+          patch_storage='gerrit',
+          revision=REF_HEAD,
+          slavename='skiabot-linux-infra-001',
+          path_config='kitchen') +
+      api.properties.tryserver(
+          gerrit_project='skia',
+          gerrit_url='https://skia-review.googlesource.com/',
+      )
   )

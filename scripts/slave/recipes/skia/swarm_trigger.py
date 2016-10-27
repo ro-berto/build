@@ -196,9 +196,8 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
   if builder_cfg['is_trybot']:
     if api.properties.get('patch_storage') == 'gerrit':
       properties['patch_storage'] = api.properties['patch_storage']
-      properties['repository'] = api.properties['repository']
-      properties['event.patchSet.ref'] = api.properties['event.patchSet.ref']
-      properties['event.change.number'] = api.properties['event.change.number']
+      properties['patch_ref'] = api.properties['patch_ref']
+      properties['patch_issue'] = api.properties['patch_issue']
     else:
       properties['issue'] = str(api.properties['issue'])
       properties['patchset'] = str(api.properties['patchset'])
@@ -879,12 +878,6 @@ def GenTests(api):
   )
   yield test
 
-  gerrit_kwargs = {
-    'patch_storage': 'gerrit',
-    'repository': 'skia',
-    'event.patchSet.ref': 'refs/changes/00/2100/2',
-    'event.change.number': '2100',
-  }
   test = (
     api.test('recipe_with_gerrit_patch') +
     api.properties(buildername='Build-Ubuntu-GCC-x86_64-Release-Trybot',
@@ -893,7 +886,12 @@ def GenTests(api):
                    buildnumber=5,
                    path_config='kitchen',
                    revision='abc123',
-                   **gerrit_kwargs) +
+                   patch_storage='gerrit') +
+    api.properties.tryserver(
+        buildername='Build-Ubuntu-GCC-x86_64-Release-Trybot',
+        gerrit_project='skia',
+        gerrit_url='https://skia-review.googlesource.com/',
+    ) +
     api.step_data('upload new .isolated file for compile_skia',
                   stdout=api.raw_io.output('def456 XYZ.isolated'))
   )

@@ -65,9 +65,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/apply_gerrit.py",
       "--gerrit_repo",
-      "skia",
+      "https://skia.googlesource.com/skia",
       "--gerrit_ref",
-      "refs/changes/00/2100/2",
+      "refs/changes/89/456789/12",
       "--root",
       "[SLAVE_BUILD]/go/src/go.skia.org/infra"
     ],
@@ -145,9 +145,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/apply_gerrit.py",
       "--gerrit_repo",
-      "skia",
+      "https://skia.googlesource.com/skia",
       "--gerrit_ref",
-      "refs/changes/00/2100/2",
+      "refs/changes/89/456789/12",
       "--root",
       "[SLAVE_BUILD]/go/src/go.skia.org/infra"
     ],
@@ -233,7 +233,7 @@
       "DEPOT_TOOLS": "[DEPOT_TOOLS]",
       "GIT_USER_AGENT": "git/1.9.1",
       "GOPATH": "[SLAVE_BUILD]/go",
-      "KARMA_PORT": "15001",
+      "KARMA_PORT": "9876",
       "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
     },
     "name": "run_unittests"
