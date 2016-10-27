@@ -248,123 +248,22 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "gen",
-      "//out/Debug",
-      "--args=rtc_enable_protobuf=false is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "gn (3)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtc_enable_protobuf=false)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Debug",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--buildbot-buildername",
-      "Linux (more configs)",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "TestSlavename",
-      "--goma-deps-cache-file",
-      "Linux__more_configs_.gomadeps",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--"
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux (more configs)\", \"buildnumber\": 571, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/more_configs\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux (more configs)\", \"buildnumber\": 571, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/more_configs\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--step-name=modules_unittests",
+      "--builder-name=Linux (more configs)",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "modules_unittests",
+      "--gtest_filter=Intelligibility*"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "compile (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "gen",
-      "//out/Debug",
-      "--args=rtc_include_opus=false is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "gn (4)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtc_include_opus=false)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "--target",
-      "Debug",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--buildbot-buildername",
-      "Linux (more configs)",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "TestSlavename",
-      "--goma-deps-cache-file",
-      "Linux__more_configs_.gomadeps",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "compile (4)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
+    "name": "modules_unittests"
   },
   {
     "name": "$result",

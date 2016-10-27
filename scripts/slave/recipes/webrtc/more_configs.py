@@ -68,8 +68,8 @@ def RunSteps(api):
 
   BuildSteps(api, name='minimal')
   BuildSteps(api, gn_arg='rtc_enable_intelligibility_enhancer=true')
-  BuildSteps(api, gn_arg='rtc_enable_protobuf=false')
-  BuildSteps(api, gn_arg='rtc_include_opus=false')
+  api.chromium.runtest(test='modules_unittests',
+                       args=['--gtest_filter=Intelligibility*'])
 
 
 def GenTests(api):
