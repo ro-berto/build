@@ -196,6 +196,7 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
   if builder_cfg['is_trybot']:
     if api.properties.get('patch_storage') == 'gerrit':
       properties['patch_storage'] = api.properties['patch_storage']
+      properties['repository'] = api.properties['repository']
       properties['patch_ref'] = api.properties['patch_ref']
       properties['patch_set'] = api.properties['patch_set']
       properties['patch_issue'] = api.properties['patch_issue']
@@ -243,7 +244,8 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
 
 def checkout_steps(api):
   """Run the steps to obtain a checkout of Skia."""
-  gclient_cfg = api.gclient.make_config(CACHE_DIR=None)
+  gclient_cfg = api.gclient.make_config(
+      CACHE_DIR='/home/default/storage/skia-repo/cache')
   repo = gclient_cfg.solutions.add()
   repo.managed = False
   repo.revision = api.properties.get('revision') or 'origin/master'
@@ -886,6 +888,7 @@ def GenTests(api):
                    buildnumber=5,
                    path_config='kitchen',
                    revision='abc123',
+                   repository='skia',
                    patch_storage='gerrit') +
     api.properties.tryserver(
         buildername='Build-Ubuntu-GCC-x86_64-Release-Trybot',
