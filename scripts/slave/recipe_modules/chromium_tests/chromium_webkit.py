@@ -171,9 +171,8 @@ SPEC['builders'] = {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 64,
     },
-    'compile_targets': [
-      'blink_tests',
-    ],
+    'bot_type': 'tester',
+    'parent_buildername': 'WebKit Mac Builder',
     'tests': [
       steps.BlinkTest(),
     ],
@@ -196,7 +195,8 @@ SPEC['builders'] = {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 64,
     },
-    'bot_type': 'builder',
+    'bot_type': 'tester',
+    'parent_buildername': 'WebKit Mac Builder',
     'tests': [
       steps.BlinkTest(),
     ],

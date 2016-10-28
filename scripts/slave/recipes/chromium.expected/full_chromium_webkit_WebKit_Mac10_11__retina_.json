@@ -37,7 +37,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@1111111",
       "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
@@ -50,7 +50,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"1111111\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -270,63 +270,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/mac_layout/src/out/Release",
-      "--clean-isolated-files"
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[BUILDER_CACHE]/mac_layout/src/out/Release"
     ],
-    "name": "clean isolated files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/mac_layout/src/tools/mb/mb.py",
-      "gen",
-      "-m",
-      "chromium.webkit",
-      "-b",
-      "WebKit Mac10.11 (retina)",
-      "--config-file",
-      "[BUILDER_CACHE]/mac_layout/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--swarming-targets-file",
-      "browser_tests\n",
-      "//out/Release"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac_layout/src",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "generate_build_files",
+    "name": "rmtree build directory",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[BUILDER_CACHE]/mac_layout/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -336,82 +292,21 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
       "Release",
       "--src-dir",
       "[BUILDER_CACHE]/mac_layout/src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--buildbot-buildername",
-      "WebKit Mac10.11 (retina)",
-      "--buildbot-mastername",
+      "--build-archive-url",
+      "gs://test-domain/test-archive.zip",
+      "--master-name",
       "chromium.webkit",
-      "--buildbot-slavename",
-      "TestSlavename",
-      "--goma-deps-cache-file",
-      "WebKit_Mac10_11__retina_.gomadeps",
-      "--build-data-dir",
-      "[ROOT]/build_data_dir",
-      "--compiler",
-      "goma-clang",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--",
-      "blink_tests",
-      "browser_tests",
-      "browser_tests_run"
+      "--build-number",
+      "571"
     ],
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/mac_layout/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/mac_layout/src/out/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/mac_layout/src/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[BUILDER_CACHE]/mac_layout/src/out/Release/browser_tests.isolated.gen.json"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "extract build"
   },
   {
     "cmd": [
@@ -442,21 +337,87 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "browser_tests"
+      "[BUILDER_CACHE]/mac_layout/src/tools/swarming_client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--priority",
+      "25",
+      "--shards",
+      "1",
+      "--task-name",
+      "browser_tests/Mac-10.11/ffffffffff/WebKit Mac10.11 (retina)/571",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "gpu",
+      "none",
+      "--dimension",
+      "hidpi",
+      "1",
+      "--dimension",
+      "os",
+      "Mac-10.11",
+      "--dimension",
+      "pool",
+      "Chrome",
+      "--tag",
+      "buildername:WebKit Mac10.11 (retina)",
+      "--tag",
+      "buildnumber:571",
+      "--tag",
+      "data:ffffffffffffffffffffffffffffffffffffffff",
+      "--tag",
+      "master:chromium.webkit",
+      "--tag",
+      "name:browser_tests",
+      "--tag",
+      "os:Mac-10.11",
+      "--tag",
+      "project:chromium",
+      "--tag",
+      "purpose:CI",
+      "--tag",
+      "purpose:post-commit",
+      "--tag",
+      "slavename:TestSlavename",
+      "--tag",
+      "stepname:browser_tests on Mac-10.11",
+      "--idempotent",
+      "ffffffffffffffffffffffffffffffffffffffff",
+      "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[error] browser_tests",
+    "name": "[trigger] browser_tests on Mac-10.11",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print '*.isolated file for target %s is missing' % sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.11/ffffffffff/WebKit Mac10.11 (retina)/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Mac-10.11/ffffffffff/WebKit Mac10.11 (retina)/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -467,9 +428,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Mac10.11 (retina)\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Mac10.11 (retina)\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"WebKit Mac Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Mac10.11 (retina)\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Mac10.11 (retina)\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"WebKit Mac Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests",
       "--builder-name=WebKit Mac10.11 (retina)",
       "--slave-name=TestSlavename",
@@ -535,25 +496,64 @@
     ]
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nprint '%s wasn\\'t triggered' % sys.argv[1]\nsys.exit(1)\n",
-      "browser_tests"
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "python",
+      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[BUILDER_CACHE]/mac_layout/src/tools/swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--json",
+      "{\"base_task_name\": \"browser_tests/Mac-10.11/ffffffffff/WebKit Mac10.11 (retina)/571\", \"tasks\": {\"browser_tests/Mac-10.11/ffffffffff/WebKit Mac10.11 (retina)/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[collect error] browser_tests",
+    "name": "browser_tests on Mac-10.11",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print '%s wasn\\'t triggered' % sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "--master-name",
+      "chromium.webkit",
+      "--builder-name",
+      "WebKit Mac10.11 (retina)",
+      "--build-number",
+      "571",
+      "--test-type",
+      "browser_tests on Mac-10.11",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac_layout",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [browser_tests on Mac-10.11]"
   },
   {
     "name": "$result",
