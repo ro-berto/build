@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from . import steps
-import time
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
@@ -184,28 +183,6 @@ SPEC = {
       ],
       'testing': {
         'platform': 'linux',
-      },
-      'enable_swarming': True,
-      'use_isolate': True,
-    },
-    'WebKit Linux - RandomOrder':{
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb','ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'blink_tests',
-      ],
-      'tests': [
-        steps.BlinkTest(extra_args=[
-          '--order=random',
-        ]),
-      ],
-      'testing': {
-          'platform': 'linux',
       },
       'enable_swarming': True,
       'use_isolate': True,
