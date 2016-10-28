@@ -40,9 +40,6 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     env = ConfigGroup(
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
     ),
-    gce_setup = Single(bool, required=False, empty_val=False),
-    gce_snapshot = Single(basestring, required=False),
-    gce_count = Single(int, required=False),
     restart_usb = Single(bool, required=False, empty_val=False),
     use_devil_adb = Single(bool, required=False, empty_val=False),
   )
