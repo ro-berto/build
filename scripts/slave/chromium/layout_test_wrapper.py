@@ -96,6 +96,10 @@ def layout_test(options, args):
     command.append('--enable-wptserve')
   if options.batch_size:
     command.extend(['--batch-size', options.batch_size])
+  if options.order:
+    command.extend(['--order', options.order])
+  if options.seed:
+    command.extend(['--seed', options.seed])
   if options.run_part:
     command.extend(['--run-part', options.run_part])
   if options.builder_name:
