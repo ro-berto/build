@@ -704,9 +704,17 @@ class PreferredBuilderNextSlaveFuncNG(object):
       # one group will be chosen arbitrarily, the actual slave will be chosen
       # randomly.
       key = prefs.most_common()[0][0]
-    return self._choice(
+    result = self._choice(
         [s for s in slave_builders
          if s.slave.properties.getProperty('preferred_builder') == key])
+
+    log.msg('Assigning slave to %s. Preferred: %s. Chose %s.' % (
+        builder.name,
+        [s.slave.properties.getProperty('preferred_builder')
+         for s in slave_builders],
+        result))
+
+    return result
 
 
 def SetMasterProcessName():
