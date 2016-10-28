@@ -68,6 +68,7 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
+      'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.10',
       },
@@ -84,6 +85,10 @@ SPEC = {
       'parent_buildername': 'Mac Builder',
       'testing': {
         'platform': 'mac',
+      },
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'os': 'Mac-10.11',
       },
     },
     'Mac Builder (dbg)': {
