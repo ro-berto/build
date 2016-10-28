@@ -2,7 +2,7 @@
   "class_map": {
     "builder": {
       "amd64-generic-full": [
-        "build162-m2"
+        "build98-m2"
       ], 
       "amd64-generic-incremental": [
         "build86-m2"
@@ -56,7 +56,6 @@
   "unallocated": [
     "build333-m2", 
     "build94-m2", 
-    "build98-m2", 
     "cros199-c2"
   ]
 }
