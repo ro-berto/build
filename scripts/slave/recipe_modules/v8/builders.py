@@ -43,6 +43,7 @@ SimdJs = TestStepConfig('simdjs')
 SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
 Test262_2 = TestStepConfig('test262', shards=2)
+Test262_4 = TestStepConfig('test262', shards=4)
 Test262Extra_2 = TestStepConfig('test262_extra', shards=2)
 Test262IgnitionTurbofan = TestStepConfig('test262_ignition_turbofan')
 Test262IgnitionTurbofan_2 = TestStepConfig(
@@ -1445,7 +1446,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_5, Test262_2, Mozilla, SimdJs],
+        'tests': [V8Testing_5, Test262_4, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
