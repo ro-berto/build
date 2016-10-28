@@ -44,7 +44,12 @@ def _url_open_json(url):
         return json.load(f)
     except (urllib2.URLError, IOError) as f:
       if attempts > MAX_ATTEMPTS:
-        raise
+        # Raise a ValueError because this can be called from multiprocessing,
+        # which can't pickle SSLContext objects, which apparently are
+        # properties of urllib2.URLError (it seems).
+        msg = "Error encountered during URL Fetch: %s" % f
+        logging.error(msg)
+        raise ValueError(msg)
 
       attempts += 1
       time_to_sleep = 2 ** attempts
@@ -163,7 +168,6 @@ def get_build_json(url_tuple):
   logging.debug('opening %s...' % url)
   return _url_open_json(url), master, builder, buildnum
 
-
 def get_build_jsons(master_builds, processes):
   """Get all new builds on specified masters.
 
@@ -236,19 +240,11 @@ def get_options():
 
 
 def get_updated_builds(masters, build_db, parallelism):
-  try:
-    new_builds, master_jsons = find_new_builds_per_master(masters, build_db)
-    build_jsons = get_build_jsons(new_builds, parallelism)
-    propagate_build_json_to_db(build_db, build_jsons)
-    return master_jsons, build_jsons
+  new_builds, master_jsons = find_new_builds_per_master(masters, build_db)
+  build_jsons = get_build_jsons(new_builds, parallelism)
+  propagate_build_json_to_db(build_db, build_jsons)
+  return master_jsons, build_jsons
 
-  # Catch this and raise a ValueError because this can be called from
-  # mulitprocessing, which can't pickle SSLContext objects, which apparently are
-  # properties of urllib2.URLError (it seems).
-  except (urllib2.URLError, IOError) as f:
-    msg = "Error encountered during URL Fetch: %s" % f
-    logging.error(msg)
-    raise ValueError(msg)
 
 
 def main():
