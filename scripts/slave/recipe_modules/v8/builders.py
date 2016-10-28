@@ -51,6 +51,7 @@ Test262IgnitionTurbofan_2 = TestStepConfig(
 Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
 Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
+Test262Variants_4 = TestStepConfig('test262_variants', shards=4)
 Test262Variants_6 = TestStepConfig('test262_variants', shards=6)
 Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
@@ -1675,7 +1676,7 @@ BUILDERS = {
           V8Testing,
           V8TestingExtra,
           OptimizeForSize,
-          Test262Variants_2,
+          Test262Variants_4,
           Test262Extra_2,
           Mozilla,
           Benchmarks,
@@ -1890,7 +1891,7 @@ BUILDERS = {
           V8Testing,
           V8TestingExtra,
           OptimizeForSize,
-          Test262Variants_2,
+          Test262Variants_4,
           Test262Extra_2,
           SimdJs,
           IgnitionTurbofan,
@@ -2259,7 +2260,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing_2, V8TestingExtra_2, IgnitionTurbofan],
+        'tests': [V8Testing_3, V8TestingExtra_2, IgnitionTurbofan],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_rel_ng': {
