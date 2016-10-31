@@ -197,7 +197,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     goma_env['GOMA_DEPS_CACHE_FILE'] = safe_buildername
 
     if self.c.compile_py.build_args:
-      args += ['--build-args', ' '.join(self.c.compile_py.build_args)]
+      for arg in self.c.compile_py.build_args:
+        args += ['--build-args', arg]
     if self.m.properties.get('build_data_dir'):
       args += ['--build-data-dir', self.m.properties.get('build_data_dir')]
     if self.c.compile_py.compiler:
