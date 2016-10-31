@@ -55,7 +55,7 @@ def GenTests(api):
            api.properties.generic(**properties))
 
     yield (api.test('%s_goma_disabled' % platform) +
-           api.step_data('start_goma', retcode=1) +
+           api.step_data('preprocess_for_goma.start_goma', retcode=1) +
            api.platform.name(platform) +
            api.properties(allow_build_without_goma=True) +
            api.properties.generic(**properties))

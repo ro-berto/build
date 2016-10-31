@@ -67,6 +67,10 @@
     "name": "gn"
   },
   {
+    "cmd": [],
+    "name": "preprocess_for_goma"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -78,8 +82,9 @@
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "start_goma",
+    "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_EXCEPTION@@@"
     ]
@@ -96,7 +101,10 @@
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "stop_goma (start failure)"
+    "name": "preprocess_for_goma.stop_goma (start failure)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -129,7 +137,10 @@
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "upload_goma_start_failed_logs"
+    "name": "preprocess_for_goma.upload_goma_start_failed_logs",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

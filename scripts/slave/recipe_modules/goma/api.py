@@ -189,45 +189,46 @@ print jobs
     assert self._goma_dir
     assert not self._goma_started
 
-    if self.build_data_dir:
-      self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
-          self.m.path.join(self.build_data_dir, 'goma_stats_proto'))
-      self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
-          self.m.path.join(self.build_data_dir, 'crash_report_id_file'))
+    with self.m.step.nest('preprocess_for_goma'):
+      if self.build_data_dir:
+        self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
+            self.m.path.join(self.build_data_dir, 'goma_stats_proto'))
+        self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
+            self.m.path.join(self.build_data_dir, 'crash_report_id_file'))
 
-    self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
-        self.service_account_json_path)
+      self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
+          self.service_account_json_path)
 
-    # GLOG_log_dir should not be set.
-    assert env is None or 'GLOG_log_dir' not in env
+      # GLOG_log_dir should not be set.
+      assert env is None or 'GLOG_log_dir' not in env
 
-    goma_ctl_start_env = self._goma_ctl_env.copy()
+      goma_ctl_start_env = self._goma_ctl_env.copy()
 
-    if env is not None:
-      goma_ctl_start_env.update(env)
+      if env is not None:
+        goma_ctl_start_env.update(env)
 
-    try:
-      self.m.python(
-          name='start_goma',
-          script=self.goma_ctl,
-          args=['restart'], env=goma_ctl_start_env, infra_step=True, **kwargs)
-      self._goma_started = True
-
-      self._start_cloudtail()
-
-    except self.m.step.InfraFailure as e: # pragma: no cover
       try:
-        with self.m.step.defer_results():
-          self.m.python(
-              name='stop_goma (start failure)',
-              script=self.goma_ctl,
-              args=['stop'], env=self._goma_ctl_env, **kwargs)
-          self._upload_logs(name='upload_goma_start_failed_logs',
-                            skip_sendgomatsmon=True)
-      except self.m.step.StepFailure:
-        pass
+        self.m.python(
+            name='start_goma',
+            script=self.goma_ctl,
+            args=['restart'], env=goma_ctl_start_env, infra_step=True, **kwargs)
+        self._goma_started = True
 
-      raise e
+        self._start_cloudtail()
+
+      except self.m.step.InfraFailure as e: # pragma: no cover
+        try:
+          with self.m.step.defer_results():
+            self.m.python(
+                name='stop_goma (start failure)',
+                script=self.goma_ctl,
+                args=['stop'], env=self._goma_ctl_env, **kwargs)
+            self._upload_logs(name='upload_goma_start_failed_logs',
+                              skip_sendgomatsmon=True)
+        except self.m.step.StepFailure:
+          pass
+
+        raise e
 
   def stop(self, ninja_log_outdir=None, ninja_log_compiler=None,
            ninja_log_command=None, ninja_log_exit_status=None, **kwargs):
@@ -243,21 +244,22 @@ print jobs
     assert self._goma_dir
     assert self._goma_started
 
-    with self.m.step.defer_results():
-      self.m.python(name='goma_jsonstatus', script=self.goma_ctl,
-                    args=['jsonstatus', self.json_path],
-                    env=self._goma_ctl_env, **kwargs)
-      self.m.python(name='goma_stat', script=self.goma_ctl,
-                    args=['stat'],
-                    env=self._goma_ctl_env, **kwargs)
-      self.m.python(name='stop_goma', script=self.goma_ctl,
-                    args=['stop'], env=self._goma_ctl_env, **kwargs)
-      self._upload_logs(ninja_log_outdir, ninja_log_compiler,
-                       ninja_log_command, ninja_log_exit_status)
-      self._stop_cloudtail()
+    with self.m.step.nest('postprocess_for_goma'):
+      with self.m.step.defer_results():
+        self.m.python(name='goma_jsonstatus', script=self.goma_ctl,
+                      args=['jsonstatus', self.json_path],
+                      env=self._goma_ctl_env, **kwargs)
+        self.m.python(name='goma_stat', script=self.goma_ctl,
+                      args=['stat'],
+                      env=self._goma_ctl_env, **kwargs)
+        self.m.python(name='stop_goma', script=self.goma_ctl,
+                      args=['stop'], env=self._goma_ctl_env, **kwargs)
+        self._upload_logs(ninja_log_outdir, ninja_log_compiler,
+                         ninja_log_command, ninja_log_exit_status)
+        self._stop_cloudtail()
 
-    self._goma_started = False
-    self._goma_ctl_env = {}
+      self._goma_started = False
+      self._goma_ctl_env = {}
 
   def _upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
                    ninja_log_command=None, ninja_log_exit_status=None,
