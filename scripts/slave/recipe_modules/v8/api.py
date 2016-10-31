@@ -477,6 +477,8 @@ class V8Api(recipe_api.RecipeApi):
       self._update_build_environment(self.m.step.active_result.stdout)
 
     self.peek_gn()
+    if self.m.properties['buildername'] != 'V8 Mips - builder':
+      kwargs['use_goma_module'] = True
     self.m.chromium.compile(**kwargs)
     self.isolate_tests()
 
