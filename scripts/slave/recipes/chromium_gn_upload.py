@@ -74,7 +74,7 @@ def RunSteps(api):
 
   api.chromium.run_mb(mastername, buildername)
 
-  api.chromium.compile(targets=['gn', 'gn_unittests'])
+  api.chromium.compile(targets=['gn', 'gn_unittests'], use_goma_module=True)
 
   path_to_binary = str(api.path['checkout'].join('out', 'Release', 'gn'))
   if api.platform.is_win:
