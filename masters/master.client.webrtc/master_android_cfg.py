@@ -36,6 +36,7 @@ def Update(c):
           'Android64 Builder x64 (dbg)',
           'Android32 GYP',
           'Android32 GYP (dbg)',
+          'Android32 (more configs)',
       ]),
   ])
 
@@ -53,6 +54,7 @@ def Update(c):
     {'name': 'Android64 Builder x64 (dbg)', 'slavebuilddir': 'android_x64'},
     {'name': 'Android32 GYP', 'slavebuilddir': 'android_gyp'},
     {'name': 'Android32 GYP (dbg)', 'slavebuilddir': 'android_gyp'},
+    {'name': 'Android32 (more configs)', 'slavebuilddir': 'android'},
   ]
 
   c['builders'].extend([

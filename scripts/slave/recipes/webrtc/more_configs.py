@@ -17,6 +17,11 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'webrtc_minimal',
     'gclient_config': 'webrtc',
   },
+  'webrtc_android_minimal': {
+    'chromium_config': 'android',
+    'gclient_config': 'webrtc',
+    'gclient_apply_config': ['android'],
+  },
 })
 
 BUILDERS = freeze({
@@ -31,6 +36,17 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
+      'Android32 (more configs)': {
+        'recipe_config': 'webrtc_android_minimal',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
     },
   },
   'tryserver.webrtc': {
@@ -40,6 +56,17 @@ BUILDERS = freeze({
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'android_more_configs': {
+        'recipe_config': 'webrtc_android_minimal',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
