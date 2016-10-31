@@ -26,13 +26,15 @@ class AutoBisectStagingTestApi(recipe_test_api.RecipeTestApi):
     A value of 1 indicates pre-regression,
     A value of 7 indicates post-regression,
     Neither, need more data.
+    A value of 404 forces NEED_MORE_DATA regardless
     """
 
     values_a = data[rev_a.commit_hash][:rev_a.test_run_count]
     values_b = data[rev_b.commit_hash][:rev_b.test_run_count]
 
     result = revision_state.FAIL_TO_REJECT
-    if rev_a.test_run_count < 15 and rev_b.test_run_count < 15:
+    if (rev_a.test_run_count < 15 and rev_b.test_run_count < 15) or (
+        404 in values_a + values_b):
       result = revision_state.NEED_MORE_DATA
     elif ((1 in values_a and 7 in values_b) or
           (7 in values_a and 1 in values_b)):

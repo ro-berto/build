@@ -25,6 +25,8 @@ from . import bisect_exceptions
 # These relate to how to increase the number of repetitions during re-test
 MINIMUM_SAMPLE_SIZE = 5
 INCREASE_FACTOR = 1.5
+# If after testing a revision this many times it cannot be classified, fail.
+MAX_TESTS_PER_REVISION = 20
 
 NOT_SIGNIFICANTLY_DIFFERENT = 'NOT_SIGNIFICANTLY_DIFFERENT'
 SIGNIFICANTLY_DIFFERENT = 'SIGNIFICANTLY_DIFFERENT'
@@ -459,6 +461,10 @@ class RevisionState(object):
       self.good = True
       return True
     # NEED_MORE_DATA
+    if self.test_run_count > MAX_TESTS_PER_REVISION:
+      raise bisect_exceptions.UntestableRevisionException(
+          'Not enough data after testing %s %d times' % (
+              self.revision_string(), self.test_run_count))
     return False
 
 

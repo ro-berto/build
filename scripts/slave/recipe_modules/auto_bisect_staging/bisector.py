@@ -807,7 +807,8 @@ class Bisector(object):
             'revision_string': r.revision_string(),
             'mean_value': r.mean,
             'std_dev': r.std_dev,
-            'values': r.debug_values or r.return_codes,
+            'values': (r.debug_values if self.test_type == 'perf'
+                       else r.return_codes),
             'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
         })
     return revision_rows
