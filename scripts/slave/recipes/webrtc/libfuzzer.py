@@ -61,7 +61,7 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  api.chromium.run_gn(use_goma=False)
+  api.chromium.run_gn(use_goma=True)
 
   step_result = api.python('calculate targets',
           api.path['depot_tools'].join('gn.py'),
@@ -77,7 +77,7 @@ def RunSteps(api):
 
   targets = step_result.stdout.split()
   api.step.active_result.presentation.logs['targets'] = targets
-  api.chromium.compile(targets=targets)
+  api.chromium.compile(targets=targets, use_goma_module=True)
 
 
 def GenTests(api):
@@ -86,4 +86,3 @@ def GenTests(api):
            api.step_data('calculate targets',
                stdout=api.raw_io.output('target1 target2 target3'))
            )
-
