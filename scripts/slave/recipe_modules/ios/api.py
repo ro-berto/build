@@ -358,7 +358,7 @@ class iOSApi(recipe_api.RecipeApi):
     if use_goma:
       self.m.chromium.compile(targets=compile_targets,
                               target=build_sub_path,
-                              cwd=cwd)
+                              cwd=cwd, use_goma_module=True)
     else:
       self.m.step('compile' + suffix, cmd, cwd=cwd)
 
