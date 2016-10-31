@@ -145,6 +145,8 @@ def RunSteps(api, buildername):
   api.chromium_android.init_and_sync(
       use_bot_update=False, use_git_cache=config.get('use_git_cache', True))
 
+  if config.get('build', False):
+    api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.chromium_android.run_tree_truth(additional_repos=['foo'])
   assert 'MAJOR' in api.chromium.get_version()
@@ -152,12 +154,12 @@ def RunSteps(api, buildername):
   api.chromium_android.host_info()
 
   if config.get('build', False):
-    api.chromium.compile()
+    api.chromium.compile(use_goma_module=True)
     api.chromium_android.make_zip_archive('zip_build_proudct', 'archive.zip',
         filters=['*.apk'])
   else:
     api.chromium_android.download_build('build-bucket',
-                                              'build_product.zip')
+                                        'build_product.zip')
   api.chromium_android.git_number()
 
   if config.get('specific_install'):
