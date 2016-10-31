@@ -20,19 +20,33 @@ DEPS = [
 
 
 def _RunStepsInternal(api):
-  repo_name = api.properties['repo_name']
+  repo_name = api.properties.get('repo_name')
   codereview_auth = api.properties.get('codereview_auth', False)
   patch_storage = api.properties.get('patch_storage', 'rietveld')
 
-  api.gclient.set_config(repo_name)
+  gclient_config = None
+  if repo_name:
+    api.gclient.set_config(repo_name)
+  else:
+    gclient_config = api.gclient.make_config()
+    solution = gclient_config.solutions.add()
+    solution.url = api.properties['repository_url']
+    solution.name = api.properties['solution_name']
+    gclient_config.got_revision_mapping[solution.name] = 'got_revision'
 
   kwargs = {}
   bot_update_step = api.bot_update.ensure_checkout(
+      gclient_config=gclient_config,
       patch_oauth2=codereview_auth,
       **kwargs)
   relative_root = api.gclient.calculate_patch_root(
-      api.properties['patch_project']).rstrip('/')
-  got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
+      api.properties['patch_project'],
+      gclient_config=gclient_config).rstrip('/')
+  if gclient_config:
+    got_revision_property = gclient_config.got_revision_mapping[relative_root]
+  else:
+    got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
+
   upstream = bot_update_step.json.output['properties'].get(
       got_revision_property)
 
@@ -238,4 +252,15 @@ def GenTests(api):
         repo_name='chromium',
         patch_project='chromium') +
     api.step_data('presubmit', api.json.output({}, retcode=2))
+  )
+
+  yield (
+    api.test('repository_url') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repository_url='https://skia.googlesource.com/skia.git',
+        solution_name='skia') +
+    api.step_data('presubmit',
+                  api.json.output([['chromium_presubmit', ['compile']]]))
   )
