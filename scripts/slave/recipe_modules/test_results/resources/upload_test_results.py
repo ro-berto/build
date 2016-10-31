@@ -49,13 +49,14 @@ def get_results_map_from_json(results_json):
   return test_results_map
 
 
-def generate_json_results(test_results_map, builder_name, build_number,
+def generate_json_results_file(results_json, builder_name, build_number,
                           results_directory, chrome_revision, master_name):
-  """Generates JSON results files from the given test_results_map.
+  """Generates JSON results files from the given |results_json|.
 
   Args:
-    test_results_map: A map of TestResult.
+    results_json: the raw test results object that follows GTest format.
   """
+  results_map = get_results_map_from_json(results_json)
   if not os.path.exists(results_directory):
     os.makedirs(results_directory)
 
@@ -78,6 +79,8 @@ def generate_json_results(test_results_map, builder_name, build_number,
       master_name=master_name)
   generator.generate_json_output()
   generator.generate_times_ms_file()
+  return [(f, os.path.join(results_directory, f)) for f in
+          (FULL_RESULTS_FILENAME, TIMES_MS_FILENAME)]
 
 
 def main():
@@ -125,11 +128,14 @@ def main():
                  'uploaded to the server.')
 
   with file(options.input_json) as json_file:
-    results_map = get_results_map_from_json(json_file.read())
+    results_json = json_file.read()
 
-  generate_json_results(results_map, options.builder_name,
-                        options.build_number, options.results_directory,
-                        options.chrome_revision, options.master_name)
+  files = generate_json_results_file(
+      results_json, builder_name=options.builder_name,
+      builder_number=options.build_number,
+      results_directory=options.results_directory,
+      chrome_revision=options.chrome_revision,
+      master_name=options.master_name)
 
   # Upload to a test results server if specified.
   if options.test_results_server and options.master_name:
@@ -138,9 +144,6 @@ def main():
     attrs = [('builder', options.builder_name),
              ('testtype', options.test_type),
              ('master', options.master_name)]
-
-    files = [(f, os.path.join(options.results_directory, f)) for f in
-             (FULL_RESULTS_FILENAME, TIMES_MS_FILENAME)]
 
     # Set uploading timeout in case appengine server is having problem.
     # 120 seconds are more than enough to upload test results.
