@@ -96,6 +96,10 @@ def layout_test(options, args):
     command.append('--enable-wptserve')
   if options.batch_size:
     command.extend(['--batch-size', options.batch_size])
+  if options.order:
+    command.extend(['--order', options.order])
+  if options.seed:
+    command.extend(['--seed', options.seed])
   if options.run_part:
     command.extend(['--run-part', options.run_part])
   if options.builder_name:
@@ -202,6 +206,16 @@ def main():
                            default=None,
                            help=('Run a the tests in batches (n), after every '
                                  'n tests, the test shell is relaunched.'))
+  option_parser.add_option('--order', action='store', default=None,
+                           help=('Determine the order in which the test cases will be run. '
+                                 '"none" == use the order in which the tests were listed '
+                                 'either in arguments or test list, '
+                                 '"natural" == use the natural order (default), '
+                                 '"random" == pseudo-random order. Seed can be specified '
+                                 'via --seed, otherwise a default seed will be used.')),
+  option_parser.add_option('--seed', type='int', default=None,
+                           help=('Seed to use for random test order. '
+                                 'Only applicable in combination with --order=random.')),
   option_parser.add_option('--run-part',
                            default=None,
                            help=('Run a specified part (n:l), the nth of lth'
