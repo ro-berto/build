@@ -205,7 +205,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       isolated_targets=self._isolated_targets)
     # GYP bots no longer compiles, we only want to ensure GYP executes.
     if 'gyp' not in self.buildername.lower():
-      self.m.chromium.compile()
+      self.m.chromium.compile(use_goma_module=True)
 
     if self.c.use_isolate:
       self.m.isolate.remove_build_metadata()
