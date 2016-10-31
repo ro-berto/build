@@ -25,6 +25,8 @@ def result_details(json_path, cs_base_url, master_name):
   with open(json_path) as json_file:
     json_object = json.loads(json_file.read())
     results_list = []
+    if not 'per_iteration_data' in json_object:
+      return 'Error: json file missing per_iteration_data.'
     for testsuite_run in json_object['per_iteration_data']:
       for test, test_runs in testsuite_run.iteritems():
         results_list.extend([
