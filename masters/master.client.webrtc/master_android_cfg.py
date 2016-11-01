@@ -4,6 +4,7 @@
 
 from buildbot.schedulers.basic import SingleBranchScheduler
 
+from master.factory import annotator_factory
 from master.factory import remote_run_factory
 
 import master_site_config
@@ -17,6 +18,9 @@ def m_remote_run(recipe, **kwargs):
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
       **kwargs)
+
+
+m_annotator = annotator_factory.AnnotatorFactory()
 
 
 def Update(c):
@@ -54,13 +58,19 @@ def Update(c):
     {'name': 'Android64 Builder x64 (dbg)', 'slavebuilddir': 'android_x64'},
     {'name': 'Android32 GYP', 'slavebuilddir': 'android_gyp'},
     {'name': 'Android32 GYP (dbg)', 'slavebuilddir': 'android_gyp'},
-    {'name': 'Android32 (more configs)', 'slavebuilddir': 'android'},
+    {
+      'name': 'Android32 (more configs)',
+      'recipe': 'webrtc/more_configs',
+      'slavebuilddir': 'android',
+    },
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_remote_run('webrtc/standalone'),
+        'factory': m_annotator.BaseFactory(spec['recipe'])
+                   if 'recipe' in spec
+                   else m_remote_run('webrtc/standalone'),
         'notify_on_missing': True,
         'category': 'android',
         'slavebuilddir': spec.get('slavebuilddir', 'android'),
