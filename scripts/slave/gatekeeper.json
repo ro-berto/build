@@ -779,6 +779,18 @@
               "webkit_tests"
             ]
           },
+          "Ozone Linux": {
+            "tree_notify": [
+              "thomasanderson@chromium.org",
+              "rjkroege@chromium.org",
+              "fwang@igalia.com",
+              "tonikitoo@igalia.com",
+              "joone.hur@intel.com"
+            ],
+            "forgiving_optional": [
+              "*"
+            ]
+          },
           "Site Isolation Android": {
             "tree_notify": [
               "nasko+fyi-bots@chromium.org",

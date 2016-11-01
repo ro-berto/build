@@ -360,6 +360,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'CFI Linux',
       }),
+      'linux_chromium_ozone_compile_only_ng': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Ozone Linux',
+      }),
       'linux_site_isolation': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Site Isolation Linux',
