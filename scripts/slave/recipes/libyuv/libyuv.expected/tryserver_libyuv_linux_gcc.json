@@ -148,7 +148,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Release",
-      "--args=is_clang=false symbol_level=2 dcheck_always_on=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+      "--args=is_clang=false use_sysroot=false symbol_level=2 dcheck_always_on=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "gn"
