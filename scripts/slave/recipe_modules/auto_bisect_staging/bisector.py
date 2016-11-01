@@ -530,8 +530,8 @@ class Bisector(object):
     if (self.lkgr and self.lkgr.test_run_count and self.fkbr and
         self.fkbr.test_run_count):
       result += '\n' + '\n'.join([
-          'LKGR values: %r' % list(self.lkgr.debug_values),
-          'FKBR values: %r' % list(self.fkbr.debug_values),
+          'LKGR values: %r' % list(self.lkgr.display_values),
+          'FKBR values: %r' % list(self.fkbr.display_values),
       ])
     return result
 
@@ -539,7 +539,7 @@ class Bisector(object):
     """Returns a string table showing revisions and their values."""
     header = [['Revision', 'Values']]
     with self._api.m.step.nest('Resolving hashes'):
-      rows = [[r.revision_string(), str(r.debug_values)]
+      rows = [[r.revision_string(), str(r.display_values)]
               for r in self.revisions]
     return self._pretty_table(header + rows)
 
@@ -807,8 +807,7 @@ class Bisector(object):
             'revision_string': r.revision_string(),
             'mean_value': r.mean,
             'std_dev': r.std_dev,
-            'values': (r.debug_values if self.test_type == 'perf'
-                       else r.return_codes),
+            'values': r.display_values,
             'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
         })
     return revision_rows

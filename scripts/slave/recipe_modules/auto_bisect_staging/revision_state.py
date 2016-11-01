@@ -128,6 +128,12 @@ class RevisionState(object):
         len(self.return_codes))
 
   @property
+  def display_values(self):
+    if self.bisector.is_return_code_mode():
+      return self.return_codes
+    return self.debug_values
+
+  @property
   def mean(self):
     if self.debug_values:
       return float(sum(self.debug_values))/len(self.debug_values)
