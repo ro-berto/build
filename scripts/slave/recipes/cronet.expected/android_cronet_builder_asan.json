@@ -625,6 +625,21 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/wait_for_devices.py",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "-v",
+      "07a00ca4"
+    ],
+    "name": "Set up ASAN on devices.wait_for_devices",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Release/bin/run_cronet_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
@@ -802,6 +817,21 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "Tear down ASAN on devices.07a00ca4",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/third_party/catapult/devil/devil/android/tools/wait_for_devices.py",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "-v",
+      "07a00ca4"
+    ],
+    "name": "Tear down ASAN on devices.wait_for_devices",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

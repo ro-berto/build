@@ -682,6 +682,18 @@ class AndroidApi(recipe_api.RecipeApi):
                   cmd + ['--device', d],
                   infra_step=True,
                   env=env)
+    self.wait_for_devices(self.devices)
+
+  def wait_for_devices(self, devices):
+    script = self.m.path['checkout'].join(
+        'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
+        'wait_for_devices.py')
+    args = [
+        '--adb-path', self.m.adb.adb_path(),
+        '-v'
+    ]
+    args += devices
+    self.m.python('wait_for_devices', script, args, infra_step=True)
 
   def asan_device_setup(self):
     clang_version_cmd = [
