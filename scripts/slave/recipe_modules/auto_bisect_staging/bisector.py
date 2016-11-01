@@ -7,6 +7,7 @@ import re
 import time
 import urllib
 
+from . import bisect_exceptions
 from . import config_validation
 from . import depot_config
 from . import revision_state
@@ -477,8 +478,7 @@ class Bisector(object):
     or REGRESSION_CHECK_TIMEOUT seconds have elapsed.
 
     Returns: True if the revisions produced results that differ from each
-    other in a statistically significant manner. False if such difference could
-    not be established in the time or sample size allowed.
+    other in a statistically significant manner. Raises an exception otherwise.
     """
     if self.is_return_code_mode():
       return (self.good_rev.overall_return_code !=
@@ -488,7 +488,7 @@ class Bisector(object):
       self.compare_revisions(self.good_rev, self.bad_rev)
       dummy_result = self.good_rev.mean != self.bad_rev.mean
       if not dummy_result:
-        self._set_insufficient_confidence_warning()
+        self._raise_low_confidence_error()
       return dummy_result
 
     # TODO(robertocn): This step should not be necessary in some cases.
@@ -505,22 +505,20 @@ class Bisector(object):
           revision_to_retest = min(self.good_rev, self.bad_rev,
                                    key=lambda x: x.test_run_count)
         revision_to_retest._do_test()
+      self._raise_low_confidence_error()
 
-      self._set_insufficient_confidence_warning()
-      return False
 
+  def _raise_low_confidence_error(self):
+    self.surface_result('REF_RANGE_FAIL')
+    self.surface_result('LO_INIT_CONF')
+    self.failed = True
+    self.failed_initial_confidence = True
+    raise bisect_exceptions.InconclusiveBisectException(
+        'Bisect failed to reproduce the regression with enough confidence.')
 
   def get_exception(self):
     raise NotImplementedError()  # pragma: no cover
     # TODO: should return an exception with the details of the failure.
-
-  def _set_insufficient_confidence_warning(
-      self):  # pragma: no cover
-    """Adds a warning about the lack of initial regression confidence."""
-    self.failed_initial_confidence = True
-    self.surface_result('LO_INIT_CONF')
-    self.warnings.append(
-        'Bisect failed to reproduce the regression with enough confidence.')
 
   def _results_debug_message(self):
     """Returns a string with values used to debug a bisect result."""

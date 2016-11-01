@@ -1156,6 +1156,36 @@
   },
   {
     "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "dcdcdc0ff1122212323134879ddceeb1240b0988"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving hashes"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Debug Info",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@a6298e4afe, mean_value=None, std_dev=None)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: RevisionState(rev=chromium@dcdcdc0ff1), values=[]@@@",
+      "@@@STEP_LOG_LINE@Debug Info@@@@",
+      "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
+      "@@@STEP_LOG_LINE@Debug Info@chromium@a6298e4afe[]             @@@",
+      "@@@STEP_LOG_LINE@Debug Info@chromium@dcdcdc0ff1[]             @@@",
+      "@@@STEP_LOG_END@Debug Info@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
@@ -1173,7 +1203,7 @@
   },
   {
     "name": "$result",
-    "reason": "Bisect cannot identify a culprit",
+    "reason": "Bisect cannot identify a culprit: Testing the \"bad\" revision failed",
     "recipe_result": null,
     "status_code": 1
   }

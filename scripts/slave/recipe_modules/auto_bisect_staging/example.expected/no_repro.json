@@ -1475,7 +1475,7 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_LO_INIT_CONF\"]@@@"
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_LO_INIT_CONF\", \"B4T_REF_RANGE_FAIL\"]@@@"
     ]
   },
   {
@@ -1529,24 +1529,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": \"The metric values for the initial \\\"good\\\" and \\\"bad\\\" revisions do not represent a clear regression.\", \"bad_revision\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": null, \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605, \"values\": [19, 20, 23, 1]}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.284386017443605, \"values\": [19, 20, 23, 1]}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": [\"Bisect failed to reproduce the regression with enough confidence.\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Post bisect results (2)",
-    "stdin": "{\"data\": {\"aborted_reason\": \"The metric values for the initial \\\"good\\\" and \\\"bad\\\" revisions do not represent a clear regression.\", \"bad_revision\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": null, \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605, \"values\": [19, 20, 23, 1]}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.284386017443605, \"values\": [19, 20, 23, 1]}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": [\"Bisect failed to reproduce the regression with enough confidence.\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"aborted_reason\": \"The metric values for the initial \\\"good\\\" and \\\"bad\\\" revisions do not represent a clear regression.\", \"bad_revision\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": null, \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605, \"values\": [19, 20, 23, 1]}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.284386017443605, \"values\": [19, 20, 23, 1]}], \"status\": \"failed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
@@ -1557,7 +1540,7 @@
   },
   {
     "name": "$result",
-    "reason": "Failed to upload result to Perf Dashboard. Error response: None",
+    "reason": "Bisect cannot identify a culprit: Bisect failed to reproduce the regression with enough confidence.",
     "recipe_result": null,
     "status_code": 1
   }
