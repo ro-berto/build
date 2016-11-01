@@ -212,10 +212,12 @@ def main():
                                  'either in arguments or test list, '
                                  '"natural" == use the natural order (default), '
                                  '"random" == pseudo-random order. Seed can be specified '
-                                 'via --seed, otherwise a default seed will be used.')),
+                                 'via --seed, '
+                                 'otherwise a default seed will be used.'))
   option_parser.add_option('--seed', type='int', default=None,
                            help=('Seed to use for random test order. '
-                                 'Only applicable in combination with --order=random.')),
+                                 'Only applicable in combination with '
+                                 '--order=random.'))
   option_parser.add_option('--run-part',
                            default=None,
                            help=('Run a specified part (n:l), the nth of lth'
