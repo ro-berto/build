@@ -361,6 +361,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -374,10 +377,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "android_webview_unittests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_base_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -391,10 +414,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "base_unittests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_cc_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -408,10 +451,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "cc_unittests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_components_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -425,10 +488,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "components_unittests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_events_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -442,10 +525,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "events_unittests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_gl_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -459,10 +562,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "gl_tests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_ipc_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -476,10 +599,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "ipc_tests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_skia_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -493,10 +636,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "skia_unittests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_sql_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -510,10 +673,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "sql_unittests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_ui_android_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -527,10 +710,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "ui_android_unittests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/out/Debug/bin/run_ui_touch_selection_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -539,6 +742,23 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "ui_touch_selection_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.fyi"
+    ],
+    "name": "ui_touch_selection_unittests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
   },
   {
     "cmd": [

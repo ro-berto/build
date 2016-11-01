@@ -1178,8 +1178,8 @@ class AndroidApi(recipe_api.RecipeApi):
          '-w', self.m.path['slave_build']] + args, **kwargs)
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
-                     gtest_filter=None, tool=None, result_details=False,
-                     store_tombstones=False,
+                     gtest_filter=None, tool=None, result_details=True,
+                     store_tombstones=True,
                      name=None, json_results_file=None, shard_timeout=None,
                      args=None, **kwargs):
     args = args or []
