@@ -1639,8 +1639,8 @@ BUILDERS = {
           'os': 'Ubuntu-14.04',
         },
         'swarming_properties': {
-          'default_expiration': 2 * 60 * 60,
-          'default_hard_timeout': 2 * 60 * 60,
+          'default_expiration': 3 * 60 * 60,
+          'default_hard_timeout': 3 * 60 * 60,
           'default_priority': 35,
         },
       },
