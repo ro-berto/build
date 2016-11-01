@@ -14,6 +14,8 @@ import test_env  # pylint: disable=W0611,W0403
 
 from master import status_logger
 
+from infra_libs import ts_mon
+
 
 ### Mock buildbot objects.
 
@@ -68,12 +70,13 @@ class Build(object):
 
 
 class Step(object):
-  def __init__(self, step_number=8, result=0):
+  def __init__(self, step_number=8, result=0, name='reticulating_splines'):
     self.step_number = step_number
     self.__result = result
+    self._name = name
 
   def getName(self):
-    return 'reticulating_splines'
+    return self._name
 
   def getText(self):
     return 'step text'
@@ -107,6 +110,10 @@ def _make_logger(event_logfile=None, ts_mon_logfile=None,
 ### Main test class.
 
 class StatusLoggerTest(unittest.TestCase):
+
+  def setUp(self):
+    super(StatusLoggerTest, self).setUp()
+    ts_mon.reset_for_unittest(disable=True)
 
   def testNormalInitialization(self):
     with _make_logger() as logger:
@@ -263,6 +270,28 @@ class StatusLoggerTest(unittest.TestCase):
         line = f.read()
         d = json.loads(line)
         self.assertEqual(expected, d)
+
+  def testBotUpdateStepMonitor(self):
+    properties = {'patch_project': '',
+                  'subproject_tag': ''}
+    step = Step(step_number=1, name='bot_update 1')
+    build = Build(steps=[step], properties=properties)
+    with _make_logger() as logger:
+      logger.stepFinished(build, step, [0])
+    expected_fields = {
+        'slave': build.getSlavename(),
+        'builder': build.getBuilder().name,
+        'master': logger.master_dir,
+        'result': 'success',
+        'step_name': 'bot_update',
+        'subproject_tag': '',
+        'project_id': ''
+    }
+    duration_dist = status_logger.step_durations.get(expected_fields)
+    started, finished  = step.getTimes()
+    self.assertEqual(duration_dist.count, 1)
+    self.assertEqual(duration_dist.sum, finished - started)
+    self.assertEqual(1, status_logger.step_counts.get(expected_fields))
 
   def testStepStepWithMissingProject(self):
     properties = {'patch_project': '',

@@ -21,6 +21,17 @@ from twisted.python import log as twisted_log
 
 from common import chromium_utils
 
+from infra_libs import ts_mon
+
+step_durations  = ts_mon.CumulativeDistributionMetric(
+    'buildbot/master/builders/steps/durations',
+    description='Time (in seconds) from step start to step end',
+    units=ts_mon.MetricsDataUnits.SECONDS)
+
+step_counts  = ts_mon.CounterMetric(
+    'buildbot/master/builders/steps/count',
+    description='Count of step results, per builder and step')
+
 
 class StatusEventLogger(StatusReceiverMultiService):
   """Log status events to a file on disk or event collection endpoint.
@@ -386,7 +397,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     bot = build.getSlavename()
     step_name = step.getName()
     step_text = ' '.join(step.getText())
-    _, finished = step.getTimes()
+    started, finished = step.getTimes()
     properties = build.getProperties()
     self.send_build_event(
         'END', finished * 1000, 'STEP', bot, builder_name, build_number,
@@ -401,14 +412,30 @@ class StatusEventLogger(StatusReceiverMultiService):
     properties = build.getProperties()
     project_id = properties.getProperty('patch_project')
     subproject_tag = properties.getProperty('subproject_tag')
+    step_result = buildbot.status.results.Results[step.getResults()[0]]
 
     self.send_step_result(
       finished,
       builder_name,
       bot,
-      buildbot.status.results.Results[step.getResults()[0]],
+      step_result,
       project_id,
       subproject_tag)
+
+    if re.match('bot_update', step_name):
+      values = {
+          'slave': bot,
+          'project_id': project_id,
+          'builder': builder_name,
+          'result': step_result,
+          'subproject_tag': subproject_tag,
+          'step_name': 'bot_update',
+          'master': self.master_dir
+      }
+      fields = { key: value if value is not None else ''
+                for key, value in values.iteritems() }
+      step_durations.add(finished - started, fields=fields)
+      step_counts.increment(fields=fields)
 
   def buildFinished(self, builderName, build, results):
     build_number = build.getNumber()
