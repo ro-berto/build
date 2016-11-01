@@ -136,7 +136,6 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 use_goma=1",
-      "GYP_MSVS_VERSION": "2013",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -149,7 +148,7 @@
       "--root=[SLAVE_BUILD]\\src",
       "gen",
       "//out/Debug",
-      "--args=symbol_level=2 visual_studio_version=2013 dcheck_always_on=true is_debug=true target_cpu=\"x86\" use_goma=true goma_dir=\"[CACHE]\\cipd\\goma\""
+      "--args=symbol_level=2 dcheck_always_on=true is_debug=true target_cpu=\"x86\" use_goma=true goma_dir=\"[CACHE]\\cipd\\goma\""
     ],
     "cwd": "[SLAVE_BUILD]\\src",
     "name": "gn"

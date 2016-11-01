@@ -14,10 +14,10 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-          'Win32 Debug (VS2013)',
-          'Win32 Release (VS2013)',
-          'Win64 Debug (VS2013)',
-          'Win64 Release (VS2013)',
+          'Win32 Debug',
+          'Win32 Release',
+          'Win64 Debug',
+          'Win64 Release',
           'Win32 Debug (Clang)',
           'Win32 Release (Clang)',
           'Win64 Debug (Clang)',
@@ -26,10 +26,10 @@ def Update(c):
   ])
 
   specs = [
-    {'name': 'Win32 Debug (VS2013)', 'slavebuilddir': 'win_2013'},
-    {'name': 'Win32 Release (VS2013)', 'slavebuilddir': 'win_2013'},
-    {'name': 'Win64 Debug (VS2013)', 'slavebuilddir': 'win_2013'},
-    {'name': 'Win64 Release (VS2013)', 'slavebuilddir': 'win_2013'},
+    {'name': 'Win32 Debug', 'slavebuilddir': 'win'},
+    {'name': 'Win32 Release', 'slavebuilddir': 'win'},
+    {'name': 'Win64 Debug', 'slavebuilddir': 'win'},
+    {'name': 'Win64 Release', 'slavebuilddir': 'win'},
     {'name': 'Win32 Debug (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win32 Release (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win64 Debug (Clang)', 'slavebuilddir': 'win_clang'},

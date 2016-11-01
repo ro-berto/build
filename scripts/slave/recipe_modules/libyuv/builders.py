@@ -42,9 +42,8 @@ BUILDERS = freeze({
       'build_gs_bucket': 'chromium-libyuv',
     },
     'builders': {
-      'Win32 Debug (VS2013)': {
+      'Win32 Debug': {
         'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2013'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -52,9 +51,8 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'Win32 Release (VS2013)': {
+      'Win32 Release': {
         'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2013'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -62,9 +60,8 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'Win64 Debug (VS2013)': {
+      'Win64 Debug': {
         'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2013'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -72,9 +69,8 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'Win64 Release (VS2013)': {
+      'Win64 Release': {
         'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2013'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -428,7 +424,6 @@ BUILDERS = freeze({
     'builders': {
       'win': {
         'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2013'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -438,7 +433,6 @@ BUILDERS = freeze({
       },
       'win_rel': {
         'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2013'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -448,7 +442,6 @@ BUILDERS = freeze({
       },
       'win_x64_rel': {
         'recipe_config': 'libyuv',
-        'chromium_apply_config': ['msvs2013'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
