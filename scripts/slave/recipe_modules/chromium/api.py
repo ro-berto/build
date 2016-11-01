@@ -231,10 +231,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       goma_env['GOMA_ENABLE_REMOTE_LINK'] = 'true'
     if self.c.compile_py.goma_store_local_run_output:
       args += ['--goma-store-local-run-output']
+      goma_env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = 'true'
     if self.c.compile_py.goma_max_active_fail_fallback_tasks:
       args += ['--goma-max-active-fail-fallback-tasks',
                self.c.compile_py.goma_max_active_fail_fallback_tasks]
-      goma_env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = 'true'
+      goma_env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = (
+          self.c.compile_py.goma_max_active_fail_fallback_tasks)
     if (self.m.tryserver.is_tryserver or
         self.c.compile_py.goma_failfast):
       # We rely on goma to meet cycle time goals on the tryserver. It's better
