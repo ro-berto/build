@@ -251,7 +251,6 @@ def main(argv):
       'master.client.dart.packages': 'DartPackages',
       'master.client.drmemory': 'DrMemory',
       'master.client.dynamorio': 'DynamoRIO',
-      'master.client.fletch': 'Dartino',
       'master.client.flutter': 'ClientFlutter',
       'master.client.gyp': 'GYP',
       'master.client.libyuv': 'Libyuv',
