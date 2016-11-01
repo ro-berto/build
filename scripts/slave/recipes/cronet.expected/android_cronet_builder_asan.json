@@ -644,9 +644,6 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--json-results-file",
-      "/path/to/tmp/json",
-      "--store-tombstones",
       "-t",
       "180",
       "--adb-path",
@@ -662,30 +659,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
-      "--json-file",
-      "{}",
-      "--master-name",
-      "chromium.testing.master"
-    ],
-    "name": "cronet_unittests: generate result details",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@result_details@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/out/Release/bin/run_net_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--json-results-file",
-      "/path/to/tmp/json",
-      "--store-tombstones",
       "-t",
       "180",
       "--adb-path",
@@ -696,23 +673,6 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "net_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
-      "--json-file",
-      "{}",
-      "--master-name",
-      "chromium.testing.master"
-    ],
-    "name": "net_unittests: generate result details",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@result_details@@@"
-    ]
   },
   {
     "cmd": [

@@ -725,7 +725,6 @@
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json",
-      "--store-tombstones",
       "--adb-path",
       "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -740,35 +739,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
-      "--json-file",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "tryserver.chromium.android"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_blink_rel",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_blink_rel/src/build/android:%(PATH)s"
-    },
-    "name": "blink_heap_unittests (with patch): generate result details",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@result_details@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILDER_CACHE]/android_blink_rel/src/out/Release/bin/run_webkit_unit_tests",
       "--blacklist-file",
       "[BUILDER_CACHE]/android_blink_rel/src/out/bad_devices.json",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json",
-      "--store-tombstones",
       "--adb-path",
       "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -778,28 +754,6 @@
       "PATH": "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_blink_rel/src/build/android:%(PATH)s"
     },
     "name": "webkit_unit_tests (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
-      "--json-file",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "tryserver.chromium.android"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_blink_rel",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_blink_rel/src/build/android:%(PATH)s"
-    },
-    "name": "webkit_unit_tests (with patch): generate result details",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@result_details@@@"
-    ]
   },
   {
     "cmd": [

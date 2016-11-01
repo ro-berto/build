@@ -553,9 +553,6 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--json-results-file",
-      "/path/to/tmp/json",
-      "--store-tombstones",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -564,23 +561,6 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "libyuv_unittest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
-      "--json-file",
-      "{}",
-      "--master-name",
-      "tryserver.libyuv"
-    ],
-    "name": "libyuv_unittest: generate result details",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@result_details@@@"
-    ]
   },
   {
     "cmd": [
