@@ -55,7 +55,7 @@ def _RunStepsInternal(api):
   api.git('-c', 'user.email=commit-bot@chromium.org',
           '-c', 'user.name=The Commit Bot',
           'commit', '-a', '-m', 'Committed patch',
-          name='commit git patch', cwd=abs_root)
+          name='commit git patch', cwd=abs_root, infra_step=False)
 
   if api.properties.get('runhooks'):
     api.gclient.runhooks()
