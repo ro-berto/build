@@ -202,6 +202,7 @@ SPEC = {
       'tests': [
         steps.BlinkTest(extra_args=[
           '--order=random',
+          '--additional-expectations=LayoutTests/RandomOrderExpectations',
         ]),
       ],
       'testing': {

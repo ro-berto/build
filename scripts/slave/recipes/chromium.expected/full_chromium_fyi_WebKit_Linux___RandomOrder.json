@@ -466,7 +466,8 @@
       "WebKit Linux - RandomOrder",
       "--step-name",
       "webkit_tests",
-      "--order=random"
+      "--order=random",
+      "--additional-expectations=LayoutTests/RandomOrderExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/WebKit_Linux___RandomOrder",
     "env": {
