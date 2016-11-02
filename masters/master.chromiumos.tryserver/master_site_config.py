@@ -20,3 +20,6 @@ class ChromiumOSTryServer(Master.ChromiumOSBase):
   tree_status_url = base_app_url + '/status'
   buildbucket_bucket = 'master.chromiumos.tryserver'
   service_account_file = 'service-account-chromeos.json'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/private-buildbot'
+  name = 'chromiumos.tryserver'
