@@ -26,7 +26,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/iOS_API_Framework",
+      "[BUILDER_CACHE]/iOS_API_Framework_Builder",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -62,7 +62,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/iOS_API_Framework",
+    "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -101,7 +101,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/iOS_API_Framework/src",
+    "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder/src",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -109,19 +109,19 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/iOS_API_Framework/src/webrtc/build/ios/build_ios_libs.sh",
+      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/webrtc/build/ios/build_ios_libs.sh",
       "-c"
     ],
-    "cwd": "[BUILDER_CACHE]/iOS_API_Framework/src",
+    "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder/src",
     "name": "cleanup"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/iOS_API_Framework/src/webrtc/build/ios/build_ios_libs.sh",
+      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/webrtc/build/ios/build_ios_libs.sh",
       "-r",
       "170242"
     ],
-    "cwd": "[BUILDER_CACHE]/iOS_API_Framework/src",
+    "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder/src",
     "name": "build"
   },
   {
@@ -131,7 +131,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zip archive",
-    "stdin": "{\"entries\": [{\"path\": \"[BUILDER_CACHE]/iOS_API_Framework/src/out_ios_libs/WebRTC.framework\", \"type\": \"dir\"}, {\"path\": \"[BUILDER_CACHE]/iOS_API_Framework/src/out_ios_libs/WebRTC.dSYM\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/webrtc_ios_api_framework.zip\", \"root\": \"[BUILDER_CACHE]/iOS_API_Framework/src/out_ios_libs\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs/WebRTC.framework\", \"type\": \"dir\"}, {\"path\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs/WebRTC.dSYM\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/webrtc_ios_api_framework.zip\", \"root\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs\"}"
   },
   {
     "cmd": [
