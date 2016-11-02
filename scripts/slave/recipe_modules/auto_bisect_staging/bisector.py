@@ -45,10 +45,6 @@ VALID_RESULT_CODES = (
 # to move *too* far from the original revision, we'll cap the search at 25%.
 DEFAULT_SEARCH_RANGE_PERCENTAGE = 0.25
 
-# How long to re-test the initial good-bad range for until significant
-# difference is established.
-REGRESSION_CHECK_TIMEOUT = 20 * 60 * 60  # 20 hours. A build times out after 24.
-
 _FAILED_INITIAL_CONFIDENCE_ABORT_REASON = (
     'The metric values for the initial "good" and "bad" revisions '
     'do not represent a clear regression.')
@@ -474,8 +470,9 @@ class Bisector(object):
     """Checks that the initial range presents a clear enough regression.
 
     We ensure that the good and bad revisions produce significantly different
-    results, increasing the sample size until MAX_REQUIRED_SAMPLES is reached
-    or REGRESSION_CHECK_TIMEOUT seconds have elapsed.
+    results, increasing the sample size until the compare_revisions function
+    concludes that a difference exists or not, OR the maximum allowed number of
+    repeated tests has been reached.
 
     Returns: True if the revisions produced results that differ from each
     other in a statistically significant manner. Raises an exception otherwise.
@@ -491,22 +488,24 @@ class Bisector(object):
         self._raise_low_confidence_error()
       return dummy_result
 
-    # TODO(robertocn): This step should not be necessary in some cases.
-    with self.api.m.step.nest('Re-testing reference range'):
-      expiration_time = time.time() + REGRESSION_CHECK_TIMEOUT
-      while time.time() < expiration_time:
-        if (self.good_rev.test_run_count >= 5
-            and self.bad_rev.test_run_count >= 5):
-          if self.compare_revisions(self.good_rev, self.bad_rev):
-            return True
-        if self.good_rev.test_run_count == self.bad_rev.test_run_count:
-          revision_to_retest = self.last_tested_revision
-        else:
+    compare_result = self.compare_revisions(self.good_rev, self.bad_rev)
+
+    # Only create a superstep if retesting will be needed.
+    if compare_result == revision_state.NEED_MORE_DATA:
+      with self.api.m.step.nest('Re-testing reference range'):
+        while (compare_result == revision_state.NEED_MORE_DATA):
           revision_to_retest = min(self.good_rev, self.bad_rev,
                                    key=lambda x: x.test_run_count)
-        revision_to_retest._do_test()
-      self._raise_low_confidence_error()
-
+          if (revision_to_retest.test_run_count
+              >= revision_state.MAX_TESTS_PER_REVISION):
+            break
+          with self.api.m.step.nest('Retesting %s revision' % (
+              'GOOD' if revision_to_retest.good else 'BAD')):
+            revision_to_retest._do_test()
+          compare_result = self.compare_revisions(self.good_rev, self.bad_rev)
+    if compare_result == revision_state.SIGNIFICANTLY_DIFFERENT:
+      return True
+    self._raise_low_confidence_error()
 
   def _raise_low_confidence_error(self):
     self.surface_result('REF_RANGE_FAIL')
