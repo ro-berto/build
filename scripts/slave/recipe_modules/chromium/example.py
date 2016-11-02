@@ -17,6 +17,9 @@ def RunSteps(api):
 
   if api.properties.get('codesearch'):
     api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
+  elif api.properties.get('chromeos'):
+    api.chromium.set_config('chromeos', TARGET_CROS_BOARD='amd64-generic',
+                            TARGET_PLATFORM='chromeos')
   else:
     bot_config = api.chromium_tests.create_bot_config_object(
         mastername, buildername)
@@ -72,6 +75,15 @@ def GenTests(api):
       buildnumber='77457',
       use_goma_module=True,
       codesearch=True,
+  )
+
+  yield api.test('chromeos') + api.properties(
+      mastername='tryserver.chromium.linux',
+      buildername='Linux ChromiumOS Builder',
+      slavename='build1-a1',
+      buildnumber='77457',
+      use_goma_module=True,
+      chromeos=True,
   )
 
   yield (api.test('basic_no_out_dir_with_goma_module_goma_disabled_win') +

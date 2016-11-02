@@ -261,11 +261,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       kwargs.setdefault('cwd', self.m.path['checkout'])
 
     if use_goma_module:
-      # TODO(tikuta):
-      # Make it possible to build with TARGET_CROS_BOARD using goma module.
-      assert not self.c.TARGET_CROS_BOARD
 
-      if out_dir is None:
+      if self.m.platform.is_linux and self.c.TARGET_CROS_BOARD:
+        out_dir = 'out_%s' % self.c.TARGET_CROS_BOARD
+      elif out_dir is None:
         out_dir = 'out'
 
       target_output_dir = self.m.path.abspath(
