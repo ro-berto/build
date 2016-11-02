@@ -74,6 +74,15 @@ for arch in ['simmips', 'simarm', 'simarm64']:
       'checked': True,
     }
 
+for arch in ['simdbc64']:
+  for mode in ['debug', 'release']:
+    builders['vm-mac-%s-%s' % (mode, arch)] = {
+      'mode': mode,
+      'target_arch': arch,
+      'env': {},
+      'checked': True,
+    }
+
 for arch in ['x64', 'ia32']:
   asan = builders['vm-linux-release-%s' % arch].copy()
   asan_args = ['--builder-tag=asan', '--timeout=240']
