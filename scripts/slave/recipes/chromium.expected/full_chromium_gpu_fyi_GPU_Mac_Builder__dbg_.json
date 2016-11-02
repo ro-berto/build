@@ -245,7 +245,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Debug (ATI)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Debug (AMD)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -480,7 +480,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Mac 10.10 Debug (ATI)",
+        "builder_name": "Mac 10.10 Debug (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -557,7 +557,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Debug (ATI)<br />Mac 10.10 Debug (Intel)<br />Mac 10.10 Retina Debug (AMD)<br />Mac Retina Debug@@@"
+      "@@@STEP_TEXT@Mac 10.10 Debug (AMD)<br />Mac 10.10 Debug (Intel)<br />Mac 10.10 Retina Debug (AMD)<br />Mac Retina Debug@@@"
     ]
   },
   {

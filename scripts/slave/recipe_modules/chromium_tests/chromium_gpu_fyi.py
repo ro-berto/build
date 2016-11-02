@@ -128,7 +128,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Win7 Release (ATI)': {
+    'Win7 Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -144,7 +144,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Win7 Debug (ATI)': {
+    'Win7 Debug (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -211,7 +211,7 @@ SPEC = {
       # This new hardware is being tested for reliability.
       'enable_swarming': False,
     },
-    'Win7 Release (AMD R7 240)': {
+    'Win7 Release (AMD R5 230)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -402,7 +402,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Linux Release (ATI)': {
+    'Linux Release (AMD R5 230)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -585,7 +585,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Mac 10.10 Release (ATI)': {
+    'Mac 10.10 Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -603,7 +603,7 @@ SPEC = {
       # in order to keep up with the faster cycle time of the tests.
       'enable_swarming': False,
     },
-    'Mac 10.10 Debug (ATI)': {
+    'Mac 10.10 Debug (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -892,7 +892,7 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Optional Win7 Release (ATI)': {
+    'Optional Win7 Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',

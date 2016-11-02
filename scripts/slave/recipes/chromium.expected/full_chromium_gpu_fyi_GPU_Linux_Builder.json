@@ -244,7 +244,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux Release (AMD R7 240)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux Release (AMD R5 230)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -254,7 +254,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux Release (ATI)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux Release (AMD R7 240)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -474,7 +474,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Linux Release (AMD R7 240)",
+        "builder_name": "Linux Release (AMD R5 230)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -493,7 +493,7 @@
         }
       },
       {
-        "builder_name": "Linux Release (ATI)",
+        "builder_name": "Linux Release (AMD R7 240)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -589,7 +589,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Linux Release (AMD R7 240)<br />Linux Release (ATI)<br />Linux Release (NVIDIA GeForce 730)<br />Linux Release (NVIDIA)<br />Linux Release (New Intel)<br />Optional Linux Release (NVIDIA)@@@"
+      "@@@STEP_TEXT@Linux Release (AMD R5 230)<br />Linux Release (AMD R7 240)<br />Linux Release (NVIDIA GeForce 730)<br />Linux Release (NVIDIA)<br />Linux Release (New Intel)<br />Optional Linux Release (NVIDIA)@@@"
     ]
   },
   {

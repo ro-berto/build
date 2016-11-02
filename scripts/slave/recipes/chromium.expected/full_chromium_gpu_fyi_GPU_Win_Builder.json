@@ -252,7 +252,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Optional Win7 Release (ATI)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Optional Win7 Release (AMD)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -272,7 +272,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 Release (AMD R7 240)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win7 Release (AMD R5 230)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -282,7 +282,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 Release (ATI)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win7 Release (AMD)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -502,7 +502,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Optional Win7 Release (ATI)",
+        "builder_name": "Optional Win7 Release (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -540,7 +540,7 @@
         }
       },
       {
-        "builder_name": "Win7 Release (AMD R7 240)",
+        "builder_name": "Win7 Release (AMD R5 230)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -559,7 +559,7 @@
         }
       },
       {
-        "builder_name": "Win7 Release (ATI)",
+        "builder_name": "Win7 Release (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -655,7 +655,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Optional Win7 Release (ATI)<br />Optional Win7 Release (NVIDIA)<br />Win7 Release (AMD R7 240)<br />Win7 Release (ATI)<br />Win7 Release (NVIDIA GeForce 730)<br />Win7 Release (NVIDIA)<br />Win7 Release (New Intel)<br />Win8 Release (NVIDIA)@@@"
+      "@@@STEP_TEXT@Optional Win7 Release (AMD)<br />Optional Win7 Release (NVIDIA)<br />Win7 Release (AMD R5 230)<br />Win7 Release (AMD)<br />Win7 Release (NVIDIA GeForce 730)<br />Win7 Release (NVIDIA)<br />Win7 Release (New Intel)<br />Win8 Release (NVIDIA)@@@"
     ]
   },
   {

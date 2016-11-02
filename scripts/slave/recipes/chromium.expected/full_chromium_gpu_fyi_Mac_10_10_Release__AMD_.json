@@ -3,16 +3,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
-    ],
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]\\Win7_Release__ATI_",
+      "[BUILDER_CACHE]/Mac_10_10_Release__AMD_",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -33,7 +25,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
@@ -48,9 +40,9 @@
       "src@1111111",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win7_Release__ATI_",
+    "cwd": "[BUILDER_CACHE]/Mac_10_10_Release__AMD_",
     "env": {
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -136,11 +128,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::cipd]\\resources\\bootstrap.py",
+      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
-      "windows-386",
+      "mac-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]\\cipd",
+      "[SLAVE_BUILD]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -149,7 +141,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -157,16 +149,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\cipd\\cipd",
+      "[SLAVE_BUILD]/cipd/cipd",
       "ensure",
       "--root",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]/cipd/goma",
       "--list",
-      "infra/tools/cloudtail/windows-386 goma_recipe_module\ninfra_internal/goma/client/windows-amd64 release",
+      "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "/creds/service_accounts/service-account-goma-client.json"
     ],
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -175,11 +167,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/windows-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -190,27 +182,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win7_Release__ATI_\\src\\tools\\swarming_client\\swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win7_Release__ATI_\\src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_10_Release__AMD_/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -218,7 +198,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win7_Release__ATI_\\src\\testing\\scripts\\get_compile_targets.py",
+      "[BUILDER_CACHE]/Mac_10_10_Release__AMD_/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -226,9 +206,9 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]\\\\Win7_Release__ATI_\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Mac_10_10_Release__AMD_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Win7 Release (ATI)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"Mac 10.10 Release (AMD)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -241,24 +221,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\Win7_Release__ATI_\\src\\testing\\buildbot\\chromium.gpu.fyi.json",
+      "[BUILDER_CACHE]/Mac_10_10_Release__AMD_/src/testing/buildbot/chromium.gpu.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.gpu.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\Win7_Release__ATI_\\src\\testing\\buildbot\\chromium.gpu.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 Release (ATI)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Mac_10_10_Release__AMD_/src/testing/buildbot/chromium.gpu.fyi.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -266,10 +235,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
   },
@@ -278,7 +247,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILDER_CACHE]\\Win7_Release__ATI_\\src\\out\\Release"
+      "[BUILDER_CACHE]/Mac_10_10_Release__AMD_/src/out/Release"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -296,16 +265,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\extract_build.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--target",
       "Release",
       "--src-dir",
-      "[BUILDER_CACHE]\\Win7_Release__ATI_\\src",
+      "[BUILDER_CACHE]/Mac_10_10_Release__AMD_/src",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
@@ -314,185 +283,6 @@
       "571"
     ],
     "name": "extract build"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
-      "--build-dir",
-      "[BUILDER_CACHE]\\Win7_Release__ATI_\\src\\out\\Release",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[BUILDER_CACHE]\\Win7_Release__ATI_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "find isolated tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]\\Win7_Release__ATI_\\src\\tools\\swarming_client\\swarming.py",
-      "trigger",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--priority",
-      "25",
-      "--shards",
-      "1",
-      "--task-name",
-      "browser_tests/Windows-7-SP1/ffffffffff/Win7 Release (ATI)/571",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--expiration",
-      "3600",
-      "--io-timeout",
-      "1200",
-      "--hard-timeout",
-      "3600",
-      "--dimension",
-      "cpu",
-      "x86-64",
-      "--dimension",
-      "gpu",
-      "none",
-      "--dimension",
-      "os",
-      "Windows-7-SP1",
-      "--dimension",
-      "pool",
-      "Chrome",
-      "--tag",
-      "buildername:Win7 Release (ATI)",
-      "--tag",
-      "buildnumber:571",
-      "--tag",
-      "data:ffffffffffffffffffffffffffffffffffffffff",
-      "--tag",
-      "master:chromium.gpu.fyi",
-      "--tag",
-      "name:browser_tests",
-      "--tag",
-      "os:Windows-7-SP1",
-      "--tag",
-      "project:chromium",
-      "--tag",
-      "purpose:CI",
-      "--tag",
-      "purpose:post-commit",
-      "--tag",
-      "slavename:TestSlavename",
-      "--tag",
-      "stepname:browser_tests on Windows-7-SP1",
-      "--idempotent",
-      "ffffffffffffffffffffffffffffffffffffffff",
-      "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
-    ],
-    "cwd": "[BUILDER_CACHE]\\Win7_Release__ATI_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "[trigger] browser_tests on Windows-7-SP1",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-7-SP1/ffffffffff/Win7 Release (ATI)/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Windows-7-SP1/ffffffffff/Win7 Release (ATI)/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]\\resources\\collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]\\Win7_Release__ATI_\\src\\tools\\swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
-      "collect",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"browser_tests/Windows-7-SP1/ffffffffff/Win7 Release (ATI)/571\", \"tasks\": {\"browser_tests/Windows-7-SP1/ffffffffff/Win7 Release (ATI)/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
-    ],
-    "cwd": "[BUILDER_CACHE]\\Win7_Release__ATI_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "browser_tests on Windows-7-SP1",
-    "~followup_annotations": [
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
-      "--master-name",
-      "chromium.gpu.fyi",
-      "--builder-name",
-      "Win7 Release (ATI)",
-      "--build-number",
-      "571",
-      "--test-type",
-      "browser_tests on Windows-7-SP1",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "170242"
-    ],
-    "cwd": "[BUILDER_CACHE]\\Win7_Release__ATI_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "Upload to test-results [browser_tests on Windows-7-SP1]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
-      "--target",
-      "Release"
-    ],
-    "cwd": "[BUILDER_CACHE]\\Win7_Release__ATI_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "process_dumps"
   },
   {
     "name": "$result",

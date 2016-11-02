@@ -245,7 +245,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Release (ATI)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Release (AMD)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -520,7 +520,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Mac 10.10 Release (ATI)",
+        "builder_name": "Mac 10.10 Release (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -673,7 +673,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Release (ATI)<br />Mac 10.10 Release (Intel)<br />Mac 10.10 Retina Release (AMD)<br />Mac 10.11 Retina Release (AMD)<br />Mac Retina Release<br />Optional Mac 10.10 Release (Intel)<br />Optional Mac 10.10 Retina Release (AMD)<br />Optional Mac Retina Release@@@"
+      "@@@STEP_TEXT@Mac 10.10 Release (AMD)<br />Mac 10.10 Release (Intel)<br />Mac 10.10 Retina Release (AMD)<br />Mac 10.11 Retina Release (AMD)<br />Mac Retina Release<br />Optional Mac 10.10 Release (Intel)<br />Optional Mac 10.10 Retina Release (AMD)<br />Optional Mac Retina Release@@@"
     ]
   },
   {

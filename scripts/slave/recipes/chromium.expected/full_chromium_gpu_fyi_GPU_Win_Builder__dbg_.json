@@ -252,7 +252,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 Debug (ATI)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win7 Debug (AMD)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -462,7 +462,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Win7 Debug (ATI)",
+        "builder_name": "Win7 Debug (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -539,7 +539,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 Debug (ATI)<br />Win7 Debug (NVIDIA)<br />Win7 Debug (New Intel)<br />Win8 Debug (NVIDIA)@@@"
+      "@@@STEP_TEXT@Win7 Debug (AMD)<br />Win7 Debug (NVIDIA)<br />Win7 Debug (New Intel)<br />Win8 Debug (NVIDIA)@@@"
     ]
   },
   {
