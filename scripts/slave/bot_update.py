@@ -329,11 +329,6 @@ GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
 # How many times to try before giving up.
 ATTEMPTS = 5
 
-# Find deps2git
-DEPS2GIT_DIR_PATH = path.join(SCRIPTS_DIR, 'tools', 'deps2git')
-DEPS2GIT_PATH = path.join(DEPS2GIT_DIR_PATH, 'deps2git.py')
-S2G_INTERNAL_PATH = path.join(SCRIPTS_DIR, 'tools', 'deps2git_internal',
-                              'svn_to_git_internal.py')
 
 # ../../cache_dir aka /b/build/slave/cache_dir
 GIT_CACHE_PATH = path.join(DEPOT_TOOLS_DIR, 'git_cache.py')
@@ -802,59 +797,6 @@ def get_git_hash(revision, branch, sln_dir):
                             (revision, sln_dir))
 
 
-def _last_commit_for_file(filename, repo_base):
-  cmd = ['log', '--format=%H', '--max-count=1', '--', filename]
-  return git(*cmd, cwd=repo_base).strip()
-
-
-def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
-  """Checks to see if we need to run deps2git.
-
-  Returns True if there was a DEPS change after the last .DEPS.git update
-  or if DEPS has local modifications.
-  """
-  # See if DEPS is dirty
-  deps_file_status = git(
-      'status', '--porcelain', deps_file, cwd=repo_base).strip()
-  if deps_file_status and deps_file_status.startswith('M '):
-    return True
-
-  last_known_deps_ref = _last_commit_for_file(deps_file, repo_base)
-  last_known_deps_git_ref = _last_commit_for_file(deps_git_file, repo_base)
-  merge_base_ref = git('merge-base', last_known_deps_ref,
-                       last_known_deps_git_ref, cwd=repo_base).strip()
-
-  # If the merge base of the last DEPS and last .DEPS.git file is not
-  # equivilent to the hash of the last DEPS file, that means the DEPS file
-  # was committed after the last .DEPS.git file.
-  return last_known_deps_ref != merge_base_ref
-
-
-def ensure_deps2git(solution, shallow):
-  repo_base = path.join(os.getcwd(), solution['name'])
-  deps_file = path.join(repo_base, 'DEPS')
-  deps_git_file = path.join(repo_base, '.DEPS.git')
-  if (not git('ls-files', 'DEPS', cwd=repo_base).strip() or
-      not git('ls-files', '.DEPS.git', cwd=repo_base).strip()):
-    return
-
-  print 'Checking if %s is newer than %s' % (deps_file, deps_git_file)
-  if not need_to_run_deps2git(repo_base, deps_file, deps_git_file):
-    return
-
-  print '===DEPS file modified, need to run deps2git==='
-  cmd = [sys.executable, DEPS2GIT_PATH,
-         '--workspace', os.getcwd(),
-         '--cache_dir', CACHE_DIR,
-         '--deps', deps_file,
-         '--out', deps_git_file]
-  if 'chrome-internal.googlesource' in solution['url']:
-    cmd.extend(['--extra-rules', S2G_INTERNAL_PATH])
-  if shallow:
-    cmd.append('--shallow')
-  call(*cmd)
-
-
 def emit_log_lines(name, lines):
   for line in lines.splitlines():
     print '@@@STEP_LOG_LINE@%s@%s@@@' % (name, line)
@@ -1315,11 +1257,6 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                              revision_mapping, git_ref, apply_issue_email_file,
                              apply_issue_key_file, whitelist=[target])
         already_patched.append(target)
-
-  if not buildspec:
-    # Run deps2git if there is a DEPS change after the last .DEPS.git commit.
-    for solution in solutions:
-      ensure_deps2git(solution, shallow)
 
   # Ensure our build/ directory is set up with the correct .gclient file.
   gclient_configure(solutions, target_os, target_os_only)

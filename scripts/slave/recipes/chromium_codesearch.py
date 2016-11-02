@@ -36,7 +36,6 @@ ADDITIONAL_REPOS = freeze({
   'tools/command_wrapper/bin':\
       '%s/chromium/tools/command_wrapper/bin' % CHROMIUM_GIT_URL,
   'tools/depot_tools': '%s/chromium/tools/depot_tools' % CHROMIUM_GIT_URL,
-  'tools/deps2git': '%s/chromium/tools/deps2git' % CHROMIUM_GIT_URL,
   'tools/gsd_generate_index':\
       '%s/chromium/tools/gsd_generate_index' % CHROMIUM_GIT_URL,
   'tools/perf': '%s/chromium/tools/perf' % CHROMIUM_GIT_URL,

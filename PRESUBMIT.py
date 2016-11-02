@@ -63,7 +63,6 @@ def CommonChecks(input_api, output_api):
       # sys.path so modifications to sys.path aren't kept.
       join('scripts', 'master', 'unittests'),
       join('scripts', 'slave', 'unittests'),
-      join('scripts', 'tools', 'deps2git'),
       join('tests'),
   ] + sys.path
   with pythonpath(test_sys_path):
