@@ -1499,11 +1499,15 @@ SPEC = {
         'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder_tester',
       'android_config': 'clang_builder_mb_x64',
-      'testing': {
-        'platform': 'linux',
-      },
+      'testing': { 'platform': 'linux', },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
     },
     'ClangToTMac': {
       'chromium_config': 'clang_tot_mac',

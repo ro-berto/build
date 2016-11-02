@@ -294,7 +294,8 @@
       "[ROOT]/build_data_dir",
       "--compiler",
       "clang",
-      "--"
+      "--",
+      "all"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
