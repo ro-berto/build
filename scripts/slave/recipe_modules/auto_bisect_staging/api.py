@@ -310,6 +310,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
         '--blacklist-file', self.m.chromium_android.blacklist_file,
         '--perfbot',
         '--release',
+        '--adb-path', self.m.adb.adb_path(),
     ]
     if args:
       full_deploy_flags += args

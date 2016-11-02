@@ -1,4 +1,5 @@
 DEPS = [
+    'adb',
     'bisect_tester',
     'buildbucket',
     'chromium',
