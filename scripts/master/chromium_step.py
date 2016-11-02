@@ -810,11 +810,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def closeSection(self, section):
     """Closes the step and finalizes when async_ops complete."""
-    assert not section['closed'], 'Can\'t close a closed step'
-    # The initial section will be closed by self.finished when runCommand
-    # completes.
-    assert not self.sectionIsPreamble(section), ('The initial section cannot '
-                                                 'be closed')
+    if section['closed']:
+      raise AssertionError('Can\'t close a closed step: %r' % section['name'])
+    if self.sectionIsPreamble(section):
+      # The initial section will be closed by self.finished when runCommand
+      # completes.
+      raise AssertionError('The initial section cannot be closed')
     section['closed'] = True
     if section['step'].isFinished():
       return
