@@ -29,8 +29,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'GYP_DEFINES': {
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
       'bucket': 'mock-gcs-bucket',
@@ -77,8 +75,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'GYP_DEFINES': {
-      },
       'configuration': 'Release',
       'sdk': 'iphoneos8.1',
       'tests': [
@@ -129,8 +125,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'GYP_DEFINES': {
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
       'tests': [
@@ -168,8 +162,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'GYP_DEFINES': {
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
       'tests': [
@@ -207,8 +199,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'GYP_DEFINES': {
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
       'tests': [
@@ -245,8 +235,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'GYP_DEFINES': {
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
       'tests': [
@@ -283,8 +271,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'GYP_DEFINES': {
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
       'tests': [
@@ -322,8 +308,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'GYP_DEFINES': {
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
       'tests': [

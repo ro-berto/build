@@ -153,12 +153,10 @@
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 1\": \"fake value 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 2\": \"fake value 2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"use_goma\": \"1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos8.0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
@@ -170,7 +168,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\", \n    \"use_goma\": \"1\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"use_goma=true\"\n  ], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -255,16 +253,32 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "use_goma=1 fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
-      "GYP_GENERATORS": "ninja",
       "LANDMINES_VERBOSE": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "gclient runhooks",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br />GYP_DEFINES:<br />use_goma=1<br />fake gyp define 1=fake value 1<br />fake gyp define 2=fake value 2<br />component=static_library<br />OS=ios@@@"
-    ]
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/ios/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.fake",
+      "-b",
+      "ios",
+      "--config-file",
+      "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "//out/Release-iphoneos"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files"
   },
   {
     "allow_subannotations": true,

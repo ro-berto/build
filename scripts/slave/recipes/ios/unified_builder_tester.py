@@ -29,10 +29,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
       'env': {
         'fake env var 1': 'fake env value 1',
         'fake env var 2': 'fake env value 2',
@@ -76,12 +72,10 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-        'use_goma': '1',
-      },
       'configuration': 'Release',
+      'gn_args': [
+        'use_goma=true',
+      ],
       'sdk': 'iphoneos8.0',
       'tests': [
       ],
@@ -104,11 +98,9 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-        'use_goma': '1',
-      },
+      'gn_args': [
+        'use_goma=true',
+      ],
       'use_goma_canary': True,
       'configuration': 'Release',
       'sdk': 'iphoneos8.0',

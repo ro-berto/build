@@ -49,7 +49,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {},
       'mb_type': 'gn',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
@@ -80,7 +79,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {},
       'mb_type': 'gn',
       'configuration': 'Release',
       'sdk': 'iphoneos8.0',
@@ -101,7 +99,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {},
       'use_analyze': 'false',
       'mb_type': 'gn',
       'configuration': 'Release',
@@ -123,7 +120,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {},
       'mb_type': 'gn',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
@@ -158,7 +154,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {},
       'mb_type': 'gn',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',

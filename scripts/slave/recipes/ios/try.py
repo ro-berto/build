@@ -63,10 +63,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -100,10 +96,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -131,10 +123,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -168,10 +156,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -214,10 +198,6 @@ def GenTests(api):
     })
     + api.ios.make_test_build_config_for_parent({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
     })
@@ -243,10 +223,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -276,10 +252,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -310,7 +282,6 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': [],
       'gn_args': [
         'target_os="ios"',
         'ios_enable_code_signing=false',
@@ -318,48 +289,6 @@ def GenTests(api):
       ],
       'use_analyze': True,
       'mb_type': 'gn',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.0',
-      'tests': [
-        {
-          'app': 'fake tests',
-          'device type': 'fake device',
-          'os': '8.1',
-        },
-      ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
-    )
-    + suppress_analyze()
-  )
-
-  yield (
-    api.test('gyp_goma')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios-simulator',
-      buildnumber='0',
-      issue=123456,
-      mastername='tryserver.fake',
-      patchset=1,
-      rietveld='fake://rietveld.url',
-      slavename='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'GYP_DEFINES': [
-        'OS=ios',
-        'gomadir=$(goma_dir)',
-        'target_subarch=both',
-        'use_goma=1',
-      ],
-      'gn_args': [
-      ],
-      'use_analyze': True,
-      'mb_type': 'gyp',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [

@@ -58,16 +58,6 @@ class iOSApi(recipe_api.RecipeApi):
     return self.__config['configuration']
 
   @property
-  def using_gyp(self):
-    assert self.__config is not None
-    return not self.using_mb or self.__config.get('mb_type') == 'gyp'
-
-  @property
-  def using_mb(self):
-    assert self.__config is not None
-    return self.__config['mb_type'] is not None
-
-  @property
   def platform(self):
     assert self.__config is not None
     if self.__config['sdk'].startswith('iphoneos'):
@@ -124,20 +114,12 @@ class iOSApi(recipe_api.RecipeApi):
         'configuration',
         'gn_args',
         'gn_args_file',
-        'GYP_DEFINES',
         'mb_type',
         'sdk',
         'xcode version',
       ):
         if key in parent_config:
           self.__config[key] = parent_config[key]
-
-    # In the older dict-based bot configs we didn't set these values
-    # since they were the same on every bot. In the newer configs they
-    # are set anyway since MB needs them as well.
-    if isinstance(self.__config['GYP_DEFINES'], dict):
-      self.__config['GYP_DEFINES']['component'] = 'static_library'
-      self.__config['GYP_DEFINES']['OS'] = 'ios'
 
     # TODO(crbug.com/552146): Once 'all' works, the default should be ['all'].
     self.__config.setdefault('additional_compile_targets', ['All'])
@@ -224,18 +206,10 @@ class iOSApi(recipe_api.RecipeApi):
 
     cfg = self.m.chromium.make_config()
 
-    if self.using_gyp:
-      cfg.gyp_env.GYP_CROSSCOMPILE = 1
-      if isinstance(self.__config['GYP_DEFINES'], dict):
-        cfg.gyp_env.GYP_DEFINES = copy.deepcopy(self.__config['GYP_DEFINES'])
-      else:
-        cfg.gyp_env.GYP_DEFINES = dict(v.split('=') for
-                                       v in self.__config['GYP_DEFINES'])
     self.m.chromium.c = cfg
     self.m.chromium.apply_config('force_mac_toolchain_off')
 
-    use_goma = (cfg.gyp_env.GYP_DEFINES.get('use_goma') == '1' or
-                'use_goma=true' in self.__config['gn_args'])
+    use_goma = 'use_goma=true' in self.__config['gn_args']
     if use_goma:
       # Make sure these chromium configs are applied consistently for the
       # rest of the recipe; they are needed in order for m.chromium.compile()
@@ -252,7 +226,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     return copy.deepcopy(self.__config)
 
-  def build(self, mb_config_path=None, gyp_script=None, suffix=None):
+  def build(self, mb_config_path=None, suffix=None):
     """Builds from this bot's build config."""
     assert self.__config is not None
 
@@ -266,22 +240,12 @@ class iOSApi(recipe_api.RecipeApi):
       '--version', self.__config['xcode version'],
     ], step_test_data=lambda: self.m.json.test_api.output({}))
 
-    if self.using_mb:
-      self.m.chromium.c.project_generator.tool = 'mb'
-
-    # Add the default GYP_DEFINES.
-    if isinstance(self.__config['GYP_DEFINES'], dict):
-      gyp_defines = [
-        '%s=%s' % (k, v) for k, v in self.__config['GYP_DEFINES'].iteritems()
-      ]
-    else:
-      gyp_defines = self.__config['GYP_DEFINES']
+    self.m.chromium.c.project_generator.tool = 'mb'
 
     mb_type = self.__config['mb_type']
     gn_args = self.__config['gn_args']
 
     env = {
-      'GYP_DEFINES': ' '.join(gyp_defines),
       'LANDMINES_VERBOSE': '1',
     }
 
@@ -290,8 +254,6 @@ class iOSApi(recipe_api.RecipeApi):
 
     build_sub_path = ''
 
-    env['GYP_CROSSCOMPILE'] = '1'
-    env['GYP_GENERATORS'] = 'ninja'
     build_sub_path = '%s-%s' % (self.configuration, {
         'simulator': 'iphonesimulator',
         'device': 'iphoneos',
@@ -301,26 +263,13 @@ class iOSApi(recipe_api.RecipeApi):
     compile_targets = self.__config['additional_compile_targets']
     cmd = ['ninja', '-C', cwd]
 
-    if self.using_mb:
-      # if we're using MB to generate build files, make sure we don't
-      # invoke GYP directly. We still want the GYP_DEFINES set in the
-      # environment, though, so that other hooks can key off of them.
-      env['GYP_CHROMIUM_NO_ACTION'] = '1'
-
     step_result = self.m.gclient.runhooks(name='runhooks' + suffix, env=env)
-    step_result.presentation.step_text = (
-      '<br />GYP_DEFINES:<br />%s' % '<br />'.join(gyp_defines)
-    )
-    if self.using_mb:
-      step_result.presentation.step_text += '<br />GYP_CHROMIUM_NO_ACTION=1'
 
-    if self.using_mb:
-      self.m.chromium.run_mb(self.__config['mastername'],
-                             self.m.properties['buildername'],
-                             name='generate_build_files' + suffix,
-                             mb_config_path=mb_config_path,
-                             gyp_script=gyp_script,
-                             build_dir='//out/' + build_sub_path)
+    self.m.chromium.run_mb(self.__config['mastername'],
+                           self.m.properties['buildername'],
+                           name='generate_build_files' + suffix,
+                           mb_config_path=mb_config_path,
+                           build_dir='//out/' + build_sub_path)
 
     use_analyze = self.__config['use_analyze']
     if (use_analyze and
@@ -354,7 +303,7 @@ class iOSApi(recipe_api.RecipeApi):
       else:
         return
 
-    use_goma = 'use_goma=1' in gyp_defines or 'use_goma=true' in gn_args
+    use_goma = 'use_goma=true' in gn_args
     if use_goma:
       self.m.chromium.compile(targets=compile_targets,
                               target=build_sub_path,
