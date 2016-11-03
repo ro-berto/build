@@ -43,6 +43,12 @@ def code_search(test, cs_base_url):
   search = test.replace('#', '.')
   return '%s/?q=%s&type=cs' % (cs_base_url, search)
 
+def status_class(status):
+  status = status.lower()
+  if status not in ('success', 'skipped'):
+    return 'failure'
+  return status
+
 def create_test_row_data(results, cs_base_url):
   tombstones_data = []
   test_row_list = []
@@ -59,7 +65,7 @@ def create_test_row_data(results, cs_base_url):
         {'data': result['name'], 'class': 'left',
          'link': code_search(result['name'], cs_base_url)},
         {'data': result['status'], 
-         'class': 'center ' + result['status'].lower(),
+         'class': 'center ' + status_class(result['status']),
          'action': add_tombstone,
          'action_argument': tombstones_name,
          'title': 'Show tombstones of this crashed test case.'},
@@ -107,7 +113,7 @@ def create_suite_row_data(results):
     if result['status'] == 'SUCCESS':
       suite_row[SUCCESS_COUNT]['data'] += 1
       suites_summary[SUCCESS_COUNT]['data'] += 1
-    elif result['status'] == 'FAILURE':
+    elif result['status'] != 'SKIPPED':
       suite_row[FAIL_COUNT]['data'] += 1
       suites_summary[FAIL_COUNT]['data'] += 1
     suite_row[TIME]['data'] += result['duration']
