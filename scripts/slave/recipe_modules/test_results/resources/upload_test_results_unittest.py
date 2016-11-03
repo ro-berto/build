@@ -6,7 +6,17 @@
 """Unit tests for upload_test_results.py."""
 
 import json
+import os
+import shutil
+import sys
+import tempfile
 import unittest
+
+sys.path.insert(0, os.path.join(
+      os.path.dirname(__file__), '..', '..', '..', '..'))
+import common.env
+common.env.Install()
+import mock
 
 import upload_test_results
 
@@ -67,6 +77,42 @@ class UploadTestResultsTest(unittest.TestCase):
                       results['Disabled.Test'][0].modifier)
     self.assertEquals(results['Disabled.Test'][0].DISABLED,
                       results['Skipped.Test'][0].modifier)
+
+  @mock.patch('test_results_uploader.upload_test_results')
+  def test_main(self, uploader_mock):
+    contents = {
+        'per_iteration_data': [{
+            'Fake.Test': [
+                {'status': 'XXX', 'elapsed_time_ms': 1000},
+            ],
+        }],
+    }
+    result_directory = tempfile.mkdtemp()
+    input_json_file_path = os.path.join(result_directory, 'results.json')
+    with open(input_json_file_path, 'w') as f:
+      json.dump(contents, f)
+    try:
+      upload_test_results.main([
+        '--test-type=foo',
+        '--input-json=%s' % input_json_file_path,
+        '--results-directory=%s' % result_directory,
+        '--test-results-server=foo',
+        '--master-name=sauron',
+      ])
+      files = [
+        ('full_results.json',
+         os.path.join(result_directory,
+                      upload_test_results.FULL_RESULTS_FILENAME)),
+        ('times_ms.json',
+         os.path.join(result_directory,
+                      upload_test_results.TIMES_MS_FILENAME))]
+      uploader_mock.assert_called_with(
+          'foo',
+          [('builder', 'DUMMY_BUILDER_NAME'),
+           ('testtype', 'foo'),
+           ('master', 'sauron')], files, 120)
+    finally:
+      shutil.rmtree(result_directory)
 
 
 if __name__ == '__main__':
