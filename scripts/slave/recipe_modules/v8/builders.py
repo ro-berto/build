@@ -73,6 +73,12 @@ def with_test_args(suffix, test_args, tests, variants=V8VariantNeutral):
   ]
 
 
+SWARMING_FYI_PROPS = {
+  'default_expiration': 2 * 60 * 60,
+  'default_hard_timeout': 60 * 60,
+  'default_priority': 35,
+}
+
 BUILDERS = {
 ####### Waterfall: client.v8
   'client.v8': {
@@ -1530,6 +1536,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
+        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - mipsel - sim',
@@ -1555,8 +1562,12 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - mipsel - sim - builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
-        'tests': [V8Testing, Test262, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, SimdJs],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+        },
       },
 ####### Category: PPC
       'V8 Linux - ppc - sim': {
@@ -1567,8 +1578,13 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+        },
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - ppc64 - sim': {
         'chromium_apply_config': [
@@ -1578,8 +1594,13 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+        },
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
 ####### Category: S390
       'V8 Linux - s390 - sim': {
@@ -1590,8 +1611,13 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+        },
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - s390x - sim': {
         'chromium_apply_config': [
@@ -1601,8 +1627,13 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+        },
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
 ####### Category: X87
       'V8 Linux - x87 - nosnap - debug builder': {
