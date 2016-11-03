@@ -30,7 +30,6 @@ def Update(_config, active_master, c):
       active_master=active_master)
 
   builders = [
-      Builder(factory_obj, 'x86-generic'),
       Builder(factory_obj, 'amd64-generic'),
   ]
 
