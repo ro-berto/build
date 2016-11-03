@@ -33,6 +33,12 @@ BUILD_DIR = os.getcwd()
 # /b/build/slave/<slavename>/
 BUILDER_DIR = os.path.dirname(BUILD_DIR)
 
+# ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
+# to test new recipe engine flags on a select few masters.
+_ENGINE_FLAGS = {
+  None: {},
+}
+
 def _build_dir():
   return BUILD_DIR
 
@@ -259,12 +265,30 @@ def _exec_recipe(rt, opts, basedir, tdir, properties):
   with open(props_file, 'w') as fh:
     json.dump(properties, fh)
 
+  mastername = properties.get('mastername')
+  engine_flags = {}
+  if mastername:
+    engine_flags = _ENGINE_FLAGS.get(mastername)
+  if not engine_flags:
+    engine_flags = _ENGINE_FLAGS[None]
+
+  recipe_result_path = os.path.join(tdir, 'recipe_result.json')
+
+  engine_args = []
+  if engine_flags:
+    engine_flags_path = os.path.join(tdir, 'op_args.json')
+    with open(engine_flags_path, 'w') as f:
+      json.dump(engine_flags, f)
+    engine_args = ['--operational-args-path', engine_flags_path]
+
   recipe_cmd = [
-      sys.executable, '-u', recipe_runner,
+      sys.executable, '-u', recipe_runner,] + engine_args + [
       '--verbose',
       'run',
       '--workdir=%s' % _build_dir(),
       '--properties-file=%s' % props_file,
+      '--output-result-json',
+      recipe_result_path,
       properties['recipe'],
   ]
 
@@ -286,6 +310,25 @@ def _exec_recipe(rt, opts, basedir, tdir, properties):
     if recipe_return_code is None:
       LOGGER.info('Not using LogDog. Invoking `recipes.py` directly.')
       recipe_return_code, _ = _run_command(recipe_cmd, dry_run=opts.dry_run)
+
+    if engine_flags.get('use_result_proto'):
+      with open(recipe_result_path, 'r') as f:
+        return_value = json.load(f)
+
+      if return_value.get('failure'):
+        f = return_value['failure']
+
+        # If we aren't a step failure, we assume it was an exception.
+        if not f.get('step_failure'):
+          # The recipe engine used to return -1, which got interpreted as 255
+          # by os.exit in python, since process exit codes are a single byte.
+          recipe_return_code = 255
+        else:
+          # return code != 0 is for the benefit of buildbot, which uses return
+          # code to decide if a step failed or not.
+          recipe_return_code = 1
+
+
   return recipe_return_code
 
 

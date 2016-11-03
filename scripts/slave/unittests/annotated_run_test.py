@@ -105,6 +105,7 @@ class AnnotatedRunExecTest(unittest.TestCase):
         sys.executable, '-u', self.rpy_path, '--verbose', 'run',
         '--workdir=/home/user/builder/build',
         '--properties-file=%s' % (self._tp('recipe_properties.json'),),
+        '--output-result-json', self._tp('recipe_result.json'),
         'example/recipe']
 
     # Use public recipes.py path.

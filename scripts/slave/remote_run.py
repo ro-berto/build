@@ -39,6 +39,12 @@ _CIPD_PINS = {
   None: 'latest',
 }
 
+# ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
+# to test new recipe engine flags on a select few masters.
+_ENGINE_FLAGS = {
+  None: {},
+}
+
 
 def _call(cmd, **kwargs):
   LOGGER.info('Executing command: %s', cmd)
@@ -151,8 +157,8 @@ def main(argv):
         # on optional cleanup.
         LOGGER.exception('Buildbot workdir cleanup failed: %s', e)
 
-    # Should we use a CIPD pin?
     mastername = properties.get('mastername')
+    # Should we use a CIPD pin?
     cipd_pin = None
     if mastername:
       cipd_pin = _CIPD_PINS.get(mastername)
@@ -163,10 +169,24 @@ def main(argv):
     _install_cipd_packages(
         cipd_path, cipd.CipdPackage('infra/recipes-py', cipd_pin))
 
+    engine_flags = {}
+    if mastername:
+      engine_flags = _ENGINE_FLAGS.get(mastername)
+    if not engine_flags:
+      engine_flags = _ENGINE_FLAGS.get(None, {})
+
+    engine_args = []
+    if engine_flags:
+      engine_flags_path = os.path.join(tempdir, 'engine_flags.json')
+      with open(engine_flags_path, 'w') as f:
+        json.dump(engine_flags, f)
+
+      engine_args = ['--operational-args-path', engine_flags_path]
+
     recipe_result_path = os.path.join(tempdir, 'recipe_result.json')
     recipe_cmd = [
         sys.executable,
-        os.path.join(cipd_path, 'recipes.py'),
+        os.path.join(cipd_path, 'recipes.py'),] + engine_args + [
         '--verbose',
         'remote',
         '--repository', args.repository,
@@ -176,7 +196,8 @@ def main(argv):
     if args.use_gitiles:
       recipe_cmd.append('--use-gitiles')
     recipe_cmd.extend([
-        '--',
+        '--',] + (
+        engine_args) + [
         '--verbose',
         'run',
         '--properties-file', properties_file,
@@ -209,7 +230,22 @@ def main(argv):
       # Try to open recipe result JSON. Any failure will result in an exception
       # and an infra failure.
       with open(recipe_result_path) as f:
-        json.load(f)
+        return_value = json.load(f)
+
+      if engine_flags.get('use_result_proto'):
+        if return_value.get('failure'):
+          f = return_value['failure']
+
+          # If we aren't a step failure, we assume it was an exception.
+          if not f.get('step_failure'):
+            # The recipe engine used to return -1, which got interpreted as 255
+            # by os.exit in python, since process exit codes are a single byte.
+            recipe_return_code = 255
+          else:
+            # return code != 0 is for the benefit of buildbot, which uses return
+            # code to decide if a step failed or not.
+            recipe_return_code = 1
+
     return recipe_return_code
 
 
