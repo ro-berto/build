@@ -11,7 +11,6 @@ class InfraCodesearch(Master.Master1):
   master_port_id = 13
   buildbot_url = 'https://build.chromium.org/p/chromium.infra.codesearch/'
   service_account_file = 'service-account-infra.json'
-  buildbucket_bucket = 'master.chromium.infra.codesearch'
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'chromium.infra.codesearch'
