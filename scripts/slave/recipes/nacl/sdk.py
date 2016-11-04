@@ -25,7 +25,7 @@ def RunSteps(api):
   api.chromium.run_mb(
       api.properties.get('mastername'), api.properties.get('buildername'))
   api.chromium.cleanup_temp()
-  api.chromium.compile(['chrome'])
+  api.chromium.compile(['chrome'], use_goma_module=True)
   api.python(
       'annotated_steps',
       api.path['build'].join(
