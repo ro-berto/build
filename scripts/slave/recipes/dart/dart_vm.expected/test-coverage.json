@@ -63,7 +63,6 @@
       "CXX": "third_party/clang/linux/bin/clang++",
       "CXX_host": "third_party/clang/linux/bin/clang++",
       "C_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
-      "DART_USE_GN": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -94,8 +93,7 @@
       "CPLUS_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
       "CXX": "third_party/clang/linux/bin/clang++",
       "CXX_host": "third_party/clang/linux/bin/clang++",
-      "C_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
-      "DART_USE_GN": "1"
+      "C_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/"
     },
     "name": "build dart"
   },

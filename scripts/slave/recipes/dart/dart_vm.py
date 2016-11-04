@@ -21,7 +21,6 @@ linux_clang_env = {
   'CXX_host': 'third_party/clang/linux/bin/clang++',
   'C_INCLUDE_PATH': 'third_party/clang/linux/lib/clang/3.4/include/',
   'CPLUS_INCLUDE_PATH': 'third_party/clang/linux/lib/clang/3.4/include/',
-  'DART_USE_GN': '1',
 }
 asan64 = linux_clang_env.copy()
 asan64['GYP_DEFINES'] = 'asan=1'
@@ -33,12 +32,10 @@ linux_asan_env = {
   'x64': asan64,
   'ia32': asan32,
 }
-windows_env = {'LOGONSERVER': '\\\\AD1',
-               'DART_USE_GN': '1',
-}
+windows_env = {'LOGONSERVER': '\\\\AD1'}
 default_envs = {
   'linux': linux_clang_env,
-  'mac': {'DART_USE_GN': '1'},
+  'mac': {},
   'win': windows_env,
 }
 
