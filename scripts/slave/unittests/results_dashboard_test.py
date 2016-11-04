@@ -127,6 +127,41 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     ]
     self.assertEqual(expected_points, actual_points)
 
+  def test_MakeListOfPoints_RevisionsDict(self):
+    """A very simple test of a call to MakeListOfPoints."""
+
+    # The master name is gotten when making the list of points,
+    # so it must be stubbed out here.
+    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
+    slave_utils.GetActiveMaster().AndReturn('MyMaster')
+    self.mox.ReplayAll()
+
+    actual_points = results_dashboard.MakeListOfPoints(
+        {
+            'bar': {
+                'traces': {'baz': ["100.0", "5.0"]},
+            }
+        },
+        'my-bot', 'foo_test', 'Builder',
+        10, {}, revisions_dict={'rev': '377777'})
+    expected_points = [
+        {
+            'master': 'MyMaster',
+            'bot': 'my-bot',
+            'test': 'foo_test/bar/baz',
+            'revision': 377777,
+            'value': '100.0',
+            'error': '5.0',
+            'supplemental_columns': {
+                'r_commit_pos': 377777,
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
+            },
+        }
+    ]
+    self.assertEqual(expected_points, actual_points)
+
   def test_MakeListOfPoints_GeneralCase(self):
     """A test of making a list of points, including all optional data."""
     # The master name is gotten when making the list of points,

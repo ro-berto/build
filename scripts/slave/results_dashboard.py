@@ -154,7 +154,7 @@ def _CanParseJSON(my_json):
 
 
 def MakeListOfPoints(charts, bot, test_name, buildername,
-                     buildnumber, supplemental_columns):
+                     buildnumber, supplemental_columns, revisions_dict=None):
   """Constructs a list of point dictionaries to send.
 
   The format output by this function is the original format for sending data
@@ -181,7 +181,8 @@ def MakeListOfPoints(charts, bot, test_name, buildername,
   master = slave_utils.GetActiveMaster()
 
   for chart_name, chart_data in sorted(charts.items()):
-    point_id, revision_columns = _RevisionNumberColumns(chart_data, prefix='r_')
+    point_id, revision_columns = _RevisionNumberColumns(
+      revisions_dict if revisions_dict is not None else chart_data, prefix='r_')
 
     for trace_name, trace_values in sorted(chart_data['traces'].items()):
       is_important = trace_name in chart_data.get('important', [])

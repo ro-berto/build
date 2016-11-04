@@ -34,7 +34,7 @@ def main(args):
   # Parse options
   parser = optparse.OptionParser()
   parser.add_option('--name')
-  parser.add_option('--chartjson-results-file')
+  parser.add_option('--results-file')
   parser.add_option('--got-revision-cp')
   parser.add_option('--build-dir')
   parser.add_option('--perf-id')
@@ -61,9 +61,16 @@ def main(args):
   reference_build = 'reference' in options.name
   stripped_test_name = options.name.replace('.reference', '')
   results = {}
-  with open(options.chartjson_results_file) as f:
+  with open(options.results_file) as f:
     results = json.load(f)
-  dashboard_json = results_dashboard.MakeDashboardJsonV1(
+  dashboard_json = {}
+  if not 'charts' in results:
+    # These are legacy results.
+    dashboard_json = results_dashboard.MakeListOfPoints(
+      results, options.perf_id, stripped_test_name, options.buildername,
+      options.buildnumber, {}, revisions_dict=revisions)
+  else:
+    dashboard_json = results_dashboard.MakeDashboardJsonV1(
       results,
       revisions, stripped_test_name, options.perf_id,
       options.buildername, options.buildnumber,

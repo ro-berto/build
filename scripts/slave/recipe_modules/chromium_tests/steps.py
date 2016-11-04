@@ -1136,12 +1136,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
            ['Info: Benchmark disabled, not sending results to dashboard']
         return
 
-      if not 'charts' in results:
-        step_result.presentation.logs['chartjson_info'] = \
-            ['Info: No chart json present']
-        return
-
-
       # TODO(eyaich): Remove logging once we debug uploading chartjson
       # to perf dashboard
       step_result.presentation.logs['chartjson_info'] = \
@@ -1150,7 +1144,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       results_file = api.raw_io.input(data=json.dumps(results))
       """Produces a step that uploads results to dashboard"""
       args = [
-          '--chartjson-results-file', results_file,
+          '--results-file', results_file,
           '--perf-id', self._perf_id,
           '--results-url', self._results_url,
           '--name', self._perf_dashboard_id,

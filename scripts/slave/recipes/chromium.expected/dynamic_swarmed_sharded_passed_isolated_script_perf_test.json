@@ -457,7 +457,7 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_perf_dashboard_results.py",
-      "--chartjson-results-file",
+      "--results-file",
       "{\"dummy\": \"dummy0\", \"enabled\": true, \"charts\": {\"entry2\": \"chart2\", \"entry3\": \"chart3\", \"entry1\": \"chart1\", \"entry4\": \"chart4\"}}",
       "--perf-id",
       "win-10-low-end",
