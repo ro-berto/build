@@ -480,7 +480,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               mastername, buildername)):
         trigger_spec = {
             'builder_name': loop_buildername,
-            'properties': {},
+            'properties': {
+                'parent_mastername': mastername,
+            },
         }
         if mastername != loop_mastername:
           trigger_spec['bucket'] = 'master.' + loop_mastername

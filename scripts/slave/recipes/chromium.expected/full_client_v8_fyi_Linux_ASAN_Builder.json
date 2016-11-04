@@ -383,7 +383,8 @@
           "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
           "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
           "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "client.v8.fyi"
         }
       }
     ],
