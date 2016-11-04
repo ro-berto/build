@@ -55,6 +55,7 @@
       "CXX": "third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC",
       "CXX_host": "third_party/clang/linux/bin/clang++",
       "C_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
+      "DART_USE_GN": "1",
       "GYP_DEFINES": "asan=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -88,6 +89,7 @@
       "CXX": "third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC",
       "CXX_host": "third_party/clang/linux/bin/clang++",
       "C_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
+      "DART_USE_GN": "1",
       "GYP_DEFINES": "asan=1"
     },
     "name": "build dart"
