@@ -723,7 +723,7 @@ SPEC = {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -744,7 +744,7 @@ SPEC = {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'TARGET_PLATFORM': 'android',
       },
@@ -764,7 +764,7 @@ SPEC = {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -785,7 +785,7 @@ SPEC = {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'TARGET_PLATFORM': 'android',
       },
@@ -804,7 +804,7 @@ SPEC = {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'TARGET_PLATFORM': 'android',
       },
@@ -823,7 +823,7 @@ SPEC = {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'TARGET_PLATFORM': 'android',
       },
