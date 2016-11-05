@@ -889,6 +889,59 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Gathering reference values.Clearing results directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/bisect_results"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Gathering reference values.Clearing results directory.rmtree old results directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results",
+      "511"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Gathering reference values.Clearing results directory.makedirs new results directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1088,6 +1141,33 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -1110,7 +1190,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_1"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1131,7 +1211,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[TMP_BASE]/perf-test-output_tmp_1/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1147,7 +1227,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_1/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1161,6 +1241,33 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -1189,7 +1296,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_2"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1210,7 +1317,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[TMP_BASE]/perf-test-output_tmp_2/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1226,7 +1333,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_2/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1240,6 +1347,33 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -1268,7 +1402,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_3"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1289,7 +1423,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[TMP_BASE]/perf-test-output_tmp_3/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1305,7 +1439,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_3/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1319,6 +1453,33 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -1347,7 +1508,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_4"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1368,7 +1529,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[TMP_BASE]/perf-test-output_tmp_4/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1384,7 +1545,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_4/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1398,6 +1559,33 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -1426,7 +1614,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_5"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1447,7 +1635,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[TMP_BASE]/perf-test-output_tmp_5/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1463,7 +1651,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_5/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1518,6 +1706,59 @@
     "name": "Gathering reference values.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Gathering reference values.Clearing results directory (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/bisect_results"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Gathering reference values.Clearing results directory.rmtree old results directory (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results",
+      "511"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Gathering reference values.Clearing results directory.makedirs new results directory (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -1720,6 +1961,33 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -1742,7 +2010,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_6"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1765,7 +2033,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark fail",
-      "[TMP_BASE]/perf-test-output_tmp_6/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1781,7 +2049,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_6/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1795,6 +2063,33 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory (7)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -1823,7 +2118,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_7"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1846,7 +2141,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark fail",
-      "[TMP_BASE]/perf-test-output_tmp_7/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1862,7 +2157,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_7/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1876,6 +2171,33 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -1904,7 +2226,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_8"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1927,7 +2249,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark fail",
-      "[TMP_BASE]/perf-test-output_tmp_8/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1943,7 +2265,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_8/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1957,6 +2279,33 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory (9)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -1985,7 +2334,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_9"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2008,7 +2357,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark fail",
-      "[TMP_BASE]/perf-test-output_tmp_9/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2024,7 +2373,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_9/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -2038,6 +2387,33 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.makedirs results directory (10)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
@@ -2066,7 +2442,7 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_10"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2089,7 +2465,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark fail",
-      "[TMP_BASE]/perf-test-output_tmp_10/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2105,7 +2481,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_10/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {

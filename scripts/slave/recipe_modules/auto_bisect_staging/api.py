@@ -174,6 +174,10 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
 
     This is for the merged director/tester flow.
     """
+    with self.m.step.nest('Clearing results directory'):
+      results_dir = self.m.path['bisect_results']
+      self.m.file.rmtree('old results directory', results_dir)
+      self.m.file.makedirs('new results directory', results_dir)
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 

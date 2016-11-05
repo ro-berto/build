@@ -118,6 +118,8 @@ def RunSteps(api, mastername, buildername):
   update_step = api.auto_bisect_staging.ensure_checkout()
   api.path.c.dynamic_paths['catapult'] = (
       api.m.auto_bisect_staging.working_dir.join('catapult'))
+  api.path.c.dynamic_paths['bisect_results'] = api.path['slave_build'].join(
+      'bisect_results')
   api.chromium_android.clean_local_files()
 
   bot_db = api.chromium_tests.create_bot_db_from_master_dict(mastername,

@@ -35,6 +35,8 @@ def RunSteps(api):
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
   api.path.c.dynamic_paths['catapult'] = (
       api.auto_bisect_staging.working_dir.join('catapult'))
+  api.path.c.dynamic_paths['bisect_results'] = api.path['slave_build'].join(
+      'bisect_results')
   api.auto_bisect_staging.start_try_job(
       api, update_step=update_step, bot_db=bot_db,
       do_not_nest_wait_for_revision=True)

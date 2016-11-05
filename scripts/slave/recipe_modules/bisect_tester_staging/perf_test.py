@@ -5,6 +5,7 @@
 import os
 import re
 import time
+import uuid
 
 
 class Metric(object):  # pragma: no cover
@@ -70,6 +71,12 @@ def _is_telemetry_command(command):
   """Attempts to discern whether or not a given command is running telemetry."""
   return 'run_benchmark' in command
 
+def _make_results_dir(api):
+  new_dir = 'dummy' if api._test_data.enabled else str(uuid.uuid4())
+  full_path = api.m.path['bisect_results'].join(new_dir)
+  api.m.file.makedirs('results directory', full_path)
+  return full_path
+
 def run_perf_test(api, test_config, **kwargs):
   """Runs the command N times and parses a metric from the output."""
   # TODO(prasadv):  Consider extracting out the body of the for loop into
@@ -106,7 +113,7 @@ def run_perf_test(api, test_config, **kwargs):
         command += ' --upload-results'
       if kwargs.get('results_label'):
         command += ' --results-label=%s' % kwargs.get('results_label')
-    temp_dir = api.m.path.mkdtemp('perf-test-output')
+    temp_dir = _make_results_dir(api)
     if use_chartjson or use_valueset:  # pragma: no cover
       command = _set_output_dir(command, str(temp_dir))
       chartjson_path = temp_dir.join('results-chart.json')

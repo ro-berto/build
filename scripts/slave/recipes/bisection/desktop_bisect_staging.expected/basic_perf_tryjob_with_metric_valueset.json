@@ -453,6 +453,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "makedirs results directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -474,7 +497,7 @@
       "--reset-results",
       "--upload-results",
       "--results-label=Patch",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_1"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Performance Test (With Patch) 1 of 1",
@@ -497,7 +520,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\n",
-      "[TMP_BASE]/perf-test-output_tmp_1/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "write buildbot output to disk"
@@ -507,7 +530,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_1/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
@@ -778,6 +801,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "makedirs results directory (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -798,7 +844,7 @@
       "--output_format=valueset",
       "--upload-results",
       "--results-label=TOT",
-      "--output-dir=[TMP_BASE]/perf-test-output_tmp_2"
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Performance Test (Without Patch) 1 of 1",
@@ -821,7 +867,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\n",
-      "[TMP_BASE]/perf-test-output_tmp_2/results.txt"
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "write buildbot output to disk (2)"
@@ -831,7 +877,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/perf-test-output_tmp_2/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
@@ -848,7 +894,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/catapult/tracing/bin/parse_metric_cmdline",
-      "[TMP_BASE]/perf-test-output_tmp_1/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "dummy/dummy",
       "--valueset"
     ],
@@ -869,7 +915,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/catapult/tracing/bin/parse_metric_cmdline",
-      "[TMP_BASE]/perf-test-output_tmp_2/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "dummy/dummy",
       "--valueset"
     ],
@@ -910,7 +956,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/catapult/tracing/bin/parse_metric_cmdline",
-      "[TMP_BASE]/perf-test-output_tmp_1/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "dummy/dummy",
       "--valueset"
     ],
@@ -931,7 +977,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/catapult/tracing/bin/parse_metric_cmdline",
-      "[TMP_BASE]/perf-test-output_tmp_2/results-valueset.json",
+      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
       "dummy/dummy",
       "--valueset"
     ],
