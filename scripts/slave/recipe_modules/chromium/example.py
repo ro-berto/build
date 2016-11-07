@@ -9,6 +9,7 @@ DEPS = [
   'recipe_engine/properties',
 ]
 
+
 def RunSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
@@ -35,12 +36,13 @@ def RunSteps(api):
                         android_version_name="example")
 
   env = {}
-  if api.properties.get('goma_disable', False):
-    env.update({'GOMA_DISABLED': 'true'})
+  use_compile_py = api.properties.get('use_compile_py', True)
+  api.chromium.compile(
+      targets=['All'], out_dir=out_dir,
+      use_goma_module=use_goma_module,
+      use_compile_py=use_compile_py,
+      env=env)
 
-  api.chromium.compile(targets=['All'], out_dir=out_dir,
-                       use_goma_module=use_goma_module,
-                       env=env)
 
 def GenTests(api):
   yield api.test('basic_out_dir') + api.properties(
@@ -49,6 +51,15 @@ def GenTests(api):
       slavename='build1-a1',
       buildnumber='77457',
       out_dir='/tmp',
+  )
+
+  yield api.test('basic_out_dir_without_compile_py') + api.properties(
+      mastername='chromium.linux',
+      buildername='Android Builder (dbg)',
+      slavename='build1-a1',
+      buildnumber='77457',
+      out_dir='/tmp',
+      use_compile_py=False,
   )
 
   yield api.test('basic_out_dir_with_goma_module') + api.properties(
@@ -93,5 +104,5 @@ def GenTests(api):
              slavename='build1-a1',
              buildnumber='77457',
              use_goma_module=True,
-             goma_disable=True,
-         ) + api.platform.name('win'))
+         ) + api.platform.name('win') +
+         api.step_data('preprocess_for_goma.start_goma', retcode=1))

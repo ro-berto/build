@@ -156,8 +156,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
+  # TODO(tikuta): Remove use_compile_py=True after removing compile.py.
   def compile(self, targets=None, name=None, out_dir=None,
-              target=None, use_goma_module=False, **kwargs):
+              target=None, use_goma_module=False,
+              use_compile_py=True, **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -260,7 +262,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
       kwargs.setdefault('cwd', self.m.path['checkout'])
 
-    if use_goma_module:
+    if use_goma_module or not use_compile_py:
 
       if self.m.platform.is_linux and self.c.TARGET_CROS_BOARD:
         out_dir = 'out_%s' % self.c.TARGET_CROS_BOARD
@@ -277,32 +279,40 @@ class ChromiumApi(recipe_api.RecipeApi):
       if self.c.compile_py.build_args:
         command.extend(self.c.compile_py.build_args)
 
-      # Set -j just before 'with self.m.goma.build_with_goma('
-      # for ninja_log_command being set correctly if starting goma
-      # fails.
-      command += ['-j', self.m.goma.recommended_goma_jobs]
+      if use_goma_module:
+        # Set -j just before 'with self.m.goma.build_with_goma('
+        # for ninja_log_command being set correctly if starting goma
+        # fails.
+        command += ['-j', self.m.goma.recommended_goma_jobs]
 
       if targets is not None:
         # Add build targets to command ('All', 'chrome' etc).
         command += targets
 
-      # TODO(tikuta): Set disable_local_fallback option appropriately.
-      with self.m.goma.build_with_goma(
-          env=goma_env,
-          ninja_log_outdir=target_output_dir,
-          ninja_log_compiler=self.c.compile_py.compiler or 'goma',
-          ninja_log_command=command,
-          allow_build_without_goma=allow_build_without_goma):
-        if 'GOMA_DISABLED' in goma_env:
-          self.m.goma.remove_j_flag(command)
+      kwargs.pop('env', {})
 
-          if self.m.platform.is_win:
-            self.m.python('update windows env',
-                          script=self.package_repo_resource(
-                              'scripts', 'slave', 'update_windows_env.py'),
-                          args=['--envfile-dir', str(target_output_dir)],
-                          env=goma_env)
-        ninja_env.update(kwargs.pop('env', {}))
+      # TODO(tikuta): Set disable_local_fallback option appropriately.
+      if use_goma_module:
+        with self.m.goma.build_with_goma(
+            env=goma_env,
+            ninja_log_outdir=target_output_dir,
+            ninja_log_compiler=self.c.compile_py.compiler or 'goma',
+            ninja_log_command=command,
+            allow_build_without_goma=allow_build_without_goma):
+          if 'GOMA_DISABLED' in goma_env:
+            self.m.goma.remove_j_flag(command)
+            ninja_env['GOMA_DISABLED'] = 'true'
+            if self.m.platform.is_win:
+              self.m.python('update windows env',
+                            script=self.package_repo_resource(
+                                'scripts', 'slave', 'update_windows_env.py'),
+                            args=['--envfile-dir', str(target_output_dir)],
+                            env=goma_env)
+          self.m.step(name or 'compile with ninja',
+                      command,
+                      env=ninja_env,
+                      **kwargs)
+      else:
         self.m.step(name or 'compile with ninja',
                     command,
                     env=ninja_env,
