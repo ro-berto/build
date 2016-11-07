@@ -108,7 +108,7 @@ def RunSteps(api):
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium.run_mb(mastername, buildername, use_goma=False)
+  api.chromium.run_mb(mastername, buildername, use_goma=True)
 
   all_fuzzers = gn_refs(
           api,
@@ -128,7 +128,7 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
   api.step.active_result.presentation.logs['targets'] = targets
-  api.chromium.compile(targets=targets)
+  api.chromium.compile(targets=targets, use_goma_module=True)
 
   config_kwargs = bot_config.get('chromium_config_kwargs', dict())
   build_config = config_kwargs.get('BUILD_CONFIG', 'Release')
