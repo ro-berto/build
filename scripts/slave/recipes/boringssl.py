@@ -283,15 +283,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('gerrit_cl_deprecated') +
-    api.platform('linux', 64) +
-    api.properties.tryserver_gerrit(
-        gerrit_host='boringssl-review.googlesource.com',
-        full_project_name='boringssl',
-        mastername='actually-no-master', buildername='linux',
-        slavename='swarming-slave')
-  )
-  yield (
     api.test('gerrit_cl') +
     api.platform('linux', 64) +
     api.properties.tryserver(
