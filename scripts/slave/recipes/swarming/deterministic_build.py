@@ -165,7 +165,7 @@ def RunSteps(api, buildername):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.chromium.run_mb(api.properties.get('mastername'), buildername)
-  api.chromium.compile(targets, name='First build')
+  api.chromium.compile(targets, name='First build', use_goma_module=True)
   api.isolate.remove_build_metadata()
   if enable_isolate:
     # This archives the results and regenerate the .isolated files.
@@ -176,7 +176,7 @@ def RunSteps(api, buildername):
   # Do the second build and move the build artifact to the temp directory.
   api.chromium.runhooks()
   api.chromium.run_mb(api.properties.get('mastername'), buildername)
-  api.chromium.compile(targets, name='Second build')
+  api.chromium.compile(targets, name='Second build', use_goma_module=True)
   api.isolate.remove_build_metadata()
   if enable_isolate:
     # This should be quick if the build is indeed deterministic.

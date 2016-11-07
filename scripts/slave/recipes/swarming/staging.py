@@ -116,7 +116,7 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.isolate.clean_isolated_files(api.chromium.output_dir)
-  api.chromium.compile(targets=targets)
+  api.chromium.compile(targets=targets, use_goma_module=True)
   api.isolate.remove_build_metadata()
 
   # Will search for *.isolated.gen.json files in the build directory and isolate
