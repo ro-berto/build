@@ -43,6 +43,9 @@ _CIPD_PINS = {
 # to test new recipe engine flags on a select few masters.
 _ENGINE_FLAGS = {
   None: {},
+  'chromium.fyi': {
+    'use_result_proto': True,
+  },
 }
 
 
