@@ -79,7 +79,7 @@ def RunSteps(api, mastername, buildername):
     # TODO(agrieve): Remove _apk suffix in favour of bin/run_${target} once GYP
     #     is gone. http://crbug.com/599919
     targets.append(target + '_apk')
-  api.chromium.compile(targets=targets)
+  api.chromium.compile(targets=targets, use_goma_module=True)
 
   api.emulator.install_emulator_deps(api_level=builder.get('api_level'))
 
