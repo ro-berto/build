@@ -218,7 +218,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   if bot_config.get('check_licenses'):
     with bot_config['check_licenses']():
       droid.check_webview_licenses()
-  api.chromium.compile(bot_config.get('targets'))
+  api.chromium.compile(bot_config.get('targets'), use_goma_module=True)
 
   for apk_name in bot_config.get('resource_sizes_apks', ()):
     apk_path = api.chromium_android.apk_path(apk_name)
@@ -288,4 +288,3 @@ def GenTests(api):
   yield step_failure(mastername='chromium.android',
                      buildername='Android x64 Builder (dbg)',
                      steps=['check licenses'])
-
