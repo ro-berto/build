@@ -25,13 +25,13 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-                                'Win32 Release (swarming)',
+                                'Win64 Debug (swarming)',
                             ]),
   ])
 
   specs = [
     {
-      'name': 'Win32 Release (swarming)',
+      'name': 'Win64 Debug (swarming)',
       'slavebuilddir': 'win_swarming',
     },
   ]
