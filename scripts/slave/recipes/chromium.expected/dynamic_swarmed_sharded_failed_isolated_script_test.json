@@ -438,6 +438,31 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 4, \"PASS\": 0}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"FAIL FAIL TIMEOUT\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"FAIL FAIL FAIL\", \"expected\": \"PASS TIMEOUT\"}}, \"test3\": {\"Test3\": {\"actual\": \"FAIL FAIL TIMEOUT\", \"expected\": \"PASS\"}, \"Test4\": {\"actual\": \"FAIL FAIL FAIL\", \"expected\": \"PASS TIMEOUT\"}}}, \"version\": 3}",
+      "--master-name",
+      "chromium.linux",
+      "--builder-name",
+      "Linux Tests",
+      "--build-number",
+      "571",
+      "--test-type",
+      "telemetry_gpu_unittests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [telemetry_gpu_unittests]"
+  },
+  {
     "name": "$result",
     "reason": "1 tests failed: ['telemetry_gpu_unittests']",
     "recipe_result": null,

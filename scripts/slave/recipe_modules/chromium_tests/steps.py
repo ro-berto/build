@@ -1049,6 +1049,10 @@ class LocalIsolatedScriptTest(Test):
     return self._test_runs[suffix].json.output['failures']
 
 
+def is_json_results_format(results):
+  return results.get('version', 0) == 3
+
+
 class SwarmingIsolatedScriptTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None, priority=None,
@@ -1064,6 +1068,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._perf_id=perf_id
     self._results_url = results_url
     self._perf_dashboard_id = perf_dashboard_id
+    self._isolated_script_results = {}
 
   @property
   def target_name(self):
@@ -1103,12 +1108,22 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
              for res in tests[t]['actual'].split()))
     return True, failures
 
+  def upload_json_format_results(self, api, results):
+    chrome_revision_cp = api.bot_update.last_returned_properties.get(
+        'got_revision_cp', 'x@{#0}')
+    chrome_revision = str(api.commit_position.parse_revision(
+        chrome_revision_cp))
+    api.test_results.upload(
+      api.json.input(results), chrome_revision=chrome_revision,
+      test_type=self.name,
+      test_results_server='test-results.appspot.com')
+
   def validate_task_results(self, api, step_result):
     results = getattr(step_result, 'isolated_script_results', None) or {}
     valid = True
     failures = []
     try:
-      if results.get('version', 0) == 3:
+      if is_json_results_format(results):
         valid, failures = self.validate_json_test_results(api, results)
       else:
         valid, failures = self.validate_simplified_results(results)
@@ -1120,12 +1135,22 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       failures = ['%s (entire test suite)' % self.name]
       valid = False
     if valid:
+      self._isolated_script_results = results
       step_result.presentation.step_text += api.test_utils.format_step_text([
         ['failures:', failures]
       ])
     # Check for chartjson results and upload to results dashboard if present.
     self._output_chartjson_results_if_present(api, step_result)
     return valid, failures
+
+  def post_run(self, api, suffix, test_filter=None):
+    try:
+      super(SwarmingIsolatedScriptTest, self).post_run(
+          api, suffix, test_filter=test_filter)
+    finally:
+      results = self._isolated_script_results
+      if self._upload_test_results and is_json_results_format(results):
+        self.upload_json_format_results(api, results)
 
   def _output_chartjson_results_if_present(self, api, step_result):
     results = \
