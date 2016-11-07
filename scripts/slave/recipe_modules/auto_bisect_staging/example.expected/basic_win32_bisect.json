@@ -2176,8 +2176,8 @@
       "python",
       "-u",
       "[SLAVE_BUILD]\\catapult\\tracing\\bin\\compare_samples",
-      "[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json",
-      "[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json",
+      "[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy",
+      "[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy,[SLAVE_BUILD]\\bisect_results\\dummy\\results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],

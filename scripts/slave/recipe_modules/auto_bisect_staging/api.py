@@ -410,8 +410,11 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
       well as details about each sample ('debug_values', 'mean' and 'std_dev').
 
     """
-    args = [','.join(map(str, values_a)),
-            ','.join(map(str, values_b)),
+    values_a = self._make_copies(values_a)
+    values_b = self._make_copies(values_b)
+
+    args = [','.join(values_a),
+            ','.join(values_b),
             metric,
             '--' + output_format]
 
@@ -423,3 +426,24 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
         args=args,
         stdout=self.m.json.output(),
         **kwargs).stdout
+
+  def _make_copies(self, files):
+    """Creates a copy of each file making sure to close the file handle.
+
+    The reason why we need this is to allow compare_samples to open the files.
+    An issue with this is suspected to cause http://crbug.com/659908
+
+    Args:
+      files: A list of strings or Path objects.
+
+    Returns:
+      A list of paths as strings.
+    """
+    copy_paths = []
+    for path in files:
+      new_path = str(path) + '.copy'
+      if not self._test_data.enabled:  # pragma: no cover
+        with open(new_path, 'w') as f:
+            f.write(open(str(path)).read())
+      copy_paths.append(new_path)
+    return copy_paths
