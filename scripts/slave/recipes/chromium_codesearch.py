@@ -153,7 +153,7 @@ def RunSteps(api):
   result = GenerateCompilationDatabase(api, debug_path, targets, platform)
 
   try:
-    api.chromium.compile(targets)
+    api.chromium.compile(targets, use_goma_module=True)
   except api.step.StepFailure as f: # pragma: no cover
     # Even if compilation fails, the Grok indexer may still be able to extract
     # (almost) all cross references. And the downside of failing on compile
