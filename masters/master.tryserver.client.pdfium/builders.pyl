@@ -74,10 +74,22 @@
       "recipe": "pdfium",
       "scheduler": None,
       "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "pdfium",
       "category": "1xfa",
       "properties": {
         "xfa": True,
         "memory_tool": "asan",
+      },
+    },
+    "linux_xfa_rel": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "rel": True,
       },
     },
     "mac": {
@@ -119,6 +131,17 @@
         "xfa": True,
       }
     },
+    "mac_xfa_rel": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "rel": True,
+      },
+    },
     "win": {
       "recipe": "pdfium",
       "scheduler": None,
@@ -158,15 +181,50 @@
         "xfa": True,
       }
     },
+    "win_xfa_32": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["win_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "target_cpu": "x86",
+      },
+    },
     "win_xfa_clang": {
       "recipe": "pdfium",
       "scheduler": None,
       "slave_pools": ["win_slave_pool"],
+      "slavebuilddir": "pdfium",
       "category": "1xfa",
       "properties": {
         "xfa": True,
         "clang": True,
       },
+    },
+    "win_xfa_clang_32": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["win_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "clang": True,
+        "target_cpu": "x86",
+      },
+    },
+    "win_xfa_rel": {
+      "recipe": "pdfium",
+      "scheduler": None,
+      "slave_pools": ["win_slave_pool"],
+      "slavebuilddir": "pdfium",
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "rel": True,
+      }
     },
   },
 
