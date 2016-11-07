@@ -79,7 +79,7 @@ class UploadTestResultsTest(unittest.TestCase):
                       results['Skipped.Test'][0].modifier)
 
   @mock.patch('test_results_uploader.upload_test_results')
-  def test_main(self, uploader_mock):
+  def test_main_gtest_json(self, uploader_mock):
     contents = {
         'per_iteration_data': [{
             'Fake.Test': [
@@ -88,10 +88,10 @@ class UploadTestResultsTest(unittest.TestCase):
         }],
     }
     result_directory = tempfile.mkdtemp()
-    input_json_file_path = os.path.join(result_directory, 'results.json')
-    with open(input_json_file_path, 'w') as f:
-      json.dump(contents, f)
     try:
+      input_json_file_path = os.path.join(result_directory, 'results.json')
+      with open(input_json_file_path, 'w') as f:
+        json.dump(contents, f)
       upload_test_results.main([
         '--test-type=foo',
         '--input-json=%s' % input_json_file_path,
@@ -113,6 +113,54 @@ class UploadTestResultsTest(unittest.TestCase):
            ('master', 'sauron')], files, 120)
     finally:
       shutil.rmtree(result_directory)
+
+  @mock.patch('test_results_uploader.upload_test_results')
+  def test_main_full_results_json(self, uploader_mock):
+    contents = {
+        'tests': {
+            'mojom_tests': {
+              'parse': {
+                'ast_unittest': {
+                  'ASTTest': {
+                    'testNodeBase': {
+                      'expected': 'PASS',
+                      'actual': 'PASS'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          'interrupted': False,
+          'path_delimiter': '.',
+          'version': 3,
+          'seconds_since_epoch': 1406662283.764424,
+          'num_failures_by_type': {
+            'FAIL': 0,
+            'PASS': 1
+          }
+    }
+    result_directory = tempfile.mkdtemp()
+    try:
+      input_json_file_path = os.path.join(result_directory, 'results.json')
+      with open(input_json_file_path, 'w') as f:
+        json.dump(contents, f)
+      upload_test_results.main([
+        '--test-type=foo',
+        '--input-json=%s' % input_json_file_path,
+        '--results-directory=%s' % result_directory,
+        '--test-results-server=foo',
+        '--master-name=sauron',
+      ])
+      files = [(os.path.basename(input_json_file_path), input_json_file_path)]
+      uploader_mock.assert_called_with(
+          'foo',
+          [('builder', 'DUMMY_BUILDER_NAME'),
+           ('testtype', 'foo'),
+           ('master', 'sauron')], files, 120)
+    finally:
+      shutil.rmtree(result_directory)
+
 
 
 if __name__ == '__main__':

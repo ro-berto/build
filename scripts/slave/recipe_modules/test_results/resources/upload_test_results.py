@@ -135,12 +135,19 @@ def main(args):
   with file(options.input_json) as json_file:
     results_json = json_file.read()
 
-  files = generate_json_results_file(
-      results_json, builder_name=options.builder_name,
-      build_number=options.build_number,
-      results_directory=options.results_directory,
-      chrome_revision=options.chrome_revision,
-      master_name=options.master_name)
+  content = json.loads(results_json)
+  if content.get('version', 0) >= 3:
+    print 'Input JSON file probably has full json results format'
+    files = [(os.path.basename(options.input_json), options.input_json)]
+  else:
+    print ('Input JSON file probably has gtest format. Converting to full json'
+           ' results format')
+    files = generate_json_results_file(
+        results_json, builder_name=options.builder_name,
+        build_number=options.build_number,
+        results_directory=options.results_directory,
+        chrome_revision=options.chrome_revision,
+        master_name=options.master_name)
 
   # Upload to a test results server if specified.
   if options.test_results_server and options.master_name:
