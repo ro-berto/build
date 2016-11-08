@@ -26,6 +26,8 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Win64 Debug (swarming)',
+                                'Win64 Debug (Win8)',
+                                'Win64 Debug (Win10)',
                             ]),
   ])
 
@@ -33,6 +35,14 @@ def Update(c):
     {
       'name': 'Win64 Debug (swarming)',
       'slavebuilddir': 'win_swarming',
+    },
+    {
+      'name': 'Win64 Debug (Win8)',
+      'slavebuilddir': 'win',
+    },
+    {
+      'name': 'Win64 Debug (Win10)',
+      'slavebuilddir': 'win',
     },
   ]
 

@@ -619,6 +619,24 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
+      'Win64 Debug (Win8)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+      },
+      'Win64 Debug (Win10)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+      },
       'Mac64 Release (swarming)': {
         'recipe_config': 'webrtc_swarming',
         'chromium_config_kwargs': {
@@ -1117,6 +1135,24 @@ BUILDERS = freeze({
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
         }
+      },
+      'win_x64_win8': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+      },
+      'win_x64_win10': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
       },
       'mac_compile_dbg': {
         'recipe_config': 'webrtc',
