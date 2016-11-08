@@ -174,10 +174,6 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
 
     This is for the merged director/tester flow.
     """
-    with self.m.step.nest('Clearing results directory'):
-      results_dir = self.m.path['bisect_results']
-      self.m.file.rmtree('old results directory', results_dir)
-      self.m.file.makedirs('new results directory', results_dir)
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
@@ -375,6 +371,10 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
           # test by checking for the presence of the good_revision key.
           if api.properties.get('bisect_config').get('good_revision'):
             api.step('***BISECT***', [])
+            with api.m.step.nest('Clearing results directory'):
+              results_dir = self.m.path['bisect_results']
+              self.m.file.rmtree('old results directory', results_dir)
+              self.m.file.makedirs('new results directory', results_dir)
             local_bisect.perform_bisect(self, **flags)
           else:
             api.step('***SINGLE TEST (deprecated)***', [])
