@@ -48,6 +48,11 @@ _ENGINE_FLAGS = {
       'use_result_proto': True,
     }
   },
+  'tryserver.chromium.linux': {
+    'engine_flags': {
+      'use_result_proto': True,
+    }
+  },
 }
 
 
