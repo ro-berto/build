@@ -371,7 +371,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux Asan': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_swarming_clang',
         'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -379,6 +379,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86-64',
+        }
       },
       'Linux Memcheck': {
         'recipe_config': 'webrtc',
@@ -403,7 +409,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux Tsan v2': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_swarming_clang',
         'chromium_apply_config': ['tsan2'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -411,9 +417,15 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86-64',
+        }
       },
        'Linux UBSan': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_swarming_clang',
         'chromium_apply_config': ['ubsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -421,9 +433,15 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86-64',
+        }
       },
       'Linux UBSan vptr': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_swarming_clang',
         'chromium_apply_config': ['ubsan_vptr'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -431,6 +449,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Linux',
+          'cpu': 'x86-64',
+        }
       },
       'Linux64 Release [large tests]': {
         'recipe_config': 'webrtc_baremetal',
