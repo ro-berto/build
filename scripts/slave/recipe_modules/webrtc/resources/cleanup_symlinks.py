@@ -13,7 +13,7 @@ import sys
 def main(args):
   if len(args) != 1:
     print >> sys.stderr, ('Please specify a single directory as an argument, '
-                          'which points to the checkout root (dir above src/).'
+                          'which points to the checkout root (dir above src/).')
     return 1
 
   checkout_root = args[0]
