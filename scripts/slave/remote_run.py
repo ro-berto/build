@@ -42,7 +42,11 @@ _CIPD_PINS = {
 # ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
 # to test new recipe engine flags on a select few masters.
 _ENGINE_FLAGS = {
-  None: {},
+  None: {
+    'engine_flags': {
+      'use_result_proto': True,
+    }
+  },
   'chromium.fyi': {
     'engine_flags': {
       'use_result_proto': True,
