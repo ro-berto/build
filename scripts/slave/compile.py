@@ -156,17 +156,15 @@ def goma_setup(options, env):
     os.mkdir(options.goma_cache_dir, 0700)
   env['GOMA_CACHE_DIR'] = options.goma_cache_dir
 
-  # HACK(shinyak): Disable DepsCache for a while due to crbug.com/663166
-  # # Enable DepsCache. DepsCache caches the list of files to send goma server.
-  # # This will greatly improve build speed when cache is warmed.
-  #
-  # if options.goma_deps_cache_file:
-  #   env['GOMA_DEPS_CACHE_FILE'] = options.goma_deps_cache_file
-  # else:
-  #   # TODO(shinyak): GOMA_DEPS_CACHE_DIR will be removed from goma in future.
-  #   # GOMA_DEPS_CACHE_FILE should be used.
-  #   env['GOMA_DEPS_CACHE_DIR'] = (
-  #     options.goma_deps_cache_dir or options.target_output_dir)
+  # Enable DepsCache. DepsCache caches the list of files to send goma server.
+  # This will greatly improve build speed when cache is warmed.
+  if options.goma_deps_cache_file:
+    env['GOMA_DEPS_CACHE_FILE'] = options.goma_deps_cache_file
+  else:
+    # TODO(shinyak): GOMA_DEPS_CACHE_DIR will be removed from goma in future.
+    # GOMA_DEPS_CACHE_FILE should be used.
+    env['GOMA_DEPS_CACHE_DIR'] = (
+      options.goma_deps_cache_dir or options.target_output_dir)
 
   if options.goma_hermetic:
     env['GOMA_HERMETIC'] = options.goma_hermetic
