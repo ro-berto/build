@@ -9,17 +9,6 @@
 
 {% block content %}
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript" src="/gantt_chart.js"></script>
-<script type="text/javascript">
-  var rawSteps = [
-    {% for s in b.getSteps() %}
-      {'name': '{{ s.getName()|escapejs }}',
-       'start': new Date({{ s.getTimes()[0] }}*1000),
-       'end': new Date ({{ s.getTimes()[1] }}*1000)},
-    {% endfor %}
-  ];
-</script>
 <h1>
 Builder <a href="{{ path_to_builder }}">{{ b.getBuilder().getName() }}</a>
 Build #{{ b.getNumber() }}
@@ -191,12 +180,7 @@ Build #{{ b.getNumber() }}
 {% for _ in range(-1, nest_level) %}
  </li></ol>
 {% endfor %}
-  <div>
-    <button type="button" onclick="toggleChart(rawSteps);">
-      SHOW/HIDE Gantt Chart
-    </button>
-    <div id="chart_div"></div>
-  </div>
+
 </div>
 <div class="column">
 
