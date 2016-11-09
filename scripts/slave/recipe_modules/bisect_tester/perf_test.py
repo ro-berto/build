@@ -4,6 +4,7 @@
 
 import os
 import re
+import shlex
 import time
 
 from . import parse_metric
@@ -203,7 +204,7 @@ def _rebase_path(api, file_path):
   return file_path
 
 def _run_command(api, command, step_name):
-  command_parts = command.split()
+  command_parts = shlex.split(command)
   stdout = api.m.raw_io.output()
   stderr = api.m.raw_io.output()
 
