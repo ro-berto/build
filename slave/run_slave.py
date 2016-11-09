@@ -163,6 +163,7 @@ def HotPatchSlaveBuilder(is_testing):
     """
     global needs_reboot
     if not is_testing:
+      Log('Setting needs_reboot flag')
       needs_reboot = True
       self.old_remote_shutdown()
     else:
