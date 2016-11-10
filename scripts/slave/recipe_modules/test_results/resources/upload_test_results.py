@@ -138,7 +138,7 @@ def main(args):
   content = json.loads(results_json)
   if content.get('version', 0) >= 3:
     print 'Input JSON file probably has full json results format'
-    files = [(os.path.basename(options.input_json), options.input_json)]
+    files = [(FULL_RESULTS_FILENAME, os.path.basename(options.input_json))]
   else:
     print ('Input JSON file probably has gtest format. Converting to full json'
            ' results format')
