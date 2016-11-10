@@ -146,7 +146,7 @@ _AddBuildSpec('Android arm64 Builder', 'android')
 _AddBuildSpec('Win Builder', 'win', target_bits=32)
 _AddBuildSpec( \
   'Win x64 Builder', 'win', add_to_bisect=True, enable_swarming=True)
-_AddBuildSpec('Mac Builder', 'mac', add_to_bisect=True)
+_AddBuildSpec('Mac Builder', 'mac', add_to_bisect=True, enable_swarming=True)
 _AddBuildSpec('Linux Builder', 'linux', add_to_bisect=True)
 
 
@@ -188,8 +188,7 @@ _AddTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia', 'win',
 
 _AddTestSpec('Mac 10.11 Perf', 'chromium-rel-mac11', 'mac',
              num_host_shards=5)
-_AddTestSpec('Mac 10.10 Perf', 'chromium-rel-mac10', 'mac',
-             num_host_shards=5)
+_AddIsolatedTestSpec('Mac 10.10 Perf', 'chromium-rel-mac10', 'mac')
 _AddTestSpec('Mac Retina Perf', 'chromium-rel-mac-retina', 'mac',
              num_host_shards=5)
 _AddTestSpec('Mac HDD Perf', 'chromium-rel-mac-hdd', 'mac',
