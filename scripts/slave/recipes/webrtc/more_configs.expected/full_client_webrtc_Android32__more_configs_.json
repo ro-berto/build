@@ -248,6 +248,68 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
+      "gen",
+      "//out/Debug",
+      "--args=rtc_include_tests=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "gn (3)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@gn (rtc_include_tests=false)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
+      "--buildbot-buildername",
+      "Android32 (more configs)",
+      "--buildbot-mastername",
+      "client.webrtc",
+      "--buildbot-slavename",
+      "TestSlavename",
+      "--goma-deps-cache-file",
+      "Android32__more_configs_.gomadeps",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-service-account-json-file",
+      "/creds/service_accounts/service-account-goma-client.json",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile (3)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
