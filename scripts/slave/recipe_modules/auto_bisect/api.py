@@ -19,7 +19,7 @@ from . import local_bisect
 BISECT_CONFIG_FILE = 'tools/auto_bisect/bisect.cfg'
 
 
-class AutoBisectApi(recipe_api.RecipeApi):
+class AutoBisectStagingApi(recipe_api.RecipeApi):
   """A module for bisect specific functions."""
 
   # Number of seconds to wait between polls for test results.
@@ -36,7 +36,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
   SERVICE_ACCOUNT = 'chromium-bisect'
 
   def __init__(self, *args, **kwargs):
-    super(AutoBisectApi, self).__init__(*args, **kwargs)
+    super(AutoBisectStagingApi, self).__init__(*args, **kwargs)
     self.override_poll_interval = None
     self.bot_db = None
     # Repo for triggering build jobs.
@@ -56,9 +56,6 @@ class AutoBisectApi(recipe_api.RecipeApi):
    if not self._working_dir:
      self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
    return self._working_dir or self.m.path['slave_build']
-
-  def perform_bisect(self, **flags):
-    return local_bisect.perform_bisect(self, **flags)
 
   def create_bisector(self, bisect_config_dict, dummy_mode=False, **flags):
     """Passes the api and the config dictionary to the Bisector constructor.
@@ -104,11 +101,11 @@ class AutoBisectApi(recipe_api.RecipeApi):
     """Sets SVN repo url for triggering build jobs."""
     self.svn_repo_url = svn_repo_url
 
-  def gsutil_file_exists(self, path):
+  def gsutil_file_exists(self, path, **kwargs):
     """Returns True if a file exists at the given GS path."""
     try:
-      self.m.gsutil(['ls', path])
-    except self.m.step.StepFailure:  # pragma: no cover
+      self.m.gsutil( ['ls', path], **kwargs)
+    except self.m.step.StepFailure:
       # A step failure here simply means that the file does not exist, and
       # should not be treated as an error.
       self.m.step.active_result.presentation.status = self.m.step.SUCCESS
@@ -134,7 +131,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
         step_name,
         self.resource('fetch_revision_info.py'),
         [revision.commit_hash, revision.depot_name],
-        stdout=self.m.json.output())
+        stdout=self.m.json.output(),
+        step_test_data=lambda: self._test_data['cl_info'][revision.commit_hash],
+    )
     return result.stdout
 
   def _commit_info(self, commit_hash, url, step_name=None):  # pragma: no cover
@@ -169,41 +168,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
      self.surface_result('BAD_REV')
      raise
 
-  def run_bisect_script(self, **kwargs):
-    """Executes src/tools/run-perf-bisect-regression.py to perform bisection."""
-    self.m.python(
-        'Preparing for Bisection',
-        script=self.m.path['checkout'].join(
-            'tools', 'prepare-bisect-perf-regression.py'),
-        args=['-w', self.m.path['cache'].join('bisect')])
-    args = []
-
-    kwargs['allow_subannotations'] = True
-
-    # TODO(prasadv): Remove this once bisect runs are no longer running
-    # against revisions from February 2016 or earlier.
-    if self.internal_bisect:  # pragma: no cover
-      kwargs['env'] = {'CHROMIUM_OUTPUT_DIR': self.m.chromium.output_dir}
-
-    if kwargs.get('extra_src'):
-      args = args + ['--extra_src', kwargs.pop('extra_src')]
-    if kwargs.get('path_to_config'):
-      args = args + ['--path_to_config', kwargs.pop('path_to_config')]
-    if self.m.chromium.c.TARGET_PLATFORM != 'android':
-      goma_dir = self.m.goma.ensure_goma()
-      args += ['--path_to_goma', goma_dir]
-    args += [
-        '--build-properties',
-        self.m.json.dumps(dict(self.m.properties.legacy())),
-    ]
-    self.m.chromium.runtest(
-        self.m.path['checkout'].join('tools', 'run-bisect-perf-regression.py'),
-        ['-w', self.m.path['cache'].join('bisect')] + args,
-        name='Running Bisection',
-        xvfb=True, **kwargs)
-
   def run_local_test_run(self, test_config_params,
-                         skip_download=False):  # pragma: no cover
+                         skip_download=False, **kwargs):
     """Starts a test run on the same machine.
 
     This is for the merged director/tester flow.
@@ -211,13 +177,13 @@ class AutoBisectApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
-    if skip_download:
+    if skip_download:  # pragma: no cover
       update_step = None
     else:
       update_step = self._SyncRevisionToTest(test_config_params)
-    self.start_test_run_for_bisect(update_step, self.bot_db,
-                                   test_config_params, run_locally=True,
-                                   skip_download=skip_download)
+    return self.start_test_run_for_bisect(
+        update_step, self.bot_db, test_config_params,
+        skip_download=skip_download, **kwargs)
 
   def ensure_checkout(self, *args, **kwargs):
     if self.working_dir:
@@ -225,13 +191,13 @@ class AutoBisectApi(recipe_api.RecipeApi):
 
     return self.m.bot_update.ensure_checkout(*args, **kwargs)
 
-  def _SyncRevisionToTest(self, test_config_params):  # pragma: no cover
+  def _SyncRevisionToTest(self, test_config_params):
     if not self.internal_bisect:
       self.m.gclient.c.revisions.update(
           test_config_params['deps_revision_overrides'])
       return self.ensure_checkout(
           root_solution_revision=test_config_params['revision'])
-    else:
+    else:  # pragma: no cover
       return self._SyncRevisionsForAndroidChrome(
           test_config_params['revision_ladder'])
 
@@ -247,15 +213,12 @@ class AutoBisectApi(recipe_api.RecipeApi):
     self.m.gclient('sync %s' % '-'.join(revisions), params)
     return None
 
-  def start_test_run_for_bisect(self, update_step, bot_db,
-                                test_config_params, run_locally=False,
-                                skip_download=False):
+  def start_test_run_for_bisect(self, update_step, bot_db, test_config_params,
+                                skip_download=False, **kwargs):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
     bot_config = bot_db.get_bot_config(mastername, buildername)
     build_archive_url = test_config_params['parent_build_archive_url']
-    if not run_locally:
-      self.m.bisect_tester.upload_job_url()
     if not skip_download:
       if self.m.chromium.c.TARGET_PLATFORM == 'android':
         # The best way to ensure the old build directory is not used is to
@@ -298,7 +261,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
             build_revision=test_config_params['parent_got_revision'],
             override_bot_type='tester')
 
-    tests = [self.m.chromium_tests.steps.BisectTest(test_config_params)]
+    tests = [
+        self.m.chromium_tests.steps.BisectTest(
+            test_config_params, **kwargs)]
 
     if not tests:  # pragma: no cover
       return
@@ -328,6 +293,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         self.deploy_apk_on_device(
             self.full_deploy_script, deploy_apks, deploy_args)
       test_runner()
+      return tests[0].run_results
 
   def deploy_apk_on_device(self, deploy_script, deploy_apks, deploy_args):
     """Installs apk on the android device."""
@@ -378,8 +344,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
       flags['do_not_nest_wait_for_revision'] = kwargs.pop(
           'do_not_nest_wait_for_revision')
     if bot_db is None:  # pragma: no cover
-      self.bot_db = api.chromium_tests.create_bot_db_from_master_dict(
-          '', None, None)
+      self.bot_db = api.chromium_tests.create_bot_db_from_master_dict('', None)
     else:
       self.bot_db = bot_db
 
@@ -397,16 +362,20 @@ class AutoBisectApi(recipe_api.RecipeApi):
             perf_setup=True, remove_system_webview=True)
         api.chromium.runhooks()
       try:
-        # Run legacy bisect script if the patch contains bisect.cfg.
         if BISECT_CONFIG_FILE in affected_files:
-          api.step('***LEGACY BISECT (deprecated)***', [])
-          self.run_bisect_script(**kwargs)
+          api.step('***LEGACY BISECT HAS BEEN DEPRECATED***', [])
+          api.step.active_result.presentation.status = api.step.FAILURE
+          return
         elif api.properties.get('bisect_config'):
           # We can distinguish between a config for a full bisect vs a single
           # test by checking for the presence of the good_revision key.
           if api.properties.get('bisect_config').get('good_revision'):
             api.step('***BISECT***', [])
-            local_bisect.perform_bisect(self, **flags)  # pragma: no cover
+            with api.m.step.nest('Clearing results directory'):
+              results_dir = self.m.path['bisect_results']
+              self.m.file.rmtree('old results directory', results_dir)
+              self.m.file.makedirs('new results directory', results_dir)
+            local_bisect.perform_bisect(self, **flags)
           else:
             api.step('***SINGLE TEST (deprecated)***', [])
             self.start_test_run_for_bisect(update_step, self.bot_db,
@@ -424,3 +393,57 @@ class AutoBisectApi(recipe_api.RecipeApi):
           else:
             self.ensure_checkout()
           api.chromium_android.common_tests_final_steps()
+
+
+  def stat_compare(self, values_a, values_b, metric,
+                   output_format='chartjson', **kwargs):
+    """Compares samples using catapult's statistics implementation.
+
+    Args:
+      values_a, values_b: lists of paths to the json files containing the values
+        produced by the test.
+      metric: the name of the metric as sent by dashboard.
+      output_format: 'chartjson', 'valueset' or 'buildbot'
+
+    Returns:
+      a dict containing 'result' which may be True, False or 'needMoreData', as
+      well as details about each sample ('debug_values', 'mean' and 'std_dev').
+
+    """
+    values_a = self._make_copies(values_a)
+    values_b = self._make_copies(values_b)
+
+    args = [','.join(values_a),
+            ','.join(values_b),
+            metric,
+            '--' + output_format]
+
+    script = self.working_dir.join('catapult', 'tracing', 'bin',
+                                   'compare_samples')
+    return self.m.python(
+        'Compare samples',
+        script=script,
+        args=args,
+        stdout=self.m.json.output(),
+        **kwargs).stdout
+
+  def _make_copies(self, files):
+    """Creates a copy of each file making sure to close the file handle.
+
+    The reason why we need this is to allow compare_samples to open the files.
+    An issue with this is suspected to cause http://crbug.com/659908
+
+    Args:
+      files: A list of strings or Path objects.
+
+    Returns:
+      A list of paths as strings.
+    """
+    copy_paths = []
+    for path in files:
+      new_path = str(path) + '.copy'
+      if not self._test_data.enabled:  # pragma: no cover
+        with open(new_path, 'w') as f:
+            f.write(open(str(path)).read())
+      copy_paths.append(new_path)
+    return copy_paths

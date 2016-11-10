@@ -7,6 +7,7 @@ import re
 import time
 import urllib
 
+from . import bisect_exceptions
 from . import config_validation
 from . import depot_config
 from . import revision_state
@@ -43,17 +44,6 @@ VALID_RESULT_CODES = (
 # looking for a revision that's already been archived. Since we don't want
 # to move *too* far from the original revision, we'll cap the search at 25%.
 DEFAULT_SEARCH_RANGE_PERCENTAGE = 0.25
-
-# How long to re-test the initial good-bad range for until significant
-# difference is established.
-REGRESSION_CHECK_TIMEOUT = 20 * 60 * 60  # 20 hours. A build times out after 24.
-# If we reach this number of samples on the reference range and have not
-# achieved statistical significance, bail.
-MAX_REQUIRED_SAMPLES = 15
-
-# Significance level to use for determining difference between revisions via
-# hypothesis testing.
-SIGNIFICANCE_LEVEL = 0.01
 
 _FAILED_INITIAL_CONFIDENCE_ABORT_REASON = (
     'The metric values for the initial "good" and "bad" revisions '
@@ -155,7 +145,9 @@ class Bisector(object):
       commit_position = self._api.m.commit_position.construct(
           branch='refs/heads/master', value=rev)
       try:
-        return self._api.m.crrev.to_commit_hash(commit_position)
+        return self.api.m.crrev.to_commit_hash(
+            commit_position,
+            step_test_data=lambda: self.api._test_data['hash_cp_map'][rev])
       except self.api.m.step.StepFailure:  # pragma: no cover
         self.surface_result('BAD_REV')
         raise
@@ -167,37 +159,42 @@ class Bisector(object):
   def _is_sha1(s):
     return bool(re.match('^[0-9A-Fa-f]{40}$', s))
 
-  def significantly_different(
-      self, list_a, list_b,
-      significance_level=SIGNIFICANCE_LEVEL):  # pragma: no cover
-    """Uses an external script to run hypothesis testing with scipy.
-
-    The reason why we need an external script is that scipy is not available to
-    the default python installed in all platforms. We instead rely on an
-    anaconda environment to provide those packages.
-
-    Args:
-      list_a, list_b: Two lists representing samples to be compared.
-      significance_level: Self-describing. As a decimal fraction.
-
-    Returns:
-      A boolean indicating whether the null hypothesis ~(that the lists are
-      samples from the same population) can be rejected at the specified
-      significance level.
+  def compare_revisions(self, revision_a, revision_b):
     """
-    step_result = self.api.m.python(
-        'Checking sample difference',
-        self.api.resource('significantly_different.py'),
-        [json.dumps(list_a), json.dumps(list_b), str(significance_level)],
-        stdout=self.api.m.json.output())
-    results = step_result.stdout
-    if results is None:
-      assert self.dummy_builds
-      return True
-    significantly_different = results['significantly_different']
-    step_result.presentation.logs[str(significantly_different)] = [
-        'See json.output for details']
-    return significantly_different
+    Returns:
+      SIGNIFICANTLY_DIFFERENT if the samples are significantly different.
+      NEED_MORE_DATA if there is not enough data to tell.
+      NOT_SIGNIFICANTLY_DIFFERENT if if there's enough data but still can't
+          tell the samples apart.
+    """
+    output_format = 'chartjson'
+    values_a = revision_a.chartjson_paths
+    values_b = revision_b.chartjson_paths
+    if revision_a.valueset_paths and revision_b.valueset_paths:
+      output_format = 'valueset'
+      values_a = revision_a.valueset_paths
+      values_b = revision_b.valueset_paths
+
+    result = self.api.stat_compare(
+        values_a,
+        values_b,
+        self.bisect_config['metric'],
+        output_format=output_format,
+        step_test_data=lambda: self.api.test_api.compare_samples_data(
+            self.api._test_data['parsed_values'], revision_a, revision_b))
+
+    revision_a.debug_values = result['sampleA']
+    revision_b.debug_values = result['sampleB']
+
+    res = result['result']['significance']
+    if res == revision_state.NEED_MORE_DATA:
+      return revision_state.NEED_MORE_DATA
+    elif res == revision_state.REJECT:
+      return revision_state.SIGNIFICANTLY_DIFFERENT
+    elif res == revision_state.FAIL_TO_REJECT:  # pragma: no cover
+      return revision_state.NOT_SIGNIFICANTLY_DIFFERENT
+    else:   # pragma: no cover
+      assert False, 'Unexpected result code from compare_samples: ' + res
 
   def config_step(self):
     """Yields a step that prints the bisect config."""
@@ -235,8 +232,8 @@ class Bisector(object):
     return self._api
 
   def compute_relative_change(self):
-    old_value = float(self.good_rev.mean_value)
-    new_value = float(self.bad_rev.mean_value)
+    old_value = float(self.good_rev.mean or 0)
+    new_value = float(self.bad_rev.mean or 0)
 
     if new_value and not old_value:  # pragma: no cover
       self.relative_change = ZERO_TO_NON_ZERO
@@ -245,145 +242,26 @@ class Bisector(object):
     rel_change = self.api.m.math_utils.relative_change(old_value, new_value)
     self.relative_change = '%.2f%%' % (100 * rel_change)
 
-  def make_deps_sha_file(self, deps_sha):
-    """Make a diff patch that creates DEPS.sha.
-
-    Args:
-      deps_sha (str): The hex digest of a SHA1 hash of the diff that patches
-        DEPS.
-
-    Returns:
-      A string containing a git diff.
-    """
-    return _DEPS_SHA_PATCH % {'deps_sha': deps_sha}
-
-  def _git_intern_file(self, file_contents, cwd, commit_hash):
-    """Writes a file to the git database and produces its git hash.
-
-    Args:
-      file_contents (str): The contents of the file to be hashed and interned.
-      cwd (recipe_config_types.Path): Path to the checkout whose repository the
-        file is to be written to.
-      commit_hash (str): An identifier for the step.
-
-    Returns:
-      A string containing the hash of the interned object.
-    """
-    cmd = 'hash-object -t blob -w --stdin'.split(' ')
-    stdin = self.api.m.raw_io.input(file_contents)
-    stdout = self.api.m.raw_io.output()
-    step_name = 'Hashing modified DEPS file with revision ' + commit_hash
-    step_result = self.api.m.git(*cmd, cwd=cwd, stdin=stdin, stdout=stdout,
-                                 name=step_name)
-    hash_string = step_result.stdout.splitlines()[0]
-    try:
-      if hash_string:
-        int(hash_string, 16)
-        return hash_string
-    except ValueError:  # pragma: no cover
-      reason = 'Git did not output a valid hash for the interned file.'
-      self.api.m.halt(reason)
-      raise self.api.m.step.StepFailure(reason)
-
-  def _gen_diff_patch(self, git_object_a, git_object_b, src_alias, dst_alias,
-                      cwd, deps_rev):
-    """Produces a git diff patch.
-
-    Args:
-      git_object_a (str): Tree-ish git object identifier.
-      git_object_b (str): Another tree-ish git object identifier.
-      src_alias (str): Label to replace the tree-ish identifier on
-        the resulting diff patch. (git_object_a)
-      dst_alias (str): Same as above for (git_object_b)
-      cwd (recipe_config_types.Path): Path to the checkout whose repo contains
-        the objects to be compared.
-      deps_rev (str): Deps revision to identify the patch generating step.
-
-    Returns:
-      A string containing the diff patch as produced by the 'git diff' command.
-    """
-    # The prefixes used in the command below are used to find and replace the
-    # tree-ish git object id's on the diff output more easily.
-    cmd = 'diff %s %s --src-prefix=IAMSRC: --dst-prefix=IAMDST:'
-    cmd %= (git_object_a, git_object_b)
-    cmd = cmd.split(' ')
-    stdout = self.api.m.raw_io.output()
-    step_name = 'Generating patch for %s to %s' % (git_object_a, deps_rev)
-    step_result = self.api.m.git(*cmd, cwd=cwd, stdout=stdout, name=step_name)
-    patch_text = step_result.stdout
-    src_string = 'IAMSRC:' + git_object_a
-    dst_string = 'IAMDST:' + git_object_b
-    patch_text = patch_text.replace(src_string, src_alias)
-    patch_text = patch_text.replace(dst_string, dst_alias)
-    return patch_text
-
-  def make_deps_patch(self, base_revision, base_file_contents,
-                      depot, new_commit_hash):
-    """Make a diff patch that updates a specific dependency revision.
-
-    Args:
-      base_revision (RevisionState): The revision for which the DEPS file is to
-        be patched.
-      base_file_contents (str): The contents of the original DEPS file.
-      depot (str): The dependency to modify.
-      new_commit_hash (str): The revision to put in place of the old one.
-
-    Returns:
-      A pair containing the git diff patch that updates DEPS, and the
-      full text of the modified DEPS file, both as strings.
-    """
-    original_contents = str(base_file_contents)
-    patched_contents = str(original_contents)
-
-    # Modify DEPS.
-    deps_var = depot['deps_var']
-    deps_item_regexp = re.compile(
-        r'(?<=["\']%s["\']: ["\'])([a-fA-F0-9]+)(?=["\'])' % deps_var,
-        re.MULTILINE)
-    if not re.search(deps_item_regexp, original_contents):  # pragma: no cover
-      reason = 'DEPS file does not contain entry for ' + deps_var
-      self.api.m.halt(reason)
-      raise self.api.m.step.StepFailure(reason)
-
-    patched_contents = re.sub(deps_item_regexp, new_commit_hash,
-                              original_contents)
-
-    cwd = self.api.working_dir.join(
-        depot_config.DEPOT_DEPS_NAME[base_revision.depot_name]['src'])
-    deps_file = 'DEPS'
-    # This is to support backward compatibility on android-chrome because
-    # .DEPS.git got migrated to DEPS on April 5, 2016
-    if (base_revision.depot_name == 'android-chrome' and
-        self.api.m.path.exists(self.api.m.path.join(cwd, '.DEPS.git'))):
-      deps_file = '.DEPS.git'  # pragma: no cover
-
-    interned_deps_hash = self._git_intern_file(
-        patched_contents, cwd, new_commit_hash)
-
-    patch_text = self._gen_diff_patch(
-        '%s:%s' % (base_revision.commit_hash, deps_file),
-        interned_deps_hash, deps_file, deps_file,
-        cwd=cwd,
-        deps_rev=new_commit_hash)
-    return patch_text, patched_contents
-
   def _expand_initial_revision_range(self):
     """Sets the initial contents of |self.revisions|."""
     with self.api.m.step.nest('Expanding revision range'):
       good_hash = self.good_rev.commit_hash
       bad_hash = self.bad_rev.commit_hash
+      depot = self.good_rev.depot_name
       step_name = 'for revisions %s:%s' % (good_hash, bad_hash)
       revisions = self._revision_range(
           start=good_hash,
           end=bad_hash,
           depot_name=self.base_depot,
           step_name=step_name,
-          exclude_end=True)
+          exclude_end=True,
+          step_test_data=lambda: self.api._test_data['revision_list'][depot]
+      )
       self.revisions = [self.good_rev] + revisions + [self.bad_rev]
       self._update_revision_list_indexes()
 
   def _revision_range(self, start, end, depot_name, base_revision=None,
-                      step_name=None, exclude_end=False):
+                      step_name=None, exclude_end=False, **kwargs):
     """Returns a list of RevisionState objects between |start| and |end|.
 
     When expanding the initial revision range we want to exclude the last
@@ -406,13 +284,15 @@ class Bisector(object):
     """
     if self.internal_bisect:  # pragma: no cover
       return self._revision_range_with_gitiles(
-          start, end, depot_name, base_revision, step_name)
+          start, end, depot_name, base_revision, step_name,
+          step_test_data=lambda: self.api._test_data[
+              'revision_list_internal'][depot_name])
     try:
       step_result = self.api.m.python(
           step_name,
           self.api.resource('fetch_intervening_revisions.py'),
           [start, end, depot_config.DEPOT_DEPS_NAME[depot_name]['url']],
-          stdout=self.api.m.json.output())
+          stdout=self.api.m.json.output(), **kwargs)
     except self.api.m.step.StepFailure:  # pragma: no cover
       self.surface_result('BAD_REV')
       raise
@@ -429,7 +309,7 @@ class Bisector(object):
     return revisions
 
   def _revision_range_with_gitiles(self, start, end, depot_name,
-       base_revision=None, step_name=None):   # pragma: no cover
+       base_revision=None, step_name=None, **kwargs):   # pragma: no cover
     """Returns a list of RevisionState objects between |start| and |end|.
 
     Args:
@@ -444,7 +324,7 @@ class Bisector(object):
     """
     try:
       url = depot_config.DEPOT_DEPS_NAME[depot_name]['url']
-      commits = self._commit_log(start, end, url, step_name)
+      commits = self._commit_log(start, end, url, step_name, **kwargs)
 
     except self.api.m.step.StepFailure:  # pragma: no cover
       self.surface_result('BAD_REV')
@@ -458,7 +338,8 @@ class Bisector(object):
           base_revision=base_revision))
     return revisions
 
-  def _commit_log(self, start, end, url, step_name=None):  # pragma: no cover
+  def _commit_log(self, start, end, url, step_name=None,
+                  **kwargs):  # pragma: no cover
     """Fetches information about a range of commits.
 
     Args:
@@ -480,7 +361,7 @@ class Bisector(object):
      ref = '%s..%s' % (start, end)
      step_name = step_name or 'gitiles log: %s' % ref
      commits, cursor = self.api.m.gitiles.log(
-         url, ref, limit=2048, step_name=step_name)
+         url, ref, limit=2048, step_name=step_name, **kwargs)
      if cursor:  # pragma: no cover
        raise self.api.m.step.StepFailure('Revision range too large')
      return list(reversed(commits))
@@ -521,7 +402,9 @@ class Bisector(object):
                 end=dep_revision_max,
                 depot_name=depot_name,
                 base_revision=min_revision,
-                step_name=step_name)
+                step_name=step_name,
+                step_test_data=lambda:
+                    self.api._test_data['revision_list'][depot_name])
             new_revisions = self.revisions[:max_revision.list_index]
             new_revisions += rev_list
             new_revisions += self.revisions[max_revision.list_index:]
@@ -558,8 +441,8 @@ class Bisector(object):
       True if the check passes (i.e. no problem), False if the change is not
       a regression according to the improvement direction.
     """
-    good = self.good_rev.mean_value
-    bad = self.bad_rev.mean_value
+    good = self.good_rev.mean
+    bad = self.bad_rev.mean
 
     if self.is_return_code_mode():
       return True
@@ -587,69 +470,74 @@ class Bisector(object):
     """Checks that the initial range presents a clear enough regression.
 
     We ensure that the good and bad revisions produce significantly different
-    results, increasing the sample size until MAX_REQUIRED_SAMPLES is reached
-    or REGRESSION_CHECK_TIMEOUT seconds have elapsed.
+    results, increasing the sample size until the compare_revisions function
+    concludes that a difference exists or not, OR the maximum allowed number of
+    repeated tests has been reached.
 
     Returns: True if the revisions produced results that differ from each
-    other in a statistically significant manner. False if such difference could
-    not be established in the time or sample size allowed.
+    other in a statistically significant manner. Raises an exception otherwise.
     """
-    if self.test_type == 'return_code':
+    if self.is_return_code_mode():
       return (self.good_rev.overall_return_code !=
               self.bad_rev.overall_return_code)
 
     if self.bypass_stats_check:
-      dummy_result = self.good_rev.values != self.bad_rev.values
+      self.compare_revisions(self.good_rev, self.bad_rev)
+      dummy_result = self.good_rev.mean != self.bad_rev.mean
       if not dummy_result:
-        self._set_insufficient_confidence_warning()
+        self._raise_low_confidence_error()
       return dummy_result
 
-    with self.api.m.step.nest('Re-testing reference range'):
-      expiration_time = time.time() + REGRESSION_CHECK_TIMEOUT
-      while time.time() < expiration_time:
-        if len(self.good_rev.values) >= 5 and len(self.bad_rev.values) >= 5:
-          if self.significantly_different(self.good_rev.values,
-                                          self.bad_rev.values):
-            return True
-        if len(self.good_rev.values) == len(self.bad_rev.values):
-          revision_to_retest = self.last_tested_revision
-        else:
-          revision_to_retest = min(self.good_rev, self.bad_rev,
-                                   key=lambda x: len(x.values))
-        if len(revision_to_retest.values) < MAX_REQUIRED_SAMPLES:
-          revision_to_retest.retest()
-        else:
-          break
-      self._set_insufficient_confidence_warning()
-      return False
+    compare_result = self.compare_revisions(self.good_rev, self.bad_rev)
 
+    # Only create a superstep if retesting will be needed.
+    if compare_result == revision_state.NEED_MORE_DATA:
+      with self.api.m.step.nest('Re-testing reference range'):
+        while (compare_result == revision_state.NEED_MORE_DATA):
+          revision_to_retest = min(self.good_rev, self.bad_rev,
+                                   key=lambda x: x.test_run_count)
+          if (revision_to_retest.test_run_count
+              >= revision_state.MAX_TESTS_PER_REVISION):
+            break
+          with self.api.m.step.nest('Retesting %s revision' % (
+              'GOOD' if revision_to_retest.good else 'BAD')):
+            revision_to_retest._do_test()
+          compare_result = self.compare_revisions(self.good_rev, self.bad_rev)
+    if compare_result == revision_state.SIGNIFICANTLY_DIFFERENT:
+      return True
+    self._raise_low_confidence_error()
+
+  def _raise_low_confidence_error(self):
+    self.surface_result('REF_RANGE_FAIL')
+    self.surface_result('LO_INIT_CONF')
+    self.failed = True
+    self.failed_initial_confidence = True
+    raise bisect_exceptions.InconclusiveBisectException(
+        'Bisect failed to reproduce the regression with enough confidence.')
 
   def get_exception(self):
     raise NotImplementedError()  # pragma: no cover
     # TODO: should return an exception with the details of the failure.
-
-  def _set_insufficient_confidence_warning(
-      self):  # pragma: no cover
-    """Adds a warning about the lack of initial regression confidence."""
-    self.failed_initial_confidence = True
-    self.surface_result('LO_INIT_CONF')
-    self.warnings.append(
-        'Bisect failed to reproduce the regression with enough confidence.')
 
   def _results_debug_message(self):
     """Returns a string with values used to debug a bisect result."""
     result = 'bisector.lkgr: %r\n' % self.lkgr
     result += 'bisector.fkbr: %r\n\n' % self.fkbr
     result += self._revision_value_table()
-    if (self.lkgr and self.lkgr.values and self.fkbr and self.fkbr.values):
-      result += '\n' + self._t_test_results()
+    if (self.lkgr and self.lkgr.test_run_count and self.fkbr and
+        self.fkbr.test_run_count):
+      result += '\n' + '\n'.join([
+          'LKGR values: %r' % list(self.lkgr.display_values),
+          'FKBR values: %r' % list(self.fkbr.display_values),
+      ])
     return result
 
   def _revision_value_table(self):
     """Returns a string table showing revisions and their values."""
     header = [['Revision', 'Values']]
     with self._api.m.step.nest('Resolving hashes'):
-      rows = [[r.revision_string(), str(r.values)] for r in self.revisions]
+      rows = [[r.revision_string(), str(r.display_values)]
+              for r in self.revisions]
     return self._pretty_table(header + rows)
 
   def _pretty_table(self, data):
@@ -657,20 +545,6 @@ class Bisector(object):
     for row in data:
       results.append('%-15s' * len(row) % tuple(row))
     return '\n'.join(results)
-
-  def _t_test_results(self):
-    """Returns a string showing t-test results for lkgr and fkbr."""
-    t, df, p = self.api.m.math_utils.welchs_t_test(
-        self.lkgr.values, self.fkbr.values)
-    lines = [
-        'LKGR values: %r' % self.lkgr.values,
-        'FKBR values: %r' % self.fkbr.values,
-        't-statistic: %r' % t,
-        'deg. of freedom:  %r' % df,
-        'p-value: %r' % p,
-        'Confidence score: %r' % (100 * (1 - p))
-    ]
-    return '\n'.join(lines)
 
   def print_result_debug_info(self):
     """Prints extra debug info at the end of the bisect process."""
@@ -696,7 +570,7 @@ class Bisector(object):
     candidate_range = [revision for revision in
                        self.revisions[self.lkgr.list_index + 1:
                                       self.fkbr.list_index]
-                       if not revision.tested and not revision.failed]
+                       if not revision.failed]
     if len(candidate_range) == 1:
       return candidate_range[0]
     if len(candidate_range) == 0:
@@ -739,7 +613,7 @@ class Bisector(object):
     does not contain a DEPS change.
     """
     if (revision.bad and revision.previous_revision and
-        revision.previous_revision.good):  # pragma: no cover
+        revision.previous_revision.good):
       if revision.deps_change() and self._expand_deps_revisions(revision):
         return False
       self.culprit = revision
@@ -751,32 +625,9 @@ class Bisector(object):
         return False
       self.culprit = revision.next_revision
       return True
-    return False
-
-  def wait_for_all(self, revision_list):
-    """Waits for all revisions in list to finish."""
-    for r in revision_list:
-      self.wait_for(r)
-
-  def wait_for(self, revision, nest_check=True):
-    """Waits for the revision to finish its job."""
-    if nest_check and not self.flags.get(
-        'do_not_nest_wait_for_revision'):  # pragma: no cover
-      with self.api.m.step.nest('Waiting for ' + revision.revision_string()):
-        return self.wait_for(revision, nest_check=False)
-    while True:
-      revision.update_status()
-      if revision.in_progress:
-        self.api.m.python.inline(
-            'sleeping',
-            """
-            import sys
-            import time
-            time.sleep(20*60)
-            sys.exit(0)
-            """)
-      else:
-        break
+    # We'll never get here because revision adjacency is checked before this
+    # function is called.
+    assert False  # pragma: no cover
 
   def _update_candidate_range(self):
     """Updates lkgr and fkbr (last known good/first known bad) revisions.
@@ -784,7 +635,7 @@ class Bisector(object):
     lkgr and fkbr are 'pointers' to the appropriate RevisionState objects in
     bisectors.revisions."""
     for r in self.revisions:
-      if r.tested:
+      if r.test_run_count:
         if r.good:
           self.lkgr = r
         elif r.bad:
@@ -822,7 +673,7 @@ class Bisector(object):
 
     # TODO(prasadv): Refactor this code to remove hard coded values and use
     # target_bit from the bot config. crbug.com/640287
-    if 'android' in bot_name:
+    if 'android' in bot_name:  # pragma: no cover
       if any(b in bot_name for b in ['arm64', 'nexus9', 'nexus5X']):
         return 'android_arm64_perf_bisect_builder'
       return 'android_perf_bisect_builder'
@@ -852,7 +703,7 @@ class Bisector(object):
 
     # TODO(prasadv): Refactor this code to remove hard coded values and use
     # target_bit from the bot config. crbug.com/640287
-    if 'android' in bot_name:
+    if 'android' in bot_name: #pragma: no cover
       if any(b in bot_name for b in ['arm64', 'nexus9', 'nexus5X']):
         return 'gs://chrome-perf/Android arm64 Builder/full-build-linux_'
       return 'gs://chrome-perf/Android Builder/full-build-linux_'
@@ -877,7 +728,7 @@ class Bisector(object):
 
   def is_return_code_mode(self):
     """Checks whether this is a bisect on the test's exit code."""
-    return self.bisect_config.get('test_type') == 'return_code'
+    return self.test_type == 'return_code'
 
   def surface_result(self, result_string):
     assert result_string in VALID_RESULT_CODES
@@ -892,10 +743,6 @@ class Bisector(object):
   def get_result(self):
     """Returns the results as a jsonable object."""
     config = self.bisect_config
-    results_confidence = 0
-    if self.culprit:
-      results_confidence = self.api.m.math_utils.confidence_score(
-          self.lkgr.values, self.fkbr.values)
 
     if self.failed:
       status = 'failed'
@@ -907,7 +754,7 @@ class Bisector(object):
     aborted_reason = None
     if self.failed_initial_confidence:
       aborted_reason = _FAILED_INITIAL_CONFIDENCE_ABORT_REASON
-    elif self.failed_direction:
+    elif self.failed_direction:  # pragma: no cover
       aborted_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
     return {
         'try_job_id': config.get('try_job_id'),
@@ -917,9 +764,8 @@ class Bisector(object):
         'bisect_bot': self.get_perf_tester_name(),
         'command': config['command'],
         'test_type': config['test_type'],
-        'metric': config['metric'],
+        'metric': config.get('metric'),
         'change': self.relative_change,
-        'score': results_confidence,
         'good_revision': self.good_rev.commit_hash,
         'bad_revision': self.bad_rev.commit_hash,
         'warnings': self.warnings,
@@ -951,14 +797,14 @@ class Bisector(object):
   def _revision_data(self):
     revision_rows = []
     for r in self.revisions:
-      if r.tested or r.aborted:
+      if r.test_run_count:
         revision_rows.append({
             'depot_name': r.depot_name,
             'commit_hash': r.commit_hash,
             'revision_string': r.revision_string(),
-            'mean_value': r.mean_value,
+            'mean_value': r.mean,
             'std_dev': r.std_dev,
-            'values': r.values,
+            'values': r.display_values,
             'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
         })
     return revision_rows

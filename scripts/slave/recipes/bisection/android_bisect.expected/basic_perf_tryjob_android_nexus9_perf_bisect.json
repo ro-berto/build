@@ -85,7 +85,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'catapult', 'url': 'https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git'}]\ntarget_os = ['android']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -507,7 +507,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"client_operation_id\": \"12345726327327\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=android-chrome sunspider\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"max_time_minutes\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"repeat_count\": \"1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"target_arch\": \"ia32\", @@@",
@@ -714,6 +714,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
+    "name": "makedirs results directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -732,10 +755,12 @@
       "[BUILDER_CACHE]/android_nexus9_perf_bisect/src/tools/perf/run_benchmark",
       "-v",
       "--browser=android-chrome",
+      "--output-format=chartjson",
       "sunspider",
       "--reset-results",
       "--upload-results",
-      "--results-label=Patch"
+      "--results-label=Patch",
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
     "env": {
@@ -759,9 +784,20 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\n",
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
+    "name": "write buildbot output to disk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'catapult', 'url': 'https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git'}]\ntarget_os = ['android']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -1062,6 +1098,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/bisect_results/dummy",
+      "511"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
+    "name": "makedirs results directory (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -1080,9 +1139,11 @@
       "[BUILDER_CACHE]/android_nexus9_perf_bisect/src/tools/perf/run_benchmark",
       "-v",
       "--browser=android-chrome",
+      "--output-format=chartjson",
       "sunspider",
       "--upload-results",
-      "--results-label=TOT"
+      "--results-label=TOT",
+      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
     "env": {
@@ -1101,6 +1162,17 @@
       "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\n",
+      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
+    "name": "write buildbot output to disk (2)"
   },
   {
     "cmd": [],
@@ -1138,7 +1210,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus9_perf_bisect",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"bisect_bot\": \"android_nexus9_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_nexus9_perf_bisect/builds/571\", \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome sunspider\", \"metric\": null, \"status\": \"completed\", \"try_job_id\": null, \"warnings\": [\"No values from test with patch, or none from test without patch.\\n Output with patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\n\\n\\nOutput without patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\n\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"bisect_bot\": \"android_nexus9_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_nexus9_perf_bisect/builds/571\", \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\", \"metric\": null, \"status\": \"completed\", \"try_job_id\": null, \"warnings\": [\"No values from test with patch, or none from test without patch.\\n Output with patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\n\\n\\nOutput without patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\n\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
@@ -1153,7 +1225,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'catapult', 'url': 'https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git'}]\ntarget_os = ['android']",
       "--patch_root",
       "src",
       "--revision_mapping_file",

@@ -5,7 +5,6 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-    'build/adb',
     'auto_bisect',
     'bisect_tester',
     'depot_tools/bot_update',
@@ -16,7 +15,6 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
@@ -83,6 +81,11 @@ BUILDERS = freeze({
                 'bucket': 'chrome-perf',
                 'webview': True,
             },
+            'staging_android_nexus5X_perf_bisect': {
+                'recipe_config': 'arm64_builder_rel_mb',
+                'gclient_apply_config': ['android', 'perf'],
+                'bucket': 'chrome-perf',
+            },
         },
     },
 })
@@ -109,12 +112,14 @@ def RunSteps(api, mastername, buildername):
   api.chromium.set_config(recipe_config, **kwargs)
   api.chromium.ensure_goma()
   api.chromium_android.c.set_val({'deps_file': 'DEPS'})
-  api.gclient.set_config('chromium')
+  api.gclient.set_config('tryserver_chromium_perf')
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
   update_step = api.auto_bisect.ensure_checkout()
-  api.path.c.dynamic_paths['catapult'] = api.m.auto_bisect.working_dir.join(
-      'catapult')
+  api.path.c.dynamic_paths['catapult'] = (
+      api.m.auto_bisect.working_dir.join('catapult'))
+  api.path.c.dynamic_paths['bisect_results'] = api.path['slave_build'].join(
+      'bisect_results')
   api.chromium_android.clean_local_files()
 
   bot_db = api.chromium_tests.create_bot_db_from_master_dict(mastername,
@@ -122,14 +127,15 @@ def RunSteps(api, mastername, buildername):
 
   api.chromium_android.use_devil_adb()
 
-  api.auto_bisect.start_try_job(api, update_step=update_step, bot_db=bot_db,
-                                do_not_nest_wait_for_revision=True)
+  api.auto_bisect.start_try_job(api, update_step=update_step,
+                                        bot_db=bot_db,
+                                        do_not_nest_wait_for_revision=True)
 
 
 def GenTests(api):
   config_json_main = {
       'command': ('./tools/perf/run_benchmark -v --browser=android-chrome '
-                'sunspider'),
+                  '--output-format=chartjson sunspider'),
       'max_time_minutes': '25',
       'client_operation_id': '12345726327327',
       'repeat_count': '1',
@@ -192,17 +198,6 @@ results-without_patch
   for _, master_dict in BUILDERS.items():
     for buildername in master_dict.get('builders', {}):
       config_json = config_json_main.copy()
-      yield (api.test('basic_' + buildername) + api.properties.tryserver(
-        path_config='kitchen',
-        mastername='tryserver.chromium.perf',
-        buildername=buildername,
-        patch_storage='rietveld',
-        patchset='20001',
-        issue='12345',
-        is_test=True,
-        rietveld="https://codereview.chromium.org") + api.override_step_data(
-              'git diff to analyze patch',
-              api.raw_io.stream_output('tools/auto_bisect/bisect.cfg')))
 
       yield (
           api.test('basic_perf_tryjob_' + buildername) +
@@ -354,7 +349,8 @@ results-without_patch
           api.properties(requester='commit-bot@chromium.org') +
           api.override_step_data(
               'git diff to analyze patch',
-              api.raw_io.stream_output('tools/perf/benchmarks/blink_perf.py')) +
+              api.raw_io.stream_output(
+                  'tools/perf/benchmarks/blink_perf.py')) +
           api.step_data('buildbucket.put',
               stdout=api.json.output(buildbucket_put_response)) +
           api.step_data('buildbucket.get',
@@ -398,7 +394,8 @@ results-without_patch
       bisect_config = {
           'test_type': 'perf',
           'command': './tools/perf/run_benchmark -v '
-                     '--browser=android-chromium page_cycler.intl_ar_fa_he',
+                     '--browser=android-chromium --output-format=valueset '
+                     'page_cycler_v2.intl_ar_fa_he',
           'metric': 'warm_times/page_load_time',
           'repeat_count': '2',
           'max_time_minutes': '5',
@@ -413,12 +410,6 @@ results-without_patch
               path_config='kitchen',
               mastername='tryserver.chromium.perf',
               buildername=buildername) +
-          api.step_data(
-              'saving url to temp file',
-              stdout=api.raw_io.output('/tmp/dummy1')) +
-          api.step_data(
-              'saving json to temp file',
-              stdout=api.raw_io.output('/tmp/dummy2')) +
           api.properties(
                       bisect_config=bisect_config) + api.properties(
                           job_name='f7a7b4135624439cbd27fdd5133d74ec') +
@@ -429,7 +420,8 @@ results-without_patch
       local_bisect_config = {
           'test_type': 'perf',
           'command': './tools/perf/run_benchmark -v '
-                     '--browser=android-chromium page_cycler.intl_ar_fa_he',
+                     '--browser=android-chromium --output-format=valueset '
+                     'page_cycler_v2.intl_ar_fa_he',
           'metric': 'warm_times/page_load_time',
           'repeat_count': '2',
           'max_time_minutes': '5',
@@ -444,8 +436,6 @@ results-without_patch
       }
 
   buildername = 'android_one_perf_bisect'
-  good_revision_hash = 'e28dc0d49c331def2a3bbf3ddd0096eb51551155'
-  bad_revision_hash = 'fc6dfc7ff5b1073408499478969261b826441144'
   working_device = [
       {
         "battery": {
@@ -575,31 +565,25 @@ results-without_patch
         parent_got_revision='1111111',
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.bisect_tester(tempfile='/tmp/dummy') +
-    api.step_data(
-        'Gathering reference values.saving json to temp file',
-        stdout=api.raw_io.output('/tmp/dummy3')) +
-    api.step_data(
-        'Gathering reference values.saving json to temp file (2)',
-        stdout=api.raw_io.output('/tmp/dummy4')) +
     api.override_step_data('device_status',
         api.json.output(two_devices)) +
     api.override_step_data('device_status (2)',
         api.json.output(two_devices)) +
-    api.step_data('Resolving reference range.crrev get commit hash for ' +
-        ('refs/heads/master@{#%s}' % local_bisect_config['bad_revision']),
-        stdout=api.json.output(
-            {'git_sha': bad_revision_hash}))+
-    api.step_data('Resolving reference range.crrev get commit hash for ' +
-        ('refs/heads/master@{#%s}' % local_bisect_config[
-            'good_revision']),
-        stdout=api.json.output(
-            {'git_sha': good_revision_hash}))+
-    api.step_data('Expanding revision range.for revisions %s:%s' % (
-        good_revision_hash, bad_revision_hash),
-        stdout=api.json.output([[bad_revision_hash, 'ignored'],
-            [good_revision_hash, 'ignored']])) +
     api.step_data('Post bisect results',
-        stdout=api.json.output({'status_code': 200})))
+        stdout=api.json.output({'status_code': 200})) +
+    api.auto_bisect([
+          {
+              'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
+              'commit_pos': '306475',
+              'parsed_values': [12, 13, 14, 15, 1],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          },
+          {
+              'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
+              'commit_pos': '306476',
+              'parsed_values': [212, 213, 214, 215, 7],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          }]))
 
   # simulate the scenario when the no device is connected.
   yield (api.test('local_basic_recipe_no_device') +
@@ -614,7 +598,16 @@ results-without_patch
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.bisect_tester(tempfile='/tmp/dummy') +
     api.override_step_data('device_status', api.json.output([])) +
-    api.override_step_data('device_status (2)', api.json.output([])))
+    api.override_step_data('device_status (2)', api.json.output([])) +
+    api.auto_bisect([
+          {
+              'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
+              'commit_pos': '306475',
+          },
+          {
+              'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
+              'commit_pos': '306476',
+          }]))
 
   # simulate the scenario when tests fail not because of device
   # disconnection.
@@ -629,37 +622,83 @@ results-without_patch
         parent_got_revision='1111111',
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.bisect_tester(tempfile='/tmp/dummy') +
-    api.step_data(
-        'Gathering reference values.saving json to temp file',
-        stdout=api.raw_io.output('/tmp/dummy3')) +
-    api.step_data(
-        'Gathering reference values.saving json to temp file (2)',
-        stdout=api.raw_io.output('/tmp/dummy4')) +
     api.override_step_data('device_status',
         api.json.output(working_device)) +
     api.override_step_data('device_status (2)',
         api.json.output(working_device)) +
-    api.step_data('Resolving reference range.crrev get commit hash for ' +
-        ('refs/heads/master@{#%s}' % local_bisect_config['bad_revision']),
-        stdout=api.json.output(
-            {'git_sha': bad_revision_hash}))+
-    api.step_data('Resolving reference range.crrev get commit hash for ' +
-        ('refs/heads/master@{#%s}' % local_bisect_config[
-            'good_revision']),
-          stdout=api.json.output(
-              {'git_sha': good_revision_hash}))+
-    api.step_data('Expanding revision range.for revisions %s:%s' % (
-        good_revision_hash, bad_revision_hash),
-        stdout=api.json.output([[bad_revision_hash, 'ignored'],
-            [good_revision_hash, 'ignored']])) +
     api.step_data('Debug Info', retcode=1) +
     api.step_data('Post bisect results',
         stdout=api.json.output({'status_code': 200})) +
     api.override_step_data('device_status (3)',
-        api.json.output(working_device)))
+        api.json.output(working_device)) +
+    api.auto_bisect([
+          {
+              'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
+              'commit_pos': '306475',
+              'parsed_values': [12, 13, 14, 15, 1],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          },
+          {
+              'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
+              'commit_pos': '306476',
+              'parsed_values': [212, 213, 214, 215, 7],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          }]))
 
   # simulate the scenario when tests fail because of device disconnection.
-  yield (api.test('local_basic_recipe_disconnected_device') +
+  yield (api.test('local_basic_recipe_disconnection') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.perf', buildername=buildername) +
+    api.properties(
+        path_config='kitchen',
+        bisect_config={
+          'test_type': 'perf',
+          'command': './tools/perf/run_benchmark -v '
+                     '--browser=android-chromium --output-format=valueset '
+                     'page_cycler_v2.intl_ar_fa_he',
+          'metric': 'warm_times/page_load_time',
+          'bug_id': '425582',
+          'gs_bucket': 'chrome-perf',
+          'good_revision': '306474',
+          'bad_revision': '306476',
+      },
+        job_name='f7a7b4135624439cbd27fdd5133d74ec',
+        local_test=True,
+        parent_got_revision='1111111',
+        parent_build_archive_url='gs://test-domain/test-archive.zip') +
+    api.bisect_tester(tempfile='/tmp/dummy') +
+    api.override_step_data('device_status',
+        api.json.output(two_devices)) +
+    api.override_step_data('device_status (2)',
+        api.json.output(two_devices)) +
+    # Simulating disconnect by raising failure and changing the output of
+    # multiple_device_status
+    api.step_data('Debug Info', retcode=1) +
+    api.override_step_data('device_status (3)',
+        api.json.output(working_device)) +
+    api.step_data('Post bisect results',
+        stdout=api.json.output({'status_code': 200})) +
+    api.auto_bisect([
+          {
+              'hash': '0000000000000000000000000000000000000000',
+              'commit_pos': '306474',
+              'parsed_values': [12, 13, 14, 15, 1],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          },
+          {
+              'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
+              'commit_pos': '306475',
+              'parsed_values': [12, 13, 14, 15, 1],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 1}],
+          },
+          {
+              'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
+              'commit_pos': '306476',
+              'parsed_values': [212, 213, 214, 215, 7],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          }]))
+
+  yield (api.test('failure_in_ref_range') +
     api.properties.tryserver(
         mastername='tryserver.chromium.perf', buildername=buildername) +
     api.properties(
@@ -670,43 +709,22 @@ results-without_patch
         parent_got_revision='1111111',
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.bisect_tester(tempfile='/tmp/dummy') +
-    api.step_data(
-        'Gathering reference values.saving json to temp file',
-        stdout=api.raw_io.output('/tmp/dummy3')) +
-    api.step_data(
-        'Gathering reference values.saving json to temp file (2)',
-        stdout=api.raw_io.output('/tmp/dummy4')) +
-    api.step_data(
-        'Gathering reference values.saving json to temp file (3)',
-        stdout=api.raw_io.output('/tmp/dummy5')) +
-    api.step_data(
-        'Gathering reference values.saving json to temp file (4)',
-        stdout=api.raw_io.output('/tmp/dummy6')) +
     api.override_step_data('device_status',
         api.json.output(two_devices)) +
     api.override_step_data('device_status (2)',
         api.json.output(two_devices)) +
-    api.step_data('Resolving reference range.crrev get commit hash for ' +
-        ('refs/heads/master@{#%s}' % local_bisect_config['bad_revision']),
-        stdout=api.json.output(
-            {'git_sha': bad_revision_hash}))+
-    api.step_data('Resolving reference range.crrev get commit hash for ' +
-        ('refs/heads/master@{#%s}' % local_bisect_config[
-            'good_revision']),
-        stdout=api.json.output(
-            {'git_sha': good_revision_hash}))+
-    api.step_data('Expanding revision range.for revisions %s:%s' % (
-            good_revision_hash, bad_revision_hash),
-        stdout=api.json.output([[bad_revision_hash, 'ignored'], [
-            good_revision_hash, 'ignored']])) +
-    # Simulating disconnect by raising failure and changing the output of
-    # multiple_device_status
-    api.step_data('Debug Info', retcode=1) +
-    api.override_step_data('device_status (3)',
-        api.json.output(working_device)) +
-    api.step_data('Expanding revision range.for revisions %s:%s (2)' % (
-            good_revision_hash, bad_revision_hash),
-        stdout=api.json.output([[bad_revision_hash, 'ignored'], [
-            good_revision_hash, 'ignored']])) +
     api.step_data('Post bisect results',
-        stdout=api.json.output({'status_code': 200})))
+        stdout=api.json.output({'status_code': 200})) +
+    api.auto_bisect([
+          {
+              'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
+              'commit_pos': '306475',
+              'parsed_values': [12, 13, 14, 15, 1],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          },
+          {
+              'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
+              'commit_pos': '306476',
+              'parsed_values': [212, 213, 214, 215, 7],
+              'test_results': 5 * [{'stdout': 'benchmark fail', 'retcode': 1}],
+          }]))

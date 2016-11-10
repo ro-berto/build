@@ -31,15 +31,21 @@ def RunSteps(api):
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
   api.path.c.dynamic_paths['catapult'] = api.path['slave_build'].join(
       'catapult')
-  api.auto_bisect.start_try_job(api, update_step=update_step, bot_db=bot_db,
-                                do_not_nest_wait_for_revision=True)
+  api.path.c.dynamic_paths['bisect_results'] = api.path['slave_build'].join(
+      'bisect_results')
+  api.auto_bisect.start_try_job(api, update_step=update_step,
+                                        bot_db=bot_db,
+                                        do_not_nest_wait_for_revision=True)
 
 
 def GenTests(api):
-  yield (api.test('basic') + api.properties.tryserver(
-      path_config='kitchen',
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect') + api.override_step_data(
+  yield (
+      api.test('basic') +
+      api.properties.tryserver(
+          path_config='kitchen',
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect') +
+      api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('tools/auto_bisect/bisect.cfg')))
 
@@ -196,6 +202,41 @@ results-without_patch
          api.step_data('Post bisect results',
                        stdout=api.json.output({'status_code': 200})))
 
+  config_valueset = config_json
+  config_valueset['command'] += ' --output_format=valueset'
+  yield (
+      api.test('basic_perf_tryjob_with_metric_valueset')
+      + api.properties.tryserver(
+        path_config='kitchen',
+        mastername='tryserver.chromium.perf',
+        buildername='linux_perf_bisect',
+        patch_storage='rietveld',
+        patchset='20001',
+        issue='12345',
+        is_test=True,
+        rietveld="https://codereview.chromium.org")
+      + api.override_step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('tools/run-perf-test.cfg'))
+      + api.override_step_data('load config', api.json.output(config_valueset))
+      + api.step_data('gsutil exists', retcode=1)
+      + api.step_data('buildbucket.put',
+                      stdout=api.json.output(buildbucket_put_response))
+      + api.step_data('buildbucket.put (2)',
+                      stdout=api.json.output(buildbucket_put_response))
+      + api.step_data('buildbucket.get',
+                      stdout=api.json.output(buildbucket_get_response))
+      + api.step_data('buildbucket.get (2)',
+                      stdout=api.json.output(buildbucket_get_response))
+      + api.step_data('Performance Test (Without Patch) 1 of 1',
+                      stdout=api.raw_io.output(results_without_patch))
+      + api.step_data('Performance Test (With Patch) 1 of 1',
+                      stdout=api.raw_io.output(results_with_patch))
+      + api.step_data('Post bisect results',
+                      stdout=api.json.output({'status_code': 200})))
+
+
+
 
   yield (api.test('perf_tryjob_failed_test') + api.properties.tryserver(
       path_config='kitchen',
@@ -238,7 +279,8 @@ results-without_patch
       api.override_step_data('load config', api.json.output(config_json)) +
       api.step_data(
           'resolving commit_pos ' + config_json['good_revision'],
-          stdout=api.raw_io.output('hash:d49c331def2a3bbf3ddd0096eb51551155')) +
+          stdout=api.raw_io.output(
+              'hash:d49c331def2a3bbf3ddd0096eb51551155')) +
       api.step_data(
           'resolving commit_pos ' + config_json['bad_revision'],
           stdout=api.raw_io.output(
@@ -326,57 +368,3 @@ results-without_patch
       api.step_data('buildbucket.get',
               stdout=api.json.output(buildbucket_get_response)))
 
-  bisect_config = {
-      'test_type': 'perf',
-      'command': './tools/perf/run_benchmark -v '
-                 '--browser=release page_cycler.intl_ar_fa_he',
-      'metric': 'warm_times/page_load_time',
-      'repeat_count': '2',
-      'max_time_minutes': '5',
-      'truncate_percent': '25',
-      'bug_id': '425582',
-      'gs_bucket': 'chrome-perf',
-      'builder_host': 'master4.golo.chromium.org',
-      'builder_port': '8341',
-  }
-  yield (
-      api.test('basic_linux_bisect_tester_recipe') + api.properties.tryserver(
-          path_config='kitchen',
-          mastername='tryserver.chromium.perf',
-          buildername='linux_perf_bisect') + api.step_data(
-              'saving url to temp file',
-              stdout=api.raw_io.output('/tmp/dummy1')) + api.step_data(
-                  'saving json to temp file',
-                  stdout=api.raw_io.output('/tmp/dummy2')) + api.properties(
-                      bisect_config=bisect_config) + api.properties(
-                          job_name='f7a7b4135624439cbd27fdd5133d74ec') +
-      api.bisect_tester(tempfile='/tmp/dummy') + api.properties(
-          parent_got_revision='1111111') + api.properties(
-              parent_build_archive_url='gs://test-domain/test-archive.zip'))
-
-  bisect_ret_code_config = {
-      'test_type': 'return_code',
-      'command': './tools/perf/run_benchmark -v '
-                 '--browser=release page_cycler.intl_ar_fa_he',
-      'metric': 'warm_times/page_load_time',
-      'repeat_count': '2',
-      'max_time_minutes': '5',
-      'truncate_percent': '25',
-      'bug_id': '425582',
-      'gs_bucket': 'chrome-perf',
-      'builder_host': 'master4.golo.chromium.org',
-      'builder_port': '8341',
-  }
-  yield (api.test('basic_linux_bisect_tester_recipe_ret_code') +
-         api.properties.tryserver(path_config='kitchen',
-                                  mastername='tryserver.chromium.perf',
-                                  buildername='linux_perf_bisect') +
-         api.step_data('saving url to temp file',
-                       stdout=api.raw_io.output('/tmp/dummy1')) + api.step_data(
-                           'saving json to temp file',
-                           stdout=api.raw_io.output('/tmp/dummy2')) +
-         api.properties(bisect_config=bisect_ret_code_config) + api.properties(
-             job_name='f7a7b4135624439cbd27fdd5133d74ec') +
-         api.bisect_tester(tempfile='/tmp/dummy') + api.properties(
-             parent_got_revision='1111111') + api.properties(
-                 parent_build_archive_url='gs://test-domain/test-archive.zip'))

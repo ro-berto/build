@@ -4,17 +4,10 @@
 # found in the LICENSE file.
 
 import os
-import pipes
 import sys
 import unittest
 
-root_dir = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), os.path.pardir,
-    os.path.pardir, os.path.pardir, os.path.pardir))
-sys.path.insert(0, os.path.join(root_dir, 'third_party', 'mock-1.0.1'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
-
-import mock
 
 from bisect_tester import perf_test
 
@@ -104,36 +97,6 @@ class ParseValuesTest(unittest.TestCase):  # pragma: no cover
     results = self._sample_results()
     self.assertEqual((False, []), perf_test.find_values(results, metric))
 
-
-class RunCommandTest(unittest.TestCase):  # pragma: no cover
-
-  def _do_run_command(self, command, step_name):
-    step_result = mock.Mock()
-    step_result.presentation.logs = {}
-    api = mock.Mock(**{'m.chromium.runtest.return_value': step_result})
-    perf_test._run_command(api, command, step_name)
-    self.assertEqual(api.m.chromium.runtest.call_count, 1)
-    return api.m.chromium.runtest.call_args
-
-  def test_run_command_simple_args(self):
-    _, kwargs = self._do_run_command(
-        'tools/perf/run_benchmark -v --browser=chromium '
-        '--output-format=chartjson example.benchmark', 'run test')
-    self.assertEqual(kwargs['test'], 'tools/perf/run_benchmark')
-    self.assertListEqual(kwargs['args'], [
-        '-v', '--browser=chromium', '--output-format=chartjson',
-        'example.benchmark'])
-
-  def test_run_command_complex_args(self):
-    pattern = r'Wik.* \(1 tabs?\)'
-    _, kwargs = self._do_run_command(
-        'tools/perf/run_benchmark -v --browser=chromium '
-        '--story-filter=%s example.benchmark' % pipes.quote(pattern),
-        'run test')
-    self.assertEqual(kwargs['test'], 'tools/perf/run_benchmark')
-    self.assertListEqual(kwargs['args'], [
-        '-v', '--browser=chromium', '--story-filter=%s' % pattern,
-        'example.benchmark'])
 
 
 if __name__ == '__main__':

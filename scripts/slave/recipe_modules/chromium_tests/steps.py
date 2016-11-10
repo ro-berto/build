@@ -1405,9 +1405,11 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
 class BisectTest(Test):  # pylint: disable=W0232
   name = 'bisect_test'
 
-  def __init__(self, test_parameters={}):
+  def __init__(self, test_parameters={}, **kwargs):
     super(BisectTest, self).__init__()
     self._test_parameters = test_parameters
+    self.run_results = {}
+    self.kwargs = kwargs
 
   @property
   def abort_on_failure(self):
@@ -1427,17 +1429,11 @@ class BisectTest(Test):  # pylint: disable=W0232
                                   api.properties.get('bisect_config')))
 
   def run(self, api, _, test_filter=None):
-    self._run_results, self.test_output, self.retcodes = (
-        api.bisect_tester.run_test(self.test_config))
-
-  def post_run(self, api, _, test_filter=None):
-      self.values = api.bisect_tester.digest_run_results(
-          self._run_results, self.retcodes, self.test_config)
-      api.bisect_tester.upload_results(self.test_output, self.values,
-                                       self.retcodes, self._test_parameters)
+    self.run_results = api.bisect_tester.run_test(
+        self.test_config, **self.kwargs)
 
   def has_valid_results(self, *_):
-    return len(getattr(self, 'values', [])) > 0  # pragma: no cover
+    return bool(self.run_results.get('retcodes')) # pragma: no cover
 
   def failures(self, *_):
     return self._failures  # pragma: no cover
