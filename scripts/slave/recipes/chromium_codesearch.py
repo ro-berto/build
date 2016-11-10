@@ -224,15 +224,19 @@ def RunSteps(api):
       dest='%s/%s' % (environment, index_pack_name_with_revision)
   )
 
-  # Package the source code.
+  # Package the source code and generated files.
   tarball_name = 'chromium_src_%s.tar.bz2' % platform
   tarball_name_with_revision = 'chromium_src_%s_%s.tar.bz2' % (
-      platform,commit_position)
+      platform, commit_position)
+  generated_tarball_name = 'chromium_generated_%s.tar.bz2' % platform
+  generated_tarball_name_with_revision = 'chromium_generated_%s_%s.tar.bz2' % (
+      platform, commit_position)
   api.python('archive source',
              api.path['build'].join('scripts','slave',
                                     'archive_source_codesearch.py'),
-             ['src', 'build', 'infra', 'tools', '-f',
-              tarball_name])
+             ['src', 'build', 'infra', 'tools',
+              '-f', tarball_name,
+              '-g', generated_tarball_name])
 
   # Upload the source code.
   api.gsutil.upload(
@@ -240,6 +244,14 @@ def RunSteps(api):
       source=api.path['slave_build'].join(tarball_name),
       bucket=BUCKET_NAME,
       dest='%s/%s' % (environment, tarball_name_with_revision)
+  )
+
+  # Upload the generated files.
+  api.gsutil.upload(
+      name='upload generated files tarball',
+      source=api.path['slave_build'].join(generated_tarball_name),
+      bucket=BUCKET_NAME,
+      dest='%s/%s' % (environment, generated_tarball_name_with_revision)
   )
 
 def _sanitize_nonalpha(text):

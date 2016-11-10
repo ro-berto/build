@@ -622,7 +622,9 @@
       "infra",
       "tools",
       "-f",
-      "chromium_src_linux.tar.bz2"
+      "chromium_src_linux.tar.bz2",
+      "-g",
+      "chromium_generated_linux.tar.bz2"
     ],
     "name": "archive source"
   },
@@ -641,6 +643,23 @@
     "name": "gsutil upload source tarball",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_src_linux_170242.tar.bz2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/chromium_generated_linux.tar.bz2",
+      "gs://chrome-codesearch/prod/chromium_generated_linux_170242.tar.bz2"
+    ],
+    "name": "gsutil upload generated files tarball",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_generated_linux_170242.tar.bz2@@@"
     ]
   },
   {
