@@ -26,6 +26,8 @@ def main(args):
     print 'Cleaning up symlinks in %s' % checkout_root
     subprocess.check_call([sys.executable, setup_links_file, '--clean-only'],
                           cwd=checkout_root)
+  else:
+    print 'Cannot find %s: Incomplete sync?' % setup_links_file
   return 0
 
 

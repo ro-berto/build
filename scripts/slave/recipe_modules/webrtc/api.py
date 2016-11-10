@@ -178,13 +178,15 @@ class WebRTCApi(recipe_api.RecipeApi):
     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
     if self._working_dir:
       kwargs.setdefault('cwd', self._working_dir)
+    else:
+      self._working_dir = self.m.path['slave_build']
 
     # TODO(kjellander): Deploy at all bots once verified working.
     if self.mastername == 'client.webrtc.fyi':
       # Cleanup symlinks if there are any created.
       self.m.python('clean symlinks',
                     script=self.resource('cleanup_symlinks.py'),
-                    args=[self.m.path['slave_build']],
+                    args=[self._working_dir],
                     infra_step=True)
 
     update_step = self.m.bot_update.ensure_checkout(**kwargs)

@@ -26,7 +26,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_symlinks.py",
-      "[SLAVE_BUILD]"
+      "[BUILDER_CACHE]/Android32_Release__swarming_"
     ],
     "name": "clean symlinks"
   },
