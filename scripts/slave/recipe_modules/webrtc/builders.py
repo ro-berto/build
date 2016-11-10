@@ -661,8 +661,9 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'Mac64 Release (swarming)': {
-        'recipe_config': 'webrtc_swarming',
+      'Mac Asan (swarming)': {
+        'recipe_config': 'webrtc_swarming_clang',
+        'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
