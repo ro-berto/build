@@ -181,11 +181,13 @@ class WebRTCApi(recipe_api.RecipeApi):
     else:
       self._working_dir = self.m.path['slave_build']
 
-    # Cleanup symlinks if there are any created.
-    self.m.python('clean symlinks',
-                  script=self.resource('cleanup_symlinks.py'),
-                  args=[self._working_dir],
-                  infra_step=True)
+    # TODO(kjellander): Deploy at all bots once verified working.
+    if self.mastername == 'client.webrtc.fyi':
+      # Cleanup symlinks if there are any created.
+      self.m.python('clean symlinks',
+                    script=self.resource('cleanup_symlinks.py'),
+                    args=[self._working_dir],
+                    infra_step=True)
 
     update_step = self.m.bot_update.ensure_checkout(**kwargs)
     assert update_step.json.output['did_run']
