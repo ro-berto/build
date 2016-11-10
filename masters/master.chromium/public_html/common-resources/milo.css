@@ -1,0 +1,72 @@
+/** Copyright (c) 2016 The Chromium Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
+.header-right-align {
+  float: right;
+}
+
+.milo-container {
+  position: relative;
+}
+
+.milo-link {
+  display: block;
+  text-align: right;
+  font-size: 14px;
+  background-color: #d9ead3;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.milo-link + .milo-info {
+  display: none;
+}
+
+/* When a user hovers over the Milo link, show the info pane. */
+.milo-link:hover + .milo-info {
+  display: block;
+}
+
+/* Once a user is hovering, keep it visible. */
+.milo-info:hover {
+  display: block;
+}
+
+.milo-info {
+  position: absolute;
+  right: 0;
+  width: 250px;
+  padding: 5px;
+
+  background-color: #d9ead3;
+  font-size: 14px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.milo-link img {
+  vertical-align: middle;
+  width: 14px;
+  height: auto;
+  margin: 0px;
+  padding: 0px;
+  transition: 0.3s;
+}
+
+.milo-cit-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 10px;
+}
+
+.milo-info img {
+  vertical-align: middle;
+}
