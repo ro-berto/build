@@ -184,7 +184,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       # Cleanup symlinks if there are any created.
       self.m.python('clean symlinks',
                     script=self.resource('cleanup_symlinks.py'),
-                    args=[self._working_dir],
+                    args=[self.m.path['slave_build']],
                     infra_step=True)
 
     update_step = self.m.bot_update.ensure_checkout(**kwargs)

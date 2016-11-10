@@ -26,7 +26,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_symlinks.py",
-      "[BUILDER_CACHE]/Linux64_GCC"
+      "[SLAVE_BUILD]"
     ],
     "name": "clean symlinks"
   },

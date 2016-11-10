@@ -48,7 +48,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_symlinks.py",
-      "[BUILDER_CACHE]/Mac64_Release__swarming_"
+      "[SLAVE_BUILD]"
     ],
     "name": "clean symlinks"
   },
