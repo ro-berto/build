@@ -85,15 +85,26 @@ def create_generated_code_archive(directory, output_filename):
 
 
 def find_and_tar(find_command, output_filename, cwd=None):
+  tar_command = ['tar', '-T-', '-cvf', os.path.abspath(output_filename)]
+  if has_executable('pbzip2'):
+    print 'Using pbzip2 to compress in parallel'
+    tar_command.extend(['--use-compress-program', 'pbzip2'])
+  else:
+    print 'Warning: install pbzip2 to make this faster'
+    tar_command.append('-j')
+
   find_proc = subprocess.Popen(find_command, stdout=subprocess.PIPE, cwd=cwd)
-  tar_proc = subprocess.Popen(['tar', '-T-', '-cjvf',
-                               os.path.abspath(output_filename)],
-                              stdin=find_proc.stdout, cwd=cwd)
+  tar_proc = subprocess.Popen(tar_command, stdin=find_proc.stdout, cwd=cwd)
   find_proc.stdout.close()
   find_proc.wait()
   tar_proc.communicate()
   return (tar_proc.returncode == 0 and find_proc.returncode == 0)
 
+
+def has_executable(name):
+  """Returns True if an executable with the given name was found in $PATH."""
+  return any(os.path.exists(os.path.join(x, name))
+             for x in os.environ['PATH'].split(os.pathsep))
 
 
 if '__main__' == __name__:
