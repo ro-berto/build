@@ -88,6 +88,7 @@ class Bisector(object):
         'improvement_direction', 0)) or None
 
     self.warnings = []
+    self.aborted_reason = None
 
     # Status flags
     self.failed_initial_confidence = False
@@ -774,7 +775,7 @@ class Bisector(object):
         'good_revision': self.good_rev.commit_hash,
         'bad_revision': self.bad_rev.commit_hash,
         'warnings': self.warnings,
-        'aborted_reason': aborted_reason,
+        'aborted_reason': self.aborted_reason or aborted_reason,
         'culprit_data': self._culprit_data(),
         'revision_data': self._revision_data()
     }

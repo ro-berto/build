@@ -36,13 +36,15 @@ def perform_bisect(api, **flags):
           else:
             raise
   except bisect_exceptions.InconclusiveBisectException as e:
+    message =  'Bisect cannot identify a culprit: ' + e.message
     if bisect_attempts:
+      bisect_attempts[-1].aborted_reason = message
       bisect_attempts[-1].print_result_debug_info()
       bisect_attempts[-1].post_result()
-    raise api.m.step.StepFailure('Bisect cannot identify a culprit: ' +
-                                 e.message)
-  except Exception: # pylint: disable=bare-except
+    raise api.m.step.StepFailure(message)
+  except Exception as e: # pylint: disable=bare-except
     if bisect_attempts:
+      bisect_attempts[-1].aborted_reason = e.message
       bisect_attempts[-1].post_result()
     raise
 
