@@ -110,14 +110,16 @@ def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64):
 
 
 def _AddBuildSpec(
-  name, platform, target_bits=64, add_to_bisect=False, enable_swarming=False):
+  name, platform, target_bits=64, add_to_bisect=False, enable_swarming=False,
+  extra_compile_targets=None):
   if target_bits == 64:
     perf_id = platform
   else:
     perf_id = '%s-%d' % (platform, target_bits)
 
   SPEC['builders'][name] = BuildSpec(
-      'chromium_perf', perf_id, platform, target_bits, enable_swarming)
+      'chromium_perf', perf_id, platform, target_bits, enable_swarming,
+      extra_compile_targets=extra_compile_targets)
 
   # TODO(martiniss): re-enable assertion once android has switched to the
   # chromium recipe
@@ -143,7 +145,14 @@ def _AddTestSpec(name, perf_id, platform, target_bits=64,
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)
-_AddBuildSpec('Android Compile', 'android', target_bits=32)
+_AddBuildSpec('Android Compile', 'android', target_bits=32,
+              extra_compile_targets=['android_tools',
+                                     'cc_perftests',
+                                     'chrome_public_apk',
+                                     'gpu_perftests',
+                                     'push_apps_to_background_apk',
+                                     'system_webview_apk',
+                                     'system_webview_shell_apk',])
 _AddBuildSpec('Android arm64 Builder', 'android')
 _AddBuildSpec('Win Builder', 'win', target_bits=32)
 _AddBuildSpec( \
