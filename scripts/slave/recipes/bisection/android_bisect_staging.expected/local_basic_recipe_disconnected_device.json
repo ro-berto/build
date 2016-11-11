@@ -215,7 +215,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\n",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
     ],
     "name": "initialize devil",
@@ -224,8 +224,10 @@
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
       "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
       "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
       "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
@@ -1099,6 +1101,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.initialize devil",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.spawn_device_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -1666,6 +1735,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.shutdown_device_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.stack_tool_with_logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.get version (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.stack_tool_for_tombstones",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -1866,6 +2052,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.initialize devil (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.spawn_logcat_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.spawn_device_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -1874,7 +2127,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Gathering reference values.get version (2)",
+    "name": "Gathering reference values.get version (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2433,6 +2686,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.shutdown_device_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.logcat_dump (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.stack_tool_with_logcat_dump (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.get version (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.stack_tool_for_tombstones (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -2659,6 +3029,73 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Re-testing reference range.Retesting GOOD revision.unzip_build_product",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.initialize devil",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_device_monitor",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3022,6 +3459,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.shutdown_device_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_with_logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_for_tombstones",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -3244,6 +3798,73 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Re-testing reference range.Retesting BAD revision.unzip_build_product",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.initialize devil",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.spawn_device_monitor",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3607,6 +4228,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.shutdown_device_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.stack_tool_with_logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.get version (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.stack_tool_for_tombstones",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -3837,6 +4575,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.initialize devil (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_logcat_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_device_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -3845,7 +4650,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.get version (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4298,6 +5103,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.shutdown_device_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.logcat_dump (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_with_logcat_dump (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_for_tombstones (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -4528,6 +5450,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.initialize devil (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.spawn_logcat_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.spawn_device_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -4536,7 +5525,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.get version (2)",
+    "name": "Re-testing reference range.Retesting BAD revision.get version (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4989,6 +5978,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.shutdown_device_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.logcat_dump (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.stack_tool_with_logcat_dump (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.get version (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.stack_tool_for_tombstones (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -5219,6 +6325,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.initialize devil (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_logcat_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_device_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -5227,7 +6400,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.get version (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5892,6 +7065,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.shutdown_device_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.logcat_dump (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.gsutil upload (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_with_logcat_dump (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_for_tombstones (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -6171,6 +7461,73 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "name": "Working on revision chromium@e28dc0d49c.unzip_build_product",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.initialize devil",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_device_monitor",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6756,6 +8113,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.shutdown_device_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_with_logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.get version (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_for_tombstones",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -7205,6 +8679,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.initialize devil (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.spawn_logcat_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.spawn_device_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -7213,7 +8754,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Gathering reference values.get version (3)",
+    "name": "Gathering reference values.get version (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7772,6 +9313,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.shutdown_device_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.logcat_dump (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.gsutil upload (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.stack_tool_with_logcat_dump (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.get version (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.stack_tool_for_tombstones (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -7972,6 +9630,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.initialize devil (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.spawn_logcat_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.spawn_device_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -7980,7 +9705,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Gathering reference values.get version (4)",
+    "name": "Gathering reference values.get version (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8539,6 +10264,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.shutdown_device_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.logcat_dump (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.gsutil upload (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.stack_tool_with_logcat_dump (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.get version (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Gathering reference values.stack_tool_for_tombstones (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -8773,6 +10615,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.initialize devil (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_logcat_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_device_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -8781,7 +10690,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.get version (4)",
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -9128,6 +11037,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.shutdown_device_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.logcat_dump (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.gsutil upload (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_with_logcat_dump (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_for_tombstones (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -9358,6 +11384,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.initialize devil (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.spawn_logcat_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.spawn_device_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -9366,7 +11459,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.get version (3)",
+    "name": "Re-testing reference range.Retesting BAD revision.get version (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -9713,6 +11806,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.shutdown_device_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.logcat_dump (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.gsutil upload (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.stack_tool_with_logcat_dump (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.get version (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.stack_tool_for_tombstones (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -9943,6 +12153,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.initialize devil (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_logcat_monitor (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_device_monitor (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -9951,7 +12228,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.get version (5)",
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -10404,6 +12681,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.shutdown_device_monitor (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.logcat_dump (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.gsutil upload (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_with_logcat_dump (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (10)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_for_tombstones (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -10634,6 +13028,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.initialize devil (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.spawn_logcat_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.spawn_device_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -10642,7 +13103,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.get version (4)",
+    "name": "Re-testing reference range.Retesting BAD revision.get version (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -11095,6 +13556,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.shutdown_device_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.logcat_dump (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.gsutil upload (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.stack_tool_with_logcat_dump (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.get version (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting BAD revision.stack_tool_for_tombstones (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -11325,6 +13903,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.initialize devil (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_logcat_monitor (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.spawn_device_monitor (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -11333,7 +13978,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.get version (6)",
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -11998,6 +14643,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.shutdown_device_monitor (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.logcat_dump (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.gsutil upload (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_with_logcat_dump (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.get version (12)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Re-testing reference range.Retesting GOOD revision.stack_tool_for_tombstones (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -12285,6 +15047,73 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.initialize devil (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_logcat_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_device_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
@@ -12293,7 +15122,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.get version (2)",
+    "name": "Working on revision chromium@e28dc0d49c.get version (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12852,6 +15681,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.shutdown_device_monitor (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.logcat_dump (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_with_logcat_dump (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.get version (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_for_tombstones (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -12948,6 +15894,73 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.initialize devil (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_logcat_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_device_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -13272,6 +16285,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.shutdown_device_monitor (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.logcat_dump (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.gsutil upload (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_with_logcat_dump (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.get version (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_for_tombstones (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -13368,6 +16498,73 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.initialize devil (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_logcat_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_device_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -13798,6 +16995,123 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.shutdown_device_monitor (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.logcat_dump (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.gsutil upload (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_with_logcat_dump (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.get version (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_for_tombstones (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/test_logs/*.log"
     ],
@@ -13894,6 +17208,73 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\nfrom devil.android.sdk import adb_wrapper\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\nadb_wrapper.AdbWrapper.StartServer()\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.initialize devil (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil.android.sdk import adb_wrapper@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_wrapper.AdbWrapper.StartServer()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_logcat_monitor (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "--adb-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.spawn_device_monitor (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -14530,6 +17911,123 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.shutdown_device_monitor (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.logcat_dump (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.gsutil upload (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_with_logcat_dump (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.get version (7)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+    },
+    "name": "Working on revision chromium@e28dc0d49c.stack_tool_for_tombstones (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
