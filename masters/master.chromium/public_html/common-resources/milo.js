@@ -26,7 +26,7 @@ function MiloInject(root, mastername) {
       },
     },
     {
-      re: /^(?:\/[ip]\/([^\/]+))?\/builders\/([^\/]+)\/builds\/([^\/]+)\/$/,
+      re: /^(?:\/[ip]\/([^\/]+))?\/builders\/([^\/]+)\/builds\/([^\/]+)$/,
       desc: "build faster and forever",
       replacer: function(match, master, builder, buildno, offset, string) {
         master = mastername || master;
