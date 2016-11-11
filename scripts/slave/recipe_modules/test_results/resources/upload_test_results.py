@@ -49,8 +49,35 @@ def get_results_map_from_json(gtest_json):
   return test_results_map
 
 
-def generate_json_results_file(gtest_json, builder_name, build_number,
-                          results_directory, chrome_revision, master_name):
+def generate_json_results_file_for_json(
+    results_json, builder_name, build_number,
+    results_directory, chrome_revision, master_name):
+  """Generates JSON results file from the given |results_json|.
+
+  Args:
+    results_json: the raw test results object that follows full json results
+      format.
+
+  Returns:
+    A list that contains a single tuple (<file name>, <file path>). The tuple
+    represents the full test results file.
+  """
+  if not os.path.exists(results_directory):
+    os.makedirs(results_directory)
+  json_results_file_path = os.path.abspath(
+      os.path.join(results_directory, FULL_RESULTS_FILENAME))
+  results_json['builder_name'] = builder_name
+  results_json['build_number'] = build_number
+  results_json['chromium_revision'] = chrome_revision
+  results_json['master_name'] = master_name
+  with open(json_results_file_path, 'w') as f:
+    json.dump(results_json, f)
+  return [(FULL_RESULTS_FILENAME, json_results_file_path)]
+
+
+def generate_json_results_file_for_gtest(
+    gtest_json, builder_name, build_number, results_directory, chrome_revision,
+    master_name):
   """Generates JSON results files from the given |gtest_json|.
 
   Args:
@@ -138,11 +165,16 @@ def main(args):
   content = json.loads(results_json)
   if content.get('version', 0) >= 3:
     print 'Input JSON file probably has full json results format'
-    files = [(FULL_RESULTS_FILENAME, os.path.abspath(options.input_json))]
+    files = generate_json_results_file_for_json(
+      content, builder_name=options.builder_name,
+      build_number=options.build_number,
+      results_directory=options.results_directory,
+      chrome_revision=options.chrome_revision,
+      master_name=options.master_name)
   else:
     print ('Input JSON file probably has gtest format. Converting to full json'
            ' results format')
-    files = generate_json_results_file(
+    files = generate_json_results_file_for_gtest(
         results_json, builder_name=options.builder_name,
         build_number=options.build_number,
         results_directory=options.results_directory,

@@ -150,17 +150,30 @@ class UploadTestResultsTest(unittest.TestCase):
         '--input-json=%s' % input_json_file_path,
         '--results-directory=%s' % result_directory,
         '--test-results-server=foo',
+        '--builder-name=hobbit',
+        '--build-number=1234',
+        '--chrome-revision=99999',
         '--master-name=sauron',
       ])
-      files = [(os.path.basename(input_json_file_path), input_json_file_path)]
+      uploaded_json_result_path = os.path.join(
+          result_directory, upload_test_results.FULL_RESULTS_FILENAME)
+
+      # Assert that metadata are added to the json results before uploading.
+      with open(uploaded_json_result_path) as f:
+        augmented_json = json.load(f)
+      self.assertEquals(augmented_json.get('master_name'), 'sauron')
+      self.assertEquals(augmented_json.get('builder_name'), 'hobbit')
+      self.assertEquals(augmented_json.get('build_number'), '1234')
+      self.assertEquals(augmented_json.get('chromium_revision'), '99999')
+
+      files = [('full_results.json', uploaded_json_result_path)]
       uploader_mock.assert_called_with(
           'foo',
-          [('builder', 'DUMMY_BUILDER_NAME'),
+          [('builder', 'hobbit'),
            ('testtype', 'foo'),
            ('master', 'sauron')], files, 120)
     finally:
       shutil.rmtree(result_directory)
-
 
 
 if __name__ == '__main__':
