@@ -30,12 +30,8 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-                                'Linux Asan (swarming)',
                                 'Linux Memcheck (swarming)',
                                 'Linux MSan (swarming)',
-                                'Linux Tsan v2 (swarming)',
-                                'Linux UBSan (swarming)',
-                                'Linux UBSan vptr (swarming)',
                                 'Linux64 GCC',
       ]),
       # Run WebRTC DEPS roller at CET hours: 4am, 12pm and 8pm.
@@ -49,15 +45,8 @@ def Update(c):
 
   specs = [
     {'name': 'Linux64 GCC', 'slavebuilddir': 'linux_gcc'},
-    {'name': 'Linux Asan (swarming)', 'slavebuilddir': 'linux_asan'},
     {'name': 'Linux Memcheck (swarming)', 'slavebuilddir': 'linux_memcheck'},
     {'name': 'Linux MSan (swarming)', 'slavebuilddir': 'linux_msan'},
-    {'name': 'Linux Tsan v2 (swarming)', 'slavebuilddir': 'linux_tsan'},
-    {'name': 'Linux UBSan (swarming)', 'slavebuilddir': 'linux_ubsan'},
-    {
-      'name': 'Linux UBSan vptr (swarming)',
-      'slavebuilddir': 'linux_ubsan_vptr',
-    },
     {
       'name': 'Auto-roll - WebRTC DEPS',
       'recipe': 'webrtc/auto_roll_webrtc_deps',

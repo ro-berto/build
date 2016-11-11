@@ -677,22 +677,6 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
-      'Linux Asan (swarming)': {
-        'recipe_config': 'webrtc_swarming_clang',
-        'chromium_apply_config': ['asan', 'lsan'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Linux',
-          'cpu': 'x86-64',
-        }
-      },
       'Linux Memcheck (swarming)': {
         'recipe_config': 'webrtc_swarming',
         'chromium_apply_config': ['memcheck'],
@@ -714,54 +698,6 @@ BUILDERS = freeze({
         'recipe_config': 'webrtc_swarming_clang',
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
                                   'prebuilt_instrumented_libraries'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Linux',
-          'cpu': 'x86-64',
-        }
-      },
-      'Linux Tsan v2 (swarming)': {
-        'recipe_config': 'webrtc_swarming_clang',
-        'chromium_apply_config': ['tsan2'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Linux',
-          'cpu': 'x86-64',
-        }
-      },
-      'Linux UBSan (swarming)': {
-        'recipe_config': 'webrtc_swarming_clang',
-        'chromium_apply_config': ['ubsan'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Linux',
-          'cpu': 'x86-64',
-        }
-      },
-      'Linux UBSan vptr (swarming)': {
-        'recipe_config': 'webrtc_swarming_clang',
-        'chromium_apply_config': ['ubsan_vptr'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
