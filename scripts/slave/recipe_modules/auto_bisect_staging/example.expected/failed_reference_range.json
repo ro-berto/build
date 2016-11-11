@@ -1824,7 +1824,7 @@
   },
   {
     "name": "$result",
-    "reason": "Bisect cannot identify a culprit: Testing the \"bad\" revision failed",
+    "reason": "Bisect cannot identify a culprit: Testing the \"bad\" revision failed: got non-zero return code on all runs for dcdcdc0ff1122212323134879ddceeb1240b0988",
     "recipe_result": null,
     "status_code": 1
   }

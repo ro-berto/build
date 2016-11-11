@@ -97,6 +97,7 @@ class RevisionState(object):
     self.debug_values = []
     self.return_codes = []
     self._test_config = None
+    self.failure_reason = None
 
     if self.bisector.test_type == 'perf':
       self.repeat_count = MINIMUM_SAMPLE_SIZE
@@ -161,6 +162,9 @@ class RevisionState(object):
                 """)
             if self._is_build_failed():
               self.failed = True
+              self.failure_reason = (
+                  'Failed to compile revision %s. Buildbucket job id %s' % (
+                      self.revision_string(), self.build_id))
               return
 
       self._do_test()
@@ -169,8 +173,10 @@ class RevisionState(object):
         min(self, self.bisector.lkgr, self.bisector.fkbr,
             key=lambda(x): x.test_run_count)._do_test()
 
-    except bisect_exceptions.UntestableRevisionException:
+    except bisect_exceptions.UntestableRevisionException as e:
+      self.failure_reason = e.message
       self.failed = True
+
 
   def deps_change(self):
     """Uses `git show` to see if a given commit contains a DEPS change."""
@@ -319,7 +325,8 @@ class RevisionState(object):
       self.failed = True
       if 'MISSING_METRIC' in results.get('errors'):
         self.bisector.surface_result('MISSING_METRIC')
-      raise bisect_exceptions.UntestableRevisionException(results['errors'])
+      raise bisect_exceptions.UntestableRevisionException(
+          'The metric was not found in the output.')
     elif self.bisector.is_return_code_mode():
       assert len(results['retcodes'])
     else:

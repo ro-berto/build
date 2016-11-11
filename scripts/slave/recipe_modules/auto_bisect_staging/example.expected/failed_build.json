@@ -1319,7 +1319,21 @@
       "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "dcdcdc0ff1122212323134879ddceeb1240b0988"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Gathering reference values.Waiting for build.resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_REF_RANGE_FAIL\"]@@@"
     ]
   },
@@ -1332,17 +1346,6 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -1383,7 +1386,7 @@
   },
   {
     "name": "$result",
-    "reason": "Bisect cannot identify a culprit: Testing the \"bad\" revision failed",
+    "reason": "Bisect cannot identify a culprit: Testing the \"bad\" revision failed: Failed to compile revision chromium@dcdcdc0ff1. Buildbucket job id 1201331270",
     "recipe_result": null,
     "status_code": 1
   }

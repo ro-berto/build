@@ -81,12 +81,14 @@ def _gather_reference_range(bisector):  # pragma: no cover
     bisector.surface_result('REF_RANGE_FAIL')
     bisector.failed = True
     raise bisect_exceptions.InconclusiveBisectException(
-        'Testing the "good" revision failed')
+        'Testing the "good" revision failed: ' +
+        bisector.good_rev.failure_reason)
   elif bisector.bad_rev.failed:
     bisector.surface_result('REF_RANGE_FAIL')
     bisector.failed = True
     raise bisect_exceptions.InconclusiveBisectException(
-        'Testing the "bad" revision failed')
+        'Testing the "bad" revision failed: ' +
+        bisector.bad_rev.failure_reason)
 
 def _bisect_main_loop(bisector):  # pragma: no cover
   """This is the main bisect loop.
