@@ -1,0 +1,75 @@
+{
+  "master_base_class": "Master1",
+  "master_port": 20106,
+  "master_port_alt": 25106,
+  "slave_port": 30106,
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "default_remote_run_properties": {
+    "path_config": "kitchen",
+  },
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/src.git",
+
+  "builders": {
+    "Jelly Bean Tester": {
+      "recipe": "chromium",
+      "remote_run_sync_revision": True,
+      "remote_run_use_gitiles": True,
+      "use_remote_run": True,
+      "scheduler": None,
+      "slave_pools": ["jelly_bean_tester"],
+      "category": "3Testers",
+      "mergeRequests": True,
+    },
+    "Lollipop Consumer Tester": {
+      "recipe": "chromium",
+      "remote_run_sync_revision": True,
+      "remote_run_use_gitiles": True,
+      "use_remote_run": True,
+      "scheduler": None,
+      "slave_pools": ["lollipop_consumer"],
+      "category": "3Testers",
+      "mergeRequests": True,
+    },
+    "Lollipop Low-end Tester": {
+      "recipe": "chromium",
+      "remote_run_sync_revision": True,
+      "remote_run_use_gitiles": True,
+      "use_remote_run": True,
+      "scheduler": None,
+      "slave_pools": ["lollipop_low_end"],
+      "category": "3Testers",
+      "mergeRequests": True,
+    },
+  },
+
+  "schedulers": {},
+
+  "slave_pools": {
+    "jelly_bean_tester": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": "64",
+      },
+      "slaves": ["build40-b1"],
+    },
+    "lollipop_consumer": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": "64",
+      },
+      "slaves": ["build39-b1"],
+    },
+    "lollipop_low_end": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": "64",
+      },
+      "slaves": ["build19-b1"],
+    },
+  }
+}

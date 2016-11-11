@@ -193,16 +193,6 @@
       "category": "4Swarming",
       "slavebuilddir": "android_build",
     },
-    "Jelly Bean Tester": {
-      "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["jelly_bean_tester"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
     "KitKat Tablet Tester": {
       "recipe": "chromium",
       "remote_run_sync_revision": True,
@@ -210,26 +200,6 @@
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["kit_kat_tablet"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
-    "Lollipop Consumer Tester": {
-      "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["lollipop_consumer"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
-    "Lollipop Low-end Tester": {
-      "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["lollipop_low_end"],
       "category": "3Testers",
       "mergeRequests": True,
     },
@@ -382,14 +352,6 @@
       },
       "slaves": ["build88-b1"],
     },
-    "jelly_bean_tester": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["build40-b1"],
-    },
     "kit_kat_tablet": {
       "slave_data": {
         "os": "linux",
@@ -397,22 +359,6 @@
         "bits": "64",
       },
       "slaves": ["build42-b1"],
-    },
-    "lollipop_consumer": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["build39-b1"],
-    },
-    "lollipop_low_end": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["build19-b1"],
     },
     "lollipop_phone": {
       "slave_data": {

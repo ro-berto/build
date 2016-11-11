@@ -12,15 +12,15 @@
 
 from config_bootstrap import Master
 
-class ChromiumAndroid(Master.Master1):
-  project_name = 'ChromiumAndroid'
-  master_port = 20101
-  slave_port = 30101
-  master_port_alt = 40101
-  buildbot_url = 'https://build.chromium.org/p/chromium.android/'
+class ChromiumAndroidFyi(Master.Master1):
+  project_name = 'ChromiumAndroidFyi'
+  master_port = 20106
+  slave_port = 30106
+  master_port_alt = 25106
+  buildbot_url = 'https://build.chromium.org/p/chromium.android.fyi/'
   buildbucket_bucket = None
   service_account_file = None
   # To enable outbound pubsub event streaming.
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
-  name = 'chromium.android'
+  name = 'chromium.android.fyi'
