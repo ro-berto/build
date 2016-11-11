@@ -508,12 +508,17 @@ class Bisector(object):
     self._raise_low_confidence_error()
 
   def _raise_low_confidence_error(self):
+    if (not self.good_rev.debug_values or
+        not self.bad_rev.debug_values):  # pragma: no cover
+      msg = 'No values were found while testing the reference range.'
+      self.surface_result('MISSING_METRIC')
+    else:
+      msg = 'Bisect failed to reproduce the regression with enough confidence.'
+      self.surface_result('LO_INIT_CONF')
     self.surface_result('REF_RANGE_FAIL')
-    self.surface_result('LO_INIT_CONF')
     self.failed = True
     self.failed_initial_confidence = True
-    raise bisect_exceptions.InconclusiveBisectException(
-        'Bisect failed to reproduce the regression with enough confidence.')
+    raise bisect_exceptions.InconclusiveBisectException(msg)
 
   def get_exception(self):
     raise NotImplementedError()  # pragma: no cover
