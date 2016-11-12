@@ -697,34 +697,3 @@ results-without_patch
               'parsed_values': [212, 213, 214, 215, 7],
               'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
           }]))
-
-  yield (api.test('failure_in_ref_range') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.perf', buildername=buildername) +
-    api.properties(
-        path_config='kitchen',
-        bisect_config=local_bisect_config,
-        job_name='f7a7b4135624439cbd27fdd5133d74ec',
-        local_test=True,
-        parent_got_revision='1111111',
-        parent_build_archive_url='gs://test-domain/test-archive.zip') +
-    api.bisect_tester(tempfile='/tmp/dummy') +
-    api.override_step_data('device_status',
-        api.json.output(two_devices)) +
-    api.override_step_data('device_status (2)',
-        api.json.output(two_devices)) +
-    api.step_data('Post bisect results',
-        stdout=api.json.output({'status_code': 200})) +
-    api.auto_bisect([
-          {
-              'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
-              'commit_pos': '306475',
-              'parsed_values': [12, 13, 14, 15, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
-          },
-          {
-              'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
-              'commit_pos': '306476',
-              'parsed_values': [212, 213, 214, 215, 7],
-              'test_results': 5 * [{'stdout': 'benchmark fail', 'retcode': 1}],
-          }]))

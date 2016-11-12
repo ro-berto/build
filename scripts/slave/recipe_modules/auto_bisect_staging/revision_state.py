@@ -332,9 +332,6 @@ class RevisionState(object):
     else:
       self.valueset_paths.extend(results.get('valueset_paths'))
       self.chartjson_paths.extend(results.get('chartjson_paths'))
-      if results.get('retcodes') and 0 not in results['retcodes']:
-        raise bisect_exceptions.UntestableRevisionException(
-            'got non-zero return code on all runs for ' + self.commit_hash)
 
   def _request_build(self):
     """Posts a request to buildbot to build this revision and archive it."""
