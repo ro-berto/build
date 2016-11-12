@@ -808,7 +808,8 @@ class Bisector(object):
             'depot_name': r.depot_name,
             'commit_hash': r.commit_hash,
             'revision_string': r.revision_string(),
-            'mean_value': r.mean,
+            'mean_value': (r.overall_return_code if
+                           r.bisector.is_return_code_mode() else r.mean),
             'std_dev': r.std_dev,
             'n_observations': len(r.display_values),
             'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
