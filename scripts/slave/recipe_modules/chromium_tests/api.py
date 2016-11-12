@@ -810,7 +810,27 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return args
 
   def get_compile_targets_for_scripts(self):
-    return self.m.python(
+    """This gets the combined compile_targets information from the
+    //testing/scripts/get_compile_targets.py script.
+
+    This script returns the compile targets for all of the 'script tests' in
+    chromium (including ones that we don't plan to run on this configuration,
+    see TODO). The information is returned in the following format:
+
+    {
+      "some_script_name.py": ["list", "of", "compile", "targets"],
+    }
+
+    Where "some_script_name.py" corresponds to
+    "//testing/scripts/some_script_name.py".
+
+    Returns:
+      The compile target data in the form described above.
+
+    TODO:
+      * Only gather targets for the scripts that we might concievably run.
+    """
+    result = self.m.python(
         name='get compile targets for scripts',
         script=self.m.path['checkout'].join(
             'testing', 'scripts', 'get_compile_targets.py'),
@@ -819,6 +839,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             '--',
         ] + self.get_common_args_for_scripts(),
         step_test_data=lambda: self.m.json.test_api.output({}))
+    return result.json.output
 
   @staticmethod
   # TODO(phajdan.jr): try to get rid of api parameter.

@@ -73,7 +73,7 @@ class BotConfig(object):
       scripts_compile_targets = {}
     else:
       scripts_compile_targets = \
-          chromium_tests_api.get_compile_targets_for_scripts().json.output
+          chromium_tests_api.get_compile_targets_for_scripts()
 
     test_generators = [
       chromium_tests_api.steps.generate_gtest,
