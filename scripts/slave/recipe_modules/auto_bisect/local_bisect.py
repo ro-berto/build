@@ -36,13 +36,15 @@ def perform_bisect(api, **flags):
           else:
             raise
   except bisect_exceptions.InconclusiveBisectException as e:
+    message =  'Bisect cannot identify a culprit: ' + e.message
     if bisect_attempts:
+      bisect_attempts[-1].aborted_reason = message
       bisect_attempts[-1].print_result_debug_info()
       bisect_attempts[-1].post_result()
-    raise api.m.step.StepFailure('Bisect cannot identify a culprit: ' +
-                                 e.message)
-  except Exception: # pylint: disable=bare-except
+    raise api.m.step.StepFailure(message)
+  except Exception as e: # pylint: disable=bare-except
     if bisect_attempts:
+      bisect_attempts[-1].aborted_reason = e.message
       bisect_attempts[-1].post_result()
     raise
 
@@ -81,12 +83,14 @@ def _gather_reference_range(bisector):  # pragma: no cover
     bisector.surface_result('REF_RANGE_FAIL')
     bisector.failed = True
     raise bisect_exceptions.InconclusiveBisectException(
-        'Testing the "good" revision failed')
+        'Testing the "good" revision failed: ' +
+        bisector.good_rev.failure_reason)
   elif bisector.bad_rev.failed:
     bisector.surface_result('REF_RANGE_FAIL')
     bisector.failed = True
     raise bisect_exceptions.InconclusiveBisectException(
-        'Testing the "bad" revision failed')
+        'Testing the "bad" revision failed: ' +
+        bisector.bad_rev.failure_reason)
 
 def _bisect_main_loop(bisector):  # pragma: no cover
   """This is the main bisect loop.

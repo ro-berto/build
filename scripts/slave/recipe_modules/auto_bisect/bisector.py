@@ -88,6 +88,7 @@ class Bisector(object):
         'improvement_direction', 0)) or None
 
     self.warnings = []
+    self.aborted_reason = None
 
     # Status flags
     self.failed_initial_confidence = False
@@ -508,12 +509,17 @@ class Bisector(object):
     self._raise_low_confidence_error()
 
   def _raise_low_confidence_error(self):
+    if (not self.good_rev.debug_values or
+        not self.bad_rev.debug_values):  # pragma: no cover
+      msg = 'No values were found while testing the reference range.'
+      self.surface_result('MISSING_METRIC')
+    else:
+      msg = 'Bisect failed to reproduce the regression with enough confidence.'
+      self.surface_result('LO_INIT_CONF')
     self.surface_result('REF_RANGE_FAIL')
-    self.surface_result('LO_INIT_CONF')
     self.failed = True
     self.failed_initial_confidence = True
-    raise bisect_exceptions.InconclusiveBisectException(
-        'Bisect failed to reproduce the regression with enough confidence.')
+    raise bisect_exceptions.InconclusiveBisectException(msg)
 
   def get_exception(self):
     raise NotImplementedError()  # pragma: no cover
@@ -769,7 +775,7 @@ class Bisector(object):
         'good_revision': self.good_rev.commit_hash,
         'bad_revision': self.bad_rev.commit_hash,
         'warnings': self.warnings,
-        'aborted_reason': aborted_reason,
+        'aborted_reason': self.aborted_reason or aborted_reason,
         'culprit_data': self._culprit_data(),
         'revision_data': self._revision_data()
     }
@@ -802,9 +808,10 @@ class Bisector(object):
             'depot_name': r.depot_name,
             'commit_hash': r.commit_hash,
             'revision_string': r.revision_string(),
-            'mean_value': r.mean,
+            'mean_value': (r.overall_return_code if
+                           r.bisector.is_return_code_mode() else r.mean),
             'std_dev': r.std_dev,
-            'values': r.display_values,
+            'n_observations': len(r.display_values),
             'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
         })
     return revision_rows
