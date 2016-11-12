@@ -810,7 +810,7 @@ class Bisector(object):
             'revision_string': r.revision_string(),
             'mean_value': r.mean,
             'std_dev': r.std_dev,
-            'values': r.display_values,
+            'n_observations': len(r.display_values),
             'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
         })
     return revision_rows
