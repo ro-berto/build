@@ -13,10 +13,12 @@ import tempfile
 import unittest
 
 sys.path.insert(0, os.path.join(
-      os.path.dirname(__file__), '..', '..', '..', '..'))
+      os.path.dirname(__file__), '..', '..', '..', '..', '..'))
 import common.env
 common.env.Install()
 import mock
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 import upload_test_results
 
