@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import contextlib
-
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -128,36 +126,6 @@ def RunSteps(api, mastername, buildername):
                                                              master_dict)
 
   api.chromium_android.use_devil_adb()
-
-  @contextlib.contextmanager
-  def android_bisect_build_wrapper(new_api):
-    """A context manager for use as auto_bisect's build_context_mgr.
-
-    This wraps each individual bisect test. We use new_api here to
-    disambiguate from RunSteps' api object. Otherwise calling
-    auto_bisect_staging from within auto_bisect_staging causes a module
-    to require itself.
-    """
-    with api.chromium_android.android_build_wrapper()(new_api):
-      try:
-        yield
-      finally:
-        api.auto_bisect_staging.ensure_checkout()
-
-  @contextlib.contextmanager
-  def android_bisect_test_wrapper(new_api):
-    """A context manager for use as auto_bisect's test_context_mgr.
-
-    This wraps each individual bisect test. We use new_api here to disambiguate
-    from RunSteps' api object.
-    """
-    api.chromium_android.use_devil_adb()
-    with api.chromium_android.android_test_wrapper()(new_api):
-      yield
-
-  # Make sure the bisect build and individual test runs are wrapped.
-  api.auto_bisect_staging.build_context_mgr = android_bisect_build_wrapper
-  api.auto_bisect_staging.test_context_mgr = android_bisect_test_wrapper
 
   api.auto_bisect_staging.start_try_job(api, update_step=update_step,
                                         bot_db=bot_db,
