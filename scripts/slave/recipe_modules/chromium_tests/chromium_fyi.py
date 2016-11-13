@@ -1895,6 +1895,22 @@ SPEC = {
       },
     },
 
+    'Android x64 Tests': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'android_config': 'x64_builder_mb',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
     'Android Remoting Tests': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
