@@ -226,16 +226,17 @@ class RevisionState(object):
   def read_deps(self, recipe_tester_name):
     """Sets the dependencies for this revision from the contents of DEPS."""
     api = self.bisector.api
-    if self.bisector.internal_bisect:  # pragma: no cover
+    if (self.bisector.internal_bisect and
+        'deps_file' in self.depot):  # pragma: no cover
       deps_file_contents = self._read_content(
-          depot_config.DEPOT_DEPS_NAME[self.depot_name]['url'],
-          depot_config.DEPOT_DEPS_NAME[self.depot_name]['deps_file'],
+          self.depot['url'],
+          self.depot['deps_file'],
           self.commit_hash)
       # On April 5th, 2016 .DEPS.git was changed to DEPS on android-chrome repo,
       # we are doing this in order to support both deps files.
       if not deps_file_contents:
         deps_file_contents = self._read_content(
-            depot_config.DEPOT_DEPS_NAME[self.depot_name]['url'],
+            self.depot['url'],
             depot_config.DEPS_FILENAME,
             self.commit_hash)
     else:
