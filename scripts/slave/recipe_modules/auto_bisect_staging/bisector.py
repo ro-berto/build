@@ -278,7 +278,10 @@ class Bisector(object):
       base_revision (str): Base revision in the downstream repo (e.g. chromium).
       step_name (str): Optional step name.
       exclude_end (bool): Whether to exclude the last revision in the range,
-          i.e. the revision given as end.
+          i.e. the revision given as end. The use case for this parameter is
+          when expanding the initial regression range. The "bad" revision has
+          already been instantianted and including it in this response would
+          duplicate it.
 
     Returns:
       A list of RevisionState objects.
@@ -286,7 +289,7 @@ class Bisector(object):
     if self.internal_bisect:  # pragma: no cover
       return self._revision_range_with_gitiles(
           start, end, depot_name, base_revision, step_name,
-          step_test_data=lambda: self.api._test_data[
+          exclude_end=exclude_end, step_test_data=lambda: self.api._test_data[
               'revision_list_internal'][depot_name])
     try:
       step_result = self.api.m.python(
@@ -309,8 +312,9 @@ class Bisector(object):
           base_revision=base_revision))
     return revisions
 
-  def _revision_range_with_gitiles(self, start, end, depot_name,
-       base_revision=None, step_name=None, **kwargs):   # pragma: no cover
+  def _revision_range_with_gitiles(
+      self, start, end, depot_name, base_revision=None, step_name=None,
+      exclude_end=False, **kwargs):   # pragma: no cover
     """Returns a list of RevisionState objects between |start| and |end|.
 
     Args:
@@ -319,6 +323,8 @@ class Bisector(object):
       depot_name (str): Short string name of repo, e.g. chromium or v8.
       base_revision (str): Base revision in the downstream repo (e.g. chromium).
       step_name (str): Optional step name.
+      exclude_end (bool): Whether to exclude the last revision in the range,
+          i.e. the revision given as end.
 
     Returns:
       A list of RevisionState objects, not including the given start or end.
@@ -331,7 +337,9 @@ class Bisector(object):
       self.surface_result('BAD_REV')
       raise
     revisions = []
-    for c in commits[:-1]:
+    if exclude_end:
+      commits = commits[:-1]
+    for c in commits:
       revisions.append(self.revision_class(
           bisector=self,
           commit_hash=c['commit'],
