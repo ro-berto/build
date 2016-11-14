@@ -387,8 +387,8 @@ def asan(c):
 
   c.gn_args.append('is_asan=true')
   c.gyp_env.GYP_DEFINES['asan'] = 1
-  if c.TARGET_PLATFORM != 'android' and c.TARGET_BITS == 64:
-    # LSAN isn't supported on Android or 32 bits platforms.
+  if c.TARGET_PLATFORM not in ('android', 'mac') and c.TARGET_BITS == 64:
+    # LSAN isn't supported on Android, Mac or 32 bits platforms.
     c.gn_args.append('is_lsan=true')
     c.gyp_env.GYP_DEFINES['lsan'] = 1
 
@@ -591,9 +591,7 @@ def clang_tot_linux_ubsan_vptr(c):
 @config_ctx(includes=['clang_tot_mac', 'asan', 'chromium_sanitizer',
             'static_library'])
 def clang_tot_mac_asan(c):
-  # Like chromium_mac_asan, without goma.
-  # Clear lsan configuration for mac.
-  del c.gyp_env.GYP_DEFINES['lsan']
+  pass
 
 @config_ctx(includes=['android_common', 'ninja', 'clang', 'clang_tot'])
 def clang_tot_android(c):
@@ -633,9 +631,6 @@ def chromium_linux_asan(c):
 
 @config_ctx(includes=['chromium_asan', 'static_library'])
 def chromium_mac_asan(c):
-  # Clear lsan configuration for mac.
-  del c.gyp_env.GYP_DEFINES['lsan']
-
   # Need to explicitly set host arch for mac asan 64.
   # TODO(glider, earthdok): Figure out if this is really required or
   # auto-detected by gyp.

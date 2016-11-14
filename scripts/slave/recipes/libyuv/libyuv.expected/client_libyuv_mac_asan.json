@@ -130,7 +130,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library fastbuild=0 gomadir='[CACHE]/cipd/goma' lsan=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library fastbuild=0 gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -143,7 +143,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Release",
-      "--args=is_clang=true symbol_level=1 is_asan=true is_lsan=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+      "--args=is_clang=true symbol_level=1 is_asan=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "gn"
