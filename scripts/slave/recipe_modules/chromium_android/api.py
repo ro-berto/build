@@ -1161,6 +1161,30 @@ class AndroidApi(recipe_api.RecipeApi):
       self.asan_device_teardown()
     self.test_report()
 
+  def android_build_wrapper(self, logcat_gs_bucket='chromium-android'):
+    @contextlib.contextmanager
+    def wrapper(api):
+      """A context manager for use as auto_bisect's build_context_mgr.
+
+      This wraps every overall bisect run.
+      """
+      try:
+        self.common_tests_setup_steps(
+            perf_setup=True, remove_system_webview=True)
+        api.chromium.runhooks()
+
+        yield
+      finally:
+        self.common_tests_final_steps(logcat_gs_bucket=logcat_gs_bucket)
+    return wrapper
+
+  def android_test_wrapper(self, _logcat_gs_bucket='chromium-android'):
+    @contextlib.contextmanager
+    def wrapper(_api):
+      """A context manager for running android test steps."""
+      yield
+    return wrapper
+
   def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):
     self.m.step('prepare bisect perf regression',
         [self.m.path['checkout'].join('tools',
