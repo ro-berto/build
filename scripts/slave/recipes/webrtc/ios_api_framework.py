@@ -24,15 +24,7 @@ def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
 
   api.ios.host_info()
-
-  checkout_kwargs = {}
-  checkout_dir = api.chromium_checkout.get_checkout_dir({})
-  if checkout_dir:
-    checkout_kwargs['cwd'] = checkout_dir
-  update_step = api.bot_update.ensure_checkout(**checkout_kwargs)
-
-  revs = update_step.presentation.properties
-  commit_pos = api.commit_position.parse_revision(revs['got_revision_cp'])
+  api.webrtc.checkout()
   api.gclient.runhooks()
 
   build_script = api.path['checkout'].join('webrtc', 'build', 'ios',
@@ -40,7 +32,8 @@ def RunSteps(api):
   if not api.tryserver.is_tryserver:
     api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])
 
-  api.step('build', [build_script, '-r', commit_pos], cwd=api.path['checkout'])
+  api.step('build', [build_script, '-r', api.webrtc.revision_number],
+           cwd=api.path['checkout'])
 
   if not api.tryserver.is_tryserver:
     output_dir = api.path['checkout'].join('out_ios_libs')
@@ -55,7 +48,8 @@ def RunSteps(api):
     api.gsutil.upload(
         zip_out,
         'chromium-webrtc',
-        'ios_api_framework/webrtc_ios_api_framework_%d.zip' % commit_pos,
+        ('ios_api_framework/webrtc_ios_api_framework_%s.zip' %
+         api.webrtc.revision_number),
         args=['-a', 'public-read'],
         unauthenticated_url=True)
 

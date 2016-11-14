@@ -17,14 +17,8 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
-
   api.ios.host_info()
-
-  checkout_kwargs = {}
-  checkout_dir = api.chromium_checkout.get_checkout_dir({})
-  if checkout_dir:
-    checkout_kwargs['cwd'] = checkout_dir
-  api.bot_update.ensure_checkout(**checkout_kwargs)
+  api.webrtc.checkout()
 
   build_config_base_dir = api.path['checkout'].join(
       'webrtc',

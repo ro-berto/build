@@ -86,8 +86,7 @@ def BuildSteps(api, gn_arg=None, name=None):
 
 
 def RunSteps(api):
-  webrtc = api.webrtc
-  webrtc.apply_bot_config(BUILDERS, RECIPE_CONFIGS)
+  api.webrtc.apply_bot_config(BUILDERS, RECIPE_CONFIGS)
 
   api.webrtc.checkout()
   api.chromium.ensure_goma()

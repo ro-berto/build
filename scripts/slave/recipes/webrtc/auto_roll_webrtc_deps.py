@@ -33,7 +33,7 @@ def RunSteps(api):
   else:
     step_result.presentation.step_text = 'Rolling activated'
 
-  api.bot_update.ensure_checkout()
+  api.webrtc.checkout()
   api.gclient.runhooks()
 
   # Enforce a clean state.
