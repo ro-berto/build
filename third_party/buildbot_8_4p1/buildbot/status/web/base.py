@@ -197,6 +197,8 @@ class ContextMixin(AccessorMixin):
             locale_tz = unicode(time.tzname[time.localtime()[-1]], locale_enc)
         else:
             locale_tz = unicode(time.tzname[time.localtime()[-1]])
+
+        props = request.site.buildbot_service.master.properties
         return dict(title_url = status.getTitleURL(),
                     title = status.getTitle(),
                     stylesheet = rootpath + 'default.css',
@@ -209,7 +211,7 @@ class ContextMixin(AccessorMixin):
                     pageTitle = self.getPageTitle(request),
                     welcomeurl = rootpath,
                     authz = self.getAuthz(request),
-                    mastername = self.getBuildmaster(request),
+                    mastername = props['mastername'],
                     )
 
 
