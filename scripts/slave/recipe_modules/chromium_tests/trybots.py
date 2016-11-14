@@ -17,19 +17,19 @@ TRYBOTS = freeze({
     'builders': {
       'linux_precise_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Precise (dbg)',
+        'buildername': 'WebKit Linux Trusty (dbg)',
       }),
       'linux_precise_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Precise',
+        'buildername': 'WebKit Linux Trusty',
       }),
       'linux_precise_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Precise (dbg)',
+        'buildername': 'WebKit Linux Trusty (dbg)',
       }, analyze_mode='compile'),
       'linux_precise_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Precise',
+        'buildername': 'WebKit Linux Trusty',
       }, analyze_mode='compile'),
       'linux_trusty_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
@@ -566,7 +566,7 @@ TRYBOTS = freeze({
     'builders': {
       'v8_linux_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Precise',
+        'buildername': 'WebKit Linux Trusty',
       }),
       'v8_linux_chromium_gn_rel': simple_bot({
         'mastername': 'client.v8.fyi',

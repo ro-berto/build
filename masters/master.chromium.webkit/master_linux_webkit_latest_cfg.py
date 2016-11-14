@@ -45,22 +45,18 @@ defaults['category'] = 'layout'
 # Linux Rel Builder/Tester
 #
 
-B('WebKit Linux Precise', 'f_webkit_linux_rel', scheduler='global_scheduler')
+B('WebKit Linux Trusty', 'f_webkit_linux_rel', scheduler='global_scheduler')
 F('f_webkit_linux_rel', m_remote_run_chromium_src('chromium'))
 
-B('WebKit Linux Trusty', 'f_webkit_linux_rel_trusty',
-    scheduler='global_scheduler')
-F('f_webkit_linux_rel_trusty', m_remote_run_chromium_src('chromium'))
-
-B('WebKit Linux Precise ASAN', 'f_webkit_linux_rel_asan',
+B('WebKit Linux Trusty ASAN', 'f_webkit_linux_rel_asan',
     scheduler='global_scheduler', auto_reboot=True)
 F('f_webkit_linux_rel_asan', m_remote_run_chromium_src('chromium'))
 
-B('WebKit Linux Precise MSAN', 'f_webkit_linux_rel_msan',
+B('WebKit Linux Trusty MSAN', 'f_webkit_linux_rel_msan',
     scheduler='global_scheduler', auto_reboot=True)
 F('f_webkit_linux_rel_msan', m_remote_run_chromium_src('chromium'))
 
-B('WebKit Linux Precise Leak', 'f_webkit_linux_leak_rel',
+B('WebKit Linux Trusty Leak', 'f_webkit_linux_leak_rel',
     scheduler='global_scheduler', category='layout')
 F('f_webkit_linux_leak_rel', m_remote_run_chromium_src('chromium'))
 
@@ -73,7 +69,7 @@ F('f_webkit_linux_leak_rel', m_remote_run_chromium_src('chromium'))
 # Linux Dbg Webkit builders/testers
 #
 
-B('WebKit Linux Precise (dbg)', 'f_webkit_dbg_tests',
+B('WebKit Linux Trusty (dbg)', 'f_webkit_dbg_tests',
     scheduler='global_scheduler', auto_reboot=True)
 F('f_webkit_dbg_tests', m_remote_run_chromium_src('chromium'))
 

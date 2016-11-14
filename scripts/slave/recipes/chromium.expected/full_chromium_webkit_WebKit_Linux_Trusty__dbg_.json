@@ -202,7 +202,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -216,11 +216,11 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Debug",
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"WebKit Linux Precise\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"WebKit Linux Trusty (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -240,7 +240,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux_layout/src/testing/buildbot/chromium.webkit.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"WebKit Linux Precise\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"WebKit Linux Trusty (dbg)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -271,7 +271,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/linux_layout/src/out/Release",
+      "[BUILDER_CACHE]/linux_layout/src/out/Debug",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -285,14 +285,14 @@
       "-m",
       "chromium.webkit",
       "-b",
-      "WebKit Linux Precise",
+      "WebKit Linux Trusty (dbg)",
       "--config-file",
       "[BUILDER_CACHE]/linux_layout/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--swarming-targets-file",
       "browser_tests\n",
-      "//out/Release"
+      "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
@@ -317,19 +317,19 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[BUILDER_CACHE]/linux_layout/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "WebKit Linux Precise",
+      "WebKit Linux Trusty (dbg)",
       "--buildbot-mastername",
       "chromium.webkit",
       "--buildbot-slavename",
       "TestSlavename",
       "--goma-deps-cache-file",
-      "WebKit_Linux_Precise.gomadeps",
+      "WebKit_Linux_Trusty__dbg_.gomadeps",
       "--build-data-dir",
       "[ROOT]/build_data_dir",
       "--compiler",
@@ -340,7 +340,6 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--ninja-ensure-up-to-date",
       "--",
       "blink_tests",
       "browser_tests",
@@ -361,7 +360,7 @@
       "-u",
       "[BUILDER_CACHE]/linux_layout/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]/linux_layout/src/out/Release"
+      "[BUILDER_CACHE]/linux_layout/src/out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
@@ -378,7 +377,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[BUILDER_CACHE]/linux_layout/src/out/Release/browser_tests.isolated.gen.json"
+      "[BUILDER_CACHE]/linux_layout/src/out/Debug/browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -394,7 +393,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/linux_layout/src/out/Release",
+      "[BUILDER_CACHE]/linux_layout/src/out/Debug",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -438,20 +437,20 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
-      "Release",
+      "Debug",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Linux Precise\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Linux Trusty (dbg)\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Linux Precise\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Linux Trusty (dbg)\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests",
-      "--builder-name=WebKit Linux Precise",
+      "--builder-name=WebKit Linux Trusty (dbg)",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",
       "--target",
-      "Release",
+      "Debug",
       "-o",
       "[SLAVE_BUILD]/layout-test-results",
       "--build-dir",
@@ -463,7 +462,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux Precise",
+      "WebKit Linux Trusty (dbg)",
       "--step-name",
       "webkit_tests"
     ],
@@ -488,7 +487,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux Precise",
+      "WebKit Linux Trusty (dbg)",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--staging-dir",
@@ -502,8 +501,8 @@
     },
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Precise/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Precise/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Trusty__dbg_/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Trusty__dbg_/571/layout-test-results.zip@@@"
     ]
   },
   {
