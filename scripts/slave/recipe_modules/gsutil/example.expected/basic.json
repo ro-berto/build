@@ -156,6 +156,23 @@
     "name": "gsutil list"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://chromium-recipe-test/some/random/path/to/boom",
+      "gs://chromium-recipe-test/staging/to/boom"
+    ],
+    "name": "gsutil copy",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/chromium-recipe-test/staging/to/boom@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

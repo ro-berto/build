@@ -7,7 +7,6 @@ from buildbot.process.properties import WithProperties
 from master import gitiles_poller
 from master import master_config
 from master import master_utils
-from master.factory import annotator_factory
 from master.factory import remote_run_factory
 
 import master_site_config
@@ -20,8 +19,6 @@ helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
-
-m_annotator = annotator_factory.AnnotatorFactory()
 
 revision_getter = master_utils.ConditionalProperty(
     lambda build: build.getProperty('revision'),
@@ -135,11 +132,6 @@ F('linux_msan_rel_no_origins', m_remote_run_chromium_src('chromium'))
 B('MSAN Release (chained origins)', 'linux_msan_rel_chained_origins', 'compile',
   'chromium_lkgr')
 F('linux_msan_rel_chained_origins', m_remote_run_chromium_src('chromium'))
-
-# This is a bot that uploads LKGR telemetry harnesses to Google Storage.
-B('Telemetry Harness Upload', 'telemetry_harness_upload', None, 'chromium_lkgr')
-F('telemetry_harness_upload',
-  m_annotator.BaseFactory('perf/telemetry_harness_upload'))
 
 # UBSan bots.
 B('UBSan Release', 'linux_ubsan_rel', 'compile', 'chromium_lkgr')

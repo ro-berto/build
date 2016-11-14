@@ -62,6 +62,7 @@ def RunSteps(api):
                                   'gs://chromium-recipe-test/foo/b',
                                   'local/path/for/download')
   api.gsutil.list('gs://chromium-recipe-test/foo')
+  api.gsutil.copy(bucket, cloud_file, bucket, new_cloud_file)
 
 
 def GenTests(api):
