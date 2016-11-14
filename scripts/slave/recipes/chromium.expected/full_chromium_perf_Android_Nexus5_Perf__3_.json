@@ -323,9 +323,32 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\n",
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus5_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/build/android:%(PATH)s"
+    },
+    "name": "initialize devil",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.path.append(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@from devil import devil_env@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.Initialize()@@@",
+      "@@@STEP_LOG_LINE@python.inline@devil_env.config.PrefetchPaths(dependencies=['adb'])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/build/symlink.py",
       "-f",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "~/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5_Perf__3_",
@@ -341,7 +364,7 @@
       "--",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/build/android/adb_logcat_monitor.py",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/out/logcat",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5_Perf__3_",
     "env": {
@@ -362,7 +385,7 @@
       "--",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/out/bad_devices.json"
     ],
@@ -380,7 +403,7 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5_Perf__3_",
     "env": {
@@ -397,7 +420,7 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "-v",
       "--enable-usb-reset"
     ],
@@ -414,7 +437,7 @@
       "-u",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/build/android/provision_devices.py",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/out/bad_devices.json",
       "--output-device-blacklist",
@@ -447,7 +470,7 @@
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
@@ -626,7 +649,7 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src",
     "env": {
@@ -649,7 +672,7 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/out/bad_devices.json",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5_Perf__3_",
     "env": {
@@ -707,7 +730,7 @@
       "page_cycler.foo",
       "--verbose",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/out/bad_devices.json"
     ],
@@ -759,7 +782,7 @@
       "perf_test.foo",
       "--verbose",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus5_Perf__3_/src/out/bad_devices.json"
     ],
