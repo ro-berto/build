@@ -70,7 +70,7 @@ BUILDERS = freeze({
                 'bucket': 'chrome-perf',
             },
             'android_webview_arm64_aosp_perf_bisect': {
-                'recipe_config': 'main_builder_rel_mb',
+                'recipe_config': 'arm64_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
                 'webview': True,
