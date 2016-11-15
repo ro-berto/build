@@ -102,6 +102,12 @@ def _bisect_main_loop(bisector):  # pragma: no cover
     revision_to_check = bisector.get_revision_to_eval()
     if not revision_to_check:
       bisector.bisect_over = True
+      if not bisector.culprit:
+        bisector.failed = True
+        message = 'All revisions between %s and %s failed to build or test.' % (
+            bisector.lkgr.revision_string(), bisector.fkbr.revision_string())
+        message += bisector.failed_jobs()
+        raise bisect_exceptions.InconclusiveBisectException(message)
       break
 
     with bisector.api.m.step.nest(str('Working on revision ' +

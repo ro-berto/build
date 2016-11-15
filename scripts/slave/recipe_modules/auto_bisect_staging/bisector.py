@@ -831,3 +831,17 @@ class Bisector(object):
     builder_name = urllib.quote(properties.get('buildername', ''))
     builder_number = str(properties.get('buildnumber', ''))
     return '%sbuilders/%s/builds/%s' % (bot_url, builder_name, builder_number)
+
+  def failed_jobs(self):
+    """Produce a list of failed build jobs if the number is manageable."""
+    with self.api.m.step.nest('Gathering failed build jobs list'):
+      failed_revisions = self.revisions[
+          self.fkbr.list_index + 1:self.lkgr.list_index]
+      failed_ids = ['Buildbucket ID: ' + r.build_id for r in failed_revisions
+                    if r.is_build_failed()]
+      message = ('\n\nNo failures were found, further debugging necessary'
+                 if not failed_ids else '\n\nFailed builds:\n')
+      message = ('\n\nOver 10 revisions failed, listing only the first 10:\n\n'
+                 if len(failed_ids) > 10 else message)
+      message += '\n'.join(failed_ids[:10])
+    return message
