@@ -393,7 +393,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "compile with ninja"
+    "name": "compile"
   },
   {
     "cmd": [],

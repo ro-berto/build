@@ -308,12 +308,12 @@ class ChromiumApi(recipe_api.RecipeApi):
                                 'scripts', 'slave', 'update_windows_env.py'),
                             args=['--envfile-dir', str(target_output_dir)],
                             env=goma_env)
-          self.m.step(name or 'compile with ninja',
+          self.m.step(name or 'compile',
                       command,
                       env=ninja_env,
                       **kwargs)
       else:
-        self.m.step(name or 'compile with ninja',
+        self.m.step(name or 'compile',
                     command,
                     env=ninja_env,
                     **kwargs)

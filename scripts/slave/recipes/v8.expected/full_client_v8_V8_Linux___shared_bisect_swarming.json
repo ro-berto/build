@@ -343,7 +343,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "compile with ninja"
+    "name": "compile"
   },
   {
     "cmd": [],
@@ -1435,7 +1435,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Bisect a0.compile with ninja",
+    "name": "Bisect a0.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2030,7 +2030,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Bisect a2.compile with ninja",
+    "name": "Bisect a2.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2658,7 +2658,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Bisect a1.compile with ninja",
+    "name": "Bisect a1.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
