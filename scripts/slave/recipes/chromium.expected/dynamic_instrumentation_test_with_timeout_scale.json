@@ -185,7 +185,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Lollipop Low-end Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Lollipop Low-end Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.android.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -198,12 +198,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.android.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.android.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.android.json)",
+    "name": "read test spec (chromium.android.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.android.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.android.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Lollipop Low-end Tester\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instrumentation_tests\": [@@@",
@@ -297,11 +297,11 @@
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-url",
-      "gs://chromium-android-archive/chromium.android/Android arm Builder (dbg)/full-build-linux.zip",
+      "gs://chromium-android-archive/chromium.android.fyi/Android arm Builder (dbg)/full-build-linux.zip",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--master-name",
-      "chromium.android",
+      "chromium.android.fyi",
       "--build-number",
       "571"
     ],
@@ -560,7 +560,7 @@
       "--json-file",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
       "--master-name",
-      "chromium.android"
+      "chromium.android.fyi"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -582,7 +582,7 @@
       "--input-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
       "--master-name",
-      "chromium.android",
+      "chromium.android.fyi",
       "--builder-name",
       "Lollipop Low-end Tester",
       "--build-number",

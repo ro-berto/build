@@ -6,6 +6,7 @@ from recipe_engine.types import freeze
 
 from . import chromium
 from . import chromium_android
+from . import chromium_android_fyi
 from . import chromium_chrome
 from . import chromium_chromiumos
 from . import chromium_fyi
@@ -31,6 +32,7 @@ from . import tryserver_chromium_perf
 BUILDERS = freeze({
   'chromium': chromium.SPEC,
   'chromium.android': chromium_android.SPEC,
+  'chromium.android.fyi': chromium_android_fyi.SPEC,
   'chromium.chrome': chromium_chrome.SPEC,
   'chromium.chromiumos': chromium_chromiumos.SPEC,
   'chromium.fyi': chromium_fyi.SPEC,

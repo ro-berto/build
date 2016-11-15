@@ -26,8 +26,6 @@
         ],
         "excluded_builders": [
           "Android Swarm Builder",
-          "Lollipop Consumer Tester",
-          "Jelly Bean Tester",
           "Marshmallow 64 bit Tester"
         ],
         "builders": {

@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester",
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -40,7 +40,7 @@
       "src@1111111",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/Jelly_Bean_Tester",
+    "cwd": "[BUILDER_CACHE]/Lollipop_Consumer_Tester",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -185,13 +185,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Jelly_Bean_Tester/src",
+    "cwd": "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
-      "PATH": "[BUILDER_CACHE]/Jelly_Bean_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Jelly_Bean_Tester/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm64 use_goma=1",
+      "PATH": "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Lollipop_Consumer_Tester/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -199,16 +199,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/Jelly_Bean_Tester/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Lollipop_Consumer_Tester/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Jelly Bean Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Lollipop Consumer Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.android.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -221,12 +221,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src/testing/buildbot/chromium.android.json",
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src/testing/buildbot/chromium.android.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.android.json)",
+    "name": "read test spec (chromium.android.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Jelly_Bean_Tester/src/testing/buildbot/chromium.android.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Lollipop_Consumer_Tester/src/testing/buildbot/chromium.android.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -247,10 +247,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src/out/Debug/debug_info_dumps",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src/out/Debug/test_logs",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src/out/build_product.zip",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src"
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src/out/Debug/debug_info_dumps",
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src/out/Debug/test_logs",
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src/out/build_product.zip",
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -271,8 +271,8 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src/build/tree_truth.sh",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src",
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src/build/tree_truth.sh",
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src",
       "src"
     ],
     "name": "tree truth steps"
@@ -282,7 +282,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src/out/Debug"
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src/out/Debug"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -309,11 +309,11 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[BUILDER_CACHE]/Jelly_Bean_Tester/src",
+      "[BUILDER_CACHE]/Lollipop_Consumer_Tester/src",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
-      "chromium.android",
+      "chromium.android.fyi",
       "--build-number",
       "571"
     ],
