@@ -386,6 +386,39 @@ TRYBOTS = freeze({
           },
         ],
       },
+      # Trusty
+      'linux_chromium_compile_trusty_dbg_32_ng': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder Trusty (dbg)(32)',
+      }, analyze_mode='compile'),
+      'linux_chromium_trusty_dbg_32_ng': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder Trusty (dbg)(32)',
+        'tester': 'Linux Tests Trusty (dbg)(1)(32)',
+      }),
+      # TODO(yyanagisawa): Also support GPU Linux Builder / NVIDIA tester
+      'linux_chromium_trusty_rel_ng': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder Trusty',
+        'tester': 'Linux Tests Trusty',
+      }),
+      'linux_chromium_trusty_dbg_ng': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder Trusty (dbg)',
+        'tester': 'Linux Tests Trusty (dbg)(1)',
+      }),
+      'linux_chromium_compile_trusty_rel_ng': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder Trusty',
+      }, analyze_mode='compile'),
+      'linux_chromium_compile_trusty_dbg_ng': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder Trusty (dbg)',
+      }, analyze_mode='compile'),
+      'cast_shell_linux_trusty': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Cast Linux Trusty',
+      }),
     },
   },
   'tryserver.chromium.mac': {
