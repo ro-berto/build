@@ -16,7 +16,7 @@ class ChromiumAndroid(Master.Master1):
   project_name = 'ChromiumAndroid'
   master_port = 20101
   slave_port = 30101
-  master_port_alt = 40101
+  master_port_alt = 20501
   buildbot_url = 'https://build.chromium.org/p/chromium.android/'
   buildbucket_bucket = None
   service_account_file = None
