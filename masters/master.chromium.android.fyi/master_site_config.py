@@ -18,8 +18,8 @@ class ChromiumAndroidFyi(Master.Master1):
   slave_port = 30106
   master_port_alt = 25106
   buildbot_url = 'https://build.chromium.org/p/chromium.android.fyi/'
-  buildbucket_bucket = None
-  service_account_file = None
+  service_account_file = 'service-account-chromium.json'
+  buildbucket_bucket = 'master.chromium.android.fyi'
   # To enable outbound pubsub event streaming.
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
