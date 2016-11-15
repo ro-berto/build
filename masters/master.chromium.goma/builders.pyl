@@ -9,13 +9,11 @@
   "default_remote_run_properties": {
     "path_config": "kitchen",
   },
-  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/src.git",
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
 
   "builders": {
      "Chromium Linux Goma Staging": {
        "recipe": "chromium",
-       "remote_run_sync_revision": True,
-       "remote_run_use_gitiles": True,
        "use_remote_run": True,
        "scheduler": "chromium_src_commits",
        "slave_pools": ["linux_trusty"],
@@ -23,8 +21,6 @@
      },
      "Chromium Mac Goma Staging": {
        "recipe": "chromium",
-       "remote_run_sync_revision": True,
-       "remote_run_use_gitiles": True,
        "use_remote_run": True,
        "scheduler": "chromium_src_commits",
        "slave_pools": ["mac_10.11"],
@@ -32,8 +28,6 @@
      },
      "CrWinGomaStaging": {
        "recipe": "chromium",
-       "remote_run_sync_revision": True,
-       "remote_run_use_gitiles": True,
        "use_remote_run": True,
        "scheduler": "chromium_src_commits",
        "slave_pools": ["win_win8"],
