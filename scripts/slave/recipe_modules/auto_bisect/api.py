@@ -8,7 +8,7 @@ This API is meant to enable the bisect recipe to bisect any chromium-supported
 platform for any test that can be run via buildbot, perf or otherwise.
 """
 
-import os
+import contextlib
 
 from recipe_engine import recipe_api
 from . import bisector
@@ -50,6 +50,22 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
     # Keep track of working directory (which contains the checkout).
     # None means "default value".
     self._working_dir = None
+
+    @contextlib.contextmanager
+    def noop_context_manager(_api):
+      """This is a context manager that doesn't do anything.
+
+      It is used for a placeholder for code that should be wrapped around ever
+      test execution of a bisect iteration or full build. Replace it with a
+      real context manager (one that accepts an api argument) to do something
+      useful.
+      """
+      yield
+
+    # build_context_mgr is run for each overall bisect run (i.e., once).
+    self.build_context_mgr = noop_context_manager
+    # test_context_mgr is run for each iteration of the bisect.
+    self.test_context_mgr = noop_context_manager
 
   @property
   def working_dir(self):
@@ -274,26 +290,27 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
     bot_config_object = self.m.chromium_tests.create_bot_config_object(
         mastername, buildername)
     with self.m.chromium_tests.wrap_chromium_tests(bot_config_object, tests):
-      if self.m.chromium.c.TARGET_PLATFORM == 'android' and not skip_download:
-        deploy_apks = []
-        deploy_args = []
-        if self.internal_bisect:  # pragma: no cover
-          deploy_args = list(bot_config['deploy_args'])
-          deploy_apks = bot_config.get('deploy_apks')
-          if deploy_apks:
-            deploy_args.extend([
-              '--apks',
-              ','.join(str(self.m.chromium_android.apk_path(apk))
-                       for apk in deploy_apks)])
-        else:
-          if bot_config.get('webview'):
-            deploy_apks = ['SystemWebView.apk', 'SystemWebViewShell.apk']
+      with self.test_context_mgr(self.m):
+        if self.m.chromium.c.TARGET_PLATFORM == 'android' and not skip_download:
+          deploy_apks = []
+          deploy_args = []
+          if self.internal_bisect:  # pragma: no cover
+            deploy_args = list(bot_config['deploy_args'])
+            deploy_apks = bot_config.get('deploy_apks')
+            if deploy_apks:
+              deploy_args.extend([
+                '--apks',
+                ','.join(str(self.m.chromium_android.apk_path(apk))
+                         for apk in deploy_apks)])
           else:
-            deploy_apks = ['ChromePublic.apk']
-        self.deploy_apk_on_device(
-            self.full_deploy_script, deploy_apks, deploy_args)
-      test_runner()
-      return tests[0].run_results
+            if bot_config.get('webview'):
+              deploy_apks = ['SystemWebView.apk', 'SystemWebViewShell.apk']
+            else:
+              deploy_apks = ['ChromePublic.apk']
+          self.deploy_apk_on_device(
+              self.full_deploy_script, deploy_apks, deploy_args)
+        test_runner()
+        return tests[0].run_results
 
   def deploy_apk_on_device(self, deploy_script, deploy_apks, deploy_args):
     """Installs apk on the android device."""
@@ -354,14 +371,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
 
     with api.step.context(context):
       affected_files = self.m.tryserver.get_files_affected_by_patch()
-      # Skip device setup for internal bisect as it is taken care in
-      # internal recipes.
-      if (api.chromium.c.TARGET_PLATFORM == 'android' and
-          not self.internal_bisect):
-        api.chromium_android.common_tests_setup_steps(
-            perf_setup=True, remove_system_webview=True)
-        api.chromium.runhooks()
-      try:
+      with self.build_context_mgr(self.m):
         if BISECT_CONFIG_FILE in affected_files:
           api.step('***LEGACY BISECT HAS BEEN DEPRECATED***', [])
           api.step.active_result.presentation.status = api.step.FAILURE
@@ -384,16 +394,6 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
           api.step('***PERF TRYJOB***', [])
           self.m.perf_try.start_perf_try_job(
               api, affected_files, update_step, self.bot_db)
-      finally:
-        if api.chromium.c.TARGET_PLATFORM == 'android':
-          if self.internal_bisect:  # pragma: no cover
-            api.chromium_android.init_and_sync(
-                gclient_config=api.chromium_android.c.internal_dir_name,
-                use_bot_update=True)
-          else:
-            self.ensure_checkout()
-          api.chromium_android.common_tests_final_steps()
-
 
   def stat_compare(self, values_a, values_b, metric,
                    output_format='chartjson', **kwargs):

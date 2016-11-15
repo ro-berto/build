@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
+
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -70,7 +72,7 @@ BUILDERS = freeze({
                 'bucket': 'chrome-perf',
             },
             'android_webview_arm64_aosp_perf_bisect': {
-                'recipe_config': 'arm64_builder_rel_mb',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
                 'webview': True,
@@ -126,6 +128,35 @@ def RunSteps(api, mastername, buildername):
                                                              master_dict)
 
   api.chromium_android.use_devil_adb()
+
+  @contextlib.contextmanager
+  def android_bisect_build_wrapper(new_api):
+    """A context manager for use as auto_bisect's build_context_mgr.
+
+    This wraps each individual bisect test. We use new_api here to
+    disambiguate from RunSteps' api object. Otherwise calling
+    auto_bisect from within auto_bisect causes a module
+    to require itself.
+    """
+    with api.chromium_android.android_build_wrapper()(new_api):
+      try:
+        yield
+      finally:
+        api.auto_bisect.ensure_checkout()
+
+  @contextlib.contextmanager
+  def android_bisect_test_wrapper(new_api):
+    """A context manager for use as auto_bisect's test_context_mgr.
+
+    This wraps each individual bisect test. We use new_api here to disambiguate
+    from RunSteps' api object.
+    """
+    with api.chromium_android.android_test_wrapper()(new_api):
+      yield
+
+  # Make sure the bisect build and individual test runs are wrapped.
+  api.auto_bisect.build_context_mgr = android_bisect_build_wrapper
+  api.auto_bisect.test_context_mgr = android_bisect_test_wrapper
 
   api.auto_bisect.start_try_job(api, update_step=update_step,
                                         bot_db=bot_db,
@@ -646,7 +677,7 @@ results-without_patch
           }]))
 
   # simulate the scenario when tests fail because of device disconnection.
-  yield (api.test('local_basic_recipe_disconnection') +
+  yield (api.test('local_basic_recipe_disconnected_device') +
     api.properties.tryserver(
         mastername='tryserver.chromium.perf', buildername=buildername) +
     api.properties(
@@ -697,3 +728,4 @@ results-without_patch
               'parsed_values': [212, 213, 214, 215, 7],
               'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
           }]))
+
