@@ -221,6 +221,7 @@ class FilterApi(recipe_api.RecipeApi):
       if 'error' in step_result.json.output:
         step_result.presentation.step_text = ('Error: ' +
             step_result.json.output['error'])
+        step_result.presentation.status = self.m.step.FAILURE
         raise self.m.step.StepFailure(
             'Error: ' + step_result.json.output['error'])
 
