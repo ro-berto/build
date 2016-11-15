@@ -1588,6 +1588,10 @@ class AndroidInstrumentationTest(AndroidTest):
     },
     'WebViewUiTest': {
       'compile_target': 'webview_ui_test_app_test_apk',
+      # TODO(yolandyan): These should be removed once crbug/643660 is resolved
+      'additional_compile_targets': [
+        'system_webview_apk',
+      ],
     }
   }
 
