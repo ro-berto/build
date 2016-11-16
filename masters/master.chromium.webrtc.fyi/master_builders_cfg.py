@@ -12,12 +12,13 @@ import master_site_config
 ActiveMaster = master_site_config.ChromiumWebRTCFYI
 
 
-def m_remote_run(recipe, **kwargs):
+def m_remote_run_chromium_src(recipe, **kwargs):
   return remote_run_factory.RemoteRunFactory(
       active_master=ActiveMaster,
-      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      repository='https://chromium.googlesource.com/chromium/src.git',
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
+      use_gitiles=True,
       **kwargs)
 
 
@@ -71,7 +72,7 @@ def Update(c):
   for spec in specs:
     builder_dict = {
       'name': spec['name'],
-      'factory': m_remote_run('chromium'),
+      'factory': m_remote_run_chromium_src('chromium'),
       'category': spec['category'],
       'notify_on_missing': True,
     }
