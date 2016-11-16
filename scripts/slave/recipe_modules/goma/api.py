@@ -25,12 +25,12 @@ class GomaApi(recipe_api.RecipeApi):
     return '/creds/service_accounts/service-account-goma-client.json'
 
   @property
-  def cloudtail_path(self):
+  def cloudtail_path(self):  # pragma: nocover
     assert self._goma_dir
     return self.m.path.join(self._goma_dir, 'cloudtail')
 
   @property
-  def cloudtail_pid_file(self):
+  def cloudtail_pid_file(self):  # pragma: nocover
     return self.m.path['tmp_base'].join('cloudtail.pid')
 
   @property
@@ -147,12 +147,15 @@ print jobs
   def build_data_dir(self):
     return self.m.properties.get('build_data_dir')
 
-  def _start_cloudtail(self):
+  def _start_cloudtail(self):  # pragma: nocover
     """Start cloudtail to upload compiler_proxy.INFO
 
     Raises:
       InfraFailure if it fails to start cloudtail
     """
+
+    # TODO(vadimsh): crbug/642299
+    return
 
     self.m.python(
       name='start cloudtail',
@@ -166,12 +169,15 @@ print jobs
           lambda: self.m.raw_io.test_api.output('12345')),
       infra_step=True)
 
-  def _stop_cloudtail(self):
+  def _stop_cloudtail(self):  # pragma: nocover
     """Stop cloudtail started by _start_cloudtail
 
     Raises:
       InfraFailure if it fails to stop cloudtail
     """
+
+    # TODO(vadimsh): crbug/642299
+    return
 
     self.m.python(
         name='stop cloudtail',

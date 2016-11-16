@@ -188,21 +188,9 @@ def goma_setup(options, env):
     # goma started sucessfully.
     # Making cloudtail to upload the latest log.
     # TODO(yyanagisawa): install cloudtail from CIPD.
-    cloudtail_path = '/opt/infra-tools/cloudtail'
-    if chromium_utils.IsWindows():
-      cloudtail_path = 'C:\\infra-tools\\cloudtail'
-    try:
-      cloudtail_proc = subprocess.Popen(
-          [cloudtail_path, 'tail', '--log-id', 'goma_compiler_proxy', '--path',
-           goma_utils.GetLatestGomaCompilerProxyInfo()])
 
-      if cloudtail_pid_file:
-        with open(cloudtail_pid_file,'w') as f:
-          f.write('%d' % cloudtail_proc.pid)
-    except Exception as e:
-      print 'failed to invoke cloudtail: %s' % e
-      return True, None
-    return True, cloudtail_proc
+    # TODO(vadimsh): crbug/642299
+    return True, None
 
   StopGomaClientAndUploadInfo(options, env, -1)
 
