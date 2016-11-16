@@ -25,12 +25,10 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-                                'Mac Asan (swarming)',
                             ]),
   ])
 
   specs = [
-    {'name': 'Mac Asan (swarming)', 'slavebuilddir': 'mac_swarming'},
   ]
 
   c['builders'].extend([

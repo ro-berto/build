@@ -225,7 +225,7 @@ BUILDERS = freeze({
         }
       },
       'Mac Asan': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_swarming_clang',
         'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -233,6 +233,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.11',
+          'cpu': 'x86-64',
+        }
       },
       'Mac64 Release [large tests]': {
         'recipe_config': 'webrtc_baremetal',
@@ -344,7 +350,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux MSan': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_swarming_clang',
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
                                   'prebuilt_instrumented_libraries'],
         'chromium_config_kwargs': {
@@ -353,6 +359,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'x86-64',
+        }
       },
       'Linux Tsan v2': {
         'recipe_config': 'webrtc_swarming_clang',
@@ -585,43 +597,10 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'Mac Asan (swarming)': {
-        'recipe_config': 'webrtc_swarming_clang',
-        'chromium_apply_config': ['asan'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Mac-10.11',
-          'cpu': 'x86-64',
-        }
-      },
       'Linux Memcheck (swarming)': {
         'recipe_config': 'webrtc_swarming',
         'chromium_apply_config': ['memcheck'],
         'gclient_apply_config': ['webrtc_valgrind'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'x86-64',
-        }
-      },
-      'Linux MSan (swarming)': {
-        'recipe_config': 'webrtc_swarming_clang',
-        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
-                                  'prebuilt_instrumented_libraries'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -988,21 +967,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'win_swarming': {
-        'recipe_config': 'webrtc_swarming',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86',
-        }
-      },
       'win_x64_win8': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1070,7 +1034,7 @@ BUILDERS = freeze({
         }
       },
       'mac_asan': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_swarming_clang',
         'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1078,6 +1042,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.11',
+          'cpu': 'x86-64',
+        }
       },
       'mac_baremetal': {
         'recipe_config': 'webrtc_baremetal',
@@ -1087,21 +1057,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-      },
-      'mac_swarming': {
-        'recipe_config': 'webrtc_swarming',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Mac-10.11',
-          'cpu': 'x86',
-        }
       },
       'linux_compile_dbg': {
         'recipe_config': 'webrtc',
@@ -1219,7 +1174,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_msan': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_swarming_clang',
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
                                   'prebuilt_instrumented_libraries'],
         'chromium_config_kwargs': {
@@ -1228,6 +1183,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'x86-64',
+        }
       },
       'linux_tsan2': {
         'recipe_config': 'webrtc_swarming_clang',
@@ -1285,17 +1246,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-      },
-      'linux_swarming': {
-        'recipe_config': 'webrtc_swarming',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
       },
       'android_compile_dbg': {
         'recipe_config': 'webrtc_android',
