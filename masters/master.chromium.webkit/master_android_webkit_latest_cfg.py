@@ -19,12 +19,19 @@ B = helper.Builder
 F = helper.Factory
 T = helper.Triggerable
 
-def m_remote_run(recipe, **kwargs):
+revision_getter = master_utils.ConditionalProperty(
+    lambda build: build.getProperty('revision'),
+    WithProperties('%(revision)s'),
+    'master')
+
+def m_remote_run_chromium_src(recipe, **kwargs):
+  kwargs.setdefault('revision', revision_getter)
   return remote_run_factory.RemoteRunFactory(
       active_master=ActiveMaster,
-      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      repository='https://chromium.googlesource.com/chromium/src.git',
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
+      use_gitiles=True,
       **kwargs)
 
 
@@ -43,12 +50,12 @@ T('android_rel_trigger')
 # Android Rel Builder
 #
 B('Android Builder', 'f_android_rel', scheduler='global_scheduler')
-F('f_android_rel', m_remote_run(
+F('f_android_rel', m_remote_run_chromium_src(
     'chromium', triggers=['android_rel_trigger']))
 
 B('WebKit Android (Nexus4)', 'f_webkit_android_tests', None,
   'android_rel_trigger')
-F('f_webkit_android_tests', m_remote_run('chromium'))
+F('f_webkit_android_tests', m_remote_run_chromium_src('chromium'))
 
 def Update(_config, _active_master, c):
   return helper.Update(c)

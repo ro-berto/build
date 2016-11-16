@@ -35,12 +35,19 @@ B = helper.Builder
 F = helper.Factory
 T = helper.Triggerable
 
-def m_remote_run(recipe, **kwargs):
+revision_getter = master_utils.ConditionalProperty(
+    lambda build: build.getProperty('revision'),
+    WithProperties('%(revision)s'),
+    'master')
+
+def m_remote_run_chromium_src(recipe, **kwargs):
+  kwargs.setdefault('revision', revision_getter)
   return remote_run_factory.RemoteRunFactory(
       active_master=ActiveMaster,
-      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      repository='https://chromium.googlesource.com/chromium/src.git',
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
+      use_gitiles=True,
       **kwargs)
 
 defaults['category'] = 'layout'
@@ -60,7 +67,7 @@ T('s5_webkit_rel_trigger')
 B('WebKit Mac Builder', 'f_webkit_mac_rel',
   auto_reboot=False, scheduler='global_scheduler',
   builddir='webkit-mac-latest-rel')
-F('f_webkit_mac_rel', m_remote_run(
+F('f_webkit_mac_rel', m_remote_run_chromium_src(
     'chromium', triggers=['s5_webkit_rel_trigger']))
 
 #
@@ -69,19 +76,19 @@ F('f_webkit_mac_rel', m_remote_run(
 
 B('WebKit Mac10.9', 'f_webkit_rel_tests_109',
   scheduler='s5_webkit_rel_trigger')
-F('f_webkit_rel_tests_109', m_remote_run('chromium'))
+F('f_webkit_rel_tests_109', m_remote_run_chromium_src('chromium'))
 
 B('WebKit Mac10.10', 'f_webkit_rel_tests_1010',
   scheduler='s5_webkit_rel_trigger')
-F('f_webkit_rel_tests_1010', m_remote_run('chromium'))
+F('f_webkit_rel_tests_1010', m_remote_run_chromium_src('chromium'))
 
 B('WebKit Mac10.11', 'f_webkit_rel_tests_1011',
   scheduler='s5_webkit_rel_trigger')
-F('f_webkit_rel_tests_1011', m_remote_run('chromium'))
+F('f_webkit_rel_tests_1011', m_remote_run_chromium_src('chromium'))
 
 B('WebKit Mac10.11 (retina)', 'f_webkit_rel_tests_1011_retina',
   scheduler='s5_webkit_rel_trigger')
-F('f_webkit_rel_tests_1011_retina', m_remote_run('chromium'))
+F('f_webkit_rel_tests_1011_retina', m_remote_run_chromium_src('chromium'))
 
 
 ################################################################################
@@ -102,7 +109,7 @@ T('s5_webkit_dbg_trigger')
 #
 B('WebKit Mac Builder (dbg)', 'f_webkit_mac_dbg', auto_reboot=False,
   scheduler='global_scheduler', builddir='webkit-mac-latest-dbg')
-F('f_webkit_mac_dbg', m_remote_run(
+F('f_webkit_mac_dbg', m_remote_run_chromium_src(
     'chromium', triggers=['s5_webkit_dbg_trigger']))
 
 #
@@ -111,7 +118,7 @@ F('f_webkit_mac_dbg', m_remote_run(
 
 B('WebKit Mac10.11 (dbg)', 'f_webkit_dbg_tests',
     scheduler='s5_webkit_dbg_trigger')
-F('f_webkit_dbg_tests', m_remote_run('chromium'))
+F('f_webkit_dbg_tests', m_remote_run_chromium_src('chromium'))
 
 
 ################################################################################
