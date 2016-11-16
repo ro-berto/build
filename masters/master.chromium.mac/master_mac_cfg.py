@@ -13,20 +13,12 @@ import master_site_config
 ActiveMaster = master_site_config.ChromiumMac
 
 
-revision_getter = master_utils.ConditionalProperty(
-    lambda build: build.getProperty('revision'),
-    WithProperties('%(revision)s'),
-    'master')
-
-
-def m_remote_run_chromium_src(recipe, **kwargs):
-  kwargs.setdefault('revision', revision_getter)
+def m_remote_run(recipe, **kwargs):
   return remote_run_factory.RemoteRunFactory(
       active_master=ActiveMaster,
-      repository='https://chromium.googlesource.com/chromium/src.git',
+      repository='https://chromium.googlesource.com/chromium/tools/build.git',
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
-      use_gitiles=True,
       **kwargs)
 
 
@@ -52,7 +44,7 @@ def Update(config, active_master, c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_remote_run_chromium_src('chromium'),
+        'factory': m_remote_run('chromium'),
         'notify_on_missing': True,
         'category': '3mac',
       } for spec in specs

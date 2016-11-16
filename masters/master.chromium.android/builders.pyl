@@ -9,7 +9,7 @@
   "default_remote_run_properties": {
     "path_config": "kitchen",
   },
-  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/src.git",
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
 
   "builders": {
     "Android Cronet Builder": {
@@ -99,8 +99,6 @@
     },
     "Android WebView CTS L-MR1 (dbg)": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["webview_cts"],
@@ -108,8 +106,6 @@
     },
     "Android Webview L (dbg)": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["webview_l"],
@@ -117,8 +113,6 @@
     },
     "Android Webview M (dbg)": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["webview_m"],
@@ -126,8 +120,6 @@
     },
     "Android MIPS Builder (dbg)": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["mips_builder"],
@@ -136,8 +128,6 @@
     },
     "Android x64 Builder (dbg)": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
@@ -146,8 +136,6 @@
     },
     "Android x86 Builder (dbg)": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
@@ -156,8 +144,6 @@
     },
     "Android arm Builder (dbg)": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["arm_builder"],
@@ -166,8 +152,6 @@
     },
     "Android arm64 Builder (dbg)": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
@@ -176,8 +160,6 @@
     },
     "Android Swarm Builder": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
@@ -185,8 +167,6 @@
     },
     "Android N5X Swarm Builder": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": "android_commits",
       "slave_pools": ["main_n5x_builder"],
@@ -195,8 +175,6 @@
     },
     "KitKat Tablet Tester": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["kit_kat_tablet"],
@@ -205,8 +183,6 @@
     },
     "Lollipop Phone Tester": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["lollipop_phone"],
@@ -215,8 +191,6 @@
     },
     "Lollipop Tablet Tester": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["lollipop_tablet"],
@@ -225,8 +199,6 @@
     },
     "Marshmallow 64 bit Tester": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["marshmallow_64"],
@@ -235,8 +207,6 @@
     },
     "Marshmallow Tablet Tester": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["marshmallow_tablet"],
