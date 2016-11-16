@@ -39,70 +39,12 @@ class PageHeapError(Exception):
 _gflags_exe = None
 
 
-def SubversionExe():
-  # TODO(pamg): move this into platform_utils to support Mac and Linux.
-  if chromium_utils.IsWindows():
-    return 'svn.bat'  # Find it in the user's path.
-  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-    return 'svn'  # Find it in the user's path.
-  else:
-    raise NotImplementedError(
-        'Platform "%s" is not currently supported.' % sys.platform)
-
-
 def GitExe():
   return 'git.bat' if chromium_utils.IsWindows() else 'git'
 
 
-def SubversionCat(wc_dir):
-  """Output the content of specified files or URLs in SVN.
-  """
-  try:
-    return chromium_utils.GetCommandOutput([SubversionExe(), 'cat',
-                                            wc_dir])
-  except chromium_utils.ExternalError:
-    return None
-
-
 class NotGitWorkingCopy(Exception): pass
-class NotSVNWorkingCopy(Exception): pass
 class NotAnyWorkingCopy(Exception): pass
-class InvalidSVNRevision(Exception): pass
-
-
-def ScrapeSVNInfoRevision(wc_dir, regexp):
-  """Runs 'svn info' on a working copy and applies the supplied regex and
-  returns the matched group as an int.
-  regexp can be either a compiled regex or a string regex.
-  throws NotSVNWorkingCopy if wc_dir is not in a working copy.
-  throws InvalidSVNRevision if matched group is not alphanumeric.
-  """
-  if isinstance(regexp, (str, unicode)):
-    regexp = re.compile(regexp)
-  retval, svn_info = chromium_utils.GetStatusOutput([SubversionExe(), 'info',
-                                                    wc_dir])
-  if retval or 'is not a working copy' in svn_info:
-    raise NotSVNWorkingCopy(wc_dir)
-  match = regexp.search(svn_info)
-  if not match or not match.groups():
-    raise InvalidSVNRevision(
-        '%s did not match in svn info %s.' % (regexp.pattern, svn_info))
-  text = match.group(1)
-  if text.isalnum():
-    return int(text)
-  else:
-    raise InvalidSVNRevision(text)
-
-
-def SubversionRevision(wc_dir):
-  """Finds the last svn revision of a working copy and returns it as an int."""
-  return ScrapeSVNInfoRevision(wc_dir, r'(?s).*Revision: (\d+).*')
-
-
-def SubversionLastChangedRevision(wc_dir_or_file):
-  """Finds the last changed svn revision of a fs path returns it as an int."""
-  return ScrapeSVNInfoRevision(wc_dir_or_file,
-                               r'(?s).*Last Changed Rev: (\d+).*')
 
 
 def GitHash(wc_dir):
@@ -115,37 +57,13 @@ def GitHash(wc_dir):
 
 
 def GetHashOrRevision(wc_dir):
-  """Gets the svn revision or git hash of wc_dir as a string. Throws
-  NotAnyWorkingCopy if neither are appropriate."""
-  try:
-    return str(SubversionRevision(wc_dir))
-  except NotSVNWorkingCopy:
-    pass
+  """Gets the git hash of wc_dir as a string. Throws NotAnyWorkingCopy if the
+  wc_dir isn't a git checkout."""
   try:
     return GitHash(wc_dir)
   except NotGitWorkingCopy:
     pass
   raise NotAnyWorkingCopy(wc_dir)
-
-
-def GitOrSubversion(wc_dir):
-  """Returns the VCS for the given directory.
-
-  Returns:
-    'svn' if the directory is a valid svn repo
-    'git' if the directory is a valid git repo root
-    None otherwise
-  """
-  ret, out = chromium_utils.GetStatusOutput([SubversionExe(), 'info', wc_dir])
-  if not ret and 'is not a working copy' not in out:
-    return 'svn'
-
-  ret, out = chromium_utils.GetStatusOutput(
-      [GitExe(), 'rev-parse', '--is-inside-work-tree'], cwd=wc_dir)
-  if not ret and 'fatal: Not a git repository' not in out:
-    return 'git'
-
-  return None
 
 
 def GetBuildRevisions(src_dir, webkit_dir=None, revision_dir=None):
