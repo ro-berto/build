@@ -9,6 +9,7 @@ DEPS = [
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/git',
   'file',
   'goma',
   'gsutil',
@@ -41,6 +42,8 @@ ADDITIONAL_REPOS = freeze({
   'tools/perf': '%s/chromium/tools/perf' % CHROMIUM_GIT_URL,
 })
 
+GENERATED_REPO = '%s/chromium/src/out' % CHROMIUM_GIT_URL
+
 LINUX_GN_ARGS = [
   'is_clang=true',
   'is_component_build=true',
@@ -60,6 +63,7 @@ SPEC = freeze({
   # - environment: The environment of the bot (prod / staging).
   # - package_filename: The prefix of the name of the source archive.
   # - platform: The platform for which the code is compiled.
+  # - sync_generated_files: Whether to sync generated files into a git repo.
   'builders': {
     'Chromium Linux Codesearch': {
       'compile_targets': [
@@ -68,6 +72,7 @@ SPEC = freeze({
       'environment': 'prod',
       'package_filename': 'chromium-src',
       'platform': 'linux',
+      'sync_generated_files': True,
     },
     'ChromiumOS Codesearch': {
       'compile_targets': [
@@ -224,19 +229,15 @@ def RunSteps(api):
       dest='%s/%s' % (environment, index_pack_name_with_revision)
   )
 
-  # Package the source code and generated files.
+  # Package the source code.
   tarball_name = 'chromium_src_%s.tar.bz2' % platform
   tarball_name_with_revision = 'chromium_src_%s_%s.tar.bz2' % (
-      platform, commit_position)
-  generated_tarball_name = 'chromium_generated_%s.tar.bz2' % platform
-  generated_tarball_name_with_revision = 'chromium_generated_%s_%s.tar.bz2' % (
-      platform, commit_position)
+      platform,commit_position)
   api.python('archive source',
              api.path['build'].join('scripts','slave',
                                     'archive_source_codesearch.py'),
-             ['src', 'build', 'infra', 'tools',
-              '-f', tarball_name,
-              '-g', generated_tarball_name])
+             ['src', 'build', 'infra', 'tools', '-f',
+              tarball_name])
 
   # Upload the source code.
   api.gsutil.upload(
@@ -246,13 +247,25 @@ def RunSteps(api):
       dest='%s/%s' % (environment, tarball_name_with_revision)
   )
 
-  # Upload the generated files.
-  api.gsutil.upload(
-      name='upload generated files tarball',
-      source=api.path['slave_build'].join(generated_tarball_name),
-      bucket=BUCKET_NAME,
-      dest='%s/%s' % (environment, generated_tarball_name_with_revision)
-  )
+  if bot_config.get('sync_generated_files', False):
+    # Check out the generated files repo.
+    generated_repo_dir = api.path['slave_build'].join('generated')
+    api.git.checkout(
+        GENERATED_REPO, ref='master', dir_path=generated_repo_dir,
+        submodules=False)
+
+    # Sync the generated files into this checkout.
+    api.python('sync generated files',
+               api.path['build'].join('scripts','slave',
+                                      'sync_generated_files_codesearch.py'),
+               ['--message',
+                'Generated files from "%s" build %s, revision %s' % (
+                    api.chromium.build_properties.get('buildername'),
+                    api.chromium.build_properties.get('buildnumber'),
+                    api.chromium.build_properties.get('got_revision')),
+                'src/out',
+                generated_repo_dir])
+
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
