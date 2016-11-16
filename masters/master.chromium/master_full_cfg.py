@@ -21,13 +21,19 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def m_remote_run(recipe, **kwargs):
+revision_getter = master_utils.ConditionalProperty(
+    lambda build: build.getProperty('revision'),
+    WithProperties('%(revision)s'),
+    'master')
+
+def m_remote_run_chromium_src(recipe, **kwargs):
+  kwargs.setdefault('revision', revision_getter)
   return remote_run_factory.RemoteRunFactory(
       active_master=ActiveMaster,
-      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      repository='https://chromium.googlesource.com/chromium/src.git',
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
-      use_gitiles=False,
+      use_gitiles=True,
       **kwargs)
 
 defaults['category'] = '1clobber'
@@ -41,11 +47,11 @@ S('chromium', branch='master', treeStableTimer=60)
 
 B('Win', 'win_clobber', 'compile|windows', 'chromium',
   notify_on_missing=True)
-F('win_clobber', m_remote_run('chromium'))
+F('win_clobber', m_remote_run_chromium_src('chromium'))
 
 B('Win x64', 'win_x64_clobber', 'compile|windows', 'chromium',
   notify_on_missing=True)
-F('win_x64_clobber', m_remote_run('chromium'))
+F('win_x64_clobber', m_remote_run_chromium_src('chromium'))
 
 ################################################################################
 ## Mac
@@ -53,7 +59,7 @@ F('win_x64_clobber', m_remote_run('chromium'))
 
 B('Mac', 'mac_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
-F('mac_clobber', m_remote_run('chromium'))
+F('mac_clobber', m_remote_run_chromium_src('chromium'))
 
 ################################################################################
 ## Linux
@@ -61,7 +67,7 @@ F('mac_clobber', m_remote_run('chromium'))
 
 B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
-F('linux64_clobber', m_remote_run('chromium'))
+F('linux64_clobber', m_remote_run_chromium_src('chromium'))
 
 ################################################################################
 ## Android
@@ -69,7 +75,7 @@ F('linux64_clobber', m_remote_run('chromium'))
 
 B('Android', 'f_android_clobber', None, 'chromium',
   notify_on_missing=True)
-F('f_android_clobber', m_remote_run('chromium'))
+F('f_android_clobber', m_remote_run_chromium_src('chromium'))
 
 
 def Update(_config, active_master, c):
