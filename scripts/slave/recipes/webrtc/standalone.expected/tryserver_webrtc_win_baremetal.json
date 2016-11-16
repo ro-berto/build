@@ -195,7 +195,6 @@
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "--isolate-map-file=[BUILDER_CACHE]\\win_baremetal\\src\\webrtc\\build\\gn_isolate_map.pyl",
-      "--gyp-script=[BUILDER_CACHE]\\win_baremetal\\src\\webrtc\\build\\gyp_webrtc.py",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]\\win_baremetal\\src",

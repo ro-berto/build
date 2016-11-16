@@ -38,8 +38,6 @@ def Update(c):
           'Android32 Builder MIPS (dbg)',
           'Android32 Clang (dbg)',
           'Android64 Builder x64 (dbg)',
-          'Android32 GYP',
-          'Android32 GYP (dbg)',
           'Android32 (more configs)',
       ]),
   ])
@@ -56,8 +54,6 @@ def Update(c):
     {'name': 'Android32 Builder MIPS (dbg)', 'slavebuilddir': 'android_mips'},
     {'name': 'Android32 Clang (dbg)', 'slavebuilddir': 'android_clang'},
     {'name': 'Android64 Builder x64 (dbg)', 'slavebuilddir': 'android_x64'},
-    {'name': 'Android32 GYP', 'slavebuilddir': 'android_gyp'},
-    {'name': 'Android32 GYP (dbg)', 'slavebuilddir': 'android_gyp'},
     {
       'name': 'Android32 (more configs)',
       'recipe': 'webrtc/more_configs',

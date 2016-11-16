@@ -208,12 +208,9 @@ class WebRTCApi(recipe_api.RecipeApi):
                                                   'mb_config.pyl'),
       gn_isolate_map_path=self.m.path['checkout'].join('webrtc', 'build',
                                                        'gn_isolate_map.pyl'),
-      gyp_script=self.m.path['checkout'].join('webrtc', 'build',
-                                              'gyp_webrtc.py'),
       isolated_targets=self._isolated_targets)
-    # GYP bots no longer compiles, we only want to ensure GYP executes.
-    if 'gyp' not in self.buildername.lower():
-      self.m.chromium.compile(use_goma_module=True)
+
+    self.m.chromium.compile(use_goma_module=True)
 
     if self.c.use_isolate:
       self.m.isolate.remove_build_metadata()

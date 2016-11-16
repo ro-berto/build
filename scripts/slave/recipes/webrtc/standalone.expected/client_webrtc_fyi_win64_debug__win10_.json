@@ -189,7 +189,6 @@
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "--isolate-map-file=[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\webrtc\\build\\gn_isolate_map.pyl",
-      "--gyp-script=[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\webrtc\\build\\gyp_webrtc.py",
       "//out/Debug_x64"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src",

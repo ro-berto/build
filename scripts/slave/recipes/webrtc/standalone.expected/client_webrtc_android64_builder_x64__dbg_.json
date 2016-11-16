@@ -202,7 +202,6 @@
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--isolate-map-file=[BUILDER_CACHE]/Android64_Builder_x64__dbg_/src/webrtc/build/gn_isolate_map.pyl",
-      "--gyp-script=[BUILDER_CACHE]/Android64_Builder_x64__dbg_/src/webrtc/build/gyp_webrtc.py",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/Android64_Builder_x64__dbg_/src",

@@ -114,13 +114,9 @@
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 1\": \"fake value 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake gyp define 2\": \"fake value 2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"use_goma\": \"1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mb_type\": \"gyp\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"mb_type\": \"gn\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -143,9 +139,44 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\", \n    \"use_goma\": \"1\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": \"gyp\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.0\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"id\": \"1\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.0\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"id\": \"1\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--version",
+      "fake xcode version"
+    ],
+    "name": "find xcode",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_debug/src",
+    "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "component=static_library OS=ios",
+      "GYP_GENERATORS": "ninja",
+      "LANDMINES_VERBOSE": "1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br />GYP_DEFINES:<br />component=static_library<br />OS=ios<br />GYP_CHROMIUM_NO_ACTION=1@@@"
+    ]
   },
   {
     "cmd": [],
@@ -207,41 +238,6 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
-      "--json-file",
-      "/path/to/tmp/json",
-      "--version",
-      "fake xcode version"
-    ],
-    "name": "find xcode",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[BUILDER_CACHE]/ios_debug/src",
-    "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "use_goma=1 fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
-      "GYP_GENERATORS": "ninja",
-      "LANDMINES_VERBOSE": "1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "name": "gclient runhooks",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br />GYP_DEFINES:<br />use_goma=1<br />fake gyp define 1=fake value 1<br />fake gyp define 2=fake value 2<br />component=static_library<br />OS=ios<br />GYP_CHROMIUM_NO_ACTION=1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[BUILDER_CACHE]/ios_debug/src/tools/mb/mb.py",
@@ -254,7 +250,6 @@
       "[BUILDER_CACHE]/ios_debug/src/webrtc/build/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--gyp-script=[BUILDER_CACHE]/ios_debug/src/webrtc/build/gyp_webrtc.py",
       "//out/Debug-iphonesimulator"
     ],
     "cwd": "[BUILDER_CACHE]/ios_debug/src",
@@ -264,173 +259,13 @@
     "name": "generate_build_files"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[BUILDER_CACHE]/ios_debug/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport multiprocessing\nimport sys\n\njob_limit = 200\nif sys.platform.startswith('linux'):\n  # Use 80 for linux not to load goma backend.\n  job_limit = 80\n\ntry:\n  jobs = min(job_limit, multiprocessing.cpu_count() * 10)\nexcept NotImplementedError:\n  jobs = 50\n\nprint jobs\n"
-    ],
-    "name": "calculate the number of recommended jobs",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import multiprocessing@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@job_limit = 200@@@",
-      "@@@STEP_LOG_LINE@python.inline@if sys.platform.startswith('linux'):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  # Use 80 for linux not to load goma backend.@@@",
-      "@@@STEP_LOG_LINE@python.inline@  job_limit = 80@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@try:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  jobs = min(job_limit, multiprocessing.cpu_count() * 10)@@@",
-      "@@@STEP_LOG_LINE@python.inline@except NotImplementedError:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  jobs = 50@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@print jobs@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "preprocess_for_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
-      "restart"
-    ],
-    "env": {
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]",
-      "GOMA_DEPS_CACHE_FILE": "ios_debug.gomadeps",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "preprocess_for_goma.start_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
+      "ninja",
       "-C",
-      "[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator",
-      "-j",
-      "50",
-      "All"
+      "[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator"
     ],
     "cwd": "[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "compile"
-  },
-  {
-    "cmd": [],
-    "name": "postprocess_for_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
-      "jsonstatus",
-      "[CACHE]/cipd/goma/jsonstatus"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.goma_jsonstatus",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
-      "stat"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.goma_stat",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
-      "stop"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.stop_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
-      "--upload-compiler-proxy-info",
-      "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
-      "--ninja-log-outdir",
-      "[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator",
-      "--ninja-log-compiler",
-      "goma-clang",
-      "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator', '-j', 50, 'All']",
-      "--ninja-log-exit-status",
-      "0",
-      "--buildbot-buildername",
-      "ios debug",
-      "--buildbot-mastername",
-      "chromium.fake",
-      "--buildbot-slavename",
-      "fake-vm"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.upload_log",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
   },
   {
     "cmd": [

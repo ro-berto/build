@@ -32,8 +32,6 @@ def Update(c):
           'Mac64 Debug',
           'Mac64 Release',
           'Mac64 Release [large tests]',
-          'Mac64 Debug (GYP)',
-          'Mac64 Release (GYP)',
           'Mac Asan',
           'iOS32 Debug',
           'iOS32 Release',
@@ -41,8 +39,6 @@ def Update(c):
           'iOS64 Release',
           'iOS32 Simulator Debug',
           'iOS64 Simulator Debug',
-          'iOS64 Debug (GYP)',
-          'iOS64 Release (GYP)',
           'iOS API Framework Builder',
       ]),
   ])
@@ -57,8 +53,6 @@ def Update(c):
       'category': 'compile|baremetal',
       'slavebuilddir': 'mac_baremetal',
     },
-    {'name': 'Mac64 Debug (GYP)', 'slavebuilddir': 'mac64_gyp'},
-    {'name': 'Mac64 Release (GYP)', 'slavebuilddir': 'mac64_gyp'},
     {'name': 'Mac Asan', 'slavebuilddir': 'mac_asan'},
     {
       'name': 'iOS32 Debug',
@@ -88,16 +82,6 @@ def Update(c):
     {
       'name': 'iOS64 Simulator Debug',
       'slavebuilddir': 'mac64',
-      'recipe': 'webrtc/ios',
-    },
-    {
-      'name': 'iOS64 Debug (GYP)',
-      'slavebuilddir': 'mac64_gyp',
-      'recipe': 'webrtc/ios',
-    },
-    {
-      'name': 'iOS64 Release (GYP)',
-      'slavebuilddir': 'mac64_gyp',
       'recipe': 'webrtc/ios',
     },
     {

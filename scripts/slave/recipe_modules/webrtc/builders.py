@@ -136,24 +136,6 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
-      'Win64 Debug (GYP)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
-      },
-      'Win64 Release (GYP)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
-      },
       'Win32 Debug (Clang)': {
         'recipe_config': 'webrtc_clang',
         'chromium_config_kwargs': {
@@ -242,24 +224,6 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
-      'Mac64 Debug (GYP)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'Mac64 Release (GYP)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
       'Mac Asan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan'],
@@ -341,24 +305,6 @@ BUILDERS = freeze({
           'os': 'Linux',
           'cpu': 'x86-64',
         }
-      },
-      'Linux64 Debug (GYP)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux64 Release (GYP)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
       },
       'Linux32 ARM': {
         'recipe_config': 'webrtc',
@@ -516,28 +462,6 @@ BUILDERS = freeze({
         'recipe_config': 'webrtc_android_clang',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android32 GYP (dbg)': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android32 GYP': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
@@ -1009,24 +933,6 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
-      'win_x64_gyp_dbg': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
-      },
-      'win_x64_gyp_rel': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
-      },
       'win_clang_dbg': {
         'recipe_config': 'webrtc_clang',
         'chromium_config_kwargs': {
@@ -1163,24 +1069,6 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
-      'mac_gyp_dbg': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'mac_gyp_rel': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
       'mac_asan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan'],
@@ -1292,24 +1180,6 @@ BUILDERS = freeze({
           'os': 'Linux',
           'cpu': 'x86',
         }
-      },
-      'linux_gyp_dbg': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'linux_gyp_rel': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
       },
       'linux_arm': {
         'recipe_config': 'webrtc',
@@ -1579,28 +1449,6 @@ BUILDERS = freeze({
           'device_os': 'M',
           'os': 'Android',
         }
-      },
-      'android_gyp_dbg': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'android_gyp_rel': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
       },
     },
   },

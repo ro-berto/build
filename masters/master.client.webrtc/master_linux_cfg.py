@@ -42,8 +42,6 @@ def Update(c):
           'Linux UBSan vptr',
           'Linux (more configs)',
           'Linux64 Release [large tests]',
-          'Linux64 Debug (GYP)',
-          'Linux64 Release (GYP)',
           'Linux64 Release (Libfuzzer)',
       ]),
   ])
@@ -72,8 +70,6 @@ def Update(c):
       'category': 'compile|baremetal',
       'slavebuilddir': 'linux_baremetal',
     },
-    {'name': 'Linux64 Debug (GYP)', 'slavebuilddir': 'linux64_gyp'},
-    {'name': 'Linux64 Release (GYP)', 'slavebuilddir': 'linux64_gyp'},
     {
       'name': 'Linux64 Release (Libfuzzer)',
       'recipe': 'webrtc/libfuzzer',

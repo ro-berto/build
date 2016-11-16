@@ -33,20 +33,8 @@ def RunSteps(api):
       'build',
       'mb_config.pyl',
   )
-  gyp_script = api.path['checkout'].join(
-      'webrtc',
-      'build',
-      'gyp_webrtc.py',
-  )
-  if 'gyp' not in buildername.lower():
-    api.ios.build(mb_config_path=mb_config_path, gyp_script=gyp_script)
-    api.ios.test()
-  else:
-    mastername = api.properties['mastername']
-    buildername = api.properties['buildername']
-    api.chromium.runhooks()
-    api.chromium.run_mb(mastername, buildername, mb_config_path=mb_config_path,
-                        gyp_script=gyp_script)
+  api.ios.build(mb_config_path=mb_config_path)
+  api.ios.test()
 
 def GenTests(api):
   yield (
@@ -61,12 +49,8 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-        'use_goma': '1',
-      },
-      'mb_type': 'gyp',
+      'GYP_DEFINES': {},
+      'mb_type': 'gn',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -85,56 +69,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('gn_build')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios',
-      buildnumber='0',
-      mastername='chromium.fake',
-      slavename='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-      },
-      "gn_args": [
-        "is_debug=true"
-      ],
-      "mb_type": "gn",
-      'configuration': 'Debug',
-      'sdk': 'iphoneos8.0',
-      'tests': [
-      ],
-    })
-  )
-
-  yield (
-    api.test('gyp_build')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios gyp',
-      buildnumber='0',
-      mastername='chromium.fake',
-      slavename='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-      },
-      "gn_args": [
-        "is_debug=true"
-      ],
-      "mb_type": "gn",
-      'configuration': 'Debug',
-      'sdk': 'iphoneos8.0',
-      'tests': [
-      ],
-    })
-  )
-
-  yield (
     api.test('no_tests')
     + api.platform('mac', 64)
     + api.properties(
@@ -146,12 +80,8 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-        'use_goma': '1',
-      },
-      'mb_type': 'gyp',
+      'GYP_DEFINES': {},
+      'mb_type': 'gn',
       'configuration': 'Release',
       'sdk': 'iphoneos8.0',
       'tests': [
@@ -171,13 +101,9 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-        'use_goma': '1',
-      },
+      'GYP_DEFINES': {},
       'use_analyze': 'false',
-      'mb_type': 'gyp',
+      'mb_type': 'gn',
       'configuration': 'Release',
       'sdk': 'iphoneos8.0',
       'tests': [
@@ -197,11 +123,8 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
-      'mb_type': 'gyp',
+      'GYP_DEFINES': {},
+      'mb_type': 'gn',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
@@ -235,11 +158,8 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {
-        'fake gyp define 1': 'fake value 1',
-        'fake gyp define 2': 'fake value 2',
-      },
-      'mb_type': 'gyp',
+      'GYP_DEFINES': {},
+      'mb_type': 'gn',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
       'tests': [
