@@ -257,7 +257,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86',
         }
       },
@@ -272,7 +272,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86',
         }
       },
@@ -287,7 +287,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -302,7 +302,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -328,7 +328,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -366,7 +366,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -382,7 +382,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -398,7 +398,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -614,7 +614,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -631,7 +631,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -1132,7 +1132,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -1147,7 +1147,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -1162,7 +1162,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86',
         }
       },
@@ -1177,7 +1177,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86',
         }
       },
@@ -1203,7 +1203,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -1241,7 +1241,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -1257,7 +1257,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
@@ -1273,7 +1273,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Linux',
+          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
