@@ -724,7 +724,7 @@ class AndroidApi(recipe_api.RecipeApi):
     args = [
         'monkey',
         '-v',
-        '--package=%s' % self.c.channel,
+        '--browser=%s' % self.c.channel,
         '--event-count=50000',
         '--blacklist-file', self.blacklist_file,
     ]

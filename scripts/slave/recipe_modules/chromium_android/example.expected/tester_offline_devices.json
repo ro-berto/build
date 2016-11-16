@@ -947,7 +947,7 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "monkey",
       "-v",
-      "--package=chrome",
+      "--browser=chrome",
       "--event-count=50000",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
