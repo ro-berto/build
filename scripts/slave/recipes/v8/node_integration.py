@@ -33,6 +33,9 @@ BUILDERS = freeze({
   },
 })
 
+ARCHIVE_LINK = ('https://storage.googleapis.com'
+                '/chromium-v8/node-linux-rel/%s')
+
 
 def _build_and_test(api, suffix=''):
   api.step(
@@ -85,6 +88,10 @@ def _build_and_upload(api):
     archive_name,
     args=['-a', 'public-read'],
   )
+
+  api.step('Archive link', cmd=None)
+  api.step.active_result.presentation.links['download'] = (
+      ARCHIVE_LINK % archive_name)
 
   # Clean up.
   api.file.remove('cleanup archive', zip_file)
