@@ -252,12 +252,35 @@ class FilterDomain(util.ComparableMixin):
       return None
     return result
 
+# Based on django.utils.html.escapejs from the Django project
+def EscapeJs(t):
+  """Replaces javascript special characters in the supplied string.
+
+  Characters are replaced with a textual representation of their integer
+  ordinal."""
+  js_escapes = {
+    '\\': '\\u005C',
+    '\'': '\\u0027',
+    '"': '\\u0022',
+    '>': '\\u003E',
+    '<': '\\u003C',
+    '&': '\\u0026',
+    '=': '\\u003D',
+    '-': '\\u002D',
+    ';': '\\u003B',
+    u'\u2028': '\\u2028',
+    u'\u2029': '\\u2029',
+  }
+  for k, v in js_escapes.items():
+    t = t.replace(k, v)
+  return t
 
 def CreateWebStatus(port, templates=None, tagComparator=None,
                     customEndpoints=None, console_repo_filter=None,
                     console_builder_filter=None, web_template_globals=None,
                     **kwargs):
   webstatus = WebStatus(port, **kwargs)
+  webstatus.templates.filters.update({"escapejs": EscapeJs})
   if templates:
     # Manipulate the search path for jinja templates
     # pylint: disable=F0401
