@@ -46,7 +46,7 @@ def code_search(test, cs_base_url):
 def status_class(status):
   status = status.lower()
   if status not in ('success', 'skipped'):
-    return 'failure'
+    return 'failure %s' % status
   return status
 
 def create_test_row_data(results, cs_base_url):
