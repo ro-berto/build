@@ -260,8 +260,8 @@ def RunSteps(api):
                                       'sync_generated_files_codesearch.py'),
                ['--message',
                 'Generated files from "%s" build %s, revision %s' % (
-                    api.chromium.build_properties.get('buildername'),
-                    api.chromium.build_properties.get('buildnumber'),
+                    api.properties.get('buildername'),
+                    api.properties.get('buildnumber'),
                     api.chromium.build_properties.get('got_revision')),
                 'src/out',
                 generated_repo_dir])

@@ -643,7 +643,7 @@
       "-u",
       "[BUILD]/scripts/slave/sync_generated_files_codesearch.py",
       "--message",
-      "Generated files from \"None\" build None, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "Generated files from \"Chromium Linux Codesearch\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "src/out",
       "[SLAVE_BUILD]/generated"
     ],

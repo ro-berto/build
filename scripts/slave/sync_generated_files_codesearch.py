@@ -51,7 +51,7 @@ def main():
     return 0
 
   check_call(['git', 'commit', '-m', opts.message], cwd=opts.dest)
-  check_call(['git', 'push', 'origin', 'master'], cwd=opts.dest)
+  check_call(['git', 'push', 'origin', 'HEAD:master'], cwd=opts.dest)
 
 
 def check_call(cmd, cwd=None):
