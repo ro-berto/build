@@ -362,6 +362,12 @@ def main(argv):
     build_data_dir = _ensure_directory(tdir, 'build_data')
     properties['build_data_dir'] = build_data_dir
 
+    # path_config property defines what paths a build uses for checkout, git
+    # cache, goma cache, etc.
+    # Unless it is explicitly specified by a builder, use paths for buildbot
+    # environment.
+    properties['path_config'] = properties.get('path_config', 'buildbot')
+
     # Write our annotated_run.py monitoring event.
     monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 

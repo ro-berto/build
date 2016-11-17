@@ -138,6 +138,11 @@ def main(argv):
     properties = copy.copy(args.factory_properties)
     properties.update(args.build_properties)
     properties['build_data_dir'] = build_data_dir
+    # path_config property defines what paths a build uses for checkout, git
+    # cache, goma cache, etc.
+    # Unless it is explicitly specified by a builder, use paths for buildbot
+    # environment.
+    properties['path_config'] = properties.get('path_config', 'buildbot')
     LOGGER.info('Using properties: %r', properties)
     properties_file = os.path.join(tempdir, 'remote_run_properties.json')
     with open(properties_file, 'w') as f:
