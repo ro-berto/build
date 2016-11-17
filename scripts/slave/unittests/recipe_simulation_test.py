@@ -11,9 +11,6 @@ import sys
 
 import test_env  # pylint: disable=W0403,W0611
 
-# Load our ".recipe_deps" tag name from the environment.
-recipe_deps_tag = os.environ.get('RECIPE_SIMULATION_TEST_DEPS_TAG')
-
 # Delete the old recipe_engine directory which might have stale pyc files
 # that will mess us up.
 shutil.rmtree(os.path.join(
@@ -26,11 +23,11 @@ RECIPES_PY = os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
     'recipes.py')
 
-args = [RECIPES_PY]
-if recipe_deps_tag:
-  args += ['--deps-path', os.path.join(os.getcwd(), '.%s_recipe_deps' % (
-      recipe_deps_tag,))]
-args += ['simulation_test'] + sys.argv[1:]
+args = [
+    RECIPES_PY,
+    '--deps-path=-',
+    'simulation_test',
+] + sys.argv[1:]
 ret = subprocess.call(args)
 if ret:
   # TODO(martiniss): Move this logic into recipes-py. http://crbug.com/601662
