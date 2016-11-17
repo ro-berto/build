@@ -65,9 +65,6 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
 
 def _ChromiumPerfTesters():
   testers = [
-    _CreateTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5',
-        required_apks=['ChromePublic.apk'], num_device_shards=7,
-        num_host_shards=3, target_bits=32, enable_platform_mode=True),
     _CreateTestSpec('Android Nexus5 Perf', 'android-nexus5',
         required_apks=['ChromePublic.apk'], num_device_shards=7,
         num_host_shards=3, target_bits=32, enable_platform_mode=True),

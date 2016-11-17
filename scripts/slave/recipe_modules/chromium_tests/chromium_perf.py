@@ -160,8 +160,6 @@ _AddBuildSpec('Mac Builder', 'mac', add_to_bisect=True, enable_swarming=True)
 _AddBuildSpec('Linux Builder', 'linux', add_to_bisect=True)
 
 
-_AddTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
              target_bits=32, num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',

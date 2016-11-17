@@ -67,9 +67,6 @@ _AddBuildSpec('Android Builder FYI', 'android', 'android', target_bits=32,
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
-_AddTestSpec('Android Galaxy S5 Perf (1)', 'fyi-android-galaxy-s5', 'android',
-             target_bits=32, parent_buildername='Android Builder FYI')
-
 
 _AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True)
 _AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win-10-low-end', 'win',
