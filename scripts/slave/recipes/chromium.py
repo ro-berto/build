@@ -5,6 +5,7 @@
 DEPS = [
   'adb',
   'bisect_tester',
+  'build',
   'depot_tools/bot_update',
   'chromium',
   'chromium_android',

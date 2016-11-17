@@ -154,8 +154,11 @@ def _ParseArgs():
                       help='Directory to use for staging the archives. '
                            'Default behavior is to automatically detect '
                            'slave\'s build directory.')
+  slave_utils_callback = slave_utils.AddArgs(parser)
+
   args = parser.parse_args()
   args.build_dir = build_directory.GetBuildOutputDirectory()
+  slave_utils_callback(args)
   return args
 
 

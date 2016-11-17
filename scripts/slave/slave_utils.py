@@ -7,6 +7,7 @@
 
 import datetime
 import glob
+import optparse
 import os
 import re
 import shutil
@@ -28,6 +29,9 @@ WARNING_EXIT_CODE = 88
 GIT_SVN_ID_RE = re.compile(r'^git-svn-id: .*@([0-9]+) .*$')
 # Regex for the master branch commit position.
 GIT_CR_POS_RE = re.compile(r'^Cr-Commit-Position: refs/heads/master@{#(\d+)}$')
+
+# Global variables set by command-line arguments (AddArgs, AddOpts).
+_ARGS_GSUTIL_PY_PATH = None
 
 
 # Local errors.
@@ -256,10 +260,19 @@ def GetGypFlag(options, flag, default=None):
 
 def GSUtilSetup():
   # Get the path to the gsutil script.
-  gsutil = os.path.join(os.path.dirname(__file__), 'gsutil')
-  gsutil = os.path.normpath(gsutil)
-  if chromium_utils.IsWindows():
-    gsutil += '.bat'
+  if _ARGS_GSUTIL_PY_PATH:
+    # The `gsutil.py` path was supplied on the command-line. Run this through
+    # our local Python interpreter.
+    gsutil = [sys.executable, _ARGS_GSUTIL_PY_PATH]
+  else:
+    # Fall back to local repository 'gsutil' invocation. NOTE that this requires
+    # the standard infra checkout layout, namely that 'depot_tools' is checked
+    # out one directory above 'build'.
+    gsutil = os.path.join(os.path.dirname(__file__), 'gsutil')
+    gsutil = os.path.normpath(gsutil)
+    if chromium_utils.IsWindows():
+      gsutil += '.bat'
+    gsutil = [gsutil]
 
   # Get the path to the boto file containing the password.
   boto_file = os.path.join(os.path.dirname(__file__), '..', '..', 'site_config',
@@ -330,7 +343,7 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
   gsutil = GSUtilSetup()
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
-  command = list(override_gsutil or [gsutil])
+  command = list(override_gsutil or gsutil)
 
   if not metadata:
     metadata = {}
@@ -396,8 +409,8 @@ def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None,
   if os.path.isfile(src_dir):
     assert os.path.isdir(src_dir), '%s must be a directory' % src_dir
 
-  gsutil = GSUtilSetup()
-  command = [gsutil, '-m']
+  command = GSUtilSetup()
+  command += ['-m']
   if cache_control:
     command.extend(['-h', 'Cache-Control:%s' % cache_control])
   command.extend(['cp', '-R'])
@@ -411,11 +424,9 @@ def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None,
 
 def GSUtilDownloadFile(src, dst):
   """Copy a file from Google Storage."""
-  gsutil = GSUtilSetup()
-
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
-  command = [gsutil]
+  command = GSUtilSetup()
   command.extend(['cp', src, dst])
   return chromium_utils.RunCommand(command)
 
@@ -427,16 +438,14 @@ def GSUtilMoveFile(source, dest, gs_acl=None):
 
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
-  command = [gsutil]
-  command.extend(['mv', source, dest])
+  command = gsutil + ['mv', source, dest]
   status = chromium_utils.RunCommand(command)
 
   if status:
     return status
 
   if gs_acl:
-    command = [gsutil]
-    command.extend(['setacl', gs_acl, dest])
+    command = gsutil + ['setacl', gs_acl, dest]
     status = chromium_utils.RunCommand(command)
 
   return status
@@ -445,11 +454,9 @@ def GSUtilMoveFile(source, dest, gs_acl=None):
 def GSUtilDeleteFile(filename):
   """Delete a file on Google Storage."""
 
-  gsutil = GSUtilSetup()
-
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
-  command = [gsutil]
+  command = GSUtilSetup()
   command.extend(['rm', filename])
   return chromium_utils.RunCommand(command)
 
@@ -473,7 +480,7 @@ def GSUtilListBucket(gs_base, args):
   def GatherOutput(line):
     global command_output
     command_output += line + '\n'
-  command = [gsutil, 'ls'] + args + [gs_base]
+  command = gsutil + ['ls'] + args + [gs_base]
   status = chromium_utils.RunCommand(command, parser_func=GatherOutput)
   return (status, command_output)
 
@@ -837,3 +844,66 @@ def _IsGitDirectory(dir_path):
     p = subprocess.Popen([git_exe, 'rev-parse', '--git-dir'],
                          cwd=dir_path, stdout=devnull, stderr=devnull)
     return p.wait() == 0
+
+
+def AddArgs(parser):
+  """Adds slave_utils common arguments to the supplied argparse parser.
+
+  Args:
+      parser (argparse.ArgumentParser): The argument parser to augment.
+
+  Returns: callable(args)
+      A callback function that should be invoked with the parsed args. This
+      completes the processing and loads the result of the parsing into
+      slave_utils.
+  """
+  group = parser.add_argument_group(title='Common `slave_utils.py` Options')
+  group.add_argument('--slave-utils-gsutil-py-path', metavar='PATH',
+      help='The path to the `gsutil.py` command to use for Google Storage '
+           'operations. This file lives in the <depot_tools> repository.')
+
+  return _AddArgsCallback
+
+
+def AddOpts(parser):
+  """Adds slave_utils common arguments to the supplied optparse parser.
+
+  Args:
+      parser (optparse.OptionParser): The argument parser to augment.
+
+  Returns: callable(opts)
+      A callback function that should be invoked with the parsed opts. This
+      completes the processing and loads the result of the parsing into
+      slave_utils.
+  """
+  group = optparse.OptionGroup(parser, 'Common `slave_utils.py` Options')
+  group.add_option('--slave-utils-gsutil-py-path', metavar='PATH',
+      help='The path to the `gsutil` command to use for Google Storage '
+           'operations. This file lives in the <depot_tools> repository.')
+  parser.add_option_group(group)
+
+  return _AddArgsCallback
+
+
+def _AddArgsCallback(opts):
+  """
+  Internal callback supplied by AddArgs and AddOpts. Designed to work with
+  both argparse and optparse results.
+  """
+  global _ARGS_GSUTIL_PY_PATH
+  _ARGS_GSUTIL_PY_PATH = opts.slave_utils_gsutil_py_path
+
+
+def GetPassthroughArgs(opts):
+  """Returns (list): A list of slave_utils arguments that can be forwarded to
+      other slave_utils-args-aware scrpts.
+
+  Args:
+      opts: Either the parsed argparse results or the optparse options
+          component. The respective parser must have had args/opts added via
+          AddArgs/AddOpts.
+  """
+  args = []
+  if opts.slave_utils_gsutil_py_path:
+    args += ['--slave-utils-gsutil-py-path', opts.slave_utils_gsutil_py_path]
+  return args

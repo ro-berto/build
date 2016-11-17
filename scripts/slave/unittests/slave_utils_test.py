@@ -115,7 +115,7 @@ class TestGetBuildRevisions(unittest.TestCase):
 
 
 @mock.patch('__main__.slave_utils.GSUtilSetup',
-            mock.MagicMock(return_value='/mock/gsutil'))
+      mock.MagicMock(side_effect=lambda: ['/mock/gsutil']))
 @mock.patch('__main__.chromium_utils.RunCommand')
 class TestGSUtil(unittest.TestCase):
 
