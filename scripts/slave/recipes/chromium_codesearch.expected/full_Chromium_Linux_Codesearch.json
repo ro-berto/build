@@ -639,6 +639,26 @@
   },
   {
     "cmd": [
+      "git",
+      "config",
+      "user.email",
+      "git-generated-files-sync@chromium.org"
+    ],
+    "cwd": "[START_DIR]/generated",
+    "name": "git config"
+  },
+  {
+    "cmd": [
+      "git",
+      "config",
+      "user.name",
+      "Automatic Generated Files Sync"
+    ],
+    "cwd": "[START_DIR]/generated",
+    "name": "git config (2)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/sync_generated_files_codesearch.py",

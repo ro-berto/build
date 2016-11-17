@@ -43,6 +43,8 @@ ADDITIONAL_REPOS = freeze({
 })
 
 GENERATED_REPO = '%s/chromium/src/out' % CHROMIUM_GIT_URL
+GENERATED_AUTHOR_EMAIL = 'git-generated-files-sync@chromium.org'
+GENERATED_AUTHOR_NAME = 'Automatic Generated Files Sync'
 
 LINUX_GN_ARGS = [
   'is_clang=true',
@@ -253,6 +255,10 @@ def RunSteps(api):
     api.git.checkout(
         GENERATED_REPO, ref='master', dir_path=generated_repo_dir,
         submodules=False)
+    api.git('config', 'user.email', GENERATED_AUTHOR_EMAIL,
+            cwd=generated_repo_dir)
+    api.git('config', 'user.name', GENERATED_AUTHOR_NAME,
+            cwd=generated_repo_dir)
 
     # Sync the generated files into this checkout.
     api.python('sync generated files',
