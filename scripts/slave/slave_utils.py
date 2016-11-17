@@ -263,7 +263,7 @@ def GSUtilSetup():
   if _ARGS_GSUTIL_PY_PATH:
     # The `gsutil.py` path was supplied on the command-line. Run this through
     # our local Python interpreter.
-    gsutil = [sys.executable, _ARGS_GSUTIL_PY_PATH]
+    gsutil = [sys.executable, _ARGS_GSUTIL_PY_PATH, '--']
   else:
     # Fall back to local repository 'gsutil' invocation. NOTE that this requires
     # the standard infra checkout layout, namely that 'depot_tools' is checked
