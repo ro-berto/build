@@ -54,7 +54,9 @@ SUPPRESSIONS = {
     ],
     'master.chromium.mac': [
         'ios-device',
+        'ios-device-xcode-clang',
         'ios-simulator',
+        'ios-simulator-xcode-clang',
         'Mac10.11 Tests',
     ],
     'master.chromium.memory': [

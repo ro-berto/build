@@ -411,19 +411,22 @@
         "categories": [
           "chromium_tree_closer"
         ],
-        "comment": [
-          "TODO(dpranke): crbug.com/486089, crbug.com/439402",
-          "Until the Mac GN (dbg) bot is in the CQ, it should not close the",
-          "tree."
-        ],
         "builders": {
           "ios-device": {
+            "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
+          },
+          "ios-device-xcode-clang": {
+            "close_tree": false,
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
           },
           "ios-simulator": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"],
             "closing_optional": [],
             "comment": ["closing_optional due to crbug.com/393861"]
+          },
+          "ios-simulator-xcode-clang": {
+            "close_tree": false,
+            "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
           },
           "Mac GN (dbg)": {
             "close_tree": false

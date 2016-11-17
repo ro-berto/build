@@ -16,11 +16,15 @@ def Update(config, active_master, c):
                             builderNames=[
           'ios-device',
           'ios-simulator',
+          'ios-device-xcode-clang',
+          'ios-simulator-xcode-clang',
       ]),
   ])
   specs = [
     {'name': 'ios-device'},
     {'name': 'ios-simulator'},
+    {'name': 'ios-device-xcode-clang'},
+    {'name': 'ios-simulator-xcode-clang'},
   ]
 
   c['builders'].extend([
