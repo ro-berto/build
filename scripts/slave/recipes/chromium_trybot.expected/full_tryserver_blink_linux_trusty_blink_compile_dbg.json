@@ -226,7 +226,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"linux_precise_blink_compile_dbg\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"linux_trusty_blink_compile_dbg\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -338,7 +338,7 @@
       "-m",
       "tryserver.blink",
       "-b",
-      "linux_precise_blink_compile_dbg",
+      "linux_trusty_blink_compile_dbg",
       "--config-file",
       "[BUILDER_CACHE]/linux_layout/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -370,13 +370,13 @@
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
-      "linux_precise_blink_compile_dbg",
+      "linux_trusty_blink_compile_dbg",
       "--buildbot-mastername",
       "tryserver.blink",
       "--buildbot-slavename",
       "TestSlavename",
       "--goma-deps-cache-file",
-      "linux_precise_blink_compile_dbg.gomadeps",
+      "linux_trusty_blink_compile_dbg.gomadeps",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

@@ -619,7 +619,7 @@ def GenTests(api):
   yield (
     api.test('blink_minimal_pass_continues') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_trusty_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -631,7 +631,7 @@ def GenTests(api):
   yield (
     api.test('blink_compile_without_patch_fails') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_trusty_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -647,7 +647,7 @@ def GenTests(api):
   yield (
     api.test('webkit_tests_unexpected_error') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_trusty_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -662,7 +662,7 @@ def GenTests(api):
   yield (
     api.test('webkit_tests_interrupted') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_trusty_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -676,7 +676,7 @@ def GenTests(api):
   yield (
     api.test('too_many_failures_for_retcode') +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_trusty_blink_rel') +
     suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
@@ -690,7 +690,7 @@ def GenTests(api):
     api.test('webkit_tests_with_and_without_patch_fail') +
     suppress_analyze() +
     props(mastername='tryserver.blink',
-          buildername='linux_precise_blink_rel') +
+          buildername='linux_trusty_blink_rel') +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False)) +
     api.override_step_data('webkit_tests (without patch)',
