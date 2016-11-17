@@ -487,11 +487,13 @@ class Bisector(object):
     other in a statistically significant manner. Raises an exception otherwise.
     """
     if self.is_return_code_mode():
+      self.compute_relative_change()
       return (self.good_rev.overall_return_code !=
               self.bad_rev.overall_return_code)
 
     if self.bypass_stats_check:
       self.compare_revisions(self.good_rev, self.bad_rev)
+      self.compute_relative_change()
       dummy_result = self.good_rev.mean != self.bad_rev.mean
       if not dummy_result:
         self._raise_low_confidence_error()
@@ -512,6 +514,7 @@ class Bisector(object):
               'GOOD' if revision_to_retest.good else 'BAD')):
             revision_to_retest._do_test()
           compare_result = self.compare_revisions(self.good_rev, self.bad_rev)
+    self.compute_relative_change()
     if compare_result == revision_state.SIGNIFICANTLY_DIFFERENT:
       return True
     self._raise_low_confidence_error()
