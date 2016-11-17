@@ -22,16 +22,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
         api.mastername != 'client.webrtc.fyi'):
       tests.append(WebRTCTest('rtc_unittests', revision=revision))
   elif test_suite == 'webrtc_baremetal':
-    if api.m.platform.is_linux:
-      f = api.m.path['checkout'].join
-      tests.extend([
-          BaremetalTest('isac_fix_test',
-                        revision,
-                        args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
-                              'isac_speech_and_misc_wb.pcm'],
-                        perf_test=True),
-      ])
-
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
 
     # This test currently fails on Trusty Linux due to pulseaudio issues. See
@@ -43,12 +33,21 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
         BaremetalTest('voe_auto_test', revision, args=['--automated']),
         BaremetalTest('video_capture_tests', revision),
     ])
-    if not api.m.tryserver.is_tryserver:
-      tests.append(BaremetalTest('webrtc_perf_tests', revision, perf_test=True))
-  elif (test_suite == 'android_perf' and not api.m.tryserver.is_tryserver
-      and api.c.PERF_ID and api.m.chromium.c.BUILD_CONFIG == 'Release'):
-    tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
-                                 perf_id=api.c.PERF_ID))
+  elif test_suite == 'desktop_perf':
+    assert api.c.PERF_ID
+    if api.m.platform.is_linux:
+      f = api.m.path['checkout'].join
+      tests.append(
+          BaremetalTest('isac_fix_test',
+                        revision,
+                        args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
+                              'isac_speech_and_misc_wb.pcm'],
+                        perf_test=True),
+      )
+    tests.append(BaremetalTest('webrtc_perf_tests', revision, perf_test=True))
+  elif test_suite == 'android_perf' and api.c.PERF_ID:
+    # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
+    tests.append(AndroidPerfTest('webrtc_perf_tests', revision))
   elif test_suite == 'android_swarming':
     GTestTest = api.m.chromium_tests.steps.GTestTest
     for test in (api.ANDROID_DEVICE_TESTS +
@@ -130,15 +129,11 @@ class AndroidPerfTest(Test):
     is entirely different.
   """
 
-  def __init__(self, name, revision, perf_id):
+  def __init__(self, name, revision):
     super(AndroidPerfTest, self).__init__(name)
     self._revision = revision
-    self._perf_id = perf_id
-    assert perf_id, 'You must specify a Perf ID for builders running perf tests'
 
   def run_nonswarming(self, api, suffix):
-    assert api.m.chromium.c.BUILD_CONFIG == 'Release', (
-        'Perf tests should only be run with Release builds.')
     wrapper_script = api.m.chromium.output_dir.join('bin',
                                                     'run_%s' % self._name)
     args = ['--verbose']

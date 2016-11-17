@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/linux_baremetal",
+      "[BUILDER_CACHE]/Linux_Trusty",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -26,7 +26,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_symlinks.py",
-      "[BUILDER_CACHE]/linux_baremetal"
+      "[BUILDER_CACHE]/Linux_Trusty"
     ],
     "name": "clean symlinks"
   },
@@ -43,19 +43,13 @@
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
-      "--issue",
-      "666666",
-      "--patchset",
-      "1",
-      "--rietveld_server",
-      "https://fake.rietveld.url",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_baremetal",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -92,7 +86,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[BUILDER_CACHE]/linux_baremetal/src/out"
+      "[BUILDER_CACHE]/Linux_Trusty/src/out"
     ],
     "name": "clean test output files"
   },
@@ -172,10 +166,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_baremetal/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=static_library ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' rtc_use_h264=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -184,20 +178,20 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux_baremetal/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/Linux_Trusty/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc.perf",
       "-b",
-      "linux_baremetal",
+      "Linux Trusty",
       "--config-file",
-      "[BUILDER_CACHE]/linux_baremetal/src/webrtc/build/mb_config.pyl",
+      "[BUILDER_CACHE]/Linux_Trusty/src/webrtc/build/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--isolate-map-file=[BUILDER_CACHE]/linux_baremetal/src/webrtc/build/gn_isolate_map.pyl",
+      "--isolate-map-file=[BUILDER_CACHE]/Linux_Trusty/src/webrtc/build/gn_isolate_map.pyl",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_baremetal/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -242,9 +236,9 @@
       "restart"
     ],
     "env": {
+      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]",
-      "GOMA_DEPS_CACHE_FILE": "linux_baremetal.gomadeps",
-      "GOMA_FAIL_FAST": "true",
+      "GOMA_DEPS_CACHE_FILE": "Linux_Trusty.gomadeps",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma.start_goma",
@@ -258,7 +252,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/linux_baremetal/src/out/Release",
+      "[BUILDER_CACHE]/Linux_Trusty/src/out/Release",
       "-j",
       "50"
     ],
@@ -326,17 +320,17 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/linux_baremetal/src/out/Release",
+      "[BUILDER_CACHE]/Linux_Trusty/src/out/Release",
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux_baremetal/src/out/Release', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Linux_Trusty/src/out/Release', '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
-      "linux_baremetal",
+      "Linux Trusty",
       "--buildbot-mastername",
-      "tryserver.webrtc",
+      "client.webrtc.perf",
       "--buildbot-slavename",
       "slavename"
     ],
@@ -349,13 +343,37 @@
     ]
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/ensure_webcam_is_running.py"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=isac_fix_test",
+      "--perf-id=webrtc-linux-large-tests",
+      "--perf-config",
+      "{'a_default_rev': 'r_webrtc_rev'}",
+      "--test-type=isac_fix_test",
+      "--step-name=isac_fix_test",
+      "--builder-name=Linux Trusty",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--revision=170242",
+      "isac_fix_test",
+      "32000",
+      "[BUILDER_CACHE]/Linux_Trusty/src/resources/speech_and_misc_wb.pcm",
+      "isac_speech_and_misc_wb.pcm"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_baremetal",
-    "name": "webcam_check"
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "name": "isac_fix_test"
   },
   {
     "allow_subannotations": true,
@@ -367,46 +385,25 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
-      "--test-type=voe_auto_test",
-      "--step-name=voe_auto_test",
-      "--builder-name=linux_baremetal",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=webrtc_perf_tests",
+      "--perf-id=webrtc-linux-large-tests",
+      "--perf-config",
+      "{'a_default_rev': 'r_webrtc_rev'}",
+      "--test-type=webrtc_perf_tests",
+      "--step-name=webrtc_perf_tests",
+      "--builder-name=Linux Trusty",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "voe_auto_test",
-      "--automated"
+      "--revision=170242",
+      "webrtc_perf_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/linux_baremetal",
-    "name": "voe_auto_test"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
-      "--test-type=video_capture_tests",
-      "--step-name=video_capture_tests",
-      "--builder-name=linux_baremetal",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "video_capture_tests"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_baremetal",
-    "name": "video_capture_tests"
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "name": "webrtc_perf_tests"
   },
   {
     "name": "$result",

@@ -144,6 +144,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
+    if self.c.PERF_ID:
+      assert not self.m.tryserver.is_tryserver
+      assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
+        'Perf tests should only be run with Release builds.')
+
   def configure_swarming(self):
     self.c.use_isolate = self.bot_config.get('use_isolate')
     self.c.enable_swarming = self.bot_config.get('enable_swarming')

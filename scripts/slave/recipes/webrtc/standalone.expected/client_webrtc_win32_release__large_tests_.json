@@ -434,35 +434,6 @@
     "name": "video_capture_tests"
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=webrtc_perf_tests",
-      "--perf-id=webrtc-win-large-tests",
-      "--perf-config",
-      "{'a_default_rev': 'r_webrtc_rev'}",
-      "--test-type=webrtc_perf_tests",
-      "--step-name=webrtc_perf_tests",
-      "--builder-name=Win32 Release [large tests]",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--revision=170242",
-      "webrtc_perf_tests.exe"
-    ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
-    "name": "webrtc_perf_tests"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

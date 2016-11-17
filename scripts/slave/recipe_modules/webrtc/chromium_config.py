@@ -16,10 +16,15 @@ def webrtc_minimal(c):
   _compiler_defaults(c)
 
 @CONFIG_CTX(includes=['webrtc_minimal', 'dcheck', 'webrtc_openh264'])
-def webrtc_standalone(c):
+def webrtc_default(c):
   c.runtests.memory_tests_runner = c.CHECKOUT_PATH.join(
       'tools', 'valgrind-webrtc', 'webrtc_tests',
       platform_ext={'win': '.bat', 'mac': '.sh', 'linux': '.sh'})
+
+@CONFIG_CTX(includes=['webrtc_minimal', 'webrtc_openh264'])
+def webrtc_perf(c):
+  if c.BUILD_CONFIG != 'Release':
+    raise BadConf('Perf bots must use Release configs!') # pragma: no cover
 
 # TOOD(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
 @CONFIG_CTX(includes=['ninja', 'gcc', 'goma'])

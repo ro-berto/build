@@ -104,7 +104,7 @@ def GenTests(api):
     test += api.properties(buildnumber=1337)
     return test
 
-  for mastername in ('client.webrtc', 'client.webrtc.fyi', 'tryserver.webrtc'):
+  for mastername in builders.keys():
     master_config = builders[mastername]
     for buildername in master_config['builders'].keys():
       yield generate_builder(mastername, buildername, revision='12345')

@@ -410,6 +410,8 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=webrtc_perf_tests",
       "--perf-id=webrtc-android-tests-nexus6-lollipop",
+      "--perf-config",
+      "{'a_default_rev': 'r_webrtc_rev'}",
       "--test-type=webrtc_perf_tests",
       "--step-name=webrtc_perf_tests",
       "--builder-name=Android32 Tests (L Nexus6)",

@@ -9,7 +9,7 @@ from recipe_engine.types import freeze
 
 RECIPE_CONFIGS = freeze({
   'webrtc': {
-    'chromium_config': 'webrtc_standalone',
+    'chromium_config': 'webrtc_default',
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc',
   },
@@ -18,9 +18,14 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
   },
   'webrtc_baremetal': {
-    'chromium_config': 'webrtc_standalone',
+    'chromium_config': 'webrtc_default',
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc_baremetal',
+  },
+  'webrtc_perf': {
+    'chromium_config': 'webrtc_perf',
+    'gclient_config': 'webrtc',
+    'test_suite': 'desktop_perf',
   },
   'webrtc_clang': {
     'chromium_config': 'webrtc_clang',
@@ -28,7 +33,7 @@ RECIPE_CONFIGS = freeze({
     'test_suite': 'webrtc',
   },
   'webrtc_swarming': {
-    'chromium_config': 'webrtc_standalone',
+    'chromium_config': 'webrtc_default',
     'gclient_config': 'webrtc',
     'test_suite': 'desktop_swarming',
   },
@@ -72,7 +77,6 @@ BUILDERS = freeze({
   'client.webrtc': {
     'settings': {
       'build_gs_bucket': 'chromium-webrtc',
-      'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
     },
     'builders': {
       'Win32 Debug': {
@@ -178,9 +182,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-win-large-tests',
-        },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
@@ -245,9 +246,6 @@ BUILDERS = freeze({
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
-        },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-mac-large-tests',
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
@@ -420,9 +418,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-linux-large-tests',
-        },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
@@ -562,6 +557,7 @@ BUILDERS = freeze({
   'client.webrtc.fyi': {
     'settings': {
       'build_gs_bucket': 'chromium-webrtc',
+      'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
     },
     'builders':  {
       'Win64 Debug (swarming)': {
@@ -717,8 +713,45 @@ BUILDERS = freeze({
   'client.webrtc.perf': {
     'settings': {
       'build_gs_bucket': 'chromium-webrtc',
+      'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
     },
     'builders': {
+       'Win7': {
+        'recipe_config': 'webrtc_perf',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-win-large-tests',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+      },
+      'Mac 10.11': {
+        'recipe_config': 'webrtc_perf',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-mac-large-tests',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+      },
+      'Linux Trusty': {
+        'recipe_config': 'webrtc_perf',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-linux-large-tests',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
       'Android32 Builder': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
