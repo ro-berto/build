@@ -37,6 +37,10 @@ def GenTests(api):
           'app': 'fake test 1',
           'device type': 'fake device 1',
           'os': '8.1',
+          'test args': [
+            '--fake-arg-1',
+            '--fake-arg-2',
+          ],
         },
         {
           'include': 'fake include.json',
