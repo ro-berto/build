@@ -37,6 +37,7 @@ MjsunitIgnitionTurbofan_2 = TestStepConfig(
     'mjsunit_ignition_turbofan', shards=2)
 MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
 Mozilla = TestStepConfig('mozilla')
+Mozilla_2 = TestStepConfig('mozilla', shards=2)
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
 SimdJs = TestStepConfig('simdjs')
@@ -60,6 +61,7 @@ V8Testing_2 = TestStepConfig('v8testing', shards=2)
 V8Testing_3 = TestStepConfig('v8testing', shards=3)
 V8Testing_4 = TestStepConfig('v8testing', shards=4)
 V8Testing_5 = TestStepConfig('v8testing', shards=5)
+V8Testing_7 = TestStepConfig('v8testing', shards=7)
 V8TestingExtra = TestStepConfig('v8testing_extra')
 V8TestingExtra_2 = TestStepConfig('v8testing_extra', shards=2)
 Webkit = TestStepConfig('webkit')
@@ -1453,7 +1455,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_5, Test262_4, Mozilla, SimdJs],
+        'tests': [V8Testing_7, Test262_4, Mozilla_2, SimdJs],
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
