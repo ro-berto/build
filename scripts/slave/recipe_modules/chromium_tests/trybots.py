@@ -31,6 +31,22 @@ TRYBOTS = freeze({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux Trusty',
       }, analyze_mode='compile'),
+      'linux_precise_blink_dbg': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux Trusty (dbg)',
+      }),
+      'linux_precise_blink_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux Trusty',
+      }),
+      'linux_precise_blink_compile_dbg': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux Trusty (dbg)',
+      }, analyze_mode='compile'),
+      'linux_precise_blink_compile_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux Trusty',
+      }, analyze_mode='compile'),
       'mac10.9_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.11 (dbg)',
