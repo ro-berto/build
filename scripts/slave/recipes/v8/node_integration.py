@@ -40,31 +40,31 @@ ARCHIVE_LINK = ('https://storage.googleapis.com'
 def _build_and_test(api, suffix=''):
   api.step(
     'configure node.js%s' % suffix,
-    [api.path['slave_build'].join('node.js', 'configure')],
-    cwd=api.path['slave_build'].join('node.js'),
+    [api.path['start_dir'].join('node.js', 'configure')],
+    cwd=api.path['start_dir'].join('node.js'),
   )
 
   api.step(
     'build and test node.js%s' % suffix,
     ['make', '-j8', 'test'],
-    cwd=api.path['slave_build'].join('node.js'),
+    cwd=api.path['start_dir'].join('node.js'),
   )
 
 def _build_and_upload(api):
   api.step(
     'configure node.js - install',
     [
-      api.path['slave_build'].join('node.js', 'configure'),
+      api.path['start_dir'].join('node.js', 'configure'),
       '--prefix=/',
       '--tag=v8-build-%s' % api.v8.revision,
     ],
-    cwd=api.path['slave_build'].join('node.js'),
+    cwd=api.path['start_dir'].join('node.js'),
   )
 
-  archive_dir = api.path['slave_build'].join('archive-build')
+  archive_dir = api.path['start_dir'].join('archive-build')
   archive_name = ('node-linux-rel-%s-%s.zip' %
                   (api.v8.revision_number, api.v8.revision))
-  zip_file = api.path['slave_build'].join(archive_name)
+  zip_file = api.path['start_dir'].join(archive_name)
 
   # Make archive directory.
   api.file.makedirs('install directory', archive_dir)
@@ -73,7 +73,7 @@ def _build_and_upload(api):
   api.step(
     'build and install node.js',
     ['make', '-j8', 'install', 'DESTDIR=%s' % archive_dir],
-    cwd=api.path['slave_build'].join('node.js'),
+    cwd=api.path['start_dir'].join('node.js'),
   )
 
   # Zip build.
@@ -112,20 +112,20 @@ def RunSteps(api):
     pass
 
   # Copy the checked-out v8.
-  api.file.rmtree('v8', api.path['slave_build'].join('node.js', 'deps', 'v8'))
+  api.file.rmtree('v8', api.path['start_dir'].join('node.js', 'deps', 'v8'))
   api.python(
       name='copy v8 tree',
       script=api.v8.resource('copy_v8.py'),
       args=[
         # Source.
-        api.path['slave_build'].join('v8'),
+        api.path['start_dir'].join('v8'),
         # Destination.
-        api.path['slave_build'].join('node.js', 'deps', 'v8'),
+        api.path['start_dir'].join('node.js', 'deps', 'v8'),
         # Paths to ignore.
         '.git',
-        api.path['slave_build'].join('v8', 'buildtools'),
-        api.path['slave_build'].join('v8', 'out'),
-        api.path['slave_build'].join('v8', 'third_party'),
+        api.path['start_dir'].join('v8', 'buildtools'),
+        api.path['start_dir'].join('v8', 'out'),
+        api.path['start_dir'].join('v8', 'third_party'),
       ],
   )
 

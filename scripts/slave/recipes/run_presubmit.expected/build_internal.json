@@ -75,7 +75,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[SLAVE_BUILD]/build_internal",
+    "cwd": "[START_DIR]/build_internal",
     "name": "commit git patch"
   },
   {
@@ -93,7 +93,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[SLAVE_BUILD]/build_internal",
+      "[START_DIR]/build_internal",
       "--commit",
       "--verbose",
       "--verbose",

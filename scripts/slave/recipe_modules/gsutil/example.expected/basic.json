@@ -16,7 +16,7 @@
       "-h",
       "x-custom-field:custom-value",
       "cp",
-      "[SLAVE_BUILD]/boom",
+      "[START_DIR]/boom",
       "gs://chromium-recipe-test/some/random/path/to/boom"
     ],
     "name": "gsutil upload",
@@ -64,7 +64,7 @@
       "----",
       "cp",
       "gs://chromium-recipe-test/some/random/path/to/boom",
-      "[SLAVE_BUILD]/boom"
+      "[START_DIR]/boom"
     ],
     "name": "gsutil gsutil download url"
   },
@@ -78,7 +78,7 @@
       "----",
       "cp",
       "gs://chromium-recipe-test/staging/to/boom",
-      "[SLAVE_BUILD]/erang"
+      "[START_DIR]/erang"
     ],
     "name": "gsutil download"
   },
@@ -124,7 +124,7 @@
       "--timeout",
       "600"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Download GS file with polling"
   },
   {
@@ -139,7 +139,7 @@
       "--partial-name",
       "gs://chromium-recipe-test/foo/b"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Download latest file from GS"
   },
   {

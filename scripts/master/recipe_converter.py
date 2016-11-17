@@ -967,9 +967,9 @@ def dynamorio_unpack_tools_converter(step):
   rc.deps.add('recipe_engine/step')
   rc.deps.add('recipe_engine/path')
   fmtstr = 'api.step("%s", %s, env=%s, cwd=%s)'
-  cmdstr = 'api.path["slave_build"].join(' +\
+  cmdstr = 'api.path["start_dir"].join(' +\
       repr(step[1]['workdir'].split('/') + ['unpack.bat'])[1:-1] + ')'
-  cwd = 'api.path["slave_build"]'
+  cwd = 'api.path["start_dir"]'
   if step[1].get('workdir', ''):
     cwd += '.join(%s)' % repr(step[1]['workdir'].split('/'))[1:-1]
   env = "{}"
@@ -1001,9 +1001,9 @@ def upload_drmemory_latest_converter(step):
   bucket = 'chromium-drmemory-builds'
   remote_dir = '""'
   rc.steps.append('api.step("copy locally", ["copy", basename + "-sfx.exe",'
-      ' "drmemory-windows-latest-sfx.exe"], cwd=api.path["slave_build"])')
+      ' "drmemory-windows-latest-sfx.exe"], cwd=api.path["start_dir"])')
   rc.steps.append('api.gsutil.upload("%s", "%s", %s,'
-      ' cwd=api.path["slave_build"])' % (local_file, bucket,
+      ' cwd=api.path["start_dir"])' % (local_file, bucket,
     remote_dir))
   return rc
 
@@ -1014,13 +1014,13 @@ def drmemory_create_sfx_archive_converter(step):
   rc.steps.append('# Create sfx archive step')
   build_env = 'api.path["build"].join("scripts", "slave", "drmemory",'+\
       '"build_env.bat")'
-  env = ('{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '
+  env = ('{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '
       '"bot_tools")}')
   archive_name = 'basename + "-sfx.exe"'
   archive_source = ('"build_drmemory-debug-32\\\\_CPack_Packages\\\\Windows\\\\'
       'ZIP\\\\" + basename + "\\\\*"')
   rc.steps.append('api.step("create sfx archive", [%s, "7z", "a"' % build_env +\
-      ', "-sfx", %s, %s], cwd=api.path["slave_build"], env=%s)' % (archive_name,
+      ', "-sfx", %s, %s], cwd=api.path["start_dir"], env=%s)' % (archive_name,
         archive_source, env))
   return rc
 
@@ -1033,7 +1033,7 @@ def drmemory_find_package_basename_converter(step):
   rc.steps.append('step_result = api.step("Find package basename", ["dir",'
       ' "/B", '
       '"DrMemory-Windows-*0x" + build_properties["got_revision"][:7] + '
-      '".zip"], stdout=api.raw_io.output(), cwd=api.path["slave_build"])')
+      '".zip"], stdout=api.raw_io.output(), cwd=api.path["start_dir"])')
   rc.steps.append('basename = step_result.stdout[:-4]')
   return rc
 
@@ -1043,7 +1043,7 @@ def delete_prior_sfx_archive_converter(step):
   rc.deps.add('recipe_engine/path')
   rc.steps.append('# Delete prior sfx archive step')
   rc.steps.append('api.step("Delete prior sfx archive", '
-      '["del", basename + "-sfx.exe"], cwd=api.path["slave_build"])')
+      '["del", basename + "-sfx.exe"], cwd=api.path["start_dir"])')
   return rc
 
 def package_drmemory_win_converter(step):
@@ -1052,14 +1052,14 @@ def package_drmemory_win_converter(step):
   rc.deps.add('recipe_engine/path')
   build_env = 'api.path["build"].join("scripts", "slave", "drmemory",'+\
       '"build_env.bat")'
-  env = ('{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '
+  env = ('{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '
       '"bot_tools")}')
   confstr = ('str(api.path["checkout"].join("package.cmake")) + ",build=0x"'
       ' + build_properties["got_revision"][:7] + ";drmem_only"')
   rc.steps.append('# Package dynamorio step')
   rc.steps.append('api.step("Package Dr. Memory", [%s, %s, %s],' % (build_env,
         repr(step[1]['command'][1:4])[1:-1], confstr) +\
-      'env=%s, cwd=api.path["slave_build"])' % env)
+      'env=%s, cwd=api.path["start_dir"])' % env)
   return rc
 
 def drmemory_get_revision_converter(step):
@@ -1080,13 +1080,13 @@ def drmemory_download_build_converter(step):
   rc.steps.append('# Download build step')
   rc.steps.append('api.gsutil.download("chromium-drmemory-builds", '
       '"drmemory-windows-latest-sfx.exe", "drm-sfx.exe", '
-      'cwd=api.path["slave_build"])')
+      'cwd=api.path["start_dir"])')
   return rc
 
 def drmemory_tsan_test_light_converter(step):
   rc = recipe_chunk()
   rc.steps.append('# Dr. Memory TSan test step')
-  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+  env = '{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '+\
       '"bot_tools")}'
   rc.steps.append('api.step("%s", [' % step[1]['name'] +\
       'api.path["build"].join("scripts", "slave", "drmemory", ' +\
@@ -1094,7 +1094,7 @@ def drmemory_tsan_test_light_converter(step):
       repr(step[1]['command'][1:7])[1:-1] +\
       ', api.path["checkout"].join("tests", "app_suite", '+\
       '"default-suppressions.txt"), "-light", "--", ' +\
-      'api.path["slave_build"].join("tsan", '+\
+      'api.path["start_dir"].join("tsan", '+\
       '%s), ' % repr(step[1]['command'][10].split('\\')[2:])[1:-1] +\
       '%s], ' % repr(step[1]['command'][-2:])[1:-1] +\
       'env=%s)' % env)
@@ -1105,7 +1105,7 @@ def drmemory_tsan_test_converter(step):
   rc.deps.add('recipe_engine/path')
   rc.deps.add('recipe_engine/step')
   rc.steps.append('# Dr. Memory TSan test step')
-  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+  env = '{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '+\
       '"bot_tools")}'
   rc.steps.append('api.step("%s", [' % step[1]['name'] +\
       'api.path["build"].join("scripts", "slave", "drmemory", ' +\
@@ -1113,7 +1113,7 @@ def drmemory_tsan_test_converter(step):
       repr(step[1]['command'][1:7])[1:-1] +\
       ', api.path["checkout"].join("tests", "app_suite", '+\
       '"default-suppressions.txt"), "--", ' +\
-      'api.path["slave_build"].join("tsan", '+\
+      'api.path["start_dir"].join("tsan", '+\
       '%s), ' % repr(step[1]['command'][9].split('\\')[2:])[1:-1] +\
       '%s], ' % repr(step[1]['command'][-2:])[1:-1] +\
       'env=%s)' % env)
@@ -1123,12 +1123,12 @@ def build_tsan_tests_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/step')
   rc.deps.add('recipe_engine/path')
-  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+  env = '{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '+\
       '"bot_tools"), "CYGWIN": "nodosfilewarning"}'
   rc.steps.append("# Build TSan tests step")
   rc.steps.append('api.step("Build TSan Tests", ' +\
       '[%s, ' % repr(step[1]['command'][:-1])[1:-1] +\
-      '%s], ' % 'api.path["slave_build"].join("tsan", "unittest")' +\
+      '%s], ' % 'api.path["start_dir"].join("tsan", "unittest")' +\
       "env=%s)" % env)
   return rc
 
@@ -1139,7 +1139,7 @@ def checkout_tsan_converter(step):
   rc.steps.append('# Checkout TSan tests step')
   rc.steps.append('api.step("Checkout TSan tests",' +\
       ' [%s, ' % repr(step[1]['command'][:-1])[1:-1] +\
-      'api.path["slave_build"].join("tsan")])')
+      'api.path["start_dir"].join("tsan")])')
   return rc
 
 def drmemory_tests_converter(step):
@@ -1160,9 +1160,9 @@ def config_release_dynamorio_converter(step):
   rc.deps.add('file')
   rc.deps.add('recipe_engine/path')
   rc.steps.append("# Make the build directory step")
-  rc.steps.append('api.file.makedirs("makedirs", api.path["slave_build"].'
+  rc.steps.append('api.file.makedirs("makedirs", api.path["start_dir"].'
       'join("dynamorio"))')
-  rc.steps.append('api.file.makedirs("makedirs", api.path["slave_build"].'
+  rc.steps.append('api.file.makedirs("makedirs", api.path["start_dir"].'
       'join("dynamorio", "build"))')
   rc = rc + generic_shellcommand_converter(step)
   return rc
@@ -1198,7 +1198,7 @@ def drmemory_pack_results_win_converter(step):
   rc.steps.append("# Pack test results step")
   build_env = 'api.path["build"].join("scripts", "slave", "drmemory",'+\
       '"build_env.bat")'
-  env = ('{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '
+  env = ('{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '
       '"bot_tools")}')
   zipname = ('"testlogs_r" + build_properties["got_revision"] + "_b" +'
   ' str(build_properties["buildnumber"]) + ".7z"')
@@ -1365,7 +1365,7 @@ def win_package_dynamorio_converter(step):
       '"build_env.bat")'
   confstr = 'str(api.path["checkout"].join("make", "package.cmake")) + '+\
       '",build=0x" + str(api.properties["revision"])[:7]'
-  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+  env = '{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '+\
       '"bot_tools")}'
   rc.steps.append('api.step("Package DynamoRIO", '+\
       '[%s, "ctest", "-VV", "-S", %s], env=%s)' % (build_env_bat, confstr, env))
@@ -1420,7 +1420,7 @@ def upload_dynamorio_docs_converter(step):
   rc = recipe_chunk()
   rc.deps.add('gsutil')
   rc.deps.add('recipe_engine/path')
-  local_file = 'api.path["slave_build"].join("install", "docs", "html")'
+  local_file = 'api.path["start_dir"].join("install", "docs", "html")'
   bucket = '"chromium-dynamorio"'
   remote_dir = '"dr_docs/"'
   args = ['-r', '-m']
@@ -1436,7 +1436,7 @@ def dynamorio_precommit_converter(step):
   rc.steps.append('# pre-commit suite step')
   command = repr(step[1]['command'][:-1])[1:-1]
   cmake_file = 'api.path["checkout"].join("suite", "runsuite.cmake")'
-  cwd = 'api.path["slave_build"]'
+  cwd = 'api.path["start_dir"]'
   rc.steps.append('api.step("pre-commit suite", '+\
       '[%s, %s], cwd=%s, ok_ret="all")' % (command, cmake_file, cwd))
   return rc
@@ -1447,12 +1447,12 @@ def win_dynamorio_precommit_converter(step):
   rc.deps.add('recipe_engine/path')
   rc.steps.append('# build_env step')
   fmtstr = 'api.step("pre-commit suite", [%s, %s, %s],  env=%s, '+\
-      'cwd=api.path["slave_build"])'
+      'cwd=api.path["start_dir"])'
   command = 'api.path["build"].join("scripts", "slave", "drmemory", '+\
       '"build_env.bat")'
   args = step[1]['command'][1:-1]
   runsuite = 'api.path["checkout"].join("suite", "runsuite.cmake")'
-  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+  env = '{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '+\
       '"bot_tools")}'
   rc.steps.append(fmtstr % (command, repr(args)[1:-1], runsuite, env))
   return rc
@@ -1461,9 +1461,9 @@ def win_dynamorio_nightly_suite_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/step')
   rc.steps.append('# dynamorio win nightly suite step')
-  fmtstr = 'api.step("%s", [%s, %s], env=%s, cwd=api.path["slave_build"])'
+  fmtstr = 'api.step("%s", [%s, %s], env=%s, cwd=api.path["start_dir"])'
   env = '{"BOTTOOLS": '+\
-      'api.path["slave_build"].join("tools", "buildbot", "bot_tools")}'
+      'api.path["start_dir"].join("tools", "buildbot", "bot_tools")}'
   command = 'api.path["build"].join("scripts", "slave", "drmemory", '+\
       '"build_env.bat")'
   step[1]['command'][-1] = step[1]['command'][-1][3:]
@@ -1490,7 +1490,7 @@ def generic_shellcommand_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/step')
   fmtstr = 'api.step("%s", %s, env=%s, cwd=%s)'
-  cwd = 'api.path["slave_build"]'
+  cwd = 'api.path["start_dir"]'
   if step[1].get('workdir', ''):
     cwd += '.join(%s)' % repr(step[1]['workdir'].split('/'))[1:-1]
   env = "{}"

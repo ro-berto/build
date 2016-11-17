@@ -11,7 +11,7 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -20,7 +20,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -28,7 +28,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -716,7 +716,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
@@ -761,7 +761,7 @@
       "--reset-results",
       "--upload-results",
       "--results-label=Patch",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -781,7 +781,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-chart.json",
+      "[START_DIR]/bisect_results/dummy/results-chart.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
@@ -1099,7 +1099,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
@@ -1143,7 +1143,7 @@
       "sunspider",
       "--upload-results",
       "--results-label=TOT",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -1161,7 +1161,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-chart.json",
+      "[START_DIR]/bisect_results/dummy/results-chart.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",

@@ -132,7 +132,7 @@ def RunSteps(api):
 
   config_kwargs = bot_config.get('chromium_config_kwargs', dict())
   build_config = config_kwargs.get('BUILD_CONFIG', 'Release')
-  build_dir=api.path['slave_build'].join('src', 'out', build_config)
+  build_dir=api.path['start_dir'].join('src', 'out', build_config)
 
   api.archive.clusterfuzz_archive(
       build_dir=build_dir,

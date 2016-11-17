@@ -53,10 +53,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/gyp/gyptest.py",
+      "[START_DIR]/gyp/gyptest.py",
       "-a"
     ],
-    "cwd": "[SLAVE_BUILD]/gyp",
+    "cwd": "[START_DIR]/gyp",
     "name": "run tests"
   },
   {

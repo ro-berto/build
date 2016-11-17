@@ -65,7 +65,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
@@ -89,7 +89,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[START_DIR]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
@@ -115,9 +115,9 @@
       "-u",
       "\nimport sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
       "metrics.csv",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[START_DIR]\\src\\out\\Release"
     ],
-    "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\out\\Release",
+    "name": "rmwildcard metrics.csv in [START_DIR]\\src\\out\\Release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
@@ -132,7 +132,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\syzygy\\unittests.gypi",
+      "[START_DIR]\\src\\syzygy\\unittests.gypi",
       "/path/to/tmp/"
     ],
     "name": "read_unittests_gypi"
@@ -153,7 +153,7 @@
       "--builder-name=Syzygy Release",
       "--slave-name=vm331-m3",
       "--build-number=571",
-      "[SLAVE_BUILD]\\src\\out\\Release\\bar_unittests.exe",
+      "[START_DIR]\\src\\out\\Release\\bar_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
@@ -176,7 +176,7 @@
       "--builder-name=Syzygy Release",
       "--slave-name=vm331-m3",
       "--build-number=571",
-      "[SLAVE_BUILD]\\src\\out\\Release\\baz_unittests.exe",
+      "[START_DIR]\\src\\out\\Release\\baz_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
@@ -199,7 +199,7 @@
       "--builder-name=Syzygy Release",
       "--slave-name=vm331-m3",
       "--build-number=571",
-      "[SLAVE_BUILD]\\src\\out\\Release\\foo_unittests.exe",
+      "[START_DIR]\\src\\out\\Release\\foo_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
@@ -213,7 +213,7 @@
       "-t",
       "-a",
       "public-read",
-      "[SLAVE_BUILD]\\src\\out\\Release\\metrics.csv",
+      "[START_DIR]\\src\\out\\Release\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/release.csv"
     ],
     "name": "archive_metrics",
@@ -225,9 +225,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\randomize_chrome.py",
+      "[START_DIR]\\src\\syzygy\\internal\\build\\randomize_chrome.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out",
+      "[START_DIR]\\src\\out",
       "--target",
       "Release",
       "--verbose"
@@ -238,9 +238,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\benchmark_chrome.py",
+      "[START_DIR]\\src\\syzygy\\internal\\build\\benchmark_chrome.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out",
+      "[START_DIR]\\src\\out",
       "--target",
       "Release",
       "--verbose"

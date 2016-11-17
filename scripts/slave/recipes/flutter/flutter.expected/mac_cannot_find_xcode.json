@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\npath = sys.argv[1]\nif os.path.exists(path):\n  for p in (os.path.join(path, x) for x in os.listdir(path)):\n    if os.path.isdir(p):\n      chromium_utils.RemoveDirectory(p)\n    else:\n      os.unlink(p)\n",
-      "[SLAVE_BUILD]"
+      "[START_DIR]"
     ],
     "name": "rmcontents everything",
     "~followup_annotations": [
@@ -28,7 +28,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[SLAVE_BUILD]/flutter",
+      "[START_DIR]/flutter",
       "--url",
       "https://chromium.googlesource.com/external/github.com/flutter/flutter"
     ],
@@ -43,7 +43,7 @@
       "1234abcd",
       "--recurse-submodules"
     ],
-    "cwd": "[SLAVE_BUILD]/flutter",
+    "cwd": "[START_DIR]/flutter",
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
@@ -56,7 +56,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/flutter",
+    "cwd": "[START_DIR]/flutter",
     "name": "git checkout"
   },
   {
@@ -65,7 +65,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/flutter",
+    "cwd": "[START_DIR]/flutter",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -81,7 +81,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD]/flutter",
+    "cwd": "[START_DIR]/flutter",
     "name": "git clean"
   },
   {
@@ -90,7 +90,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]/flutter",
+    "cwd": "[START_DIR]/flutter",
     "name": "submodule sync"
   },
   {
@@ -101,12 +101,12 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[SLAVE_BUILD]/flutter",
+    "cwd": "[START_DIR]/flutter",
     "name": "submodule update"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/flutter/dev/bots/download_android_tools.py"
+      "[START_DIR]/flutter/dev/bots/download_android_tools.py"
     ],
     "name": "download android tools"
   },
@@ -119,9 +119,9 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/dev/bots/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "enumerate_xcode_installations",
     "~followup_annotations": [

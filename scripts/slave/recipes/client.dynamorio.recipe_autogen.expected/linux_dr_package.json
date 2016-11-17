@@ -44,7 +44,7 @@
       "ctest",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]/dynamorio/make/package.cmake,build=0x1234567"
+      "[START_DIR]/dynamorio/make/package.cmake,build=0x1234567"
     ],
     "name": "Package DynamoRIO"
   },

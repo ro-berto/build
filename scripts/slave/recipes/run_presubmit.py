@@ -50,7 +50,7 @@ def _RunStepsInternal(api):
   upstream = bot_update_step.json.output['properties'].get(
       got_revision_property)
 
-  abs_root = api.path['slave_build'].join(relative_root)
+  abs_root = api.path['start_dir'].join(relative_root)
   # TODO(hinoka): Extract email/name from issue?
   api.git('-c', 'user.email=commit-bot@chromium.org',
           '-c', 'user.name=The Commit Bot',

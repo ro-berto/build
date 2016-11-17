@@ -38,7 +38,7 @@ def RunSteps(api):
   api.gclient.c.got_revision_mapping['src/dart'] = 'got_revision'
 
   # gclient api sets Path('[CHECKOUT]') to build/src/dart.  We prefer build/src.
-  api.path['checkout'] = api.path['slave_build'].join('src')
+  api.path['checkout'] = api.path['start_dir'].join('src')
 
   with api.step.defer_results():
     api.python(

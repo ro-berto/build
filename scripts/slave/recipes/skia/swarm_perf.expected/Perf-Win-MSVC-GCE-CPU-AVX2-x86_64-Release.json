@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\skia\\tools\\buildbot_spec.py",
+      "[START_DIR]\\skia\\tools\\buildbot_spec.py",
       "/path/to/tmp/json",
       "Perf-Win-MSVC-GCE-CPU-AVX2-x86_64-Release"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[START_DIR]\\skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -48,7 +48,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\skia\\infra\\bots\\assets\\skp\\VERSION",
+      "[START_DIR]\\skia\\infra\\bots\\assets\\skp\\VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded SKP VERSION"
@@ -59,7 +59,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]\\tmp\\SKP_VERSION"
+      "[START_DIR]\\tmp\\SKP_VERSION"
     ],
     "name": "write SKP_VERSION"
   },
@@ -68,7 +68,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\skia\\infra\\bots\\assets\\skimage\\VERSION",
+      "[START_DIR]\\skia\\infra\\bots\\assets\\skimage\\VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded skimage VERSION"
@@ -79,7 +79,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]\\tmp\\SK_IMAGE_VERSION"
+      "[START_DIR]\\tmp\\SK_IMAGE_VERSION"
     ],
     "name": "write SK_IMAGE_VERSION"
   },
@@ -129,14 +129,14 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\out\\Release_x64\\nanobench",
+      "[START_DIR]\\out\\Release_x64\\nanobench",
       "--undefok",
       "-i",
-      "[SLAVE_BUILD]\\skia\\resources",
+      "[START_DIR]\\skia\\resources",
       "--skps",
-      "[SLAVE_BUILD]\\skp",
+      "[START_DIR]\\skp",
       "--images",
-      "[SLAVE_BUILD]\\skimage\\nanobench",
+      "[START_DIR]\\skimage\\nanobench",
       "--nogpu",
       "--dummy-flags",
       "--outResultsFile",
@@ -165,7 +165,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
       "PYTHONPATH": "[BUILD]\\scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]\\out"
+      "SKIA_OUT": "[START_DIR]\\out"
     },
     "name": "nanobench"
   },

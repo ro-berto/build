@@ -120,7 +120,7 @@ def RunSteps(api, mastername, buildername):
   update_step = api.auto_bisect.ensure_checkout()
   api.path.c.dynamic_paths['catapult'] = (
       api.m.auto_bisect.working_dir.join('catapult'))
-  api.path.c.dynamic_paths['bisect_results'] = api.path['slave_build'].join(
+  api.path.c.dynamic_paths['bisect_results'] = api.path['start_dir'].join(
       'bisect_results')
   api.chromium_android.clean_local_files()
 

@@ -43,9 +43,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/clean_output_directory.py"
+      "[START_DIR]/sdk/tools/clean_output_directory.py"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "clobber"
   },
   {
@@ -55,7 +55,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
       "DART_USE_GN": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -66,22 +66,22 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "[START_DIR]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "taskkill before building"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/build.py",
+      "[START_DIR]/sdk/tools/build.py",
       "-mrelease",
       "--arch=x64",
       "runtime"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
       "DART_USE_GN": "1"
     },
@@ -91,7 +91,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "-mrelease",
       "--arch=x64",
       "--progress=line",
@@ -103,14 +103,14 @@
       "--copy-coredumps",
       "--exclude-suite=pkg"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "-mrelease",
       "--arch=x64",
       "--progress=line",
@@ -123,17 +123,17 @@
       "--exclude-suite=pkg",
       "--checked"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "checked vm tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "[START_DIR]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "taskkill after testing"
   },
   {

@@ -42,7 +42,7 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD]/chromite/bin/cbuildbot",
+      "[START_DIR]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/android",
       "--buildbot",
@@ -54,7 +54,7 @@
       "https://android.googlesource.com/toolchain/ndk_chromite_config",
       "ndk-linux-arm64-v8a"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "cbuildbot [ndk-linux-arm64-v8a]"
   },
   {

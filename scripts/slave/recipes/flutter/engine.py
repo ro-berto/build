@@ -26,7 +26,7 @@ def GetCloudPath(api, path):
 
 
 def Build(api, config, *targets):
-  checkout = api.path['slave_build'].join('src')
+  checkout = api.path['start_dir'].join('src')
   build_dir = checkout.join('out/%s' % config)
   ninja_args = ['ninja', '-C', build_dir]
   ninja_args.extend(targets)
@@ -34,7 +34,7 @@ def Build(api, config, *targets):
 
 
 def RunGN(api, *args):
-  checkout = api.path['slave_build'].join('src')
+  checkout = api.path['start_dir'].join('src')
   gn_cmd = [checkout.join('flutter/tools/gn')]
   gn_cmd.extend(args)
   api.step('gn %s' % ' '.join(args), gn_cmd)
@@ -51,7 +51,7 @@ def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
     local_zip = temp_dir.join('artifacts.zip')
     remote_name = '%s/%s' % (platform, archive_name)
     remote_zip = GetCloudPath(api, remote_name)
-    pkg = api.zip.make_package(api.path['slave_build'].join('src'), local_zip)
+    pkg = api.zip.make_package(api.path['start_dir'].join('src'), local_zip)
     AddFiles(api, pkg, file_paths)
 
     pkg.zip('Zip %s %s' % (platform, archive_name))
@@ -65,7 +65,7 @@ def UploadDartPackage(api, package_name):
     local_zip = temp_dir.join('%s.zip' % package_name)
     remote_name = '%s.zip' % package_name
     remote_zip = GetCloudPath(api, remote_name)
-    parent_dir = api.path['slave_build'].join(
+    parent_dir = api.path['start_dir'].join(
         'src/out/android_debug/dist/packages')
     pkg = api.zip.make_package(parent_dir, local_zip)
     pkg.add_directory(parent_dir.join(package_name))
@@ -88,7 +88,7 @@ def AnalyzeDartUI(api):
   RunGN(api, '--unoptimized')
   Build(api, 'host_debug_unopt', 'generate_dart_ui')
 
-  checkout = api.path['slave_build'].join('src')
+  checkout = api.path['start_dir'].join('src')
   api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'],
            cwd=checkout)
 
@@ -171,7 +171,7 @@ def BuildLinux(api):
 
 
 def TestObservatory(api):
-  checkout = api.path['slave_build'].join('src')
+  checkout = api.path['start_dir'].join('src')
   sky_shell_path = checkout.join('out/host_debug_unopt/sky_shell')
   empty_main_path = \
       checkout.join('flutter/shell/testing/observatory/empty_main.dart')
@@ -205,7 +205,7 @@ def BuildMac(api):
 
 
 def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
-  checkout = api.path['slave_build'].join('src')
+  checkout = api.path['start_dir'].join('src')
   out_dir = checkout.join('out')
 
   label_dir = out_dir.join(label)
@@ -275,11 +275,11 @@ def GetCheckout(api):
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
-    api.file.rmcontents('everything', api.path['slave_build'])
+    api.file.rmcontents('everything', api.path['start_dir'])
 
   GetCheckout(api)
 
-  checkout = api.path['slave_build'].join('src')
+  checkout = api.path['start_dir'].join('src')
   dart_bin = checkout.join('third_party', 'dart-sdk', 'dart-sdk', 'bin')
   env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
 

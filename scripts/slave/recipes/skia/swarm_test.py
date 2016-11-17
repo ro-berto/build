@@ -83,12 +83,12 @@ def GenTests(api):
                          path_config='kitchen',
                          swarm_out_dir='[SWARM_OUT_DIR]') +
           api.path.exists(
-              api.path['slave_build'].join('skia'),
-              api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+              api.path['start_dir'].join('skia'),
+              api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                            'skimage', 'VERSION'),
-              api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+              api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                            'skp', 'VERSION'),
-              api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+              api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
           )
         )
         if ('Android' in builder and
@@ -116,12 +116,12 @@ def GenTests(api):
                    path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skp', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     api.step_data('dm', retcode=1)
   )
@@ -137,12 +137,12 @@ def GenTests(api):
                    path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skp', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
@@ -162,12 +162,12 @@ def GenTests(api):
                    path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skp', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
@@ -189,12 +189,12 @@ def GenTests(api):
                    path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skp', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
@@ -216,12 +216,12 @@ def GenTests(api):
                    path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skp', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
@@ -243,12 +243,12 @@ def GenTests(api):
                    path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skp', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
@@ -270,12 +270,12 @@ def GenTests(api):
                    path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skp', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     AndroidTestData(builder, adb='/usr/bin/adb') +
     api.step_data('read SKP_VERSION',
@@ -298,12 +298,12 @@ def GenTests(api):
                      patchset=1,
                      issue=2147533002L) +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skp', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     ) +
     api.platform('win', 64)
   )
@@ -319,10 +319,10 @@ def GenTests(api):
                    path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skp', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     )
   )
 
@@ -336,9 +336,9 @@ def GenTests(api):
                    path_config='kitchen',
                    swarm_out_dir='[SWARM_OUT_DIR]') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('skia', 'infra', 'bots', 'assets',
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('skia', 'infra', 'bots', 'assets',
                                      'skimage', 'VERSION'),
-        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+        api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt')
     )
   )

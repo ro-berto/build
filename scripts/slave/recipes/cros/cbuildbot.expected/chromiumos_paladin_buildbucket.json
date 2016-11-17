@@ -44,7 +44,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/chromite/cbuildbot/config_dump.json",
+      "[START_DIR]/chromite/cbuildbot/config_dump.json",
       "/path/to/tmp/json"
     ],
     "name": "read chromite config",
@@ -60,7 +60,7 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD]/chromite/bin/cbuildbot",
+      "[START_DIR]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--buildbot",
@@ -76,7 +76,7 @@
       "24601",
       "auron-paladin"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "cbuildbot [auron-paladin]"
   },
   {

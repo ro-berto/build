@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport os, sys, shutil\nroot = sys.argv[1]\nnuke_dirs = sys.argv[2:]\nfor fname in os.listdir(root):\n  path = os.path.join(root, fname)\n  if os.path.isfile(path):\n    os.unlink(path)\n  elif fname in nuke_dirs:\n    shutil.rmtree(path)\n",
-      "[SLAVE_BUILD]",
+      "[START_DIR]",
       "libs",
       "obj",
       "vp8",
@@ -36,7 +36,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[SLAVE_BUILD]/libvpx",
+      "[START_DIR]/libvpx",
       "--url",
       "https://chromium.googlesource.com/webm/libvpx"
     ],
@@ -51,7 +51,7 @@
       "master",
       "--recurse-submodules"
     ],
-    "cwd": "[SLAVE_BUILD]/libvpx",
+    "cwd": "[START_DIR]/libvpx",
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
@@ -64,7 +64,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/libvpx",
+    "cwd": "[START_DIR]/libvpx",
     "name": "git checkout"
   },
   {
@@ -73,7 +73,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/libvpx",
+    "cwd": "[START_DIR]/libvpx",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -88,7 +88,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD]/libvpx",
+    "cwd": "[START_DIR]/libvpx",
     "name": "git clean"
   },
   {
@@ -97,7 +97,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]/libvpx",
+    "cwd": "[START_DIR]/libvpx",
     "name": "submodule sync"
   },
   {
@@ -108,7 +108,7 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[SLAVE_BUILD]/libvpx",
+    "cwd": "[START_DIR]/libvpx",
     "name": "submodule update"
   },
   {

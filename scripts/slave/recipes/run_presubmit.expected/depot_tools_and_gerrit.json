@@ -65,7 +65,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[SLAVE_BUILD]/depot_tools",
+    "cwd": "[START_DIR]/depot_tools",
     "name": "commit git patch"
   },
   {
@@ -75,7 +75,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/depot_tools",
+    "cwd": "[START_DIR]/depot_tools",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -94,7 +94,7 @@
       "https://chromium-review.googlesource.com",
       "--gerrit_fetch",
       "--root",
-      "[SLAVE_BUILD]/depot_tools",
+      "[START_DIR]/depot_tools",
       "--commit",
       "--verbose",
       "--verbose",

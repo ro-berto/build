@@ -172,7 +172,7 @@
       "blob",
       "HEAD:DEPS"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git cat-file",
     "stdout": "/path/to/tmp/"
   },
@@ -180,9 +180,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/v8/tools/release/auto_roll.py",
+      "[START_DIR]/src/v8/tools/release/auto_roll.py",
       "--chromium",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--author",
       "v8-autoroll@chromium.org",
       "--reviewer",
@@ -191,9 +191,9 @@
       "--json-output",
       "/path/to/tmp/json",
       "--work-dir",
-      "[SLAVE_BUILD]/workdir"
+      "[START_DIR]/workdir"
     ],
-    "cwd": "[SLAVE_BUILD]/src/v8",
+    "cwd": "[START_DIR]/src/v8",
     "name": "roll deps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

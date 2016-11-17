@@ -41,9 +41,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools\\unpack.bat"
+      "[START_DIR]\\tools\\buildbot\\bot_tools\\unpack.bat"
     ],
-    "cwd": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools",
+    "cwd": "[START_DIR]\\tools\\buildbot\\bot_tools",
     "name": "unpack tools"
   },
   {
@@ -54,7 +54,7 @@
       "60",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]\\drmemory\\tests\\runsuite.cmake,drmemory_only;long;build=42"
+      "[START_DIR]\\drmemory\\tests\\runsuite.cmake,drmemory_only;long;build=42"
     ],
     "name": "Dr. Memory ctest"
   },
@@ -64,7 +64,7 @@
       "checkout",
       "--force",
       "http://data-race-test.googlecode.com/svn/trunk/",
-      "[SLAVE_BUILD]\\tsan"
+      "[START_DIR]\\tsan"
     ],
     "name": "Checkout TSan tests"
   },
@@ -73,10 +73,10 @@
       "E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat",
       "make",
       "-C",
-      "[SLAVE_BUILD]\\tsan\\unittest"
+      "[START_DIR]\\tsan\\unittest"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools",
+      "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools",
       "CYGWIN": "nodosfilewarning"
     },
     "name": "Build TSan Tests"
@@ -90,14 +90,14 @@
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
+      "[START_DIR]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "--",
-      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
+      "[START_DIR]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
+      "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
     "name": "dbg full TSan tests"
   },
@@ -110,15 +110,15 @@
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
+      "[START_DIR]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "-light",
       "--",
-      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
+      "[START_DIR]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
+      "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
     "name": "dbg light TSan tests"
   },
@@ -131,14 +131,14 @@
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
+      "[START_DIR]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "--",
-      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
+      "[START_DIR]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
+      "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
     "name": "rel full TSan tests"
   },
@@ -151,15 +151,15 @@
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
+      "[START_DIR]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "-light",
       "--",
-      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
+      "[START_DIR]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
+      "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
     "name": "rel light TSan tests"
   },
@@ -172,14 +172,14 @@
       "-results_to_stderr",
       "-batch",
       "-suppress",
-      "[SLAVE_BUILD]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
+      "[START_DIR]\\drmemory\\tests\\app_suite\\default-suppressions.txt",
       "--",
-      "[SLAVE_BUILD]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
+      "[START_DIR]\\tsan\\unittest\\bin\\racecheck_unittest-windows-x86-O0.exe",
       "--gtest_filter=-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*",
       "-147"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
+      "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
     "name": "dbg full nosyms TSan tests"
   },
@@ -201,7 +201,7 @@
       "xmlresults"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
+      "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
     "name": "Pack test results"
   },

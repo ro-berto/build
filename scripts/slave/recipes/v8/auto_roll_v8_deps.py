@@ -50,7 +50,7 @@ def GetDEPS(api, name, repo):
   step_result = api.gclient(
       'get %s deps' % name,
       ['revinfo', '--deps', 'all', '--spec', spec],
-      cwd=api.path['slave_build'],
+      cwd=api.path['start_dir'],
       stdout=api.raw_io.output(),
   )
 

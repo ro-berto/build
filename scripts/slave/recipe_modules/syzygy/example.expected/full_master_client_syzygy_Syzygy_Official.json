@@ -67,7 +67,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[START_DIR]\\src\\out\\Release"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -88,7 +88,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "official_build=1 target_arch=ia32",
@@ -112,7 +112,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[START_DIR]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
@@ -138,9 +138,9 @@
       "-u",
       "\nimport sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
       "metrics.csv",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[START_DIR]\\src\\out\\Release"
     ],
-    "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\out\\Release",
+    "name": "rmwildcard metrics.csv in [START_DIR]\\src\\out\\Release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
@@ -155,7 +155,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\syzygy\\unittests.gypi",
+      "[START_DIR]\\src\\syzygy\\unittests.gypi",
       "/path/to/tmp/"
     ],
     "name": "read_unittests_gypi"
@@ -176,7 +176,7 @@
       "--builder-name=Syzygy Official",
       "--slave-name=fake_slave",
       "--build-number=571",
-      "[SLAVE_BUILD]\\src\\out\\Release\\bar_unittests.exe",
+      "[START_DIR]\\src\\out\\Release\\bar_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
@@ -199,7 +199,7 @@
       "--builder-name=Syzygy Official",
       "--slave-name=fake_slave",
       "--build-number=571",
-      "[SLAVE_BUILD]\\src\\out\\Release\\baz_unittests.exe",
+      "[START_DIR]\\src\\out\\Release\\baz_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
@@ -222,7 +222,7 @@
       "--builder-name=Syzygy Official",
       "--slave-name=fake_slave",
       "--build-number=571",
-      "[SLAVE_BUILD]\\src\\out\\Release\\foo_unittests.exe",
+      "[START_DIR]\\src\\out\\Release\\foo_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
@@ -233,9 +233,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\randomize_chrome.py",
+      "[START_DIR]\\src\\syzygy\\internal\\build\\randomize_chrome.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out",
+      "[START_DIR]\\src\\out",
       "--target",
       "Release",
       "--verbose"
@@ -246,9 +246,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\benchmark_chrome.py",
+      "[START_DIR]\\src\\syzygy\\internal\\build\\benchmark_chrome.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out",
+      "[START_DIR]\\src\\out",
       "--target",
       "Release",
       "--verbose"
@@ -262,7 +262,7 @@
       "-t",
       "-a",
       "public-read",
-      "[SLAVE_BUILD]\\src\\out\\Release\\metrics.csv",
+      "[START_DIR]\\src\\out\\Release\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/official.csv"
     ],
     "name": "archive_metrics",
@@ -275,7 +275,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\syzygy\\SYZYGY_VERSION",
+      "[START_DIR]\\src\\syzygy\\SYZYGY_VERSION",
       "/path/to/tmp/"
     ],
     "name": "read_version"
@@ -286,7 +286,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
       "--public-read",
-      "[SLAVE_BUILD]\\src\\out\\Release\\archive",
+      "[START_DIR]\\src\\out\\Release\\archive",
       "gs://syzygy-archive/test/builds/official/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
     "name": "archive_binaries",
@@ -298,11 +298,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\scripts\\archive_symbols.py",
+      "[START_DIR]\\src\\syzygy\\internal\\scripts\\archive_symbols.py",
       "-s",
       "-b",
-      "[SLAVE_BUILD]\\src\\out\\Release\\*asan_rtl.dll",
-      "[SLAVE_BUILD]\\src\\out\\Release\\*client.dll"
+      "[START_DIR]\\src\\out\\Release\\*asan_rtl.dll",
+      "[START_DIR]\\src\\out\\Release\\*client.dll"
     ],
     "name": "upload_symbols"
   },
@@ -310,9 +310,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\build\\get_syzygy_binaries.py",
+      "[START_DIR]\\src\\syzygy\\build\\get_syzygy_binaries.py",
       "--output-dir",
-      "[SLAVE_BUILD]\\src\\syzygy\\binaries",
+      "[START_DIR]\\src\\syzygy\\binaries",
       "--revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--overwrite",
@@ -324,10 +324,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\smoke_test.py",
+      "[START_DIR]\\src\\syzygy\\internal\\build\\smoke_test.py",
       "--verbose",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\build"
+      "[START_DIR]\\src\\build"
     ],
     "name": "smoke_test"
   },

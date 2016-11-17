@@ -115,7 +115,7 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -124,7 +124,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -132,7 +132,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -166,7 +166,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -187,7 +187,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -200,19 +200,19 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.chromium.linux",
       "-b",
       "linux_chromium_gn_upload",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -273,7 +273,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[START_DIR]/src/out/Release",
       "-j",
       "50",
       "gn",
@@ -343,11 +343,11 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[START_DIR]/src/out/Release",
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]/src/out/Release', '-j', 50, 'gn', 'gn_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'gn', 'gn_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -367,7 +367,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/out/Release/gn",
+      "[START_DIR]/src/out/Release/gn",
       "--version"
     ],
     "name": "gn version"
@@ -395,7 +395,7 @@
   {
     "cmd": [
       "strip",
-      "[SLAVE_BUILD]/src/out/Release/gn"
+      "[START_DIR]/src/out/Release/gn"
     ],
     "name": "gn strip"
   },
@@ -406,7 +406,7 @@
       "[DEPOT_TOOLS]/upload_to_google_storage.py",
       "-b",
       "chromium-gn",
-      "[SLAVE_BUILD]/src/out/Release/gn"
+      "[START_DIR]/src/out/Release/gn"
     ],
     "name": "upload"
   },
@@ -415,7 +415,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/out/Release/gn.sha1",
+      "[START_DIR]/src/out/Release/gn.sha1",
       "/path/to/tmp/"
     ],
     "name": "gn sha1",

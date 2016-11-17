@@ -19,13 +19,13 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/buildbot-build.sh",
+      "[START_DIR]/art/tools/buildbot-build.sh",
       "-j8",
       "--target"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -37,9 +37,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -50,11 +50,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/setup-buildbot-device.sh"
+      "[START_DIR]/art/tools/setup-buildbot-device.sh"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -66,9 +66,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -88,8 +88,8 @@
       "/data/nativetest"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -101,9 +101,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -118,8 +118,8 @@
       "test-art-target-sync"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -131,9 +131,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -149,8 +149,8 @@
       "test-art-target-gtest64"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -164,9 +164,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -184,8 +184,8 @@
       "threadtime"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -197,9 +197,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -210,11 +210,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -226,9 +226,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -244,8 +244,8 @@
       "-c"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -257,9 +257,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -276,8 +276,8 @@
       "dist"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -292,9 +292,9 @@
       "ART_TEST_RUN_TEST_DEBUGGABLE": "true",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -312,8 +312,8 @@
       "threadtime"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -325,9 +325,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -338,11 +338,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -354,9 +354,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -372,8 +372,8 @@
       "-c"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -385,9 +385,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -404,8 +404,8 @@
       "dist"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -419,9 +419,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -439,8 +439,8 @@
       "threadtime"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -452,9 +452,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -465,11 +465,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -481,9 +481,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -499,8 +499,8 @@
       "-c"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -512,9 +512,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -531,8 +531,8 @@
       "dist"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -546,9 +546,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -566,8 +566,8 @@
       "threadtime"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -579,9 +579,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -592,11 +592,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -608,9 +608,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -626,8 +626,8 @@
       "-c"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -639,9 +639,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -652,14 +652,14 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/run-libcore-tests.sh",
+      "[START_DIR]/art/tools/run-libcore-tests.sh",
       "--mode=device",
       "--variant=X64",
       "--debug"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -673,9 +673,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -693,8 +693,8 @@
       "threadtime"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -706,9 +706,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -719,11 +719,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -735,9 +735,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -753,8 +753,8 @@
       "-c"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -766,9 +766,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -779,14 +779,14 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/run-jdwp-tests.sh",
+      "[START_DIR]/art/tools/run-jdwp-tests.sh",
       "--mode=device",
       "--variant=X64",
       "--debug"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -800,9 +800,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -820,8 +820,8 @@
       "threadtime"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -833,9 +833,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -846,11 +846,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -862,9 +862,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -880,8 +880,8 @@
       "-c"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -893,9 +893,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -906,15 +906,15 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/run-jdwp-tests.sh",
+      "[START_DIR]/art/tools/run-jdwp-tests.sh",
       "--mode=device",
       "--variant=X64",
       "--no-jit",
       "--debug"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -928,9 +928,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -948,8 +948,8 @@
       "threadtime"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -961,9 +961,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -974,11 +974,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -990,9 +990,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
@@ -1008,8 +1008,8 @@
       "-c"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/armv8",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -1021,9 +1021,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",

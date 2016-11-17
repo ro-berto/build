@@ -115,7 +115,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "commit git patch"
   },
   {
@@ -133,7 +133,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--commit",
       "--verbose",
       "--verbose",

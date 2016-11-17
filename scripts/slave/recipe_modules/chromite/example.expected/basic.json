@@ -21,7 +21,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/chromite/bin/cros_sdk",
+      "[START_DIR]/chromite/bin/cros_sdk",
       "--cache-dir",
       ".cache",
       "--",
@@ -35,7 +35,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/chromite/bin/cros_sdk",
+      "[START_DIR]/chromite/bin/cros_sdk",
       "--",
       "./build_packages",
       "--board",
@@ -47,7 +47,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/chromite/bin/cros_sdk",
+      "[START_DIR]/chromite/bin/cros_sdk",
       "var1=value",
       "--",
       "echo",
@@ -58,7 +58,7 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD]/chromite/bin/cbuildbot",
+      "[START_DIR]/chromite/bin/cbuildbot",
       "--clobber",
       "--build-dir",
       "/here/there",
@@ -71,7 +71,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/chromite/cbuildbot/config_dump.json",
+      "[START_DIR]/chromite/cbuildbot/config_dump.json",
       "/path/to/tmp/json"
     ],
     "name": "read chromite config",

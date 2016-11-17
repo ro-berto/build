@@ -18,7 +18,7 @@ class DiskApi(recipe_api.RecipeApi):
     Prints disk space usage in step log and step text.
 
     Args:
-      path (str): path mapped to the disk. Defaults to [SLAVE_BUILD].
+      path (str): path mapped to the disk. Defaults to [START_DIR].
       warning_level (float): a value from 0 to 1.0. If usage reaches this level,
         mark the step as WARNING. Defaults to 0.9.
       previous_result (dict): previous result of space_usage call. If passed,
@@ -30,7 +30,7 @@ class DiskApi(recipe_api.RecipeApi):
         * capacity (float): disk capacity, in MiB.
         * used (float): disk usage, in MiB.
     """
-    path = path or self.m.path['slave_build']
+    path = path or self.m.path['start_dir']
     name = name or 'disk space usage'
     warning_level = warning_level or 0.9
     kwargs.setdefault(

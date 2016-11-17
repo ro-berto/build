@@ -41,9 +41,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools/unpack.bat"
+      "[START_DIR]/dynamorio/tools/buildbot/bot_tools/unpack.bat"
     ],
-    "cwd": "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools",
+    "cwd": "[START_DIR]/dynamorio/tools/buildbot/bot_tools",
     "name": "unpack tools"
   },
   {
@@ -56,9 +56,9 @@
       "-S",
       "dynamorio/suite/runsuite.cmake,nightly;long;site=X64.WindowsXp.VS2010.BuildBot"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[START_DIR]/dynamorio/tools/buildbot/bot_tools"
     },
     "name": "nightly suite"
   },

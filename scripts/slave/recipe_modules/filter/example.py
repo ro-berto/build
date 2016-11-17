@@ -18,7 +18,7 @@ def RunSteps(api):
   additional_compile_targets = api.m.properties.get(
       'additional_compile_targets')
 
-  api.path['checkout'] = api.path['slave_build']
+  api.path['checkout'] = api.path['start_dir']
   api.chromium.set_config('chromium')
   api.chromium.ensure_goma()
   api.filter.does_patch_require_compile(

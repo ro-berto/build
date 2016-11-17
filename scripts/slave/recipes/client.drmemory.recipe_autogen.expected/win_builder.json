@@ -41,9 +41,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools\\unpack.bat"
+      "[START_DIR]\\tools\\buildbot\\bot_tools\\unpack.bat"
     ],
-    "cwd": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools",
+    "cwd": "[START_DIR]\\tools\\buildbot\\bot_tools",
     "name": "unpack tools"
   },
   {
@@ -52,11 +52,11 @@
       "ctest",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]\\drmemory\\package.cmake,build=0x1234567;drmem_only"
+      "[START_DIR]\\drmemory\\package.cmake,build=0x1234567;drmem_only"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
+      "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
     "name": "Package Dr. Memory"
   },
@@ -69,7 +69,7 @@
       "/B",
       "DrMemory-Windows-*0x1234567.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Find package basename",
     "stdout": "/path/to/tmp/"
   },
@@ -78,7 +78,7 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\DrMemory-Windows-1.2.3-0x1234567-sfx.exe"
+      "[START_DIR]\\DrMemory-Windows-1.2.3-0x1234567-sfx.exe"
     ],
     "name": "Delete prior sfx archive",
     "~followup_annotations": [
@@ -96,11 +96,11 @@
       "a",
       "-sfx",
       "DrMemory-Windows-1.2.3-0x1234567-sfx.exe",
-      "..\\[SLAVE_BUILD]\\build_drmemory-debug-32\\_CPack_Packages\\Windows\\ZIP\\DrMemory-Windows-1.2.3-0x1234567\\*"
+      "..\\[START_DIR]\\build_drmemory-debug-32\\_CPack_Packages\\Windows\\ZIP\\DrMemory-Windows-1.2.3-0x1234567\\*"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]\\tools\\buildbot\\bot_tools"
+      "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
     "name": "create sfx archive"
   },
@@ -109,8 +109,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\DrMemory-Windows-1.2.3-0x1234567-sfx.exe",
-      "[SLAVE_BUILD]\\drmemory-windows-latest-sfx.exe"
+      "[START_DIR]\\DrMemory-Windows-1.2.3-0x1234567-sfx.exe",
+      "[START_DIR]\\drmemory-windows-latest-sfx.exe"
     ],
     "name": "copy locally"
   },
@@ -126,7 +126,7 @@
       "drmemory-windows-latest-sfx.exe",
       "gs://chromium-drmemory-builds/"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-drmemory-builds/@@@"

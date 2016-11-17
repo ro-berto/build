@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[START_DIR]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -48,7 +48,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_install"
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_install"
     ],
     "env": {
       "BUILDTYPE": "Debug",
@@ -57,15 +57,15 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "install iOSShell"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_push_if_needed",
-      "[SLAVE_BUILD]/skia/resources",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_push_if_needed",
+      "[START_DIR]/skia/resources",
       "skiabot/skia_resources"
     ],
     "env": {
@@ -75,8 +75,8 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "push resources to skia_resources"
   },
@@ -85,7 +85,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skp/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded SKP VERSION"
@@ -96,13 +96,13 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION"
+      "[START_DIR]/tmp/SKP_VERSION"
     ],
     "name": "write SKP_VERSION"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_cat_file",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_cat_file",
       "skiabot/skia_tmp_dir/SKP_VERSION"
     ],
     "env": {
@@ -112,15 +112,15 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_rm",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_rm",
       "skiabot/skia_tmp_dir/SKP_VERSION"
     ],
     "env": {
@@ -130,14 +130,14 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "rm skiabot/skia_tmp_dir/SKP_VERSION"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_rm",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_rm",
       "skiabot/skia_skp/skps"
     ],
     "env": {
@@ -147,14 +147,14 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "rmdir skiabot/skia_skp/skps"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_mkdir",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_mkdir",
       "skiabot/skia_skp/skps"
     ],
     "env": {
@@ -164,15 +164,15 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "mkdir skiabot/skia_skp/skps"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_push_if_needed",
-      "[SLAVE_BUILD]/skp",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_push_if_needed",
+      "[START_DIR]/skp",
       "skiabot/skia_skp/skps"
     ],
     "env": {
@@ -182,15 +182,15 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "push skp to skps"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_push_file",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_push_file",
+      "[START_DIR]/tmp/SKP_VERSION",
       "skiabot/skia_tmp_dir/SKP_VERSION"
     ],
     "env": {
@@ -200,17 +200,17 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
-    "name": "push [SLAVE_BUILD]/tmp/SKP_VERSION"
+    "name": "push [START_DIR]/tmp/SKP_VERSION"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded skimage VERSION"
@@ -221,13 +221,13 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
+      "[START_DIR]/tmp/SK_IMAGE_VERSION"
     ],
     "name": "write SK_IMAGE_VERSION"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_cat_file",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_cat_file",
       "skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "env": {
@@ -237,15 +237,15 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "read SK_IMAGE_VERSION",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_rm",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_rm",
       "skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "env": {
@@ -255,14 +255,14 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "rm skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_rm",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_rm",
       "skiabot/skia_images"
     ],
     "env": {
@@ -272,14 +272,14 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "rmdir skiabot/skia_images"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_mkdir",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_mkdir",
       "skiabot/skia_images"
     ],
     "env": {
@@ -289,15 +289,15 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "mkdir skiabot/skia_images"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_push_if_needed",
-      "[SLAVE_BUILD]/skimage",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_push_if_needed",
+      "[START_DIR]/skimage",
       "skiabot/skia_images"
     ],
     "env": {
@@ -307,15 +307,15 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "push skimage to skia_images"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_push_file",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_push_file",
+      "[START_DIR]/tmp/SK_IMAGE_VERSION",
       "skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "env": {
@@ -325,10 +325,10 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
-    "name": "push [SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
+    "name": "push [START_DIR]/tmp/SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -376,7 +376,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_rm",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_rm",
       "skiabot/skia_dm"
     ],
     "env": {
@@ -386,14 +386,14 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "rmdir skiabot/skia_dm"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_mkdir",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_mkdir",
       "skiabot/skia_dm"
     ],
     "env": {
@@ -403,8 +403,8 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "mkdir skiabot/skia_dm"
   },
@@ -413,7 +413,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/tmp",
+      "[START_DIR]/tmp",
       "511"
     ],
     "name": "makedirs tmp_dir",
@@ -435,9 +435,9 @@
       "python",
       "-u",
       "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
-      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
+      "[START_DIR]/tmp/uninteresting_hashes.txt"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "env": {
       "BUILDTYPE": "Debug",
       "CC": "/usr/bin/clang",
@@ -445,7 +445,7 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "get uninteresting hashes",
     "~followup_annotations": [
@@ -484,8 +484,8 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_push_file",
-      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_push_file",
+      "[START_DIR]/tmp/uninteresting_hashes.txt",
       "skiabot/skia_tmp_dir/uninteresting_hashes.txt"
     ],
     "env": {
@@ -495,14 +495,14 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
-    "name": "push [SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
+    "name": "push [START_DIR]/tmp/uninteresting_hashes.txt"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_run_skia",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_run_skia",
       "--dm",
       "--undefok",
       "--resourcePath",
@@ -552,14 +552,14 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "dm"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_pull_if_needed",
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_pull_if_needed",
       "skiabot/skia_dm",
       "[CUSTOM_[SWARM_OUT_DIR]]/dm"
     ],
@@ -570,14 +570,14 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "pull skia_dm"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_restart"
+      "[START_DIR]/skia/platform_tools/ios/bin/ios_restart"
     ],
     "env": {
       "BUILDTYPE": "Debug",
@@ -586,8 +586,8 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "reboot"
   },
@@ -603,8 +603,8 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "XCODEBUILD": "[SLAVE_BUILD]/xcodebuild"
+      "SKIA_OUT": "[START_DIR]/out",
+      "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
     "name": "wait for reboot"
   },

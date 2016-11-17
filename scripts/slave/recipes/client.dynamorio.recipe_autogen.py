@@ -34,7 +34,7 @@ def win_xp_dr_nightly_steps(api):
         'dynamorio/suite/runsuite.cmake,nightly;long;'+\
             'site=X64.WindowsXp.VS2010.BuildBot'],
       env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-        "bot_tools")}, cwd=api.path["slave_build"])
+        "bot_tools")}, cwd=api.path["start_dir"])
 
 
 def linux_dr_steps(api):
@@ -50,9 +50,9 @@ def linux_dr_steps(api):
   # pre-commit suite step
   api.step("pre-commit suite", ['ctest', '--timeout', '120', '-VV', '-S',
     api.path["checkout"].join("suite", "runsuite.cmake")],
-    cwd=api.path["slave_build"], ok_ret="all")
+    cwd=api.path["start_dir"], ok_ret="all")
   # upload dynamorio docs step
-  api.gsutil.upload(api.path["slave_build"].join("install", "docs", "html"),
+  api.gsutil.upload(api.path["start_dir"].join("install", "docs", "html"),
       "chromium-dynamorio", "dr_docs/", ["-r"], multithreaded=True)
 
 
@@ -77,7 +77,7 @@ def win_7_dr_steps(api):
     "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
     api.path["checkout"].join("suite", "runsuite.cmake")],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.path["slave_build"])
+      "bot_tools")}, cwd=api.path["start_dir"])
 
 
 def linux_dr_package_steps(api):
@@ -124,7 +124,7 @@ def win_8_dr_steps(api):
         'ctest', '--timeout', '120', '-VV', '-S',
         api.path["checkout"].join("suite", "runsuite.cmake")],
       env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-        "bot_tools")}, cwd=api.path["slave_build"])
+        "bot_tools")}, cwd=api.path["start_dir"])
 
 
 def win_xp_dr_steps(api):
@@ -148,7 +148,7 @@ def win_xp_dr_steps(api):
     "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
     api.path["checkout"].join("suite", "runsuite.cmake")],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.path["slave_build"])
+      "bot_tools")}, cwd=api.path["start_dir"])
 
 
 def win_7_dr_nightly_steps(api):
@@ -173,7 +173,7 @@ def win_7_dr_nightly_steps(api):
     'dynamorio/suite/runsuite.cmake,nightly;long;'+\
         'site=X64.Windows7.VS2010.BuildBot'],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.path["slave_build"])
+      "bot_tools")}, cwd=api.path["start_dir"])
 
 
 def win_8_dr_nightly_steps(api):
@@ -198,7 +198,7 @@ def win_8_dr_nightly_steps(api):
     'dynamorio/suite/runsuite.cmake,nightly;long;'+\
         'site=X64.Windows8.VS2010.BuildBot'],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.path["slave_build"])
+      "bot_tools")}, cwd=api.path["start_dir"])
 
 
 def win_dr_package_steps(api):

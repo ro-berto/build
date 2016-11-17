@@ -5,7 +5,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "None/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
-      "[SLAVE_BUILD]/src/out/Release/llvm-symbolizer"
+      "[START_DIR]/src/out/Release/llvm-symbolizer"
     ],
     "name": "Copy llvm-symbolizer"
   },
@@ -15,7 +15,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "None/third_party/llvm-build/Release+Asserts/bin/sancov",
-      "[SLAVE_BUILD]/src/out/Release/sancov"
+      "[START_DIR]/src/out/Release/sancov"
     ],
     "name": "Copy sancov"
   },
@@ -24,7 +24,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[START_DIR]/src/out/Release",
       "/path/to/tmp/json"
     ],
     "name": "listdir build_dir",
@@ -49,7 +49,7 @@
       "[TMP_BASE]/chrome_staging_tmp_1",
       "chrome-asan-linux-release-x10-component-234",
       "[\"chrome\"]",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
     "name": "zipping"
   },

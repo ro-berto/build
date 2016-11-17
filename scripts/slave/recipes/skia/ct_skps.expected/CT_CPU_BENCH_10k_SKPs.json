@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git clean"
   },
   {
@@ -46,7 +46,7 @@
       "origin",
       "https://chromium.googlesource.com/chromium/src.git"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git remote set-url (2)"
   },
   {
@@ -54,7 +54,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git fetch (2)"
   },
   {
@@ -64,7 +64,7 @@
       "--hard",
       "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git reset (2)"
   },
   {
@@ -74,7 +74,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git clean (2)"
   },
   {
@@ -98,7 +98,7 @@
       "src@origin/master",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -137,7 +137,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[SLAVE_BUILD]/swarming.client",
+      "[START_DIR]/swarming.client",
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
@@ -151,7 +151,7 @@
       "origin",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
@@ -164,7 +164,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "git checkout (swarming_client)"
   },
   {
@@ -173,7 +173,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -188,7 +188,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "git clean (swarming_client)"
   },
   {
@@ -197,7 +197,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -208,14 +208,14 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "submodule update (swarming_client)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -233,7 +233,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/src/tools/luci-go/linux64"
+      "[START_DIR]/src/tools/luci-go/linux64"
     ],
     "name": "download luci-go linux"
   },
@@ -246,7 +246,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/src/tools/luci-go/mac64"
+      "[START_DIR]/src/tools/luci-go/mac64"
     ],
     "name": "download luci-go mac"
   },
@@ -259,7 +259,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/src/tools/luci-go/win64"
+      "[START_DIR]/src/tools/luci-go/win64"
     ],
     "name": "download luci-go win"
   },
@@ -268,7 +268,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/luci-go"
+      "[START_DIR]/luci-go"
     ],
     "name": "rmtree Go binary dir",
     "~followup_annotations": [
@@ -287,8 +287,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/src/tools/luci-go",
-      "[SLAVE_BUILD]/luci-go",
+      "[START_DIR]/src/tools/luci-go",
+      "[START_DIR]/luci-go",
       "0"
     ],
     "name": "Copy Go binary"
@@ -299,7 +299,7 @@
       "nanobench",
       "BUILDTYPE=Release"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "build nanobench",
     "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@Location of SKPs@\"https://pantheon.corp.google.com/storage/browser/cluster-telemetry/swarming/skps/10k/fad657e-276e633/\"@@@"
@@ -310,7 +310,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir"
+      "[START_DIR]/swarming_temp_dir"
     ],
     "name": "rmtree swarming temp dir",
     "~followup_annotations": [
@@ -329,7 +329,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skps/slave1"
+      "[START_DIR]/skps/slave1"
     ],
     "name": "rmtree slave1",
     "~followup_annotations": [
@@ -348,7 +348,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skps/slave1",
+      "[START_DIR]/skps/slave1",
       "511"
     ],
     "name": "makedirs slave1",
@@ -383,7 +383,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/8/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/9/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/10/*.skp",
-      "[SLAVE_BUILD]/skps/slave1"
+      "[START_DIR]/skps/slave1"
     ],
     "name": "gsutil cp"
   },
@@ -392,7 +392,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
+      "[START_DIR]/swarming_temp_dir",
       "511"
     ],
     "name": "makedirs swarming tmp dir",
@@ -414,8 +414,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-nanobench-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-1.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-ct-nanobench-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[START_DIR]/src/chrome\", \n    \"version\": 1\n}",
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-1.isolated.gen.json"
     ],
     "name": "Write ct-nanobench-1.isolated.gen.json"
   },
@@ -424,7 +424,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skps/slave2"
+      "[START_DIR]/skps/slave2"
     ],
     "name": "rmtree slave2",
     "~followup_annotations": [
@@ -443,7 +443,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skps/slave2",
+      "[START_DIR]/skps/slave2",
       "511"
     ],
     "name": "makedirs slave2",
@@ -478,7 +478,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/18/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/19/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/20/*.skp",
-      "[SLAVE_BUILD]/skps/slave2"
+      "[START_DIR]/skps/slave2"
     ],
     "name": "gsutil cp (2)"
   },
@@ -487,7 +487,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
+      "[START_DIR]/swarming_temp_dir",
       "511"
     ],
     "name": "makedirs swarming tmp dir (2)",
@@ -509,8 +509,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-nanobench-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-2.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-ct-nanobench-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[START_DIR]/src/chrome\", \n    \"version\": 1\n}",
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-2.isolated.gen.json"
     ],
     "name": "Write ct-nanobench-2.isolated.gen.json"
   },
@@ -519,7 +519,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skps/slave3"
+      "[START_DIR]/skps/slave3"
     ],
     "name": "rmtree slave3",
     "~followup_annotations": [
@@ -538,7 +538,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skps/slave3",
+      "[START_DIR]/skps/slave3",
       "511"
     ],
     "name": "makedirs slave3",
@@ -573,7 +573,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/28/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/29/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/30/*.skp",
-      "[SLAVE_BUILD]/skps/slave3"
+      "[START_DIR]/skps/slave3"
     ],
     "name": "gsutil cp (3)"
   },
@@ -582,7 +582,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
+      "[START_DIR]/swarming_temp_dir",
       "511"
     ],
     "name": "makedirs swarming tmp dir (3)",
@@ -604,8 +604,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-nanobench-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-3.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-ct-nanobench-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[START_DIR]/src/chrome\", \n    \"version\": 1\n}",
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-3.isolated.gen.json"
     ],
     "name": "Write ct-nanobench-3.isolated.gen.json"
   },
@@ -614,7 +614,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skps/slave4"
+      "[START_DIR]/skps/slave4"
     ],
     "name": "rmtree slave4",
     "~followup_annotations": [
@@ -633,7 +633,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skps/slave4",
+      "[START_DIR]/skps/slave4",
       "511"
     ],
     "name": "makedirs slave4",
@@ -668,7 +668,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/38/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/39/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/40/*.skp",
-      "[SLAVE_BUILD]/skps/slave4"
+      "[START_DIR]/skps/slave4"
     ],
     "name": "gsutil cp (4)"
   },
@@ -677,7 +677,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
+      "[START_DIR]/swarming_temp_dir",
       "511"
     ],
     "name": "makedirs swarming tmp dir (4)",
@@ -699,8 +699,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-nanobench-4.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"4\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-4.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-ct-nanobench-4.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"4\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[START_DIR]/src/chrome\", \n    \"version\": 1\n}",
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-4.isolated.gen.json"
     ],
     "name": "Write ct-nanobench-4.isolated.gen.json"
   },
@@ -709,7 +709,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skps/slave5"
+      "[START_DIR]/skps/slave5"
     ],
     "name": "rmtree slave5",
     "~followup_annotations": [
@@ -728,7 +728,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skps/slave5",
+      "[START_DIR]/skps/slave5",
       "511"
     ],
     "name": "makedirs slave5",
@@ -763,7 +763,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/48/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/49/*.skp",
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/50/*.skp",
-      "[SLAVE_BUILD]/skps/slave5"
+      "[START_DIR]/skps/slave5"
     ],
     "name": "gsutil cp (5)"
   },
@@ -772,7 +772,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
+      "[START_DIR]/swarming_temp_dir",
       "511"
     ],
     "name": "makedirs swarming tmp dir (5)",
@@ -794,8 +794,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-nanobench-5.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"5\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-5.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/src/chrome/ct_skps.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-ct-nanobench-5.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"CONFIGURATION\", \n        \"Release\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"9046e2e693bb92a76e972b694580e5d17ad10748\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"5\", \n        \"--extra-variable\", \n        \"TOOL_NAME\", \n        \"nanobench\"\n    ], \n    \"dir\": \"[START_DIR]/src/chrome\", \n    \"version\": 1\n}",
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-5.isolated.gen.json"
     ],
     "name": "Write ct-nanobench-5.isolated.gen.json"
   },
@@ -805,27 +805,27 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"chromium_build\": \"fad657e-276e633\", \"num_slaves\": 5, \"page_type\": \"10k\"}",
-      "[SLAVE_BUILD]/skps/skps_version"
+      "[START_DIR]/skps/skps_version"
     ],
-    "name": "Create [SLAVE_BUILD]/skps/skps_version"
+    "name": "Create [START_DIR]/skps/skps_version"
   },
   {
     "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/swarming.client",
+      "[START_DIR]/swarming.client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-1.isolated.gen.json",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-2.isolated.gen.json",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-3.isolated.gen.json",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-4.isolated.gen.json",
-      "[SLAVE_BUILD]/swarming_temp_dir/ct-nanobench-5.isolated.gen.json"
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-1.isolated.gen.json",
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-2.isolated.gen.json",
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-3.isolated.gen.json",
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-4.isolated.gen.json",
+      "[START_DIR]/swarming_temp_dir/ct-nanobench-5.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -844,7 +844,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -905,7 +905,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -966,7 +966,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1027,7 +1027,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1088,7 +1088,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1150,7 +1150,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1161,7 +1161,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-1"
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-1"
     ],
     "name": "ct-nanobench-1 on Ubuntu-14.04",
     "~followup_annotations": [
@@ -1213,7 +1213,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-1/0",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-1/0",
       "/path/to/tmp/json"
     ],
     "name": "listdir output dir",
@@ -1241,7 +1241,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-1/0/file 1",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-1/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {
@@ -1263,7 +1263,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-1/0/file 2",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-1/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {
@@ -1279,7 +1279,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1290,7 +1290,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-2"
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-2"
     ],
     "name": "ct-nanobench-2 on Ubuntu-14.04",
     "~followup_annotations": [
@@ -1342,7 +1342,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-2/0",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-2/0",
       "/path/to/tmp/json"
     ],
     "name": "listdir output dir (2)",
@@ -1370,7 +1370,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-2/0/file 1",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-2/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {
@@ -1392,7 +1392,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-2/0/file 2",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-2/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {
@@ -1408,7 +1408,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1419,7 +1419,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-3"
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-3"
     ],
     "name": "ct-nanobench-3 on Ubuntu-14.04",
     "~followup_annotations": [
@@ -1471,7 +1471,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-3/0",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-3/0",
       "/path/to/tmp/json"
     ],
     "name": "listdir output dir (3)",
@@ -1499,7 +1499,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-3/0/file 1",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-3/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {
@@ -1521,7 +1521,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-3/0/file 2",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-3/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {
@@ -1537,7 +1537,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1548,7 +1548,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-4"
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-4"
     ],
     "name": "ct-nanobench-4 on Ubuntu-14.04",
     "~followup_annotations": [
@@ -1600,7 +1600,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-4/0",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-4/0",
       "/path/to/tmp/json"
     ],
     "name": "listdir output dir (4)",
@@ -1628,7 +1628,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-4/0/file 1",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-4/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {
@@ -1650,7 +1650,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-4/0/file 2",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-4/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {
@@ -1666,7 +1666,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1677,7 +1677,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-5"
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-5"
     ],
     "name": "ct-nanobench-5 on Ubuntu-14.04",
     "~followup_annotations": [
@@ -1729,7 +1729,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-5/0",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-5/0",
       "/path/to/tmp/json"
     ],
     "name": "listdir output dir (5)",
@@ -1757,7 +1757,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-5/0/file 1",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-5/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {
@@ -1779,7 +1779,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-5/0/file 2",
+      "[START_DIR]/swarming_temp_dir/outputs/ct-nanobench-5/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "env": {

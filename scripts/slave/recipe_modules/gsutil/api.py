@@ -159,7 +159,7 @@ class GSUtilApi(recipe_api.RecipeApi):
     return self.m.python(name,
                          gsutil_download_path,
                          args,
-                         cwd=self.m.path['slave_build'])
+                         cwd=self.m.path['start_dir'])
 
   def download_latest_file(self, base_url, partial_name, destination,
                            name='Download latest file from GS'):
@@ -179,7 +179,7 @@ class GSUtilApi(recipe_api.RecipeApi):
     return self.m.python(name,
                          gsutil_download_path,
                          args,
-                         cwd=self.m.path['slave_build'])
+                         cwd=self.m.path['start_dir'])
 
   def _generate_metadata_args(self, metadata):
     result = []

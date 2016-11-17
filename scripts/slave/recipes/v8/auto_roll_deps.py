@@ -159,7 +159,7 @@ def RunSteps(api):
          'littledan@chromium.org,vogelheim@chromium.org',
          '--roll',
          '--json-output', api.json.output(),
-         '--work-dir', api.path['slave_build'].join('workdir')],
+         '--work-dir', api.path['start_dir'].join('workdir')],
         cwd=api.path['checkout'].join('v8'),
         step_test_data=lambda: api.json.test_api.output(
             {'monitoring_state': 'success'}),

@@ -67,7 +67,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[SLAVE_BUILD]/native_client",
+    "cwd": "[START_DIR]/native_client",
     "name": "commit git patch"
   },
   {
@@ -85,7 +85,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[SLAVE_BUILD]/native_client",
+      "[START_DIR]/native_client",
       "--commit",
       "--verbose",
       "--verbose",

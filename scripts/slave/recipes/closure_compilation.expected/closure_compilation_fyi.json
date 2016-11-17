@@ -101,14 +101,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/third_party/closure_compiler/run_tests.py"
+      "[START_DIR]/src/third_party/closure_compiler/run_tests.py"
     ],
     "name": "run_tests"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "[SLAVE_BUILD]/src/third_party/closure_compiler/compiled_resources.gyp"
+      "[START_DIR]/src/build/gyp_chromium",
+      "[START_DIR]/src/third_party/closure_compiler/compiled_resources.gyp"
     ],
     "name": "generate_gyp_files"
   },
@@ -127,7 +127,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
@@ -147,8 +147,8 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "[SLAVE_BUILD]/src/third_party/closure_compiler/compiled_resources2.gyp"
+      "[START_DIR]/src/build/gyp_chromium",
+      "[START_DIR]/src/third_party/closure_compiler/compiled_resources2.gyp"
     ],
     "name": "generate_v2_gyp_files"
   },
@@ -167,7 +167,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",

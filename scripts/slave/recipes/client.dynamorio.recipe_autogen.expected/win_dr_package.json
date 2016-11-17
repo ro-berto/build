@@ -41,9 +41,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools/unpack.bat"
+      "[START_DIR]/dynamorio/tools/buildbot/bot_tools/unpack.bat"
     ],
-    "cwd": "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools",
+    "cwd": "[START_DIR]/dynamorio/tools/buildbot/bot_tools",
     "name": "unpack tools"
   },
   {
@@ -52,10 +52,10 @@
       "ctest",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]/dynamorio/make/package.cmake,build=0x1234567"
+      "[START_DIR]/dynamorio/make/package.cmake,build=0x1234567"
     ],
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[START_DIR]/dynamorio/tools/buildbot/bot_tools"
     },
     "name": "Package DynamoRIO"
   },

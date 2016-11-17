@@ -86,7 +86,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git checkout"
   },
   {
@@ -96,7 +96,7 @@
       "-D",
       "work"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git branch"
   },
   {
@@ -105,7 +105,7 @@
       "clean",
       "-ffd"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git clean"
   },
   {
@@ -114,7 +114,7 @@
       "show",
       "refs/remotes/branch-heads/3.4:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "Check latest version file",
     "stdout": "/path/to/tmp/"
   },
@@ -124,7 +124,7 @@
       "show",
       "refs/remotes/branch-heads/3.4~1:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "Check previous version file",
     "stdout": "/path/to/tmp/"
   },
@@ -143,7 +143,7 @@
       "--format=%H",
       "refs/remotes/branch-heads/3.4"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git log",
     "stdout": "/path/to/tmp/"
   },
@@ -153,7 +153,7 @@
       "show",
       "c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6:include/v8-version.h"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "Check head version file",
     "stdout": "/path/to/tmp/"
   },
@@ -164,7 +164,7 @@
       "--tags",
       "c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git describe",
     "stdout": "/path/to/tmp/"
   },
@@ -175,7 +175,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "refs/heads/3.4-lkgr"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git ls-remote 3.4-lkgr",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -190,7 +190,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "+c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6:refs/heads/3.4-lkgr"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git push"
   },
   {

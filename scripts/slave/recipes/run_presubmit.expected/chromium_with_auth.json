@@ -119,7 +119,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "commit git patch"
   },
   {
@@ -139,7 +139,7 @@
       "--rietveld_private_key_file",
       "[BUILD]/site_config/.rietveld_secret_key",
       "--root",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--commit",
       "--verbose",
       "--verbose",

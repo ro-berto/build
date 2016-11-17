@@ -56,7 +56,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -65,9 +65,9 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD]/src/build_tools/buildbot_selector.sh"
+      "[START_DIR]/src/build_tools/buildbot_selector.sh"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "BUILDBOT_BUILDERNAME": "linux-glibc-0",
       "BUILDBOT_GOT_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",

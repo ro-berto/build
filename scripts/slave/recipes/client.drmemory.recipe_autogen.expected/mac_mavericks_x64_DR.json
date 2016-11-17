@@ -46,9 +46,9 @@
       "120",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]/dynamorio/suite/runsuite.cmake"
+      "[START_DIR]/dynamorio/suite/runsuite.cmake"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "pre-commit suite"
   },
   {

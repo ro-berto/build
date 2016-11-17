@@ -72,7 +72,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "+refs/heads/lkgr:refs/heads/lkgr"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git fetch"
   },
   {
@@ -82,7 +82,7 @@
       "-s",
       "refs/heads/lkgr"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git show-ref refs/heads/lkgr",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -104,7 +104,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "+refs/heads/candidate:refs/heads/candidate"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git fetch (2)"
   },
   {
@@ -114,7 +114,7 @@
       "-s",
       "refs/heads/candidate"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git show-ref refs/heads/candidate",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -129,7 +129,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "+refs/heads/roll:refs/heads/roll"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git fetch (3)"
   },
   {
@@ -139,7 +139,7 @@
       "-s",
       "refs/heads/roll"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git show-ref refs/heads/roll",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -152,7 +152,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/timestamp.txt",
+      "[START_DIR]/timestamp.txt",
       "/path/to/tmp/"
     ],
     "name": "check timestamp"
@@ -161,9 +161,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/release/check_clusterfuzz.py",
+      "[START_DIR]/v8/tools/release/check_clusterfuzz.py",
       "--key-file",
-      "[SLAVE_BUILD]/.cf_key",
+      "[START_DIR]/.cf_key",
       "--results-file",
       "/path/to/tmp/json"
     ],
@@ -197,7 +197,7 @@
       "refs/heads/roll",
       "0df953c9e12c1e3b0e37f2d4ef1ef8c319e095cb"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git update-ref"
   },
   {
@@ -207,7 +207,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "refs/heads/roll:refs/heads/roll"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "git push"
   },
   {
@@ -216,7 +216,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "0df953c9e12c1e3b0e37f2d4ef1ef8c319e095cb 396006",
-      "[SLAVE_BUILD]/refs_heads_roll.log"
+      "[START_DIR]/refs_heads_roll.log"
     ],
     "name": "Write refs_heads_roll.log"
   },
@@ -229,7 +229,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[SLAVE_BUILD]/refs_heads_roll.log",
+      "[START_DIR]/refs_heads_roll.log",
       "gs://chromium-v8-auto-roll/v8_release_process/refs_heads_roll.log"
     ],
     "name": "gsutil upload",

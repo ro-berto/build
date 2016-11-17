@@ -43,7 +43,7 @@ PROPERTIES = {
 
 def RunSteps(api, libvpx_git_url, buildername):
   # Paths and other constants
-  build_root = api.path['slave_build']
+  build_root = api.path['start_dir']
 
   # Android tools DEPS
   android_tools_root = build_root.join('android_tools')

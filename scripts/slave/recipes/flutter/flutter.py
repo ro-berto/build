@@ -116,7 +116,7 @@ def SetupXcode(api):
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
-    api.file.rmcontents('everything', api.path['slave_build'])
+    api.file.rmcontents('everything', api.path['start_dir'])
 
   git_hash = api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
@@ -132,7 +132,7 @@ def RunSteps(api):
   # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
   # a regexp in flutter_tools analyze.dart which is in turn a hack around:
   # https://github.com/dart-lang/sdk/issues/25722
-  pub_cache = api.path['slave_build'].join('.pub-cache')
+  pub_cache = api.path['start_dir'].join('.pub-cache')
   env = {
     'PATH': api.path.pathsep.join((str(flutter_bin), str(dart_bin),
         '%(PATH)s')),

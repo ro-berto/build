@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[START_DIR]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-MSAN"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -50,7 +50,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skp/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded SKP VERSION"
@@ -61,7 +61,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION"
+      "[START_DIR]/tmp/SKP_VERSION"
     ],
     "name": "write SKP_VERSION"
   },
@@ -70,7 +70,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded skimage VERSION"
@@ -81,22 +81,22 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
+      "[START_DIR]/tmp/SK_IMAGE_VERSION"
     ],
     "name": "write SK_IMAGE_VERSION"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/out/Debug/dm",
+      "[START_DIR]/out/Debug/dm",
       "--undefok",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
+      "[START_DIR]/skia/resources",
       "--skps",
-      "[SLAVE_BUILD]/skp",
+      "[START_DIR]/skp",
       "--images",
-      "[SLAVE_BUILD]/skimage/dm",
+      "[START_DIR]/skimage/dm",
       "--colorImages",
-      "[SLAVE_BUILD]/skimage/colorspace",
+      "[START_DIR]/skimage/colorspace",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -132,13 +132,13 @@
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "LD_LIBRARY_PATH": "[SLAVE_BUILD]/third_party/externals/llvm/msan_out/lib",
-      "LSAN_OPTIONS": "symbolize=1 print_suppressions=1 suppressions=[SLAVE_BUILD]/skia/tools/lsan.supp",
-      "PATH": "%(PATH)s:[SLAVE_BUILD]/llvm-build/Release+Asserts/bin",
+      "LD_LIBRARY_PATH": "[START_DIR]/third_party/externals/llvm/msan_out/lib",
+      "LSAN_OPTIONS": "symbolize=1 print_suppressions=1 suppressions=[START_DIR]/skia/tools/lsan.supp",
+      "PATH": "%(PATH)s:[START_DIR]/llvm-build/Release+Asserts/bin",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out",
-      "TSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/tsan.supp",
-      "UBSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/ubsan.supp"
+      "SKIA_OUT": "[START_DIR]/out",
+      "TSAN_OPTIONS": "suppressions=[START_DIR]/skia/tools/tsan.supp",
+      "UBSAN_OPTIONS": "suppressions=[START_DIR]/skia/tools/ubsan.supp"
     },
     "name": "dm"
   },

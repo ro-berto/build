@@ -323,7 +323,7 @@
       "--build-dir",
       "[BUILDER_CACHE]\\ClangToTWin64_dll_\\src\\out\\Release_x64"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

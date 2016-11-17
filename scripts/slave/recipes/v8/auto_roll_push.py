@@ -42,7 +42,7 @@ def RunSteps(api):
       ['--author', 'v8-autoroll@chromium.org',
        '--reviewer', 'v8-autoroll@chromium.org',
        '--push',
-       '--work-dir', api.path['slave_build'].join('workdir')],
+       '--work-dir', api.path['start_dir'].join('workdir')],
       cwd=api.path['checkout'],
     )
 

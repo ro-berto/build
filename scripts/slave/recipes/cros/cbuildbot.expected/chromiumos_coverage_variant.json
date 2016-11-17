@@ -42,7 +42,7 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD]/chromite/buildbot/cbuildbot",
+      "[START_DIR]/chromite/buildbot/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--buildbot",
@@ -60,7 +60,7 @@
       "/var/cache/chrome-infra/ccompute-setup/cros-internal",
       "x86-generic-full"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "cbuildbot [x86-generic-full]"
   },
   {

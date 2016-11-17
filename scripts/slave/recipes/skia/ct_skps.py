@@ -98,10 +98,10 @@ def RunSteps(api):
   src.revision = 'origin/master'  # Always checkout Chromium at ToT.
 
   for repo in (skia, src):
-    api.skia.update_repo(api.path['slave_build'], repo)
+    api.skia.update_repo(api.path['start_dir'], repo)
 
   update_step = api.bot_update.ensure_checkout(gclient_config=gclient_cfg,
-                                               cwd=api.path['slave_build'])
+                                               cwd=api.path['start_dir'])
   skia_hash = update_step.presentation.properties['got_revision']
 
   # Checkout Swarming scripts.
@@ -113,7 +113,7 @@ def RunSteps(api):
   # Ensure swarming_client is compatible with what recipes expect.
   api.swarming.check_client_version()
   # Setup Go isolate binary.
-  chromium_checkout = api.path['slave_build'].join('src')
+  chromium_checkout = api.path['start_dir'].join('src')
   api.skia_swarming.setup_go_isolate(chromium_checkout.join('tools', 'luci-go'))
 
   # Build the tool.
@@ -144,7 +144,7 @@ def RunSteps(api):
       "page_type": ct_page_type,
       "num_slaves": ct_num_slaves,
   }
-  skps_dir = api.path['slave_build'].join('skps')
+  skps_dir = api.path['start_dir'].join('skps')
   version_file = skps_dir.join(SKPS_VERSION_FILE)
   if api.path.exists(version_file):  # pragma: nocover
     version_file_contents = api.file.read(
@@ -162,7 +162,7 @@ def RunSteps(api):
       api.file.makedirs(api.path.basename(skps_dir), skps_dir)
 
   # If a blacklist file exists then specify SKPs to be blacklisted.
-  blacklists_dir = api.path['slave_build'].join(
+  blacklists_dir = api.path['start_dir'].join(
       'skia', 'infra', 'bots', 'ct', 'blacklists')
   blacklist_file = blacklists_dir.join(
       '%s_%s_%s.json' % (skia_tool, ct_page_type, skps_chromium_build))
@@ -179,7 +179,7 @@ def RunSteps(api):
       # Download SKPs.
       api.ct.download_swarming_skps(
           ct_page_type, slave_num, skps_chromium_build,
-          api.path['slave_build'].join('skps'),
+          api.path['start_dir'].join('skps'),
           start_range=((slave_num-1)*num_per_slave) + 1,
           num_skps=num_per_slave)
 
@@ -314,8 +314,8 @@ def GenTests(api):
         revision=skia_revision,
     ) +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('src')
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('src')
     )
   )
 
@@ -329,8 +329,8 @@ def GenTests(api):
         revision=skia_revision,
     ) +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('src')
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('src')
     )
   )
 
@@ -344,8 +344,8 @@ def GenTests(api):
         revision=skia_revision,
     ) +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join('src')
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join('src')
     )
   )
 

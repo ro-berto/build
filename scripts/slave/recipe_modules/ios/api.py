@@ -325,7 +325,7 @@ class iOSApi(recipe_api.RecipeApi):
       cmd = [
         self.package_repo_resource(
           'scripts', 'slave', 'ios', 'run.py'),
-        '--app', self.m.path['slave_build'].join(
+        '--app', self.m.path['start_dir'].join(
           self.most_recent_app_dir,
           '%s.app' % test['app'],
         ),
@@ -342,7 +342,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       if self.platform == 'simulator':
         cmd.extend([
-          '--iossim', self.m.path['slave_build'].join(self.most_recent_iossim),
+          '--iossim', self.m.path['start_dir'].join(self.most_recent_iossim),
           '--platform', test['device type'],
           '--version', test['os'],
         ])
@@ -464,7 +464,7 @@ class iOSApi(recipe_api.RecipeApi):
     isolate_template_contents = self.m.json.dumps(
       isolate_template_contents, indent=2)
 
-    isolate_template = self.m.path['slave_build'].join('template.isolate')
+    isolate_template = self.m.path['start_dir'].join('template.isolate')
     step_result = self.m.file.write(
       'generate template.isolate',
       isolate_template,
@@ -508,7 +508,7 @@ class iOSApi(recipe_api.RecipeApi):
           ])
         isolate_gen_file_contents = self.m.json.dumps({
           'args': args,
-          'dir': self.m.path['slave_build'],
+          'dir': self.m.path['start_dir'],
           'version': 1,
         }, indent=2)
         step_result = self.m.file.write(

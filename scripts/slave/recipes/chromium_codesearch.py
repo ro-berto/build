@@ -242,14 +242,14 @@ def RunSteps(api):
   # Upload the source code.
   api.gsutil.upload(
       name='upload source tarball',
-      source=api.path['slave_build'].join(tarball_name),
+      source=api.path['start_dir'].join(tarball_name),
       bucket=BUCKET_NAME,
       dest='%s/%s' % (environment, tarball_name_with_revision)
   )
 
   if bot_config.get('sync_generated_files', False):
     # Check out the generated files repo.
-    generated_repo_dir = api.path['slave_build'].join('generated')
+    generated_repo_dir = api.path['start_dir'].join('generated')
     api.git.checkout(
         GENERATED_REPO, ref='master', dir_path=generated_repo_dir,
         submodules=False)

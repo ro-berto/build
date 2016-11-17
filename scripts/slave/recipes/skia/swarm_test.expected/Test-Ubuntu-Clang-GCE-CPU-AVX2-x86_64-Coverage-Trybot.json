@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[START_DIR]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -51,7 +51,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skp/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded SKP VERSION"
@@ -62,7 +62,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION"
+      "[START_DIR]/tmp/SKP_VERSION"
     ],
     "name": "write SKP_VERSION"
   },
@@ -71,7 +71,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded skimage VERSION"
@@ -82,16 +82,16 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
+      "[START_DIR]/tmp/SK_IMAGE_VERSION"
     ],
     "name": "write SK_IMAGE_VERSION"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/tools/llvm_coverage_build",
+      "[START_DIR]/skia/tools/llvm_coverage_build",
       "dm"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "env": {
       "BUILDTYPE": "Coverage",
       "CC": "/usr/bin/clang-3.6",
@@ -99,7 +99,7 @@
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "build dm"
   },
@@ -108,7 +108,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/out/coverage_results"
+      "[START_DIR]/out/coverage_results"
     ],
     "env": {
       "PYTHONPATH": "build/scripts"
@@ -130,7 +130,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/out/coverage_results",
+      "[START_DIR]/out/coverage_results",
       "511"
     ],
     "name": "makedirs coverage_results",
@@ -150,17 +150,17 @@
   {
     "cmd": [
       "python",
-      "[SLAVE_BUILD]/skia/tools/llvm_coverage_run.py",
+      "[START_DIR]/skia/tools/llvm_coverage_run.py",
       "dm",
       "--undefok",
       "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
+      "[START_DIR]/skia/resources",
       "--skps",
-      "[SLAVE_BUILD]/skp",
+      "[START_DIR]/skp",
       "--images",
-      "[SLAVE_BUILD]/skimage/dm",
+      "[START_DIR]/skimage/dm",
       "--colorImages",
-      "[SLAVE_BUILD]/skimage/colorspace",
+      "[START_DIR]/skimage/colorspace",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -193,9 +193,9 @@
       "--nogpu",
       "--dummy-flags",
       "--outResultsFile",
-      "[SLAVE_BUILD]/out/coverage_results/abc123.cov"
+      "[START_DIR]/out/coverage_results/abc123.cov"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "env": {
       "BUILDTYPE": "Coverage",
       "CC": "/usr/bin/clang-3.6",
@@ -203,20 +203,20 @@
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "dm"
   },
   {
     "cmd": [
       "python",
-      "[SLAVE_BUILD]/skia/tools/parse_llvm_coverage.py",
+      "[START_DIR]/skia/tools/parse_llvm_coverage.py",
       "--report",
-      "[SLAVE_BUILD]/out/coverage_results/abc123.cov",
+      "[START_DIR]/out/coverage_results/abc123.cov",
       "--nanobench",
-      "[SLAVE_BUILD]/out/coverage_results/nanobench_abc123.json",
+      "[START_DIR]/out/coverage_results/nanobench_abc123.json",
       "--linebyline",
-      "[SLAVE_BUILD]/out/coverage_results/coverage_by_line_abc123.json",
+      "[START_DIR]/out/coverage_results/coverage_by_line_abc123.json",
       "--key",
       "arch",
       "x86_64",
@@ -246,7 +246,7 @@
       "patchset",
       "1"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "env": {
       "BUILDTYPE": "Coverage",
       "CC": "/usr/bin/clang-3.6",
@@ -254,7 +254,7 @@
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "Generate Coverage Data"
   },
@@ -263,7 +263,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/out/coverage_results",
+      "[START_DIR]/out/coverage_results",
       "/path/to/tmp/json"
     ],
     "name": "listdir results_dir",
@@ -286,7 +286,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/out/coverage_results/file 1",
+      "[START_DIR]/out/coverage_results/file 1",
       "[CUSTOM_[SWARM_OUT_DIR]]"
     ],
     "name": "Copy to swarming out"
@@ -296,7 +296,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/out/coverage_results/file 2",
+      "[START_DIR]/out/coverage_results/file 2",
       "[CUSTOM_[SWARM_OUT_DIR]]"
     ],
     "name": "Copy to swarming out (2)"

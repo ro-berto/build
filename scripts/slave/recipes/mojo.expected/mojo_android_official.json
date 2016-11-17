@@ -46,7 +46,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -64,7 +64,7 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -73,7 +73,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -81,7 +81,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -114,12 +114,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "[START_DIR]/src/mojo/tools/mojob.py",
       "gn",
       "--official",
       "--android"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_DIR": "[CACHE]/cipd/goma",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -130,7 +130,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "[START_DIR]/src/mojo/tools/mojob.py",
       "build",
       "--official",
       "--android"
@@ -145,7 +145,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/upload_binaries.py",
+      "[START_DIR]/src/mojo/tools/upload_binaries.py",
       "--android",
       "--official"
     ],

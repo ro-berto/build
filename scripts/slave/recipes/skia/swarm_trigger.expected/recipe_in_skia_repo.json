@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git clean"
   },
   {
@@ -57,7 +57,7 @@
       "skia@abc123",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -93,10 +93,10 @@
     "allow_subannotations": true,
     "cmd": [
       "python",
-      "[SLAVE_BUILD]/skia/infra/bots/recipes.py",
+      "[START_DIR]/skia/infra/bots/recipes.py",
       "run",
       "--workdir",
-      "[SLAVE_BUILD]",
+      "[START_DIR]",
       "swarm_trigger",
       "path_config=kitchen",
       "buildername=Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug",

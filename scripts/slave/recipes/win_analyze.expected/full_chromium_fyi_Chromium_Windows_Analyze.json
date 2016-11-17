@@ -102,7 +102,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\src\\out\\Debug"
+      "[START_DIR]\\src\\out\\Debug"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -123,7 +123,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -136,17 +136,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "[START_DIR]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.fyi",
       "-b",
       "Chromium Windows Analyze",
       "--config-file",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
       "//out/Debug"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -167,7 +167,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[START_DIR]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",

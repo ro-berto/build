@@ -109,7 +109,7 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -118,7 +118,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -126,7 +126,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -162,7 +162,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -175,14 +175,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"dummyslave\", \"target_platform\": \"linux\"}"
     ],
@@ -197,12 +197,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json",
+      "[START_DIR]/src/testing/buildbot/tryserver.chromium.perf.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (tryserver.chromium.perf.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json@@@",
+      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/tryserver.chromium.perf.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -214,7 +214,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -224,12 +224,12 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "***BISECT***"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Clearing results directory"
   },
   {
@@ -237,9 +237,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/bisect_results"
+      "[START_DIR]/bisect_results"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Clearing results directory.rmtree old results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -258,10 +258,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results",
+      "[START_DIR]/bisect_results",
       "511"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Clearing results directory.makedirs new results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -284,7 +284,7 @@
       "refs/heads/master",
       "refs/remotes/origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git update-ref"
   },
   {
@@ -293,12 +293,12 @@
       "checkout",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git checkout"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -320,7 +320,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Resolving reference range"
   },
   {
@@ -334,7 +334,7 @@
       "--attempts",
       "3"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314017}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -356,7 +356,7 @@
       "--attempts",
       "3"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314015}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -376,7 +376,7 @@
       "--commit",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Resolving reference range.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -396,7 +396,7 @@
       "--commit",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Resolving reference range.fetch file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -409,7 +409,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Expanding revision range"
   },
   {
@@ -421,7 +421,7 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "https://chromium.googlesource.com/chromium/src"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Expanding revision range.for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -441,7 +441,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values"
   },
   {
@@ -455,7 +455,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -472,7 +472,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"user_agent:recipe\"]}"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -491,7 +491,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -508,7 +508,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -521,7 +521,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -543,7 +543,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -568,7 +568,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -581,7 +581,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -603,7 +603,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -628,7 +628,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -641,7 +641,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -663,7 +663,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.buildbucket.get (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -688,7 +688,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -701,7 +701,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -723,7 +723,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.buildbucket.get (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -748,7 +748,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -761,7 +761,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -783,7 +783,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.buildbucket.get (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -808,7 +808,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -821,7 +821,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -843,7 +843,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.buildbucket.get (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -868,7 +868,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -881,7 +881,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -903,7 +903,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.buildbucket.get (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -928,7 +928,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -941,7 +941,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -963,7 +963,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.buildbucket.get (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -988,7 +988,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1001,7 +1001,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1023,7 +1023,7 @@
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.buildbucket.get (9)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -1048,7 +1048,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.gsutil ls (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1073,7 +1073,7 @@
       "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1159,9 +1159,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1188,7 +1188,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--build-archive-url",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
       "--master-name",
@@ -1196,7 +1196,7 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1207,7 +1207,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -1245,12 +1245,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1270,7 +1270,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1285,7 +1285,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1305,7 +1305,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -1343,12 +1343,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1368,7 +1368,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1383,7 +1383,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1403,7 +1403,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -1441,12 +1441,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1466,7 +1466,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1481,7 +1481,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1501,7 +1501,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -1539,12 +1539,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1564,7 +1564,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1579,7 +1579,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1599,7 +1599,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -1637,12 +1637,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1662,7 +1662,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1677,7 +1677,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1703,7 +1703,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1728,7 +1728,7 @@
       "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1814,9 +1814,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1843,7 +1843,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--build-archive-url",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
       "--master-name",
@@ -1851,7 +1851,7 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Gathering reference values.extract build (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1862,7 +1862,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -1900,12 +1900,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1925,7 +1925,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1940,7 +1940,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -1960,7 +1960,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -1998,12 +1998,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2023,7 +2023,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2038,7 +2038,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -2058,7 +2058,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -2096,12 +2096,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2121,7 +2121,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2136,7 +2136,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -2156,7 +2156,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -2194,12 +2194,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2219,7 +2219,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2234,7 +2234,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -2254,7 +2254,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -2292,12 +2292,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2317,7 +2317,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2332,7 +2332,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -2351,13 +2351,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Compare samples",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -2390,13 +2390,13 @@
       "--position",
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1"
   },
   {
@@ -2406,7 +2406,7 @@
       "--position",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "Working on revision chromium@dcdcdc0ff1.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2420,7 +2420,7 @@
       "--position",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "Working on revision chromium@dcdcdc0ff1.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2433,7 +2433,7 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Post bisect results",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"23.81%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.0, \"n_observations\": 4, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.48074069840786}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
@@ -2456,7 +2456,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2481,7 +2481,7 @@
       "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -2567,9 +2567,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2596,7 +2596,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--build-archive-url",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
       "--master-name",
@@ -2604,7 +2604,7 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2615,7 +2615,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -2653,12 +2653,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2678,7 +2678,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2693,7 +2693,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -2713,7 +2713,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -2751,12 +2751,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2776,7 +2776,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2791,7 +2791,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -2811,7 +2811,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -2849,12 +2849,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2874,7 +2874,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2889,7 +2889,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -2909,7 +2909,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -2947,12 +2947,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2972,7 +2972,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2987,7 +2987,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -3007,7 +3007,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -3045,12 +3045,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3070,7 +3070,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "benchmark text",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3085,7 +3085,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -3104,13 +3104,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3141,13 +3141,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3179,7 +3179,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -3217,12 +3217,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3242,7 +3242,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3257,7 +3257,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -3277,7 +3277,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -3315,12 +3315,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3340,7 +3340,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3355,7 +3355,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -3375,7 +3375,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -3413,12 +3413,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3438,7 +3438,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3453,7 +3453,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -3472,13 +3472,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3509,13 +3509,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3561,7 +3561,7 @@
       "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -3647,9 +3647,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3676,7 +3676,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--build-archive-url",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
       "--master-name",
@@ -3684,7 +3684,7 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.extract build (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3695,7 +3695,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -3733,12 +3733,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3758,7 +3758,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3773,7 +3773,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -3793,7 +3793,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -3831,12 +3831,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3856,7 +3856,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3871,7 +3871,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -3891,7 +3891,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -3929,12 +3929,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3954,7 +3954,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3969,7 +3969,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -3988,13 +3988,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -4025,13 +4025,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -4077,7 +4077,7 @@
       "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -4163,9 +4163,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4192,7 +4192,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--build-archive-url",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
       "--master-name",
@@ -4200,7 +4200,7 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.extract build (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4211,7 +4211,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -4249,12 +4249,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4274,7 +4274,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4289,7 +4289,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -4309,7 +4309,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -4347,12 +4347,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4372,7 +4372,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4387,7 +4387,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -4407,7 +4407,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -4445,12 +4445,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4470,7 +4470,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4485,7 +4485,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -4504,13 +4504,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -4541,13 +4541,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -4593,7 +4593,7 @@
       "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -4679,9 +4679,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4708,7 +4708,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--build-archive-url",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
       "--master-name",
@@ -4716,7 +4716,7 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.extract build (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4727,7 +4727,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -4765,12 +4765,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4790,7 +4790,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4805,7 +4805,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -4825,7 +4825,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -4863,12 +4863,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4888,7 +4888,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4903,7 +4903,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -4923,7 +4923,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -4961,12 +4961,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4986,7 +4986,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5001,7 +5001,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -5021,7 +5021,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -5059,12 +5059,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5084,7 +5084,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5099,7 +5099,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -5118,13 +5118,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (9)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -5155,13 +5155,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (10)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -5207,7 +5207,7 @@
       "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -5293,9 +5293,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5322,7 +5322,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--build-archive-url",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
       "--master-name",
@@ -5330,7 +5330,7 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.extract build (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5341,7 +5341,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -5379,12 +5379,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5404,7 +5404,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5419,7 +5419,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -5439,7 +5439,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -5477,12 +5477,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5502,7 +5502,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5517,7 +5517,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -5537,7 +5537,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -5575,12 +5575,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5600,7 +5600,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5615,7 +5615,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -5635,7 +5635,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -5673,12 +5673,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5698,7 +5698,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5713,7 +5713,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -5732,13 +5732,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (11)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -5769,13 +5769,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (12)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -5821,7 +5821,7 @@
       "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -5907,9 +5907,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5936,7 +5936,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--build-archive-url",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
       "--master-name",
@@ -5944,7 +5944,7 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.extract build (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5955,7 +5955,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -5993,12 +5993,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6018,7 +6018,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6033,7 +6033,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -6053,7 +6053,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -6091,12 +6091,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6116,7 +6116,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6131,7 +6131,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -6151,7 +6151,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -6189,12 +6189,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6214,7 +6214,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6229,7 +6229,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -6249,7 +6249,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -6287,12 +6287,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6312,7 +6312,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6327,7 +6327,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -6346,13 +6346,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (13)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -6383,13 +6383,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (14)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -6435,7 +6435,7 @@
       "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -6521,9 +6521,9 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6550,7 +6550,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--build-archive-url",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
       "--master-name",
@@ -6558,7 +6558,7 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.extract build (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6569,7 +6569,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -6607,12 +6607,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6632,7 +6632,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6647,7 +6647,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -6667,7 +6667,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -6705,12 +6705,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6730,7 +6730,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6745,7 +6745,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -6765,7 +6765,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -6803,12 +6803,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6828,7 +6828,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6843,7 +6843,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -6863,7 +6863,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -6901,12 +6901,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6926,7 +6926,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6941,7 +6941,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -6961,7 +6961,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -6999,12 +6999,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -7024,7 +7024,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -7039,7 +7039,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -7059,7 +7059,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/bisect_results/dummy",
+      "[START_DIR]/bisect_results/dummy",
       "511"
     ],
     "env": {
@@ -7097,12 +7097,12 @@
       "--slave-name=dummyslave",
       "--build-number=571",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[START_DIR]/src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "--output-format=valueset",
       "smoothness.tough_scrolling_cases",
-      "--output-dir=[SLAVE_BUILD]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -7122,7 +7122,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "mock output",
-      "[SLAVE_BUILD]/bisect_results/dummy/results.txt"
+      "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -7137,7 +7137,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -7156,13 +7156,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (15)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -7193,13 +7193,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/compare_samples",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
-      "[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy,[SLAVE_BUILD]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (16)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -7228,7 +7228,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Check bisect finished on revision chromium@dcdcdc0ff1"
   },
   {
@@ -7239,7 +7239,7 @@
       "--pretty=format:",
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "Check bisect finished on revision chromium@dcdcdc0ff1.Checking DEPS for dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -7248,12 +7248,12 @@
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Resolving hashes"
   },
   {
     "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Debug Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@a6298e4afe, mean_value=15.75, std_dev=17.284386017443605)@@@",
@@ -7276,7 +7276,7 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988",
       "chromium"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Reading culprit cl information.",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -7296,7 +7296,7 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Post bisect results",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"23.81%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": {\"author\": \"DummyAuthor\", \"cl\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"cl_date\": \"01/01/2015\", \"commit_info\": \"A long description for a CL.\\nContaining multiple lines\", \"email\": \"dummy@nowhere.com\", \"revisions_links\": [], \"subject\": \"Some random CL\"}, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 12.0, \"n_observations\": 4, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 6.48074069840786}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.0, \"n_observations\": 4, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.48074069840786}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
@@ -7315,7 +7315,7 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988",
       "chromium"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Reading culprit cl information. (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -7335,7 +7335,7 @@
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Post bisect results (2)",
     "stdin": "{\"data\": {\"aborted_reason\": \"Failed to upload result to Perf Dashboard. Error response: None\", \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"23.81%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": {\"author\": \"DummyAuthor\", \"cl\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"cl_date\": \"01/01/2015\", \"commit_info\": \"A long description for a CL.\\nContaining multiple lines\", \"email\": \"dummy@nowhere.com\", \"revisions_links\": [], \"subject\": \"Some random CL\"}, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 12.0, \"n_observations\": 4, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 6.48074069840786}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.0, \"n_observations\": 4, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.48074069840786}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",

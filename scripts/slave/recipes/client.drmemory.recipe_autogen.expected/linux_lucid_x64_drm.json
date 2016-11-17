@@ -46,7 +46,7 @@
       "60",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]/drmemory/tests/runsuite.cmake,drmemory_only;long;build=0x1234567"
+      "[START_DIR]/drmemory/tests/runsuite.cmake,drmemory_only;long;build=0x1234567"
     ],
     "name": "Dr. Memory ctest"
   },

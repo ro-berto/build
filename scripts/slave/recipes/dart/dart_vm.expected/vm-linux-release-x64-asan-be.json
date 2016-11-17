@@ -46,7 +46,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
       "ASAN_OPTIONS": "handle_segv=0:detect_stack_use_after_return=1",
       "CC": "third_party/clang/linux/bin/clang",
@@ -64,22 +64,22 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "[START_DIR]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "taskkill before building"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/build.py",
+      "[START_DIR]/sdk/tools/build.py",
       "-mrelease",
       "--arch=x64",
       "runtime"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
       "ASAN_OPTIONS": "handle_segv=0:detect_stack_use_after_return=1",
       "CC": "third_party/clang/linux/bin/clang",
@@ -96,7 +96,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "-mrelease",
       "--arch=x64",
       "--progress=line",
@@ -110,14 +110,14 @@
       "--builder-tag=asan",
       "--timeout=240"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "-mrelease",
       "--arch=x64",
       "--progress=line",
@@ -132,17 +132,17 @@
       "--timeout=240",
       "--checked"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "checked vm tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "[START_DIR]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "taskkill after testing"
   },
   {

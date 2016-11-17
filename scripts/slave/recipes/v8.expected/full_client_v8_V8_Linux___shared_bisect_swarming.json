@@ -62,7 +62,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/v8/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -83,7 +83,7 @@
       "--platform",
       "linux-386",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -92,7 +92,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -100,7 +100,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -136,7 +136,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -161,20 +161,20 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - shared",
       "--config-file",
-      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -192,7 +192,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/v8/out/gn",
+      "[START_DIR]/v8/out/gn",
       "511"
     ],
     "name": "makedirs for peeking gn",
@@ -214,7 +214,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/patch_mb_config.py",
-      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "/path/to/tmp/"
     ],
     "name": "patch mb config (fyi)"
@@ -223,7 +223,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
@@ -233,9 +233,9 @@
       "[mb config]",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -245,9 +245,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
-      "[SLAVE_BUILD]/v8/out/gn",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/tools/gyp_flag_compare.py",
+      "[START_DIR]/v8/out/gn",
+      "[START_DIR]/v8/out/Release",
       "all",
       "all"
     ],
@@ -258,9 +258,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "name": "rmtree [SLAVE_BUILD]/v8/out/gn"
+    "name": "rmtree [START_DIR]/v8/out/gn"
   },
   {
     "cmd": [
@@ -317,7 +317,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/out/Release",
       "-j",
       "50"
     ],
@@ -385,11 +385,11 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/out/Release",
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]/v8/out/Release', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/v8/out/Release', '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -412,17 +412,17 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
+      "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/mozilla.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/simdjs.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -439,7 +439,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -533,7 +533,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -628,7 +628,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -722,7 +722,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -820,7 +820,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -901,7 +901,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -940,7 +940,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -979,7 +979,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -1159,7 +1159,7 @@
       "--platform",
       "linux-386",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -1168,7 +1168,7 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -1176,7 +1176,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -1212,7 +1212,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -1229,20 +1229,20 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - shared",
       "--config-file",
-      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1261,7 +1261,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/v8/out/gn",
+      "[START_DIR]/v8/out/gn",
       "511"
     ],
     "name": "Bisect a0.makedirs for peeking gn",
@@ -1284,7 +1284,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/patch_mb_config.py",
-      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "/path/to/tmp/"
     ],
     "name": "Bisect a0.patch mb config (fyi)",
@@ -1296,7 +1296,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
@@ -1306,9 +1306,9 @@
       "[mb config]",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1321,9 +1321,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
-      "[SLAVE_BUILD]/v8/out/gn",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/tools/gyp_flag_compare.py",
+      "[START_DIR]/v8/out/gn",
+      "[START_DIR]/v8/out/Release",
       "all",
       "all"
     ],
@@ -1337,9 +1337,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "name": "Bisect a0.rmtree [SLAVE_BUILD]/v8/out/gn",
+    "name": "Bisect a0.rmtree [START_DIR]/v8/out/gn",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1375,7 +1375,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/out/Release",
       "-j",
       "50",
       "d8"
@@ -1450,11 +1450,11 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/out/Release",
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]/v8/out/Release', '-j', 50, 'd8']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/v8/out/Release', '-j', 50, 'd8']",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -1477,17 +1477,17 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
+      "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/mozilla.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/simdjs.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "Bisect a0.isolate tests",
     "~followup_annotations": [
@@ -1505,7 +1505,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1604,7 +1604,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -1721,7 +1721,7 @@
       "--platform",
       "linux-386",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -1730,7 +1730,7 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -1738,7 +1738,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -1774,7 +1774,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -1791,20 +1791,20 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - shared",
       "--config-file",
-      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1823,7 +1823,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/v8/out/gn",
+      "[START_DIR]/v8/out/gn",
       "511"
     ],
     "name": "Bisect a2.makedirs for peeking gn",
@@ -1846,7 +1846,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/patch_mb_config.py",
-      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "/path/to/tmp/"
     ],
     "name": "Bisect a2.patch mb config (fyi)",
@@ -1858,7 +1858,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
@@ -1868,9 +1868,9 @@
       "[mb config]",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1883,9 +1883,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
-      "[SLAVE_BUILD]/v8/out/gn",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/tools/gyp_flag_compare.py",
+      "[START_DIR]/v8/out/gn",
+      "[START_DIR]/v8/out/Release",
       "all",
       "all"
     ],
@@ -1899,9 +1899,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "name": "Bisect a2.rmtree [SLAVE_BUILD]/v8/out/gn",
+    "name": "Bisect a2.rmtree [START_DIR]/v8/out/gn",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1937,7 +1937,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/out/Release",
       "-j",
       "50",
       "d8"
@@ -2012,11 +2012,11 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/out/Release",
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]/v8/out/Release', '-j', 50, 'd8']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/v8/out/Release', '-j', 50, 'd8']",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -2039,17 +2039,17 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
+      "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/mozilla.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/simdjs.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "Bisect a2.isolate tests",
     "~followup_annotations": [
@@ -2067,7 +2067,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2166,7 +2166,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -2316,7 +2316,7 @@
       "--platform",
       "linux-386",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -2325,7 +2325,7 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -2333,7 +2333,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -2369,7 +2369,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -2386,20 +2386,20 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - shared",
       "--config-file",
-      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2418,7 +2418,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/v8/out/gn",
+      "[START_DIR]/v8/out/gn",
       "511"
     ],
     "name": "Bisect a1.makedirs for peeking gn",
@@ -2441,7 +2441,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/patch_mb_config.py",
-      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "/path/to/tmp/"
     ],
     "name": "Bisect a1.patch mb config (fyi)",
@@ -2453,7 +2453,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
@@ -2463,9 +2463,9 @@
       "[mb config]",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2478,9 +2478,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
-      "[SLAVE_BUILD]/v8/out/gn",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/tools/gyp_flag_compare.py",
+      "[START_DIR]/v8/out/gn",
+      "[START_DIR]/v8/out/Release",
       "all",
       "all"
     ],
@@ -2494,9 +2494,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "name": "Bisect a1.rmtree [SLAVE_BUILD]/v8/out/gn",
+    "name": "Bisect a1.rmtree [START_DIR]/v8/out/gn",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2532,7 +2532,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/out/Release",
       "-j",
       "50",
       "d8"
@@ -2607,11 +2607,11 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/out/Release",
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]/v8/out/Release', '-j', 50, 'd8']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/v8/out/Release', '-j', 50, 'd8']",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -2634,17 +2634,17 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
+      "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/mozilla.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/simdjs.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "Bisect a1.isolate tests",
     "~followup_annotations": [
@@ -2662,7 +2662,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2761,7 +2761,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[START_DIR]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",

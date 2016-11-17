@@ -30,7 +30,7 @@ def RunSteps(api):
     api.path.mock_add_paths(api.path.join(llvm_bin_dir, 'llvm-symbolizer'))
     api.path.mock_add_paths(api.path.join(llvm_bin_dir, 'sancov'))
 
-  build_dir = api.path['slave_build'].join('src', 'out', 'Release')
+  build_dir = api.path['start_dir'].join('src', 'out', 'Release')
 
   api.archive.clusterfuzz_archive(
       build_dir=build_dir,

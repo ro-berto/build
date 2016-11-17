@@ -116,17 +116,17 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/v8/tools/release/releases.py",
+      "[START_DIR]/v8/tools/release/releases.py",
       "-c",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--json",
-      "[SLAVE_BUILD]/v8-releases-update.json",
+      "[START_DIR]/v8-releases-update.json",
       "--branch",
       "recent",
       "--work-dir",
-      "[SLAVE_BUILD]/workdir"
+      "[START_DIR]/workdir"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "name": "V8Releases"
   },
   {
@@ -138,7 +138,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[SLAVE_BUILD]/v8-releases-update.json",
+      "[START_DIR]/v8-releases-update.json",
       "gs://chromium-v8-auto-roll/v8rel/v8-releases-update.json"
     ],
     "name": "gsutil upload",

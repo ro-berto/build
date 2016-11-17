@@ -65,7 +65,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
@@ -89,7 +89,7 @@
       "--target",
       "Coverage",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[START_DIR]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
@@ -113,11 +113,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\build\\generate_coverage.py",
+      "[START_DIR]\\src\\syzygy\\build\\generate_coverage.py",
       "--verbose",
       "--syzygy",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Coverage"
+      "[START_DIR]\\src\\out\\Coverage"
     ],
     "name": "capture_unittest_coverage"
   },

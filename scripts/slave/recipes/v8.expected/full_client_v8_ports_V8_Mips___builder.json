@@ -60,7 +60,7 @@
       "----",
       "cp",
       "gs://chromium-v8/Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz",
-      "[SLAVE_BUILD]"
+      "[START_DIR]"
     ],
     "name": "gsutil bootstrapping mips toolchain"
   },
@@ -70,7 +70,7 @@
       "xf",
       "Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "unzipping"
   },
   {
@@ -80,18 +80,18 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
-      "AR": "[SLAVE_BUILD]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-ar",
-      "CC": "[SLAVE_BUILD]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-gcc",
-      "CXX": "[SLAVE_BUILD]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-g++",
+      "AR": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-ar",
+      "CC": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-gcc",
+      "CXX": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-g++",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "0",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-      "LINK": "[SLAVE_BUILD]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-g++",
+      "LINK": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-g++",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
-      "RANLIB": "[SLAVE_BUILD]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-ranlib"
+      "RANLIB": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-ranlib"
     },
     "name": "gclient runhooks"
   },
@@ -111,7 +111,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/v8/out/gn",
+      "[START_DIR]/v8/out/gn",
       "511"
     ],
     "name": "makedirs for peeking gn",
@@ -133,7 +133,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/patch_mb_config.py",
-      "[SLAVE_BUILD]/v8/infra/mb/mb_config.pyl",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "/path/to/tmp/"
     ],
     "name": "patch mb config (fyi)"
@@ -142,7 +142,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/mb/mb.py",
+      "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8.ports",
@@ -150,9 +150,9 @@
       "V8 Mips - builder",
       "--config-file",
       "[mb config]",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -162,9 +162,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/gyp_flag_compare.py",
-      "[SLAVE_BUILD]/v8/out/gn",
-      "[SLAVE_BUILD]/v8/out/Release",
+      "[START_DIR]/v8/tools/gyp_flag_compare.py",
+      "[START_DIR]/v8/out/gn",
+      "[START_DIR]/v8/out/Release",
       "all",
       "all"
     ],
@@ -175,9 +175,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[SLAVE_BUILD]/v8/out/gn"
+      "[START_DIR]/v8/out/gn"
     ],
-    "name": "rmtree [SLAVE_BUILD]/v8/out/gn"
+    "name": "rmtree [START_DIR]/v8/out/gn"
   },
   {
     "cmd": [
@@ -194,7 +194,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[START_DIR]/v8",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",

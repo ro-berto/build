@@ -46,7 +46,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/pdfium",
+    "cwd": "[START_DIR]/pdfium",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -64,7 +64,7 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -73,7 +73,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -81,7 +81,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -115,12 +115,12 @@
       "python",
       "-u",
       "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/pdfium",
+      "--root=[START_DIR]/pdfium",
       "gen",
       "//out/debug_xfa_v8_asan",
       "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/cipd/goma\" use_sysroot=false is_asan=true is_lsan=true"
     ],
-    "cwd": "[SLAVE_BUILD]/pdfium",
+    "cwd": "[START_DIR]/pdfium",
     "name": "gn gen"
   },
   {
@@ -173,7 +173,7 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/pdfium/out/debug_xfa_v8_asan",
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan",
       "-j",
       "50"
     ],
@@ -238,7 +238,7 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/pdfium/out/debug_xfa_v8_asan",
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan",
       "--ninja-log-compiler",
       "unknown",
       "--ninja-log-command",
@@ -262,9 +262,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pdfium/out/debug_xfa_v8_asan/pdfium_unittests"
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan/pdfium_unittests"
     ],
-    "cwd": "[SLAVE_BUILD]/pdfium",
+    "cwd": "[START_DIR]/pdfium",
     "env": {
       "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
@@ -272,9 +272,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pdfium/out/debug_xfa_v8_asan/pdfium_embeddertests"
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan/pdfium_embeddertests"
     ],
-    "cwd": "[SLAVE_BUILD]/pdfium",
+    "cwd": "[START_DIR]/pdfium",
     "env": {
       "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
@@ -284,11 +284,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/pdfium/testing/tools/run_javascript_tests.py",
+      "[START_DIR]/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
       "out/debug_xfa_v8_asan"
     ],
-    "cwd": "[SLAVE_BUILD]/pdfium",
+    "cwd": "[START_DIR]/pdfium",
     "env": {
       "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
@@ -298,11 +298,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/pdfium/testing/tools/run_pixel_tests.py",
+      "[START_DIR]/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
       "out/debug_xfa_v8_asan"
     ],
-    "cwd": "[SLAVE_BUILD]/pdfium",
+    "cwd": "[START_DIR]/pdfium",
     "env": {
       "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
@@ -312,11 +312,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/pdfium/testing/tools/run_corpus_tests.py",
+      "[START_DIR]/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
       "out/debug_xfa_v8_asan"
     ],
-    "cwd": "[SLAVE_BUILD]/pdfium",
+    "cwd": "[START_DIR]/pdfium",
     "env": {
       "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },

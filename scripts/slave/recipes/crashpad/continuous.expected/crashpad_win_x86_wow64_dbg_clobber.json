@@ -44,7 +44,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/crashpad/out"
+      "[START_DIR]/crashpad/out"
     ],
     "name": "rmtree out",
     "~followup_annotations": [
@@ -65,7 +65,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/crashpad",
+    "cwd": "[START_DIR]/crashpad",
     "env": {
       "GYP_DEFINES": "target_arch=ia32",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -76,7 +76,7 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/crashpad/out/Debug"
+      "[START_DIR]/crashpad/out/Debug"
     ],
     "name": "compile with ninja"
   },
@@ -84,7 +84,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/crashpad/build/run_tests.py",
+      "[START_DIR]/crashpad/build/run_tests.py",
       "Debug"
     ],
     "name": "run tests"

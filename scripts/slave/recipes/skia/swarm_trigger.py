@@ -212,12 +212,12 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
   for k, v in properties.iteritems():
     extra_args.append('%s=%s' % (k, v))
 
-  isolate_base_dir = api.path['slave_build']
+  isolate_base_dir = api.path['start_dir']
   dimensions = swarm_dimensions(builder_spec)
   isolate_blacklist = ['.git', 'out', '*.pyc']
   isolate_vars = {
     'BUILD': api.path['build'],
-    'WORKDIR': api.path['slave_build'],
+    'WORKDIR': api.path['start_dir'],
   }
 
   isolate_file = '%s_skia.isolate' % task_name
@@ -261,11 +261,11 @@ def checkout_steps(api):
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
     gclient_cfg.target_os.add('llvm')
 
-  api.skia.update_repo(api.path['slave_build'], repo)
+  api.skia.update_repo(api.path['start_dir'], repo)
 
   update_step = api.bot_update.ensure_checkout(
       gclient_config=gclient_cfg,
-      cwd=api.path['slave_build'])
+      cwd=api.path['start_dir'])
 
   got_revision = update_step.presentation.properties['got_revision']
 
@@ -339,7 +339,7 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
   compile_builder_spec = builder_spec
   if builder_name != api.properties['buildername']:
     compile_builder_spec = api.skia.get_builder_spec(
-        api.path['slave_build'].join('skia'), builder_name)
+        api.path['start_dir'].join('skia'), builder_name)
 
   extra_hashes = extra_isolate_hashes[:]
 
@@ -446,7 +446,7 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
 
   # Upload the results.
   if upload_perf_results:
-    perf_data_dir = api.path['slave_build'].join(
+    perf_data_dir = api.path['start_dir'].join(
         'perfdata', api.properties['buildername'], 'data')
     git_timestamp = api.git.get_timestamp(test_data='1408633190',
                                           infra_step=True)
@@ -505,7 +505,7 @@ def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot,
 
   # Upload the results.
   if upload_dm_results:
-    dm_dir = api.path['slave_build'].join('dm')
+    dm_dir = api.path['start_dir'].join('dm')
     dm_src = task.task_output_dir.join('0', 'dm')
     api.file.rmtree('dm_dir', dm_dir, infra_step=True)
     api.file.copytree('dm_dir', dm_src, dm_dir, infra_step=True)
@@ -520,7 +520,7 @@ def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot,
           api.properties['buildername'],
           api.properties['buildnumber'],
           api.properties['issue'] if is_trybot else '',
-          api.path['slave_build'].join('skia', 'common', 'py', 'utils'),
+          api.path['start_dir'].join('skia', 'common', 'py', 'utils'),
         ],
         cwd=api.path['checkout'],
         env=api.skia.gsutil_env('chromium-skia-gm.boto'),
@@ -613,7 +613,7 @@ def cipd_pkg(api, infrabots_dir, asset_name):
 
 def forward_to_recipe_in_repo(api, recipes_py):
   cmd = ['python', recipes_py, 'run',
-         '--workdir', api.path['slave_build'],
+         '--workdir', api.path['start_dir'],
          'swarm_trigger', 'path_config=kitchen']
   for k, v in api.properties.iteritems():
     cmd.append('%s=%s' % (k, v))
@@ -715,14 +715,14 @@ def RunSteps(api):
     cipd_packages.append(cipd_pkg(api, infrabots_dir, 'skp'))
   else:
     # TODO(borenet): Remove this once enough time has passed.
-    api.skia.download_skps(api.path['slave_build'].join('tmp'),
-                           api.path['slave_build'].join('skps'))
+    api.skia.download_skps(api.path['start_dir'].join('tmp'),
+                           api.path['start_dir'].join('skps'))
   if api.path.exists(infrabots_dir.join('assets', 'skimage', 'VERSION')):
     cipd_packages.append(cipd_pkg(api, infrabots_dir, 'skimage'))
   else:
     # TODO(borenet): Remove this once enough time has passed.
-    api.skia.download_images(api.path['slave_build'].join('tmp'),
-                             api.path['slave_build'].join('images'))
+    api.skia.download_images(api.path['start_dir'].join('tmp'),
+                             api.path['start_dir'].join('images'))
 
   # Trigger test and perf tasks.
   test_task = None
@@ -758,8 +758,8 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
                    revision='abc123')
   )
   paths = [
-      api.path['slave_build'].join('skia'),
-      api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt'),
+      api.path['start_dir'].join('skia'),
+      api.path['start_dir'].join('tmp', 'uninteresting_hashes.txt'),
   ]
   if 'Trybot' in builder:
     test += api.properties(issue=500,
@@ -767,7 +767,7 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
                            rietveld='https://codereview.chromium.org')
   if 'Android' in builder:
     if not legacy_android_sdk:
-      paths.append(api.path['slave_build'].join(
+      paths.append(api.path['start_dir'].join(
           'skia', 'infra', 'bots', 'assets', 'android_sdk', 'VERSION'))
   if ('Coverage' not in builder and
       'Infra' not in builder and
@@ -794,16 +794,16 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
         stdout=api.raw_io.output('def456 XYZ.isolated'))
   if 'Win' in builder:
     if not legacy_win_toolchain:
-      paths.append(api.path['slave_build'].join(
+      paths.append(api.path['start_dir'].join(
           'skia', 'infra', 'bots', 'assets', 'win_toolchain', 'VERSION'))
     if not legacy_win_vulkan_sdk:
-      paths.append(api.path['slave_build'].join(
+      paths.append(api.path['start_dir'].join(
           'skia', 'infra', 'bots', 'assets', 'win_vulkan_sdk', 'VERSION'))
   if not legacy_skimage_version:
-    paths.append(api.path['slave_build'].join(
+    paths.append(api.path['start_dir'].join(
         'skia', 'infra', 'bots', 'assets', 'skimage', 'VERSION'))
   if not legacy_skp_version:
-    paths.append(api.path['slave_build'].join(
+    paths.append(api.path['start_dir'].join(
         'skia', 'infra', 'bots', 'assets', 'skp', 'VERSION'))
   if 'RecreateSKPs' in builder:
     test += api.step_data(
@@ -875,8 +875,8 @@ def GenTests(api):
                    path_config='kitchen',
                    revision='abc123') +
     api.path.exists(
-        api.path['slave_build'].join('skia'),
-        api.path['slave_build'].join(
+        api.path['start_dir'].join('skia'),
+        api.path['start_dir'].join(
             'skia', 'infra', 'bots', 'recipes', 'swarm_trigger.py'),
     )
   )

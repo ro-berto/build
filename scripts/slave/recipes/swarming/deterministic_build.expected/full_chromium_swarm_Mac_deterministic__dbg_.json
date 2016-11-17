@@ -113,18 +113,18 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[SLAVE_BUILD]/src/out/Release.1"
+      "[START_DIR]/src/out/Release.1"
     ],
-    "name": "rmtree [SLAVE_BUILD]/src/out/Release.1"
+    "name": "rmtree [START_DIR]/src/out/Release.1"
   },
   {
     "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[SLAVE_BUILD]/src/out/Release.2"
+      "[START_DIR]/src/out/Release.2"
     ],
-    "name": "rmtree [SLAVE_BUILD]/src/out/Release.2"
+    "name": "rmtree [START_DIR]/src/out/Release.2"
   },
   {
     "cmd": [],
@@ -138,7 +138,7 @@
       "--platform",
       "mac-386",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -147,7 +147,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -155,7 +155,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -189,7 +189,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -210,7 +210,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -223,19 +223,19 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.swarm",
       "-b",
       "Mac deterministic (dbg)",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -249,7 +249,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -321,7 +321,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[START_DIR]/src/out/Release",
       "-j",
       "50",
       "all"
@@ -391,11 +391,11 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[START_DIR]/src/out/Release",
       "--ninja-log-compiler",
       "goma-clang",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]/src/out/Release', '-j', 50, 'all']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'all']",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -417,11 +417,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/determinism/remove_build_metadata.py",
+      "[START_DIR]/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "remove_build_metadata",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -434,7 +434,7 @@
       "-u",
       "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
       "/path/to/tmp/",
-      "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
+      "[START_DIR]/src/out/Release/*.isolated.gen.json"
     ],
     "name": "find isolated targets"
   },
@@ -443,14 +443,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "[START_DIR]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
+      "[START_DIR]/src/out/Release/dummy_target_1.isolated.gen.json",
+      "[START_DIR]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -467,10 +467,10 @@
       "python",
       "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[SLAVE_BUILD]/src/out/Release",
-      "[SLAVE_BUILD]/src/out/Release.1"
+      "[START_DIR]/src/out/Release",
+      "[START_DIR]/src/out/Release.1"
     ],
-    "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.1",
+    "name": "Move [START_DIR]/src/out/Release to [START_DIR]/src/out/Release.1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -487,7 +487,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
     "name": "rmtree clobber (2)",
     "~followup_annotations": [
@@ -508,7 +508,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -521,19 +521,19 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.swarm",
       "-b",
       "Mac deterministic (dbg)",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -547,7 +547,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -592,7 +592,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[START_DIR]/src/out/Release",
       "-j",
       "50",
       "all"
@@ -662,11 +662,11 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[START_DIR]/src/out/Release",
       "--ninja-log-compiler",
       "goma-clang",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]/src/out/Release', '-j', 50, 'all']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'all']",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -688,11 +688,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/determinism/remove_build_metadata.py",
+      "[START_DIR]/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "remove_build_metadata (2)"
   },
   {
@@ -701,7 +701,7 @@
       "-u",
       "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
       "/path/to/tmp/",
-      "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
+      "[START_DIR]/src/out/Release/*.isolated.gen.json"
     ],
     "name": "find isolated targets (2)"
   },
@@ -710,14 +710,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "[START_DIR]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
+      "[START_DIR]/src/out/Release/dummy_target_1.isolated.gen.json",
+      "[START_DIR]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
     "name": "isolate tests (2)",
     "~followup_annotations": [
@@ -734,10 +734,10 @@
       "python",
       "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[SLAVE_BUILD]/src/out/Release",
-      "[SLAVE_BUILD]/src/out/Release.2"
+      "[START_DIR]/src/out/Release",
+      "[START_DIR]/src/out/Release.2"
     ],
-    "name": "Move [SLAVE_BUILD]/src/out/Release to [SLAVE_BUILD]/src/out/Release.2",
+    "name": "Move [START_DIR]/src/out/Release to [START_DIR]/src/out/Release.2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -753,15 +753,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/determinism/compare_build_artifacts.py",
+      "[START_DIR]/src/tools/determinism/compare_build_artifacts.py",
       "--first-build-dir",
-      "[SLAVE_BUILD]/src/out/Release.1",
+      "[START_DIR]/src/out/Release.1",
       "--second-build-dir",
-      "[SLAVE_BUILD]/src/out/Release.2",
+      "[START_DIR]/src/out/Release.2",
       "--target-platform",
       "mac"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "compare_build_artifacts"
   },
   {

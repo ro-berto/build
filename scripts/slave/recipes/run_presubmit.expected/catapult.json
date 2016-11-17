@@ -67,7 +67,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[SLAVE_BUILD]/catapult",
+    "cwd": "[START_DIR]/catapult",
     "name": "commit git patch"
   },
   {
@@ -85,7 +85,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[SLAVE_BUILD]/catapult",
+      "[START_DIR]/catapult",
       "--commit",
       "--verbose",
       "--verbose",

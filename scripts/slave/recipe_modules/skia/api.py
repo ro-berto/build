@@ -152,7 +152,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.master_name = self.m.properties['mastername']
     self.slave_name = self.m.properties['slavename']
 
-    self.slave_dir = self.m.path['slave_build']
+    self.slave_dir = self.m.path['start_dir']
     self.checkout_root = self.slave_dir
     self.default_env = {}
     self.gclient_env = {}
@@ -162,13 +162,13 @@ class SkiaApi(recipe_api.RecipeApi):
     # The 'build' and 'depot_tools' directories are provided through isolate
     # and aren't in the expected location, so we need to override them.
     self.m.path.c.base_paths['depot_tools'] = (
-        self.m.path.c.base_paths['slave_build'] +
+        self.m.path.c.base_paths['start_dir'] +
         ('build', 'scripts', 'slave', '.recipe_deps', 'depot_tools'))
     if 'Win' in self.builder_name:
       self.m.path.c.base_paths['depot_tools'] = (
           'c:\\', 'Users', 'chrome-bot', 'depot_tools')
     self.m.path.c.base_paths['build'] = (
-        self.m.path.c.base_paths['slave_build'] + ('build',))
+        self.m.path.c.base_paths['start_dir'] + ('build',))
     self.default_env['PYTHONPATH'] = self.m.path['build'].join('scripts')
 
     # Compile bots keep a persistent checkout.
@@ -223,7 +223,7 @@ class SkiaApi(recipe_api.RecipeApi):
       self.local_skp_dir = self.slave_dir.join('skps')
     if not self.is_compile_bot:
       self.skia_out = self.slave_dir.join('out')
-    self.tmp_dir = self.m.path['slave_build'].join('tmp')
+    self.tmp_dir = self.m.path['start_dir'].join('tmp')
     if not self.m.path.exists(self.tmp_dir):
       self._run_once(self.m.file.makedirs,
                      'tmp_dir',

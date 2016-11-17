@@ -323,7 +323,7 @@
       "--build-dir",
       "[BUILDER_CACHE]\\CrWinClangLLD\\src\\out\\Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

@@ -46,7 +46,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -56,18 +56,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "[START_DIR]/src/mojo/tools/mojob.py",
       "gn",
       "--debug"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "mojob gn"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/mojob.py",
+      "[START_DIR]/src/mojo/tools/mojob.py",
       "build",
       "--debug"
     ],
@@ -77,7 +77,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/get_test_list.py",
+      "[START_DIR]/src/mojo/tools/get_test_list.py",
       "{\"build_number\": 571, \"builder_name\": \"Mojo Win (dbg)\", \"dcheck_always_on\": false, \"is_debug\": true, \"master_name\": \"chromium.testing.master\", \"target_os\": \"windows\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"default\"]}",
       "/path/to/tmp/json"
     ],
@@ -98,7 +98,7 @@
     "cmd": [
       "world"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "Hello"
   },
   {

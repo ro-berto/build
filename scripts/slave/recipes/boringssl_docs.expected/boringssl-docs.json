@@ -46,7 +46,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl",
+    "cwd": "[START_DIR]/boringssl",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -56,14 +56,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
       "doc.go",
       "-out",
       "[TMP_BASE]/boringssl-docs_tmp_1"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl/util",
+    "cwd": "[START_DIR]/boringssl/util",
     "name": "generate"
   },
   {

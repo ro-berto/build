@@ -7,7 +7,7 @@
       "origin",
       "https://skia.googlesource.com/skia.git"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git remote set-url"
   },
   {
@@ -15,7 +15,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git fetch"
   },
   {
@@ -25,7 +25,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git reset"
   },
   {
@@ -35,7 +35,7 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git clean"
   },
   {
@@ -63,7 +63,7 @@
       "skia@abc123",
       "--output_manifest"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -101,7 +101,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[SLAVE_BUILD]/swarming.client",
+      "[START_DIR]/swarming.client",
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
@@ -115,7 +115,7 @@
       "origin",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
@@ -128,7 +128,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "git checkout (swarming_client)"
   },
   {
@@ -137,7 +137,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -152,7 +152,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "git clean (swarming_client)"
   },
   {
@@ -161,7 +161,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -172,14 +172,14 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[START_DIR]/swarming.client",
     "name": "submodule update (swarming_client)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -197,7 +197,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/linux64"
+      "[START_DIR]/skia/infra/bots/tools/luci-go/linux64"
     ],
     "name": "download luci-go linux"
   },
@@ -210,7 +210,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/mac64"
+      "[START_DIR]/skia/infra/bots/tools/luci-go/mac64"
     ],
     "name": "download luci-go mac"
   },
@@ -223,7 +223,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/win64"
+      "[START_DIR]/skia/infra/bots/tools/luci-go/win64"
     ],
     "name": "download luci-go win"
   },
@@ -232,7 +232,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/luci-go"
+      "[START_DIR]/luci-go"
     ],
     "name": "rmtree Go binary dir",
     "~followup_annotations": [
@@ -251,8 +251,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go",
-      "[SLAVE_BUILD]/luci-go",
+      "[START_DIR]/skia/infra/bots/tools/luci-go",
+      "[START_DIR]/luci-go",
       "0"
     ],
     "name": "Copy Go binary"
@@ -317,7 +317,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
+      "[START_DIR]/swarming_temp_dir",
       "511"
     ],
     "name": "makedirs swarming tmp dir",
@@ -339,8 +339,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[BUILD]/scripts/slave/recipes/skia/swarm_recipe.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-isolate_recipes.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\"\n    ], \n    \"dir\": \"[BUILD]/scripts/slave/recipes/skia\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[BUILD]/scripts/slave/recipes/skia/swarm_recipe.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-isolate_recipes.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\"\n    ], \n    \"dir\": \"[BUILD]/scripts/slave/recipes/skia\", \n    \"version\": 1\n}",
+      "[START_DIR]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
     ],
     "name": "Write isolate_recipes.isolated.gen.json"
   },
@@ -349,14 +349,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/swarming.client",
+      "[START_DIR]/swarming.client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
+      "[START_DIR]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -371,11 +371,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[START_DIR]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -419,7 +419,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skp/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
     "name": "read skp VERSION"
@@ -429,7 +429,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
     "name": "read skimage VERSION"
@@ -439,7 +439,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
+      "[START_DIR]/swarming_temp_dir",
       "511"
     ],
     "name": "makedirs swarming tmp dir (2)",
@@ -461,8 +461,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/coverage_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Ubuntu\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/skia/infra/bots/coverage_skia.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Ubuntu\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[START_DIR]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[START_DIR]\", \n    \"version\": 1\n}",
+      "[START_DIR]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
     "name": "Write test_skia.isolated.gen.json"
   },
@@ -471,14 +471,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/swarming.client",
+      "[START_DIR]/swarming.client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
+      "[START_DIR]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
     "name": "isolate tests (2)",
     "~followup_annotations": [
@@ -494,7 +494,7 @@
       "python",
       "-u",
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nif not isolated.get('includes'):\n  isolated['includes'] = []\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated",
+      "[START_DIR]/swarming_temp_dir/skia-task-test_skia.isolated",
       "[dummy hash for isolate_recipes]"
     ],
     "name": "add_isolated_input",
@@ -517,11 +517,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/isolateserver.py",
+      "[START_DIR]/swarming.client/isolateserver.py",
       "archive",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated"
+      "[START_DIR]/swarming_temp_dir/skia-task-test_skia.isolated"
     ],
     "name": "upload new .isolated file for test_skia",
     "stdout": "/path/to/tmp/"
@@ -530,7 +530,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -624,7 +624,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia"
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia"
     ],
     "name": "rmtree results_dir",
     "~followup_annotations": [
@@ -642,7 +642,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -653,7 +653,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia"
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia"
     ],
     "name": "test_skia on Ubuntu",
     "~followup_annotations": [
@@ -708,7 +708,7 @@
       "--format=%at",
       "-s"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "git show",
     "stdout": "/path/to/tmp/"
   },
@@ -721,7 +721,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/9046e2e693bb92a76e972b694580e5d17ad10748.cov",
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia/0/9046e2e693bb92a76e972b694580e5d17ad10748.cov",
       "gs://skia-infra/coverage-raw-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/9046e2e693bb92a76e972b694580e5d17ad10748.cov"
     ],
     "env": {
@@ -738,8 +738,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/nanobench_9046e2e693bb92a76e972b694580e5d17ad10748.json",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/nanobench_9046e2e693bb92a76e972b694580e5d17ad10748_1408633190.json"
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia/0/nanobench_9046e2e693bb92a76e972b694580e5d17ad10748.json",
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia/0/nanobench_9046e2e693bb92a76e972b694580e5d17ad10748_1408633190.json"
     ],
     "name": "nanobench JSON"
   },
@@ -748,7 +748,7 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/nanobench_9046e2e693bb92a76e972b694580e5d17ad10748.json"
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia/0/nanobench_9046e2e693bb92a76e972b694580e5d17ad10748.json"
     ],
     "name": "old nanobench JSON",
     "~followup_annotations": [
@@ -766,12 +766,12 @@
       "RECIPE_MODULE[build::skia]/resources/upload_bench_results.py",
       "Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot",
       "5",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0",
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia/0",
       "9046e2e693bb92a76e972b694580e5d17ad10748",
       "[DEPOT_TOOLS]/gsutil.py",
       "500"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "env": {
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
@@ -783,8 +783,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748.json",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748_1408633190.json"
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748.json",
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748_1408633190.json"
     ],
     "name": "Line-by-line coverage JSON"
   },
@@ -793,7 +793,7 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748.json"
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748.json"
     ],
     "name": "old line-by-line coverage JSON",
     "~followup_annotations": [
@@ -813,7 +813,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748_1408633190.json",
+      "[START_DIR]/swarming_temp_dir/outputs/test_skia/0/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748_1408633190.json",
       "gs://skia-infra/coverage-json-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/coverage_by_line_9046e2e693bb92a76e972b694580e5d17ad10748_1408633190.json"
     ],
     "env": {

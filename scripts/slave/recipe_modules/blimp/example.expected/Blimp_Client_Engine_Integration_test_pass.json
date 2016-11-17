@@ -109,7 +109,7 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -118,7 +118,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -126,7 +126,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -160,10 +160,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Debug/test_logs",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "[SLAVE_BUILD]/src"
+      "[START_DIR]/src/out/Debug/debug_info_dumps",
+      "[START_DIR]/src/out/Debug/test_logs",
+      "[START_DIR]/src/out/build_product.zip",
+      "[START_DIR]/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -189,12 +189,12 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -202,21 +202,21 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fyi",
       "-b",
       "Blimp Client Engine Integration",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--phase",
       "engine",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "[SLAVE_BUILD]/src/out-linux/Debug"
+      "[START_DIR]/src/out-linux/Debug"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -237,7 +237,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
@@ -255,7 +255,7 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--out-dir",
-      "[SLAVE_BUILD]/src/out-linux",
+      "[START_DIR]/src/out-linux",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--",
@@ -263,7 +263,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile",
     "~followup_annotations": [
@@ -275,21 +275,21 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fyi",
       "-b",
       "Blimp Client Engine Integration",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--phase",
       "client",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "[SLAVE_BUILD]/src/out-android/Debug"
+      "[START_DIR]/src/out-android/Debug"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -310,7 +310,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[START_DIR]/src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
@@ -328,7 +328,7 @@
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
       "--out-dir",
-      "[SLAVE_BUILD]/src/out-android",
+      "[START_DIR]/src/out-android",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--",
@@ -337,7 +337,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile (2)",
     "~followup_annotations": [
@@ -349,9 +349,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/blimp/tools/client_engine_integration.py",
+      "[START_DIR]/src/blimp/tools/client_engine_integration.py",
       "-l",
-      "[SLAVE_BUILD]/src/out-linux/Debug",
+      "[START_DIR]/src/out-linux/Debug",
       "run"
     ],
     "name": "[Blimp] Starting engine and forwarder"
@@ -360,12 +360,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/blimp/tools/client_engine_integration.py",
+      "[START_DIR]/src/blimp/tools/client_engine_integration.py",
       "-l",
-      "[SLAVE_BUILD]/src/out-linux/Debug",
+      "[START_DIR]/src/out-linux/Debug",
       "load",
       "--apk-path",
-      "[SLAVE_BUILD]/src/out-android/Debug/apks/ChromePublic.apk"
+      "[START_DIR]/src/out-android/Debug/apks/ChromePublic.apk"
     ],
     "name": "[Blimp] Installing apk and running blimp"
   },
@@ -373,9 +373,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/blimp/tools/client_engine_integration.py",
+      "[START_DIR]/src/blimp/tools/client_engine_integration.py",
       "-l",
-      "[SLAVE_BUILD]/src/out-linux/Debug",
+      "[START_DIR]/src/out-linux/Debug",
       "stop"
     ],
     "name": "[Blimp] Killing engine and forwarder"

@@ -179,7 +179,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self._working_dir:
       kwargs.setdefault('cwd', self._working_dir)
     else:
-      self._working_dir = self.m.path['slave_build']
+      self._working_dir = self.m.path['start_dir']
 
     # Cleanup symlinks if there are any created.
     self.m.python('clean symlinks',
@@ -330,7 +330,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     # Zip and upload out/{Debug,Release}/apks/AppRTCMobile.apk
     apk_root = self.m.chromium.c.build_dir.join(
         self.m.chromium.c.build_config_fs, 'apks')
-    zip_path = self.m.path['slave_build'].join('AppRTCMobile_apk.zip')
+    zip_path = self.m.path['start_dir'].join('AppRTCMobile_apk.zip')
 
     pkg = self.m.zip.make_package(apk_root, zip_path)
     pkg.add_file(apk_root.join('AppRTCMobile.apk'))

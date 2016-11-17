@@ -42,7 +42,7 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD]/chromite/bin/cbuildbot",
+      "[START_DIR]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/shared_external",
       "--buildbot",
@@ -56,7 +56,7 @@
       "/b/cros_git_cache",
       "x86-generic-tot-chrome-pfq-informational"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "cbuildbot [x86-generic-tot-chrome-pfq-informational]"
   },
   {

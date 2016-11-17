@@ -74,9 +74,9 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/node.js/configure"
+      "[START_DIR]/node.js/configure"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[START_DIR]/node.js",
     "name": "configure node.js - baseline"
   },
   {
@@ -85,7 +85,7 @@
       "-j8",
       "test"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[START_DIR]/node.js",
     "name": "build and test node.js - baseline"
   },
   {
@@ -93,7 +93,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/node.js/deps/v8"
+      "[START_DIR]/node.js/deps/v8"
     ],
     "name": "rmtree v8",
     "~followup_annotations": [
@@ -112,20 +112,20 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/copy_v8.py",
-      "[SLAVE_BUILD]/v8",
-      "[SLAVE_BUILD]/node.js/deps/v8",
+      "[START_DIR]/v8",
+      "[START_DIR]/node.js/deps/v8",
       ".git",
-      "[SLAVE_BUILD]/v8/buildtools",
-      "[SLAVE_BUILD]/v8/out",
-      "[SLAVE_BUILD]/v8/third_party"
+      "[START_DIR]/v8/buildtools",
+      "[START_DIR]/v8/out",
+      "[START_DIR]/v8/third_party"
     ],
     "name": "copy v8 tree"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/node.js/configure"
+      "[START_DIR]/node.js/configure"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[START_DIR]/node.js",
     "name": "configure node.js"
   },
   {
@@ -134,16 +134,16 @@
       "-j8",
       "test"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[START_DIR]/node.js",
     "name": "build and test node.js"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/node.js/configure",
+      "[START_DIR]/node.js/configure",
       "--prefix=/",
       "--tag=v8-build-f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[START_DIR]/node.js",
     "name": "configure node.js - install"
   },
   {
@@ -151,7 +151,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/archive-build",
+      "[START_DIR]/archive-build",
       "511"
     ],
     "name": "makedirs install directory",
@@ -173,9 +173,9 @@
       "make",
       "-j8",
       "install",
-      "DESTDIR=[SLAVE_BUILD]/archive-build"
+      "DESTDIR=[START_DIR]/archive-build"
     ],
-    "cwd": "[SLAVE_BUILD]/node.js",
+    "cwd": "[START_DIR]/node.js",
     "name": "build and install node.js"
   },
   {
@@ -185,7 +185,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/archive-build\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[SLAVE_BUILD]/archive-build\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/archive-build\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[START_DIR]/archive-build\"}"
   },
   {
     "cmd": [
@@ -198,7 +198,7 @@
       "cp",
       "-a",
       "public-read",
-      "[SLAVE_BUILD]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip",
+      "[START_DIR]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip",
       "gs://chromium-v8/node-linux-rel/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
     ],
     "name": "gsutil upload",
@@ -218,7 +218,7 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[SLAVE_BUILD]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
+      "[START_DIR]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
     ],
     "name": "cleanup archive",
     "~followup_annotations": [
@@ -234,7 +234,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/archive-build"
+      "[START_DIR]/archive-build"
     ],
     "name": "rmtree archive directory",
     "~followup_annotations": [

@@ -57,12 +57,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/third_party/dart/tools/task_kill.py",
+      "[START_DIR]/sdk/third_party/dart/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
-      "BUILDBOT_JAVA_HOME": "[SLAVE_BUILD]/sdk/third_party/java/linux/j2sdk"
+      "BUILDBOT_JAVA_HOME": "[START_DIR]/sdk/third_party/java/linux/j2sdk"
     },
     "name": "Taskkill"
   },
@@ -71,9 +71,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/bots/dartino.py"
+      "[START_DIR]/sdk/tools/bots/dartino.py"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
       "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
       "BUILDBOT_BUILDERNAME": "dartino-linux-debug-asan-x86",
@@ -85,12 +85,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/third_party/dart/tools/task_kill.py",
+      "[START_DIR]/sdk/third_party/dart/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
-      "BUILDBOT_JAVA_HOME": "[SLAVE_BUILD]/sdk/third_party/java/linux/j2sdk"
+      "BUILDBOT_JAVA_HOME": "[START_DIR]/sdk/third_party/java/linux/j2sdk"
     },
     "name": "Taskkill (2)"
   },

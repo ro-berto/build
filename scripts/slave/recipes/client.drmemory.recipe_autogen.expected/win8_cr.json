@@ -11,7 +11,7 @@
       "gs://chromium-drmemory-builds/drmemory-windows-latest-sfx.exe",
       "drm-sfx.exe"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "gsutil download"
   },
   {
@@ -20,7 +20,7 @@
       "-ounpacked",
       "-y"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "Unpack the build"
   },
   {
@@ -40,7 +40,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },
@@ -55,7 +55,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },
@@ -70,7 +70,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },
@@ -85,7 +85,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },
@@ -100,7 +100,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },
@@ -115,7 +115,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },
@@ -130,7 +130,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },
@@ -145,7 +145,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },
@@ -160,7 +160,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },
@@ -175,7 +175,7 @@
       "drmemory_light",
       "--keep_logs"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "env": {
       "DRMEMORY_COMMAND": "unpacked/bin/drmemory.exe"
     },

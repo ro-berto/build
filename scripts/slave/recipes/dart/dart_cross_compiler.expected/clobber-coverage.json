@@ -43,9 +43,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/clean_output_directory.py"
+      "[START_DIR]/sdk/tools/clean_output_directory.py"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "clobber"
   },
   {
@@ -55,7 +55,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -65,12 +65,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/build.py",
+      "[START_DIR]/sdk/tools/build.py",
       "-mrelease",
       "--arch=x64",
       "runtime"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "build dart"
   },
   {
@@ -84,7 +84,7 @@
       "--exclude=**/*analyzer*",
       "out/"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "create tarball"
   },
   {
@@ -101,7 +101,7 @@
       "cross_build_x64_release_abcd1234efef5656.tar.bz2",
       "gs://dart-cross-compiled-binaries/cross_build_x64_release_abcd1234efef5656.tar.bz2"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "gsutil upoad tarball"
   },
   {

@@ -57,10 +57,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/third_party/dart/tools/task_kill.py",
+      "[START_DIR]/sdk/third_party/dart/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "Taskkill"
   },
   {
@@ -68,9 +68,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/bots/dartino.py"
+      "[START_DIR]/sdk/tools/bots/dartino.py"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
       "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
       "BUILDBOT_BUILDERNAME": "dartino-mac-release-x64-sdk-dev"
@@ -81,10 +81,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/third_party/dart/tools/task_kill.py",
+      "[START_DIR]/sdk/third_party/dart/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "Taskkill (2)"
   },
   {

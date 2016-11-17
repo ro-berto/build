@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[START_DIR]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -56,33 +56,33 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
+      "[START_DIR]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait for device (1)"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
+      "[START_DIR]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait for charge (1)"
   },
@@ -98,7 +98,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "get EXTERNAL_STORAGE dir",
     "stdout": "/path/to/tmp/"
@@ -113,7 +113,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "adb root",
     "stdout": "/path/to/tmp/"
@@ -128,56 +128,56 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
+      "[START_DIR]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait for device (2)"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
+      "[START_DIR]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait for charge (2)"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
+      "[START_DIR]/skia/platform_tools/android/bin/android_kill_skia",
       "--verbose"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "kill skia"
   },
@@ -192,7 +192,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "stop shell"
   },
@@ -208,7 +208,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "starting battery stats"
   },
@@ -224,7 +224,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "cat scaling_governor"
   },
@@ -240,26 +240,26 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "cat cpu_freq"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
+      "[START_DIR]/skia/platform_tools/android/bin/adb_push_if_needed",
       "--verbose",
-      "[SLAVE_BUILD]/skia/resources",
+      "[START_DIR]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "push resources"
   },
@@ -268,7 +268,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skp/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded SKP VERSION"
@@ -279,7 +279,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION"
+      "[START_DIR]/tmp/SKP_VERSION"
     ],
     "name": "write SKP_VERSION"
   },
@@ -295,7 +295,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
@@ -305,7 +305,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/infra/bots/assets/skimage/VERSION",
+      "[START_DIR]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded skimage VERSION"
@@ -316,7 +316,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
+      "[START_DIR]/tmp/SK_IMAGE_VERSION"
     ],
     "name": "write SK_IMAGE_VERSION"
   },
@@ -332,7 +332,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "read SK_IMAGE_VERSION",
     "stdout": "/path/to/tmp/"
@@ -394,7 +394,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "rmdir skia_dm"
   },
@@ -417,7 +417,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "exists skia_dm",
     "stdout": "/path/to/tmp/"
@@ -435,7 +435,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "mkdir skia_dm"
   },
@@ -444,7 +444,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/tmp",
+      "[START_DIR]/tmp",
       "511"
     ],
     "name": "makedirs tmp_dir",
@@ -466,15 +466,15 @@
       "python",
       "-u",
       "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
-      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
+      "[START_DIR]/tmp/uninteresting_hashes.txt"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "env": {
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "get uninteresting hashes",
     "~followup_annotations": [
@@ -515,7 +515,7 @@
     "cmd": [
       "/usr/bin/adb",
       "push",
-      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
+      "[START_DIR]/tmp/uninteresting_hashes.txt",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/uninteresting_hashes.txt"
     ],
     "env": {
@@ -523,13 +523,13 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "push uninteresting_hashes.txt"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "[START_DIR]/skia/platform_tools/android/bin/android_run_skia",
       "--verbose",
       "--logcat",
       "-d",
@@ -579,33 +579,33 @@
       "--dummy-flags"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "dm"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
+      "[START_DIR]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "--verbose",
       "/storage/emulated/legacy/skiabot/skia_dm",
       "[CUSTOM_[SWARM_OUT_DIR]]/dm"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "pull skia_dm"
   },
@@ -621,7 +621,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "final battery stats"
   },
@@ -635,7 +635,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "reboot"
   },
@@ -649,39 +649,39 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait for reboot"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
+      "[START_DIR]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait for device (3)"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
+      "[START_DIR]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
     "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/android_sdk/android-sdk",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/android_sdk/android-sdk",
+      "ANDROID_HOME": "[START_DIR]/android_sdk/android-sdk",
+      "ANDROID_SDK_ROOT": "[START_DIR]/android_sdk/android-sdk",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait for charge (3)"
   },
@@ -695,7 +695,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "kill-server"
   },

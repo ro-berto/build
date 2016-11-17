@@ -134,7 +134,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/tmp",
+      "[START_DIR]/tmp",
       "511"
     ],
     "name": "makedirs tmp_dir",
@@ -190,7 +190,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os\nimport urllib2\n\nBOTO_URL = 'http://metadata/computeMetadata/v1/project/attributes/boto-file'\n\ndest_path = '[SLAVE_BUILD]/tmp/.boto'\ndest_dir = os.path.dirname(dest_path)\nif not os.path.exists(dest_dir):\n  os.makedirs(dest_dir)\n\nreq = urllib2.Request(BOTO_URL, headers={'Metadata-Flavor': 'Google'})\ncontents = urllib2.urlopen(req).read()\n\nwith open(dest_path, 'w') as f:\n  f.write(contents)\n"
+      "\nimport os\nimport urllib2\n\nBOTO_URL = 'http://metadata/computeMetadata/v1/project/attributes/boto-file'\n\ndest_path = '[START_DIR]/tmp/.boto'\ndest_dir = os.path.dirname(dest_path)\nif not os.path.exists(dest_dir):\n  os.makedirs(dest_dir)\n\nreq = urllib2.Request(BOTO_URL, headers={'Metadata-Flavor': 'Google'})\ncontents = urllib2.urlopen(req).read()\n\nwith open(dest_path, 'w') as f:\n  f.write(contents)\n"
     ],
     "name": "download boto file",
     "~followup_annotations": [
@@ -200,7 +200,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@BOTO_URL = 'http://metadata/computeMetadata/v1/project/attributes/boto-file'@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@dest_path = '[SLAVE_BUILD]/tmp/.boto'@@@",
+      "@@@STEP_LOG_LINE@python.inline@dest_path = '[START_DIR]/tmp/.boto'@@@",
       "@@@STEP_LOG_LINE@python.inline@dest_dir = os.path.dirname(dest_path)@@@",
       "@@@STEP_LOG_LINE@python.inline@if not os.path.exists(dest_dir):@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.makedirs(dest_dir)@@@",
@@ -218,7 +218,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skp_output"
+      "[START_DIR]/skp_output"
     ],
     "name": "rmtree skp_output",
     "~followup_annotations": [
@@ -237,7 +237,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/skp_output",
+      "[START_DIR]/skp_output",
       "511"
     ],
     "name": "makedirs skp_output",
@@ -263,12 +263,12 @@
       "--browser_executable",
       "[CUSTOM_/_B_WORK]/src/out/Release/chrome",
       "--target_dir",
-      "[SLAVE_BUILD]/skp_output"
+      "[START_DIR]/skp_output"
     ],
     "cwd": "[CUSTOM_/_B_WORK]/skia",
     "env": {
-      "AWS_CREDENTIAL_FILE": "[SLAVE_BUILD]/tmp/.boto",
-      "BOTO_CONFIG": "[SLAVE_BUILD]/tmp/.boto",
+      "AWS_CREDENTIAL_FILE": "[START_DIR]/tmp/.boto",
+      "BOTO_CONFIG": "[START_DIR]/tmp/.boto",
       "CHROME_HEADLESS": "1",
       "PATH": "[DEPOT_TOOLS]:%(PATH)s"
     },

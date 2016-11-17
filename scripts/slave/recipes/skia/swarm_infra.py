@@ -62,7 +62,7 @@ def git_checkout(api, url, dest, ref=None):
   # Run bot_update, just to apply patches.
   cfg_kwargs = {'CACHE_DIR': '/b/cache'}
   gclient_cfg = api.gclient.make_config(**cfg_kwargs)
-  dirname = api.path['slave_build'].join('go', 'src', 'go.skia.org')
+  dirname = api.path['start_dir'].join('go', 'src', 'go.skia.org')
   basename = 'infra'
   sln = gclient_cfg.solutions.add()
   sln.name = basename
@@ -90,12 +90,12 @@ def RunSteps(api):
   # The 'build' and 'depot_tools' directories are provided through isolate
   # and aren't in the expected location, so we need to override them.
   api.path.c.base_paths['depot_tools'] = (
-      api.path.c.base_paths['slave_build'] +
+      api.path.c.base_paths['start_dir'] +
       ('build', 'scripts', 'slave', '.recipe_deps', 'depot_tools'))
   api.path.c.base_paths['build'] = (
-      api.path.c.base_paths['slave_build'] + ('build',))
+      api.path.c.base_paths['start_dir'] + ('build',))
 
-  go_dir = api.path['slave_build'].join('go')
+  go_dir = api.path['start_dir'].join('go')
   go_src = go_dir.join('src')
   api.file.makedirs('makedirs go/src', go_src)
   infra_dir = go_src.join(INFRA_GO)
@@ -160,7 +160,7 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('Infra-PerCommit') +
-      api.path.exists(api.path['slave_build'].join('go', 'src', INFRA_GO,
+      api.path.exists(api.path['start_dir'].join('go', 'src', INFRA_GO,
                                                    '.git')) +
       api.properties(slavename='skiabot-linux-infra-001',
                      path_config='kitchen')

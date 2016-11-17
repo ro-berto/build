@@ -153,7 +153,7 @@ def RunSteps(api):
         scripts_compile_targets, [api.chromium_tests.steps.generate_script],
         bot_update_step)
 
-  api.path['checkout'] = api.path['slave_build'].join('src')
+  api.path['checkout'] = api.path['start_dir'].join('src')
   api.chromium_android.clean_local_files()
 
   # TODO(jbudorick): Remove this after resolving

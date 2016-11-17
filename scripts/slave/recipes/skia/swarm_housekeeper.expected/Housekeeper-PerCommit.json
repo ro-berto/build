@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[START_DIR]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
       "Housekeeper-PerCommit"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -42,7 +42,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/tmp",
+      "[START_DIR]/tmp",
       "511"
     ],
     "name": "makedirs tmp_dir",
@@ -62,15 +62,15 @@
   {
     "cmd": [
       "python",
-      "[SLAVE_BUILD]/skia/platform_tools/android/tests/run_all.py"
+      "[START_DIR]/skia/platform_tools/android/tests/run_all.py"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "android platform self-tests"
   },
@@ -80,13 +80,13 @@
       "RECIPE_MODULE[build::skia]/resources/generate_and_upload_doxygen.py",
       "[DEPOT_TOOLS]/gsutil.py"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "generate and upload doxygen"
   },
@@ -95,19 +95,19 @@
       "python",
       "RECIPE_MODULE[build::skia]/resources/run_binary_size_analysis.py",
       "--library",
-      "[SLAVE_BUILD]/out/Release/lib/libskia.so",
+      "[START_DIR]/out/Release/lib/libskia.so",
       "--githash",
       "abc123",
       "--gsutil_path",
       "[DEPOT_TOOLS]/gsutil.py"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[START_DIR]/skia",
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
       "PYTHONPATH": "[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/out"
+      "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "generate and upload binary size data"
   },

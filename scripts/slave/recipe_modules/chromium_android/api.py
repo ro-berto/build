@@ -132,7 +132,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(sivachandra): Manufacture gclient spec such that it contains "src"
     # solution + repo_name solution. Then checkout will be automatically
     # correctly set by gclient.checkout
-    self.m.path['checkout'] = self.m.path['slave_build'].join('src')
+    self.m.path['checkout'] = self.m.path['start_dir'].join('src')
 
     self.clean_local_files()
 
@@ -305,7 +305,7 @@ class AndroidApi(recipe_api.RecipeApi):
         # We send None as the path so that zip_build.py gets it from factory
         # properties.
         build_url=None,
-        src_dir=self.m.path['slave_build'].join('src'),
+        src_dir=self.m.path['start_dir'].join('src'),
         exclude_files='lib.target,gen,android_webview,jingle_unittests')
 
   def use_devil_adb(self):
@@ -1189,7 +1189,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step('prepare bisect perf regression',
         [self.m.path['checkout'].join('tools',
                                       'prepare-bisect-perf-regression.py'),
-         '-w', self.m.path['slave_build']])
+         '-w', self.m.path['start_dir']])
 
     args = []
     if extra_src:
@@ -1199,7 +1199,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step('run bisect perf regression',
         [self.m.path['checkout'].join('tools',
                                       'run-bisect-perf-regression.py'),
-         '-w', self.m.path['slave_build']] + args, **kwargs)
+         '-w', self.m.path['start_dir']] + args, **kwargs)
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
                      gtest_filter=None, tool=None, result_details=False,

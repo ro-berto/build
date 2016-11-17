@@ -46,7 +46,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl",
+    "cwd": "[START_DIR]/boringssl",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -57,7 +57,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[SLAVE_BUILD]/boringssl/build"
+      "[START_DIR]/boringssl/build"
     ],
     "name": "clean"
   },
@@ -66,7 +66,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/boringssl/build",
+      "[START_DIR]/boringssl/build",
       "511"
     ],
     "name": "makedirs mkdir",
@@ -87,23 +87,23 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
-      "[SLAVE_BUILD]/boringssl/util/bot/cmake-linux64/bin/cmake",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
+      "[START_DIR]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
       "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "[SLAVE_BUILD]/boringssl"
+      "[START_DIR]/boringssl"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl/build",
+    "cwd": "[START_DIR]/boringssl/build",
     "name": "cmake"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
-      "[SLAVE_BUILD]/boringssl/build"
+      "[START_DIR]/boringssl/build"
     ],
     "name": "ninja"
   },
@@ -111,14 +111,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
       "util/all_tests.go",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl",
+    "cwd": "[START_DIR]/boringssl",
     "name": "unit tests",
     "~followup_annotations": [
       "step returned non-zero exit code: 5",
@@ -175,14 +175,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "test",
       "-pipe",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD]/boringssl/ssl/test/runner",
+    "cwd": "[START_DIR]/boringssl/ssl/test/runner",
     "name": "ssl tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",

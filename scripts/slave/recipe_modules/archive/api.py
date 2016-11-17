@@ -264,7 +264,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     build_git_commit = self._get_git_commit(update_properties, primary_project)
 
     if fixed_staging_dir:
-      staging_dir = self.m.path['slave_build'].join('chrome_staging')
+      staging_dir = self.m.path['start_dir'].join('chrome_staging')
       self.m.file.rmtree('purge staging dir', staging_dir)
       self.m.file.makedirs('create staging dir', staging_dir)
     else:

@@ -127,9 +127,9 @@
       "-u",
       "[CUSTOM_C:\\_B_WORK]\\skia\\infra\\bots\\bootstrap_win_toolchain_json.py",
       "--win_toolchain_json",
-      "[SLAVE_BUILD]\\src\\build\\win_toolchain.json",
+      "[START_DIR]\\src\\build\\win_toolchain.json",
       "--depot_tools_parent_dir",
-      "[SLAVE_BUILD]"
+      "[START_DIR]"
     ],
     "name": "bootstrap win toolchain"
   },
@@ -143,7 +143,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
-      "CHROME_PATH": "[SLAVE_BUILD]\\src",
+      "CHROME_PATH": "[START_DIR]\\src",
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "[BUILD]\\scripts",

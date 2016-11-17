@@ -44,7 +44,7 @@
       "ctest",
       "-VV",
       "-S",
-      "[SLAVE_BUILD]/drmemory/package.cmake,build=0x1234567;drmem_only"
+      "[START_DIR]/drmemory/package.cmake,build=0x1234567;drmem_only"
     ],
     "name": "Package Dr. Memory"
   },

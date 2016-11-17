@@ -22,7 +22,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/out"
+      "[START_DIR]/out"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -38,13 +38,13 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/art/tools/buildbot-build.sh",
+      "[START_DIR]/art/tools/buildbot-build.sh",
       "-j8",
       "--target"
     ],
     "env": {
-      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
-      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/mips64r6",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/mips64r6",
       "ANDROID_SERIAL": "emulator-5554",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -56,9 +56,9 @@
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
-      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",

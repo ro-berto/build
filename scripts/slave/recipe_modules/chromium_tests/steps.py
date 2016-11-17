@@ -1683,7 +1683,7 @@ class BlinkTest(Test):
     return True
 
   def run(self, api, suffix, test_filter=None):
-    results_dir = api.path['slave_build'].join('layout-test-results')
+    results_dir = api.path['start_dir'].join('layout-test-results')
 
     step_name = self._step_name(suffix)
     args = [

@@ -11,7 +11,7 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -20,7 +20,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -28,7 +28,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -164,10 +164,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Release/test_logs",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "[SLAVE_BUILD]/src"
+      "[START_DIR]/src/out/Release/debug_info_dumps",
+      "[START_DIR]/src/out/Release/test_logs",
+      "[START_DIR]/src/out/build_product.zip",
+      "[START_DIR]/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -193,13 +193,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm64 use_goma=1",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -207,19 +207,19 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.perf",
       "-b",
       "Android arm64 Builder",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -268,7 +268,7 @@
       "GOMA_CACHE_DIR": "[GOMA_CACHE]",
       "GOMA_DEPS_CACHE_FILE": "Android_arm64_Builder.gomadeps",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
@@ -281,7 +281,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[START_DIR]/src/out/Release",
       "-j",
       "50",
       "android_tools",
@@ -294,7 +294,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile"
   },
@@ -357,11 +357,11 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[START_DIR]/src/out/Release",
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]/src/out/Release', '-j', 50, 'android_tools', 'cc_perftests', 'chrome_public_apk', 'gpu_perftests', 'push_apps_to_background_apk', 'system_webview_apk', 'system_webview_shell_apk']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'android_tools', 'cc_perftests', 'chrome_public_apk', 'gpu_perftests', 'push_apps_to_background_apk', 'system_webview_apk', 'system_webview_shell_apk']",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -383,25 +383,25 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--release",
       "--verbose",
       "--steps",
-      "{\"steps\": {\"resource_sizes (ChromePublic.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
+      "{\"steps\": {\"resource_sizes (ChromePublic.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/src/out/Release/apks/ChromePublic.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[START_DIR]/src/out/bad_devices.json",
       "--num-retries",
       "0",
       "--collect-chartjson-data",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "Sharded Perf Tests"
   },
@@ -409,21 +409,21 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--steps",
-      "{\"steps\": {\"resource_sizes (ChromePublic.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
+      "{\"steps\": {\"resource_sizes (ChromePublic.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/src/out/Release/apks/ChromePublic.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
       "--output-json-list",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[START_DIR]/src/out/bad_devices.json",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "get perf test list",
     "~followup_annotations": [
@@ -469,20 +469,20 @@
       "--slave-name=TestSlavename",
       "--build-number=257",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--print-step",
       "page_cycler.foo",
       "--verbose",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "page_cycler.foo",
     "~followup_annotations": [
@@ -520,20 +520,20 @@
       "--slave-name=TestSlavename",
       "--build-number=257",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--print-step",
       "perf_test.foo",
       "--verbose",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "perf_test.foo",
     "~followup_annotations": [
@@ -548,25 +548,25 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--release",
       "--verbose",
       "--steps",
-      "{\"steps\": {\"resource_sizes (SystemWebView.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[SLAVE_BUILD]/src/out/Release/apks/SystemWebView.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
+      "{\"steps\": {\"resource_sizes (SystemWebView.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/src/out/Release/apks/SystemWebView.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[START_DIR]/src/out/bad_devices.json",
       "--num-retries",
       "0",
       "--collect-chartjson-data",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "Sharded Perf Tests (2)"
   },
@@ -574,21 +574,21 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--steps",
-      "{\"steps\": {\"resource_sizes (SystemWebView.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[SLAVE_BUILD]/src/out/Release/apks/SystemWebView.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
+      "{\"steps\": {\"resource_sizes (SystemWebView.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/src/out/Release/apks/SystemWebView.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
       "--output-json-list",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "[START_DIR]/src/out/bad_devices.json",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "get perf test list (2)",
     "~followup_annotations": [
@@ -634,20 +634,20 @@
       "--slave-name=TestSlavename",
       "--build-number=257",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--print-step",
       "page_cycler.foo",
       "--verbose",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "page_cycler.foo (2)",
     "~followup_annotations": [
@@ -685,20 +685,20 @@
       "--slave-name=TestSlavename",
       "--build-number=257",
       "--run-python-script",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--print-step",
       "perf_test.foo",
       "--verbose",
       "--adb-path",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "perf_test.foo (2)",
     "~followup_annotations": [
@@ -722,7 +722,7 @@
       "apks",
       "--ignore-subfolder-names"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "package_apks_for_bisect"
   },
   {
@@ -736,7 +736,7 @@
       "4.7",
       "----",
       "cp",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
+      "[START_DIR]/src/out/build_product.zip",
       "gs://chrome-test-builds/official-by-commit/Android arm64 Builder/full-build-linux_170242.zip"
     ],
     "name": "gsutil upload_apks_for_bisect",
@@ -754,7 +754,7 @@
       "--name",
       "build_product.zip"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "zip_build_product"
   },
   {
@@ -768,7 +768,7 @@
       "4.7",
       "----",
       "cp",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
+      "[START_DIR]/src/out/build_product.zip",
       "gs://chrome-perf/Android arm64 Builder/full-build-linux_267739.zip"
     ],
     "name": "gsutil upload_build_product",

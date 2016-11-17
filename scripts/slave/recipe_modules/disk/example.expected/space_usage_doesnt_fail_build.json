@@ -4,7 +4,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::disk]/resources/statvfs.py",
-      "[SLAVE_BUILD]"
+      "[START_DIR]"
     ],
     "name": "usage1",
     "stdout": "/path/to/tmp/json",
@@ -23,7 +23,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::disk]/resources/statvfs.py",
-      "[SLAVE_BUILD]"
+      "[START_DIR]"
     ],
     "name": "usage2",
     "stdout": "/path/to/tmp/json",

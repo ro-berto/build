@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles"
+      "[START_DIR]/git_clone_bundler/bundles"
     ],
     "name": "rmtree old bundles",
     "~followup_annotations": [
@@ -23,7 +23,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles",
+      "[START_DIR]/git_clone_bundler/bundles",
       "511"
     ],
     "name": "makedirs bundles",
@@ -45,7 +45,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
+      "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
       "511"
     ],
     "name": "makedirs repo",
@@ -69,7 +69,7 @@
       "-u",
       "https://googlesource.com/manifest.xml"
     ],
-    "cwd": "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
+    "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
     "name": "repo init"
   },
   {
@@ -78,7 +78,7 @@
       "sync",
       "--no-clone-bundle"
     ],
-    "cwd": "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
+    "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
     "name": "repo sync"
   },
   {
@@ -86,7 +86,7 @@
       "[DEPOT_TOOLS]/repo",
       "list"
     ],
-    "cwd": "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
+    "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
     "name": "repo list",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -98,10 +98,10 @@
       "git",
       "bundle",
       "create",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles/b30c7a01edcf711e48356dd038d8c03e.bundle",
+      "[START_DIR]/git_clone_bundler/bundles/b30c7a01edcf711e48356dd038d8c03e.bundle",
       "--all"
     ],
-    "cwd": "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/foo",
+    "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/foo",
     "name": "create bundle (src/foo)"
   },
   {
@@ -113,7 +113,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles/b30c7a01edcf711e48356dd038d8c03e.bundle",
+      "[START_DIR]/git_clone_bundler/bundles/b30c7a01edcf711e48356dd038d8c03e.bundle",
       "gs://clone-dot-bundle-bucket/checkout/repository/src/foo/clone.bundle"
     ],
     "name": "gsutil upload bundle (src/foo)",
@@ -128,7 +128,7 @@
       "--get",
       "remote.origin.url"
     ],
-    "cwd": "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/foo",
+    "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/foo",
     "name": "lookup Git remote (src/foo)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -140,10 +140,10 @@
       "git",
       "bundle",
       "create",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles/4e9dd63391c5eb1884b9b449679dfa16.bundle",
+      "[START_DIR]/git_clone_bundler/bundles/4e9dd63391c5eb1884b9b449679dfa16.bundle",
       "--all"
     ],
-    "cwd": "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/bar",
+    "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/bar",
     "name": "create bundle (src/bar)"
   },
   {
@@ -155,7 +155,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles/4e9dd63391c5eb1884b9b449679dfa16.bundle",
+      "[START_DIR]/git_clone_bundler/bundles/4e9dd63391c5eb1884b9b449679dfa16.bundle",
       "gs://clone-dot-bundle-bucket/checkout/repository/src/bar/clone.bundle"
     ],
     "name": "gsutil upload bundle (src/bar)",
@@ -170,7 +170,7 @@
       "--get",
       "remote.origin.url"
     ],
-    "cwd": "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/bar",
+    "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/bar",
     "name": "lookup Git remote (src/bar)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

@@ -65,7 +65,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=x64",
@@ -89,7 +89,7 @@
       "--target",
       "Debug_x64",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[START_DIR]\\src",
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--buildbot-buildername",
@@ -115,9 +115,9 @@
       "-u",
       "\nimport sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
       "metrics.csv",
-      "[SLAVE_BUILD]\\src\\out\\Debug_x64"
+      "[START_DIR]\\src\\out\\Debug_x64"
     ],
-    "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\out\\Debug_x64",
+    "name": "rmwildcard metrics.csv in [START_DIR]\\src\\out\\Debug_x64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
@@ -143,7 +143,7 @@
       "--builder-name=win_x64_dbg_try",
       "--slave-name=vm331-m3",
       "--build-number=571",
-      "[SLAVE_BUILD]\\src\\out\\Debug_x64\\syzyasan_rtl_unittests.exe",
+      "[START_DIR]\\src\\out\\Debug_x64\\syzyasan_rtl_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
@@ -157,7 +157,7 @@
       "-t",
       "-a",
       "public-read",
-      "[SLAVE_BUILD]\\src\\out\\Debug_x64\\metrics.csv",
+      "[START_DIR]\\src\\out\\Debug_x64\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/debug.csv"
     ],
     "name": "archive_metrics",

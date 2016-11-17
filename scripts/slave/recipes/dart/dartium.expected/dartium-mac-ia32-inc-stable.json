@@ -46,7 +46,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src/dart",
+    "cwd": "[START_DIR]/src/dart",
     "env": {
       "GYP_DEFINES": "component=static_library linux_strip_binary target_arch=ia32",
       "GYP_GENERATORS": "ninja",
@@ -58,20 +58,20 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/dart/tools/task_kill.py",
+      "[START_DIR]/src/dart/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "taskkill before building"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/dart/tools/dartium/build.py",
+      "[START_DIR]/src/dart/tools/dartium/build.py",
       "--mode=Release"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GYP_DEFINES": "component=static_library linux_strip_binary target_arch=ia32",
       "GYP_GENERATORS": "ninja"
@@ -82,19 +82,19 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/dart/tools/dartium/buildbot_annotated_steps.py"
+      "[START_DIR]/src/dart/tools/dartium/buildbot_annotated_steps.py"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "annotated steps"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/dart/tools/task_kill.py",
+      "[START_DIR]/src/dart/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "taskkill after building"
   },
   {

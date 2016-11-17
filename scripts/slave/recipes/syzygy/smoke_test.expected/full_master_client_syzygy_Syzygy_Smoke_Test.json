@@ -65,7 +65,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\src",
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
@@ -78,9 +78,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\build\\get_syzygy_binaries.py",
+      "[START_DIR]\\src\\syzygy\\build\\get_syzygy_binaries.py",
       "--output-dir",
-      "[SLAVE_BUILD]\\src\\syzygy\\binaries",
+      "[START_DIR]\\src\\syzygy\\binaries",
       "--revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--overwrite",
@@ -92,10 +92,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\smoke_test.py",
+      "[START_DIR]\\src\\syzygy\\internal\\build\\smoke_test.py",
       "--verbose",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\build"
+      "[START_DIR]\\src\\build"
     ],
     "name": "smoke_test"
   },

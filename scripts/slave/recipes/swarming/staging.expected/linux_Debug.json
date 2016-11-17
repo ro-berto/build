@@ -122,7 +122,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[START_DIR]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -143,7 +143,7 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -152,7 +152,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -160,7 +160,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -196,7 +196,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
@@ -210,7 +210,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Debug",
+      "[START_DIR]/src/out/Debug",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -270,7 +270,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[SLAVE_BUILD]/src/out/Debug",
+      "[START_DIR]/src/out/Debug",
       "-j",
       "50",
       "chromium_swarm_tests"
@@ -339,11 +339,11 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[SLAVE_BUILD]/src/out/Debug",
+      "[START_DIR]/src/out/Debug",
       "--ninja-log-compiler",
       "goma",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[SLAVE_BUILD]/src/out/Debug', '-j', 50, 'chromium_swarm_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'chromium_swarm_tests']",
       "--ninja-log-exit-status",
       "0",
       "--buildbot-buildername",
@@ -365,11 +365,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/determinism/remove_build_metadata.py",
+      "[START_DIR]/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Debug"
+      "[START_DIR]/src/out/Debug"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {
@@ -378,7 +378,7 @@
       "-u",
       "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
       "/path/to/tmp/",
-      "[SLAVE_BUILD]/src/out/Debug/*.isolated.gen.json"
+      "[START_DIR]/src/out/Debug/*.isolated.gen.json"
     ],
     "name": "find isolated targets"
   },
@@ -387,15 +387,15 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "[START_DIR]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/src/out/Debug/dummy_target_1.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Debug/dummy_target_2.isolated.gen.json"
+      "[START_DIR]/src/out/Debug/dummy_target_1.isolated.gen.json",
+      "[START_DIR]/src/out/Debug/dummy_target_2.isolated.gen.json"
     ],
     "env": {
       "SWARMING_PROFILE": "1"
@@ -414,7 +414,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[START_DIR]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -498,7 +498,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[START_DIR]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -587,7 +587,7 @@
       "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "[START_DIR]/src/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -638,7 +638,7 @@
       "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "[START_DIR]/src/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",

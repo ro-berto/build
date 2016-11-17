@@ -110,7 +110,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -122,7 +122,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/third_party/WebKit/Source/devtools/scripts/compile_frontend.py"
+      "[START_DIR]/src/third_party/WebKit/Source/devtools/scripts/compile_frontend.py"
     ],
     "name": "compile frontend (closure compiler)"
   },

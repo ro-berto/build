@@ -46,7 +46,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -56,10 +56,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "[START_DIR]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "taskkill before building"
   },
   {
@@ -72,9 +72,9 @@
       "----",
       "cp",
       "gs://dart-archive/channels/be/raw/hash/hash_of_revision/sdk/dartsdk-linux-x64-release.zip",
-      "[SLAVE_BUILD]/sdk/sdk.zip"
+      "[START_DIR]/sdk/sdk.zip"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "gsutil Download sdk"
   },
   {
@@ -82,7 +82,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/sdk/out/ReleaseX64",
+      "[START_DIR]/sdk/out/ReleaseX64",
       "511"
     ],
     "name": "makedirs Create build directory",
@@ -104,7 +104,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/sdk/out/ReleaseX64"
+      "[START_DIR]/sdk/out/ReleaseX64"
     ],
     "name": "rmtree Clean build directory",
     "~followup_annotations": [
@@ -125,13 +125,13 @@
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
     "name": "Unzip sdk",
-    "stdin": "{\"output\": \"[SLAVE_BUILD]/sdk/out/ReleaseX64\", \"quiet\": false, \"zip_file\": \"[SLAVE_BUILD]/sdk/sdk.zip\"}"
+    "stdin": "{\"output\": \"[START_DIR]/sdk/out/ReleaseX64\", \"quiet\": false, \"zip_file\": \"[START_DIR]/sdk/sdk.zip\"}"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--compiler=none",
       "--runtime=vm",
@@ -149,14 +149,14 @@
       "--checked",
       "dart2js"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "dart2js unit tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
       "--use-sdk",
@@ -179,14 +179,14 @@
       "--append_logs",
       "--exclude-suite=observatory_ui,co19"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
       "--use-sdk",
@@ -209,14 +209,14 @@
       "--append_logs",
       "observatory_ui"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell observatory_ui tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
       "--use-sdk",
@@ -239,14 +239,14 @@
       "--append_logs",
       "co19"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell co19 tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
       "--use-sdk",
@@ -270,14 +270,14 @@
       "dart2js_extra",
       "dart2js_native"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell extra tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
       "--use-sdk",
@@ -301,14 +301,14 @@
       "--append_logs",
       "--exclude-suite=observatory_ui,co19"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell fast-startup tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
       "--use-sdk",
@@ -332,14 +332,14 @@
       "--append_logs",
       "observatory_ui"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell observatory_ui fast-startup tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
       "--use-sdk",
@@ -363,14 +363,14 @@
       "--append_logs",
       "co19"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell co19 fast-startup tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
       "--use-sdk",
@@ -395,17 +395,17 @@
       "dart2js_extra",
       "dart2js_native"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell extra fast-startup tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/tools/task_kill.py",
+      "[START_DIR]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "taskkill after testing"
   },
   {
@@ -413,7 +413,7 @@
       "cat",
       ".debug.log"
     ],
-    "cwd": "[SLAVE_BUILD]/sdk",
+    "cwd": "[START_DIR]/sdk",
     "name": "debug log"
   },
   {

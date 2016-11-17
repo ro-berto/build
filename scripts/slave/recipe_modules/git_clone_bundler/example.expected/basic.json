@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles"
+      "[START_DIR]/git_clone_bundler/bundles"
     ],
     "name": "rmtree old bundles",
     "~followup_annotations": [
@@ -23,7 +23,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles",
+      "[START_DIR]/git_clone_bundler/bundles",
       "511"
     ],
     "name": "makedirs bundles",
@@ -45,10 +45,10 @@
       "git",
       "bundle",
       "create",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles/4c11f7d238ab3a5109562560694c3722.bundle",
+      "[START_DIR]/git_clone_bundler/bundles/4c11f7d238ab3a5109562560694c3722.bundle",
       "--all"
     ],
-    "cwd": "[SLAVE_BUILD]/checkout",
+    "cwd": "[START_DIR]/checkout",
     "name": "create bundle"
   },
   {
@@ -60,7 +60,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[SLAVE_BUILD]/git_clone_bundler/bundles/4c11f7d238ab3a5109562560694c3722.bundle",
+      "[START_DIR]/git_clone_bundler/bundles/4c11f7d238ab3a5109562560694c3722.bundle",
       "gs://clone-dot-bundle-bucket/checkout/repository/clone.bundle"
     ],
     "name": "gsutil upload bundle",

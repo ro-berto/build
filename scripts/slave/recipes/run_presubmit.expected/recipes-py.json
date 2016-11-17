@@ -70,7 +70,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[SLAVE_BUILD]/infra/recipes-py",
+    "cwd": "[START_DIR]/infra/recipes-py",
     "name": "commit git patch"
   },
   {
@@ -80,7 +80,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/infra",
+    "cwd": "[START_DIR]/infra",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -101,7 +101,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[SLAVE_BUILD]/infra/recipes-py",
+      "[START_DIR]/infra/recipes-py",
       "--commit",
       "--verbose",
       "--verbose",

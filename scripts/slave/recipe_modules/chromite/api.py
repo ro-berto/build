@@ -55,7 +55,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     v = self.m.path.c.dynamic_paths.get('chromite')
     if v:
       return v
-    return self.m.path['slave_build'].join(self._chromite_subpath)
+    return self.m.path['start_dir'].join(self._chromite_subpath)
 
   def _set_chromite_path(self, path):
     self.m.path.c.dynamic_paths['chromite'] = path
@@ -435,4 +435,4 @@ class ChromiteApi(recipe_api.RecipeApi):
     return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
                           self.c.cbb.config,
                           args=cbb_args,
-                          cwd=self.m.path['slave_build'])
+                          cwd=self.m.path['start_dir'])

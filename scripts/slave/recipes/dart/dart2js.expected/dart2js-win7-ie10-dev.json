@@ -46,7 +46,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]\\sdk",
+    "cwd": "[START_DIR]\\sdk",
     "env": {
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -56,29 +56,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\sdk\\tools\\task_kill.py",
+      "[START_DIR]\\sdk\\tools\\task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]\\sdk",
+    "cwd": "[START_DIR]\\sdk",
     "name": "taskkill before building"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\sdk\\tools\\build.py",
+      "[START_DIR]\\sdk\\tools\\build.py",
       "-mrelease",
       "--arch=ia32",
       "dart2js_bot"
     ],
-    "cwd": "[SLAVE_BUILD]\\sdk",
+    "cwd": "[START_DIR]\\sdk",
     "name": "build dart"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\sdk\\tools\\test.py",
+      "[START_DIR]\\sdk\\tools\\test.py",
       "--mode=release",
       "--arch=ia32",
       "--compiler=dart2js",
@@ -98,14 +98,14 @@
       "pkg",
       "samples"
     ],
-    "cwd": "[SLAVE_BUILD]\\sdk",
+    "cwd": "[START_DIR]\\sdk",
     "name": "dart2js ie10 tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\sdk\\tools\\test.py",
+      "[START_DIR]\\sdk\\tools\\test.py",
       "--mode=release",
       "--arch=ia32",
       "--compiler=dart2js",
@@ -124,17 +124,17 @@
       "--append_logs",
       "co19"
     ],
-    "cwd": "[SLAVE_BUILD]\\sdk",
+    "cwd": "[START_DIR]\\sdk",
     "name": "dart2js ie10 co19 tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\sdk\\tools\\task_kill.py",
+      "[START_DIR]\\sdk\\tools\\task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[SLAVE_BUILD]\\sdk",
+    "cwd": "[START_DIR]\\sdk",
     "name": "taskkill after testing"
   },
   {

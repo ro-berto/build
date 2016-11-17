@@ -344,7 +344,7 @@
       "--build-dir",
       "[BUILDER_CACHE]\\ClangToTWin\\src\\out\\Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

@@ -172,7 +172,7 @@
       "blob",
       "HEAD:DEPS"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git cat-file",
     "stdout": "/path/to/tmp/"
   },

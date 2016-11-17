@@ -136,7 +136,7 @@
       "--platform",
       "linux-amd64",
       "--dest-directory",
-      "[SLAVE_BUILD]/cipd",
+      "[START_DIR]/cipd",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -145,7 +145,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -153,7 +153,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/cipd/cipd",
+      "[START_DIR]/cipd/cipd",
       "ensure",
       "--root",
       "[CACHE]/cipd/goma",
@@ -410,7 +410,7 @@
       "--build-dir",
       "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/out/Release"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {
@@ -472,7 +472,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "AppRTCMobile zip archive",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/Android64__M_Nexus5X_/src/out/Release/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"output\": \"[SLAVE_BUILD]/AppRTCMobile_apk.zip\", \"root\": \"[BUILDER_CACHE]/Android64__M_Nexus5X_/src/out/Release/apks\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/Android64__M_Nexus5X_/src/out/Release/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"output\": \"[START_DIR]/AppRTCMobile_apk.zip\", \"root\": \"[BUILDER_CACHE]/Android64__M_Nexus5X_/src/out/Release/apks\"}"
   },
   {
     "cmd": [
@@ -485,7 +485,7 @@
       "cp",
       "-a",
       "public-read",
-      "[SLAVE_BUILD]/AppRTCMobile_apk.zip",
+      "[START_DIR]/AppRTCMobile_apk.zip",
       "gs://chromium-webrtc/client.webrtc/Android64 (M Nexus5X)/AppRTCMobile_apk_170242.zip"
     ],
     "name": "gsutil upload",

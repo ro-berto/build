@@ -19,7 +19,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_symlinks.py",
-      "[SLAVE_BUILD]"
+      "[START_DIR]"
     ],
     "name": "clean symlinks"
   },
@@ -80,7 +80,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -93,7 +93,7 @@
       "-f",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git checkout"
   },
   {
@@ -102,18 +102,18 @@
       "clean",
       "-ffd"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "git clean"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/autoroller/roll_chromium_revision.py",
+      "[START_DIR]/src/tools/autoroller/roll_chromium_revision.py",
       "--clean",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[START_DIR]/src",
     "name": "autoroll chromium_revision"
   },
   {

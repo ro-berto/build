@@ -217,7 +217,7 @@ class IsolateApi(recipe_api.RecipeApi):
                                      'determinism',
                                      'remove_build_metadata.py'),
                     args=args,
-                    cwd=self.m.path['slave_build'])
+                    cwd=self.m.path['start_dir'])
     except self.m.step.StepFailure:
       step_result = self.m.step.active_result
       step_result.presentation.status = self.m.step.WARNING
@@ -235,4 +235,4 @@ class IsolateApi(recipe_api.RecipeApi):
                                    'determinism',
                                    'compare_build_artifacts.py'),
                   args=args,
-                  cwd=self.m.path['slave_build'])
+                  cwd=self.m.path['start_dir'])

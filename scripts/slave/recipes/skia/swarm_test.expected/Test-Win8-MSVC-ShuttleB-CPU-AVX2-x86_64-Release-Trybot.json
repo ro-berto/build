@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\skia\\tools\\buildbot_spec.py",
+      "[START_DIR]\\skia\\tools\\buildbot_spec.py",
       "/path/to/tmp/json",
       "Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Trybot"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[START_DIR]\\skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -48,7 +48,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\skia\\infra\\bots\\assets\\skp\\VERSION",
+      "[START_DIR]\\skia\\infra\\bots\\assets\\skp\\VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded SKP VERSION"
@@ -59,7 +59,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]\\tmp\\SKP_VERSION"
+      "[START_DIR]\\tmp\\SKP_VERSION"
     ],
     "name": "write SKP_VERSION"
   },
@@ -68,7 +68,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\skia\\infra\\bots\\assets\\skimage\\VERSION",
+      "[START_DIR]\\skia\\infra\\bots\\assets\\skimage\\VERSION",
       "/path/to/tmp/"
     ],
     "name": "Get downloaded skimage VERSION"
@@ -79,7 +79,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]\\tmp\\SK_IMAGE_VERSION"
+      "[START_DIR]\\tmp\\SK_IMAGE_VERSION"
     ],
     "name": "write SK_IMAGE_VERSION"
   },
@@ -132,7 +132,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]\\tmp",
+      "[START_DIR]\\tmp",
       "511"
     ],
     "name": "makedirs tmp_dir",
@@ -154,15 +154,15 @@
       "python",
       "-u",
       "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
-      "[SLAVE_BUILD]\\tmp\\uninteresting_hashes.txt"
+      "[START_DIR]\\tmp\\uninteresting_hashes.txt"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[START_DIR]\\skia",
     "env": {
       "BUILDTYPE": "Release_x64",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
       "PYTHONPATH": "[BUILD]\\scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]\\out"
+      "SKIA_OUT": "[START_DIR]\\out"
     },
     "name": "get uninteresting hashes",
     "~followup_annotations": [
@@ -201,16 +201,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\out\\Release_x64\\dm",
+      "[START_DIR]\\out\\Release_x64\\dm",
       "--undefok",
       "--resourcePath",
-      "[SLAVE_BUILD]\\skia\\resources",
+      "[START_DIR]\\skia\\resources",
       "--skps",
-      "[SLAVE_BUILD]\\skp",
+      "[START_DIR]\\skp",
       "--images",
-      "[SLAVE_BUILD]\\skimage\\dm",
+      "[START_DIR]\\skimage\\dm",
       "--colorImages",
-      "[SLAVE_BUILD]\\skimage\\colorspace",
+      "[START_DIR]\\skimage\\colorspace",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -241,7 +241,7 @@
       "os",
       "Win8",
       "--uninterestingHashesFile",
-      "[SLAVE_BUILD]\\tmp\\uninteresting_hashes.txt",
+      "[START_DIR]\\tmp\\uninteresting_hashes.txt",
       "--writePath",
       "[CUSTOM_[SWARM_OUT_DIR]]\\dm",
       "--nogpu",
@@ -252,7 +252,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
       "PYTHONPATH": "[BUILD]\\scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]\\out"
+      "SKIA_OUT": "[START_DIR]\\out"
     },
     "name": "dm"
   },
