@@ -112,6 +112,20 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]\\src\\tools\\determinism\\platform_whitelist.py",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "whitelist_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[recipe_engine::shutil]\\resources\\rmtree.py",
       "[START_DIR]\\src\\out\\Release.1"
     ],

@@ -147,11 +147,18 @@ def RunSteps(api, buildername):
 
   if target_platform in ('linux', 'mac', 'win'):
     ConfigureChromiumBuilder(api, recipe_config)
+    step_result = api.python(
+        name='whitelist_files',
+        script=api.path['checkout'].join('tools', 'determinism',
+                                         'platform_whitelist.py'),
+        args=['--output-json', api.json.output()])
+    isolated_targets = step_result.json.output
   elif target_platform is 'android':
     # Disable the tests isolation on Android as it's not supported yet.
     enable_isolate = False
     ConfigureAndroidBuilder(api, recipe_config)
     api.chromium_android.init_and_sync()
+    isolated_targets = None
 
   if enable_isolate:
     # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
@@ -164,7 +171,8 @@ def RunSteps(api, buildername):
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium.run_mb(api.properties.get('mastername'), buildername)
+  api.chromium.run_mb(api.properties.get('mastername'), buildername,
+                      isolated_targets=isolated_targets)
   api.chromium.compile(targets, name='First build', use_goma_module=True)
   api.isolate.remove_build_metadata()
   if enable_isolate:
@@ -175,7 +183,8 @@ def RunSteps(api, buildername):
 
   # Do the second build and move the build artifact to the temp directory.
   api.chromium.runhooks()
-  api.chromium.run_mb(api.properties.get('mastername'), buildername)
+  api.chromium.run_mb(api.properties.get('mastername'), buildername,
+                      isolated_targets=isolated_targets)
   api.chromium.compile(targets, name='Second build', use_goma_module=True)
   api.isolate.remove_build_metadata()
   if enable_isolate:
