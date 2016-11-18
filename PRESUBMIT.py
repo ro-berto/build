@@ -167,7 +167,7 @@ def ConditionalChecks(input_api, output_api):
   for test, regexes in conditional_tests.iteritems():
     for path in affected_files:
       if any(re.match(r, path) for r in regexes):
-        tests_to_run.extend(test)
+        tests_to_run.append(test)
         break
 
   return input_api.RunTests(input_api.canned_checks.GetUnitTests(
