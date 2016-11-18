@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import argparse
+import itertools
 import json
 import logging
 import os
@@ -27,16 +28,19 @@ def result_details(json_path, cs_base_url, master_name):
     results_list = []
     if not 'per_iteration_data' in json_object:
       return 'Error: json file missing per_iteration_data.'
+    test_results_dict = {}
     for testsuite_run in json_object['per_iteration_data']:
       for test, test_runs in testsuite_run.iteritems():
-        results_list.extend([
+        test_results_dict[test] = [
             {
                 'name': test,
                 'status': tr['status'],
                 'duration': tr['elapsed_time_ms'],
                 'output_snippet': tr['output_snippet'],
                 'tombstones': tr['tombstones'] if 'tombstones' in tr else '',
-            } for tr in test_runs])
+            } for tr in test_runs]
+    results_list = list(
+        itertools.chain.from_iterable(test_results_dict.values()))
     return results_to_html(results_list, cs_base_url, master_name)
 
 def code_search(test, cs_base_url):
