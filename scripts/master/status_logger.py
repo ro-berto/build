@@ -516,6 +516,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     subproject_tag = properties.getProperty('subproject_tag')
 
     fields = {
+        'master': 'deprecated',
         'builder': builderName,
         'slave': bot,
         'result': buildbot.status.results.Results[results].lower(),
