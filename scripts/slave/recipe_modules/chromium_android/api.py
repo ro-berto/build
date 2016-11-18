@@ -934,10 +934,10 @@ class AndroidApi(recipe_api.RecipeApi):
                                 result_details=False,
                                 cs_base_url=None,
                                 store_tombstones=False,
+                                args=None,
                                 **kwargs):
-    args = [
-      '--blacklist-file', self.blacklist_file,
-    ]
+    args = args or []
+    args.extend(['--blacklist-file', self.blacklist_file,])
     if tool:
       args.append('--tool=%s' % tool)
     if flakiness_dashboard:

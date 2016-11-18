@@ -510,6 +510,8 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
         swarming_dimension_sets = swarming_spec.get('dimension_sets')
         swarming_priority = swarming_spec.get('priority_adjustment')
         swarming_expiration = swarming_spec.get('expiration')
+    args = get_args_for_test(api, chromium_tests_api, test,
+                             bot_update_step)
     if use_swarming and swarming_dimension_sets:
       for dimensions in swarming_dimension_sets:
         # TODO(stip): Swarmify instrumentation tests
@@ -520,7 +522,8 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
           compile_targets=test.get('override_compile_targets'),
           timeout_scale=test.get('timeout_scale'),
           result_details=True,
-          store_tombstones=True)
+          store_tombstones=True,
+          args=args)
 
 
 def generate_junit_test(api, chromium_tests_api, mastername, buildername,
@@ -1611,7 +1614,7 @@ class AndroidInstrumentationTest(AndroidTest):
                test_apk=None, isolate_file_path=None, timeout_scale=None,
                annotation=None, except_annotation=None, screenshot=False,
                verbose=True, tool=None, additional_apks=None,
-               store_tombstones=False, result_details=False):
+               store_tombstones=False, result_details=False, args=None):
     suite_defaults = (
         AndroidInstrumentationTest._DEFAULT_SUITES.get(name)
         or AndroidInstrumentationTest._DEFAULT_SUITES_BY_TARGET.get(name)
@@ -1639,6 +1642,7 @@ class AndroidInstrumentationTest(AndroidTest):
     self._wrapper_script_suite_name = compile_targets[0]
     self._store_tombstones = store_tombstones
     self._result_details = result_details
+    self._args = args
 
   @property
   def uses_local_devices(self):
@@ -1662,7 +1666,8 @@ class AndroidInstrumentationTest(AndroidTest):
         result_details=self._result_details,
         store_tombstones=self._store_tombstones,
         wrapper_script_suite_name=self._wrapper_script_suite_name,
-        step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False))
+        step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False),
+        args=self._args)
 
 
 class BlinkTest(Test):
