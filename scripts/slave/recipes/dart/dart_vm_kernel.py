@@ -24,7 +24,7 @@ builders = {
 }
 
 transformer_args = []
-general_test_args = ['co19', 'language', 'dill']
+general_test_args = ['co19', 'language', 'kernel']
 
 for platform in ['linux']:
   for arch in ['x64']:

@@ -93,7 +93,7 @@
       "-rvm",
       "co19",
       "language",
-      "dill"
+      "kernel"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"

@@ -97,7 +97,7 @@
       "-rdart_precompiled",
       "co19",
       "language",
-      "dill"
+      "kernel"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
