@@ -133,14 +133,16 @@ def _AddBuildSpec(
 
 
 def _AddTestSpec(name, perf_id, platform, target_bits=64,
-                 num_host_shards=1, num_device_shards=1):
+                 num_host_shards=1, num_device_shards=1,
+                 parent_buildername=None):
   for shard_index in xrange(num_host_shards):
     builder_name = '%s (%d)' % (name, shard_index + 1)
     tests = [steps.DynamicPerfTests(
         perf_id, platform, target_bits, num_device_shards=num_device_shards,
         num_host_shards=num_host_shards, shard_index=shard_index)]
     SPEC['builders'][builder_name] = TestSpec(
-        'chromium_perf', perf_id, platform, target_bits, tests=tests)
+        'chromium_perf', perf_id, platform, target_bits, tests=tests,
+        parent_buildername=parent_buildername)
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)
@@ -163,7 +165,8 @@ _AddBuildSpec('Linux Builder', 'linux', add_to_bisect=True)
 _AddTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
              target_bits=32, num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3)
+             target_bits=32, num_device_shards=7, num_host_shards=3,
+             parent_buildername='Android Compile')
 _AddTestSpec('Android Nexus6 Perf', 'android-nexus6', 'android',
              target_bits=32, num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2', 'android',
