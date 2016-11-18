@@ -47,6 +47,13 @@ def RunSteps(api):
 def GenTests(api):
   import json
 
+  common_properties = {
+    'buildername': 'Test',
+    # chromite module uses path['root'] which exists only in Buildbot.
+    'path_config': 'buildbot',
+    'slavename': 'test',
+  }
+
   #
   # master.chromiumos.chromium
   #
@@ -56,13 +63,12 @@ def GenTests(api):
       api.test('chromiumos_chromium_builder')
       + api.properties(
           mastername='chromiumos.chromium',
-          buildername='Test',
-          slavename='test',
           buildnumber='12345',
           repository='https://chromium.googlesource.com/chromium/src',
           revision='b8819267417da248aa4fe829c5fcf0965e17b0c3',
           branch='master',
           cbb_config='x86-generic-tot-chrome-pfq-informational',
+          **common_properties
       )
   )
 
@@ -75,14 +81,13 @@ def GenTests(api):
       api.test('chromiumos_paladin')
       + api.properties(
           mastername='chromiumos',
-          buildername='Test',
-          slavename='test',
           buildnumber='12345',
           repository='https://chromium.googlesource.com/chromiumos/'
                      'manifest-versions',
           branch='master',
           revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-paladin',
+          **common_properties
       )
       + api.step_data(
           'Fetch manifest config',
@@ -106,14 +111,13 @@ def GenTests(api):
       api.test('chromiumos_paladin_manifest_failure')
       + api.properties(
           mastername='chromiumos',
-          buildername='Test',
-          slavename='test',
           buildnumber='12345',
           repository='https://chromium.googlesource.com/chromiumos/'
                      'manifest-versions',
           branch='master',
           revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-paladin',
+          **common_properties
       )
       + api.step_data(
           'Fetch manifest config',
@@ -134,8 +138,6 @@ def GenTests(api):
       api.test('chromiumos_paladin_buildbucket')
       + api.properties(
           mastername='chromiumos',
-          buildername='Test',
-          slavename='test',
           buildnumber='12345',
           cbb_config='auron-paladin',
           cbb_branch='master',
@@ -148,6 +150,7 @@ def GenTests(api):
               'id': '1337',
             },
           }),
+          **common_properties
       )
       + api.chromite.add_chromite_config(
           'auron-paladin',
@@ -164,8 +167,6 @@ def GenTests(api):
       api.test('chromiumos_coverage')
       + api.properties(
           mastername='chromiumos.coverage',
-          buildername='Test',
-          slavename='test',
           buildnumber=0,
           clobber=None,
           repository='https://chromium.googlesource.com/chromiumos/'
@@ -177,6 +178,7 @@ def GenTests(api):
           config_repo='https://fake.googlesource.com/myconfig/repo.git',
           cbb_debug=True,
           cbb_disable_branch=True,
+          **common_properties
       )
   )
 
@@ -188,8 +190,6 @@ def GenTests(api):
       api.test('chromiumos_coverage_variant')
       + api.properties(
           mastername='chromiumos.coverage',
-          buildername='Test',
-          slavename='test',
           buildnumber=0,
           clobber=None,
           repository='https://chromium.googlesource.com/chromiumos/'
@@ -202,5 +202,6 @@ def GenTests(api):
           cbb_debug=True,
           cbb_disable_branch=True,
           config_repo='https://fake.googlesource.com/myconfig/repo.git',
+          **common_properties
       )
   )

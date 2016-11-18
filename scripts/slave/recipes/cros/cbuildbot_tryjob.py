@@ -116,18 +116,25 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  common_properties = {
+    'mastername': 'chromiumos.tryserver',
+    # chromite module uses path['root'] which exists only in Buildbot.
+    'path_config': 'buildbot',
+    'repository': 'https://chromium.googlesource.com/chromiumos/tryjobs.git',
+    'revision': api.gitiles.make_hash('test'),
+    'slave_name': 'test',
+  }
+
+
   # Test a CrOS tryjob.
   yield (
       api.test('external')
       + api.properties(
-          mastername='chromiumos.tryserver',
           buildername='full',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-full',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
+          **common_properties
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
@@ -135,14 +142,11 @@ def GenTests(api):
   yield (
       api.test('internal')
       + api.properties(
-          mastername='chromiumos.tryserver',
           buildername='paladin',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
           cbb_config='internal-paladin',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
+          **common_properties
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
@@ -150,15 +154,12 @@ def GenTests(api):
   yield (
       api.test('release')
       + api.properties(
-          mastername='chromiumos.tryserver',
           buildername='paladin',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-full',
           cbb_branch='release-R55-9999.B',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
+          **common_properties
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
@@ -166,16 +167,13 @@ def GenTests(api):
   yield (
       api.test('release_branch_one_param')
       + api.properties(
-          mastername='chromiumos.tryserver',
           buildername='paladin',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-full',
           cbb_branch='master',
           cbb_extra_args=json.dumps([
               '--timeout', '14400', '--remote-trybot',
               '--remote-version=4', '--branch=release-R00-0000.B']),
+          **common_properties
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
@@ -183,16 +181,13 @@ def GenTests(api):
   yield (
       api.test('release_branch_two_params')
       + api.properties(
-          mastername='chromiumos.tryserver',
           buildername='paladin',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-full',
           cbb_branch='master',
           cbb_extra_args=json.dumps([
               '--timeout', '14400', '--remote-trybot',
               '--remote-version=4', '--branch', 'release-R00-0000.B']),
+          **common_properties
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
@@ -200,15 +195,12 @@ def GenTests(api):
   yield (
       api.test('pre_git_cache_release')
       + api.properties(
-          mastername='chromiumos.tryserver',
           buildername='paladin',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-full',
           cbb_branch='release-R54-8743.B',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
+          **common_properties
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
@@ -217,15 +209,12 @@ def GenTests(api):
   yield (
       api.test('basic_compressed')
       + api.properties(
-          mastername='chromiumos.tryserver',
           buildername='full',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-full',
           cbb_extra_args=(
             'z:eJyLVtLVLcnMTc0vLVHSUVAyNDExMAAxdHWLUnPzS1J1S4oqk/JLUITKUouKM'
             '/PzbE2UYgFJaBNI'),
+          **common_properties
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
@@ -234,14 +223,11 @@ def GenTests(api):
   yield (
       api.test('unknown_config')
       + api.properties(
-          mastername='chromiumos.tryserver',
           buildername='etc',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
           cbb_config='xxx-fakeboard-fakebuild',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
+          **common_properties
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
@@ -250,15 +236,12 @@ def GenTests(api):
   yield (
       api.test('pre_cq_buildbucket_config')
       + api.properties(
-          mastername='chromiumos.tryserver',
           buildername='pre-cq',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
           cbb_config='binhost-pre-cq',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
-          buildbucket=json.dumps({'build': {'id':'12345'}})
+          buildbucket=json.dumps({'build': {'id':'12345'}}),
+          **common_properties
       )
       + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )

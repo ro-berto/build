@@ -5,6 +5,7 @@
 DEPS = [
   'chromite',
   'gitiles',
+  'recipe_engine/properties',
 ]
 
 
@@ -56,7 +57,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('basic') +
-      api.chromite.seed_chromite_config(_TEST_CONFIG)
+  yield (
+      api.test('basic') +
+      api.chromite.seed_chromite_config(_TEST_CONFIG) +
+      # chromite module uses path['root'] which exists only in Buildbot.
+      api.properties(path_config='buildbot')
   )
 

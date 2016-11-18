@@ -28,6 +28,8 @@ def GenTests(api):
     api.properties.generic(
       mastername='client.ndk',
       branch='master',
-      cbb_config='ndk-linux-arm64-v8a'
+      cbb_config='ndk-linux-arm64-v8a',
+      # chromite module uses path['root'] which exists only in Buildbot.
+      path_config='buildbot',
     )
   )
