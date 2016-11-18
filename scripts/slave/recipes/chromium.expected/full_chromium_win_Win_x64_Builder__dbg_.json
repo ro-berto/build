@@ -351,6 +351,8 @@
       "[CACHE]\\chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]\\Win_x64_Builder__dbg_\\src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--build-url",
       "gs://chromium-win-archive/chromium.win/Win x64 Builder (dbg)",
       "--build_revision",

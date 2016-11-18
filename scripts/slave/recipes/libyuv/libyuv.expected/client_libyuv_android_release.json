@@ -312,6 +312,8 @@
       "[CACHE]/chrome_staging",
       "--src-dir",
       "[START_DIR]/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-libyuv/client.libyuv/Android Release",
       "--build_revision",

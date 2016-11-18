@@ -298,6 +298,8 @@
       "Release",
       "--src-dir",
       "[START_DIR]\\src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--build-url",
       "gs://chromium-win-archive/chromium.win/Win Builder/full-build-win32.zip",
       "--build_revision",

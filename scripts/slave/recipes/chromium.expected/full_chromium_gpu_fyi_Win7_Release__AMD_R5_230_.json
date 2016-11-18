@@ -282,6 +282,8 @@
       "Release",
       "--src-dir",
       "[BUILDER_CACHE]\\Win7_Release__AMD_R5_230_\\src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",

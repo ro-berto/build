@@ -440,6 +440,8 @@
       "[CACHE]/chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]/android/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-linux-archive/chromium.linux/Android Builder (dbg)",
       "--build_revision",

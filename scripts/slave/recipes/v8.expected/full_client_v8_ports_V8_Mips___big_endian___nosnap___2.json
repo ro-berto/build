@@ -111,6 +111,8 @@
       "Release",
       "--src-dir",
       "v8",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-v8/v8-mips-rel",
       "--master-name",

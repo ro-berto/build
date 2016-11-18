@@ -333,6 +333,8 @@
       "[CACHE]/chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]/Linux_Debug_Builder/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-v8/client.v8.fyi/Linux Debug Builder",
       "--build_revision",

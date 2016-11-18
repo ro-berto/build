@@ -484,8 +484,10 @@ def main(argv):
   option_parser.add_option('--gsutil-py-path',
                            help='Specify path to gsutil.py script.')
   chromium_utils.AddPropertiesOptions(option_parser)
+  slave_utils_callback = slave_utils.AddOpts(option_parser)
 
   options, args = option_parser.parse_args(argv)
+  slave_utils_callback(options)
 
   if not options.master_name:
     options.master_name = options.build_properties.get('mastername', '')

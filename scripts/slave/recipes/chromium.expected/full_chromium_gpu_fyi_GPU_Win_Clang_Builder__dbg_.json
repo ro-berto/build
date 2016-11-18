@@ -384,6 +384,8 @@
       "[CACHE]\\chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]\\GPU_Win_Clang_Builder__dbg_\\src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--build-url",
       "gs://chromium-gpu-fyi-archive/chromium.gpu.fyi/GPU Win Clang Builder (dbg)",
       "--build_revision",

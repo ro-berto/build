@@ -380,6 +380,8 @@
       "[CACHE]\\chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--build-url",
       "gs://chrome-perf/Win Clang Builder",
       "--build_revision",

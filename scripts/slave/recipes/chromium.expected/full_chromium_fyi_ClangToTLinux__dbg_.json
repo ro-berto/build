@@ -296,6 +296,8 @@
       "[CACHE]/chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]/ClangToTLinux__dbg_/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-fyi-archive/chromium.fyi/ClangToTLinux (dbg)",
       "--build_revision",

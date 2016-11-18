@@ -413,6 +413,8 @@
       "[CACHE]\\chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]\\win_layout\\src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--build-url",
       "gs://chromium-webkit-archive/chromium.webkit/WebKit Win Builder (dbg)",
       "--build_revision",

@@ -361,6 +361,8 @@
       "[CACHE]/chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]/ChromiumOS_amd64_generic_Compile/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-chromiumos-archive/chromium.chromiumos/ChromiumOS amd64-generic Compile",
       "--build_revision",

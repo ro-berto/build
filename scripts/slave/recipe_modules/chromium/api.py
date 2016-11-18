@@ -856,6 +856,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--target', self.c.build_config_fs,
         '--factory-properties', self.m.json.dumps(fake_factory_properties),
     ]
+    args += self.m.build.slave_utils_args
     if self.build_properties:
       args += [
         '--build-properties', self.m.json.dumps(self.build_properties),

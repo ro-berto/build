@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/tryserver',
 
   'adb',
+  'build',
   'commit_position',
   'file',
   'goma',

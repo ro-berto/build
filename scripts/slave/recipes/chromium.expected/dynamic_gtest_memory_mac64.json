@@ -271,6 +271,8 @@
       "Release",
       "--src-dir",
       "[START_DIR]/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-memory-archive/chromium.memory/Mac ASan 64 Builder/full-build-mac.zip",
       "--build_revision",

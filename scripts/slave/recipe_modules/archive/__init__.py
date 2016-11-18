@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'build',
   'commit_position',
   'depot_tools/depot_tools',
   'file',

@@ -370,6 +370,8 @@
       "[CACHE]/chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]/V8_Android_GN__dbg_/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-v8/client.v8.fyi/V8 Android GN (dbg)",
       "--build_revision",

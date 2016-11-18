@@ -626,9 +626,12 @@ def main():
                               'Default behavior is to automatically detect '
                               'slave\'s build directory.')
   chromium_utils.AddPropertiesOptions(option_parser)
+  slave_utils_callback = slave_utils.AddOpts(option_parser)
   options, args = option_parser.parse_args()
+
   if args:
     raise archive_utils.StagingError('Unknown arguments: %s' % args)
+  slave_utils_callback(options)
 
   if not options.ignore:
     # Independent of any other configuration, these exes and any symbol files

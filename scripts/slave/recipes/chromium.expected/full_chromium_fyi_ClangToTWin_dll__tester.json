@@ -247,6 +247,8 @@
       "Release",
       "--src-dir",
       "[BUILDER_CACHE]\\ClangToTWin_dll__tester\\src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",

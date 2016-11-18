@@ -239,6 +239,8 @@
       "Release",
       "--src-dir",
       "[BUILDER_CACHE]/ClangToTLinux_tester/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",

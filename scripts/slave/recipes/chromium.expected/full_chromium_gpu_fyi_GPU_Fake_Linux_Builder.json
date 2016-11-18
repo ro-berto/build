@@ -405,6 +405,8 @@
       "[CACHE]/chrome_staging",
       "--src-dir",
       "[BUILDER_CACHE]/GPU_Fake_Linux_Builder/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-gpu-fyi-archive/chromium.gpu.fyi/GPU Fake Linux Builder",
       "--build_revision",
