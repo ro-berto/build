@@ -568,11 +568,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       build_archive_url=build_archive_url)
 
   def _make_legacy_build_url(self, master_config, mastername):
+    # The master where the build was zipped and uploaded from.
+    source_master = self.m.properties.get('parent_mastername')
+    if not source_master:
+      source_master = self.m.properties['mastername']
     return self.m.archive.legacy_download_url(
                master_config.get('build_gs_bucket'),
                extra_url_components=(
                    None if mastername.startswith('chromium.perf')
-                   else self.m.properties['mastername']))
+                   else source_master))
 
   @contextlib.contextmanager
   def wrap_chromium_tests(self, bot_config, tests=None):
