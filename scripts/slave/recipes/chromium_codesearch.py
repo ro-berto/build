@@ -119,14 +119,21 @@ def GenerateCompilationDatabase(api, debug_path, targets, platform):
 
   command += ['-j', api.goma.recommended_goma_jobs]
 
-  with api.goma.build_with_goma(
-      ninja_log_outdir=debug_path,
-      ninja_log_command=command,
-      ninja_log_compiler='goma'):
-    return api.step('generate compilation database for %s' % platform,
-                    command,
-                    stdout=api.raw_io.output())
+  # TODO(tikuta): Support returning step result in api.goma.build_with_goma
+  api.goma.start()
 
+  ninja_log_exit_status = 1
+  try:
+    step_result = api.step('generate compilation database for %s' % platform,
+                           command, stdout=api.raw_io.output())
+    ninja_log_exit_status = step_result.retcode
+  finally:
+    api.goma.stop(ninja_log_outdir=debug_path,
+                  ninja_log_command=command,
+                  ninja_log_compiler='goma',
+                  ninja_log_exit_status=ninja_log_exit_status)
+
+  return step_result
 
 def RunSteps(api):
   buildername = api.properties.get('buildername')
