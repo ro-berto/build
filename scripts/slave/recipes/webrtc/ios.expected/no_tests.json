@@ -115,7 +115,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mb_type\": \"gn\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos8.0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
@@ -127,7 +126,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },

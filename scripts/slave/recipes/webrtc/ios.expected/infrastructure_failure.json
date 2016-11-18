@@ -115,7 +115,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mb_type\": \"gn\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -138,7 +137,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.0\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"id\": \"1\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.0\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"id\": \"1\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },

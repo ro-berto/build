@@ -126,7 +126,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"mb_type\": null, \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
+      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
     ],
     "name": "finalize build config"
   },

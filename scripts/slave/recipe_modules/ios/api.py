@@ -114,7 +114,6 @@ class iOSApi(recipe_api.RecipeApi):
         'configuration',
         'gn_args',
         'gn_args_file',
-        'mb_type',
         'sdk',
         'xcode version',
       ):
@@ -131,7 +130,6 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config.setdefault('triggered bots', {})
     self.__config.setdefault('tests', [])
     self.__config.setdefault('env', {})
-    self.__config.setdefault('mb_type', None)
     self.__config.setdefault('gn_args', [])
     self.__config.setdefault('use_analyze', True)
 
@@ -242,7 +240,6 @@ class iOSApi(recipe_api.RecipeApi):
 
     self.m.chromium.c.project_generator.tool = 'mb'
 
-    mb_type = self.__config['mb_type']
     gn_args = self.__config['gn_args']
 
     env = {
