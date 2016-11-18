@@ -32,6 +32,30 @@ step_counts  = ts_mon.CounterMetric(
     'buildbot/master/builders/steps/count',
     description='Count of step results, per builder and step')
 
+result_count = ts_mon.CounterMetric('buildbot/master/builders/results/count',
+    description='Number of items consumed from ts_mon.log by mastermon')
+# A custom bucketer with 12% resolution in the range of 1..10**5,
+# better suited for build cycle times.
+bucketer = ts_mon.GeometricBucketer(
+    growth_factor=10**0.05, num_finite_buckets=100)
+cycle_times = ts_mon.CumulativeDistributionMetric(
+    'buildbot/master/builders/builds/durations', bucketer=bucketer,
+    description='Durations (in seconds) that slaves spent actively doing '
+                'work towards builds for each builder')
+pending_times = ts_mon.CumulativeDistributionMetric(
+    'buildbot/master/builders/builds/pending_durations', bucketer=bucketer,
+    description='Durations (in seconds) that the master spent waiting for '
+                'slaves to become available for each builder')
+total_times = ts_mon.CumulativeDistributionMetric(
+    'buildbot/master/builders/builds/total_durations', bucketer=bucketer,
+    description='Total duration (in seconds) that builds took to complete '
+                'for each builder')
+
+pre_test_times = ts_mon.CumulativeDistributionMetric(
+    'buildbot/master/builders/builds/pre_test_durations', bucketer=bucketer,
+    description='Durations (in seconds) that builds spent before their '
+                '"before_tests" step')
+
 
 class StatusEventLogger(StatusReceiverMultiService):
   """Log status events to a file on disk or event collection endpoint.
@@ -490,6 +514,24 @@ class StatusEventLogger(StatusReceiverMultiService):
     # Note: this is not true for build.getProperty(), it raises KeyError.
     project_id = properties.getProperty('patch_project')
     subproject_tag = properties.getProperty('subproject_tag')
+
+    fields = {
+        'builder': builderName,
+        'slave': bot,
+        'result': buildbot.status.results.Results[results].lower(),
+        'project_id': project_id if project_id else 'unknown',
+        'subproject_id': subproject_tag if subproject_tag else 'unknown',
+    }
+    result_count.increment(fields)
+    cycle_times.add(finished - started, fields=fields)
+    pending_times.add(started - scheduled, fields=fields)
+    total_times.add(finished - scheduled, fields=fields)
+    if pre_test_time_s:
+      pre_test_times.add(pre_test_time_s, fields=fields)
+
+    # TODO(sergeyberezin): remove this when all masters are restarted,
+    # and all graphs and alerts are migrated to the new metrics. Do
+    # this before turning down mastermon - to avoid accumulating logs.
     self.send_build_result(
         scheduled, started, finished, builderName, bot,
         buildbot.status.results.Results[results],
