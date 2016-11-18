@@ -171,6 +171,7 @@
               document.write([
                 a("../client.webrtc/waterfall", "WebRTC", ""),
                 aView("../client.webrtc.fyi", "", "WebRTC FYI"),
+                aView("../client.webrtc.perf", "", "WebRTC Perf"),
                 aView("../chromium.webrtc", "", "Chromium"),
                 aView("../chromium.webrtc.fyi", "", "Chromium FYI"),
                 aView("../tryserver.webrtc", "", "Try WebRTC"),
@@ -204,10 +205,12 @@
         <table width="100%">
           <script language="javascript">
             c.webrtc = '';
+            c.webrtc_perf = '';
             c.chromium = '';
             c.chromium_fyi = '';
 
             c.status_webrtc = '../client.webrtc';
+            c.status_webrtc_perf = '../client.webrtc.perf';
             c.status_chromium = '../chromium.webrtc';
             c.status_chromium_fyi = '../chromium.webrtc.fyi';
 
@@ -221,6 +224,7 @@
                      '/horizontal_one_box_per_builder';
             }
             c.bar_webrtc = BarUrl('client.webrtc')
+            c.bar_webrtc_perf = BarUrl('client.webrtc.perf')
             c.bar_chromium = BarUrl('chromium.webrtc');
             c.bar_chromium_fyi = BarUrl('chromium.webrtc.fyi');
 
@@ -306,10 +310,12 @@
                 ) +
                 table('width="100%"',
                   tr(
+                     HTMLBaseBar(c.status_webrtc_perf, c.bar_webrtc_perf,
+                                 c.webrtc_perf, 'WebRTC Perf', 'width="33%"') +
                      HTMLBaseBar(c.status_chromium, c.bar_chromium,
-                                 c.chromium, 'Chromium', 'width="50%"') +
+                                 c.chromium, 'Chromium', 'width="33%"') +
                      HTMLBaseBar(c.status_chromium_fyi, c.bar_chromium_fyi,
-                                 c.chromium_fyi, 'Chromium FYI', 'width="50%"')
+                                 c.chromium_fyi, 'Chromium FYI', 'width="33%"')
                    )
                 )
             )));
