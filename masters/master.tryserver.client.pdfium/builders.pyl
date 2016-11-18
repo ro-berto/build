@@ -266,7 +266,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["vm195-m4", "slave767-c4"],
+      "slaves": ["vm195-m4", "slave767-c4", "slave1386-c4", "slave1387-c4"],
     },
     "mac_slave_pool": {
       "slave_data": {
