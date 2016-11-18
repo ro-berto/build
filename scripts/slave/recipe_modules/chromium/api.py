@@ -181,10 +181,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       '--ninja-path', self.m.depot_tools.ninja_path,
       '--target', target or self.c.build_config_fs,
       '--src-dir', self.m.path['checkout'],
-      '--goma-cache-dir', self.m.path['goma_cache'],
+      '--goma-cache-dir', self.m.goma.default_cache_path,
     ]
 
-    goma_env['GOMA_CACHE_DIR'] = self.m.path['goma_cache']
+    goma_env['GOMA_CACHE_DIR'] = self.m.goma.default_cache_path
 
     # Set some buildbot info used in goma_utils.
     for key in ['buildername', 'mastername', 'slavename', 'clobber']:

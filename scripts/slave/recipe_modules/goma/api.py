@@ -39,6 +39,15 @@ class GomaApi(recipe_api.RecipeApi):
     return self.m.path.join(self._goma_dir, 'jsonstatus')
 
   @property
+  def default_cache_path(self):
+    try:
+      # Legacy Buildbot cache path:
+      return self.m.path['goma_cache']
+    except KeyError:  # pragma: no cover | TODO(nodir): cover
+      # New more generic cache path
+      return self.m.path['cache'].join('goma')
+
+  @property
   def recommended_goma_jobs(self):
     """
     Return the recommended number of jobs for parallel build using Goma.
