@@ -18,8 +18,10 @@ from recipe_engine import recipe_api
 class BuildbucketApi(recipe_api.RecipeApi):
   """A module for interacting with buildbucket."""
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, buildername, buildnumber, *args, **kwargs):
     super(BuildbucketApi, self).__init__(*args, **kwargs)
+    self._buildername = buildername
+    self._buildnumber = buildnumber
     self._properties = None
 
   def get_config_defaults(self):
@@ -54,6 +56,10 @@ class BuildbucketApi(recipe_api.RecipeApi):
       new_tags['builder'] = builder_name
     if bucket.startswith('master.'):
       new_tags['master'] = bucket[7:]
+    if self._buildnumber is not None:
+      new_tags['parent_buildnumber'] = str(self._buildnumber)
+    if self._buildername is not None:
+      new_tags['parent_buildername'] = str(self._buildername)
 
     new_tags.update(override_tags or {})
     return sorted([':'.join((x, y)) for x, y in new_tags.iteritems()])
