@@ -9,6 +9,7 @@ details on the presubmit API built into git cl.
 """
 
 import contextlib
+import re
 import sys
 
 
@@ -152,19 +153,23 @@ def ConditionalChecks(input_api, output_api):
   """
   tests_to_run = []
   conditional_tests = {
-      'scripts/slave/bot_update.py': ['tests/bot_update_test.py'],
+      'tests/masters_test.py': [
+          r'^masters/.*',
+          r'^scripts/master/.*',
+          r'^scripts/common/.*',
+      ],
+      'tests/bot_update_test.py': [
+          r'^scripts/slave/bot_update.py$',
+      ],
   }
   affected_files = set([
       f.LocalPath() for f in input_api.change.AffectedFiles()])
-  for key, val in conditional_tests.iteritems():
-    if key in affected_files:
-      tests_to_run.extend(val)
-  return input_api.RunTests(input_api.canned_checks.GetUnitTests(
-      input_api, output_api, tests_to_run))
+  for test, regexes in conditional_tests.iteritems():
+    for path in affected_files:
+      if any(re.match(r, path) for r in regexes):
+        tests_to_run.extend(test)
+        break
 
-def CommitChecks(input_api, output_api):
-  """Tests that are only run on commit."""
-  tests_to_run = ['tests/masters_test.py']
   return input_api.RunTests(input_api.canned_checks.GetUnitTests(
       input_api, output_api, tests_to_run))
 
@@ -179,13 +184,12 @@ def BuildInternalCheck(output, input_api, output_api):
   return []
 
 
-def CheckChangeOnUpload(input_api, output_api):
+def CheckChangeOnUpload(_input_api, _output_api):
   return [] # Try-jobs/commit-queue do a better job of testing, faster.
 
 
 def CheckChangeOnCommit(input_api, output_api):
   output = CommonChecks(input_api, output_api)
   output.extend(ConditionalChecks(input_api, output_api))
-  output.extend(CommitChecks(input_api, output_api))
   output.extend(BuildInternalCheck(output, input_api, output_api))
   return output
