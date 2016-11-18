@@ -199,7 +199,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "refs",
       "[START_DIR]/src/out/Release",
@@ -215,7 +215,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "refs",
       "[START_DIR]/src/out/Release",

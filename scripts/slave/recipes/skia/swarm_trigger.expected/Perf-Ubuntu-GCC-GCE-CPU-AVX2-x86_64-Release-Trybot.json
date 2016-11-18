@@ -1050,7 +1050,7 @@
       "5",
       "[START_DIR]/perfdata/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot/data",
       "9046e2e693bb92a76e972b694580e5d17ad10748",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "500"
     ],
     "cwd": "[START_DIR]/skia",

@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
       "init",
       "-u",
       "https://chromium.googlesource.com/chromiumos/manifest.git",
@@ -12,7 +12,7 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/repo",
+      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
       "sync"
     ],
     "name": "repo sync"

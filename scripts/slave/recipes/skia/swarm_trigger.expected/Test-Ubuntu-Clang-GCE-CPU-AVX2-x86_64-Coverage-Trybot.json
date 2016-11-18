@@ -768,7 +768,7 @@
       "5",
       "[START_DIR]/swarming_temp_dir/outputs/test_skia/0",
       "9046e2e693bb92a76e972b694580e5d17ad10748",
-      "[DEPOT_TOOLS]/gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "500"
     ],
     "cwd": "[START_DIR]/skia",

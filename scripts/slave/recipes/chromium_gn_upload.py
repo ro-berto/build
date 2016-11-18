@@ -5,8 +5,9 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-  'depot_tools/bot_update',
   'chromium',
+  'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'file',
   'gsutil',
   'recipe_engine/path',
@@ -88,7 +89,7 @@ def RunSteps(api):
     api.m.step('gn strip', cmd=['strip', path_to_binary])
 
   api.python('upload',
-             api.path['depot_tools'].join('upload_to_google_storage.py'),
+             api.depot_tools.upload_to_google_storage_path,
              ['-b', 'chromium-gn', path_to_binary])
 
   sha1 = api.file.read('gn sha1', path_to_binary + '.sha1',

@@ -251,7 +251,7 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/git_number.py"
+      "RECIPE_PACKAGE_REPO[depot_tools]/git_number.py"
     ],
     "cwd": "[START_DIR]/src",
     "name": "git_number",

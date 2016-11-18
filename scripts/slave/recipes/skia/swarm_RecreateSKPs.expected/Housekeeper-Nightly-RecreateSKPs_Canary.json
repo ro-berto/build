@@ -270,7 +270,7 @@
       "AWS_CREDENTIAL_FILE": "[START_DIR]/tmp/.boto",
       "BOTO_CONFIG": "[START_DIR]/tmp/.boto",
       "CHROME_HEADLESS": "1",
-      "PATH": "[DEPOT_TOOLS]:%(PATH)s"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
     "name": "Recreate SKPs"
   },

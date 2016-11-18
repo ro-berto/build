@@ -188,7 +188,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def git_number(self, **kwargs):
     return self.m.step(
         'git_number',
-        [self.m.path['depot_tools'].join('git_number.py')],
+        [self.m.depot_tools.package_repo_resource('git_number.py')],
         stdout = self.m.raw_io.output(),
         step_test_data=(
           lambda:

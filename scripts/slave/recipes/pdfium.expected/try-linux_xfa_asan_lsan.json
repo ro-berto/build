@@ -120,7 +120,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/pdfium",
       "gen",
       "//out/debug_xfa_v8_asan",

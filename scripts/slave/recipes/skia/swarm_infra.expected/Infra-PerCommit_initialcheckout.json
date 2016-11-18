@@ -354,7 +354,7 @@
     "cwd": "[START_DIR]/go/src/go.skia.org/infra",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS": "[DEPOT_TOOLS]",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GIT_USER_AGENT": "git/1.9.1",
       "GOPATH": "[START_DIR]/go",
       "KARMA_PORT": "15001",

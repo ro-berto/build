@@ -7,6 +7,7 @@
 
 
 DEPS = [
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'file',
   'recipe_engine/path',
@@ -137,7 +138,9 @@ with open(dest_path, 'w') as f:
   api.file.makedirs('skp_output', output_dir)
 
   # Capture the SKPs.
-  path_var= api.path.pathsep.join([str(api.path['depot_tools']), '%(PATH)s'])
+  path_var = api.path.pathsep.join([
+      str(api.depot_tools.package_repo_resource()),
+      '%(PATH)s'])
   env = {
       'CHROME_HEADLESS': '1',
       'PATH': path_var,

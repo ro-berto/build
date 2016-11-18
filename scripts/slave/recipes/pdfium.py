@@ -3,8 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/gclient',
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
+  'depot_tools/gclient',
   'goma',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -58,7 +59,7 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
   checkout = api.path['checkout']
-  gn_cmd = api.path['depot_tools'].join('gn.py')
+  gn_cmd = api.depot_tools.gn_py_path
 
   # Prepare the arguments to pass in.
   args = [

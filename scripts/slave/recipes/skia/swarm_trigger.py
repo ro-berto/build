@@ -11,6 +11,7 @@ import json
 
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/tryserver',
@@ -460,7 +461,7 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
     api.file.copy('perf_results', src_results_file, dst_results_file,
                   infra_step=True)
 
-    gsutil_path = api.path['depot_tools'].join('gsutil.py')
+    gsutil_path = api.depot_tools.gsutil_py_path
     upload_args = [api.properties['buildername'], api.properties['buildnumber'],
                    perf_data_dir, got_revision, gsutil_path]
     if is_trybot:
@@ -567,7 +568,7 @@ def upload_coverage_results(api, task, got_revision, is_trybot):
   api.file.remove('old nanobench JSON', src_nano_file)
 
   # Upload nanobench JSON data.
-  gsutil_path = api.path['depot_tools'].join('gsutil.py')
+  gsutil_path = api.depot_tools.gsutil_py_path
   upload_args = [api.properties['buildername'], api.properties['buildnumber'],
                  results_dir, got_revision, gsutil_path]
   if is_trybot:

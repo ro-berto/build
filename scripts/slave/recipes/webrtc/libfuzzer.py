@@ -8,6 +8,7 @@ from recipe_engine.types import freeze
 DEPS = [
   'archive',
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'chromium',
   'file',
   'recipe_engine/json',
@@ -64,7 +65,7 @@ def RunSteps(api):
   api.chromium.run_gn(use_goma=True)
 
   step_result = api.python('calculate targets',
-          api.path['depot_tools'].join('gn.py'),
+          api.depot_tools.gn_py_path,
           ['--root=%s' % str(api.path['checkout']),
            'refs',
            str(api.chromium.output_dir),

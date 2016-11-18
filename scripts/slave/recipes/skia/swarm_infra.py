@@ -11,15 +11,16 @@ import re
 
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/infra_paths',
+  'depot_tools/rietveld',
   'file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
-  'depot_tools/rietveld',
   'recipe_engine/step',
 ]
 
@@ -153,7 +154,7 @@ def RunSteps(api):
   if m and len(m.groups()) > 0:
     karma_port = '15%s' % m.groups()[0]
   env['KARMA_PORT'] = karma_port
-  env['DEPOT_TOOLS'] = api.path['depot_tools']
+  env['DEPOT_TOOLS'] = api.depot_tools.package_repo_resource()
   api.python('run_unittests', 'run_unittests', cwd=infra_dir, env=env)
 
 

@@ -6,8 +6,9 @@ from recipe_engine.types import freeze
 
 DEPS = [
   'archive',
-  'depot_tools/bot_update',
   'chromium',
+  'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'file',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -43,7 +44,7 @@ def gn_refs(api, step_name, args):
   Returns: the list of matched targets.
   """
   step_result = api.python(step_name,
-          api.path['depot_tools'].join('gn.py'),
+          api.depot_tools.gn_py_path,
           ['--root=%s' % str(api.path['checkout']),
            'refs',
            str(api.chromium.output_dir),
