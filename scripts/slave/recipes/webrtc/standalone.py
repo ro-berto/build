@@ -10,7 +10,6 @@ DEPS = [
   'chromium',
   'chromium_android',
   'depot_tools/gclient',
-  'ios',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -25,8 +24,6 @@ def RunSteps(api):
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
   webrtc.configure_swarming()
 
-  if api.platform.is_mac:
-    api.ios.host_info()
   webrtc.checkout()
   webrtc.cleanup()
   if webrtc.should_build:

@@ -1,28 +1,6 @@
 [
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/host_info.py",
-      "--json-file",
-      "/path/to/tmp/json"
-    ],
-    "name": "host and tools info",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br />OS X 1.2.3, Xcode 6.7.8 (5D342509a)@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac OS X Version\": \"1.2.3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Xcode Build Version\": \"5D342509a\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Xcode SDKs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 2.0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Xcode Version\": \"6.7.8\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",

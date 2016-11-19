@@ -15,7 +15,6 @@ DEPS = [
 
 def RunSteps(api):
   with api.tryserver.set_failure_hash():
-    api.ios.host_info()
     bot_update_step = api.ios.checkout()
     # Ensure try bots mirror configs from chromium.mac.
     api.ios.read_build_config(master_name='chromium.mac')

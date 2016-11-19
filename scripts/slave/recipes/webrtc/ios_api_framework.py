@@ -11,7 +11,6 @@ DEPS = [
   'depot_tools/tryserver',
   'file',
   'gsutil',
-  'ios',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
@@ -23,7 +22,6 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
 
-  api.ios.host_info()
   api.webrtc.checkout()
   api.gclient.runhooks()
 

@@ -22,18 +22,6 @@ class iOSTestApi(recipe_test_api.RecipeTestApi):
   def make_test_build_config_for_parent(self, config):
     return self.parent_build_config(config)
 
-  def host_info(self):
-    return self.m.json.output({
-      'Mac OS X Version': '1.2.3',
-      'Xcode Version': '6.7.8',
-      'Xcode Build Version': '5D342509a',
-      'Xcode SDKs': [
-        'fake sdk 1.0',
-        'fake sdk 1.1',
-        'fake sdk 2.0',
-      ],
-    })
-
   def test_results(self):
     return self.m.json.output({
       'links': {

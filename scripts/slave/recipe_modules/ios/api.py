@@ -21,22 +21,6 @@ class iOSApi(recipe_api.RecipeApi):
     super(iOSApi, self).__init__(*args, **kwargs)
     self.__config = None
 
-  def host_info(self):
-    """Emits information about the current host and available tools."""
-    step_result = self.m.step('host and tools info', [
-      self.package_repo_resource(
-        'scripts', 'slave', 'ios', 'host_info.py'),
-      '--json-file', self.m.json.output(),
-    ], infra_step=True, step_test_data=self.test_api.host_info)
-
-    if step_result.json.output:
-      step_result.presentation.step_text = '<br />OS X %s, Xcode %s (%s)' % (
-        step_result.json.output['Mac OS X Version'],
-        step_result.json.output['Xcode Version'],
-        step_result.json.output['Xcode Build Version'],
-      )
-    return step_result
-
   def checkout(self, **kwargs):
     """Checks out Chromium."""
     self.m.gclient.set_config('ios')

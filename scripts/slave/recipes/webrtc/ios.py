@@ -17,7 +17,6 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
-  api.ios.host_info()
   api.webrtc.checkout()
 
   build_config_base_dir = api.path['checkout'].join(
