@@ -158,13 +158,6 @@
       "category": "2Builders",
       "slavebuilddir": "android_build",
     },
-    "Android Swarm Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "android_commits",
-      "slave_pools": ["builders"],
-      "category": "4Swarming",
-    },
     "Android N5X Swarm Builder": {
       "recipe": "chromium",
       "use_remote_run": True,

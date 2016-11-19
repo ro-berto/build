@@ -25,7 +25,6 @@
           "chromium_android"
         ],
         "excluded_builders": [
-          "Android Swarm Builder",
           "Marshmallow 64 bit Tester"
         ],
         "builders": {
