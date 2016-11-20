@@ -9,13 +9,11 @@
   "default_remote_run_properties": {
     "path_config": "kitchen",
   },
-  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/src.git",
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
 
   "builders": {
     "Jelly Bean Tester": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["jelly_bean_tester"],
@@ -24,8 +22,6 @@
     },
     "Lollipop Consumer Tester": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["lollipop_consumer"],
@@ -34,8 +30,6 @@
     },
     "Lollipop Low-end Tester": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["lollipop_low_end"],
