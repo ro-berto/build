@@ -168,7 +168,7 @@ PATCH=1
   def compile(self):
     """Generates a step to compile the project."""
     # TODO(chrisha): Migrate this to Ninja!
-    return self.m.chromium.compile()
+    return self.m.chromium.compile(use_compile_py=False)
 
   def read_unittests_gypi(self):
     """Reads and parses unittests.gypi from the checkout, returning a list."""
