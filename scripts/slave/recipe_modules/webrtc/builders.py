@@ -560,11 +560,12 @@ BUILDERS = freeze({
       'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
     },
     'builders':  {
-      'Win64 Debug (swarming)': {
+      'Win32 SyzyASan (swarming)': {
         'recipe_config': 'webrtc_swarming',
+        'chromium_apply_config': ['syzyasan'],
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
