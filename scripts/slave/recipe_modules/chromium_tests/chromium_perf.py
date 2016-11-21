@@ -159,7 +159,8 @@ _AddBuildSpec('Win Builder', 'win', target_bits=32)
 _AddBuildSpec( \
   'Win x64 Builder', 'win', add_to_bisect=True, enable_swarming=True)
 _AddBuildSpec('Mac Builder', 'mac', add_to_bisect=True, enable_swarming=True)
-_AddBuildSpec('Linux Builder', 'linux', add_to_bisect=True)
+_AddBuildSpec( \
+  'Linux Builder', 'linux', add_to_bisect=True, enable_swarming=True)
 
 
 _AddTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
@@ -208,5 +209,4 @@ _AddIsolatedTestSpec('Mac Pro 10.11 Perf', 'chromium-rel-mac11-pro', 'mac')
 _AddIsolatedTestSpec('Mac Air 10.11 Perf', 'chromium-rel-mac11-air', 'mac')
 
 
-_AddTestSpec('Linux Perf', 'linux-release', 'linux',
-             num_host_shards=5)
+_AddIsolatedTestSpec('Linux Perf', 'linux-release', 'linux')

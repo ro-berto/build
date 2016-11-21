@@ -1432,10 +1432,10 @@ def GenTests(api):
   yield (
     api.test('perf_test_profile_failure') +
     api.properties.generic(mastername='chromium.perf',
-                           buildername='Linux Perf (1)',
-                           parent_buildername='Linux Builder',
+                           buildername='Win Zenbook Perf (1)',
+                           parent_buildername='Win x64 Builder Builder',
                            buildnumber=0) +
-    api.platform('linux', 64) +
+    api.platform('win', 64) +
     api.override_step_data(
         'blink_perf.all.release',
         api.json.output([]),
