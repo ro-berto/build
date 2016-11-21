@@ -9,6 +9,7 @@ details on the presubmit API built into git cl.
 """
 
 import contextlib
+import os
 import re
 import sys
 
@@ -126,6 +127,13 @@ def CommonChecks(input_api, output_api):
         output_api,
         path,
         whitelist))
+
+  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
+      input_api,
+      output_api,
+      input_api.os_path.join('slave', 'tests'),
+      whitelist,
+      env={'PYTHONPATH': os.pathsep.join(infra_path)}))
 
   with pythonpath(infra_path + sys.path):
     import common.master_cfg_utils  # pylint: disable=F0401
