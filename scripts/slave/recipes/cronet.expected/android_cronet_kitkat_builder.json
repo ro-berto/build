@@ -267,37 +267,61 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
+      "\nimport multiprocessing\nimport sys\n\njob_limit = 200\nif sys.platform.startswith('linux'):\n  # Use 80 for linux not to load goma backend.\n  job_limit = 80\n\ntry:\n  jobs = min(job_limit, multiprocessing.cpu_count() * 10)\nexcept NotImplementedError:\n  jobs = 50\n\nprint jobs\n"
+    ],
+    "name": "calculate the number of recommended jobs",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import multiprocessing@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@job_limit = 200@@@",
+      "@@@STEP_LOG_LINE@python.inline@if sys.platform.startswith('linux'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  # Use 80 for linux not to load goma backend.@@@",
+      "@@@STEP_LOG_LINE@python.inline@  job_limit = 80@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  jobs = min(job_limit, multiprocessing.cpu_count() * 10)@@@",
+      "@@@STEP_LOG_LINE@python.inline@except NotImplementedError:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  jobs = 50@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@print jobs@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma"
+  },
+  {
+    "cmd": [
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--ninja-path",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "restart"
+    ],
+    "env": {
+      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
+      "GOMA_CACHE_DIR": "[CACHE]/goma",
+      "GOMA_DEPS_CACHE_FILE": "Android_Cronet_KitKat_Builder.gomadeps",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+    },
+    "name": "preprocess_for_goma.start_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[START_DIR]/src",
-      "--goma-cache-dir",
-      "[CACHE]/goma",
-      "--buildbot-buildername",
-      "Android Cronet KitKat Builder",
-      "--buildbot-mastername",
-      "chromium.testing.master",
-      "--buildbot-slavename",
-      "TestSlavename",
-      "--goma-deps-cache-file",
-      "Android_Cronet_KitKat_Builder.gomadeps",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "/creds/service_accounts/service-account-goma-client.json",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "--",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/src/out/Release",
+      "-j",
+      "50",
       "cronet_package",
       "cronet_perf_test_apk",
       "cronet_sample_test_apk",
@@ -311,10 +335,87 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
-    "name": "compile",
+    "name": "compile"
+  },
+  {
+    "cmd": [],
+    "name": "postprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "jsonstatus",
+      "[CACHE]/cipd/goma/jsonstatus"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "stat"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "stop"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--json-status",
+      "[CACHE]/cipd/goma/jsonstatus",
+      "--ninja-log-outdir",
+      "[START_DIR]/src/out/Release",
+      "--ninja-log-compiler",
+      "goma",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'cronet_package', 'cronet_perf_test_apk', 'cronet_sample_test_apk', 'cronet_test_instrumentation_apk', 'cronet_unittests', 'cronet_unittests_apk', 'net_unittests', 'net_unittests_apk']",
+      "--ninja-log-exit-status",
+      "0",
+      "--buildbot-buildername",
+      "Android Cronet KitKat Builder",
+      "--buildbot-mastername",
+      "chromium.testing.master",
+      "--buildbot-slavename",
+      "TestSlavename"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.upload_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

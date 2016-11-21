@@ -49,7 +49,12 @@ def RunSteps(api, buildername):
   cronet = api.cronet
   cronet.init_and_sync(recipe_config, kwargs, gyp_defs,
                        chromium_apply_config=chromium_apply_config)
-  cronet.build()
+
+  use_goma = True
+  if gyp_defs.get('use_goma') == 0:
+    use_goma = False
+  cronet.build(use_goma=use_goma)
+
   cronet.upload_package(kwargs['BUILD_CONFIG'])
   cronet.run_tests(kwargs['BUILD_CONFIG'])
 
@@ -63,4 +68,3 @@ def GenTests(api):
       project='src',
     )
     yield api.test(bot_id) + props
-

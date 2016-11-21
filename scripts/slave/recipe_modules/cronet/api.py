@@ -60,8 +60,10 @@ class CronetApi(recipe_api.RecipeApi):
     elif self.m.chromium.c.project_generator.tool == 'mb':
       self.m.chromium.run_mb(
           self.m.properties['mastername'],
-          self.m.properties['buildername'])
-    self.m.chromium.compile()
+          self.m.properties['buildername'],
+          use_goma=use_goma)
+    self.m.chromium.compile(use_goma_module=use_goma,
+                            use_compile_py=False)
 
 
   def get_version(self):
@@ -120,4 +122,3 @@ class CronetApi(recipe_api.RecipeApi):
             num_retries=0,
             **suite.get('kwargs', {}))
       droid.common_tests_final_steps()
-

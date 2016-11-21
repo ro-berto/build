@@ -195,7 +195,11 @@ def RunSteps(api, buildername):
   api.cronet.init_and_sync(
       recipe_config, kwargs, gyp_defs,
       chromium_apply_config=builder_config.get('chromium_apply_config'))
-  api.cronet.build()
+
+  use_goma = True
+  if gyp_defs.get('use_goma') == 0:
+    use_goma = False
+  api.cronet.build(use_goma=use_goma)
 
   if cronet_kwargs.get('PERF_ID'):
     api.cronet.sizes(cronet_kwargs['PERF_ID'])
