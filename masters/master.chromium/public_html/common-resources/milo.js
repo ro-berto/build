@@ -61,6 +61,15 @@ function MiloInject(root, mastername) {
         <div><a href="${miloPath}">Permalink</a></div>
         <p></p>
         <div class="milo-cit-info">
+          <span>Try the Milo UI switcher
+            <a
+              target="_blank"
+              href="https://chrome.google.com/webstore/detail/milo-ui-switcher/cblfkfndlmooinnegdbofihnlblodchb"
+              >Chrome Extension</a>
+            to toggle automatic Milo redirection.
+          </span>
+        </div>
+        <div class="milo-cit-info">
           <img src="${root}common-resources/chrome-infra-logo-32x32.png"></img>
           <span>Part of Chrome Infrastructure Team's LUCI project.</span>
         </div>
