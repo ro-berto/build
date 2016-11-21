@@ -43,7 +43,7 @@ class GomaApi(recipe_api.RecipeApi):
     try:
       # Legacy Buildbot cache path:
       return self.m.path['goma_cache']
-    except KeyError:  # pragma: no cover | TODO(nodir): cover
+    except KeyError:
       # New more generic cache path
       return self.m.path['cache'].join('goma')
 

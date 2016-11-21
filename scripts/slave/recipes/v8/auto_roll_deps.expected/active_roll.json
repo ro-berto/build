@@ -14,8 +14,8 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/runit.py",
-      "[BUILD]/scripts/tools/pycurl.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
       "https://v8-roll.appspot.com/status"
     ],
     "name": "check roll status",

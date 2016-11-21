@@ -63,13 +63,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]/git",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -241,7 +241,7 @@
     ],
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]",
+      "GOMA_CACHE_DIR": "[CACHE]/goma",
       "GOMA_DEPS_CACHE_FILE": "linux_sdk_multirel.gomadeps",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -352,7 +352,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/chromium/nacl_sdk_buildbot_run.py"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/nacl_sdk_buildbot_run.py"
     ],
     "name": "annotated_steps"
   },

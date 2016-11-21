@@ -99,7 +99,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILD]",
+      "RECIPE_PACKAGE_REPO[build]",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -125,8 +125,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
-      "[BUILD]/test1.isolated.gen.json",
-      "[BUILD]/test2.isolated.gen.json"
+      "RECIPE_PACKAGE_REPO[build]/test1.isolated.gen.json",
+      "RECIPE_PACKAGE_REPO[build]/test2.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [

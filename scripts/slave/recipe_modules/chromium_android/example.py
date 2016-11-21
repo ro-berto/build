@@ -135,9 +135,7 @@ def RunSteps(api, buildername):
   api.chromium_android.c.asan_symbolize = True
 
   if config.get('adb_vendor_keys'):
-    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
-    api.chromium.c.env.ADB_VENDOR_KEYS = api.path['build'].join(
-      'site_config', '.adb_key')
+    api.chromium.c.env.ADB_VENDOR_KEYS = api.path['start_dir'].join('.adb_key')
 
   for c in config.get('android_apply_config', []):
     api.chromium_android.apply_config(c)

@@ -138,7 +138,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "dm"
@@ -197,7 +197,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "dm --abandonGpuContext"
@@ -256,7 +256,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "dm --preAbandonGpuContext"

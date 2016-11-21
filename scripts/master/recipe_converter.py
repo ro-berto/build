@@ -816,7 +816,7 @@ def convert_arguments(args):
       '--builder-name': ("'%s', %s", '--builder-name',
                          'api.properties["buildername"]'),
       '../../../scripts/slave/chromium/layout_test_wrapper.py': (
-        '%s', 'api.path["build"].join("scripts", "slave", "chromium", '+\
+        '%s', 'api.package_repo_path("scripts", "slave", "chromium", '+\
             '"layout_test_wrapper.py")'
         )
   }
@@ -872,7 +872,7 @@ def nacl_sdk_buildbot_run_converter(step):
   rc.deps.add('recipe_engine/path')
   build_properties = "'--build-properties=%s' % " +\
       "api.json.dumps(build_properties, separators=(',', ':'))"
-  nsdk_command = 'api.path["build"].join("scripts", "slave", "chromium", '+\
+  nsdk_command = 'api.package_repo_path("scripts", "slave", "chromium", '+\
       '"nacl_sdk_buildbot_run.py")'
   fmtstr = 'api.python("annotated_steps", %s, args=[%s, \'%s\'],' +\
       ' allow_subannotations=True)'
@@ -887,7 +887,7 @@ def test_mini_installer_win_converter(step):
   rc.deps.add('recipe_engine/python')
   rc.steps.append('# test mini installer wrapper step')
   rc.steps.append('api.python("test installer", ' +\
-      'api.path["build"].join("scripts", "slave", "chromium", '+\
+      'api.package_repo_path("scripts", "slave", "chromium", '+\
       '"test_mini_installer_wrapper.py"), args=[' +\
       '"--target", "%s"])' % step[1]['command'][3])
   return rc
@@ -902,7 +902,7 @@ def zip_build_win_converter(step):
       "api.json.dumps(build_properties, separators=(',', ':'))"
   rc.steps.append('# zip_build step')
   rc.steps.append('step_result = api.python("zip build", ' +\
-      'api.path["build"].join("scripts", "slave", "zip_build.py"), ' +\
+      'api.package_repo_path("scripts", "slave", "zip_build.py"), ' +\
       'args=["--json-urls", api.json.output(), '
       '"--target", "%s", ' % step[1]['command'][3] +\
       repr(step[1]['command'][4:6])[1:-1] +\
@@ -924,7 +924,7 @@ def runbuild_converter(step):
       "api.json.dumps(build_properties, separators=(',', ':'))"
   rc.steps.append('# runbuild step')
   rc.steps.append('api.python("runbuild", ' +\
-      'api.path["build"].join("scripts", "slave", "runbuild.py"), args=[' +\
+      'api.package_repo_path("scripts", "slave", "runbuild.py"), args=[' +\
       '"--annotate", ' +\
       '%s, ' % build_properties +\
       '\'%s\'])' % step[1]['command'][4])
@@ -940,7 +940,7 @@ def runbuild_win_converter(step):
       "api.json.dumps(build_properties, separators=(',', ':'))"
   rc.steps.append('# runbuild step')
   rc.steps.append('api.python("runbuild", ' +\
-      'api.path["build"].join("scripts", "slave", "runbuild.py"), ' +\
+      'api.package_repo_path("scripts", "slave", "runbuild.py"), ' +\
       'args=["--annotate", ' +\
       '%s, ' % build_properties +\
       '\'%s\'])' % step[1]['command'][4])
@@ -955,7 +955,7 @@ def extract_build_converter(step):
       "api.json.dumps(build_properties, separators=(',', ':'))"
   rc.steps.append('# extract build step')
   rc.steps.append('api.python("extract build", ' +\
-      'api.path["build"].join("scripts", "slave", "extract_build.py"), ' +\
+      'api.package_repo_path("scripts", "slave", "extract_build.py"), ' +\
       'args=["--target", "%s", ' % step[1]['command'][3] +\
       '"--build-archive-url", ' +\
       'build_properties["parent_build_archive_url"], ' +\
@@ -987,7 +987,7 @@ def process_dumps_converter(step):
   rc.deps.add('recipe_engine/python')
   rc.steps.append('# process dumps step')
   rc.steps.append('api.python("process dumps", '
-      'api.path["build"].join("scripts", "slave", "process_dumps.py"), '
+      'api.package_repo_path("scripts", "slave", "process_dumps.py"), '
       'args=["--target", "%s"])' % step[1]['command'][3])
   return rc
 
@@ -1012,7 +1012,7 @@ def drmemory_create_sfx_archive_converter(step):
   rc.deps.add('recipe_engine/step')
   rc.deps.add('recipe_engine/path')
   rc.steps.append('# Create sfx archive step')
-  build_env = 'api.path["build"].join("scripts", "slave", "drmemory",'+\
+  build_env = 'api.package_repo_path("scripts", "slave", "drmemory",'+\
       '"build_env.bat")'
   env = ('{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '
       '"bot_tools")}')
@@ -1050,7 +1050,7 @@ def package_drmemory_win_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/step')
   rc.deps.add('recipe_engine/path')
-  build_env = 'api.path["build"].join("scripts", "slave", "drmemory",'+\
+  build_env = 'api.package_repo_path("scripts", "slave", "drmemory",'+\
       '"build_env.bat")'
   env = ('{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '
       '"bot_tools")}')
@@ -1089,7 +1089,7 @@ def drmemory_tsan_test_light_converter(step):
   env = '{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '+\
       '"bot_tools")}'
   rc.steps.append('api.step("%s", [' % step[1]['name'] +\
-      'api.path["build"].join("scripts", "slave", "drmemory", ' +\
+      'api.package_repo_path("scripts", "slave", "drmemory", ' +\
       '"build_env.bat"), '+\
       repr(step[1]['command'][1:7])[1:-1] +\
       ', api.path["checkout"].join("tests", "app_suite", '+\
@@ -1108,7 +1108,7 @@ def drmemory_tsan_test_converter(step):
   env = '{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '+\
       '"bot_tools")}'
   rc.steps.append('api.step("%s", [' % step[1]['name'] +\
-      'api.path["build"].join("scripts", "slave", "drmemory", ' +\
+      'api.package_repo_path("scripts", "slave", "drmemory", ' +\
       '"build_env.bat"), '+\
       repr(step[1]['command'][1:7])[1:-1] +\
       ', api.path["checkout"].join("tests", "app_suite", '+\
@@ -1172,7 +1172,7 @@ def win_drmemory_ctest_converter(step):
   rc.deps.add('recipe_engine/step')
   rc.deps.add('recipe_engine/path')
   rc.steps.append('# windows Dr. Memory ctest step')
-  script = ('api.path["build"].join("scripts", "slave", "drmemory",'
+  script = ('api.package_repo_path("scripts", "slave", "drmemory",'
       ' "build_env.bat")')
   confstr = ('str(api.path["checkout"].join("tests", "runsuite.cmake")) + '
       '",drmemory_only;long;build=" + str(build_properties["buildnumber"])')
@@ -1196,7 +1196,7 @@ def drmemory_pack_results_win_converter(step):
   rc.deps.add('recipe_engine/step')
   rc.deps.add('recipe_engine/path')
   rc.steps.append("# Pack test results step")
-  build_env = 'api.path["build"].join("scripts", "slave", "drmemory",'+\
+  build_env = 'api.package_repo_path("scripts", "slave", "drmemory",'+\
       '"build_env.bat")'
   env = ('{"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot", '
       '"bot_tools")}')
@@ -1361,7 +1361,7 @@ def win_package_dynamorio_converter(step):
   rc.deps.add('recipe_engine/path')
   rc.deps.add('recipe_engine/properties')
   rc.steps.append('# Package DynamoRIO step')
-  build_env_bat = 'api.path["build"].join("scripts", "slave", "drmemory", '+\
+  build_env_bat = 'api.package_repo_path("scripts", "slave", "drmemory", '+\
       '"build_env.bat")'
   confstr = 'str(api.path["checkout"].join("make", "package.cmake")) + '+\
       '",build=0x" + str(api.properties["revision"])[:7]'
@@ -1448,7 +1448,7 @@ def win_dynamorio_precommit_converter(step):
   rc.steps.append('# build_env step')
   fmtstr = 'api.step("pre-commit suite", [%s, %s, %s],  env=%s, '+\
       'cwd=api.path["start_dir"])'
-  command = 'api.path["build"].join("scripts", "slave", "drmemory", '+\
+  command = 'api.package_repo_path("scripts", "slave", "drmemory", '+\
       '"build_env.bat")'
   args = step[1]['command'][1:-1]
   runsuite = 'api.path["checkout"].join("suite", "runsuite.cmake")'
@@ -1464,7 +1464,7 @@ def win_dynamorio_nightly_suite_converter(step):
   fmtstr = 'api.step("%s", [%s, %s], env=%s, cwd=api.path["start_dir"])'
   env = '{"BOTTOOLS": '+\
       'api.path["start_dir"].join("tools", "buildbot", "bot_tools")}'
-  command = 'api.path["build"].join("scripts", "slave", "drmemory", '+\
+  command = 'api.package_repo_path("scripts", "slave", "drmemory", '+\
       '"build_env.bat")'
   step[1]['command'][-1] = step[1]['command'][-1][3:]
   command_args = repr(step[1]['command'][1:])[1:-1]
@@ -1511,7 +1511,7 @@ def runtest_converter(step):
     args = step[1]['command'].items[2:]
   else:
     args = step[1]['command'][2:]
-  fmtstr = 'api.python("%s", api.path["build"].join("scripts", "slave",'+\
+  fmtstr = 'api.python("%s", api.package_repo_path("scripts", "slave",'+\
       '"runtest.py"), args=[%s])'
   rc.steps.append(fmtstr % (step[1]['name'],
     convert_arguments(args)))
@@ -1527,7 +1527,7 @@ def win_runtest_converter(step):
   else:
     args = step[1]['command'][2:]
   fmtstr = 'api.python("%s", '+\
-      'api.path["build"].join("scripts", "slave", "runtest.py"), args=[%s])'
+      'api.package_repo_path("scripts", "slave", "runtest.py"), args=[%s])'
   rc.steps.append(fmtstr % (step[1]['name'],
     convert_arguments(args)))
   return rc
@@ -1537,7 +1537,7 @@ def win_taskkill_converter(step):
   rc.deps.add('recipe_engine/python')
   rc.deps.add('recipe_engine/path')
   rc.steps.append('# taskkill step')
-  rc.steps.append('api.python("taskkill", api.path["build"].join("scripts", '+\
+  rc.steps.append('api.python("taskkill", api.package_repo_path("scripts", '+\
       '"slave", "kill_processes.py"))')
   return rc
 
@@ -1622,7 +1622,7 @@ def gclient_runhooks_wrapper_converter(step):
   rc.steps.append('# gclient runhooks wrapper step')
   rc.steps.append('env = %s' % repr(step[1]['env']))
   rc.steps.append('api.python("gclient runhooks wrapper", ' +\
-      'api.path["build"].join("scripts", "slave", "runhooks_wrapper.py"), '+\
+      'api.package_repo_path("scripts", "slave", "runhooks_wrapper.py"), '+\
       'env=env)')
   return rc
 
@@ -1633,7 +1633,7 @@ def chromedriver_buildbot_run_converter(step):
   rc.deps.add('recipe_engine/json')
   build_properties = "'--build-properties=%s' % " +\
       "api.json.dumps(build_properties, separators=(',', ':'))"
-  cdbbrun_command = 'api.path["build"].join("scripts", "slave", "chromium", '+\
+  cdbbrun_command = 'api.package_repo_path("scripts", "slave", "chromium", '+\
       '"chromedriver_buildbot_run.py")'
   fmtstr = 'api.python("annotated_steps", %s, args=[%s, \'%s\'],' +\
       ' allow_subannotations=True)'
@@ -1649,7 +1649,7 @@ def win_chromedriver_buildbot_run_converter(step):
   rc.deps.add('recipe_engine/path')
   build_properties = "'--build-properties=%s' % " +\
       "api.json.dumps(build_properties, separators=(',', ':'))"
-  cdbbrun_command = 'api.path["build"].join("scripts", "slave", "chromium", '+\
+  cdbbrun_command = 'api.package_repo_path("scripts", "slave", "chromium", '+\
       '"chromedriver_buildbot_run.py")'
   fmtstr = 'api.python("annotated_steps", %s, args=[%s, \'%s\'],' +\
       ' allow_subannotations=True)'
@@ -1664,7 +1664,7 @@ def compile_py_converter(step):
   rc.deps.add('recipe_engine/path')
   rc.deps.add('recipe_engine/properties')
   fmtstr = 'api.python("compile", %s, args=args)'
-  compile_command = 'api.path["build"].join("scripts", "slave", "compile.py")'
+  compile_command = 'api.package_repo_path("scripts", "slave", "compile.py")'
   args = [x for x in step[1]['command'].items[2:] if isinstance(x, str)]
   rc.steps.append('args = %s' % repr(args))
   for x in step[1]['command'].items[2:]:
@@ -1682,7 +1682,7 @@ def win_compile_py_converter(step):
   rc.deps.add('recipe_engine/path')
   rc.deps.add('recipe_engine/properties')
   fmtstr = 'api.python("compile", %s, args=args)'
-  compile_command = 'api.path["build"].join("scripts", "slave", "compile.py")'
+  compile_command = 'api.package_repo_path("scripts", "slave", "compile.py")'
   args = [x for x in step[1]['command'].items[2:] if isinstance(x, str)]
   rc.steps.append('args = %s' % repr(args))
   for x in step[1]['command'].items[2:]:

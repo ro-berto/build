@@ -169,7 +169,7 @@ class SkiaApi(recipe_api.RecipeApi):
           'c:\\', 'Users', 'chrome-bot', 'depot_tools')
     self.m.path.c.base_paths['build'] = (
         self.m.path.c.base_paths['start_dir'] + ('build',))
-    self.default_env['PYTHONPATH'] = self.m.path['build'].join('scripts')
+    self.default_env['PYTHONPATH'] = self.package_repo_resource('scripts')
 
     # Compile bots keep a persistent checkout.
     self.persistent_checkout = (self.is_compile_bot or

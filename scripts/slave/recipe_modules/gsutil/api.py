@@ -171,7 +171,7 @@ class GSUtilApi(recipe_api.RecipeApi):
       destination: Destination file/directory where the file will be downloaded.
       name: The name of the step.
     """
-    gsutil_download_path = self.m.path['build'].join(
+    gsutil_download_path = self.package_repo_resource(
         'scripts', 'slave', 'gsutil_download.py')
     args = ['--url', base_url,
             '--dst', destination,

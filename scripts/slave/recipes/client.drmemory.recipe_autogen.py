@@ -110,7 +110,7 @@ def win_vista_x64_drm_steps(api):
                  "start_dir"].join('tools', 'buildbot', 'bot_tools'))
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
@@ -131,7 +131,7 @@ def win_vista_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg full TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -147,7 +147,7 @@ def win_vista_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg light TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -163,7 +163,7 @@ def win_vista_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "rel full TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -179,7 +179,7 @@ def win_vista_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "rel light TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -195,7 +195,7 @@ def win_vista_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg full nosyms TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -211,7 +211,7 @@ def win_vista_x64_drm_steps(api):
     # Prepare to pack test results step; null converted
     # Pack test results step
     api.step("Pack test results",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                "build_env.bat"),'7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
               str(build_properties["buildnumber"]) + ".7z",
@@ -288,7 +288,7 @@ def linux_cr_builder_steps(api):
            'GYP_DEFINES': 'build_for_tool=drmemory component=shared_library',
            'LANDMINES_VERBOSE': '1'}
     api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
+               api.package_repo_resource("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
@@ -300,7 +300,7 @@ def linux_cr_builder_steps(api):
             'net_unittests', 'printing_unittests', 'remoting_unittests',
             'sql_unittests', 'unit_tests', 'url_unittests']
     api.python("compile",
-               api.path["build"].join("scripts", "slave", "compile.py"),
+               api.package_repo_resource("scripts", "slave", "compile.py"),
                args=args)
 
 
@@ -351,7 +351,7 @@ def win_xp_drm_steps(api):
                  "start_dir"].join('tools', 'buildbot', 'bot_tools'))
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
@@ -372,7 +372,7 @@ def win_xp_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg full TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -388,7 +388,7 @@ def win_xp_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg light TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -404,7 +404,7 @@ def win_xp_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "rel full TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -420,7 +420,7 @@ def win_xp_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "rel light TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -436,7 +436,7 @@ def win_xp_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg full nosyms TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -452,7 +452,7 @@ def win_xp_drm_steps(api):
     # Prepare to pack test results step; null converted
     # Pack test results step
     api.step("Pack test results",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                "build_env.bat"), '7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
               str(build_properties["buildnumber"]) + ".7z",
@@ -656,7 +656,7 @@ def win8_cr_builder_steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.path["build"].join("scripts", "slave",
+    api.python("taskkill", api.package_repo_resource("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config()
@@ -692,14 +692,14 @@ def win8_cr_builder_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'build_for_tool=drmemory component=shared_library'}
     api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
+               api.package_repo_resource("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
     args = ['--target', 'Debug', 'chromium_builder_dbg_drmemory_win']
-    api.step("compile", ["python_slave", api.path["build"].join(
+    api.step("compile", ["python_slave", api.package_repo_resource(
         "scripts", "slave", "compile.py")] + args)
 
 
@@ -916,7 +916,7 @@ def win_8_x64_drm_steps(api):
                  "start_dir"].join('tools', 'buildbot', 'bot_tools'))
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
@@ -937,7 +937,7 @@ def win_8_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg full TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -953,7 +953,7 @@ def win_8_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg light TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -969,7 +969,7 @@ def win_8_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "rel full TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -985,7 +985,7 @@ def win_8_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "rel light TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -1001,7 +1001,7 @@ def win_8_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg full nosyms TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -1017,7 +1017,7 @@ def win_8_x64_drm_steps(api):
     # Prepare to pack test results step; null converted
     # Pack test results step
     api.step("Pack test results",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                "build_env.bat"), '7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
               str(build_properties["buildnumber"]) + ".7z",
@@ -1043,7 +1043,7 @@ def win7_cr_builder_steps(api):
     # svnkill step; not necessary in recipes
     # update scripts step; implicitly run by recipe engine.
     # taskkill step
-    api.python("taskkill", api.path["build"].join("scripts", "slave",
+    api.python("taskkill", api.package_repo_resource("scripts", "slave",
                                                   "kill_processes.py"))
     # bot_update step
     src_cfg = api.gclient.make_config()
@@ -1079,14 +1079,14 @@ def win7_cr_builder_steps(api):
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'build_for_tool=drmemory component=shared_library'}
     api.python("gclient runhooks wrapper",
-               api.path["build"].join("scripts", "slave",
+               api.package_repo_resource("scripts", "slave",
                                       "runhooks_wrapper.py"),
                env=env)
     # cleanup_temp step
     api.chromium.cleanup_temp()
     # compile.py step
     args = ['--target', 'Debug', 'chromium_builder_dbg_drmemory_win']
-    api.step("compile", ["python_slave", api.path["build"].join(
+    api.step("compile", ["python_slave", api.package_repo_resource(
         "scripts", "slave", "compile.py")] + args)
 
 
@@ -1115,7 +1115,7 @@ def win_7_x64_drm_steps(api):
                  "start_dir"].join('tools', 'buildbot', 'bot_tools'))
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
@@ -1136,7 +1136,7 @@ def win_7_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg full TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -1152,7 +1152,7 @@ def win_7_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg light TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -1168,7 +1168,7 @@ def win_7_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "rel full TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -1184,7 +1184,7 @@ def win_7_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "rel light TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -1200,7 +1200,7 @@ def win_7_x64_drm_steps(api):
     # Dr. Memory TSan test step
     api.step(
         "dbg full nosyms TSan tests",
-        [api.path["build"].join("scripts", "slave", "drmemory",
+        [api.package_repo_resource("scripts", "slave", "drmemory",
                                 "build_env.bat"),
          'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
          '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
@@ -1216,7 +1216,7 @@ def win_7_x64_drm_steps(api):
     # Prepare to pack test results step; null converted
     # Pack test results step
     api.step("Pack test results",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                "build_env.bat"), '7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
               str(build_properties["buildnumber"]) + ".7z",
@@ -1289,7 +1289,7 @@ def win_builder_steps(api):
     # get buildnumber step; no longer needed
     # Package dynamorio step
     api.step("Package Dr. Memory",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                                      "build_env.bat"), 'ctest', '-VV', '-S',
               str(api.path["checkout"].join("package.cmake")) + ",build=0x" +
               build_properties["got_revision"][:7] + ";drmem_only"],
@@ -1313,7 +1313,7 @@ def win_builder_steps(api):
     # Create sfx archive step
     lastdir = api.path.basename(api.path["start_dir"])
     api.step("create sfx archive",
-             [api.path["build"].join("scripts", "slave", "drmemory",
+             [api.package_repo_resource("scripts", "slave", "drmemory",
                                      "build_env.bat"), "7z", "a", "-sfx",
               basename + "-sfx.exe",
               # To get the archive to contain paths relative to the

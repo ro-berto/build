@@ -135,7 +135,7 @@
       "LD_LIBRARY_PATH": "[START_DIR]/third_party/externals/llvm/msan_out/lib",
       "LSAN_OPTIONS": "symbolize=1 print_suppressions=1 suppressions=[START_DIR]/skia/tools/lsan.supp",
       "PATH": "%(PATH)s:[START_DIR]/llvm-build/Release+Asserts/bin",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out",
       "TSAN_OPTIONS": "suppressions=[START_DIR]/skia/tools/tsan.supp",
       "UBSAN_OPTIONS": "suppressions=[START_DIR]/skia/tools/ubsan.supp"

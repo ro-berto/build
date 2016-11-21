@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/kill_processes.py"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/kill_processes.py"
     ],
     "name": "taskkill"
   },
@@ -13,13 +13,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'sdk', 'url': 'https://github.com/dartino/sdk.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'sdk', 'url': 'https://github.com/dartino/sdk.git'}]",
       "--patch_root",
       "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]/git",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -52,7 +52,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runhooks_wrapper.py"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runhooks_wrapper.py"
     ],
     "env": {
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",

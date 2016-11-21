@@ -70,10 +70,10 @@ def _RunStepsInternal(api):
     if codereview_auth:
       presubmit_args.extend([
           '--rietveld_email_file',
-          api.path['build'].join('site_config', '.rietveld_client_email')])
+          api.package_repo_resource('site_config', '.rietveld_client_email')])
       presubmit_args.extend([
           '--rietveld_private_key_file',
-          api.path['build'].join('site_config', '.rietveld_secret_key')])
+          api.package_repo_resource('site_config', '.rietveld_secret_key')])
     else:
       presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
   elif patch_storage == 'gerrit':
@@ -160,6 +160,7 @@ def GenTests(api):
         buildername='chromium_presubmit',
         repo_name='chromium',
         codereview_auth=True,
+        path_config='buildbot', # codereview_auth works only on Buildbot
         patch_project='chromium') +
     api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                  ['compile']]]))

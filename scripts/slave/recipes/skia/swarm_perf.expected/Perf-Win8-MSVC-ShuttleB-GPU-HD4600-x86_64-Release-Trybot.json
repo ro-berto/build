@@ -168,7 +168,7 @@
       "BUILDTYPE": "Release_x64",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "PYTHONPATH": "[BUILD]\\scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts",
       "SKIA_OUT": "[START_DIR]\\out"
     },
     "name": "nanobench"

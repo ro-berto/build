@@ -48,7 +48,7 @@ def _AnnotatedStepsSteps(api, got_revision):
       'BUILDBOT_BUILDERNAME': api.properties['buildername'],
       'BUILDBOT_REVISION': api.properties['revision'],
       'BUILDBOT_GOT_REVISION': got_revision,
-      'RUNTEST': api.path['build'].join('scripts', 'slave', 'runtest.py'),
+      'RUNTEST': api.package_repo_resource('scripts', 'slave', 'runtest.py'),
       'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
   }
   # Set up env for the triggered builders.

@@ -248,7 +248,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/android/transfer_files.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/transfer_files.py",
       "[START_DIR]/android_tools/sdk/platform-tools/adb",
       "/data/local/tmp",
       "[START_DIR]/test_data"

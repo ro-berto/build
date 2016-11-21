@@ -44,7 +44,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
-      "PYTHONPATH": "[BUILD]/scripts"
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -144,7 +144,7 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Mac-Clang-Arm7-Debug-Android"
     },
     "name": "has ccache?",
@@ -186,7 +186,7 @@
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Mac-Clang-Arm7-Debug-Android"
     },

@@ -181,7 +181,7 @@ def RunSteps(api):
   if platform == 'chromeos':
     result = GenerateCompilationDatabase(api, debug_path, targets, 'linux')
     api.python('Filter out duplicate compilation units',
-               api.path['build'].join('scripts', 'slave', 'chromium',
+               api.package_repo_resource('scripts', 'slave', 'chromium',
                                       'filter_compilations.py'),
                ['--compdb-input', debug_path.join('compile_commands.json'),
                 '--compdb-filter', api.raw_io.input(data=result.stdout),
@@ -218,7 +218,7 @@ def RunSteps(api):
   index_pack_name_with_revision = 'index_pack_%s_%s.zip' % (
       platform, commit_position)
   api.python('create index pack',
-             api.path['build'].join('scripts', 'slave', 'chromium',
+             api.package_repo_resource('scripts', 'slave', 'chromium',
                                     'package_index.py'),
              ['--path-to-compdb', debug_path.join('compile_commands.json'),
               '--path-to-archive-output', debug_path.join(index_pack_name)])
@@ -236,7 +236,7 @@ def RunSteps(api):
   tarball_name_with_revision = 'chromium_src_%s_%s.tar.bz2' % (
       platform,commit_position)
   api.python('archive source',
-             api.path['build'].join('scripts','slave',
+             api.package_repo_resource('scripts','slave',
                                     'archive_source_codesearch.py'),
              ['src', 'build', 'infra', 'tools', '-f',
               tarball_name])
@@ -262,7 +262,7 @@ def RunSteps(api):
 
     # Sync the generated files into this checkout.
     api.python('sync generated files',
-               api.path['build'].join('scripts','slave',
+               api.package_repo_resource('scripts','slave',
                                       'sync_generated_files_codesearch.py'),
                ['--message',
                 'Generated files from "%s" build %s, revision %s' % (

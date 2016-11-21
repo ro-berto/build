@@ -55,7 +55,7 @@ def Linux32_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
-  api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
+  api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
@@ -67,7 +67,7 @@ def Linux32_steps(api):
           "//out/Default"])
   # chromedriver compile.py step
   api.python("compile",
-             api.path["build"].join("scripts", "slave", "compile.py"),
+             api.package_repo_resource("scripts", "slave", "compile.py"),
              args=['--target', 'Default',
                    '--compiler', 'goma',
                    '--goma-dir', goma_dir,
@@ -80,7 +80,7 @@ def Linux32_steps(api):
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
   # annotated_steps step
-  api.python("annotated_steps", api.path["build"].join("scripts", "slave",
+  api.python("annotated_steps", api.package_repo_resource("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
     args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":'+\
@@ -131,7 +131,7 @@ def Mac_10_6_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
-  api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
+  api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
@@ -143,7 +143,7 @@ def Mac_10_6_steps(api):
           "//out/Default"])
   # chromedriver compile.py step
   api.python("compile",
-             api.path["build"].join("scripts", "slave", "compile.py"),
+             api.package_repo_resource("scripts", "slave", "compile.py"),
              args=['--target', 'Default',
                    '--compiler', 'goma',
                    '--goma-dir', goma_dir,
@@ -156,7 +156,7 @@ def Mac_10_6_steps(api):
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
   # annotated_steps step
-  api.python("annotated_steps", api.path["build"].join("scripts", "slave",
+  api.python("annotated_steps", api.package_repo_resource("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
     args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"c'+\
@@ -168,7 +168,7 @@ def Mac_10_6_steps(api):
 def Win7_steps(api):
   # update scripts step; implicitly run by recipe engine.
   # taskkill step
-  api.python("taskkill", api.path["build"].join("scripts", "slave",
+  api.python("taskkill", api.package_repo_resource("scripts", "slave",
     "kill_processes.py"))
   # bot_update step
   src_cfg = api.gclient.make_config()
@@ -209,7 +209,7 @@ def Win7_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
-  api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
+  api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
@@ -222,7 +222,7 @@ def Win7_steps(api):
   # chromedriver compile.py step
   api.step("compile",
            ["python_slave",
-            api.path["build"].join("scripts", "slave", "compile.py"),
+            api.package_repo_resource("scripts", "slave", "compile.py"),
             '--target', 'Default',
             '--compiler', 'goma',
             '--goma-dir', goma_dir,
@@ -232,7 +232,7 @@ def Win7_steps(api):
             'chromedriver_tests',
             'chromedriver_unittests'])
   # annotated_steps step
-  api.step("annotated_steps", ["python_slave", api.path["build"].join("scripts",
+  api.step("annotated_steps", ["python_slave", api.package_repo_resource("scripts",
     "slave", "chromium", "chromedriver_buildbot_run.py"),
     '--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\
@@ -282,7 +282,7 @@ def Linux_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
-  api.python("gclient runhooks wrapper", api.path["build"].join("scripts",
+  api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
     "slave", "runhooks_wrapper.py"), env=env)
   # cleanup_temp step
   api.chromium.cleanup_temp()
@@ -294,7 +294,7 @@ def Linux_steps(api):
           "//out/Default"])
   # chromedriver compile.py step
   api.python("compile",
-             api.path["build"].join("scripts", "slave", "compile.py"),
+             api.package_repo_resource("scripts", "slave", "compile.py"),
              args=['--target', 'Default',
                    '--compiler', 'goma',
                    '--goma-dir', goma_dir,
@@ -307,7 +307,7 @@ def Linux_steps(api):
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
   # annotated_steps step
-  api.python("annotated_steps", api.path["build"].join("scripts", "slave",
+  api.python("annotated_steps", api.package_repo_resource("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
     args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\

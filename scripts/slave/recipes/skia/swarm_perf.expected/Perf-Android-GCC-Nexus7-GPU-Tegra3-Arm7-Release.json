@@ -67,7 +67,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -83,7 +83,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -100,7 +100,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "get EXTERNAL_STORAGE dir",
@@ -115,7 +115,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "adb root",
@@ -130,7 +130,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait"
@@ -145,7 +145,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -161,7 +161,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -178,7 +178,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -194,7 +194,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "stop shell"
@@ -210,7 +210,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "starting battery stats"
@@ -226,7 +226,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "cat scaling_governor"
@@ -242,7 +242,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "cat cpu_freq"
@@ -260,7 +260,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -297,7 +297,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "read SKP_VERSION",
@@ -334,7 +334,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "read SK_IMAGE_VERSION",
@@ -352,7 +352,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "rmdir skia_perf"
@@ -375,7 +375,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "exists skia_perf",
@@ -393,7 +393,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "mkdir skia_perf"
@@ -444,7 +444,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -485,7 +485,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -502,7 +502,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "final battery stats"
@@ -516,7 +516,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "reboot"
@@ -530,7 +530,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "wait for reboot"
@@ -545,7 +545,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -561,7 +561,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
@@ -576,7 +576,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "kill-server"

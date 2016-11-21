@@ -104,8 +104,8 @@ def AgeLimitBailout(api, new_date, old_date):
 def GetLKGR(api):
   step_result = api.python(
       'get new lkgr',
-      api.path['build'].join('scripts', 'tools', 'runit.py'),
-      [api.path['build'].join('scripts', 'tools', 'pycurl.py'),
+      api.package_repo_resource('scripts', 'tools', 'runit.py'),
+      [api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
        '%s/lkgr' % STATUS_URL],
       stdout=api.raw_io.output(),
   )

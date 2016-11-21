@@ -44,7 +44,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]",
-      "PYTHONPATH": "[BUILD]\\scripts"
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -140,7 +140,7 @@
       "CHROME_PATH": "[START_DIR]\\src",
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]",
-      "PYTHONPATH": "[BUILD]\\scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts",
       "SKIA_OUT": "[CUSTOM_C:\\_B_WORK]\\skia\\out\\Build-Win-MSVC-x86-Debug"
     },
     "name": "build most",
@@ -162,7 +162,7 @@
       "CHROME_PATH": "[START_DIR]\\src",
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]",
-      "PYTHONPATH": "[BUILD]\\scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts",
       "SKIA_OUT": "[CUSTOM_C:\\_B_WORK]\\skia\\out\\Build-Win-MSVC-x86-Debug"
     },
     "name": "build most (2)"

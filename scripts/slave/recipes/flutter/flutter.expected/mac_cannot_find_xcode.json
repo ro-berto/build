@@ -114,7 +114,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/ios/find_xcode.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
       "--json-file",
       "/path/to/tmp/json"
     ],

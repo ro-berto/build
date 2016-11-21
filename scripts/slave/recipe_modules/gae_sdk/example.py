@@ -15,7 +15,8 @@ def RunSteps(api):
   api.cipd.install_client()
 
   for plat in api.gae_sdk.platforms:
-    out = api.path['build'].join('gae_sdk', '%s_%s' % (plat, api.platform.name))
+    out = api.gae_sdk.package_repo_resource(
+        'gae_sdk', '%s_%s' % (plat, api.platform.name))
     try:
       api.gae_sdk.fetch(plat, out)
     except api.gae_sdk.PackageNotFound as e:

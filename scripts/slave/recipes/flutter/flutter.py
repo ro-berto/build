@@ -93,7 +93,7 @@ def RunFindXcode(api, step_name, target_version=None):
   if target_version is not None:
     args.extend(['--version', target_version])
 
-  result = api.python(step_name, api.path['build'].join('scripts', 'slave',
+  result = api.python(step_name, api.package_repo_resource('scripts', 'slave',
     'ios', 'find_xcode.py'), args)
 
   return result.json.output

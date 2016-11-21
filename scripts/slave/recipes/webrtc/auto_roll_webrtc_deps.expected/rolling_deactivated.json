@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/pycurl.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
       "https://webrtc-roll-cr-rev-status.appspot.com/status"
     ],
     "name": "check roll status",

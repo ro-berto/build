@@ -167,7 +167,8 @@ with open(dest_path, 'w') as f:
   # Upload the SKPs.
   if 'Canary' not in api.properties['buildername']:
     cmd = ['python',
-           api.path['build'].join('scripts', 'slave', 'skia', 'upload_skps.py'),
+           api.package_repo_resource(
+              'scripts', 'slave', 'skia', 'upload_skps.py'),
            '--target_dir', output_dir]
     with depot_tools_auth(api, UPDATE_SKPS_KEY):
       api.step('Upload SKPs',

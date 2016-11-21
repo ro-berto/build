@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILD]/scripts/slave/gatekeeper_trees.json",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_trees.json",
       "/path/to/tmp/json"
     ],
     "name": "reading gatekeeper_trees.json",
@@ -41,7 +41,7 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "-v",
       "--json",
-      "[BUILD]/scripts/slave/gatekeeper.json",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper.json",
       "--email-app-secret-file",
       "/creds/gatekeeper/mailer_password"
     ],
@@ -54,7 +54,7 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "-v",
       "--json",
-      "[BUILD]/scripts/slave/gatekeeper.json",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper.json",
       "--email-app-secret-file",
       "/creds/gatekeeper/mailer_password",
       "--status-url",

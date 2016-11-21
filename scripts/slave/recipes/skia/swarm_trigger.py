@@ -158,13 +158,13 @@ def isolate_recipes(api):
   # This directory tends to be missing for some reason.
   api.file.makedirs(
       'third_party_infra',
-      api.path['build'].join('third_party', 'infra'),
+      api.package_repo_resource('third_party', 'infra'),
       infra_step=True)
 
   # Fix filemodes. These tend to get messed up somehow.
-  fix_filemodes(api, api.path['build'])
+  fix_filemodes(api, api.package_repo_resource())
 
-  skia_recipes_dir = api.path['build'].join(
+  skia_recipes_dir = api.package_repo_resource(
       'scripts', 'slave', 'recipes', 'skia')
   api.skia_swarming.create_isolated_gen_json(
       skia_recipes_dir.join('swarm_recipe.isolate'),
@@ -217,7 +217,7 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
   dimensions = swarm_dimensions(builder_spec)
   isolate_blacklist = ['.git', 'out', '*.pyc']
   isolate_vars = {
-    'BUILD': api.path['build'],
+    'BUILD': api.package_repo_resource(),
     'WORKDIR': api.path['start_dir'],
   }
 

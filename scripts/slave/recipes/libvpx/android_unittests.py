@@ -107,7 +107,7 @@ def RunSteps(api, libvpx_git_url, buildername):
 
   api.python(
       'transfer_files',
-      api.path['build'].join('scripts', 'slave', 'android',
+      api.package_repo_resource('scripts', 'slave', 'android',
                              'transfer_files.py'),
       args=[adb, DEVICE_ROOT, test_data])
 

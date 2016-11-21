@@ -69,7 +69,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "android platform self-tests"
@@ -85,7 +85,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "generate and upload doxygen"
@@ -106,7 +106,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "[BUILD]/scripts",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
     "name": "generate and upload binary size data"

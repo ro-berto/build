@@ -35,6 +35,7 @@ def CommonChecks(input_api, output_api):
       r'.*scripts/tools/buildbot_tool_templates/.*',
       r'.*scripts/release/.*',
       r'.*scripts/slave/recipes.py$',
+      r'.*scripts/slave/recipes/.*_autogen.py$',
       r'.*scripts/slave/recipe_modules/.*',
       r'.*scripts/gsd_generate_index/.*',
       r'.*masters/.*/templates/.*\.html$',

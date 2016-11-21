@@ -96,7 +96,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILD]",
+      "RECIPE_PACKAGE_REPO[build]",
       "--output-json",
       "/path/to/tmp/json"
     ],

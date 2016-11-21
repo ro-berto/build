@@ -54,13 +54,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       'CHECKOUT_PATH': self.m.path['checkout'],
     }
 
-    # Fallback in case build path is not available.
     # TODO(phajdan.jr): get rid of the need for BUILD_PATH in config.
-    try:
-      defaults['BUILD_PATH'] = self.m.path['build']
-    except KeyError:
-      defaults['BUILD_PATH'] = self.package_repo_resource()
-
+    defaults['BUILD_PATH'] = self.package_repo_resource()
     return defaults
 
   def get_env(self):

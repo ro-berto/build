@@ -268,7 +268,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILD]/third_party/infra",
+      "RECIPE_PACKAGE_REPO[build]/third_party/infra",
       "511"
     ],
     "name": "makedirs third_party_infra",
@@ -291,7 +291,7 @@
       "-u",
       "import os\nfor r, _, files in os.walk(os.getcwd()):\n  for fname in files:\n    f = os.path.join(r, fname)\n    if os.path.isfile(f):\n      if os.access(f, os.X_OK):\n        os.chmod(f, 0755)\n      else:\n        os.chmod(f, 0644)\n"
     ],
-    "cwd": "[BUILD]",
+    "cwd": "RECIPE_PACKAGE_REPO[build]",
     "name": "fix filemodes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -333,7 +333,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[BUILD]/scripts/slave/recipes/skia/swarm_recipe.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-isolate_recipes.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\"\n    ], \n    \"dir\": \"[BUILD]/scripts/slave/recipes/skia\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"RECIPE_PACKAGE_REPO[build]/scripts/slave/recipes/skia/swarm_recipe.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-isolate_recipes.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\"\n    ], \n    \"dir\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/recipes/skia\", \n    \"version\": 1\n}",
       "[START_DIR]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
     ],
     "name": "Write isolate_recipes.isolated.gen.json"
@@ -477,7 +477,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/skia/infra/bots/compile_skia.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-compile_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Mac\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[START_DIR]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[START_DIR]\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/skia/infra/bots/compile_skia.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-compile_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Mac\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[START_DIR]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"RECIPE_PACKAGE_REPO[build]\"\n    ], \n    \"dir\": \"[START_DIR]\", \n    \"version\": 1\n}",
       "[START_DIR]/swarming_temp_dir/compile_skia.isolated.gen.json"
     ],
     "name": "Write compile_skia.isolated.gen.json"
@@ -731,7 +731,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/skia/infra/bots/test_skia.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Mac\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[START_DIR]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[START_DIR]\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[START_DIR]/skia/infra/bots/test_skia.isolate\", \n        \"--isolated\", \n        \"[START_DIR]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Mac\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[START_DIR]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"RECIPE_PACKAGE_REPO[build]\"\n    ], \n    \"dir\": \"[START_DIR]\", \n    \"version\": 1\n}",
       "[START_DIR]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
     "name": "Write test_skia.isolated.gen.json"
