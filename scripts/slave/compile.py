@@ -267,7 +267,7 @@ def determine_goma_jobs():
   # Since Mac had process number limitation before, we had to set
   # the upper limit to 50. Now that the process number limitation is 2000,
   # so we would be able to use 10 * number_of_processors.
-  # For the safety, we'd like to set the upper limit to 200.
+  # For safety, we'd like to set the upper limit to 200.
   #
   # Note that currently most try-bot build slaves have 8 processors.
   if chromium_utils.IsMac() or chromium_utils.IsWindows():
@@ -282,7 +282,9 @@ def determine_goma_jobs():
       # Also increasing cpus for v8/blink trybots.
       ['build%d-m4' % x for x in xrange(45, 48)] +
       # Also increasing cpus for LTO buildbots.
-      ['slave%d-c1' % x for x in [20, 33] + range(78, 108)]):
+      ['slave%d-c1' % x for x in [20, 33] + range(78, 108)] +
+      # Also increasing cpus for Findit trybots.
+      ['slave%d-c4' % x for x in [799] + range(873, 878)]):
     return min(10 * number_of_processors, 200)
 
   return 50
