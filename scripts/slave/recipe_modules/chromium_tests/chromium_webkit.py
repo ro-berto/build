@@ -14,7 +14,7 @@ SPEC = {
 SPEC['builders'] = {
   'WebKit Win Builder': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -30,7 +30,7 @@ SPEC['builders'] = {
   },
   'WebKit Win7': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -50,7 +50,7 @@ SPEC['builders'] = {
   },
   'WebKit Win10': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -70,7 +70,7 @@ SPEC['builders'] = {
   },
   'WebKit Win x64 Builder': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -90,7 +90,7 @@ SPEC['builders'] = {
   },
   'WebKit Win Builder (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -106,7 +106,7 @@ SPEC['builders'] = {
   },
   'WebKit Win7 (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -126,7 +126,7 @@ SPEC['builders'] = {
   },
   'WebKit Win x64 Builder (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -146,7 +146,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac Builder': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -165,7 +165,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.11 (retina)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -189,7 +189,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.9': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -212,7 +212,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.10': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -235,7 +235,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.11': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -258,7 +258,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac Builder (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -277,7 +277,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.11 (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -321,7 +321,7 @@ SPEC['builders'] = {
   },
   'WebKit Linux Trusty ASAN': {
     'chromium_config': 'chromium_clang',
-    'chromium_apply_config': ['asan', 'mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['asan', 'mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -351,7 +351,6 @@ SPEC['builders'] = {
       'msan',
       'msan_full_origin_tracking',
       'prebuilt_instrumented_libraries',
-      'ninja_confirm_noop',
     ],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -376,7 +375,7 @@ SPEC['builders'] = {
   },
   'WebKit Linux Trusty (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -394,7 +393,7 @@ SPEC['builders'] = {
   },
   'Android Builder': {
     'chromium_config': 'android',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['android'],
     'chromium_config_kwargs': {
@@ -410,7 +409,7 @@ SPEC['builders'] = {
   },
   'WebKit Android (Nexus4)': {
     'chromium_config': 'android',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['android'],
     'chromium_config_kwargs': {
@@ -433,7 +432,7 @@ SPEC['builders'] = {
   },
   'WebKit Linux Trusty Leak': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
