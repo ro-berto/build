@@ -1507,6 +1507,8 @@ SPEC = {
       'bot_type': 'builder_tester',
       'android_config': 'clang_builder_mb_x64',
       'testing': { 'platform': 'linux', },
+      'enable_swarming': True,
+      'use_isolate': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -1910,6 +1912,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
+      'use_isolate': True,
     },
 
     'Android Remoting Tests': {
