@@ -2,10 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from buildbot.process.properties import WithProperties
-
 from master import master_config
-from master import master_utils
 from master.factory import remote_run_factory
 
 import master_site_config
@@ -17,7 +14,6 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-T = helper.Triggerable
 
 def m_remote_run(recipe, **kwargs):
   return remote_run_factory.RemoteRunFactory(

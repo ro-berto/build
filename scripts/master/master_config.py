@@ -12,11 +12,12 @@ from buildbot.schedulers.basic import SingleBranchScheduler as Scheduler
 from buildbot.schedulers.basic import AnyBranchScheduler
 from buildbot.scheduler import Triggerable
 
-from master import slaves_list
 from master.url_poller import URLPoller
+
 
 def GetGSUtilUrl(gs_bucket, root_folder):
   return 'gs://%s/%s' % (gs_bucket, root_folder)
+
 
 class Helper(object):
   def __init__(self, defaults):
@@ -29,10 +30,11 @@ class Helper(object):
               builddir=None, auto_reboot=True, notify_on_missing=False,
               slavebuilddir=None, category=None):
     category = category or self._defaults.get('category')
+    schedulers = scheduler.split('|') if scheduler else []
     self._builders.append({'name': name,
                            'factory': factory,
                            'gatekeeper': gatekeeper,
-                           'schedulers': scheduler.split('|'),
+                           'schedulers': schedulers,
                            'builddir': builddir,
                            'category': category,
                            'auto_reboot': auto_reboot,
