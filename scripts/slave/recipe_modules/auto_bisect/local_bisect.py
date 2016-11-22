@@ -59,7 +59,6 @@ def _perform_single_bisect(api, bisect_attempts, **flags):
         _gather_reference_range(bisector)
       if (not bisector.failed and bisector.check_improvement_direction() and
           bisector.check_initial_confidence()):
-        bisector.compute_relative_change()
         if bisector.check_reach_adjacent_revision(
             bisector.good_rev): # pragma: no cover
           # Only show this step if bisect has reached adjacent revisions.
