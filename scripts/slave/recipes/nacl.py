@@ -61,19 +61,22 @@ def _AnnotatedStepsSteps(api, got_revision):
         'BUILDBOT_TRIGGERED_BY_SLAVENAME':
           api.properties['parent_slavename'],
     })
-  # TODO(yyanagisawa): recipe start/stop goma compiler_proxy.
   goma_dir = api.goma.ensure_goma()
   if goma_dir:
     env.update({
         'GOMA_DIR': goma_dir,
-        'GOMA_SERVICE_ACCOUNT_JSON_FILE': api.goma.service_account_json_path,
+        'NOCONTROL_GOMA': '1',
     })
-  api.python('annotated steps',
-      api.path['checkout'].join('buildbot', 'buildbot_selector.py'),
-      allow_subannotations=True,
-      cwd = api.path['checkout'],
-      env = env,
-    )
+  api.goma.start()
+  try:
+    api.python('annotated steps',
+               api.path['checkout'].join('buildbot', 'buildbot_selector.py'),
+               allow_subannotations=True,
+               cwd = api.path['checkout'],
+               env = env,
+               )
+  finally:
+    api.goma.stop()
 
 def _TriggerTestsSteps(api):
   if api.properties['buildername'] in trigger_map:
