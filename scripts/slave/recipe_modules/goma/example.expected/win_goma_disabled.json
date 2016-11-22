@@ -144,6 +144,19 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\update_windows_env.py",
+      "--envfile-dir",
+      "out/Release"
+    ],
+    "env": {
+      "GOMA_DISABLED": "true"
+    },
+    "name": "update windows env"
+  },
+  {
+    "cmd": [
       "ninja",
       "-C",
       "out/Release"

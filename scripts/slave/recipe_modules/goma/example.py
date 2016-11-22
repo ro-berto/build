@@ -21,22 +21,14 @@ def RunSteps(api):
   allow_build_without_goma = api.properties.get(
       'allow_build_without_goma', False)
 
-  with api.goma.build_with_goma(
+  api.goma.build_with_goma(
+      name='ninja',
       ninja_log_outdir=api.properties.get('ninja_log_outdir'),
       ninja_log_compiler=api.properties.get('ninja_log_compiler'),
-      ninja_log_command=command,
+      ninja_command=command,
       allow_build_without_goma=allow_build_without_goma,
-      env=env):
-    if 'GOMA_DISABLED' in env:
-      api.goma.remove_j_flag(command)
-      api.step('ninja', command, env=env)
-    else:
-      # build something using goma.
-      api.step('echo goma jobs',
-               ['echo', str(api.goma.recommended_goma_jobs)])
-      api.step('echo goma jobs second',
-               ['echo', str(api.goma.recommended_goma_jobs)])
-      api.step('ninja', command, env=env)
+      goma_env=env)
+
 
 def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
@@ -45,7 +37,7 @@ def GenTests(api):
         'mastername': 'test_master',
         'slavename': 'test_slave',
         'clobber': '1',
-        'build_command': ['ninja', '-C', 'out/Release', '-j', '500'],
+        'build_command': ['ninja', '-j', '80', '-C', 'out/Release'],
         'ninja_log_outdir': 'out/Release',
         'ninja_log_compiler': 'goma',
         'build_data_dir': 'build_data_dir',

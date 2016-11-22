@@ -97,11 +97,11 @@ def _BuildSteps(api, clang, out_dir):
   ninja_cmd = ['ninja', '-C', debug_path,
                '-j', api.goma.recommended_goma_jobs]
 
-  with api.goma.build_with_goma(
+  api.goma.build_with_goma(
+      name='compile with ninja',
+      ninja_command=ninja_cmd,
       ninja_log_outdir=debug_path,
-      ninja_log_compiler='clang' if clang else 'unknown',
-      ninja_log_command=ninja_cmd):
-    api.step('compile with ninja', ninja_cmd)
+      ninja_log_compiler='clang' if clang else 'unknown')
 
 
 def _RunTests(api, memory_tool, v8, out_dir):

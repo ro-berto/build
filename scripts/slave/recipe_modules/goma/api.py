@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import re
-from contextlib import contextmanager
 
 from recipe_engine import recipe_api
 
@@ -94,7 +93,11 @@ print jobs
 
     Args:
       command: List of command line arg.
+
+    Returns:
+      list(string): Command line args parallel option removed.
     """
+    command = command[:]
     parallel_flag_regexp = re.compile('-j\d*')
     for i in range(len(command)):
       if (isinstance(command[i], str) and
@@ -102,7 +105,8 @@ print jobs
         if command[i] == '-j':
           command.pop(i + 1)
         command.pop(i)
-        return
+        break
+    return command
 
   def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):
@@ -327,44 +331,61 @@ print jobs
       env=self._goma_ctl_env
     )
 
-  @contextmanager
-  def build_with_goma(self, ninja_log_outdir=None, ninja_log_compiler=None,
-                      ninja_log_command=None, env=None,
-                      allow_build_without_goma=False):
-    """Make context wrapping goma start/stop.
-
-    Args ninja_log_* are NOT used to run actual build in this context.
-    These args are only used to collect log and upload them.
+  def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,
+                      ninja_log_compiler=None, goma_env=None, ninja_env=None,
+                      allow_build_without_goma=False, **kwargs):
+    """Build with ninja_command using goma
 
     Args:
+      ninja_command: Command used for build.
+                     This is sent as part of log.
+                     (e.g. ['ninja', '-C', 'out/Release'])
+      name: Name of compile step.
       ninja_log_outdir: Directory of ninja log. (e.g. "out/Release")
       ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
-      ninja_log_command: Command used for build.
-                         This is used only to be sent as part of log,
-                         NOT used to run actual build.
-                         (e.g. ['ninja', '-C', 'out/Release', '-j', '100'])
-      env: Environment controlling goma behavior.
-           This should be used for ninja if allow_build_without_goma is True.
-           Otherwise, only used for goma behavior control.
+      goma_env: Environment controlling goma behavior.
+      ninja_env: Environment for ninja.
       allow_build_without_goma (bool):
-        If this is not True, goma starting failure is ignored.
-        This argument should be used with env.
-        If starting goma fails, env and ninja_log_command are modified.
+        If this is True, goma starting failure is ignored and
+        build without goma.
+
+    Returns:
+      TODO(tikuta): return step_result
 
     Raises:
-      StepFailure or InfraFailure if it fails to build.
+      StepFailure or InfraFailure if it fails to build or
+      occurs something failure on goma steps.
     """
     ninja_log_exit_status = 0
 
+    if ninja_env is None:
+      ninja_env = {}
+    if goma_env is None:
+      goma_env = {}
+
+    # TODO(tikuta): Remove -j flag from ninja_command and set appropriate value.
+
     if allow_build_without_goma:
-      assert(env is not None)
+      assert ninja_log_outdir is not None
+
       try:
-        self.start(env)
+        self.start(goma_env)
       except:
-        env['GOMA_DISABLED'] = 'true'
-        self.remove_j_flag(ninja_log_command)
         try:
-          yield
+          if self.m.platform.is_win:
+            goma_env = goma_env.copy()
+            goma_env['GOMA_DISABLED'] = 'true'
+            self.m.python('update windows env',
+                          script=self.package_repo_resource(
+                              'scripts', 'slave', 'update_windows_env.py'),
+                          args=['--envfile-dir', str(ninja_log_outdir)],
+                          env=goma_env)
+          ninja_env = ninja_env.copy()
+          ninja_env['GOMA_DISABLED'] = 'true'
+          ninja_command = self.remove_j_flag(ninja_command)
+          self.m.step(name or 'compile', ninja_command,
+                      env=ninja_env, **kwargs)
+
         except self.m.step.StepFailure as e: # pragma: no cover
           ninja_log_exit_status = e.retcode
           raise e
@@ -374,15 +395,17 @@ print jobs
         finally:
           self._upload_logs(ninja_log_outdir=ninja_log_outdir,
                             ninja_log_compiler=ninja_log_compiler,
-                            ninja_log_command=ninja_log_command,
+                            ninja_log_command=ninja_command,
                             ninja_log_exit_status=ninja_log_exit_status,
                             name='upload log goma start failed')
         return
     else:
-      self.start(env)
+      self.start(goma_env)
 
     try:
-      yield
+      self.m.step(name or 'compile', ninja_command,
+                  env=ninja_env, **kwargs)
+
     except self.m.step.StepFailure as e: # pragma: no cover
       ninja_log_exit_status = e.retcode
       raise e
@@ -392,5 +415,5 @@ print jobs
     finally:
       self.stop(ninja_log_outdir=ninja_log_outdir,
                 ninja_log_compiler=ninja_log_compiler,
-                ninja_log_command=ninja_log_command,
+                ninja_log_command=ninja_command,
                 ninja_log_exit_status=ninja_log_exit_status)
