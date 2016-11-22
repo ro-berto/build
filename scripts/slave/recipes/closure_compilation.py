@@ -46,7 +46,7 @@ def RunSteps(api):
                                  'compiled_resources.gyp')],
   )
 
-  api.chromium.compile()
+  api.chromium.compile(use_compile_py=False)
 
   api.step(
       'generate_v2_gyp_files',
@@ -55,7 +55,7 @@ def RunSteps(api):
                                  'compiled_resources2.gyp')],
   )
 
-  api.chromium.compile(name='compile_v2')
+  api.chromium.compile(name='compile_v2', use_compile_py=False)
 
 
 def GenTests(api):
