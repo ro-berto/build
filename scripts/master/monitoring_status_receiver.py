@@ -3,7 +3,10 @@
 # found in the LICENSE file.
 
 import collections
+import itertools
 import time
+
+import buildbot.status.results
 
 from buildbot.status.base import StatusReceiverMultiService
 from twisted.internet import defer, reactor, task
@@ -22,6 +25,11 @@ current_builds = ts_mon.GaugeMetric('buildbot/master/builders/current_builds',
     description='Number of builds currently running, per builder')
 pending_builds = ts_mon.GaugeMetric('buildbot/master/builders/pending_builds',
     description='Number of builds pending, per builder')
+last_build_status = ts_mon.StringMetric('buildbot/master/builders/last_result',
+    description='The build result of the last completed build.')
+consecutive_failures = ts_mon.GaugeMetric(
+    'buildbot/master/builders/consecutive_failures',
+    description='The number of consecutive failures until now.')
 state = ts_mon.StringMetric('buildbot/master/builders/state',
     description='State of this builder - building, idle, or offline')
 total = ts_mon.GaugeMetric('buildbot/master/builders/total_slaves',
@@ -36,6 +44,48 @@ pool_working = ts_mon.GaugeMetric('buildbot/master/thread_pool/working',
     description='Number of running workers for the database thread pool')
 
 SERVER_STARTED = time.time()
+
+
+def generateFailureFields(fields, failure_type):
+  """Make a copy of the metric fields with failure type added."""
+  copied_fields = fields.copy()
+  copied_fields['failure_type'] = buildbot.status.results.Results[failure_type]
+  return copied_fields
+
+
+def calculateConsecutiveFailures(failure_type, build, cache_factor=0.5):
+  """Counts consecutive failure types going backward in time.
+
+  Limit oursevles to half the cache (by default) to prevent issues like what
+  happened in https://codereview.chromium.org/18429003#msg1. We use iterators
+  here to be 'lazy' and not access builds if we don't have to.
+  """
+
+  def buildResultIterator(build):
+    while build:
+      result, _ = build.GetResults()
+      yield result
+      build = build.getPreviousBuild()
+
+  # How many builds back we'll look.
+  backward_seek_limit = int(build.getBuilder().buildCacheSize * cache_factor)
+
+  # An iterator that only gives us up to backward_seek_limit builds.
+  cache_limited_iterator = itertools.islice(
+      buildResultIterator(build),
+      backward_seek_limit)
+
+  # Filter out unfinished builds.
+  finished_build_iterator = itertools.filter(
+      lambda x: x is not None,
+      cache_limited_iterator)
+
+  # Find the first string of consecutive builds matching the failure_type.
+  most_recent_consecutive_builds = itertools.takewhile(
+      lambda x: x == failure_type,
+      finished_build_iterator)
+
+  return len(list(most_recent_consecutive_builds))
 
 
 class MonitoringStatusReceiver(StatusReceiverMultiService):
@@ -86,6 +136,22 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
       current_builds.set(len(builder.getCurrentBuilds()), fields=fields)
       state.set(builder.currentBigState, fields=fields)
       total.set(len(slaves), fields=fields)
+
+      last_build = builder.getLastFinishedBuild()
+      if last_build:
+        result_code, _ = last_build.getResults()
+        result_string = buildbot.status.results.Results[result_code]
+
+        last_build_status.set(result_string, fields=fields)
+
+        for failure_type in (
+            buildbot.status.results.EXCEPTION,
+            buildbot.status.results.FAILURE):
+
+          consecutive_failures.set(
+              calculateConsecutiveFailures(failure_type, last_build),
+              generateFailureFields(fields, failure_type)
+          )
 
     # Get pending build requests directly from the db for all builders at
     # once.
