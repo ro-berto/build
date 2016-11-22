@@ -63,8 +63,7 @@ def calculateConsecutiveFailures(failure_type, build, cache_factor=0.5):
 
   def buildResultIterator(build):
     while build:
-      result, _ = build.GetResults()
-      yield result
+      yield build.getResults()
       build = build.getPreviousBuild()
 
   # How many builds back we'll look.
@@ -76,7 +75,7 @@ def calculateConsecutiveFailures(failure_type, build, cache_factor=0.5):
       backward_seek_limit)
 
   # Filter out unfinished builds.
-  finished_build_iterator = itertools.filter(
+  finished_build_iterator = itertools.ifilter(
       lambda x: x is not None,
       cache_limited_iterator)
 
@@ -139,7 +138,7 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
 
       last_build = builder.getLastFinishedBuild()
       if last_build:
-        result_code, _ = last_build.getResults()
+        result_code = last_build.getResults()
         result_string = buildbot.status.results.Results[result_code]
 
         last_build_status.set(result_string, fields=fields)
