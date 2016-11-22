@@ -783,8 +783,8 @@
             "tree_notify": [
               "thomasanderson@chromium.org",
               "rjkroege@chromium.org",
-              "fwang@igalia.com",
-              "tonikitoo@igalia.com",
+              "fwang@chromium.org",
+              "tonikitoo@chromium.org",
               "joone.hur@intel.com"
             ],
             "forgiving_optional": [
