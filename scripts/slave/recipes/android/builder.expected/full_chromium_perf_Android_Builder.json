@@ -777,23 +777,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "bucket": "master.chromium.perf.fyi",
-        "builder_name": "Android Power Nexus 5X Perf (1)",
-        "properties": {
-          "parent_revision": "267739",
-          "revision": "267739"
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Power Nexus 5X Perf (1)@@@"
-    ]
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

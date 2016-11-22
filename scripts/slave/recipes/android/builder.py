@@ -14,7 +14,6 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'trigger',
   'depot_tools/tryserver',
 ]
 
@@ -70,12 +69,6 @@ BUILDERS = freeze({
         'push_apps_to_background_apk',
         'system_webview_apk',
         'system_webview_shell_apk',
-      ],
-      'triggers': [
-        {
-          'buildername': 'Android Power Nexus 5X Perf (1)',
-          'mastername': 'chromium.perf.fyi',
-        },
       ],
     },
     'Android arm64 Builder': {
@@ -238,14 +231,6 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   upload_config = bot_config.get('zip_and_upload')
   if upload_config:
     droid.zip_and_upload_build(upload_config['bucket'])
-
-  if 'triggers' in bot_config:
-    api.trigger(*[{'bucket': 'master.' + b['mastername'],
-                   'builder_name': b['buildername'],
-                   'properties': {
-                      'revision': api.properties['revision'],
-                      'parent_revision': api.properties['revision']}
-                   } for b in bot_config['triggers']])
 
 
 def RunSteps(api, mastername, buildername, revision):
