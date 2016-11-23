@@ -59,13 +59,20 @@ BUILDERS = freeze({
         'path': lambda api: ('Android Builder/full-build-linux_%s.zip'
                              % api.properties['revision']),
       },
-      'resource_sizes_apks': ['ChromePublic.apk', 'SystemWebView.apk'],
+      'resource_sizes_apks': [
+        'ChromeModernPublic.apk',
+        'ChromePublic.apk',
+        'MonochromePublic.apk',
+        'SystemWebView.apk',
+      ],
       'run_mb': True,
       'targets': [
         'android_tools',
         'cc_perftests',
+        'chrome_modern_public_apk',
         'chrome_public_apk',
         'gpu_perftests',
+        'monochrome_public_apk',
         'push_apps_to_background_apk',
         'system_webview_apk',
         'system_webview_shell_apk',
@@ -88,13 +95,21 @@ BUILDERS = freeze({
             'Android arm64 Builder/full-build-linux_%s.zip'
             % api.properties['revision']),
       },
-      'resource_sizes_apks': ['ChromePublic.apk', 'SystemWebView.apk'],
+      'resource_sizes_apks': [
+        'ChromeModernPublic.apk',
+        'ChromePublic.apk',
+        'SystemWebView.apk',
+      ],
       'run_mb': True,
       'targets': [
         'android_tools',
         'cc_perftests',
+        'chrome_modern_public_apk',
         'chrome_public_apk',
         'gpu_perftests',
+
+        # 64-bit Monochrome builds 32-bit libchrome.so as well, so do not add it
+        # here unless it's beneficial and doesn't slow the bots down too much.
         'push_apps_to_background_apk',
         'system_webview_apk',
         'system_webview_shell_apk',
