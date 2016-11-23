@@ -38,6 +38,7 @@ def result_details(json_path, cs_base_url, master_name):
                 'duration': tr['elapsed_time_ms'],
                 'output_snippet': tr['output_snippet'],
                 'tombstones': tr['tombstones'] if 'tombstones' in tr else '',
+                'logcat': tr['logcat_url'] if 'logcat_url' in tr else '',
             } for tr in test_runs]
     results_list = list(
         itertools.chain.from_iterable(test_results_dict.values()))
@@ -68,13 +69,15 @@ def create_test_row_data(results, cs_base_url):
     test_case = ([
         {'data': result['name'], 'class': 'left',
          'link': code_search(result['name'], cs_base_url)},
-        {'data': result['status'], 
+        {'data': result['status'],
          'class': 'center ' + status_class(result['status']),
          'action': add_tombstone,
          'action_argument': tombstones_name,
          'title': 'Show tombstones of this crashed test case.'},
         {'data': result['duration'], 'class': 'center'},
-        {'data': result['output_snippet'], 
+        {'data': 'logcat' if result['logcat'] else '', 'class': 'center',
+         'link': result['logcat']},
+        {'data': result['output_snippet'],
          'class': 'left', 'is_pre': True}
         ])
     test_row_list.append(test_case)
@@ -144,6 +147,7 @@ def results_to_html(results, cs_base_url, master_name):
     'table_headers' : [('text', 'test_name'),
                        ('text', 'status'),
                        ('number', 'duration'),
+                       ('text', 'logcat'),
                        ('text', 'output_snippet'),
                       ],
     'table_rows' : test_row_list,
