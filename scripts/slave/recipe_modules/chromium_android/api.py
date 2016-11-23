@@ -1299,7 +1299,7 @@ class AndroidApi(recipe_api.RecipeApi):
         'android_webview', 'tools', 'cts_config')
     cts_filenames_json = self.m.file.read(
         'Fetch CTS filename data',
-        _CTS_CONFIG_SRC_PATH.join('webview_cts_gcs_path_new.json'),
+        _CTS_CONFIG_SRC_PATH.join('webview_cts_gcs_path.json'),
         test_data='''
                       {
                         "arm_64": {

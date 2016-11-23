@@ -585,7 +585,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Android_WebView_CTS_L_MR1__dbg_/src/android_webview/tools/cts_config/webview_cts_gcs_path_new.json",
+      "[BUILDER_CACHE]/Android_WebView_CTS_L_MR1__dbg_/src/android_webview/tools/cts_config/webview_cts_gcs_path.json",
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Android_WebView_CTS_L_MR1__dbg_",
