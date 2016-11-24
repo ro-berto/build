@@ -395,7 +395,7 @@ _CONFIG_MAP = {
         'debug': False,
       },
       'angler-armv8-debug': {
-        'serial': '84B7N15B03000615',
+        'serial': '84B7N15B03000660',
         'device': 'angler',
         'debug': True,
       },
