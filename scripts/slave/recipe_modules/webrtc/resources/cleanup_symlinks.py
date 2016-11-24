@@ -21,7 +21,7 @@ def main(args):
     print 'Cannot find any directory at %s. Skipping cleaning.' % checkout_root
     return 0
 
-  chromium_checkout = os.path.join(checkout_root, 'chromium', 'src')
+  chromium_checkout = os.path.join(checkout_root, 'src', 'chromium', 'src')
   if not os.path.exists(chromium_checkout):
     print ('Cannot find a Chromium checkout at %s. '
            'Skipping cleaning.' % chromium_checkout)
