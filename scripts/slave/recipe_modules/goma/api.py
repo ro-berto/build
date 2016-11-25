@@ -235,7 +235,7 @@ print jobs
 
         self._start_cloudtail()
 
-      except self.m.step.InfraFailure as e: # pragma: no cover
+      except self.m.step.InfraFailure as e:
         try:
           with self.m.step.defer_results():
             self.m.python(
@@ -244,7 +244,7 @@ print jobs
                 args=['stop'], env=self._goma_ctl_env, **kwargs)
             self._upload_logs(name='upload_goma_start_failed_logs',
                               skip_sendgomatsmon=True)
-        except self.m.step.StepFailure:
+        except self.m.step.StepFailure: # pragma: no cover
           pass
 
         raise e
@@ -406,7 +406,7 @@ print jobs
       self.m.step(name or 'compile', ninja_command,
                   env=ninja_env, **kwargs)
 
-    except self.m.step.StepFailure as e: # pragma: no cover
+    except self.m.step.StepFailure as e:
       ninja_log_exit_status = e.retcode
       raise e
     except self.m.step.InfraFailure as e: # pragma: no cover

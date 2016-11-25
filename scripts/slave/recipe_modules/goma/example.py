@@ -31,18 +31,18 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for platform in ('linux', 'win', 'mac'):
-    properties = {
-        'buildername': 'test_builder',
-        'mastername': 'test_master',
-        'slavename': 'test_slave',
-        'clobber': '1',
-        'build_command': ['ninja', '-j', '80', '-C', 'out/Release'],
-        'ninja_log_outdir': 'out/Release',
-        'ninja_log_compiler': 'goma',
-        'build_data_dir': 'build_data_dir',
-    }
+  properties = {
+      'buildername': 'test_builder',
+      'mastername': 'test_master',
+      'slavename': 'test_slave',
+      'clobber': '1',
+      'build_command': ['ninja', '-j', '80', '-C', 'out/Release'],
+      'ninja_log_outdir': 'out/Release',
+      'ninja_log_compiler': 'goma',
+      'build_data_dir': 'build_data_dir',
+  }
 
+  for platform in ('linux', 'win', 'mac'):
     yield (api.test(platform) + api.platform.name(platform) +
            api.properties.generic(**properties))
 
@@ -51,3 +51,7 @@ def GenTests(api):
            api.platform.name(platform) +
            api.properties(allow_build_without_goma=True) +
            api.properties.generic(**properties))
+
+  yield (api.test('linux_compile_failed') + api.platform.name('linux') +
+         api.step_data('ninja', retcode=1) +
+         api.properties.generic(**properties))
