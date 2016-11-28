@@ -5,15 +5,10 @@
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
 
-  GTestTest = api.m.chromium_tests.steps.GTestTest
-  if test_suite == 'webrtc':
-    for test in sorted(api.NORMAL_TESTS):
-      parallel = test != 'webrtc_nonparallel_tests'
-      tests.append(WebRTCTest(test, revision=revision, parallel=parallel))
-  elif test_suite == 'desktop_swarming':
+  if test_suite in ('webrtc', 'desktop_swarming'):
     for test, extra_args in sorted(api.NORMAL_TESTS.items()):
-      tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                             **extra_args))
+      tests.append(WebRTCTest(test, enable_swarming=enable_swarming,
+                              revision=revision, **extra_args))
   elif test_suite == 'webrtc_baremetal':
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
 
@@ -42,6 +37,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision))
   elif test_suite == 'android_swarming':
+    GTestTest = api.m.chromium_tests.steps.GTestTest
     for test in (api.ANDROID_DEVICE_TESTS +
                  api.ANDROID_INSTRUMENTATION_TESTS):
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
@@ -55,29 +51,45 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
 # TODO(kjellander): Continue refactoring an integrate the classes in the
 # chromium_tests recipe module instead (if possible).
 class Test(object):
-  def __init__(self, name):
+  def __init__(self, name, enable_swarming=False, swarming_shards=1):
     self._name = name
+    self._enable_swarming = enable_swarming
+    self._swarming_task = None
+    self._swarming_shards = swarming_shards
+
+  def run_nonswarming(self, api, suffix): # pragma: no cover:
+    raise NotImplementedError()
 
   def pre_run(self, api, suffix):
     return []
 
-  def run(self, api, suffix): # pragma: no cover:
-    raise NotImplementedError()
+  def run(self, api, suffix):
+    if self._enable_swarming:
+      isolated_hash = api.m.isolate.isolated_tests[self._name]
+      self._swarming_task = api.m.swarming.task(self._name, isolated_hash,
+                                                shards=self._swarming_shards)
+      api.m.swarming.trigger_task(self._swarming_task)
+    else:
+      self.run_nonswarming(api, suffix)
 
   def post_run(self, api, suffix):
-    return []
+    if self._enable_swarming:
+      api.swarming.collect_task(self._swarming_task)
+    else:
+      return []
 
 class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
-  def __init__(self, name, revision=None, parallel=True, perf_test=False,
+  def __init__(self, name, revision=None, enable_swarming=False,
+               swarming_shards=1, parallel=True, perf_test=False,
                **runtest_kwargs):
-    super(WebRTCTest, self).__init__(name)
+    super(WebRTCTest, self).__init__(name, enable_swarming, swarming_shards)
     self._revision = revision
     self._parallel = parallel
     self._perf_test = perf_test
     self._runtest_kwargs = runtest_kwargs
 
-  def run(self, api, suffix):
+  def run_nonswarming(self, api, suffix):
     self._runtest_kwargs['test'] = self._name
     api.add_test(name=self._name, revision=self._revision,
                  parallel=self._parallel, perf_test=self._perf_test,
@@ -93,7 +105,7 @@ class BaremetalTest(WebRTCTest):
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
 
-  def run(self, api, suffix):
+  def run_nonswarming(self, api, suffix):
     api.m.chromium_android.run_java_unit_test_suite(self._name)
 
 class AndroidPerfTest(Test):
@@ -109,7 +121,7 @@ class AndroidPerfTest(Test):
     super(AndroidPerfTest, self).__init__(name)
     self._revision = revision
 
-  def run(self, api, suffix):
+  def run_nonswarming(self, api, suffix):
     wrapper_script = api.m.chromium.output_dir.join('bin',
                                                     'run_%s' % self._name)
     args = ['--verbose']

@@ -47,7 +47,9 @@ class WebRTCApi(recipe_api.RecipeApi):
       'swarming_shards': 4,
     },
     'voice_engine_unittests': {},
-    'webrtc_nonparallel_tests': {},
+    'webrtc_nonparallel_tests': {
+      'parallel': False,
+    },
     'xmllite_xmpp_unittests': {},
   })
 
