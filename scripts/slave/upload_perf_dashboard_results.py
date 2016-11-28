@@ -77,13 +77,15 @@ def main(args):
       {}, reference_build)
   if dashboard_json:
     logging.debug(json.dumps(dashboard_json , indent=2))
-    results_dashboard.SendResults(
-      dashboard_json,
-      options.results_url,
-      options.build_dir)
+    if not results_dashboard.SendResults(
+        dashboard_json,
+        options.results_url,
+        options.build_dir):
+      return 1
   else:
     print 'Error: No perf dashboard JSON was produced.'
     print '@@@STEP_FAILURE@@@'
+    return 1
   return 0
 
 
