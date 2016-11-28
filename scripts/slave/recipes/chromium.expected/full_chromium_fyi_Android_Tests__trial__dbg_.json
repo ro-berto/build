@@ -626,6 +626,8 @@
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json",
+      "--additional-apk",
+      "[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/out/Debug/apks/SystemWebView.apk",
       "--adb-path",
       "[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],

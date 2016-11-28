@@ -1595,6 +1595,9 @@ class AndroidInstrumentationTest(AndroidTest):
       'additional_compile_targets': [
         'system_webview_apk',
       ],
+      'additional_apks': [
+        'SystemWebView.apk',
+      ],
     }
   }
 
