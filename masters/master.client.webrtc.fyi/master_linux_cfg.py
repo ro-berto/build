@@ -30,7 +30,6 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-                                'Linux Memcheck (swarming)',
                                 'Linux64 GCC',
       ]),
       # Run WebRTC DEPS roller at CET hours: 4am, 12pm and 8pm.
@@ -44,7 +43,6 @@ def Update(c):
 
   specs = [
     {'name': 'Linux64 GCC', 'slavebuilddir': 'linux_gcc'},
-    {'name': 'Linux Memcheck (swarming)', 'slavebuilddir': 'linux_memcheck'},
     {
       'name': 'Auto-roll - WebRTC DEPS',
       'recipe': 'webrtc/auto_roll_webrtc_deps',

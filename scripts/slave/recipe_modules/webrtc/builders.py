@@ -337,7 +337,7 @@ BUILDERS = freeze({
         }
       },
       'Linux Memcheck': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_swarming',
         'chromium_apply_config': ['memcheck'],
         'gclient_apply_config': ['webrtc_valgrind'],
         'chromium_config_kwargs': {
@@ -346,6 +346,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'x86-64',
+        }
       },
       'Linux MSan': {
         'recipe_config': 'webrtc_swarming_clang',
@@ -593,23 +599,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-      },
-      'Linux Memcheck (swarming)': {
-        'recipe_config': 'webrtc_swarming',
-        'chromium_apply_config': ['memcheck'],
-        'gclient_apply_config': ['webrtc_valgrind'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'x86-64',
-        }
       },
       'Linux64 GCC': {
         'recipe_config': 'webrtc_gcc',
