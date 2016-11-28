@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from buildbot.scheduler import Nightly
+from buildbot.scheduler import Periodic
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import annotator_factory
@@ -32,12 +32,12 @@ def Update(c):
                             builderNames=[
                                 'Linux64 GCC',
       ]),
-      # Run WebRTC DEPS roller at CET hours: 4am, 12pm and 8pm.
-      Nightly(
+      # Run WebRTC DEPS roller every 3 hours.
+      Periodic(
           name='webrtc_deps',
+          periodicBuildTimer=3*60*60,
           branch=None,
           builderNames=['Auto-roll - WebRTC DEPS'],
-          hour=[19,3,11],  # Pacific timezone.
       ),
   ])
 
