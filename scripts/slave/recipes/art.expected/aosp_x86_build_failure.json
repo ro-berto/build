@@ -25,11 +25,12 @@
     ],
     "env": {
       "ART_BUILD_HOST_STATIC": "true",
+      "ART_TARGET_LINUX": "true",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "LEGACY_USE_JAVA7": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86_64"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "build dex2oats",
     "~followup_annotations": [

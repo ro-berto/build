@@ -44,13 +44,139 @@
     ],
     "env": {
       "ART_BUILD_HOST_STATIC": "true",
+      "ART_TARGET_LINUX": "true",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "LEGACY_USE_JAVA7": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86_64"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "build dex2oats"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/art/tools/buildbot-build.sh",
+      "-j8",
+      "--target"
+    ],
+    "env": {
+      "ART_BUILD_HOST_STATIC": "true",
+      "ART_TARGET_LINUX": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "LEGACY_USE_JAVA7": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "armv8"
+    },
+    "name": "build ART for linux/arm64"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean-oat-host"
+    ],
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86"
+    },
+    "name": "Clean oat x86"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8"
+    ],
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86"
+    },
+    "name": "build x86"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean-oat-host"
+    ],
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86_64"
+    },
+    "name": "Clean oat x86_64"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8"
+    ],
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86_64"
+    },
+    "name": "build x86_64"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean-oat-host"
+    ],
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm"
+    },
+    "name": "Clean oat arm"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8"
+    ],
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm"
+    },
+    "name": "build arm"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean-oat-host"
+    ],
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm64"
+    },
+    "name": "Clean oat arm64"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8"
+    ],
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm64"
+    },
+    "name": "build arm64"
   },
   {
     "name": "$result",

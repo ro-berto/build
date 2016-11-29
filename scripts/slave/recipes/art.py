@@ -283,31 +283,36 @@ def setup_target(api,
 def setup_aosp_builder(api):
   full_checkout(api)
   clobber(api)
-  # Build the static version of dex2oat
   env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
-          'TARGET_PRODUCT': 'aosp_x86_64',
+          'TARGET_PRODUCT': 'armv8',
           'LEGACY_USE_JAVA7': 'true',
           'ART_BUILD_HOST_STATIC': 'true',
           'TARGET_BUILD_VARIANT': 'eng',
+          'ART_TARGET_LINUX' : 'true',
           'TARGET_BUILD_TYPE': 'release'}
+  # Build the static version of dex2oat
   api.step('build dex2oats',
            ['make', '-j8', 'out/host/linux-x86/bin/dex2oats'],
            env=env)
+  # Build ART for linux/arm64
+  art_tools = api.path['start_dir'].join('art', 'tools')
+  api.step('build ART for linux/arm64',
+           [art_tools.join('buildbot-build.sh'), '-j8', '--target'],
+           env=env)
 
   # Re-enable when we have Java8 jdk on the slave
-  #builds = ['x86', 'x86_64', 'arm', 'arm64']
+  builds = ['x86', 'x86_64', 'arm', 'arm64']
   # TODO: adds mips and mips64 once we have enough storage on the bot.
   # ['mips', 'mips64']
-  #with api.step.defer_results():
-  #  for build in builds:
-  #    env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
-  #            'TARGET_PRODUCT': 'aosp_%s' % build,
-  #            'LEGACY_USE_JAVA7': 'true',
-  #            'TARGET_BUILD_VARIANT': 'eng',
-  #            'TARGET_BUILD_TYPE': 'release'}
-  #    api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
-  #        env=env)
-  #    api.step('build %s' % build, ['make', '-j8'], env=env)
+  with api.step.defer_results():
+    for build in builds:
+      env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
+              'TARGET_PRODUCT': 'aosp_%s' % build,
+              'TARGET_BUILD_VARIANT': 'eng',
+              'TARGET_BUILD_TYPE': 'release'}
+      api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
+          env=env)
+      api.step('build %s' % build, ['make', '-j8'], env=env)
 
 _CONFIG_MAP = {
   'client.art': {
