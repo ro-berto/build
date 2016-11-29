@@ -30,6 +30,7 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
+                                'Linux (swarming)',
                                 'Linux64 GCC',
       ]),
       # Run WebRTC DEPS roller every 3 hours.
@@ -42,6 +43,7 @@ def Update(c):
   ])
 
   specs = [
+    {'name': 'Linux (swarming)', 'slavebuilddir': 'linux_swarming'},
     {'name': 'Linux64 GCC', 'slavebuilddir': 'linux_gcc'},
     {
       'name': 'Auto-roll - WebRTC DEPS',

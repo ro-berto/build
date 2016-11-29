@@ -26,6 +26,7 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Win32 SyzyASan (swarming)',
+                                'Win (swarming)',
                                 'Win64 Debug (Win8)',
                                 'Win64 Debug (Win10)',
                             ]),
@@ -33,8 +34,12 @@ def Update(c):
 
   specs = [
     {
-      'name': 'Win32 SyzyASan (swarming)',
+      'name': 'Win (swarming)',
       'slavebuilddir': 'win_swarming',
+    },
+    {
+      'name': 'Win32 SyzyASan (swarming)',
+      'slavebuilddir': 'win_syzyasan_swarming',
     },
     {
       'name': 'Win64 Debug (Win8)',
