@@ -1147,9 +1147,7 @@
     },
     "name": "page_cycler.foo",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
-      "@@@STEP_LOG_LINE@device affinity@0@@@",
-      "@@@STEP_LOG_END@device affinity@@@"
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
     ]
   },
   {
@@ -1197,8 +1195,6 @@
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
-      "@@@STEP_LOG_LINE@device affinity@0@@@",
-      "@@@STEP_LOG_END@device affinity@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

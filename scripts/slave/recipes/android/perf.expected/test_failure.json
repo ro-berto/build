@@ -676,9 +676,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@device affinity@0@@@",
-      "@@@STEP_LOG_END@device affinity@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -730,8 +728,6 @@
       "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@device affinity@0@@@",
-      "@@@STEP_LOG_END@device affinity@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

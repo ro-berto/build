@@ -873,12 +873,9 @@ class AndroidApi(recipe_api.RecipeApi):
       finally:
         if 'device_affinity' in test_data:
           step_result = self.m.step.active_result
-          affinity = test_data['device_affinity']
-
           step_result.presentation.step_text += (
               self.m.test_utils.format_step_text(
-                  [['Device Affinity: %s' % affinity]]))
-          step_result.presentation.logs['device affinity'] = str(affinity)
+                  [['Device Affinity: %s' % test_data['device_affinity']]]))
 
       if archive:
         dest = '{builder}/{test}/{timestamp}_build_{buildno}.zip'.format(
