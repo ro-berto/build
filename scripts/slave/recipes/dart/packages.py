@@ -112,10 +112,14 @@ def RunSteps(api):
          'tests': ['pkg/analysis_server']},
         {'name': 'analyzer_cli unit tests',
          'tests': ['pkg/analyzer_cli']},
+        {'name': 'front end unit tests',
+         'tests': ['pkg/front_end']},
         {'name': 'get dependencies - public',
          'tests': ['--use-public-packages', 'pkgbuild/pkg/analy']},
         {'name': 'get dependencies - repo',
          'tests': ['--use-repository-packages', 'pkgbuild/pkg/analy']},
+        {'name': 'get front end dependencies - repo',
+         'tests': ['--use-repository-packages', 'pkgbuild/pkg/front_end']},
       ]
     else:
       assert builder_type == 'pkg'
