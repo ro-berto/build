@@ -155,7 +155,7 @@ _AddBuildSpec('Android Compile', 'android', target_bits=32,
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
 _AddBuildSpec('Android arm64 Builder', 'android')
-_AddBuildSpec('Win Builder', 'win', target_bits=32)
+_AddBuildSpec('Win Builder', 'win', target_bits=32, enable_swarming=True)
 _AddBuildSpec( \
   'Win x64 Builder', 'win', add_to_bisect=True, enable_swarming=True)
 _AddBuildSpec('Mac Builder', 'mac', add_to_bisect=True, enable_swarming=True)
@@ -186,16 +186,14 @@ _AddTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win',
              num_host_shards=5)
 _AddTestSpec('Win 8 Perf', 'chromium-rel-win8-dual', 'win',
              num_host_shards=5)
-_AddTestSpec('Win 7 Perf', 'chromium-rel-win7-dual', 'win',
-             target_bits=32, num_host_shards=5)
-_AddTestSpec('Win 7 x64 Perf', 'chromium-rel-win7-x64-dual', 'win',
-             num_host_shards=5)
-_AddTestSpec('Win 7 ATI GPU Perf', 'chromium-rel-win7-gpu-ati', 'win',
-             num_host_shards=5)
-_AddTestSpec('Win 7 Intel GPU Perf', 'chromium-rel-win7-gpu-intel', 'win',
-             num_host_shards=5)
-_AddTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia', 'win',
-             num_host_shards=5)
+_AddIsolatedTestSpec('Win 7 Perf', 'chromium-rel-win7-dual', 'win',
+                     target_bits=32)
+_AddIsolatedTestSpec('Win 7 x64 Perf', 'chromium-rel-win7-x64-dual', 'win')
+_AddIsolatedTestSpec('Win 7 ATI GPU Perf', 'chromium-rel-win7-gpu-ati', 'win')
+_AddIsolatedTestSpec('Win 7 Intel GPU Perf', 'chromium-rel-win7-gpu-intel',
+                     'win')
+_AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia',
+                     'win')
 
 
 _AddTestSpec('Mac 10.11 Perf', 'chromium-rel-mac11', 'mac',
