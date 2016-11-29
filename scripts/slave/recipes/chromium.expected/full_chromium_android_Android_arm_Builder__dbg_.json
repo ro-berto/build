@@ -241,7 +241,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/Android_arm_Builder__dbg_/src/testing/buildbot/chromium.android.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android WebView CTS L-MR1 (dbg)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Android WebView L (dbg)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -251,7 +251,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android Webview L (dbg)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Android WebView M (dbg)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -261,7 +261,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android Webview M (dbg)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Android WebView N (dbg)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -522,7 +522,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Android WebView CTS L-MR1 (dbg)",
+        "builder_name": "Android WebView L (dbg)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -542,7 +542,7 @@
         }
       },
       {
-        "builder_name": "Android Webview L (dbg)",
+        "builder_name": "Android WebView M (dbg)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -562,7 +562,7 @@
         }
       },
       {
-        "builder_name": "Android Webview M (dbg)",
+        "builder_name": "Android WebView N (dbg)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -684,7 +684,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android WebView CTS L-MR1 (dbg)<br />Android Webview L (dbg)<br />Android Webview M (dbg)<br />Jelly Bean Tester<br />KitKat Tablet Tester<br />Lollipop Phone Tester<br />Lollipop Tablet Tester<br />Marshmallow Tablet Tester@@@"
+      "@@@STEP_TEXT@Android WebView L (dbg)<br />Android WebView M (dbg)<br />Android WebView N (dbg)<br />Jelly Bean Tester<br />KitKat Tablet Tester<br />Lollipop Phone Tester<br />Lollipop Tablet Tester<br />Marshmallow Tablet Tester@@@"
     ]
   },
   {

@@ -1839,9 +1839,14 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
 
 class WebViewCTSTest(Test):
 
+  # TODO(yolandyan): create a generator and move specifications to src/
+  def __init__(self, platform='L'):
+    super(WebViewCTSTest, self).__init__()
+    self._platform = platform
+
   @property
   def name(self):
-    return 'WebView CTS'
+    return 'WebView CTS: %s' % self._platform
 
   @property
   def uses_local_devices(self):
@@ -1854,7 +1859,7 @@ class WebViewCTSTest(Test):
   def run(self, api, suffix, test_filter=None):
     api.chromium_android.adb_install_apk(
         api.chromium_android.apk_path('SystemWebView.apk'))
-    api.chromium_android.run_webview_cts()
+    api.chromium_android.run_webview_cts(android_platform=self._platform)
 
 
 class IncrementalCoverageTest(Test):

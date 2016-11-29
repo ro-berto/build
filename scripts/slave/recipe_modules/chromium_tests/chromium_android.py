@@ -223,7 +223,7 @@ SPEC = {
       },
     },
 
-    'Android Webview L (dbg)': {
+    'Android WebView L (dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -238,13 +238,14 @@ SPEC = {
       'remove_system_webview': True,
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
+        steps.WebViewCTSTest('L'),
       ],
       'testing': {
         'platform': 'linux',
       },
     },
 
-    'Android Webview M (dbg)': {
+    'Android WebView M (dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -259,13 +260,14 @@ SPEC = {
       'remove_system_webview': True,
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
+        steps.WebViewCTSTest('M'),
       ],
       'testing': {
         'platform': 'linux',
       },
     },
 
-    'Android WebView CTS L-MR1 (dbg)': {
+    'Android WebView N (dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -279,7 +281,7 @@ SPEC = {
       'test_results_config': 'public_server',
       'remove_system_webview': True,
       'tests': [
-        steps.WebViewCTSTest(),
+        steps.WebViewCTSTest('N'),
       ],
       'testing': {
         'platform': 'linux',

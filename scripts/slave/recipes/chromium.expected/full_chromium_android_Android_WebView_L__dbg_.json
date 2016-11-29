@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -40,7 +40,7 @@
       "src@1111111",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -185,13 +185,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -199,16 +199,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/Android_Webview_L__dbg_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Android_WebView_L__dbg_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Android Webview L (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android WebView L (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -221,12 +221,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/testing/buildbot/chromium.android.json",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/testing/buildbot/chromium.android.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.android.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Android_Webview_L__dbg_/src/testing/buildbot/chromium.android.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Android_WebView_L__dbg_/src/testing/buildbot/chromium.android.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -247,10 +247,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug/debug_info_dumps",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug/test_logs",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/build_product.zip",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/debug_info_dumps",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/test_logs",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/build_product.zip",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -271,8 +271,8 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/tree_truth.sh",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/tree_truth.sh",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src",
       "src"
     ],
     "name": "tree truth steps"
@@ -282,7 +282,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -309,7 +309,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-archive-url",
@@ -325,15 +325,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/symlink.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/symlink.py",
       "-f",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "create adb symlink"
   },
@@ -341,14 +341,14 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android/adb_logcat_monitor.py",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/logcat",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/logcat",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
   },
@@ -362,16 +362,16 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid",
       "--",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/bad_devices.json"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/bad_devices.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "spawn_device_monitor"
   },
@@ -382,30 +382,30 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "authorize_adb_devices"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "device_recovery"
   },
@@ -413,44 +413,44 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android/provision_devices.py",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
       "Debug",
       "--remove-system-webview"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/catapult/devil/devil/android/tools/device_status.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "device_status",
     "~followup_annotations": [
@@ -552,21 +552,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug/bin/run_system_webview_shell_layout_test_apk",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/bin/run_system_webview_shell_layout_test_apk",
       "--blacklist-file",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/bad_devices.json",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json",
       "--additional-apk",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug/apks/SystemWebView.apk",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/apks/SystemWebView.apk",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "SystemWebViewShellLayoutTest",
     "~followup_annotations": [
@@ -585,7 +585,7 @@
       "--master-name",
       "chromium.android",
       "--builder-name",
-      "Android Webview L (dbg)",
+      "Android WebView L (dbg)",
       "--build-number",
       "571",
       "--test-type",
@@ -595,12 +595,225 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "Upload to test-results [SystemWebViewShellLayoutTest]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "get version"
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android/adb_install_apk.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/apks/SystemWebView.apk",
+      "-v",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/bad_devices.json",
+      "--adb-path",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "install SystemWebView.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/android_webview/tools/cts_config/webview_cts_gcs_path.json",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "Fetch CTS filename data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                      {@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                        \"arm_64\": {@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          \"L\": {@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"filename\": \"cts_arm64_L.zip\",@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"_origin\": \"aosp-lollipop-mr1-cts-dev@12345\"@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          },@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          \"M\": {@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"filename\": \"cts_arm64_M.zip\",@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"_origin\": \"aosp-marshmallow-cts-dev@12345\"@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          },@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          \"N\": {@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"filename\": \"cts_arm64_N.zip\",@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"_origin\": \"aosp-nougat-cts-release@12345\"@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          }@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                        }@@@",
+      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                      }@@@",
+      "@@@STEP_LOG_END@webview_cts_gcs_path.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/android_webview/tools/cts_config/expected_failure_on_bot.json",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "Fetch expected failures data"
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "Update CTS"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[CACHE]/android_cts"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "Update CTS.rmtree Delete old CTS",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[CACHE]/android_cts",
+      "511"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "Update CTS.makedirs Create CTS dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://chromium-cts/cts_arm64_L.zip",
+      "[CACHE]/android_cts/cts_arm64_L.zip"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "Update CTS.gsutil Download new CTS",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/unzip.py"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "Update CTS.Extract new CTS",
+    "stdin": "{\"output\": \"[CACHE]/android_cts/unzipped\", \"quiet\": false, \"zip_file\": \"[CACHE]/android_cts/cts_arm64_L.zip\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/android_cts/unzipped/android-cts/tools/cts-tradefed",
+      "run",
+      "cts",
+      "-p",
+      "android.webkit"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/build-tools/23.0.1:%(PATH)s"
+    },
+    "name": "Run CTS",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@disabled_tests@@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                        {@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                          \"android.webkit.cts.ExampleBlacklistedTest\":@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                            [@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                              {@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                                \"name\": \"testA\",@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                                \"_bug_id\": \"crbug.com/123\"@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                              },@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                              {\"name\": \"testB\"}@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                            ]@@@",
+      "@@@STEP_LOG_LINE@disabled_tests@                          }@@@",
+      "@@@STEP_LOG_END@disabled_tests@@@"
+    ]
   },
   {
     "cmd": [
@@ -612,10 +825,10 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "shutdown_device_monitor"
   },
@@ -623,15 +836,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android/adb_logcat_printer.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android/adb_logcat_printer.py",
       "--output-path",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug/full_log",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/logcat"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/full_log",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/logcat"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "logcat_dump"
   },
@@ -648,32 +861,32 @@
       "GSUtil:parallel_composite_upload_threshold=50M",
       "----",
       "cp",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug/full_log",
-      "gs://chromium-android/logcat_dumps/Android Webview L (dbg)/571"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/full_log",
+      "gs://chromium-android/logcat_dumps/Android WebView L (dbg)/571"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Webview L (dbg)/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android WebView L (dbg)/571@@@"
     ]
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_platform/development/scripts/stack",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_platform/development/scripts/stack",
       "--arch",
       "arm",
       "--more-info",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug/full_log"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/full_log"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_with_logcat_dump"
   },
@@ -682,28 +895,28 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/chrome/VERSION",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
-    "name": "get version"
+    "name": "get version (2)"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android/tombstones.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android/tombstones.py",
       "-a",
       "-s",
       "-w"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"
   },
@@ -712,12 +925,12 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/out/Debug/test_logs/*.log"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/test_logs/*.log"
     ],
-    "cwd": "[BUILDER_CACHE]/Android_Webview_L__dbg_",
+    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_Webview_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Webview_L__dbg_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
     },
     "name": "test_report",
     "~followup_annotations": [
@@ -733,7 +946,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['SystemWebViewShellLayoutTest']",
+    "reason": "2 tests failed: ['SystemWebViewShellLayoutTest', 'WebView CTS: L']",
     "recipe_result": null,
     "status_code": 1
   }

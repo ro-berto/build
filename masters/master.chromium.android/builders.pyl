@@ -97,25 +97,25 @@
       "slave_pools": ["cronet_m_bullhead_perf"],
       "category": "0Cronet",
     },
-    "Android WebView CTS L-MR1 (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["webview_cts"],
-      "category": "1Webview",
-    },
-    "Android Webview L (dbg)": {
+    "Android WebView L (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["webview_l"],
       "category": "1Webview",
     },
-    "Android Webview M (dbg)": {
+    "Android WebView M (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["webview_m"],
+      "category": "1Webview",
+    },
+    "Android WebView N (dbg)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      "slave_pools": ["webview_n"],
       "category": "1Webview",
     },
     "Android MIPS Builder (dbg)": {
@@ -373,14 +373,6 @@
         "slave75-c1",
       ],
     },
-    "webview_cts": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": ["build68-b1"],
-    },
     "webview_l": {
       "slave_data": {
         "os": "linux",
@@ -396,6 +388,14 @@
         "bits": 64,
       },
       "slaves": ["build37-b1"],
+    },
+    "webview_n": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": ["build68-b1"],
     },
   }
 }

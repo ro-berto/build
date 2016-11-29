@@ -1300,9 +1300,13 @@ class AndroidApi(recipe_api.RecipeApi):
                             "filename": "cts_arm64_L.zip",
                             "_origin": "aosp-lollipop-mr1-cts-dev@12345"
                           },
+                          "M": {
+                            "filename": "cts_arm64_M.zip",
+                            "_origin": "aosp-marshmallow-cts-dev@12345"
+                          },
                           "N": {
                             "filename": "cts_arm64_N.zip",
-                            "_origin": "aosp-nougat-cts-release@67890"
+                            "_origin": "aosp-nougat-cts-release@12345"
                           }
                         }
                       }''')
