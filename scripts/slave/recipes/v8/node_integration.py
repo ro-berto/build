@@ -46,7 +46,7 @@ def _build_and_test(api, suffix=''):
 
   api.step(
     'build and test node.js%s' % suffix,
-    ['make', '-j8', 'test'],
+    ['make', '-j8', 'test-ci'],
     cwd=api.path['start_dir'].join('node.js'),
   )
 
