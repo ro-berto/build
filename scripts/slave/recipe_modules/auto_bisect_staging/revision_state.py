@@ -94,6 +94,7 @@ class RevisionState(object):
     self.build_url = self.bisector.get_platform_gs_prefix() + self._gs_suffix()
     self.valueset_paths = []
     self.chartjson_paths = []
+    self.buildbot_paths = []
     self.debug_values = []
     self.return_codes = []
     self._test_config = None
@@ -126,6 +127,7 @@ class RevisionState(object):
     return max(
         len(self.valueset_paths),
         len(self.chartjson_paths),
+        len(self.buildbot_paths),
         len(self.return_codes))
 
   @property
@@ -350,6 +352,7 @@ class RevisionState(object):
     else:
       self.valueset_paths.extend(results.get('valueset_paths'))
       self.chartjson_paths.extend(results.get('chartjson_paths'))
+      self.buildbot_paths.extend(results.get('stdout_paths'))
 
   def _request_build(self):
     """Posts a request to buildbot to build this revision and archive it."""

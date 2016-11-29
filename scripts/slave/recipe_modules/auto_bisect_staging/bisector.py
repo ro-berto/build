@@ -176,6 +176,12 @@ class Bisector(object):
       values_a = revision_a.valueset_paths
       values_b = revision_b.valueset_paths
 
+    # The test produced no chartjson or valuesets, fall back to buildbot
+    if not values_a and not values_b:  # pragma: no cover
+      output_format = 'buildbot'
+      values_a = revision_a.buildbot_paths
+      values_b = revision_b.buildbot_paths
+
     result = self.api.stat_compare(
         values_a,
         values_b,
