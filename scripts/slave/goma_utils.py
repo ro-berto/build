@@ -179,16 +179,25 @@ def UploadNinjaLog(
   cwd = os.getcwd()
   platform = chromium_utils.PlatformName()
 
+  # info['cmdline'] should be list of string for
+  # go struct on chromium-build-stats.
+  if isinstance(command, str) or isinstance(command, unicode):
+    command = [command]
+
   info = {'cmdline': command,
           'cwd': cwd,
           'platform': platform,
           'exit': exit_status,
-          'argv': sys.argv,
           'env': {}}
   for k, v in os.environ.iteritems():
     info['env'][k] = v
   if compiler:
     info['compiler'] = compiler
+
+  # TODO(tikuta): Remove this after compile.py removed.
+  if os.path.basename(sys.argv[0]) == 'compile.py':
+    info['argv'] = sys.argv
+
   compiler_proxy_info = GetLatestGomaCompilerProxyInfo()
   if compiler_proxy_info:
     info['compiler_proxy_info'] = compiler_proxy_info
