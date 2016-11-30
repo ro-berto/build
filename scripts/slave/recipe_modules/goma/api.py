@@ -296,18 +296,19 @@ print jobs
       args.extend(['--json-status', self.json_path])
 
     if ninja_log_outdir:
-      assert ninja_log_compiler is not None
       assert ninja_log_command is not None
       assert ninja_log_exit_status is not None
 
       args.extend([
-        '--ninja-log-outdir', ninja_log_outdir,
-        '--ninja-log-compiler', ninja_log_compiler,
-        '--ninja-log-command', str(ninja_log_command),
-        '--ninja-log-exit-status', ninja_log_exit_status,
+          '--ninja-log-outdir', ninja_log_outdir,
+          '--ninja-log-command', str(ninja_log_command),
+          '--ninja-log-exit-status', ninja_log_exit_status,
       ])
     else:
       args.extend(['--ninja-log-exit-status', '-1'])
+
+    if ninja_log_compiler:
+      args.extend(['--ninja-log-compiler', ninja_log_compiler])
 
     if self.build_data_dir:
       args.extend([
@@ -395,6 +396,11 @@ print jobs
           ninja_log_exit_status = -1
           raise e
         finally:
+          # Drop goma from ninja_log_compiler
+          ninja_log_compiler = ninja_log_compiler.replace('goma-', '')
+          if ninja_log_compiler == 'goma':
+            ninja_log_compiler = None
+
           self._upload_logs(ninja_log_outdir=ninja_log_outdir,
                             ninja_log_compiler=ninja_log_compiler,
                             ninja_log_command=ninja_command,

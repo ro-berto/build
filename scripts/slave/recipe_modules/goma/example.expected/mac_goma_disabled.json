@@ -163,8 +163,6 @@
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
       "out/Release",
-      "--ninja-log-compiler",
-      "goma",
       "--ninja-log-command",
       "['ninja', '-C', 'out/Release']",
       "--ninja-log-exit-status",
