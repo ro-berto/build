@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/Mac_Retina_Perf__3_",
+      "[BUILDER_CACHE]/Mac_10_11_Perf",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -40,7 +40,7 @@
       "src@1111111",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_Retina_Perf__3_",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11_Perf",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -182,15 +182,28 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILDER_CACHE]/Mac_10_11_Perf/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_Retina_Perf__3_/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11_Perf/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -199,16 +212,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Mac_Retina_Perf__3_/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/Mac_10_11_Perf/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/Mac_Retina_Perf__3_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Mac_10_11_Perf/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Mac Retina Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-mac-retina\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"buildername\": \"Mac 10.11 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-mac11\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -221,13 +234,24 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Mac_Retina_Perf__3_/src/testing/buildbot/chromium.perf.json",
+      "[BUILDER_CACHE]/Mac_10_11_Perf/src/testing/buildbot/chromium.perf.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.perf.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Mac_Retina_Perf__3_/src/testing/buildbot/chromium.perf.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Mac_10_11_Perf/src/testing/buildbot/chromium.perf.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.11 Perf\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -247,7 +271,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILDER_CACHE]/Mac_Retina_Perf__3_/src/out/Release"
+      "[BUILDER_CACHE]/Mac_10_11_Perf/src/out/Release"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -274,7 +298,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[BUILDER_CACHE]/Mac_Retina_Perf__3_/src",
+      "[BUILDER_CACHE]/Mac_10_11_Perf/src",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-archive-url",
@@ -290,53 +314,170 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Mac_Retina_Perf__3_/src/tools/perf/run_benchmark",
-      "list",
-      "--browser",
-      "release",
-      "--json-output",
-      "/path/to/tmp/json",
-      "--num-shards",
-      "5"
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[BUILDER_CACHE]/Mac_10_11_Perf/src/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_Retina_Perf__3_",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11_Perf",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "List Perf Tests",
+    "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"steps\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all.exact\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benchmark --a=1 -v --b=2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.all\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.all.release\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/usr/bin/python /path/to/run_benchmark --a=1 -v --b=2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.all\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.dom\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benchmark -v --upload-results blink_perf.dom\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.dom\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benchmark\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 3@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery.release\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benchmark\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": 2@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Mac_10_11_Perf/src/tools/swarming_client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--priority",
+      "25",
+      "--shards",
+      "1",
+      "--task-name",
+      "browser_tests/Mac-10.9/ffffffffff/Mac 10.11 Perf/571",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "gpu",
+      "none",
+      "--dimension",
+      "os",
+      "Mac-10.9",
+      "--dimension",
+      "pool",
+      "Chrome",
+      "--tag",
+      "buildername:Mac 10.11 Perf",
+      "--tag",
+      "buildnumber:571",
+      "--tag",
+      "data:ffffffffffffffffffffffffffffffffffffffff",
+      "--tag",
+      "master:chromium.perf",
+      "--tag",
+      "name:browser_tests",
+      "--tag",
+      "os:Mac-10.9",
+      "--tag",
+      "project:chromium",
+      "--tag",
+      "purpose:CI",
+      "--tag",
+      "purpose:post-commit",
+      "--tag",
+      "slavename:TestSlavename",
+      "--tag",
+      "stepname:browser_tests on Mac-10.9",
+      "--idempotent",
+      "ffffffffffffffffffffffffffffffffffffffff",
+      "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+    ],
+    "cwd": "[BUILDER_CACHE]/Mac_10_11_Perf",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "[trigger] browser_tests on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.9/ffffffffff/Mac 10.11 Perf/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Mac-10.9/ffffffffff/Mac 10.11 Perf/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "python",
+      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[BUILDER_CACHE]/Mac_10_11_Perf/src/tools/swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--json",
+      "{\"base_task_name\": \"browser_tests/Mac-10.9/ffffffffff/Mac 10.11 Perf/571\", \"tasks\": {\"browser_tests/Mac-10.9/ffffffffff/Mac 10.11 Perf/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+    ],
+    "cwd": "[BUILDER_CACHE]/Mac_10_11_Perf",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "browser_tests on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "--master-name",
+      "chromium.perf",
+      "--builder-name",
+      "Mac 10.11 Perf",
+      "--build-number",
+      "571",
+      "--test-type",
+      "browser_tests on Mac-10.9",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
+    ],
+    "cwd": "[BUILDER_CACHE]/Mac_10_11_Perf",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [browser_tests on Mac-10.9]"
   },
   {
     "name": "$result",
