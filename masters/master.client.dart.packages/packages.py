@@ -120,8 +120,6 @@ PACKAGES = [
   Package(github_repo='observe'),
   Package(github_repo='paper-elements'),
   Package(github_repo='path'),
-  Package(github_repo='polymer-dart', name='polymer'),
-  Package(github_repo='polymer-expressions'),
   Package(github_repo='pool'),
   Package(github_repo='pub'),
   Package(github_repo='pub_semver'),
@@ -132,13 +130,11 @@ PACKAGES = [
   Package(github_repo='shelf_proxy'),
   Package(github_repo='shelf_static'),
   Package(github_repo='shelf_web_socket'),
-  Package(github_repo='smoke'),
   Package(github_repo='source_maps'),
   Package(github_repo='source_map_stack_trace'),
   Package(github_repo='source_span'),
   Package(github_repo='stack_trace'),
   Package(github_repo='string_scanner'),
-  Package(github_repo='template-binding'),
   Package(github_repo='test'),
   Package(github_repo='typed_data'),
   Package(github_repo='vm_service_client'),
@@ -176,7 +172,6 @@ PACKAGES = [
 
   # Github samples which are not published on pub.dartlang.org
   Package(github_repo='sample-pop_pop_win', sample=True, published=False),
-  Package(github_repo='sample-todomvc-polymer', sample=True, published=False),
 ]
 
 GITHUB_TESTING_PACKAGES = [
