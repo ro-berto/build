@@ -99,9 +99,10 @@ class CronetApi(recipe_api.RecipeApi):
     self.m.chromium.sizes(results_url=self.DASHBOARD_UPLOAD_URL,
                           perf_id=perf_id, platform='android-cronet')
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
-      # Measure Java dex size.
-      self.m.chromium_android.java_method_count(
+      # Track apk metrics.
+      self.m.chromium_android.resource_sizes(
               self.m.chromium.output_dir.join('apks', 'CronetSample.apk'),
+              chartjson_file=True,
               perf_id=perf_id)
 
 

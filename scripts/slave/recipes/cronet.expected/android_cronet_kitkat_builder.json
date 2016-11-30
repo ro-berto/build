@@ -457,11 +457,12 @@
       "--release",
       "--verbose",
       "--steps",
-      "{\"steps\": {\"resource_sizes (CronetSample.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/src/out/Release/apks/CronetSample.apk'\", \"device_affinity\": null}}, \"version\": 1}",
+      "{\"steps\": {\"resource_sizes (CronetSample.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/src/out/Release/apks/CronetSample.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--num-retries",
       "0",
+      "--collect-chartjson-data",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -480,7 +481,7 @@
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--steps",
-      "{\"steps\": {\"resource_sizes (CronetSample.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/src/out/Release/apks/CronetSample.apk'\", \"device_affinity\": null}}, \"version\": 1}",
+      "{\"steps\": {\"resource_sizes (CronetSample.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/src/out/Release/apks/CronetSample.apk' --chartjson\", \"device_affinity\": null}}, \"version\": 1}",
       "--output-json-list",
       "/path/to/tmp/json",
       "--blacklist-file",
@@ -531,6 +532,8 @@
       "--perf-id=android_cronet_builder",
       "--test-type=page_cycler.foo",
       "--step-name=page_cycler.foo",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Android Cronet KitKat Builder",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -552,7 +555,9 @@
     },
     "name": "page_cycler.foo",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -576,6 +581,8 @@
       "--perf-id=android_cronet_builder",
       "--test-type=perf_test.foo",
       "--step-name=perf_test.foo",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=Android Cronet KitKat Builder",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -597,7 +604,9 @@
     },
     "name": "perf_test.foo",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

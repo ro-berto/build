@@ -198,10 +198,6 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True,
         **kwargs)
 
-  def java_method_count(self, dexfile, name='java_method_count', perf_id=None):
-    # TODO(agrieve): Remove once usages are elimintated.
-    self.resource_sizes(dexfile, perf_id=perf_id)  # pragma: no cover
-
   def resource_sizes(self, apk_path, chartjson_file=False,
                      upload_archives_to_bucket=None, perf_id=None):
     cmd = ['build/android/resource_sizes.py', str(apk_path)]
