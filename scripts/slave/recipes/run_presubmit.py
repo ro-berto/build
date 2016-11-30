@@ -37,7 +37,7 @@ def _RunStepsInternal(api):
   kwargs = {}
   bot_update_step = api.bot_update.ensure_checkout(
       gclient_config=gclient_config,
-      patch_oauth2=codereview_auth,
+      oauth2_json=codereview_auth,
       **kwargs)
   relative_root = api.gclient.calculate_patch_root(
       api.properties['patch_project'],
