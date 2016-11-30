@@ -299,7 +299,7 @@ class iOSApi(recipe_api.RecipeApi):
     self.m.swarming_client.checkout('stable')
     self.m.swarming_client.query_script_version('swarming.py')
 
-  def isolate(self):
+  def isolate(self, scripts_dir='src/ios/build/bots/scripts'):
     """Isolates the tests specified in this bot's build config."""
     assert self.__config
 
@@ -317,7 +317,7 @@ class iOSApi(recipe_api.RecipeApi):
     skipped = []
 
     cmd = [
-      'src/ios/build/bots/scripts/run.py',
+      '%s/run.py' % scripts_dir,
       '--app', '<(app_path)',
       '--args-json', '{"test_args": <(test_args), "xctest": <(xctest)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
@@ -327,7 +327,7 @@ class iOSApi(recipe_api.RecipeApi):
       # .apps are directories. Need the trailing slash to isolate the
       # contents of a directory.
       '<(app_path)/',
-      'src/ios/build/bots/scripts/',
+      '%s/' % scripts_dir,
     ]
     if self.platform == 'simulator':
       iossim = self.m.path.join(self.most_recent_iossim)
@@ -504,7 +504,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     return failures
 
-  def test_swarming(self):
+  def test_swarming(self, scripts_dir='src/ios/build/bots/scripts'):
     """Runs tests on Swarming as instructed by this bot's build config."""
     assert self.__config
 
@@ -515,7 +515,7 @@ class iOSApi(recipe_api.RecipeApi):
       self.bootstrap_swarming()
 
     with self.m.step.nest('isolate'):
-      tasks, failures, skipped = self.isolate()
+      tasks, failures, skipped = self.isolate(scripts_dir=scripts_dir)
       infra_failures.extend(failures)
 
     if skipped:

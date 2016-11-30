@@ -34,7 +34,7 @@ def RunSteps(api):
       'mb_config.pyl',
   )
   api.ios.build(mb_config_path=mb_config_path)
-  api.ios.test_swarming()
+  api.ios.test_swarming(scripts_dir='src/chromium/src/ios/build/bots/scripts')
 
 def GenTests(api):
   yield (
