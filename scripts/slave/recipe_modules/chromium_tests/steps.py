@@ -1173,6 +1173,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       """Produces a step that uploads results to dashboard"""
       args = [
           '--results-file', results_file,
+          # We are passing this in solely to have the output show up as a link
+          # in the step log, it will not be used after the upload is complete.
+          '--output-json-file', api.json.output(),
           '--perf-id', self._perf_id,
           '--results-url', self._results_url,
           '--name', self._perf_dashboard_id,

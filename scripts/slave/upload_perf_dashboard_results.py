@@ -35,6 +35,7 @@ def main(args):
   parser = optparse.OptionParser()
   parser.add_option('--name')
   parser.add_option('--results-file')
+  parser.add_option('--output-json-file')
   parser.add_option('--got-revision-cp')
   parser.add_option('--build-dir')
   parser.add_option('--perf-id')
@@ -76,7 +77,10 @@ def main(args):
       options.buildername, options.buildnumber,
       {}, reference_build)
   if dashboard_json:
-    logging.debug(json.dumps(dashboard_json , indent=2))
+    if options.output_json_file:
+      with open (options.output_json_file, 'w') as output_file:
+        json.dump(dashboard_json, output_file)
+    logging.debug(json.dumps(dashboard_json, indent=2))
     if not results_dashboard.SendResults(
         dashboard_json,
         options.results_url,
