@@ -11,6 +11,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/raw_io',
   'webrtc'
 ]
 
@@ -33,7 +34,7 @@ def RunSteps(api):
       'mb_config.pyl',
   )
   api.ios.build(mb_config_path=mb_config_path)
-  api.ios.test()
+  api.ios.test_swarming()
 
 def GenTests(api):
   yield (
@@ -63,6 +64,10 @@ def GenTests(api):
         },
       ],
     })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+         stdout=api.raw_io.output('1.2.3'),
+    )
   )
 
   yield (
@@ -82,6 +87,10 @@ def GenTests(api):
       'tests': [
       ],
     })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+         stdout=api.raw_io.output('1.2.3'),
+    )
   )
 
   yield (
@@ -102,71 +111,8 @@ def GenTests(api):
       'tests': [
       ],
     })
-  )
-
-  yield (
-    api.test('test_failure')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios',
-      buildnumber='0',
-      mastername='chromium.fake',
-      slavename='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.0',
-      'tests': [
-        {
-          'app': 'fake tests 1',
-          'device type': 'fake device',
-          'os': '8.0',
-        },
-        {
-          'app': 'fake tests 2',
-          'device type': 'fake device',
-          'os': '7.1',
-        },
-      ],
-    })
     + api.step_data(
-      'fake tests 1 (fake device iOS 8.0)',
-      retcode=1
+        'bootstrap swarming.swarming.py --version',
+         stdout=api.raw_io.output('1.2.3'),
     )
   )
-
-  yield (
-    api.test('infrastructure_failure')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios',
-      buildnumber='0',
-      mastername='chromium.fake',
-      slavename='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.0',
-      'tests': [
-        {
-          'app': 'fake tests 1',
-          'device type': 'fake device',
-          'os': '8.0',
-        },
-        {
-          'app': 'fake tests 2',
-          'device type': 'fake device',
-          'os': '7.1',
-        },
-      ],
-    })
-    + api.step_data(
-      'fake tests 1 (fake device iOS 8.0)',
-      retcode=2,
-    )
-  )
-

@@ -21,16 +21,3 @@ class iOSTestApi(recipe_test_api.RecipeTestApi):
 
   def make_test_build_config_for_parent(self, config):
     return self.parent_build_config(config)
-
-  def test_results(self):
-    return self.m.json.output({
-      'links': {
-        'fake URL text': 'fake URL',
-      },
-      'logs': {
-        'fake log': [
-          'fake log line 1',
-          'fake log line 2',
-        ],
-      }
-    })
