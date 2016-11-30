@@ -413,7 +413,7 @@
       "--perf-dashboard-id=webrtc_perf_tests",
       "--perf-id=webrtc-android-tests-nexus72",
       "--perf-config",
-      "{'a_default_rev': 'r_webrtc_rev'}",
+      "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
       "--test-type=webrtc_perf_tests",
       "--step-name=webrtc_perf_tests",
       "--builder-name=Android32 Tests (L Nexus7.2)",

@@ -387,7 +387,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if perf_id:
       full_args.append('--perf-id=%s' % perf_id)
     if perf_config:
-      full_args.extend(['--perf-config', perf_config])
+      full_args.extend(['--perf-config', self.m.json.dumps(perf_config)])
     # This replaces the step_name that used to be sent via factory_properties.
     if test_type:
       full_args.append('--test-type=%s' % test_type)

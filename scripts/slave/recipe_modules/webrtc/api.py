@@ -79,6 +79,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     'android_junit_tests',
   )
 
+  PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
   @property
@@ -101,12 +102,11 @@ class WebRTCApi(recipe_api.RecipeApi):
   def should_download_build(self):
     return self.bot_config.get('parent_buildername')
 
-  def apply_bot_config(self, builders, recipe_configs, perf_config=None):
+  def apply_bot_config(self, builders, recipe_configs):
     self.mastername = self.m.properties.get('mastername')
     self.buildername = self.m.properties.get('buildername')
     master_dict = builders.get(self.mastername, {})
     self.master_config = master_dict.get('settings', {})
-    perf_config = self.master_config.get('PERF_CONFIG')
 
     self.bot_config = master_dict.get('builders', {}).get(self.buildername)
     assert self.bot_config, ('Unrecognized builder name "%r" for master "%r".' %
@@ -119,8 +119,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         'Cannot find recipe_config "%s" for builder "%r".' %
         (recipe_config_name, self.buildername))
 
-    self.set_config('webrtc', PERF_CONFIG=perf_config,
-                    TEST_SUITE=self.recipe_config.get('test_suite'),
+    self.set_config('webrtc', TEST_SUITE=self.recipe_config.get('test_suite'),
                     **self.bot_config.get('webrtc_config_kwargs', {}))
 
     chromium_kwargs = self.bot_config.get('chromium_config_kwargs', {})
@@ -278,13 +277,15 @@ class WebRTCApi(recipe_api.RecipeApi):
       assert self.revision_number, (
           'A revision number must be specified for perf tests as they upload '
           'data to the perf dashboard.')
+      perf_config = self.PERF_CONFIG
+      perf_config['r_webrtc_git'] = self.revision
       self.m.chromium.runtest(
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
           xvfb=True, perf_dashboard_id=perf_dashboard_id,
           test_type=perf_dashboard_id, env=env, python_mode=python_mode,
           revision=self.revision_number, perf_id=self.c.PERF_ID,
-          perf_config=self.c.PERF_CONFIG)
+          perf_config=perf_config)
     else:
       annotate = 'gtest'
       test_type = test

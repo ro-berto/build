@@ -71,8 +71,6 @@ RECIPE_CONFIGS = freeze({
   },
 })
 
-WEBRTC_REVISION_PERF_CONFIG = '{\'a_default_rev\': \'r_webrtc_rev\'}'
-
 BUILDERS = freeze({
   'client.webrtc': {
     'settings': {
@@ -563,7 +561,6 @@ BUILDERS = freeze({
   'client.webrtc.fyi': {
     'settings': {
       'build_gs_bucket': 'chromium-webrtc',
-      'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
     },
     'builders':  {
       'Win32 SyzyASan (swarming)': {
@@ -748,7 +745,6 @@ BUILDERS = freeze({
   'client.webrtc.perf': {
     'settings': {
       'build_gs_bucket': 'chromium-webrtc',
-      'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
     },
     'builders': {
        'Win7': {
