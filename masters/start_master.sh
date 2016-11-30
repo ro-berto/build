@@ -18,7 +18,7 @@ fi
 
 
 echo 'Now running Buildbot master.'
-python -S $SCRIPTS_DIR/common/twistd -y $TOPLEVEL_DIR/build/masters/buildbot.tac
+python $SCRIPTS_DIR/common/twistd -y $TOPLEVEL_DIR/build/masters/buildbot.tac
 
 echo 'Waiting for creation of twistd.pid...'
 while `test ! -f twistd.pid`; do sleep 1; done;
