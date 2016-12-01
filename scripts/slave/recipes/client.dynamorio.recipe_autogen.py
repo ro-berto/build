@@ -11,32 +11,6 @@ DEPS = [
   'recipe_engine/step',
 ]
 
-def win_xp_dr_nightly_steps(api):
-  build_properties = api.properties.legacy()
-  # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config()
-  soln = src_cfg.solutions.add()
-  soln.name = "dynamorio"
-  soln.url = "https://github.com/DynamoRIO/dynamorio.git"
-  soln.custom_deps = {'dynamorio/tools/buildbot':
-      'https://github.com/DynamoRIO/buildbot.git'}
-  api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout()
-  build_properties.update(result.json.output.get("properties", {}))
-  # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
-    'bot_tools', 'unpack.bat')], env={},
-      cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
-  # dynamorio win nightly suite step
-  api.step("nightly suite",
-      [api.package_repo_resource("scripts", "slave", "drmemory", "build_env.bat"),
-        'ctest', '--timeout', '120', '-VV', '-S',
-        'dynamorio/suite/runsuite.cmake,nightly;long;'+\
-            'site=X64.WindowsXp.VS2010.BuildBot'],
-      env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-        "bot_tools")}, cwd=api.path["start_dir"])
-
-
 def linux_dr_steps(api):
   build_properties = api.properties.legacy()
   # checkout DynamiRIO step
@@ -125,30 +99,6 @@ def win_8_dr_steps(api):
         api.path["checkout"].join("suite", "runsuite.cmake")],
       env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
         "bot_tools")}, cwd=api.path["start_dir"])
-
-
-def win_xp_dr_steps(api):
-  build_properties = api.properties.legacy()
-  # checkout DynamiRIO step
-  src_cfg = api.gclient.make_config()
-  soln = src_cfg.solutions.add()
-  soln.name = "dynamorio"
-  soln.url = "https://github.com/DynamoRIO/dynamorio.git"
-  soln.custom_deps = {'dynamorio/tools/buildbot':
-      'https://github.com/DynamoRIO/buildbot.git'}
-  api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout()
-  build_properties.update(result.json.output.get("properties", {}))
-  # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
-    'bot_tools', 'unpack.bat')], env={},
-      cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
-  # build_env step
-  api.step("pre-commit suite", [api.package_repo_resource("scripts", "slave",
-    "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
-    api.path["checkout"].join("suite", "runsuite.cmake")],
-    env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.path["start_dir"])
 
 
 def win_7_dr_nightly_steps(api):
@@ -249,12 +199,10 @@ def linux_dr_nightly_steps(api):
 
 
 dispatch_directory = {
-  'win-xp-dr-nightly': win_xp_dr_nightly_steps,
   'linux-dr': linux_dr_steps,
   'win-7-dr': win_7_dr_steps,
   'linux-dr-package': linux_dr_package_steps,
   'win-8-dr': win_8_dr_steps,
-  'win-xp-dr': win_xp_dr_steps,
   'win-7-dr-nightly': win_7_dr_nightly_steps,
   'win-8-dr-nightly': win_8_dr_nightly_steps,
   'win-dr-package': win_dr_package_steps,
@@ -269,12 +217,6 @@ def RunSteps(api):
     dispatch_directory[api.properties["buildername"]](api)
 
 def GenTests(api):
-  yield (api.test('win_xp_dr_nightly') +
-    api.properties(mastername='client.dynamorio') +
-    api.properties(buildername='win-xp-dr-nightly') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
-        )
   yield (api.test('linux_dr') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='linux-dr') +
@@ -298,12 +240,6 @@ def GenTests(api):
   yield (api.test('win_8_dr') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='win-8-dr') +
-    api.properties(revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
-        )
-  yield (api.test('win_xp_dr') +
-    api.properties(mastername='client.dynamorio') +
-    api.properties(buildername='win-xp-dr') +
     api.properties(revision='123456789abcdef') +
     api.properties(slavename='TestSlave')
         )
