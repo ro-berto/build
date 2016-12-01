@@ -1196,8 +1196,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       if 'got_v8_revision' in api.properties:
         args.extend(['--got-v8-revision', api.properties['got_v8_revision']])
 
+      step_name = '%s Dashboard Upload' % self._perf_dashboard_id
       api.python(
-        'Upload Perf Dashboard Results',
+        step_name,
         api.chromium.package_repo_resource(
             'scripts', 'slave', 'upload_perf_dashboard_results.py'),
         args)

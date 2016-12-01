@@ -489,7 +489,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "Upload Perf Dashboard Results",
+    "name": "benchmark Dashboard Upload",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
