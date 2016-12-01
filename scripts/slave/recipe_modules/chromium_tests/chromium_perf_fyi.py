@@ -92,3 +92,5 @@ _AddBuildSpec('Win Clang Builder', 'win-clang-builder', 'win',
               config_name='chromium_perf_clang', target_bits=32)
 _AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
              parent_buildername='Win Clang Builder', target_bits=32)
+_AddTestSpec('Win Clang Perf Ref', 'chromium-win-clang-ref', 'win',
+             parent_buildername='Win Builder FYI', target_bits=32)
