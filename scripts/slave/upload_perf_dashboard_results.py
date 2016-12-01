@@ -80,7 +80,6 @@ def main(args):
     if options.output_json_file:
       with open (options.output_json_file, 'w') as output_file:
         json.dump(dashboard_json, output_file)
-    logging.debug(json.dumps(dashboard_json, indent=2))
     if not results_dashboard.SendResults(
         dashboard_json,
         options.results_url,
