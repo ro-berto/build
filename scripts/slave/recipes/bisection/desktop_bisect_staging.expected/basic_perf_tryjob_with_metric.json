@@ -860,7 +860,7 @@
       "python",
       "-u",
       "[START_DIR]/catapult/tracing/bin/parse_metric_cmdline",
-      "[START_DIR]/bisect_results/dummy/results.txt",
+      "",
       "dummy/dummy",
       "--buildbot"
     ],
@@ -881,7 +881,7 @@
       "python",
       "-u",
       "[START_DIR]/catapult/tracing/bin/parse_metric_cmdline",
-      "[START_DIR]/bisect_results/dummy/results.txt",
+      "",
       "dummy/dummy",
       "--buildbot"
     ],
@@ -922,7 +922,7 @@
       "python",
       "-u",
       "[START_DIR]/catapult/tracing/bin/parse_metric_cmdline",
-      "[START_DIR]/bisect_results/dummy/results.txt",
+      "",
       "dummy/dummy",
       "--buildbot"
     ],
@@ -943,7 +943,7 @@
       "python",
       "-u",
       "[START_DIR]/catapult/tracing/bin/parse_metric_cmdline",
-      "[START_DIR]/bisect_results/dummy/results.txt",
+      "",
       "dummy/dummy",
       "--buildbot"
     ],

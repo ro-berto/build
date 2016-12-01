@@ -152,7 +152,8 @@ class RevisionState(object):
     api = self.bisector.api
     if api._test_data.enabled:
       return api._test_data.get('parsed_values', {}).get(self.commit_hash)
-    return self.chartjson_paths or self.valueset_paths  # pragma: no cover
+    return (  # pragma: no cover
+        self.chartjson_paths or self.valueset_paths or self.buildbot_paths)
 
   def start_job(self):
     api = self.bisector.api
