@@ -25,7 +25,7 @@ DEPS = [
 BUILDERS = freeze({
   'client.v8.fyi': {
     'builders': {
-      'V8 - node.js integration - lkgr': {
+      'V8 - node.js integration': {
         'testing': {
           'platform': 'linux',
         },
@@ -158,7 +158,7 @@ def GenTests(api):
           api.properties.generic(
               mastername=mastername,
               buildername=buildername,
-              branch='refs/heads/lkgr',
+              branch='refs/heads/master',
               revision='deadbeef',
           ) +
           api.override_step_data(
