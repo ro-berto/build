@@ -86,6 +86,13 @@ for arch in ['simdbc64']:
       'env': {},
       'checked': True,
     }
+    builders['vm-mac-%s-%s-reload' % (mode, arch)] = {
+      'mode': mode,
+      'target_arch': arch,
+      'env': {},
+      'checked': True,
+      'test_args': ['--hot-reload'],
+    }
 
 for arch in ['x64', 'ia32']:
   asan = builders['vm-linux-release-%s' % arch].copy()
@@ -119,22 +126,23 @@ for mode in ['debug', 'release', 'product']:
                   '--builder-tag=no_ipv6'],
     'build_args': ['runtime_precompiled'],
   }
-  builders['vm-linux-%s-x64-reload' % mode] = {
-    'mode': mode,
-    'target_arch': 'x64',
-    'env': default_envs['linux'],
-    'checked': True,
-    'test_args': ['--hot-reload',
-                  '--builder-tag=no_ipv6'],
-  }
-  builders['vm-linux-%s-x64-reload-rollback' % mode] = {
-    'mode': mode,
-    'target_arch': 'x64',
-    'env': default_envs['linux'],
-    'checked': True,
-    'test_args': ['--hot-reload-rollback',
-                  '--builder-tag=no_ipv6'],
-  }
+  for arch in ['x64', 'simdbc64']:
+    builders['vm-linux-%s-%s-reload' % (mode, arch)] = {
+      'mode': mode,
+      'target_arch': arch,
+      'env': default_envs['linux'],
+      'checked': True,
+      'test_args': ['--hot-reload',
+                    '--builder-tag=no_ipv6'],
+    }
+    builders['vm-linux-%s-%s-reload-rollback' % (mode, arch)] = {
+      'mode': mode,
+      'target_arch': arch,
+      'env': default_envs['linux'],
+      'checked': True,
+      'test_args': ['--hot-reload-rollback',
+                    '--builder-tag=no_ipv6'],
+    }
 
 
 def RunSteps(api):
