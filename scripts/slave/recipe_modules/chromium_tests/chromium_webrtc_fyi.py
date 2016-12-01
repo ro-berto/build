@@ -28,9 +28,12 @@ SPEC = {
 _builders = collections.defaultdict(dict)
 
 def AddBuildSpec(name, platform, target_bits=64, build_config='Release'):
-  SPEC['builders'][name] = chromium_webrtc.BuildSpec(
+  spec = chromium_webrtc.BuildSpec(
       platform, target_bits, build_config=build_config,
       gclient_config='chromium_webrtc_tot')
+  _ConfigureSyncingWebRTCToT(spec)
+  SPEC['builders'][name] = spec
+
   assert target_bits not in _builders[platform]
   _builders[platform][target_bits] = name
 
@@ -38,7 +41,7 @@ def AddBuildSpec(name, platform, target_bits=64, build_config='Release'):
 def AddTestSpec(name, perf_id, platform, target_bits=64,
                 build_config='Release'):
   parent_builder = _builders[platform][target_bits]
-  SPEC['builders'][name] = chromium_webrtc.TestSpec(
+  spec = chromium_webrtc.TestSpec(
       parent_builder,
       perf_id,
       platform,
@@ -46,6 +49,15 @@ def AddTestSpec(name, perf_id, platform, target_bits=64,
       build_config,
       gclient_config='chromium_webrtc_tot',
       test_spec_file='chromium.webrtc.fyi.json')
+  _ConfigureSyncingWebRTCToT(spec)
+  SPEC['builders'][name] = spec
+
+
+def _ConfigureSyncingWebRTCToT(spec):
+  spec['set_component_rev'] = {
+    'name': 'src/third_party/webrtc',
+    'rev_str': '%s',
+  }
 
 
 AddBuildSpec('Win Builder', 'win', target_bits=32)
