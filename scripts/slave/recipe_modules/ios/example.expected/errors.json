@@ -664,6 +664,7 @@
     "name": "trigger.[trigger] fake test 2 (iPad Air iOS 8.1) on iOS-8.1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-8.1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake test 2 (iPad Air iOS 8.1)/iOS-8.1/fake-hash-/ios/0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -762,6 +763,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@Run on OS: 'iOS-8.1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake test 4 (iPhone 5s iOS 8.1)/iOS-8.1/fake-hash-/ios/0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

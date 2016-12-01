@@ -510,13 +510,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:audio_decoder_unittests on Windows-7-SP1",
+      "stepname:audio_decoder_unittests",
       "--idempotent",
       "[dummy hash for audio_decoder_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] audio_decoder_unittests on Windows-7-SP1",
+    "name": "[trigger] audio_decoder_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"audio_decoder_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -588,13 +589,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:common_audio_unittests on Windows-7-SP1",
+      "stepname:common_audio_unittests",
       "--idempotent",
       "[dummy hash for common_audio_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] common_audio_unittests on Windows-7-SP1",
+    "name": "[trigger] common_audio_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"common_audio_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -666,13 +668,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:common_video_unittests on Windows-7-SP1",
+      "stepname:common_video_unittests",
       "--idempotent",
       "[dummy hash for common_video_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] common_video_unittests on Windows-7-SP1",
+    "name": "[trigger] common_video_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"common_video_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -744,13 +747,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:modules_tests on Windows-7-SP1",
+      "stepname:modules_tests",
       "--idempotent",
       "[dummy hash for modules_tests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] modules_tests on Windows-7-SP1",
+    "name": "[trigger] modules_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"modules_tests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -828,13 +832,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:modules_unittests on Windows-7-SP1",
+      "stepname:modules_unittests",
       "--idempotent",
       "[dummy hash for modules_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] modules_unittests on Windows-7-SP1",
+    "name": "[trigger] modules_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"modules_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -936,13 +941,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:peerconnection_unittests on Windows-7-SP1",
+      "stepname:peerconnection_unittests",
       "--idempotent",
       "[dummy hash for peerconnection_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] peerconnection_unittests on Windows-7-SP1",
+    "name": "[trigger] peerconnection_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"peerconnection_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1032,13 +1038,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_media_unittests on Windows-7-SP1",
+      "stepname:rtc_media_unittests",
       "--idempotent",
       "[dummy hash for rtc_media_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] rtc_media_unittests on Windows-7-SP1",
+    "name": "[trigger] rtc_media_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_media_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1110,13 +1117,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_pc_unittests on Windows-7-SP1",
+      "stepname:rtc_pc_unittests",
       "--idempotent",
       "[dummy hash for rtc_pc_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] rtc_pc_unittests on Windows-7-SP1",
+    "name": "[trigger] rtc_pc_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_pc_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1188,13 +1196,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_stats_unittests on Windows-7-SP1",
+      "stepname:rtc_stats_unittests",
       "--idempotent",
       "[dummy hash for rtc_stats_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] rtc_stats_unittests on Windows-7-SP1",
+    "name": "[trigger] rtc_stats_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_stats_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1266,13 +1275,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_unittests on Windows-7-SP1",
+      "stepname:rtc_unittests",
       "--idempotent",
       "[dummy hash for rtc_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] rtc_unittests on Windows-7-SP1",
+    "name": "[trigger] rtc_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1374,13 +1384,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:system_wrappers_unittests on Windows-7-SP1",
+      "stepname:system_wrappers_unittests",
       "--idempotent",
       "[dummy hash for system_wrappers_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] system_wrappers_unittests on Windows-7-SP1",
+    "name": "[trigger] system_wrappers_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"system_wrappers_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1452,13 +1463,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:test_support_unittests on Windows-7-SP1",
+      "stepname:test_support_unittests",
       "--idempotent",
       "[dummy hash for test_support_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] test_support_unittests on Windows-7-SP1",
+    "name": "[trigger] test_support_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_support_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1530,13 +1542,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:tools_unittests on Windows-7-SP1",
+      "stepname:tools_unittests",
       "--idempotent",
       "[dummy hash for tools_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] tools_unittests on Windows-7-SP1",
+    "name": "[trigger] tools_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tools_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1608,13 +1621,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:video_engine_tests on Windows-7-SP1",
+      "stepname:video_engine_tests",
       "--idempotent",
       "[dummy hash for video_engine_tests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] video_engine_tests on Windows-7-SP1",
+    "name": "[trigger] video_engine_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"video_engine_tests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1704,13 +1718,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:voice_engine_unittests on Windows-7-SP1",
+      "stepname:voice_engine_unittests",
       "--idempotent",
       "[dummy hash for voice_engine_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] voice_engine_unittests on Windows-7-SP1",
+    "name": "[trigger] voice_engine_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"voice_engine_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1782,13 +1797,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:webrtc_nonparallel_tests on Windows-7-SP1",
+      "stepname:webrtc_nonparallel_tests",
       "--idempotent",
       "[dummy hash for webrtc_nonparallel_tests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] webrtc_nonparallel_tests on Windows-7-SP1",
+    "name": "[trigger] webrtc_nonparallel_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webrtc_nonparallel_tests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1860,13 +1876,14 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:xmllite_xmpp_unittests on Windows-7-SP1",
+      "stepname:xmllite_xmpp_unittests",
       "--idempotent",
       "[dummy hash for xmllite_xmpp_unittests]"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "[trigger] xmllite_xmpp_unittests on Windows-7-SP1",
+    "name": "[trigger] xmllite_xmpp_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"xmllite_xmpp_unittests/Windows-7-SP1/[dummy has/Win32 Release/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1897,7 +1914,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "audio_decoder_unittests on Windows-7-SP1",
+    "name": "audio_decoder_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1957,7 +1974,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "common_audio_unittests on Windows-7-SP1",
+    "name": "common_audio_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2017,7 +2034,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "common_video_unittests on Windows-7-SP1",
+    "name": "common_video_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2077,7 +2094,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "modules_tests on Windows-7-SP1",
+    "name": "modules_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2171,7 +2188,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "modules_unittests on Windows-7-SP1",
+    "name": "modules_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2401,7 +2418,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "peerconnection_unittests on Windows-7-SP1",
+    "name": "peerconnection_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2563,7 +2580,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "rtc_media_unittests on Windows-7-SP1",
+    "name": "rtc_media_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2623,7 +2640,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "rtc_pc_unittests on Windows-7-SP1",
+    "name": "rtc_pc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2683,7 +2700,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "rtc_stats_unittests on Windows-7-SP1",
+    "name": "rtc_stats_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2743,7 +2760,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "rtc_unittests on Windows-7-SP1",
+    "name": "rtc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2973,7 +2990,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "system_wrappers_unittests on Windows-7-SP1",
+    "name": "system_wrappers_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3033,7 +3050,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "test_support_unittests on Windows-7-SP1",
+    "name": "test_support_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3093,7 +3110,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "tools_unittests on Windows-7-SP1",
+    "name": "tools_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3153,7 +3170,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "video_engine_tests on Windows-7-SP1",
+    "name": "video_engine_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3315,7 +3332,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "voice_engine_unittests on Windows-7-SP1",
+    "name": "voice_engine_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3375,7 +3392,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "webrtc_nonparallel_tests on Windows-7-SP1",
+    "name": "webrtc_nonparallel_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3435,7 +3452,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release",
-    "name": "xmllite_xmpp_unittests on Windows-7-SP1",
+    "name": "xmllite_xmpp_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

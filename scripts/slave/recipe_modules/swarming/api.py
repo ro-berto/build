@@ -13,6 +13,9 @@ from . import results_merger
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
 
+def text_for_run_on_os(os_name):
+  return 'Run on OS: %r' % os_name
+
 
 def parse_time(value):
   """Converts serialized time from the API to datetime.datetime."""
@@ -556,6 +559,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     finally:
       # Store trigger output with the |task|, print links to triggered shards.
       step_result = self.m.step.active_result
+      step_result.presentation.step_text = text_for_run_on_os(
+          task.dimensions['os'])
+
       if step_result.presentation != self.m.step.FAILURE:
         task._trigger_output = step_result.json.output
         links = step_result.presentation.links
@@ -640,6 +646,9 @@ class SwarmingApi(recipe_api.RecipeApi):
           **kwargs)
     finally:
       step_result = self.m.step.active_result
+
+      step_result.presentation.step_text = text_for_run_on_os(
+          task.dimensions['os'])
       try:
         json_data = step_result.json.output
         links = step_result.presentation.links
@@ -706,6 +715,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       # placeholder for 'test_launcher_summary_output' parameter when calling
       # gtest_task(...). It's not enforced in any way.
       step_result = self.m.step.active_result
+
+      step_result.presentation.step_text = text_for_run_on_os(
+          task.dimensions['os'])
       gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
       if gtest_results and gtest_results.raw:
         p = step_result.presentation
@@ -810,6 +822,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         step_result = self.m.step.active_result
         outdir_json = self.m.json.dumps(step_result.raw_io.output_dir, indent=2)
         step_result.presentation.logs['outdir_json'] = outdir_json.splitlines()
+        step_result.presentation.step_text = text_for_run_on_os(
+            task.dimensions['os'])
 
         # Check if it's an internal failure.
         summary = self.m.json.loads(
@@ -857,11 +871,16 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     prefix = '[%s] ' % prefix if prefix else ''
     task_os = task.dimensions['os']
+
+    bot_os = self.prefered_os_dimension(self.m.platform.name)
+    suffix = ('' if (
+        task_os == bot_os or task_os.lower() == self.m.platform.name.lower())
+              else ' on %s' % task_os)
     # Note: properly detecting dimensions of the bot the recipe is running
     # on is somewhat non-trivial. It is not safe to assume it uses default
     # or preferred dimensions for its OS. For example, the version of the OS
     # can differ.
-    return ''.join((prefix, task.title, ' on %s' % task_os))
+    return ''.join((prefix, task.title, suffix))
 
   def get_collect_cmd_args(self, task):
     """SwarmingTask -> argument list for 'swarming.py' command."""

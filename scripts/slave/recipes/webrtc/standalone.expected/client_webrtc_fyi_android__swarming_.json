@@ -531,6 +531,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] audio_decoder_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"audio_decoder_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -611,6 +612,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] common_audio_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"common_audio_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -691,6 +693,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] common_video_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"common_video_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -771,6 +774,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] modules_tests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"modules_tests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -851,6 +855,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] modules_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"modules_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -931,6 +936,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] peerconnection_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"peerconnection_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1011,6 +1017,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] rtc_stats_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_stats_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1091,6 +1098,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] rtc_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1171,6 +1179,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] system_wrappers_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"system_wrappers_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1251,6 +1260,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] test_support_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_support_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1331,6 +1341,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] tools_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tools_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1411,6 +1422,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] video_engine_tests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"video_engine_tests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1491,6 +1503,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] voice_engine_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"voice_engine_unittests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1571,6 +1584,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] webrtc_nonparallel_tests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webrtc_nonparallel_tests/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1651,6 +1665,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] AppRTCMobileTest on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"AppRTCMobileTest/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1731,6 +1746,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "[trigger] libjingle_peerconnection_android_unittest on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"libjingle_peerconnection_android_unittest/Android/[dummy has/Android (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1792,6 +1808,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "audio_decoder_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -1844,6 +1861,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "common_audio_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -1896,6 +1914,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "common_video_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -1948,6 +1967,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "modules_tests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2000,6 +2020,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "modules_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2052,6 +2073,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "peerconnection_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2104,6 +2126,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "rtc_stats_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2156,6 +2179,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "rtc_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2208,6 +2232,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "system_wrappers_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2260,6 +2285,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "test_support_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2312,6 +2338,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "tools_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2364,6 +2391,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "video_engine_tests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2416,6 +2444,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "voice_engine_unittests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2468,6 +2497,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "webrtc_nonparallel_tests on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2520,6 +2550,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "AppRTCMobileTest on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2572,6 +2603,7 @@
     "cwd": "[BUILDER_CACHE]/Android__swarming_",
     "name": "libjingle_peerconnection_android_unittest on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },

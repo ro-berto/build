@@ -474,6 +474,7 @@
     ],
     "name": "[trigger] dummy_target_1 on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Ubuntu/[dummy has/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -558,6 +559,7 @@
     ],
     "name": "[trigger] dummy_target_2 on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Ubuntu/[dummy has/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -604,6 +606,7 @@
     ],
     "name": "dummy_target_1 on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -655,6 +658,7 @@
     ],
     "name": "dummy_target_2 on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },

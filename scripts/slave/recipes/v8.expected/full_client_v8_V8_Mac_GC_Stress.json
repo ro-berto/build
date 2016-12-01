@@ -516,7 +516,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit on Mac-10.9",
+      "stepname:Mjsunit",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -538,8 +538,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit on Mac-10.9",
+    "name": "[trigger] Mjsunit",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit/Mac-10.9/[dummy has/V8 Mac GC Stress/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -623,7 +624,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Webkit on Mac-10.9",
+      "stepname:Webkit",
       "--idempotent",
       "[dummy hash for webkit]",
       "--",
@@ -645,8 +646,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Webkit on Mac-10.9",
+    "name": "[trigger] Webkit",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Webkit/Mac-10.9/[dummy has/V8 Mac GC Stress/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

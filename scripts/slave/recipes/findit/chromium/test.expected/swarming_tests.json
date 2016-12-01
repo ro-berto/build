@@ -744,7 +744,7 @@
       "--tag",
       "slavename:build1-a1",
       "--tag",
-      "stepname:gl_tests (r1) on Mac-10.9",
+      "stepname:gl_tests (r1)",
       "--idempotent",
       "[dummy hash for gl_tests]",
       "--",
@@ -756,9 +756,10 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "test r1.[trigger] gl_tests (r1) on Mac-10.9",
+    "name": "test r1.[trigger] gl_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (r1)/Mac-10.9/[dummy has/mac_chromium_variable/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -801,9 +802,10 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "test r1.gl_tests (r1) on Mac-10.9",
+    "name": "test r1.gl_tests (r1)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@"
     ]
   },
   {
@@ -820,7 +822,7 @@
       "--build-number",
       "1",
       "--test-type",
-      "test r1.gl_tests (r1) on Mac-10.9",
+      "test r1.gl_tests (r1)",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -831,7 +833,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "test r1.Upload to test-results [test r1.gl_tests (r1) on Mac-10.9]",
+    "name": "test r1.Upload to test-results [test r1.gl_tests (r1)]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

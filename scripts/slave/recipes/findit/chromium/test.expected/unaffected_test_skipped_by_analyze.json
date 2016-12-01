@@ -852,7 +852,7 @@
       "--tag",
       "slavename:build1-a1",
       "--tag",
-      "stepname:affected_tests (r1) on Windows-7-SP1",
+      "stepname:affected_tests (r1)",
       "--idempotent",
       "[dummy hash for affected_tests]",
       "--",
@@ -863,9 +863,10 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "test r1.[trigger] affected_tests (r1) on Windows-7-SP1",
+    "name": "test r1.[trigger] affected_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"affected_tests (r1)/Windows-7-SP1/[dummy has/win_chromium_variable/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -907,9 +908,10 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "test r1.affected_tests (r1) on Windows-7-SP1",
+    "name": "test r1.affected_tests (r1)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@"
     ]
   },
   {
@@ -926,7 +928,7 @@
       "--build-number",
       "1",
       "--test-type",
-      "test r1.affected_tests (r1) on Windows-7-SP1",
+      "test r1.affected_tests (r1)",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -936,7 +938,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "test r1.Upload to test-results [test r1.affected_tests (r1) on Windows-7-SP1]",
+    "name": "test r1.Upload to test-results [test r1.affected_tests (r1)]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

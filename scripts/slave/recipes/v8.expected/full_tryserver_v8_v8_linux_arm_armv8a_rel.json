@@ -502,7 +502,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check on Ubuntu-12.04",
+      "stepname:Check",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -527,8 +527,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-12.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/v8_linux_arm_armv8a_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -616,7 +617,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants on Ubuntu-12.04",
+      "stepname:Test262 - no variants",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -642,8 +643,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants on Ubuntu-12.04",
+    "name": "[trigger] Test262 - no variants",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Ubuntu-12.04/[dummy has/v8_linux_arm_armv8a_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -719,7 +721,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla on Ubuntu-12.04",
+      "stepname:Mozilla",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -744,8 +746,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Ubuntu-12.04",
+    "name": "[trigger] Mozilla",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/v8_linux_arm_armv8a_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -821,7 +824,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all on Ubuntu-12.04",
+      "stepname:SimdJs - all",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -847,8 +850,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
+    "name": "[trigger] SimdJs - all",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/v8_linux_arm_armv8a_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

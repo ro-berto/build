@@ -558,6 +558,7 @@
     ],
     "name": "[trigger] RecreateSKPs_skia on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"RecreateSKPs_skia/Ubuntu/def456/Housekeeper-Nightly-RecreateSKPs_Canary/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

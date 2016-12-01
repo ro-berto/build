@@ -546,6 +546,7 @@
     ],
     "name": "[trigger] Check on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/v8_linux64_tsan_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -665,6 +666,7 @@
     ],
     "name": "[trigger] Check - extra on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/v8_linux64_tsan_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -773,6 +775,7 @@
     ],
     "name": "[trigger] Test262 - no variants on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Ubuntu-14.04/[dummy has/v8_linux64_tsan_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -880,6 +883,7 @@
     ],
     "name": "[trigger] Ignition - turbofan on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition - turbofan/Ubuntu-14.04/[dummy has/v8_linux64_tsan_rel/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

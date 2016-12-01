@@ -604,6 +604,7 @@
     ],
     "name": "[trigger] test_skia on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_skia/Ubuntu/def456/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

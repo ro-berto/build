@@ -216,7 +216,7 @@ def GenTests(api):
         })
     ) +
     # Make one of the tests fail to improve code coverage.
-    api.override_step_data('base_unittests on NVIDIA GPU on Linux on Linux',
+    api.override_step_data('base_unittests on NVIDIA GPU on Linux',
         api.test_utils.canned_gtest_output(False))
   )
 
@@ -497,7 +497,7 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
+    api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             shards=2, isolated_script_passing=True, valid=True,
@@ -582,7 +582,7 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
+    api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             shards=3, isolated_script_passing=True, valid=False,
@@ -616,7 +616,7 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
+    api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
             shards=2, isolated_script_passing=False, valid=True,
@@ -650,7 +650,7 @@ def GenTests(api):
         })
     ) +
     api.override_step_data(
-      'telemetry_gpu_unittests on Ubuntu-12.04',
+      'telemetry_gpu_unittests',
       api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
         shards=2, isolated_script_passing=True, valid=True,
@@ -685,7 +685,7 @@ def GenTests(api):
         })
     ) +
     api.override_step_data(
-      'telemetry_gpu_unittests on Ubuntu-12.04',
+      'telemetry_gpu_unittests',
       api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
         shards=2, isolated_script_passing=True, valid=True,
@@ -721,7 +721,7 @@ def GenTests(api):
         })
     ) +
     api.override_step_data(
-      'telemetry_gpu_unittests on Ubuntu-12.04',
+      'telemetry_gpu_unittests',
       api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
         shards=4, isolated_script_passing=True, valid=True,
@@ -756,7 +756,7 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
+    api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             shards=2, isolated_script_passing=True, valid=True,
@@ -793,7 +793,7 @@ def GenTests(api):
         })
     ) +
     api.override_step_data(
-      'telemetry_gpu_unittests on Ubuntu-12.04',
+      'telemetry_gpu_unittests',
       api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
         shards=2, isolated_script_passing=True, valid=True,
@@ -969,7 +969,7 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
+    api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             isolated_script_passing=False, valid=True),
@@ -999,7 +999,7 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
+    api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             isolated_script_passing=True, valid=True),
@@ -1030,7 +1030,7 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
+    api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
             swarming_internal_failure=True, isolated_script_passing=True,

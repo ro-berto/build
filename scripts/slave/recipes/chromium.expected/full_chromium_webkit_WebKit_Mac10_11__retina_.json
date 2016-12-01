@@ -408,6 +408,7 @@
     },
     "name": "[trigger] browser_tests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.11/ffffffffff/WebKit Mac10.11 (retina)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -529,6 +530,7 @@
     },
     "name": "browser_tests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },

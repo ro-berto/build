@@ -392,7 +392,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:browser_tests on Mac-10.9",
+      "stepname:browser_tests",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
@@ -403,8 +403,9 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[trigger] browser_tests on Mac-10.9",
+    "name": "[trigger] browser_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.9/ffffffffff/Mac 10.10 Retina Debug (AMD)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -447,8 +448,9 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "browser_tests on Mac-10.9",
+    "name": "browser_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -466,7 +468,7 @@
       "--build-number",
       "571",
       "--test-type",
-      "browser_tests on Mac-10.9",
+      "browser_tests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -477,7 +479,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Upload to test-results [browser_tests on Mac-10.9]"
+    "name": "Upload to test-results [browser_tests]"
   },
   {
     "name": "$result",

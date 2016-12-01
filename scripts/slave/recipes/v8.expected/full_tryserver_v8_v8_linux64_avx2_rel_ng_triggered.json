@@ -182,6 +182,7 @@
     ],
     "name": "[trigger] Check on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/v8_linux64_avx2_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -284,6 +285,7 @@
     ],
     "name": "[trigger] SimdJs - all on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-14.04/[dummy has/v8_linux64_avx2_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

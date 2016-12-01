@@ -402,6 +402,7 @@
     },
     "name": "[trigger] telemetry_gpu_unittests on NVIDIA GPU on Windows on Windows",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -484,6 +485,7 @@
     },
     "name": "[trigger] telemetry_gpu_unittests on ATI GPU on Windows on Windows",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests on ATI GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -566,6 +568,7 @@
     },
     "name": "[trigger] telemetry_gpu_unittests on (15ad) GPU on Windows on Windows",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests on (15ad) GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -620,6 +623,7 @@
     },
     "name": "telemetry_gpu_unittests on NVIDIA GPU on Windows on Windows",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
@@ -652,6 +656,7 @@
     },
     "name": "telemetry_gpu_unittests on ATI GPU on Windows on Windows",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
@@ -684,6 +689,7 @@
     },
     "name": "telemetry_gpu_unittests on (15ad) GPU on Windows on Windows",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",

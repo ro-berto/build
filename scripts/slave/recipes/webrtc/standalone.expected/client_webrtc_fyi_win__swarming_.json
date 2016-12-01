@@ -510,15 +510,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:audio_decoder_unittests on Windows-7-SP1",
+      "stepname:audio_decoder_unittests",
       "--idempotent",
       "[dummy hash for audio_decoder_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] audio_decoder_unittests on Windows-7-SP1",
+    "name": "[trigger] audio_decoder_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"audio_decoder_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -590,15 +591,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:common_audio_unittests on Windows-7-SP1",
+      "stepname:common_audio_unittests",
       "--idempotent",
       "[dummy hash for common_audio_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] common_audio_unittests on Windows-7-SP1",
+    "name": "[trigger] common_audio_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"common_audio_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -670,15 +672,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:common_video_unittests on Windows-7-SP1",
+      "stepname:common_video_unittests",
       "--idempotent",
       "[dummy hash for common_video_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] common_video_unittests on Windows-7-SP1",
+    "name": "[trigger] common_video_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"common_video_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -750,15 +753,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:modules_tests on Windows-7-SP1",
+      "stepname:modules_tests",
       "--idempotent",
       "[dummy hash for modules_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] modules_tests on Windows-7-SP1",
+    "name": "[trigger] modules_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"modules_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -836,15 +840,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:modules_unittests on Windows-7-SP1",
+      "stepname:modules_unittests",
       "--idempotent",
       "[dummy hash for modules_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] modules_unittests on Windows-7-SP1",
+    "name": "[trigger] modules_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"modules_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -946,15 +951,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:peerconnection_unittests on Windows-7-SP1",
+      "stepname:peerconnection_unittests",
       "--idempotent",
       "[dummy hash for peerconnection_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] peerconnection_unittests on Windows-7-SP1",
+    "name": "[trigger] peerconnection_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"peerconnection_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1044,15 +1050,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_media_unittests on Windows-7-SP1",
+      "stepname:rtc_media_unittests",
       "--idempotent",
       "[dummy hash for rtc_media_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] rtc_media_unittests on Windows-7-SP1",
+    "name": "[trigger] rtc_media_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_media_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1124,15 +1131,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_pc_unittests on Windows-7-SP1",
+      "stepname:rtc_pc_unittests",
       "--idempotent",
       "[dummy hash for rtc_pc_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] rtc_pc_unittests on Windows-7-SP1",
+    "name": "[trigger] rtc_pc_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_pc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1204,15 +1212,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_stats_unittests on Windows-7-SP1",
+      "stepname:rtc_stats_unittests",
       "--idempotent",
       "[dummy hash for rtc_stats_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] rtc_stats_unittests on Windows-7-SP1",
+    "name": "[trigger] rtc_stats_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_stats_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1284,15 +1293,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_unittests on Windows-7-SP1",
+      "stepname:rtc_unittests",
       "--idempotent",
       "[dummy hash for rtc_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] rtc_unittests on Windows-7-SP1",
+    "name": "[trigger] rtc_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1394,15 +1404,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:system_wrappers_unittests on Windows-7-SP1",
+      "stepname:system_wrappers_unittests",
       "--idempotent",
       "[dummy hash for system_wrappers_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] system_wrappers_unittests on Windows-7-SP1",
+    "name": "[trigger] system_wrappers_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"system_wrappers_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1474,15 +1485,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:test_support_unittests on Windows-7-SP1",
+      "stepname:test_support_unittests",
       "--idempotent",
       "[dummy hash for test_support_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] test_support_unittests on Windows-7-SP1",
+    "name": "[trigger] test_support_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_support_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1554,15 +1566,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:tools_unittests on Windows-7-SP1",
+      "stepname:tools_unittests",
       "--idempotent",
       "[dummy hash for tools_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] tools_unittests on Windows-7-SP1",
+    "name": "[trigger] tools_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tools_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1634,15 +1647,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:video_engine_tests on Windows-7-SP1",
+      "stepname:video_engine_tests",
       "--idempotent",
       "[dummy hash for video_engine_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] video_engine_tests on Windows-7-SP1",
+    "name": "[trigger] video_engine_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"video_engine_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1732,15 +1746,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:voice_engine_unittests on Windows-7-SP1",
+      "stepname:voice_engine_unittests",
       "--idempotent",
       "[dummy hash for voice_engine_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] voice_engine_unittests on Windows-7-SP1",
+    "name": "[trigger] voice_engine_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"voice_engine_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1812,15 +1827,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:webrtc_nonparallel_tests on Windows-7-SP1",
+      "stepname:webrtc_nonparallel_tests",
       "--idempotent",
       "[dummy hash for webrtc_nonparallel_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] webrtc_nonparallel_tests on Windows-7-SP1",
+    "name": "[trigger] webrtc_nonparallel_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webrtc_nonparallel_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1892,15 +1908,16 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:xmllite_xmpp_unittests on Windows-7-SP1",
+      "stepname:xmllite_xmpp_unittests",
       "--idempotent",
       "[dummy hash for xmllite_xmpp_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "[trigger] xmllite_xmpp_unittests on Windows-7-SP1",
+    "name": "[trigger] xmllite_xmpp_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"xmllite_xmpp_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1939,8 +1956,9 @@
       "{\"base_task_name\": \"audio_decoder_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"audio_decoder_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "audio_decoder_unittests on Windows-7-SP1",
+    "name": "audio_decoder_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -1958,14 +1976,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "audio_decoder_unittests on Windows-7-SP1",
+      "audio_decoder_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [audio_decoder_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [audio_decoder_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -1991,8 +2009,9 @@
       "{\"base_task_name\": \"common_audio_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"common_audio_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "common_audio_unittests on Windows-7-SP1",
+    "name": "common_audio_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2010,14 +2029,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "common_audio_unittests on Windows-7-SP1",
+      "common_audio_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [common_audio_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [common_audio_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2043,8 +2062,9 @@
       "{\"base_task_name\": \"common_video_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"common_video_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "common_video_unittests on Windows-7-SP1",
+    "name": "common_video_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2062,14 +2082,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "common_video_unittests on Windows-7-SP1",
+      "common_video_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [common_video_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [common_video_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2095,8 +2115,9 @@
       "{\"base_task_name\": \"modules_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"modules_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "modules_tests on Windows-7-SP1",
+    "name": "modules_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2114,14 +2135,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "modules_tests on Windows-7-SP1",
+      "modules_tests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [modules_tests on Windows-7-SP1]"
+    "name": "Upload to test-results [modules_tests]"
   },
   {
     "allow_subannotations": true,
@@ -2147,8 +2168,9 @@
       "{\"base_task_name\": \"modules_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"modules_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"modules_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"modules_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"modules_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"modules_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "modules_unittests on Windows-7-SP1",
+    "name": "modules_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2166,14 +2188,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "modules_unittests on Windows-7-SP1",
+      "modules_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [modules_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [modules_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2199,8 +2221,9 @@
       "{\"base_task_name\": \"peerconnection_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"peerconnection_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"peerconnection_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"peerconnection_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"peerconnection_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "peerconnection_unittests on Windows-7-SP1",
+    "name": "peerconnection_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2218,14 +2241,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "peerconnection_unittests on Windows-7-SP1",
+      "peerconnection_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [peerconnection_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [peerconnection_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2251,8 +2274,9 @@
       "{\"base_task_name\": \"rtc_media_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"rtc_media_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "rtc_media_unittests on Windows-7-SP1",
+    "name": "rtc_media_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2270,14 +2294,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "rtc_media_unittests on Windows-7-SP1",
+      "rtc_media_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [rtc_media_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [rtc_media_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2303,8 +2327,9 @@
       "{\"base_task_name\": \"rtc_pc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"rtc_pc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "rtc_pc_unittests on Windows-7-SP1",
+    "name": "rtc_pc_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2322,14 +2347,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "rtc_pc_unittests on Windows-7-SP1",
+      "rtc_pc_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [rtc_pc_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [rtc_pc_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2355,8 +2380,9 @@
       "{\"base_task_name\": \"rtc_stats_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"rtc_stats_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "rtc_stats_unittests on Windows-7-SP1",
+    "name": "rtc_stats_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2374,14 +2400,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "rtc_stats_unittests on Windows-7-SP1",
+      "rtc_stats_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [rtc_stats_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [rtc_stats_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2407,8 +2433,9 @@
       "{\"base_task_name\": \"rtc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"rtc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"rtc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"rtc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"rtc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"rtc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"rtc_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "rtc_unittests on Windows-7-SP1",
+    "name": "rtc_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2426,14 +2453,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "rtc_unittests on Windows-7-SP1",
+      "rtc_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [rtc_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [rtc_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2459,8 +2486,9 @@
       "{\"base_task_name\": \"system_wrappers_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"system_wrappers_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "system_wrappers_unittests on Windows-7-SP1",
+    "name": "system_wrappers_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2478,14 +2506,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "system_wrappers_unittests on Windows-7-SP1",
+      "system_wrappers_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [system_wrappers_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [system_wrappers_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2511,8 +2539,9 @@
       "{\"base_task_name\": \"test_support_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"test_support_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "test_support_unittests on Windows-7-SP1",
+    "name": "test_support_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2530,14 +2559,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "test_support_unittests on Windows-7-SP1",
+      "test_support_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [test_support_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [test_support_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2563,8 +2592,9 @@
       "{\"base_task_name\": \"tools_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"tools_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "tools_unittests on Windows-7-SP1",
+    "name": "tools_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2582,14 +2612,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "tools_unittests on Windows-7-SP1",
+      "tools_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [tools_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [tools_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2615,8 +2645,9 @@
       "{\"base_task_name\": \"video_engine_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"video_engine_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"video_engine_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"video_engine_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"video_engine_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "video_engine_tests on Windows-7-SP1",
+    "name": "video_engine_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2634,14 +2665,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "video_engine_tests on Windows-7-SP1",
+      "video_engine_tests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [video_engine_tests on Windows-7-SP1]"
+    "name": "Upload to test-results [video_engine_tests]"
   },
   {
     "allow_subannotations": true,
@@ -2667,8 +2698,9 @@
       "{\"base_task_name\": \"voice_engine_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"voice_engine_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "voice_engine_unittests on Windows-7-SP1",
+    "name": "voice_engine_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2686,14 +2718,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "voice_engine_unittests on Windows-7-SP1",
+      "voice_engine_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [voice_engine_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [voice_engine_unittests]"
   },
   {
     "allow_subannotations": true,
@@ -2719,8 +2751,9 @@
       "{\"base_task_name\": \"webrtc_nonparallel_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"webrtc_nonparallel_tests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "webrtc_nonparallel_tests on Windows-7-SP1",
+    "name": "webrtc_nonparallel_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2738,14 +2771,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "webrtc_nonparallel_tests on Windows-7-SP1",
+      "webrtc_nonparallel_tests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [webrtc_nonparallel_tests on Windows-7-SP1]"
+    "name": "Upload to test-results [webrtc_nonparallel_tests]"
   },
   {
     "allow_subannotations": true,
@@ -2771,8 +2804,9 @@
       "{\"base_task_name\": \"xmllite_xmpp_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\", \"tasks\": {\"xmllite_xmpp_unittests/Windows-7-SP1/[dummy has/Win (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "xmllite_xmpp_unittests on Windows-7-SP1",
+    "name": "xmllite_xmpp_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2790,14 +2824,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "xmllite_xmpp_unittests on Windows-7-SP1",
+      "xmllite_xmpp_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
-    "name": "Upload to test-results [xmllite_xmpp_unittests on Windows-7-SP1]"
+    "name": "Upload to test-results [xmllite_xmpp_unittests]"
   },
   {
     "name": "$result",

@@ -486,7 +486,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check on Ubuntu-12.04",
+      "stepname:Check",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -507,8 +507,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-12.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux64 - internal snapshot/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

@@ -497,6 +497,7 @@
     ],
     "name": "[trigger] chrome_public_test_apk on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"chrome_public_test_apk/Android/[dummy has/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -567,6 +568,7 @@
     ],
     "name": "[trigger] dummy_target_1 on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Android/[dummy has/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -637,6 +639,7 @@
     ],
     "name": "[trigger] dummy_target_2 on Android",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Android/[dummy has/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

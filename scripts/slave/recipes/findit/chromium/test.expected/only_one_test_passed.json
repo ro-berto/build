@@ -746,7 +746,7 @@
       "--tag",
       "slavename:build1-a1",
       "--tag",
-      "stepname:gl_tests (r1) on Windows-7-SP1",
+      "stepname:gl_tests (r1)",
       "--idempotent",
       "[dummy hash for gl_tests]",
       "--",
@@ -757,9 +757,10 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "test r1.[trigger] gl_tests (r1) on Windows-7-SP1",
+    "name": "test r1.[trigger] gl_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (r1)/Windows-7-SP1/[dummy has/win_chromium_variable/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -801,11 +802,11 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "test r1.gl_tests (r1) on Windows-7-SP1",
+    "name": "test r1.gl_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.One<br/>Test.Two<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>failures:<br/>Test.One<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -823,7 +824,7 @@
       "--build-number",
       "1",
       "--test-type",
-      "test r1.gl_tests (r1) on Windows-7-SP1",
+      "test r1.gl_tests (r1)",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -833,7 +834,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "test r1.Upload to test-results [test r1.gl_tests (r1) on Windows-7-SP1]",
+    "name": "test r1.Upload to test-results [test r1.gl_tests (r1)]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

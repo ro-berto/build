@@ -152,14 +152,15 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Static-Initializers on Ubuntu-12.04",
+      "stepname:Static-Initializers",
       "--idempotent",
       "[dummy hash for check-static-initializers]",
       "--",
       "out/Release/d8"
     ],
-    "name": "[trigger] Static-Initializers on Ubuntu-12.04",
+    "name": "[trigger] Static-Initializers",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Static-Initializers/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -231,7 +232,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check on Ubuntu-12.04",
+      "stepname:Check",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -252,8 +253,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-12.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -325,7 +327,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - extra on Ubuntu-12.04",
+      "stepname:Check - extra",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -346,8 +348,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - extra on Ubuntu-12.04",
+    "name": "[trigger] Check - extra",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - extra/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -419,7 +422,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:OptimizeForSize on Ubuntu-12.04",
+      "stepname:OptimizeForSize",
       "--idempotent",
       "[dummy hash for optimize_for_size]",
       "--",
@@ -441,8 +444,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] OptimizeForSize on Ubuntu-12.04",
+    "name": "[trigger] OptimizeForSize",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"OptimizeForSize/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -514,7 +518,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 on Ubuntu-12.04",
+      "stepname:Test262",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -536,8 +540,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 on Ubuntu-12.04",
+    "name": "[trigger] Test262",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -615,7 +620,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - extra on Ubuntu-12.04",
+      "stepname:Test262 - extra",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -637,8 +642,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - extra on Ubuntu-12.04",
+    "name": "[trigger] Test262 - extra",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - extra/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -716,7 +722,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla on Ubuntu-12.04",
+      "stepname:Mozilla",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -737,8 +743,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Ubuntu-12.04",
+    "name": "[trigger] Mozilla",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -810,7 +817,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all on Ubuntu-12.04",
+      "stepname:SimdJs - all",
       "--idempotent",
       "[dummy hash for simdjs]",
       "--",
@@ -832,8 +839,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
+    "name": "[trigger] SimdJs - all",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -905,7 +913,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Ignition - turbofan on Ubuntu-12.04",
+      "stepname:Ignition - turbofan",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -926,8 +934,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Ignition - turbofan on Ubuntu-12.04",
+    "name": "[trigger] Ignition - turbofan",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -999,7 +1008,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - sp frame access on Ubuntu-12.04",
+      "stepname:Mjsunit - sp frame access",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -1021,8 +1030,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-12.04",
+    "name": "[trigger] Mjsunit - sp frame access",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1094,7 +1104,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - ignition - turbofan on Ubuntu-12.04",
+      "stepname:Test262 - ignition - turbofan",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -1116,8 +1126,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - ignition - turbofan on Ubuntu-12.04",
+    "name": "[trigger] Test262 - ignition - turbofan",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1189,7 +1200,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Simple Leak Check on Ubuntu-12.04",
+      "stepname:Simple Leak Check",
       "--idempotent",
       "[dummy hash for run-valgrind]",
       "--",
@@ -1197,8 +1208,9 @@
       "-e",
       "print(1+2)"
     ],
-    "name": "[trigger] Simple Leak Check on Ubuntu-12.04",
+    "name": "[trigger] Simple Leak Check",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Simple Leak Check/Ubuntu-12.04/[dummy has/V8 Linux64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1228,7 +1240,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "Static-Initializers on Ubuntu-12.04",
+    "name": "Static-Initializers",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1699,7 +1711,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "Simple Leak Check on Ubuntu-12.04",
+    "name": "Simple Leak Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

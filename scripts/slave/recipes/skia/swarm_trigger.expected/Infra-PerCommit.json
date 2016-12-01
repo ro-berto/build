@@ -480,6 +480,7 @@
     ],
     "name": "[trigger] infra_skia on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"infra_skia/Ubuntu/def456/Infra-PerCommit/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

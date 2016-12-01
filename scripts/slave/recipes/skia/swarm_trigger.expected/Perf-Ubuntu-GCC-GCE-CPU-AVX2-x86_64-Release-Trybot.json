@@ -616,6 +616,7 @@
     ],
     "name": "[trigger] compile_skia on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Ubuntu/def456/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -882,6 +883,7 @@
     ],
     "name": "[trigger] perf_skia on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"perf_skia/Ubuntu/def456/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

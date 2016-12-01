@@ -504,7 +504,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check on Ubuntu-12.04",
+      "stepname:Check",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -528,8 +528,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-12.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/v8_linux_arm64_dbg/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -617,7 +618,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - extra on Ubuntu-12.04",
+      "stepname:Check - extra",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -641,8 +642,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - extra on Ubuntu-12.04",
+    "name": "[trigger] Check - extra",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - extra/Ubuntu-12.04/[dummy has/v8_linux_arm64_dbg/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -724,7 +726,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants on Ubuntu-12.04",
+      "stepname:Test262 - no variants",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -749,8 +751,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants on Ubuntu-12.04",
+    "name": "[trigger] Test262 - no variants",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Ubuntu-12.04/[dummy has/v8_linux_arm64_dbg/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -826,7 +829,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - extra on Ubuntu-12.04",
+      "stepname:Test262 - extra",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -851,8 +854,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - extra on Ubuntu-12.04",
+    "name": "[trigger] Test262 - extra",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - extra/Ubuntu-12.04/[dummy has/v8_linux_arm64_dbg/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -934,7 +938,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla on Ubuntu-12.04",
+      "stepname:Mozilla",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -958,8 +962,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Ubuntu-12.04",
+    "name": "[trigger] Mozilla",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/v8_linux_arm64_dbg/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1035,7 +1040,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all on Ubuntu-12.04",
+      "stepname:SimdJs - all",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -1060,8 +1065,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
+    "name": "[trigger] SimdJs - all",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/v8_linux_arm64_dbg/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1137,7 +1143,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Ignition - turbofan on Ubuntu-12.04",
+      "stepname:Ignition - turbofan",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -1161,8 +1167,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Ignition - turbofan on Ubuntu-12.04",
+    "name": "[trigger] Ignition - turbofan",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition - turbofan/Ubuntu-12.04/[dummy has/v8_linux_arm64_dbg/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1238,7 +1245,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - sp frame access on Ubuntu-12.04",
+      "stepname:Mjsunit - sp frame access",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -1263,8 +1270,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-12.04",
+    "name": "[trigger] Mjsunit - sp frame access",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_arm64_dbg/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1340,7 +1348,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - ignition - turbofan on Ubuntu-12.04",
+      "stepname:Test262 - ignition - turbofan",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -1365,8 +1373,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - ignition - turbofan on Ubuntu-12.04",
+    "name": "[trigger] Test262 - ignition - turbofan",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - ignition - turbofan/Ubuntu-12.04/[dummy has/v8_linux_arm64_dbg/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

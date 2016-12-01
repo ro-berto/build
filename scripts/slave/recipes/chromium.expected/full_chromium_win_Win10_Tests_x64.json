@@ -411,6 +411,7 @@
     },
     "name": "[trigger] browser_tests on Windows-10-10586",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-10-10586'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-10-10586/ffffffffff/Win10 Tests x64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -475,6 +476,7 @@
     },
     "name": "browser_tests on Windows-10-10586",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-10-10586'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },

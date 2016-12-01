@@ -492,7 +492,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check on Ubuntu-12.04",
+      "stepname:Check",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -513,8 +513,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-12.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -586,7 +587,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants on Ubuntu-12.04",
+      "stepname:Test262 - no variants",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -608,8 +609,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants on Ubuntu-12.04",
+    "name": "[trigger] Test262 - no variants",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -681,7 +683,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla on Ubuntu-12.04",
+      "stepname:Mozilla",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -702,8 +704,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Ubuntu-12.04",
+    "name": "[trigger] Mozilla",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -775,7 +778,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all on Ubuntu-12.04",
+      "stepname:SimdJs - all",
       "--idempotent",
       "[dummy hash for simdjs]",
       "--",
@@ -797,8 +800,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
+    "name": "[trigger] SimdJs - all",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1558,7 +1562,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Retry on Ubuntu-12.04",
+      "stepname:Retry",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -1580,9 +1584,10 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "Bisect a0.[trigger] Retry on Ubuntu-12.04",
+    "name": "Bisect a0.[trigger] Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -2120,7 +2125,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Retry on Ubuntu-12.04",
+      "stepname:Retry",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -2142,9 +2147,10 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "Bisect a2.[trigger] Retry on Ubuntu-12.04",
+    "name": "Bisect a2.[trigger] Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -2715,7 +2721,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Retry on Ubuntu-12.04",
+      "stepname:Retry",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -2737,9 +2743,10 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "Bisect a1.[trigger] Retry on Ubuntu-12.04",
+    "name": "Bisect a1.[trigger] Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Retry/Ubuntu-12.04/[dummy has/V8 Linux - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

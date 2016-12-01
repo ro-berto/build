@@ -144,7 +144,7 @@ def GenTests(api):
         stdout=api.raw_io.output('1.2.3'),
     )
     + api.override_step_data(
-        'fake test (fake device iOS 8.1) on Mac',
+        'fake test (fake device iOS 8.1)',
         api.json.output({
           'shards': [{
             'exit_codes': [1],
@@ -181,7 +181,7 @@ def GenTests(api):
         stdout=api.raw_io.output('1.2.3'),
     )
     + api.override_step_data(
-        'fake test (fake device iOS 8.1) on Mac',
+        'fake test (fake device iOS 8.1)',
         api.json.output({
           'shards': [{
             'exit_codes': [2],
@@ -218,7 +218,7 @@ def GenTests(api):
         stdout=api.raw_io.output('1.2.3'),
     )
     + api.override_step_data(
-        'fake test (fake device iOS 8.1) on Mac',
+        'fake test (fake device iOS 8.1)',
         api.json.output({
           'shards': [{
             'state': 64,
@@ -254,7 +254,7 @@ def GenTests(api):
         stdout=api.raw_io.output('1.2.3'),
     )
     + api.override_step_data(
-        'fake test (fake device iOS 8.1) on Mac',
+        'fake test (fake device iOS 8.1)',
         api.json.output({
           'shards': [{
             'state': 48,
@@ -290,7 +290,7 @@ def GenTests(api):
         stdout=api.raw_io.output('1.2.3'),
     )
     + api.override_step_data(
-        'fake test (fake device iOS 8.1) on Mac',
+        'fake test (fake device iOS 8.1)',
         api.json.output({
           'shards': [{
             'state': 112,

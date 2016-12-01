@@ -371,7 +371,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:telemetry_gpu_unittests on Ubuntu-12.04",
+      "stepname:telemetry_gpu_unittests",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
@@ -380,8 +380,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[trigger] telemetry_gpu_unittests on Ubuntu-12.04",
+    "name": "[trigger] telemetry_gpu_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -420,8 +421,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "telemetry_gpu_unittests on Ubuntu-12.04",
+    "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": false, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",

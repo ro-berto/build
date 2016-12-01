@@ -491,15 +491,16 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:dummy_target_1 on Mac",
+      "stepname:dummy_target_1",
       "--verbose",
       "--idempotent",
       "[dummy hash for dummy_target_1]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] dummy_target_1 on Mac",
+    "name": "[trigger] dummy_target_1",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Mac/[dummy has/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -575,15 +576,16 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:dummy_target_2 on Mac",
+      "stepname:dummy_target_2",
       "--verbose",
       "--idempotent",
       "[dummy hash for dummy_target_2]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] dummy_target_2 on Mac",
+    "name": "[trigger] dummy_target_2",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Mac/[dummy has/TestBuilder/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -628,8 +630,9 @@
       "--json",
       "{\"base_task_name\": \"dummy_target_1/Mac/[dummy has/TestBuilder/571\", \"tasks\": {\"dummy_target_1/Mac/[dummy has/TestBuilder/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"dummy_target_1/Mac/[dummy has/TestBuilder/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}"
     ],
-    "name": "dummy_target_1 on Mac",
+    "name": "dummy_target_1",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -679,8 +682,9 @@
       "--json",
       "{\"base_task_name\": \"dummy_target_2/Mac/[dummy has/TestBuilder/571\", \"tasks\": {\"dummy_target_2/Mac/[dummy has/TestBuilder/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"dummy_target_2/Mac/[dummy has/TestBuilder/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}"
     ],
-    "name": "dummy_target_2 on Mac",
+    "name": "dummy_target_2",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },

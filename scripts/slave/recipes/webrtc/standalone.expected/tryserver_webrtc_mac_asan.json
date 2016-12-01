@@ -547,6 +547,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] audio_decoder_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"audio_decoder_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -627,6 +628,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] common_audio_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"common_audio_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -707,6 +709,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] common_video_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"common_video_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -787,6 +790,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] modules_tests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"modules_tests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -873,6 +877,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] modules_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"modules_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -983,6 +988,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] peerconnection_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"peerconnection_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1081,6 +1087,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] rtc_media_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_media_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1161,6 +1168,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] rtc_pc_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_pc_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1241,6 +1249,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] rtc_stats_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_stats_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1321,6 +1330,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] rtc_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"rtc_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1431,6 +1441,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] system_wrappers_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"system_wrappers_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1511,6 +1522,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] test_support_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_support_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1591,6 +1603,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] tools_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"tools_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1671,6 +1684,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] video_engine_tests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"video_engine_tests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1769,6 +1783,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] voice_engine_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"voice_engine_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1849,6 +1864,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] webrtc_nonparallel_tests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webrtc_nonparallel_tests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -1929,6 +1945,7 @@
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "[trigger] xmllite_xmpp_unittests on Mac-10.11",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"xmllite_xmpp_unittests/Mac-10.11/[dummy has/mac_asan/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

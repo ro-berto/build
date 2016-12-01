@@ -212,6 +212,7 @@
     ],
     "name": "[trigger] hello_world on Windows-7-SP1",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hello_world/Windows-7-SP1/hash_for_w\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -275,7 +276,7 @@
       "--tag",
       "rietveld:https://codereview.chromium.org/123/#ps1001",
       "--tag",
-      "stepname:hello_world on Ubuntu-12.04",
+      "stepname:hello_world",
       "--verbose",
       "--idempotent",
       "--user",
@@ -284,8 +285,9 @@
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "hash_for_linux"
     ],
-    "name": "[trigger] hello_world on Ubuntu-12.04",
+    "name": "[trigger] hello_world",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hello_world/Ubuntu-12.04/hash_for_l\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -366,6 +368,7 @@
     ],
     "name": "[trigger] hello_world on Mac-10.9",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hello_world/Mac-10.9/hash_for_m\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -468,7 +471,7 @@
       "--task-output-dir",
       "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
-    "name": "hello_world on Ubuntu-12.04",
+    "name": "hello_world",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

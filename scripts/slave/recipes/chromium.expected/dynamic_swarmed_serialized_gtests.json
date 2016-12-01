@@ -387,7 +387,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:base_unittests on NVIDIA GPU on Linux on Linux",
+      "stepname:base_unittests on NVIDIA GPU on Linux",
       "--idempotent",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
@@ -396,8 +396,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[trigger] base_unittests on NVIDIA GPU on Linux on Linux",
+    "name": "[trigger] base_unittests on NVIDIA GPU on Linux",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests on NVIDIA GPU on Linux/Linux/eeeeeeeeee/Linux Release (NVIDIA)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -438,10 +439,10 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "base_unittests on NVIDIA GPU on Linux on Linux",
+    "name": "base_unittests on NVIDIA GPU on Linux",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Linux'<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -459,7 +460,7 @@
       "--build-number",
       "571",
       "--test-type",
-      "base_unittests on NVIDIA GPU on Linux on Linux",
+      "base_unittests on NVIDIA GPU on Linux",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -468,7 +469,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Upload to test-results [base_unittests on NVIDIA GPU on Linux on Linux]"
+    "name": "Upload to test-results [base_unittests on NVIDIA GPU on Linux]"
   },
   {
     "cmd": [
@@ -527,7 +528,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:browser_tests on NVIDIA GPU on Linux on Linux",
+      "stepname:browser_tests on NVIDIA GPU on Linux",
       "--idempotent",
       "ffffffffffffffffffffffffffffff",
       "--",
@@ -536,8 +537,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[trigger] browser_tests on NVIDIA GPU on Linux on Linux",
+    "name": "[trigger] browser_tests on NVIDIA GPU on Linux",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests on NVIDIA GPU on Linux/Linux/ffffffffff/Linux Release (NVIDIA)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -578,8 +580,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "browser_tests on NVIDIA GPU on Linux on Linux",
+    "name": "browser_tests on NVIDIA GPU on Linux",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -597,7 +600,7 @@
       "--build-number",
       "571",
       "--test-type",
-      "browser_tests on NVIDIA GPU on Linux on Linux",
+      "browser_tests on NVIDIA GPU on Linux",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -606,7 +609,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Upload to test-results [browser_tests on NVIDIA GPU on Linux on Linux]"
+    "name": "Upload to test-results [browser_tests on NVIDIA GPU on Linux]"
   },
   {
     "name": "$result",

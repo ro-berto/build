@@ -176,6 +176,7 @@
     ],
     "name": "[trigger] Check on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux - x87 - nosnap - debug/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

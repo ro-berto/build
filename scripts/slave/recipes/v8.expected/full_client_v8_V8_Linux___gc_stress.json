@@ -152,7 +152,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit on Ubuntu-12.04",
+      "stepname:Mjsunit",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -174,8 +174,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit on Ubuntu-12.04",
+    "name": "[trigger] Mjsunit",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit/Ubuntu-12.04/[dummy has/V8 Linux - gc stress/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -265,7 +266,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - extra on Ubuntu-12.04",
+      "stepname:Mjsunit - extra",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -287,8 +288,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - extra on Ubuntu-12.04",
+    "name": "[trigger] Mjsunit - extra",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - extra/Ubuntu-12.04/[dummy has/V8 Linux - gc stress/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -372,7 +374,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Webkit on Ubuntu-12.04",
+      "stepname:Webkit",
       "--idempotent",
       "[dummy hash for webkit]",
       "--",
@@ -394,8 +396,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Webkit on Ubuntu-12.04",
+    "name": "[trigger] Webkit",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Webkit/Ubuntu-12.04/[dummy has/V8 Linux - gc stress/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -467,7 +470,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - ignition - turbofan on Ubuntu-12.04",
+      "stepname:Mjsunit - ignition - turbofan",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -489,8 +492,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - ignition - turbofan on Ubuntu-12.04",
+    "name": "[trigger] Mjsunit - ignition - turbofan",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - ignition - turbofan/Ubuntu-12.04/[dummy has/V8 Linux - gc stress/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

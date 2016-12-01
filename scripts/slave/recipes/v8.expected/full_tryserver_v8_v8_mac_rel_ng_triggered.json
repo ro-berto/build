@@ -182,6 +182,7 @@
     ],
     "name": "[trigger] Check on Mac-10.9",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Mac-10.9/[dummy has/v8_mac_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -283,6 +284,7 @@
     ],
     "name": "[trigger] Check - extra on Mac-10.9",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - extra/Mac-10.9/[dummy has/v8_mac_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -385,6 +387,7 @@
     ],
     "name": "[trigger] Test262 - no variants on Mac-10.9",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Mac-10.9/[dummy has/v8_mac_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -486,6 +489,7 @@
     ],
     "name": "[trigger] Mozilla on Mac-10.9",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Mac-10.9/[dummy has/v8_mac_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -588,6 +592,7 @@
     ],
     "name": "[trigger] SimdJs - all on Mac-10.9",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Mac-10.9/[dummy has/v8_mac_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -689,6 +694,7 @@
     ],
     "name": "[trigger] Ignition - turbofan on Mac-10.9",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition - turbofan/Mac-10.9/[dummy has/v8_mac_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

@@ -152,7 +152,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Deopt Fuzz on Ubuntu-12.04",
+      "stepname:Deopt Fuzz",
       "--idempotent",
       "[dummy hash for run-deopt-fuzzer]",
       "--",
@@ -166,8 +166,9 @@
       "--coverage=0.4",
       "--distribution-mode=smooth"
     ],
-    "name": "[trigger] Deopt Fuzz on Ubuntu-12.04",
+    "name": "[trigger] Deopt Fuzz",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Deopt Fuzz/Ubuntu-12.04/[dummy has/V8 Deopt Fuzzer/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -197,7 +198,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "Deopt Fuzz on Ubuntu-12.04",
+    "name": "Deopt Fuzz",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

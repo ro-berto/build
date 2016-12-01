@@ -175,6 +175,7 @@
     ],
     "name": "[trigger] Check on Windows-7-SP1",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Windows-7-SP1/[dummy has/V8 Win32 - debug/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -275,6 +276,7 @@
     ],
     "name": "[trigger] Check - extra on Windows-7-SP1",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - extra/Windows-7-SP1/[dummy has/V8 Win32 - debug/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -376,6 +378,7 @@
     ],
     "name": "[trigger] Test262 - no variants on Windows-7-SP1",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win32 - debug/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -470,6 +473,7 @@
     ],
     "name": "[trigger] Mozilla on Windows-7-SP1",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Windows-7-SP1/[dummy has/V8 Win32 - debug/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -564,6 +568,7 @@
     ],
     "name": "[trigger] Ignition - turbofan on Windows-7-SP1",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition - turbofan/Windows-7-SP1/[dummy has/V8 Win32 - debug/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

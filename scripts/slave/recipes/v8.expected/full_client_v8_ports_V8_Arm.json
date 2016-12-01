@@ -175,6 +175,7 @@
     ],
     "name": "[trigger] Check on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Arm/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -270,6 +271,7 @@
     ],
     "name": "[trigger] Benchmarks on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Benchmarks/Ubuntu-14.04/[dummy has/V8 Arm/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -365,6 +367,7 @@
     ],
     "name": "[trigger] OptimizeForSize on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -460,6 +463,7 @@
     ],
     "name": "[trigger] SimdJs - all on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -554,6 +558,7 @@
     ],
     "name": "[trigger] Ignition - turbofan on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition - turbofan/Ubuntu-14.04/[dummy has/V8 Arm/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -649,6 +654,7 @@
     ],
     "name": "[trigger] Test262 - ignition - turbofan on Ubuntu-14.04",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - ignition - turbofan/Ubuntu-14.04/[dummy has/V8 Arm/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

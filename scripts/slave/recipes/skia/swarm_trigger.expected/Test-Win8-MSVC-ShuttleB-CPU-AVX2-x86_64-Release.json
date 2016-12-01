@@ -617,6 +617,7 @@
     ],
     "name": "[trigger] compile_skia on Windows",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Windows/def456/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -878,6 +879,7 @@
     ],
     "name": "[trigger] test_skia on Windows-2008ServerR2-SP1",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-2008ServerR2-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_skia/Windows-2008ServerR2-SP1/def456/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

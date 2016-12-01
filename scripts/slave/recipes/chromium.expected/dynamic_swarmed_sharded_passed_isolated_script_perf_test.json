@@ -400,6 +400,7 @@
     },
     "name": "[trigger] benchmark on Intel GPU on Windows on Windows-10-10586",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-10-10586'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -440,6 +441,7 @@
     },
     "name": "benchmark on Intel GPU on Windows on Windows-10-10586",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-10-10586'@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",

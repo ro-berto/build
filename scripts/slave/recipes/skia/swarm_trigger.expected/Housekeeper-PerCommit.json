@@ -600,6 +600,7 @@
     ],
     "name": "[trigger] compile_skia on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Ubuntu/def456/Housekeeper-PerCommit/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -834,6 +835,7 @@
     ],
     "name": "[trigger] housekeeper_skia on Ubuntu",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"housekeeper_skia/Ubuntu/def456/Housekeeper-PerCommit/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

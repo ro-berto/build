@@ -399,7 +399,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:browser_tests on Windows-7-SP1",
+      "stepname:browser_tests",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
@@ -409,8 +409,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "[trigger] browser_tests on Windows-7-SP1",
+    "name": "[trigger] browser_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-7-SP1/ffffffffff/Win 7 Tests x64 (1)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -473,8 +474,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "browser_tests on Windows-7-SP1",
+    "name": "browser_tests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -492,7 +494,7 @@
       "--build-number",
       "571",
       "--test-type",
-      "browser_tests on Windows-7-SP1",
+      "browser_tests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -502,7 +504,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "Upload to test-results [browser_tests on Windows-7-SP1]"
+    "name": "Upload to test-results [browser_tests]"
   },
   {
     "cmd": [

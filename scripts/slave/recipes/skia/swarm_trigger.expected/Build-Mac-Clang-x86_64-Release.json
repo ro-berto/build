@@ -563,6 +563,7 @@
     ],
     "name": "[trigger] compile_skia on Mac",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Mac/def456/Build-Mac-Clang-x86_64-Release/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

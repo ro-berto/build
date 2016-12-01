@@ -685,14 +685,15 @@
       "--tag",
       "spec_name:chromium.fake:ios:fake tests 1:simulator:fake device:8.0:fake xcode version",
       "--tag",
-      "stepname:fake tests 1 (fake device iOS 8.0) on Mac",
+      "stepname:fake tests 1 (fake device iOS 8.0)",
       "--tag",
       "test:fake tests 1",
       "fake-hash-0"
     ],
-    "name": "trigger.[trigger] fake tests 1 (fake device iOS 8.0) on Mac",
+    "name": "trigger.[trigger] fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake tests 1 (fake device iOS 8.0)/Mac/fake-hash-/ios/0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -763,14 +764,15 @@
       "--tag",
       "spec_name:chromium.fake:ios:fake tests 2:simulator:fake device:7.1:fake xcode version",
       "--tag",
-      "stepname:fake tests 2 (fake device iOS 7.1) on Mac",
+      "stepname:fake tests 2 (fake device iOS 7.1)",
       "--tag",
       "test:fake tests 2",
       "fake-hash-1"
     ],
-    "name": "trigger.[trigger] fake tests 2 (fake device iOS 7.1) on Mac",
+    "name": "trigger.[trigger] fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake tests 2 (fake device iOS 7.1)/Mac/fake-hash-/ios/0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -841,14 +843,15 @@
       "--tag",
       "spec_name:chromium.fake:ios:fake_eg_test_host:simulator:fake device 3:9.3:fake xcode version",
       "--tag",
-      "stepname:fake_eg_test_host (fake device 3 iOS 9.3) on Mac",
+      "stepname:fake_eg_test_host (fake device 3 iOS 9.3)",
       "--tag",
       "test:fake_eg_test_host",
       "fake-hash-2"
     ],
-    "name": "trigger.[trigger] fake_eg_test_host (fake device 3 iOS 9.3) on Mac",
+    "name": "trigger.[trigger] fake_eg_test_host (fake device 3 iOS 9.3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake_eg_test_host (fake device 3 iOS 9.3)/Mac/fake-hash-/ios/0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -880,7 +883,7 @@
       "--task-output-dir",
       "[TMP_BASE]/0_tmp_2"
     ],
-    "name": "fake tests 1 (fake device iOS 8.0) on Mac",
+    "name": "fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -941,7 +944,7 @@
       "--task-output-dir",
       "[TMP_BASE]/1_tmp_3"
     ],
-    "name": "fake tests 2 (fake device iOS 7.1) on Mac",
+    "name": "fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1002,7 +1005,7 @@
       "--task-output-dir",
       "[TMP_BASE]/2_tmp_4"
     ],
-    "name": "fake_eg_test_host (fake device 3 iOS 9.3) on Mac",
+    "name": "fake_eg_test_host (fake device 3 iOS 9.3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

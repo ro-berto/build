@@ -191,7 +191,7 @@ def GenTests(api):
     ) +
     suppress_analyze() +
     api.override_step_data(
-        'telemetry_gpu_unittests (with patch) on Ubuntu-12.04',
+        'telemetry_gpu_unittests (with patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True))
   )
@@ -259,8 +259,7 @@ def GenTests(api):
         })
     ) +
     suppress_analyze() +
-    api.override_step_data('gl_tests (with patch) on Ubuntu-12.04',
-                           canned_test(passing=False))
+    api.override_step_data('gl_tests (with patch)', canned_test(passing=False))
   )
 
   yield (

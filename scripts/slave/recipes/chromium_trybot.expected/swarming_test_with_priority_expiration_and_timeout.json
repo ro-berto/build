@@ -559,7 +559,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:gl_tests (with patch) on Ubuntu-12.04",
+      "stepname:gl_tests (with patch)",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -571,8 +571,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[trigger] gl_tests (with patch) on Ubuntu-12.04",
+    "name": "[trigger] gl_tests (with patch)",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -614,8 +615,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "gl_tests (with patch) on Ubuntu-12.04",
+    "name": "gl_tests (with patch)",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -633,7 +635,7 @@
       "--build-number",
       "571",
       "--test-type",
-      "gl_tests (with patch) on Ubuntu-12.04",
+      "gl_tests (with patch)",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -643,7 +645,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Upload to test-results [gl_tests (with patch) on Ubuntu-12.04]"
+    "name": "Upload to test-results [gl_tests (with patch)]"
   },
   {
     "name": "$result",

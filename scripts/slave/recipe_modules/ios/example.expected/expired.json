@@ -543,14 +543,15 @@
       "--tag",
       "spec_name:chromium.fake:ios:fake test:simulator:fake device:8.1:6.1.1",
       "--tag",
-      "stepname:fake test (fake device iOS 8.1) on Mac",
+      "stepname:fake test (fake device iOS 8.1)",
       "--tag",
       "test:fake test",
       "fake-hash-0"
     ],
-    "name": "trigger.[trigger] fake test (fake device iOS 8.1) on Mac",
+    "name": "trigger.[trigger] fake test (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake test (fake device iOS 8.1)/Mac/fake-hash-/ios/0\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -582,7 +583,7 @@
       "--task-output-dir",
       "[TMP_BASE]/0_tmp_2"
     ],
-    "name": "fake test (fake device iOS 8.1) on Mac",
+    "name": "fake test (fake device iOS 8.1)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@No suitable Swarming bot found in time.@@@",

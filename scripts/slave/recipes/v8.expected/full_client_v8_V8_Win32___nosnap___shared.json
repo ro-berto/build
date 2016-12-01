@@ -497,7 +497,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check on Windows-7-SP1",
+      "stepname:Check",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -519,8 +519,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Windows-7-SP1",
+    "name": "[trigger] Check",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -598,7 +599,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - extra on Windows-7-SP1",
+      "stepname:Check - extra",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -620,8 +621,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - extra on Windows-7-SP1",
+    "name": "[trigger] Check - extra",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - extra/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -699,7 +701,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Ignition - turbofan on Windows-7-SP1",
+      "stepname:Ignition - turbofan",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -721,8 +723,9 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Ignition - turbofan on Windows-7-SP1",
+    "name": "[trigger] Ignition - turbofan",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition - turbofan/Windows-7-SP1/[dummy has/V8 Win32 - nosnap - shared/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
