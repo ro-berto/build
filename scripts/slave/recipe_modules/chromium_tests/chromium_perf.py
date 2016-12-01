@@ -175,14 +175,10 @@ _AddTestSpec('Android One Perf', 'android-one', 'android',
              target_bits=32, num_device_shards=7, num_host_shards=3)
 
 
-_AddTestSpec('Win Zenbook Perf', 'win-zenbook', 'win',
-             num_host_shards=5)
-_AddTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win',
-             num_host_shards=5)
-_AddTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win',
-             num_host_shards=5)
-_AddTestSpec('Win 8 Perf', 'chromium-rel-win8-dual', 'win',
-             num_host_shards=5)
+_AddIsolatedTestSpec('Win Zenbook Perf', 'win-zenbook', 'win')
+_AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win')
+_AddIsolatedTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win')
+_AddIsolatedTestSpec('Win 8 Perf', 'chromium-rel-win8-dual', 'win')
 _AddIsolatedTestSpec('Win 7 Perf', 'chromium-rel-win7-dual', 'win',
                      target_bits=32)
 _AddIsolatedTestSpec('Win 7 x64 Perf', 'chromium-rel-win7-x64-dual', 'win')

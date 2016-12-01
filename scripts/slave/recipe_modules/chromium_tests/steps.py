@@ -576,7 +576,7 @@ class DynamicPerfTests(Test):
 
   @property
   def name(self):
-    return 'dynamic_perf_tests'
+    return 'dynamic_perf_tests'   # pragma: no cover
 
   @property
   def uses_local_devices(self):
@@ -639,10 +639,10 @@ class DynamicPerfTests(Test):
             test_type=test.get('perf_dashboard_id', test_name),
             xvfb=True,
             chartjson_file=True)
-      except api.step.StepFailure as f:
+      except api.step.StepFailure as f: # pragma: no cover
         failure = f
 
-    if failure:
+    if failure: # pragma: no cover
       raise failure
 
   @staticmethod
