@@ -34,11 +34,11 @@ def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
       extra_compile_targets=extra_compile_targets)
 
 
-def _AddTestSpec(name, perf_id, platform,
+def _AddTestSpec(name, perf_id, platform, num_device_shards=1,
                  parent_buildername=None, target_bits=64):
   tests = [steps.DynamicPerfTests(
       perf_id, platform, target_bits,
-      num_device_shards=1, num_host_shards=1, shard_index=0)]
+      num_device_shards=num_device_shards, num_host_shards=1, shard_index=0)]
 
   spec = chromium_perf.TestSpec(
       'chromium_perf', perf_id, platform, target_bits,
@@ -69,7 +69,7 @@ _AddBuildSpec('Android Builder FYI', 'android', 'android', target_bits=32,
                                      'system_webview_shell_apk',])
 
 _AddTestSpec('Android Power Nexus 5X Perf', 'fyi-android-power-nexus-5x',
-             'android', target_bits=32,
+             'android', target_bits=32, num_device_shards=7,
              parent_buildername='Android Builder FYI')
 
 _AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True)
