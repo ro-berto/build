@@ -168,6 +168,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "FORCE_MAC_TOOLCAIN": "1",
       "LANDMINES_VERBOSE": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
