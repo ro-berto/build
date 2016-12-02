@@ -1,0 +1,31 @@
+{
+  "comment": ["This is a configuration file for gatekeeper_ng.py",
+              "Look at that for documentation on this file's format."],
+  "masters": {
+    "https://build.chromium.org/p/client.v8.fyi": [
+      {
+        "builders": {
+          "V8 - node.js integration": {
+            "tree_notify": [
+              "machenbach@chromium.org",
+              "node-build-notifications@google.com"
+            ],
+            "subject_template": "V8/node.js integration broken after %(revision)s",
+            "closing_optional": [
+              "*"
+            ],
+            "excluded_steps": [
+              "bot_update",
+              "build and test node.js - baseline",
+              "configure node.js - baseline",
+              "gsutil upload",
+              "Failure reason",
+              "update_scripts",
+              "steps"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

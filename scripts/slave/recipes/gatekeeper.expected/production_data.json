@@ -188,6 +188,17 @@
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://pdfium-status.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"v8-node\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"v8_node_build_db.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"config\": \"v8/gatekeeper_v8_node.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8.fyi\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"v8-tree-closers\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"v8_tree_closers_build_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"config\": \"v8/gatekeeper_v8_tree_closers.json\", @@@",
@@ -320,6 +331,25 @@
       "https://build.chromium.org/p/chromium.perf"
     ],
     "name": "gatekeeper: chromium.perf"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/v8/gatekeeper_v8_node.json",
+      "--email-app-secret-file",
+      "/creds/gatekeeper/mailer_password",
+      "--track-revisions",
+      "--revision-properties",
+      "got_revision_cp",
+      "--build-db",
+      "v8_node_build_db.json",
+      "https://build.chromium.org/p/client.v8.fyi"
+    ],
+    "name": "gatekeeper: v8-node"
   },
   {
     "cmd": [
