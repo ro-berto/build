@@ -189,7 +189,6 @@ class iOSApi(recipe_api.RecipeApi):
     cfg = self.m.chromium.make_config()
 
     self.m.chromium.c = cfg
-    self.m.chromium.apply_config('force_mac_toolchain_off')
 
     use_goma = 'use_goma=true' in self.__config['gn_args']
     if use_goma:

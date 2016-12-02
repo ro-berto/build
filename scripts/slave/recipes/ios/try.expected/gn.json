@@ -270,6 +270,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files (with patch)"
@@ -362,6 +363,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "clang_revision",
@@ -411,6 +413,7 @@
       "restart"
     ],
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]",
       "GOMA_DEPS_CACHE_FILE": "ios_simulator_gn.gomadeps",
       "GOMA_FAIL_FAST": "true",
@@ -435,6 +438,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile"

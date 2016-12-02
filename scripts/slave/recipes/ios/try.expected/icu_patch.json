@@ -323,7 +323,7 @@
       "-b",
       "ios-simulator",
       "-v",
-      "//out/Release",
+      "//out/None",
       "{\"additional_compile_targets\": [\"All\", \"fake tests\"], \"files\": [\"third_party/icu/foo.cc\"], \"test_targets\": [\"fake tests\"]}",
       "/path/to/tmp/json"
     ],

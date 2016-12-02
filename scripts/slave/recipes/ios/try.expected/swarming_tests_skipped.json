@@ -318,7 +318,7 @@
       "-b",
       "ios-simulator-swarming",
       "-v",
-      "//out/Release",
+      "//out/None",
       "{\"additional_compile_targets\": [\"All\", \"fake test\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake test\"]}",
       "/path/to/tmp/json"
     ],
