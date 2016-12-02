@@ -749,65 +749,10 @@
       "--second-build-dir",
       "[START_DIR]\\src\\out\\Release.2",
       "--target-platform",
-      "win",
-      "--json-output",
-      "/path/to/tmp/json"
+      "win"
     ],
     "cwd": "[START_DIR]",
-    "name": "compare_build_artifacts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"expected_diffs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"flatc\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"unexpected_diffs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"base_unittest\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\src\\tools\\create_diffs_tarball.py",
-      "--first-build-dir",
-      "[START_DIR]\\src\\out\\Release.1",
-      "--second-build-dir",
-      "[START_DIR]\\src\\out\\Release.2",
-      "--json-input",
-      "[\"base_unittest\", \"flatc\"]",
-      "--output",
-      "[TMP_BASE]\\deterministic_build_tmp_1\\deterministic_build_diffs.tgz"
-    ],
-    "name": "create tarball"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]\\resources\\gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]\\deterministic_build_tmp_1\\deterministic_build_diffs.tgz",
-      "gs://chrome-determinism/Windows Clang deterministic\\571\\deterministic_build_diffs.tgz"
-    ],
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-determinism/Windows Clang deterministic\\571\\deterministic_build_diffs.tgz@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]\\resources\\rmtree.py",
-      "[TMP_BASE]\\deterministic_build_tmp_1"
-    ],
-    "name": "rmtree [TMP_BASE]\\deterministic_build_tmp_1"
+    "name": "compare_build_artifacts"
   },
   {
     "name": "$result",
