@@ -314,6 +314,7 @@ BUILDERS = {
           Test262,
           Mozilla,
         ],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosnap - debug': {
@@ -327,6 +328,7 @@ BUILDERS = {
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'enable_swarming': True,
         'tests': [V8Testing_4, Mozilla, SimdJs],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,
@@ -618,6 +620,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing_2, V8TestingExtra_2, IgnitionTurbofan],
+        'variants': V8NoExhaustiveVariants(),
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -1455,7 +1458,8 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_7, Test262_4, Mozilla_2, SimdJs],
+        'tests': [V8Testing_5, Test262_2, Mozilla, SimdJs],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
@@ -1512,6 +1516,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
         'tests': [V8Testing, SimdJs],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
       'V8 Mips - big endian - nosnap - 2': {
@@ -1527,6 +1532,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
         'tests': [V8Testing, SimdJs],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - mipsel - sim - builder': {
@@ -1858,6 +1864,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing_3],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_dbg': {
@@ -1870,6 +1877,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing_4],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,
@@ -2295,6 +2303,7 @@ BUILDERS = {
           'cpu': 'x86-64',
         },
         'tests': [V8Testing_3, V8TestingExtra_2, IgnitionTurbofan],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
       'v8_win64_rel_ng': {
