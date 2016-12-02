@@ -13,10 +13,8 @@ results can be easily fetched from the same location as the results.
 
 import argparse
 import logging
-import os
 import re
 import socket
-import shutil
 import sys
 
 from slave import slave_utils
@@ -42,7 +40,10 @@ def _ParseArgs():
   parser.add_argument('--builder-name', type=str, required=True)
   parser.add_argument('--build-number', type=str, required=True)
   parser.add_argument('--gs-bucket', type=str, required=True)
-  return parser.parse_args()
+  slave_utils_callback = slave_utils.AddArgs(parser)
+  args = parser.parse_args()
+  slave_utils_callback(args)
+  return args
 
 
 def main():

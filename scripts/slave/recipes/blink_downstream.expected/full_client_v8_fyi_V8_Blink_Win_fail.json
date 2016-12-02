@@ -571,7 +571,9 @@
       "--builder-name",
       "V8-Blink Win",
       "--gs-bucket",
-      "gs://chromium-layout-test-archives"
+      "gs://chromium-layout-test-archives",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "name": "archive_retry_summary"

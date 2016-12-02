@@ -212,6 +212,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         '--builder-name', self.m.properties['buildername'],
         '--gs-bucket', 'gs://chromium-layout-test-archives',
     ]
+    args += self.m.build.slave_utils_args
     self.m.python('archive_retry_summary', script, args)
 
   def create_results_from_json(self, data):

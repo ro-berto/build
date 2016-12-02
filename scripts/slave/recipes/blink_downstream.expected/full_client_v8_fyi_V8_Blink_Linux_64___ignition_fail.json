@@ -442,7 +442,9 @@
       "--builder-name",
       "V8-Blink Linux 64 - ignition",
       "--gs-bucket",
-      "gs://chromium-layout-test-archives"
+      "gs://chromium-layout-test-archives",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
     "name": "archive_retry_summary"

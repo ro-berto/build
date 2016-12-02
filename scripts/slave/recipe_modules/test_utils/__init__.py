@@ -1,4 +1,5 @@
 DEPS = [
+  'build',
   'chromium',
   'depot_tools/tryserver',
   'recipe_engine/json',
