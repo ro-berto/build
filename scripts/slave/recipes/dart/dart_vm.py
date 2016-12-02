@@ -115,7 +115,7 @@ for mode in ['debug', 'release', 'product']:
     'mode': mode,
     'target_arch': 'x64',
     'env': default_envs['linux'],
-    'test_args': ['-cdart2appjit', '-rdart_app', '--use-blobs',
+    'test_args': ['-capp_jit',
                   '--builder-tag=no_ipv6'],
   }
   builders['precomp-linux-%s-x64' % mode] = {
