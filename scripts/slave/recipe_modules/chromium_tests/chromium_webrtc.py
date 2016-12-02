@@ -56,7 +56,7 @@ def BuildSpec(platform, target_bits, build_config='Release',
   return spec
 
 
-class WebRTCTest(steps.GTestTest):
+class WebRTCTest(steps.LocalGTestTest):
   """A GTestTest with the ability to turn on perf reporting.
 
   WebRTC is the only project that runs correctness tests with perf reporting
@@ -75,6 +75,18 @@ class WebRTCTest(steps.GTestTest):
       runtest_kwargs['perf_dashboard_id'] = name
       runtest_kwargs['annotate'] = 'graphing'
     super(WebRTCTest, self).__init__(name, args, **runtest_kwargs)
+
+  def run(self, api, suffix, test_filter=None):
+    webrtc_revision_cp = api.bot_update.last_returned_properties.get(
+        'got_webrtc_revision_cp', 'x@{#0}')
+    webrtc_revision = str(api.commit_position.parse_revision(
+        webrtc_revision_cp))
+    self._runtest_kwargs['perf_config'] = {
+      # TODO(kjellander: Change to r_webrtc_git once crbug.com/611808 is fixed.
+      'r_webrtc_subtree_git': webrtc_revision,
+      'a_default_rev': 'r_webrtc_subtree_git',
+    }
+    steps.LocalGTestTest.run(self, api, suffix, test_filter=test_filter)
 
 
 def TestSpec(parent_builder, perf_id, platform, target_bits,
