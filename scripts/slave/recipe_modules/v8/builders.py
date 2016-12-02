@@ -1667,6 +1667,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - x87 - nosnap - debug builder',
         'build_gs_archive': 'linux_x87_nosnap_dbg_archive',
         'tests': [V8Testing_4],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
