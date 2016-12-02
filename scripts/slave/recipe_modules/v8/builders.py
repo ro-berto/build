@@ -1458,7 +1458,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_5, Test262_2, Mozilla, SimdJs],
+        'tests': [V8Testing_5, Test262_4, Mozilla, SimdJs],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
