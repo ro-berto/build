@@ -71,6 +71,15 @@ def _is_telemetry_command(command):
   """Attempts to discern whether or not a given command is running telemetry."""
   return 'run_benchmark' in command
 
+def _is_gtest_with_buildbot_output(command):
+  """Attempts to discern whether or not a given command is an old style gtest
+  that generates buildbot output."""
+  GTESTS_WITH_BUILDBOT_OUTPUT = [
+      'angle_perftests', 'cc_perftests', 'idb_perf',
+      'load_library_perf_tests', 'media_perftests'
+  ]
+  return any([t in command for t in GTESTS_WITH_BUILDBOT_OUTPUT])
+
 def _make_results_dir(api):
   new_dir = 'dummy' if api._test_data.enabled else str(uuid.uuid4())
   full_path = api.m.path['bisect_results'].join(new_dir)
@@ -92,7 +101,7 @@ def run_perf_test(api, test_config, **kwargs):
   command = test_config['command']
   use_chartjson = bool('chartjson' in command)
   use_valueset = bool('valueset' in command)
-  use_buildbot = bool('buildbot' in command)
+  use_buildbot = _is_gtest_with_buildbot_output(command)
   is_telemetry = _is_telemetry_command(command)
   start_time = time.time()
 
@@ -130,7 +139,9 @@ def run_perf_test(api, test_config, **kwargs):
       # Write stdout to a local temp location for possible buildbot parsing
       stdout_path = temp_dir.join('results.txt')
       api.m.file.write('write buildbot output to disk', stdout_path, out)
-      results['stdout_paths'].append(stdout_path)
+
+      if use_buildbot:
+        results['stdout_paths'].append(stdout_path)
 
     if metric:
       if use_chartjson:

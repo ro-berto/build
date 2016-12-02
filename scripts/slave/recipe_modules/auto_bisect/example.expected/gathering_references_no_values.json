@@ -455,120 +455,7 @@
     "cwd": "[START_DIR]",
     "name": "Gathering reference values.gsutil ls",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "put",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.buildbucket.put",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1201331270\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build",
-    "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -779,8 +666,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -877,8 +766,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -975,8 +866,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -1073,8 +966,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -1171,8 +1066,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -1225,597 +1122,7 @@
     "cwd": "[START_DIR]",
     "name": "Gathering reference values.gsutil ls (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "put",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.buildbucket.put (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1201331270\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build (2)",
-    "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (3)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@json.output@\"ERROR\"@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (4)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping (3)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (3)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (5)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping (4)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (4)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (6)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping (5)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (5)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (7)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping (6)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (6)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (8)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping (7)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (7)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (9)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping (8)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (8)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (10)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping (9)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (9)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (11)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.sleeping (10)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "get",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chromium-bisect.json",
-      "1201331270"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (10)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "Gathering reference values.Waiting for build.gsutil ls (12)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -2026,8 +1333,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -2035,7 +1344,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2124,8 +1433,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -2133,7 +1444,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2222,8 +1533,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -2231,7 +1544,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2320,8 +1633,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -2329,7 +1644,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2418,8 +1733,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -2427,7 +1744,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2510,7 +1827,7 @@
     ],
     "cwd": "[START_DIR]",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": \"Bisect cannot identify a culprit: Testing the \\\"bad\\\" revision failed: Test runs failed to produce output.\", \"bad_revision\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": null, \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": null, \"n_observations\": 0, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": null}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": null, \"n_observations\": 0, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": null}], \"status\": \"failed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"aborted_reason\": \"Bisect cannot identify a culprit: Testing the \\\"good\\\" revision failed: Test runs failed to produce output.\", \"bad_revision\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": null, \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": null, \"n_observations\": 0, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": null}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": null, \"n_observations\": 0, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": null}], \"status\": \"failed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
@@ -2521,7 +1838,7 @@
   },
   {
     "name": "$result",
-    "reason": "Bisect cannot identify a culprit: Testing the \"bad\" revision failed: Test runs failed to produce output.",
+    "reason": "Bisect cannot identify a culprit: Testing the \"good\" revision failed: Test runs failed to produce output.",
     "recipe_result": null,
     "status_code": 1
   }

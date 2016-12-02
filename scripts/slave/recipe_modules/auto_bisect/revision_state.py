@@ -94,6 +94,7 @@ class RevisionState(object):
     self.build_url = self.bisector.get_platform_gs_prefix() + self._gs_suffix()
     self.valueset_paths = []
     self.chartjson_paths = []
+    self.buildbot_paths = []
     self.debug_values = []
     self.return_codes = []
     self._test_config = None
@@ -126,6 +127,7 @@ class RevisionState(object):
     return max(
         len(self.valueset_paths),
         len(self.chartjson_paths),
+        len(self.buildbot_paths),
         len(self.return_codes))
 
   @property
@@ -144,6 +146,14 @@ class RevisionState(object):
     if self.debug_values:
       mn = self.mean
       return math.sqrt(sum(pow(x - mn, 2) for x in self.debug_values))
+
+  def _check_values_produced(self):
+    """Checks if any values were output from tests."""
+    api = self.bisector.api
+    if api._test_data.enabled:
+      return api._test_data.get('parsed_values', {}).get(self.commit_hash)
+    return (  # pragma: no cover
+        self.chartjson_paths or self.valueset_paths or self.buildbot_paths)
 
   def start_job(self):
     api = self.bisector.api
@@ -172,6 +182,16 @@ class RevisionState(object):
       while not self._check_revision_good():  # pragma: no cover
         min(self, self.bisector.lkgr, self.bisector.fkbr,
             key=lambda(x): x.test_run_count)._do_test()
+
+      # If this is the initial good/bad revision, we should to check if any
+      # values are even produced and fail if they aren't. This allows the
+      # "Gathering Reference Values" step to fail instead of some unrelated
+      # future step.
+      if not self.bisector.is_return_code_mode():
+        if (self in [self.bisector.good_rev, self.bisector.bad_rev] and not
+            self._check_values_produced()):
+          self.failed = True
+          self.failure_reason = 'Test runs failed to produce output.'
 
     except bisect_exceptions.UntestableRevisionException as e:
       self.failure_reason = e.message
@@ -333,6 +353,7 @@ class RevisionState(object):
     else:
       self.valueset_paths.extend(results.get('valueset_paths'))
       self.chartjson_paths.extend(results.get('chartjson_paths'))
+      self.buildbot_paths.extend(results.get('stdout_paths'))
 
   def _request_build(self):
     """Posts a request to buildbot to build this revision and archive it."""

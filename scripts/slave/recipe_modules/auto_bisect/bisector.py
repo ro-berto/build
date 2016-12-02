@@ -176,6 +176,11 @@ class Bisector(object):
       values_a = revision_a.valueset_paths
       values_b = revision_b.valueset_paths
 
+    if revision_a.buildbot_paths and revision_b.buildbot_paths:
+      output_format = 'buildbot'
+      values_a = revision_a.buildbot_paths
+      values_b = revision_b.buildbot_paths
+
     result = self.api.stat_compare(
         values_a,
         values_b,
