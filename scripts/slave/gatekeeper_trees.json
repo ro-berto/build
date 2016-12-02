@@ -124,7 +124,8 @@
         "config": "v8/gatekeeper_v8_tree_closers.json",
         "masters": {
             "https://build.chromium.org/p/client.v8": ["*"],
-            "https://build.chromium.org/p/client.v8.fyi": ["*"]
+            "https://build.chromium.org/p/client.v8.fyi": ["*"],
+            "https://build.chromium.org/p/client.v8.ports": ["*"]
         },
         "open-tree": true,
         "password-file": "/creds/gatekeeper/v8_status_password",
