@@ -2,10 +2,16 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
 import json
 
 from recipe_engine import recipe_test_api
 
+# Path to the production trees file. We need to use system os.path to make this
+# available as test data whereever the simulation is run.
+PROD_TREES_FILE = os.path.normpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+    '..', '..', 'gatekeeper_trees.json'))
 
 class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
   def fake_test_data(self, data=None):
@@ -34,3 +40,7 @@ class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
       },
       'chromium': {},
     }
+
+  def production_data(self):
+    with open(PROD_TREES_FILE) as f:
+      return self.m.json.output(json.load(f))

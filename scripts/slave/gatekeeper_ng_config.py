@@ -339,6 +339,7 @@ def load_gatekeeper_tree_config(filename):
     trees_config = json.load(f)
 
   tree_config_keys = ['build-db',
+                      'config',
                       'default-from-email',
                       'filter-domain',
                       'masters',
@@ -362,6 +363,7 @@ def load_gatekeeper_tree_config(filename):
     assert all(isinstance(allowed, list) for allowed in masters.values())
 
     assert isinstance(tree_config.get('build-db', ''), basestring)
+    assert isinstance(tree_config.get('config', ''), basestring)
     assert isinstance(tree_config.get('default-from-email', ''), basestring)
     assert isinstance(tree_config.get('filter-domain', ''), basestring)
     assert isinstance(tree_config.get('open-tree', True), bool)

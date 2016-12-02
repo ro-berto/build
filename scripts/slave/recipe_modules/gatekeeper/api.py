@@ -7,7 +7,7 @@ from recipe_engine import recipe_api
 
 class Gatekeeper(recipe_api.RecipeApi):
   """Module for Gatekeeper NG."""
-  def __call__(self, gatekeeper_json, gatekeeper_trees_json):
+  def __call__(self, gatekeeper_default_json, gatekeeper_trees_json):
     config = self.m.json.read(
       'reading %s' % self.m.path.basename(gatekeeper_trees_json),
       gatekeeper_trees_json,
@@ -16,6 +16,16 @@ class Gatekeeper(recipe_api.RecipeApi):
     for tree_name, tree_args in config.iteritems():
       # TODO(martiniss): create a creds recipe module to make a nice path
       # reference to /creds
+
+      # Use tree-specific config if specified, otherwise use default.
+      # Tree-specific configs must be relative to the trees file.
+      gatekeeper_json = gatekeeper_default_json
+      if tree_args.get('config'):
+        assert '..' not in tree_args['config'].split('/')
+        gatekeeper_json = self.m.path.join(
+            self.m.path.dirname(gatekeeper_trees_json), 
+            *tree_args['config'].split('/'))
+
       args = [
           '-v', '--json', gatekeeper_json, '--email-app-secret-file',
           '/creds/gatekeeper/mailer_password'

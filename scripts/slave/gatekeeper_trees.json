@@ -110,8 +110,9 @@
         "status-url": "https://pdfium-status.appspot.com",
         "track-revisions": true
     },
-    "v8": {
-        "build-db": "v8_build_db.json",
+    "v8-tree-closers": {
+        "build-db": "v8_tree_closers_build_db.json",
+        "config": "v8/gatekeeper_v8_tree_closers.json",
         "masters": {
             "https://build.chromium.org/p/client.v8": ["*"],
             "https://build.chromium.org/p/client.v8.fyi": ["*"]

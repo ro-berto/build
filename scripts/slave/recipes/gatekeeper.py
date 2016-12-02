@@ -51,3 +51,11 @@ def GenTests(api):
         api.gatekeeper.fake_test_data(whitelist_data)
     )
   )
+
+  yield (
+    api.test('production_data')
+    + api.step_data(
+      'reading gatekeeper_trees.json',
+      api.gatekeeper.production_data(),
+    )
+  )
