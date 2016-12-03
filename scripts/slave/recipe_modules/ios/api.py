@@ -227,7 +227,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     env = {
       'LANDMINES_VERBOSE': '1',
-      'FORCE_MAC_TOOLCAIN': '1',
+      'FORCE_MAC_TOOLCHAIN': '1',
     }
 
     # Add extra env variables.
