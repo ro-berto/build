@@ -377,7 +377,7 @@
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--",
-      "browser_tests_apk_run"
+      "all"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
