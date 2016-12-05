@@ -150,7 +150,6 @@
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja",
-      "GYP_MSVS_VERSION": "2013",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -185,8 +184,7 @@
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_MSVS_VERSION": "2013"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
@@ -247,8 +245,7 @@
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_MSVS_VERSION": "2013"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "generate_build_files with gn (fyi)"
   },

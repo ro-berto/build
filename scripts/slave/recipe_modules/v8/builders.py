@@ -551,7 +551,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -571,7 +570,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -611,7 +609,6 @@ BUILDERS = {
           'shared_library',
           'no_snapshot',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -655,7 +652,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -682,7 +678,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -2186,7 +2181,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -2212,7 +2206,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -2227,7 +2220,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2269,7 +2261,6 @@ BUILDERS = {
           'no_snapshot',
           'shared_library',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2310,7 +2301,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2348,7 +2338,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'mb',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -2812,9 +2801,6 @@ BUILDERS['client.dart.fyi'] = {'builders': {
     'testing': {'platform': platform},
   } for platform in ('win', 'linux', 'mac')
 }}
-
-win = BUILDERS['client.dart.fyi']['builders']['v8-win-release']
-win['chromium_apply_config'].extend(['msvs2013'])
 
 BUILDERS = freeze(BUILDERS)
 BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)

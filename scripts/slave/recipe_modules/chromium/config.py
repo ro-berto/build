@@ -238,11 +238,6 @@ def force_mac_toolchain_off(c):
   c.env.FORCE_MAC_TOOLCHAIN = 0
 
 @config_ctx()
-def msvs2013(c):
-  c.gn_args.append('visual_studio_version=2013')
-  c.gyp_env.GYP_MSVS_VERSION = '2013'
-
-@config_ctx()
 def msvs2015(c):
   c.gn_args.append('visual_studio_version=2015')
   c.gyp_env.GYP_MSVS_VERSION = '2015'
