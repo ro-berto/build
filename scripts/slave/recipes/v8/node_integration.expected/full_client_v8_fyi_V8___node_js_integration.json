@@ -119,7 +119,9 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"icu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"inspector_protocol\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"inspector_protocol\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"jinja2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"markupsafe\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",

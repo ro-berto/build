@@ -126,8 +126,9 @@ def RunSteps(api):
   ]
   for f in api.file.listdir(
       'third_party', api.path['start_dir'].join('v8', 'third_party')):
-    if f != 'inspector_protocol':
-      # Keep copying inspector_protocol.
+    if f not in ['inspector_protocol', 'jinja2', 'markupsafe']:
+      # Keep copying inspector_protocol, jinja2 and markupsafe.
+      # TODO(machenbach): Formalize those exceptions on the v8-side.
       args.append(api.path['start_dir'].join('v8', 'third_party', f))
   api.python(
       name='copy v8 tree',
@@ -165,6 +166,8 @@ def GenTests(api):
               'listdir third_party', api.json.output([
                 'icu',
                 'inspector_protocol',
+                'jinja2',
+                'markupsafe',
               ],
           ))
       )
