@@ -198,7 +198,7 @@
       "slave_pools": ["ccompute_optional_bots"],
     },
     "android_optional_gpu_tests_rel": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 10800,  # 60 * 180
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
