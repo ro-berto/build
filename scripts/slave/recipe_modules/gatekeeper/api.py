@@ -23,7 +23,7 @@ class Gatekeeper(recipe_api.RecipeApi):
       if tree_args.get('config'):
         assert '..' not in tree_args['config'].split('/')
         gatekeeper_json = self.m.path.join(
-            self.m.path.dirname(gatekeeper_trees_json), 
+            self.m.path.dirname(gatekeeper_trees_json),
             *tree_args['config'].split('/'))
 
       args = [
