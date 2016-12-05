@@ -816,3 +816,183 @@ def GenTests(api):
               'parsed_values': [12, 13, 14, 15, 7],
               'test_results': 21 * [{'stdout': 'benchmark text', 'retcode': 0}],
           }]))
+  yield (
+      api.test('failed_build_inconclusive_1')
+      + api.properties(
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          slavename='dummyslave',
+          buildnumber=571,
+          bisect_config={
+              'test_type': 'perf',
+              'command':
+                  ('src/tools/perf/run_benchmark -v --browser=release '
+                   '--output-format=valueset smoothness.tough_scrolling_cases'),
+              'good_revision': '314015',
+              'bad_revision': '314017',
+              'metric': 'mean_input_event_latency/mean_input_event_latency',
+              'bug_id': '-1',
+              'gs_bucket': 'chrome-perf',
+              'dummy_builds': 'True',
+              'dummy_tests': 'True',
+              'dummy_job_names': 'True',
+              'bypass_stats_check': 'True',
+              'skip_gclient_ops': 'True',
+              'recipe_tester_name': 'linux_perf_tester'
+          })
+      + api.auto_bisect_staging([
+          {
+              'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
+              'commit_pos': '314015',
+              'parsed_values': [19, 20, 23, 1],
+              'gsutil_exists': 2 * [False],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'SUCCESS'}}],
+          },
+          {
+              'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
+              'commit_pos': '314016',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
+              'commit_pos': '314017',
+              'parsed_values': [12, 13, 14, 15, 7],
+              'test_results': 21 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          },
+          ]))
+  yield (
+      api.test('failed_build_inconclusive_11')
+      + api.properties(
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          slavename='dummyslave',
+          buildnumber=571,
+          bisect_config={
+              'test_type': 'perf',
+              'command':
+                  ('src/tools/perf/run_benchmark -v --browser=release '
+                   '--output-format=valueset smoothness.tough_scrolling_cases'),
+              'good_revision': '314015',
+              'bad_revision': '314027',
+              'metric': 'mean_input_event_latency/mean_input_event_latency',
+              'bug_id': '-1',
+              'gs_bucket': 'chrome-perf',
+              'dummy_builds': 'True',
+              'dummy_tests': 'True',
+              'dummy_job_names': 'True',
+              'bypass_stats_check': 'True',
+              'skip_gclient_ops': 'True',
+              'recipe_tester_name': 'linux_perf_tester'
+          })
+      + api.auto_bisect_staging([
+          {
+              'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
+              'commit_pos': '314015',
+              'parsed_values': [19, 20, 23, 1],
+              'gsutil_exists': 2 * [False],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'SUCCESS'}}],
+          },
+          {
+              'hash': 'ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16',
+              'commit_pos': '314016',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': 'bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17',
+              'commit_pos': '314017',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': 'cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18',
+              'commit_pos': '314018',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': 'de19de19de19de19de19de19de19de19de19de19',
+              'commit_pos': '314019',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': 'ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20',
+              'commit_pos': '314020',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': 'f021f021f021f021f021f021f021f021f021f021',
+              'commit_pos': '314021',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': '0122012201220122012201220122012201220122',
+              'commit_pos': '314022',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': '1223122312231223122312231223122312231223',
+              'commit_pos': '314023',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': '2324232423242324232423242324232423242324',
+              'commit_pos': '314024',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': '3425342534253425342534253425342534253425',
+              'commit_pos': '314025',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
+              'commit_pos': '314026',
+              'gsutil_exists': 10 * [False],
+              'build_status': [{'build': {'status': 'SCHEDULED'}},
+                               {'build': {'status': 'COMPLETED',
+                                          'result': 'FAILED'}}],
+          },
+          {
+              'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
+              'commit_pos': '314027',
+              'parsed_values': [12, 13, 14, 15, 7],
+              'test_results': 21 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          },
+          ]))

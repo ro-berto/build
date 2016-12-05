@@ -845,16 +845,36 @@ class Bisector(object):
     builder_number = str(properties.get('buildnumber', ''))
     return '%sbuilders/%s/builds/%s' % (bot_url, builder_name, builder_number)
 
-  def failed_jobs(self):
-    """Produce a list of failed build jobs if the number is manageable."""
+  def inconclusive_bisect_details(self):
+    """Produces a message detailing the cause of inconclusive bisect.
+
+    There are four main scenarios here:
+      1. The bisect was inconclusive because the data shows no clear culprit,
+      2. The bisect was inconclusive because the tests failed to produce,
+      sufficient data.
+      3. A combination of 1 and 2, or
+      4. Something unexpected.
+
+    Returns:
+      A string detailing the reasons.
+    """
+
     with self.api.m.step.nest('Gathering failed build jobs list'):
-      failed_revisions = self.revisions[
-          self.fkbr.list_index + 1:self.lkgr.list_index]
-      failed_ids = ['Buildbucket ID: ' + r.build_id for r in failed_revisions
-                    if r.is_build_failed()]
-      message = ('\n\nNo failures were found, further debugging necessary'
-                 if not failed_ids else '\n\nFailed builds:\n')
-      message = ('\n\nOver 10 revisions failed, listing only the first 10:\n\n'
-                 if len(failed_ids) > 10 else message)
-      message += '\n'.join(failed_ids[:10])
+      unclassified_revisions = self.revisions[
+          self.lkgr.list_index + 1:self.fkbr.list_index]
+      if unclassified_revisions:
+        # The possible culprits are those after lkgr, up to and including fkbr.
+        message = 'No single culprit between %s and %s could be identified' % (
+            self.lkgr.next_revision.revision_string(),
+            self.fkbr.revision_string())
+        failed_ids = ['Buildbucket ID: ' + r.build_id for r in
+                      unclassified_revisions if r.is_build_failed()]
+        if failed_ids:
+          if len(failed_ids) > 10:
+            message += 'Over 10 revisions failed, listing only the first 10:\n'
+          else:
+            message += 'The following revisions failed to build:\n'
+          message += '\n'.join(failed_ids[:10])
+      else:  # pragma: no cover
+        message = 'Something else went wrong, more debugging needed.'
     return message
