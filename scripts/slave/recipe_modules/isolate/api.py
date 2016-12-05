@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import itertools
 from recipe_engine import recipe_api
 
 
@@ -222,17 +223,51 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result = self.m.step.active_result
       step_result.presentation.status = self.m.step.WARNING
 
+  def archive_differences(self, first_dir, second_dir, diffs):
+    """Archive different files of 2 builds."""
+    GS_BUCKET = 'chrome-determinism'
+    TARBALL_NAME = 'deterministic_build_diffs.tgz'
+    with self.m.tempfile.temp_dir('deterministic_build') as t:
+      output = self.m.path.join(t, TARBALL_NAME)
+      self.m.python('create tarball',
+                    script=self.m.path.join(self.m.path['checkout'],
+                                            'tools',
+                                            'determinism',
+                                            'create_diffs_tarball.py'),
+                    args=[
+                        '--first-build-dir', first_dir,
+                        '--second-build-dir', second_dir,
+                        '--json-input', self.m.json.input(diffs),
+                        '--output', output,
+                    ])
+      self.m.gsutil.upload(output,
+                           GS_BUCKET,
+                           self.m.path.join(
+                               self.m.properties['buildername'],
+                               self.m.properties['buildnumber'],
+                               TARBALL_NAME))
+
   def compare_build_artifacts(self, first_dir, second_dir):
     """Compare the artifacts from 2 builds."""
     args = [
         '--first-build-dir', first_dir,
         '--second-build-dir', second_dir,
-        '--target-platform', self.m.chromium.c.TARGET_PLATFORM
+        '--target-platform', self.m.chromium.c.TARGET_PLATFORM,
+        '--json-output', self.m.json.output(),
     ]
-    self.m.python('compare_build_artifacts',
-                  self.m.path.join(self.m.path['checkout'],
-                                   'tools',
-                                   'determinism',
-                                   'compare_build_artifacts.py'),
-                  args=args,
-                  cwd=self.m.path['start_dir'])
+    step_result = self.m.python(
+        'compare_build_artifacts',
+        self.m.path.join(self.m.path['checkout'],
+                         'tools',
+                         'determinism',
+                         'compare_build_artifacts.py'),
+        args=args,
+        cwd=self.m.path['start_dir'],
+        step_test_data=(lambda: self.m.json.test_api.output({
+            'expected_diffs': ['flatc'],
+            'unexpected_diffs': ['base_unittest'],
+        })))
+    diffs = step_result.json.output
+    flattened = list(itertools.chain.from_iterable(diffs.itervalues()))
+    if flattened:
+      self.archive_differences(first_dir, second_dir, flattened)
