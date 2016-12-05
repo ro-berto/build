@@ -1645,25 +1645,23 @@ BUILDERS = {
       },
 ####### Category: X87
       'V8 Linux - x87 - nosnap - debug builder': {
-        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot',  'x87', 'mb'],
+          'v8_ninja', 'default_compiler', 'goma', 'x87', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
         'enable_swarming': True,
-        'build_gs_archive': 'linux_x87_nosnap_dbg_archive',
+        'build_gs_archive': 'linux_x87_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - x87 - nosnap - debug',
         ],
       },
       'V8 Linux - x87 - nosnap - debug': {
-        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot', 'x87'],
+          'v8_ninja', 'default_compiler', 'goma', 'x87'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1671,7 +1669,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux - x87 - nosnap - debug builder',
-        'build_gs_archive': 'linux_x87_nosnap_dbg_archive',
+        'build_gs_archive': 'linux_x87_dbg_archive',
         'tests': [V8Testing_4],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},

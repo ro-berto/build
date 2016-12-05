@@ -56,7 +56,7 @@ class V8Api(recipe_api.RecipeApi):
     'linux_dbg_archive': 'gs://chromium-v8/v8-linux-dbg',
     'linux_nosnap_rel_archive': 'gs://chromium-v8/v8-linux-nosnap-rel',
     'linux_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-nosnap-dbg',
-    'linux_x87_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-x87-nosnap-dbg',
+    'linux_x87_dbg_archive': 'gs://chromium-v8/v8-linux-x87-dbg',
     'linux_swarming_staging_archive':
         'gs://chromium-v8/v8-linux-swarming-staging',
     'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
