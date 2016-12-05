@@ -63,3 +63,6 @@ wait:
 	while `test -f twistd.pid`; do sleep 1; done;
 
 restart: stop wait start log
+
+status:
+	test -f twistd.pid && ps cax | awk '{ print $$1 }' | grep `cat twistd.pid` -w
