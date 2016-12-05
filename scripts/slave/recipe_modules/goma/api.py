@@ -62,33 +62,17 @@ class GomaApi(recipe_api.RecipeApi):
     if self._goma_jobs:
       return self._goma_jobs
 
-    # In presubmit, a buildbot generates recipe json file and
-    # another buildbot checks generated recipe,
-    # so we need to use python.inline not to change
-    # behavior of recipes.
-    step_result = self.m.python.inline(
+    step_result = self.m.python(
       'calculate the number of recommended jobs',
-      """
-import multiprocessing
-import sys
-
-job_limit = 200
-if sys.platform.startswith('linux'):
-  # Use 80 for linux not to load goma backend.
-  job_limit = 80
-
-try:
-  jobs = min(job_limit, multiprocessing.cpu_count() * 10)
-except NotImplementedError:
-  jobs = 50
-
-print jobs
-      """,
-      stdout=self.m.raw_io.output(),
+      self.package_repo_resource('scripts', 'tools', 'runit.py'),
+      args=[
+          '--show-path', 'python', self.resource('utils.py'), 'jobs',
+          '--file-path', self.m.raw_io.output()
+      ],
       step_test_data=(
-          lambda: self.m.raw_io.test_api.stream_output('50\n'))
+          lambda: self.m.raw_io.test_api.output('50'))
     )
-    self._goma_jobs = int(step_result.stdout)
+    self._goma_jobs = int(step_result.raw_io.output)
 
     return self._goma_jobs
 

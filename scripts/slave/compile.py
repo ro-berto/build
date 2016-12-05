@@ -11,7 +11,6 @@
   For a list of command-line options, call this script with '--help'.
 """
 
-import multiprocessing
 import optparse
 import os
 import signal
@@ -265,48 +264,6 @@ class EnsureUpToDateFilter(chromium_utils.RunCommandFilter):
     return a_line
 
 
-# TODO(tikuta): move to goma_utils
-def determine_goma_jobs():
-  # We would like to speed up build on Windows a bit, since it is slowest.
-  number_of_processors = 0
-  try:
-    number_of_processors = multiprocessing.cpu_count()
-  except NotImplementedError:
-    print 'cpu_count() is not implemented, using default value 50.'
-    return 50
-
-  assert number_of_processors > 0
-
-  # When goma is used, 10 * number_of_processors is basically good in
-  # various situations according to our measurement. Build speed won't
-  # be improved if -j is larger than that.
-  #
-  # Since Mac had process number limitation before, we had to set
-  # the upper limit to 50. Now that the process number limitation is 2000,
-  # so we would be able to use 10 * number_of_processors.
-  # For safety, we'd like to set the upper limit to 200.
-  #
-  # Note that currently most try-bot build slaves have 8 processors.
-  if chromium_utils.IsMac() or chromium_utils.IsWindows():
-    return min(10 * number_of_processors, 200)
-
-  # For Linux, we also would like to use 10 * cpu. However, not sure
-  # backend resource is enough, so let me set Linux and Linux x64 builder
-  # only for now.
-  hostname = goma_utils.GetShortHostname()
-  if hostname in (
-      ['build14-m1', 'build48-m1'] +
-      # Also increasing cpus for v8/blink trybots.
-      ['build%d-m4' % x for x in xrange(45, 48)] +
-      # Also increasing cpus for LTO buildbots.
-      ['slave%d-c1' % x for x in [20, 33] + range(78, 108)] +
-      # Also increasing cpus for Findit trybots.
-      ['slave%d-c4' % x for x in [799] + range(873, 878)]):
-    return min(10 * number_of_processors, 200)
-
-  return 50
-
-
 def main_ninja(options, args, env):
   """This function calls ninja.
 
@@ -508,7 +465,7 @@ def real_main():
     assert options.compiler not in ('goma', 'goma-clang')
     assert options.goma_dir is None
   elif options.goma_jobs is None:
-    options.goma_jobs = determine_goma_jobs()
+    options.goma_jobs = goma_utils.DetermineGomaJobs()
 
   # build
   exit_status = main_ninja(options, args, env)
