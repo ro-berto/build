@@ -81,7 +81,7 @@ class IsolateApi(recipe_api.RecipeApi):
             step_result.presentation.status != self.m.step.FAILURE):
       found = set(step_result.json.output)
       expected = set(targets)
-      if found >= expected:
+      if found >= expected:  # pragma: no cover
         # Limit result only to |expected|.
         self._isolated_tests = {
           target: step_result.json.output[target] for target in expected
@@ -223,10 +223,15 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result = self.m.step.active_result
       step_result.presentation.status = self.m.step.WARNING
 
-  def archive_differences(self, first_dir, second_dir, diffs):
+  def archive_differences(self, first_dir, second_dir, values):
     """Archive different files of 2 builds."""
     GS_BUCKET = 'chrome-determinism'
     TARBALL_NAME = 'deterministic_build_diffs.tgz'
+
+    diffs = list(itertools.chain.from_iterable(values.itervalues()))
+    if not diffs:  # pragma: no cover
+      return
+
     with self.m.tempfile.temp_dir('deterministic_build') as t:
       output = self.m.path.join(t, TARBALL_NAME)
       self.m.python('create tarball',
@@ -255,19 +260,21 @@ class IsolateApi(recipe_api.RecipeApi):
         '--target-platform', self.m.chromium.c.TARGET_PLATFORM,
         '--json-output', self.m.json.output(),
     ]
-    step_result = self.m.python(
-        'compare_build_artifacts',
-        self.m.path.join(self.m.path['checkout'],
-                         'tools',
-                         'determinism',
-                         'compare_build_artifacts.py'),
-        args=args,
-        cwd=self.m.path['start_dir'],
-        step_test_data=(lambda: self.m.json.test_api.output({
-            'expected_diffs': ['flatc'],
-            'unexpected_diffs': ['base_unittest'],
-        })))
-    diffs = step_result.json.output
-    flattened = list(itertools.chain.from_iterable(diffs.itervalues()))
-    if flattened:
-      self.archive_differences(first_dir, second_dir, flattened)
+    try:
+      step_result = self.m.python(
+          'compare_build_artifacts',
+          self.m.path.join(self.m.path['checkout'],
+                           'tools',
+                           'determinism',
+                           'compare_build_artifacts.py'),
+          args=args,
+          cwd=self.m.path['start_dir'],
+          step_test_data=(lambda: self.m.json.test_api.output({
+              'expected_diffs': ['flatc'],
+              'unexpected_diffs': ['base_unittest'],
+          })))
+      self.archive_differences(first_dir, second_dir, step_result.json.output)
+    except self.m.step.StepFailure as e:
+      step_result = self.m.step.active_result
+      self.archive_differences(first_dir, second_dir, step_result.json.output)
+      raise e

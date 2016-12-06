@@ -210,3 +210,13 @@ def GenTests(api):
       api.properties(configuration='Release') +
       api.step_data('remove_build_metadata', retcode=1)
     )
+    yield (
+      api.test(test_name + '_fail') +
+      api.properties.scheduled() +
+      api.properties.generic(buildername=buildername,
+                             mastername=mastername) +
+      api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 32) +
+      api.properties(configuration='Release') +
+      api.step_data('remove_build_metadata', retcode=1) +
+      api.step_data('compare_build_artifacts', retcode=1)
+    )
