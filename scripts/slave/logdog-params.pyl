@@ -47,7 +47,7 @@
     'chromium.infra': {
       # Used for canarying.
       '*': {
-        'cipd_tag': 'git_revision:dd611fe7c2ee1214713f30c5a9dab8316242d23c',
+        'cipd_tag': 'git_revision:a6d929a02eee98b47c3b94e129e3476d74652062',
       },
     },
     'chromium.infra.cron': {},
