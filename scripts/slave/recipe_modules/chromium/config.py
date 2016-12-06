@@ -47,6 +47,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       xcode_sdk = Single(basestring, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
+      # TODO(tikuta): Remove this after removing compile.py.
+      use_compile_py = Single(bool, empty_val=True, required=False),
     ),
     runtest_py = ConfigGroup(
       src_side = Single(bool),
@@ -302,6 +304,11 @@ def goma(c):
 
   if c.TARGET_PLATFORM == 'win' and c.compile_py.compiler != 'goma-clang':
     fastbuild(c)
+
+# TODO(tikuta): Remove this after removing compile.py.
+@config_ctx()
+def no_compile_py(c):
+  c.compile_py.use_compile_py = False
 
 @config_ctx()
 def dcheck(c, invert=False):

@@ -75,4 +75,33 @@ BUILDERS = freeze({
       },
     },
   },
+
+  # TODO(tikuta): Remove this after removing compile.py.
+  'not_compile_py': {
+    'builders': {
+      'Linux x64 (goma module)': {
+         'chromium_config': 'chromium',
+         'chromium_apply_config': [
+           'clobber',
+           'isolation_mode_noop',
+           'mb',
+           'ninja_confirm_noop',
+           'no_dump_symbols',
+           'no_compile_py',
+         ],
+         'gclient_config': 'chromium',
+         'chromium_config_kwargs': {
+           'BUILD_CONFIG': 'Release',
+           'TARGET_BITS': 64,
+         },
+         'archive_build': True,
+         'gs_bucket': 'chromium-browser-snapshots',
+         'gs_acl': 'public-read',
+         'checkout_dir': 'linux_clobber',
+         'testing': {
+           'platform': 'linux',
+         },
+      },
+    },
+  },
 })

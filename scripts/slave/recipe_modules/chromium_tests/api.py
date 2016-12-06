@@ -515,6 +515,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
                          mb_mastername=None, mb_buildername=None):
+    # TODO(tikuta): Remove use_compile_py after removing compile.py.
+    use_compile_py = self.m.chromium.c.compile_py.use_compile_py
+
+    use_goma_module=False
     if self.m.chromium.c.project_generator.tool == 'mb':
       mb_mastername = mb_mastername or self.m.properties['mastername']
       mb_buildername = mb_buildername or self.m.properties['buildername']
@@ -523,8 +527,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.run_mb(mb_mastername, mb_buildername, use_goma=use_goma,
                              isolated_targets=isolated_targets,
                              name='generate_build_files%s' % name_suffix)
+      if use_goma and not use_compile_py:
+        use_goma_module = True
 
-    self.m.chromium.compile(compile_targets, name='compile%s' % name_suffix)
+    self.m.chromium.compile(compile_targets, name='compile%s' % name_suffix,
+                            use_goma_module=use_goma_module,
+                            use_compile_py=use_compile_py)
 
   def download_and_unzip_build(self, mastername, buildername, update_step,
                                bot_db, build_archive_url=None,
