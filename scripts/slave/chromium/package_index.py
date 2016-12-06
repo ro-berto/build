@@ -100,6 +100,8 @@ class IndexPack(object):
             compressed_content += gzip_compress.flush()
             file_name = os.path.join(self.files_directory,
                                      content_hash + '.data')
+            print ' Including source file %s as %s for compilation' % (
+                fname, file_name)
             with open(file_name, 'wb') as f:
               f.write(compressed_content)
 
