@@ -49,6 +49,12 @@ DEPOT_DEPS_NAME = {
         'url': 'https://chromium.googlesource.com/'
                'external/github.com/catapult-project/catapult',
         'deps_var': 'catapult_revision'
+    },
+    'webrtc': {
+        'src': 'src/third_party/webrtc',
+        'recurse': True,
+        'from': ['chromium'],
+        'url': 'https://chromium.googlesource.com/external/webrtc/trunk/webrtc',
     }
 }
 

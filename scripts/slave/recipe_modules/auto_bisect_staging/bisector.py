@@ -117,7 +117,7 @@ class Bisector(object):
       self.bad_rev.read_deps(self.get_perf_tester_name())
       api.m.step.active_result.presentation.logs['Debug Bad Revision DEPS'] = [
           '%s: %s' % (key, value) for key, value in
-          self.bad_rev.deps.iteritems()]
+          sorted(self.bad_rev.deps.items())]
       self.bad_rev.deps = {}
       self.fkbr = self.bad_rev
       self.good_rev = revision_class(self, good_hash)
@@ -125,7 +125,7 @@ class Bisector(object):
       self.good_rev.read_deps(self.get_perf_tester_name())
       api.m.step.active_result.presentation.logs['Debug Good Revision DEPS'] = [
           '%s: %s' % (key, value) for key, value in
-          self.good_rev.deps.iteritems()]
+          sorted(self.good_rev.deps.items())]
       self.good_rev.deps = {}
       self.lkgr = self.good_rev
 

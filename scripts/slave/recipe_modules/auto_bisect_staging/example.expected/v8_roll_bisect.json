@@ -382,9 +382,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
       "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@catapult: None@@@",
       "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@webrtc: None@@@",
       "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
     ]
   },
@@ -402,9 +403,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: 001@@@",
       "@@@STEP_LOG_LINE@Debug Good Revision DEPS@catapult: None@@@",
       "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: 001@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@webrtc: None@@@",
       "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
     ]
   },
