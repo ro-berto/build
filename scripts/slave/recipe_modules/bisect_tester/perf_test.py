@@ -76,7 +76,7 @@ def _is_gtest_with_buildbot_output(command):
   that generates buildbot output."""
   GTESTS_WITH_BUILDBOT_OUTPUT = [
       'angle_perftests', 'cc_perftests', 'idb_perf',
-      'load_library_perf_tests', 'media_perftests'
+      'performance_browser_tests', 'load_library_perf_tests', 'media_perftests'
   ]
   return any([t in command for t in GTESTS_WITH_BUILDBOT_OUTPUT])
 
