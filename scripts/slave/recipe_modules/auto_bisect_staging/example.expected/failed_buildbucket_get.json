@@ -759,7 +759,7 @@
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 1 of 5",
+      "--step-name=Performance Test 1 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
       "--build-number=571",
@@ -774,7 +774,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.Performance Test 1 of 5",
+    "name": "Gathering reference values.Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -857,7 +857,7 @@
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 2 of 5",
+      "--step-name=Performance Test 2 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
       "--build-number=571",
@@ -872,7 +872,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.Performance Test 2 of 5",
+    "name": "Gathering reference values.Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -955,7 +955,7 @@
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 3 of 5",
+      "--step-name=Performance Test 3 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
       "--build-number=571",
@@ -970,7 +970,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.Performance Test 3 of 5",
+    "name": "Gathering reference values.Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1053,7 +1053,7 @@
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 4 of 5",
+      "--step-name=Performance Test 4 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
       "--build-number=571",
@@ -1068,7 +1068,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.Performance Test 4 of 5",
+    "name": "Gathering reference values.Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1151,7 +1151,7 @@
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 5 of 5",
+      "--step-name=Performance Test 5 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
       "--build-number=571",
@@ -1166,7 +1166,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.Performance Test 5 of 5",
+    "name": "Gathering reference values.Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1203,6 +1203,104 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Reading valueset results (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[START_DIR]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.makedirs results directory (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
+      "--build-properties",
+      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
+      "--step-name=Performance Test 6 of 6",
+      "--builder-name=linux_perf_bisect",
+      "--slave-name=dummyslave",
+      "--build-number=571",
+      "--run-python-script",
+      "[START_DIR]/src/tools/perf/run_benchmark",
+      "-v",
+      "--browser=release",
+      "--output-format=valueset",
+      "smoothness.tough_scrolling_cases",
+      "--output-dir=[START_DIR]/bisect_results/dummy"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.Performance Test 6 of 6",
+    "stderr": "/path/to/tmp/",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "mock output",
+      "[START_DIR]/bisect_results/dummy/results.txt"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.write buildbot output to disk (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.Reading valueset results (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1979,104 +2077,6 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.makedirs results directory (6)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 1 of 5",
-      "--builder-name=linux_perf_bisect",
-      "--slave-name=dummyslave",
-      "--build-number=571",
-      "--run-python-script",
-      "[START_DIR]/src/tools/perf/run_benchmark",
-      "-v",
-      "--browser=release",
-      "--output-format=valueset",
-      "smoothness.tough_scrolling_cases",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Gathering reference values.Performance Test 1 of 5 (2)",
-    "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
-      "@@@STEP_LOG_END@Captured Output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
-      "[START_DIR]/bisect_results/dummy/results.txt"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Gathering reference values.write buildbot output to disk (6)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/bisect_results/dummy/results-valueset.json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Gathering reference values.Reading valueset results (6)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[START_DIR]/bisect_results/dummy",
-      "511"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2104,7 +2104,7 @@
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 2 of 5",
+      "--step-name=Performance Test 1 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
       "--build-number=571",
@@ -2119,7 +2119,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.Performance Test 2 of 5 (2)",
+    "name": "Gathering reference values.Performance Test 1 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2202,7 +2202,7 @@
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 3 of 5",
+      "--step-name=Performance Test 2 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
       "--build-number=571",
@@ -2217,7 +2217,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.Performance Test 3 of 5 (2)",
+    "name": "Gathering reference values.Performance Test 2 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2300,7 +2300,7 @@
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 4 of 5",
+      "--step-name=Performance Test 3 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
       "--build-number=571",
@@ -2315,7 +2315,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.Performance Test 4 of 5 (2)",
+    "name": "Gathering reference values.Performance Test 3 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2398,7 +2398,7 @@
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
-      "--step-name=Performance Test 5 of 5",
+      "--step-name=Performance Test 4 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
       "--build-number=571",
@@ -2413,7 +2413,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Gathering reference values.Performance Test 5 of 5 (2)",
+    "name": "Gathering reference values.Performance Test 4 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2450,6 +2450,202 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Reading valueset results (10)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[START_DIR]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.makedirs results directory (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
+      "--build-properties",
+      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
+      "--step-name=Performance Test 5 of 6",
+      "--builder-name=linux_perf_bisect",
+      "--slave-name=dummyslave",
+      "--build-number=571",
+      "--run-python-script",
+      "[START_DIR]/src/tools/perf/run_benchmark",
+      "-v",
+      "--browser=release",
+      "--output-format=valueset",
+      "smoothness.tough_scrolling_cases",
+      "--output-dir=[START_DIR]/bisect_results/dummy"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.Performance Test 5 of 6 (2)",
+    "stderr": "/path/to/tmp/",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "mock output",
+      "[START_DIR]/bisect_results/dummy/results.txt"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.write buildbot output to disk (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.Reading valueset results (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[START_DIR]/bisect_results/dummy",
+      "511"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.makedirs results directory (12)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
+      "--build-properties",
+      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect_staging:example\", \"slavename\": \"dummyslave\"}",
+      "--step-name=Performance Test 6 of 6",
+      "--builder-name=linux_perf_bisect",
+      "--slave-name=dummyslave",
+      "--build-number=571",
+      "--run-python-script",
+      "[START_DIR]/src/tools/perf/run_benchmark",
+      "-v",
+      "--browser=release",
+      "--output-format=valueset",
+      "smoothness.tough_scrolling_cases",
+      "--output-dir=[START_DIR]/bisect_results/dummy"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.Performance Test 6 of 6 (2)",
+    "stderr": "/path/to/tmp/",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "mock output",
+      "[START_DIR]/bisect_results/dummy/results.txt"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.write buildbot output to disk (12)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Gathering reference values.Reading valueset results (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
