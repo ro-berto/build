@@ -4,18 +4,15 @@
 
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
-
-  GTestTest = api.m.chromium_tests.steps.GTestTest
-
   if test_suite == 'webrtc':
-    for test, extra_args in sorted(api.NORMAL_TESTS.items()):
-      tests.append(WebRTCTest(test, enable_swarming=enable_swarming,
-                              revision=revision, **extra_args))
+    for test in sorted(api.NORMAL_TESTS):
+      parallel = test != 'webrtc_nonparallel_tests'
+      tests.append(WebRTCTest(test, revision=revision, parallel=parallel))
   elif test_suite == 'desktop_swarming':
+    SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
     for test, extra_args in sorted(api.NORMAL_TESTS.items()):
       if api.mastername == 'client.webrtc.fyi':
-        tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                               **extra_args))
+        tests.append(SwarmingTest(test, **extra_args))
       else:
         tests.append(WebRTCTest(test, enable_swarming=enable_swarming,
                                 revision=revision, **extra_args))
@@ -47,6 +44,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision))
   elif test_suite == 'android_swarming':
+    GTestTest = api.m.chromium_tests.steps.GTestTest
     for test in (api.ANDROID_DEVICE_TESTS +
                  api.ANDROID_INSTRUMENTATION_TESTS):
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
@@ -60,11 +58,11 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
 # TODO(kjellander): Continue refactoring an integrate the classes in the
 # chromium_tests recipe module instead (if possible).
 class Test(object):
-  def __init__(self, name, enable_swarming=False, swarming_shards=1):
+  def __init__(self, name, enable_swarming=False, shards=1):
     self._name = name
     self._enable_swarming = enable_swarming
     self._swarming_task = None
-    self._swarming_shards = swarming_shards
+    self._shards = shards
 
   def run_nonswarming(self, api, suffix): # pragma: no cover:
     raise NotImplementedError()
@@ -76,7 +74,7 @@ class Test(object):
     if self._enable_swarming:
       isolated_hash = api.m.isolate.isolated_tests[self._name]
       self._swarming_task = api.m.swarming.task(self._name, isolated_hash,
-                                                shards=self._swarming_shards)
+                                                shards=self._shards)
       api.m.swarming.trigger_task(self._swarming_task)
     else:
       self.run_nonswarming(api, suffix)
@@ -90,9 +88,9 @@ class Test(object):
 class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
   def __init__(self, name, revision=None, enable_swarming=False,
-               swarming_shards=1, parallel=True, perf_test=False,
+               shards=1, parallel=True, perf_test=False,
                **runtest_kwargs):
-    super(WebRTCTest, self).__init__(name, enable_swarming, swarming_shards)
+    super(WebRTCTest, self).__init__(name, enable_swarming, shards)
     self._revision = revision
     self._parallel = parallel
     self._perf_test = perf_test

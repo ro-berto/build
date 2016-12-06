@@ -548,10 +548,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:audio_decoder_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for audio_decoder_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] audio_decoder_unittests on Ubuntu-14.04",
@@ -629,10 +629,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:common_audio_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for common_audio_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] common_audio_unittests on Ubuntu-14.04",
@@ -710,10 +710,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:common_video_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for common_video_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] common_video_unittests on Ubuntu-14.04",
@@ -791,10 +791,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:modules_tests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for modules_tests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] modules_tests on Ubuntu-14.04",
@@ -878,10 +878,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:modules_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for modules_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] modules_unittests on Ubuntu-14.04",
@@ -989,10 +989,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:peerconnection_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for peerconnection_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] peerconnection_unittests on Ubuntu-14.04",
@@ -1088,10 +1088,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:rtc_media_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for rtc_media_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] rtc_media_unittests on Ubuntu-14.04",
@@ -1169,10 +1169,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:rtc_pc_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for rtc_pc_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] rtc_pc_unittests on Ubuntu-14.04",
@@ -1250,10 +1250,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:rtc_stats_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for rtc_stats_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] rtc_stats_unittests on Ubuntu-14.04",
@@ -1331,10 +1331,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:rtc_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for rtc_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] rtc_unittests on Ubuntu-14.04",
@@ -1442,10 +1442,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:system_wrappers_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for system_wrappers_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] system_wrappers_unittests on Ubuntu-14.04",
@@ -1523,10 +1523,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:test_support_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for test_support_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] test_support_unittests on Ubuntu-14.04",
@@ -1604,10 +1604,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:tools_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for tools_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] tools_unittests on Ubuntu-14.04",
@@ -1685,10 +1685,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:video_engine_tests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for video_engine_tests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] video_engine_tests on Ubuntu-14.04",
@@ -1784,10 +1784,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:voice_engine_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for voice_engine_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] voice_engine_unittests on Ubuntu-14.04",
@@ -1865,10 +1865,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:webrtc_nonparallel_tests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for webrtc_nonparallel_tests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] webrtc_nonparallel_tests on Ubuntu-14.04",
@@ -1946,10 +1946,10 @@
       "slavename:slavename",
       "--tag",
       "stepname:xmllite_xmpp_unittests on Ubuntu-14.04",
-      "--idempotent",
       "[dummy hash for xmllite_xmpp_unittests]",
       "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "[trigger] xmllite_xmpp_unittests on Ubuntu-14.04",
@@ -1970,33 +1970,34 @@
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"audio_decoder_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"audio_decoder_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"audio_decoder_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"audio_decoder_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "audio_decoder_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2005,7 +2006,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2013,43 +2014,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "audio_decoder_unittests on Ubuntu-14.04",
+      "audio_decoder_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [audio_decoder_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [audio_decoder_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"common_audio_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"common_audio_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"common_audio_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"common_audio_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "common_audio_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2058,7 +2060,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2066,43 +2068,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "common_audio_unittests on Ubuntu-14.04",
+      "common_audio_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [common_audio_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [common_audio_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"common_video_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"common_video_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"common_video_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"common_video_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "common_video_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2111,7 +2114,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2119,43 +2122,46 @@
       "--build-number",
       "1337",
       "--test-type",
-      "common_video_unittests on Ubuntu-14.04",
+      "common_video_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [common_video_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [common_video_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"modules_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"modules_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"modules_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"modules_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "modules_tests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test3\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
     ]
   },
   {
@@ -2164,7 +2170,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 4}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test3\": {\"Test3\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test4\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test3\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2172,43 +2178,54 @@
       "--build-number",
       "1337",
       "--test-type",
-      "modules_tests on Ubuntu-14.04",
+      "modules_tests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [modules_tests on Ubuntu-14.04]"
+    "name": "Upload to test-results [modules_tests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}"
+      "{\"base_task_name\": \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "modules_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test3\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"2/output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test5\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test6\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000002, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"3/output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test7\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test7\\\": {\\\"Test8\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}, \\\"Test7\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000003, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"4/output.json\": \"{\\\"tests\\\": {\\\"test9\\\": {\\\"Test9\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test10\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test9\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000004, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"5/output.json\": \"{\\\"tests\\\": {\\\"test11\\\": {\\\"Test11\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test12\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test11\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000005, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@",
+      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@",
+      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@"
     ]
   },
   {
@@ -2217,7 +2234,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 12}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test11\": {\"Test11\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test12\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test3\": {\"Test3\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test4\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test5\": {\"Test5\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test6\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test7\": {\"Test7\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test8\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test9\": {\"Test10\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test9\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test11\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test3\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test5\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test7\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test9\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2225,43 +2242,50 @@
       "--build-number",
       "1337",
       "--test-type",
-      "modules_unittests on Ubuntu-14.04",
+      "modules_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [modules_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [modules_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
+      "{\"base_task_name\": \"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"peerconnection_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "peerconnection_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test3\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"2/output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test5\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test6\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000002, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"3/output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test7\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test7\\\": {\\\"Test8\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}, \\\"Test7\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000003, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@"
     ]
   },
   {
@@ -2270,7 +2294,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 8}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test3\": {\"Test3\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test4\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test5\": {\"Test5\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test6\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test7\": {\"Test7\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test8\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test3\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test5\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test7\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2278,43 +2302,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "peerconnection_unittests on Ubuntu-14.04",
+      "peerconnection_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [peerconnection_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [peerconnection_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_media_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"rtc_media_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"rtc_media_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"rtc_media_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "rtc_media_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2323,7 +2348,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2331,43 +2356,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "rtc_media_unittests on Ubuntu-14.04",
+      "rtc_media_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [rtc_media_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [rtc_media_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_pc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"rtc_pc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"rtc_pc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"rtc_pc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "rtc_pc_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2376,7 +2402,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2384,43 +2410,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "rtc_pc_unittests on Ubuntu-14.04",
+      "rtc_pc_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [rtc_pc_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [rtc_pc_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_stats_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"rtc_stats_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"rtc_stats_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"rtc_stats_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "rtc_stats_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2429,7 +2456,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2437,43 +2464,54 @@
       "--build-number",
       "1337",
       "--test-type",
-      "rtc_stats_unittests on Ubuntu-14.04",
+      "rtc_stats_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [rtc_stats_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [rtc_stats_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}"
+      "{\"base_task_name\": \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "rtc_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test3\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"2/output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test5\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test6\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000002, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"3/output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test7\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test7\\\": {\\\"Test8\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}, \\\"Test7\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000003, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"4/output.json\": \"{\\\"tests\\\": {\\\"test9\\\": {\\\"Test9\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test10\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test9\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000004, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"5/output.json\": \"{\\\"tests\\\": {\\\"test11\\\": {\\\"Test11\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test12\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test11\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000005, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@",
+      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@",
+      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@"
     ]
   },
   {
@@ -2482,7 +2520,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 12}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test11\": {\"Test11\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test12\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test3\": {\"Test3\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test4\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test5\": {\"Test5\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test6\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test7\": {\"Test7\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test8\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test9\": {\"Test10\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test9\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test11\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test3\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test5\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test7\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test9\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2490,43 +2528,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "rtc_unittests on Ubuntu-14.04",
+      "rtc_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [rtc_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [rtc_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"system_wrappers_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"system_wrappers_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"system_wrappers_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"system_wrappers_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "system_wrappers_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2535,7 +2574,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2543,43 +2582,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "system_wrappers_unittests on Ubuntu-14.04",
+      "system_wrappers_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [system_wrappers_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [system_wrappers_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"test_support_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"test_support_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"test_support_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"test_support_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "test_support_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2588,7 +2628,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2596,43 +2636,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "test_support_unittests on Ubuntu-14.04",
+      "test_support_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [test_support_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [test_support_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"tools_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"tools_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"tools_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"tools_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "tools_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2641,7 +2682,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2649,43 +2690,50 @@
       "--build-number",
       "1337",
       "--test-type",
-      "tools_unittests on Ubuntu-14.04",
+      "tools_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [tools_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [tools_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
+      "{\"base_task_name\": \"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"video_engine_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "video_engine_tests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test3\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"2/output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test5\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test6\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000002, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"3/output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test7\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test7\\\": {\\\"Test8\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}, \\\"Test7\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000003, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@"
     ]
   },
   {
@@ -2694,7 +2742,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 8}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test3\": {\"Test3\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test4\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test5\": {\"Test5\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test6\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test7\": {\"Test7\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test8\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test3\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test5\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}, \"Test7\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2702,43 +2750,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "video_engine_tests on Ubuntu-14.04",
+      "video_engine_tests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [video_engine_tests on Ubuntu-14.04]"
+    "name": "Upload to test-results [video_engine_tests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"voice_engine_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"voice_engine_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"voice_engine_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"voice_engine_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "voice_engine_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2747,7 +2796,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2755,43 +2804,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "voice_engine_unittests on Ubuntu-14.04",
+      "voice_engine_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [voice_engine_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [voice_engine_unittests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"webrtc_nonparallel_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"webrtc_nonparallel_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"webrtc_nonparallel_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"webrtc_nonparallel_tests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "webrtc_nonparallel_tests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2800,7 +2850,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2808,43 +2858,44 @@
       "--build-number",
       "1337",
       "--test-type",
-      "webrtc_nonparallel_tests on Ubuntu-14.04",
+      "webrtc_nonparallel_tests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [webrtc_nonparallel_tests on Ubuntu-14.04]"
+    "name": "Upload to test-results [webrtc_nonparallel_tests]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[BUILDER_CACHE]/Linux__swarming_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"xmllite_xmpp_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"xmllite_xmpp_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"xmllite_xmpp_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\", \"tasks\": {\"xmllite_xmpp_unittests/Ubuntu-14.04/[dummy has/Linux (swarming)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
     "name": "xmllite_xmpp_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
+      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -2853,7 +2904,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
       "client.webrtc.fyi",
       "--builder-name",
@@ -2861,14 +2912,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "xmllite_xmpp_unittests on Ubuntu-14.04",
+      "xmllite_xmpp_unittests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Linux__swarming_",
-    "name": "Upload to test-results [xmllite_xmpp_unittests on Ubuntu-14.04]"
+    "name": "Upload to test-results [xmllite_xmpp_unittests]"
   },
   {
     "name": "$result",

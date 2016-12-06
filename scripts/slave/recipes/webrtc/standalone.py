@@ -10,11 +10,12 @@ DEPS = [
   'chromium',
   'chromium_android',
   'depot_tools/gclient',
+  'depot_tools/tryserver',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'depot_tools/tryserver',
+  'test_utils',
   'webrtc',
 ]
 
@@ -56,6 +57,36 @@ def _sanitize_nonalpha(text):
 
 def GenTests(api):
   builders = api.webrtc.BUILDERS
+
+  NORMAL_TESTS = {
+    'audio_decoder_unittests': {},
+    'common_audio_unittests': {},
+    'common_video_unittests': {},
+    'modules_tests': {
+      'shards': 2,
+    },
+    'modules_unittests': {
+      'shards': 6,
+    },
+    'peerconnection_unittests': {
+      'shards': 4,
+    },
+    'rtc_media_unittests': {},
+    'rtc_pc_unittests': {},
+    'rtc_stats_unittests': {},
+    'rtc_unittests': {
+      'shards': 6,
+    },
+    'system_wrappers_unittests': {},
+    'test_support_unittests': {},
+    'tools_unittests': {},
+    'video_engine_tests': {
+      'shards': 4,
+    },
+    'voice_engine_unittests': {},
+    'webrtc_nonparallel_tests': {},
+    'xmllite_xmpp_unittests': {},
+  }
 
   def generate_builder(mastername, buildername, revision,
                        parent_got_revision=None, failing_test=None,
@@ -99,6 +130,20 @@ def GenTests(api):
       test += api.properties(issue=666666, patchset=1,
                              rietveld='https://fake.rietveld.url')
     test += api.properties(buildnumber=1337)
+
+    if (mastername == 'client.webrtc.fyi' and
+        'webrtc_swarming' in bot_config['recipe_config']):
+      os_suffix = ' on %s' % bot_config['swarming_dimensions']['os']
+      if 'Windows' in os_suffix:
+        os_suffix = ''
+      for test_name in NORMAL_TESTS:
+        test += api.override_step_data(test_name + os_suffix,
+            api.test_utils.canned_isolated_script_output(
+                passing=True, is_win=False, swarming=True,
+                shards=NORMAL_TESTS[test_name].get('shards', 1),
+                isolated_script_passing=True, valid=True,
+                use_json_test_format=True, output_chartjson=False),
+            retcode=0)
     return test
 
   for mastername in builders.keys():

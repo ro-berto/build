@@ -26,30 +26,28 @@ class WebRTCApi(recipe_api.RecipeApi):
     'common_audio_unittests': {},
     'common_video_unittests': {},
     'modules_tests': {
-      'swarming_shards': 2,
+      'shards': 2,
     },
     'modules_unittests': {
-      'swarming_shards': 6,
+      'shards': 6,
     },
     'peerconnection_unittests': {
-      'swarming_shards': 4,
+      'shards': 4,
     },
     'rtc_media_unittests': {},
     'rtc_pc_unittests': {},
     'rtc_stats_unittests': {},
     'rtc_unittests': {
-      'swarming_shards': 6,
+      'shards': 6,
     },
     'system_wrappers_unittests': {},
     'test_support_unittests': {},
     'tools_unittests': {},
     'video_engine_tests': {
-      'swarming_shards': 4,
+      'shards': 4,
     },
     'voice_engine_unittests': {},
-    'webrtc_nonparallel_tests': {
-      'parallel': False,
-    },
+    'webrtc_nonparallel_tests': {},
     'xmllite_xmpp_unittests': {},
   })
 
