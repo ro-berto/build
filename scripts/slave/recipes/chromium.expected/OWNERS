@@ -7,3 +7,4 @@ per-file full_chromium_webrtc*=kjellander@chromium.org
 per-file full_tryserver_chromium_perf*=dtu@chromium.org
 per-file full_tryserver_chromium_perf*=robertocn@chromium.org
 per-file full_tryserver_chromium_perf*=prasadv@chromium.org
+per-file full_tryserver_chromium_perf*=simonhatch@chromium.org
