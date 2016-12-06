@@ -162,7 +162,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"target_os=\\\"ios\\\"\", \n    \"ios_enable_code_signing=false\", \n    \"use_goma=true\"\n  ], \n  \"mastername\": \"chromium.mac\", \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"compiler flags\": [], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"target_os=\\\"ios\\\"\", \n    \"ios_enable_code_signing=false\", \n    \"use_goma=true\"\n  ], \n  \"mastername\": \"chromium.mac\", \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -274,7 +274,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files (with patch)"
+    "name": "generate build files (mb) (with patch)"
   },
   {
     "cmd": [
@@ -331,15 +331,12 @@
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
@@ -353,43 +350,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[BUILDER_CACHE]/ios_simulator_gn/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "name": "preprocess_for_goma"
   },
@@ -401,10 +361,6 @@
       "restart"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]",
-      "GOMA_DEPS_CACHE_FILE": "ios_simulator_gn.gomadeps",
-      "GOMA_FAIL_FAST": "true",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma.start_goma",
@@ -435,22 +391,15 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
+      "ninja",
       "-C",
       "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
       "-j",
       "50",
-      "All",
       "fake tests"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "compile"
+    "name": "compile (with patch)"
   },
   {
     "cmd": [],
@@ -510,14 +459,8 @@
       "--upload-compiler-proxy-info",
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
-      "--ninja-log-outdir",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
-      "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator', '-j', 50, 'All', 'fake tests']",
       "--ninja-log-exit-status",
-      "0",
-      "--ninja-log-compiler",
-      "goma-clang",
+      "-1",
       "--buildbot-buildername",
       "ios-simulator-gn",
       "--buildbot-mastername",

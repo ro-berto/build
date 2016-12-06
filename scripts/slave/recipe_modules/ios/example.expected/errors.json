@@ -141,7 +141,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphoneos8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 2\", \n      \"device type\": \"iPad Air\", \n      \"id\": \"1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 3\", \n      \"device type\": \"fake device\", \n      \"id\": \"2\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 4\", \n      \"device type\": \"iPhone 5s\", \n      \"id\": \"3\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
+      "{\n  \"compiler flags\": [], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphoneos8.1\", \n  \"tests\": [\n    {\n      \"app\": \"fake test 1\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 2\", \n      \"device type\": \"iPad Air\", \n      \"id\": \"1\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 3\", \n      \"device type\": \"fake device\", \n      \"id\": \"2\", \n      \"os\": \"8.1\"\n    }, \n    {\n      \"app\": \"fake test 4\", \n      \"device type\": \"iPhone 5s\", \n      \"id\": \"3\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"6.1.1\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -175,84 +175,38 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [],
-    "name": "ensure_goma"
+    "cmd": [
+      "[START_DIR]/src/ios/build/tools/setup-gn.py",
+      "--import",
+      "src/example/args.gn"
+    ],
+    "env": {
+      "CHROMIUM_BUILDTOOLS_PATH": "[START_DIR]/src/buildtools"
+    },
+    "name": "setup-gn.py"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
-      "--platform",
-      "mac-amd64",
-      "--dest-directory",
-      "[START_DIR]/cipd",
-      "--json-output",
-      "/path/to/tmp/json"
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "\n",
+      "[START_DIR]/src/out/Release-iphoneos/args.gn"
     ],
-    "name": "ensure_goma.install cipd",
+    "name": "write args.gn",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_TEXT@<br />@@@"
     ]
   },
   {
     "cmd": [
-      "[START_DIR]/cipd/cipd",
-      "ensure",
-      "--root",
-      "[CACHE]/cipd/goma",
-      "--list",
-      "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 release",
-      "--json-output",
-      "/path/to/tmp/json",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
-    ],
-    "name": "ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/mac-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[START_DIR]/src/buildtools/mac/gn",
       "gen",
-      "-m",
-      "chromium.fake",
-      "-b",
-      "ios",
-      "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "--check",
       "//out/Release-iphoneos"
     ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "generate_build_files"
+    "cwd": "[START_DIR]/src/out/Release-iphoneos",
+    "name": "generate build files (gn)"
   },
   {
     "cmd": [

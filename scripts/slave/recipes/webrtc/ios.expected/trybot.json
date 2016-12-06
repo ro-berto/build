@@ -105,7 +105,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": \"false\", \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"compiler flags\": [], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": \"false\", \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -216,7 +216,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files"
+    "name": "generate build files (mb)"
   },
   {
     "cmd": [

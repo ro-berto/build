@@ -21,16 +21,6 @@ class iOSApi(recipe_api.RecipeApi):
     super(iOSApi, self).__init__(*args, **kwargs)
     self.__config = None
 
-  def checkout(self, **kwargs):
-    """Checks out Chromium."""
-    self.m.gclient.set_config('ios')
-
-    checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
-    if checkout_dir:
-      kwargs.setdefault('cwd', checkout_dir)
-
-    return self.m.bot_update.ensure_checkout(**kwargs)
-
   @property
   def bucket(self):
     assert self.__config is not None
@@ -48,6 +38,21 @@ class iOSApi(recipe_api.RecipeApi):
       return 'device'
     elif self.__config['sdk'].startswith('iphonesimulator'):
       return 'simulator'
+
+  @property
+  def use_goma(self):
+    assert self.__config is not None
+    return 'use_goma=true' in self.__config['gn_args']
+
+  def checkout(self, **kwargs):
+    """Checks out Chromium."""
+    self.m.gclient.set_config('ios')
+
+    checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
+    if checkout_dir:
+      kwargs.setdefault('cwd', checkout_dir)
+
+    return self.m.bot_update.ensure_checkout(**kwargs)
 
   def read_build_config(
     self,
@@ -92,29 +97,21 @@ class iOSApi(recipe_api.RecipeApi):
         ),
       ).json.output
 
-      for key in (
-        'additional_compile_targets',
-        'bucket',
-        'configuration',
-        'gn_args',
-        'gn_args_file',
-        'sdk',
-        'xcode version',
-      ):
-        if key in parent_config:
-          self.__config[key] = parent_config[key]
-
-    # TODO(crbug.com/552146): Once 'all' works, the default should be ['all'].
-    self.__config.setdefault('additional_compile_targets', ['All'])
+      for key, value in parent_config.iteritems():
+        # Inherit the config of the parent, except for triggered bots.
+        # Otherwise this builder will infinitely trigger itself.
+        if key != 'triggered bots':
+          self.__config[key] = value
 
     # In order to simplify the code that uses the values of self.__config, here
     # we default to empty values of their respective types, so in other places
     # we can iterate over them without having to check if they are in the dict
     # at all.
-    self.__config.setdefault('triggered bots', {})
-    self.__config.setdefault('tests', [])
+    self.__config.setdefault('compiler flags', [])
     self.__config.setdefault('env', {})
     self.__config.setdefault('gn_args', [])
+    self.__config.setdefault('tests', [])
+    self.__config.setdefault('triggered bots', {})
     self.__config.setdefault('use_analyze', True)
 
     self.__config['mastername'] = master_name
@@ -190,8 +187,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     self.m.chromium.c = cfg
 
-    use_goma = 'use_goma=true' in self.__config['gn_args']
-    if use_goma:
+    if self.use_goma:
       # Make sure these chromium configs are applied consistently for the
       # rest of the recipe; they are needed in order for m.chromium.compile()
       # to work correctly.
@@ -207,8 +203,25 @@ class iOSApi(recipe_api.RecipeApi):
 
     return copy.deepcopy(self.__config)
 
-  def build(self, mb_config_path=None, suffix=None):
-    """Builds from this bot's build config."""
+  def build(
+      self,
+      default_gn_args_path=None,
+      mb_config_path=None,
+      setup_gn=False,
+      suffix=None,
+      use_mb=True,
+  ):
+    """Builds from this bot's build config.
+
+    Args:
+      default_gn_args_path: Path to default gn args file to import with
+        setup-gn.py.
+      mb_config_path: Custom path to mb_config.pyl. Uses the default if
+        unspecified.
+      setup_gn: Whether or not to call setup-gn.py.
+      suffix: Suffix to use at the end of step names.
+      use_mb: Whether or not to use mb to generate build files.
+    """
     assert self.__config is not None
 
     suffix = ' (%s)' % suffix if suffix else ''
@@ -221,39 +234,57 @@ class iOSApi(recipe_api.RecipeApi):
       '--version', self.__config['xcode version'],
     ], step_test_data=lambda: self.m.json.test_api.output({}))
 
-    self.m.chromium.c.project_generator.tool = 'mb'
-
-    gn_args = self.__config['gn_args']
-
     env = {
       'LANDMINES_VERBOSE': '1',
       'FORCE_MAC_TOOLCHAIN': '1',
     }
-
-    # Add extra env variables.
     env.update(self.__config['env'])
 
-    build_sub_path = ''
-
     build_sub_path = '%s-%s' % (self.configuration, {
-        'simulator': 'iphonesimulator',
-        'device': 'iphoneos',
-      }[self.platform])
+      'simulator': 'iphonesimulator',
+      'device': 'iphoneos',
+    }[self.platform])
 
-    cwd = self.m.path['checkout'].join('out', build_sub_path)
-    compile_targets = self.__config['additional_compile_targets']
-    cmd = ['ninja', '-C', cwd]
+    self.m.gclient.runhooks(name='runhooks' + suffix, env=env)
 
-    step_result = self.m.gclient.runhooks(name='runhooks' + suffix, env=env)
+    if setup_gn:
+      cmd = [
+        self.m.path['checkout'].join('ios', 'build', 'tools', 'setup-gn.py'),
+      ]
+      if default_gn_args_path:
+        cmd.extend(['--import', default_gn_args_path])
+      self.m.step('setup-gn.py', cmd, env={
+        # https://crbug.com/658104.
+        'CHROMIUM_BUILDTOOLS_PATH': self.m.path['checkout'].join('buildtools'),
+      })
 
-    self.m.chromium.run_mb(self.__config['mastername'],
-                           self.m.properties['buildername'],
-                           name='generate_build_files' + suffix,
-                           mb_config_path=mb_config_path,
-                           build_dir='//out/' + build_sub_path)
+    if use_mb:
+      self.m.chromium.c.project_generator.tool = 'mb'
+      self.m.chromium.run_mb(
+          self.__config['mastername'],
+          self.m.properties['buildername'],
+          build_dir='//out/%s' % build_sub_path,
+          mb_config_path=mb_config_path,
+          name='generate build files (mb)' + suffix,
+      )
+    else:
+      step_result = self.m.file.write(
+        'write args.gn' + suffix,
+        self.m.path['checkout'].join('out', build_sub_path, 'args.gn'),
+        '%s\n' % '\n'.join(self.__config['gn_args']),
+      )
+      step_result.presentation.step_text = (
+        '<br />%s' % '<br />'.join(self.__config['gn_args']))
+      self.m.step('generate build files (gn)' + suffix, [
+        self.m.path['checkout'].join('buildtools', 'mac', 'gn'),
+        'gen',
+        '--check',
+        '//out/%s' % build_sub_path,
+      ], cwd=self.m.path['checkout'].join('out', build_sub_path))
 
-    use_analyze = self.__config['use_analyze']
-    if (use_analyze and
+    targets = []
+
+    if (self.__config['use_analyze'] and
         self.m.tryserver.is_tryserver and
         'without patch' not in suffix):
       affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
@@ -266,7 +297,7 @@ class iOSApi(recipe_api.RecipeApi):
         self.m.filter.analyze(
           affected_files,
           tests,
-          self.__config['additional_compile_targets'] + tests,
+          tests,
           'trybot_analyze_config.json',
           additional_names=['chromium', 'ios'],
           mb_mastername=self.__config['mastername'],
@@ -279,18 +310,21 @@ class iOSApi(recipe_api.RecipeApi):
         if test['app'] not in test_targets:
           test['skip'] = True
 
-      if compile_targets: # pragma: no cover
-        cmd.extend(compile_targets)
-      else:
-        return
+      targets.extend(compile_targets)
 
-    use_goma = 'use_goma=true' in gn_args
-    if use_goma:
-      self.m.chromium.compile(targets=compile_targets,
-                              target=build_sub_path,
-                              cwd=cwd, use_goma_module=True)
-    else:
-      self.m.step('compile' + suffix, cmd, cwd=cwd)
+    cwd = self.m.path['checkout'].join('out', build_sub_path)
+    cmd = ['ninja', '-C', cwd]
+    cmd.extend(self.__config['compiler flags'])
+
+    if self.use_goma:
+      cmd.extend(['-j', '50'])
+      self.m.goma.start()
+
+    cmd.extend(targets)
+    self.m.step('compile' + suffix, cmd, cwd=cwd)
+
+    if self.use_goma:
+      self.m.goma.stop()
 
   def bootstrap_swarming(self):
     """Bootstraps Swarming."""

@@ -158,7 +158,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.mac\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"compiler flags\": [], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.mac\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -269,7 +269,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files (with patch)"
+    "name": "generate build files (mb) (with patch)"
   },
   {
     "cmd": [
@@ -325,7 +325,7 @@
       "ios-simulator",
       "-v",
       "//out/None",
-      "{\"additional_compile_targets\": [\"All\", \"fake tests\"], \"files\": [\"third_party/icu/foo.cc\"], \"test_targets\": [\"fake tests\"]}",
+      "{\"additional_compile_targets\": [\"fake tests\"], \"files\": [\"third_party/icu/foo.cc\"], \"test_targets\": [\"fake tests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -342,7 +342,6 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
@@ -354,6 +353,15 @@
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator",
+    "name": "compile (with patch)"
   },
   {
     "cmd": [],

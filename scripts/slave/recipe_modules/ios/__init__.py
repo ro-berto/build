@@ -5,6 +5,7 @@
 DEPS = [
   'build/file',
   'build/filter',
+  'build/goma',
   'build/gsutil',
   'build/isolate',
   'build/swarming',

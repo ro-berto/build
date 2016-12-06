@@ -146,7 +146,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"use_goma=true\"\n  ], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"compiler flags\": [], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"use_goma=true\"\n  ], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -258,44 +258,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[BUILDER_CACHE]/ios/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "name": "calculate the number of recommended jobs"
+    "name": "generate build files (mb)"
   },
   {
     "cmd": [],
@@ -309,10 +272,6 @@
       "restart"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]",
-      "GOMA_DEPS_CACHE_FILE": "ios.gomadeps",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma.start_goma",
@@ -343,20 +302,13 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
+      "ninja",
       "-C",
       "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
       "-j",
-      "50",
-      "All"
+      "50"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "compile"
   },
   {
@@ -417,14 +369,8 @@
       "--upload-compiler-proxy-info",
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
-      "--ninja-log-outdir",
-      "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
-      "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/ios/src/out/Release-iphoneos', '-j', 50, 'All']",
       "--ninja-log-exit-status",
-      "0",
-      "--ninja-log-compiler",
-      "goma-clang",
+      "-1",
       "--buildbot-buildername",
       "ios",
       "--buildbot-mastername",
