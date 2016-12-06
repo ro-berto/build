@@ -126,7 +126,9 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     pool_waiting.set(len(pool.waiters), fields={'master': ''})
     pool_working.set(len(pool.working), fields={'master': ''})
 
+    builder_names = set()
     for builder_name in self.status.getBuilderNames():
+      builder_names.add(builder_name)
       fields = {'builder': builder_name, 'master': ''}
       builder = self.status.getBuilder(builder_name)
       slaves = builder.getSlaves()
@@ -169,6 +171,8 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     else:
       pending_per_builder = collections.defaultdict(int)
       for brdict in brdicts:
+        if brdict['buildername'] not in builder_names:
+          continue  # Maybe the builder's configuration was removed.
         pending_per_builder[brdict['buildername']] += 1
 
       for builder_name, count in pending_per_builder.iteritems():
