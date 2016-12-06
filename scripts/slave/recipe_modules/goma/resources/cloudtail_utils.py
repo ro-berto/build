@@ -19,9 +19,14 @@ def start_cloudtail(args):
 
   proc = subprocess.Popen([args.cloudtail_path,
                            'tail',
+                           '--project-id', 'goma-logs',
+                           '--service-account-json',
+                           args.cloudtail_service_account_json,
                            '--log-id', 'goma_compiler_proxy',
                            '--path',
-                           goma_utils.GetLatestGomaCompilerProxyInfo()])
+                           goma_utils.GetLatestGomaCompilerProxyInfo(),
+  ])
+
   with open(args.pid_file, 'w') as f:
     f.write(str(proc.pid))
 
@@ -152,6 +157,9 @@ def main():
   parser_start.set_defaults(command='start')
   parser_start.add_argument('--cloudtail-path', required=True,
                             help='path of cloudtail binary')
+  parser_start.add_argument('--cloudtail-service-account-json', required=True,
+                            help='path of cloudtail service account json file')
+
   parser_start.add_argument('--pid-file', required=True,
                             help='file written pid')
 

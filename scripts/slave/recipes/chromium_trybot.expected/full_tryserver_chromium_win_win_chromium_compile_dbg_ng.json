@@ -401,6 +401,8 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "--cloudtail-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "--goma-fail-fast",

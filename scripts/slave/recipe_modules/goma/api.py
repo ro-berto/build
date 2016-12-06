@@ -24,6 +24,12 @@ class GomaApi(recipe_api.RecipeApi):
     return '/creds/service_accounts/service-account-goma-client.json'
 
   @property
+  def cloudtail_service_account_json_path(self):
+    if self.m.platform.is_win:
+      return 'C:\\creds\\service_accounts\\service-account-goma-cloudtail.json'
+    return '/creds/service_accounts/service-account-goma-cloudtail.json'
+
+  @property
   def cloudtail_path(self):  # pragma: nocover
     assert self._goma_dir
     return self.m.path.join(self._goma_dir, 'cloudtail')
@@ -167,14 +173,13 @@ print jobs
       InfraFailure if it fails to start cloudtail
     """
 
-    # TODO(vadimsh): crbug/642299
-    return
-
     self.m.python(
       name='start cloudtail',
       script=self.resource('cloudtail_utils.py'),
       args=['start',
             '--cloudtail-path', self.cloudtail_path,
+            '--cloudtail-service-account-json',
+            self.cloudtail_service_account_json_path,
             '--pid-file', self.m.raw_io.output(
                 leak_to=self.cloudtail_pid_file)],
       env=self._goma_ctl_env,
@@ -188,9 +193,6 @@ print jobs
     Raises:
       InfraFailure if it fails to stop cloudtail
     """
-
-    # TODO(vadimsh): crbug/642299
-    return
 
     self.m.python(
         name='stop cloudtail',

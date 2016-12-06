@@ -205,6 +205,8 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--goma-jsonstatus', self.m.json.output(),
             '--goma-service-account-json-file',
             self.m.goma.service_account_json_path,
+            '--cloudtail-service-account-json',
+            self.m.goma.cloudtail_service_account_json_path,
         ]
     if out_dir:
       args += ['--out-dir', out_dir]

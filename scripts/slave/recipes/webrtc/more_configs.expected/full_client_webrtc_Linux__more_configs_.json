@@ -179,6 +179,8 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--"
@@ -240,6 +242,8 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--"
@@ -301,6 +305,8 @@
       "/path/to/tmp/json",
       "--goma-service-account-json-file",
       "/creds/service_accounts/service-account-goma-client.json",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--"

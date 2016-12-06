@@ -187,10 +187,27 @@ def goma_setup(options, env):
   if not result:
     # goma started sucessfully.
     # Making cloudtail to upload the latest log.
-    # TODO(yyanagisawa): install cloudtail from CIPD.
 
-    # TODO(vadimsh): crbug/642299
-    return True, None
+    cloudtail_path = '/opt/infra-tools/cloudtail'
+    if chromium_utils.IsWindows():
+      cloudtail_path = 'C:\\infra-tools\\cloudtail'
+
+    try:
+
+      cloudtail_proc = subprocess.Popen(
+          [cloudtail_path, 'tail', '--project-id', 'goma-logs',
+           '--service-account-json', options.cloudtail_service_account_json,
+           '--log-id', 'goma_compiler_proxy', '--path',
+           '--buffering-time', '60',
+           goma_utils.GetLatestGomaCompilerProxyInfo()])
+
+      if cloudtail_pid_file:
+        with open(cloudtail_pid_file,'w') as f:
+          f.write('%d' % cloudtail_proc.pid)
+    except Exception as e:
+      print 'failed to invoke cloudtail: %s' % e
+      return True, None
+    return True, cloudtail_proc
 
   StopGomaClientAndUploadInfo(options, env, -1)
 
@@ -450,8 +467,12 @@ def get_parsed_options():
                            help='Checks the output of the ninja builder to '
                                 'confirm that a second compile immediately '
                                 'the first is a no-op.')
+
   option_parser.add_option('--cloudtail-pid-file', default=None,
                            help='Specify a file to store pid of cloudtail')
+  option_parser.add_option(
+      '--cloudtail-service-account-json', default=None,
+      help='Specify a file for cloudtail service account json path.')
 
   # Arguments to pass buildbot properties.
   option_parser.add_option('--buildbot-buildername', default='unknown',
