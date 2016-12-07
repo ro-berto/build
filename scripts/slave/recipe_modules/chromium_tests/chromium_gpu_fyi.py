@@ -96,7 +96,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Win8 Release (NVIDIA)': {
+    'Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -112,7 +112,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Win8 Debug (NVIDIA)': {
+    'Win10 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -177,7 +177,7 @@ SPEC = {
       # These new graphics cards are being tested at the moment.
       'enable_swarming': False,
     },
-    'Win7 Release (New Intel)': {
+    'Win10 Release (New Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -194,7 +194,7 @@ SPEC = {
       # This new hardware is being tested for reliability.
       'enable_swarming': False,
     },
-    'Win7 Debug (New Intel)': {
+    'Win10 Debug (New Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
