@@ -244,13 +244,13 @@ def msvs2015(c):
   c.gn_args.append('visual_studio_version=2015')
   c.gyp_env.GYP_MSVS_VERSION = '2015'
 
-@config_ctx()
+@config_ctx(includes=['no_compile_py'])
 def goma_canary(c):
   c.compile_py.goma_canary = True
   c.compile_py.goma_hermetic = 'error'
   c.compile_py.goma_failfast = True
 
-@config_ctx()
+@config_ctx(includes=['no_compile_py'])
 def goma_staging(c):
   c.compile_py.goma_failfast = True
   c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'sandbox.google.com'
