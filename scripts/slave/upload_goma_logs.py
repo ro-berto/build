@@ -63,23 +63,18 @@ def main():
   parser.add_argument('--buildbot-slavename',
                       default='unknown',
                       help='buildbot slavename')
-  parser.add_argument('--buildbot-clobber',
+  parser.add_argument('--buildbot-clobber', default='',
                       help='buildbot clobber')
 
   args = parser.parse_args()
 
-  # TODO(tikuta): Pass these variables explicitly.
-  if args.buildbot_buildername:
-    os.environ['BUILDBOT_BUILDERNAME'] = args.buildbot_buildername
-  if args.buildbot_mastername:
-    os.environ['BUILDBOT_MASTERNAME'] = args.buildbot_mastername
-  if args.buildbot_slavename:
-    os.environ['BUILDBOT_SLAVENAME'] = args.buildbot_slavename
-  if args.buildbot_clobber:
-    os.environ['BUILDBOT_CLOBBER'] = args.buildbot_clobber
-
   if args.upload_compiler_proxy_info:
-    goma_utils.UploadGomaCompilerProxyInfo()
+    goma_utils.UploadGomaCompilerProxyInfo(
+        builder=args.buildbot_buildername,
+        master=args.buildbot_mastername,
+        slave=args.buildbot_slavename,
+        clobber=args.buildbot_clobber
+    )
   if args.ninja_log_outdir:
     goma_utils.UploadNinjaLog(args.ninja_log_outdir,
                               args.ninja_log_compiler,
