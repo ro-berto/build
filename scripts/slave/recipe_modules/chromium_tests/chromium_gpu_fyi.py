@@ -992,5 +992,31 @@ SPEC = {
       'enable_swarming': False,
       'use_isolate': True,
     },
+    'Linux ChromiumOS Ozone Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'archive_gpu_tests',
+        'chromeos',
+        'internal_gles2_conform_tests',
+        'mb',
+        'ninja_confirm_noop',
+        'ozone',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+        'aura_builder',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': False,
+      'use_isolate': True,
+    },
   },
 }
