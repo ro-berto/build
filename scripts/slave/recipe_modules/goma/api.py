@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import re
 
 from recipe_engine import recipe_api
@@ -16,6 +17,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     self._goma_ctl_env = {}
     self._goma_jobs = None
+    self._jsonstatus = None
 
   @property
   def service_account_json_path(self):
@@ -42,6 +44,11 @@ class GomaApi(recipe_api.RecipeApi):
   def json_path(self):
     assert self._goma_dir
     return self.m.path.join(self._goma_dir, 'jsonstatus')
+
+  @property
+  def jsonstatus(self):
+    assert self._jsonstatus
+    return self._jsonstatus
 
   @property
   def default_cache_path(self):
@@ -251,9 +258,21 @@ class GomaApi(recipe_api.RecipeApi):
 
     with self.m.step.nest('postprocess_for_goma'):
       with self.m.step.defer_results():
-        self.m.python(name='goma_jsonstatus', script=self.goma_ctl,
-                      args=['jsonstatus', self.json_path],
-                      env=self._goma_ctl_env, **kwargs)
+        jsonstatus_result = self.m.python(
+            name='goma_jsonstatus', script=self.goma_ctl,
+            args=['jsonstatus'],
+            stdout=self.m.json.output(),
+            step_test_data=lambda: self.m.json.test_api.output_stream(
+                'output of `goma_ctl.py json_status`'),
+            env=self._goma_ctl_env,
+            **kwargs)
+
+        if jsonstatus_result.is_ok:
+          self._jsonstatus = jsonstatus_result.get_result().stdout
+          self.m.shutil.write('write_jsonstatus',
+                              path=self.json_path,
+                              data=json.dumps(self._jsonstatus))
+
         self.m.python(name='goma_stat', script=self.goma_ctl,
                       args=['stat'],
                       env=self._goma_ctl_env, **kwargs)
@@ -276,8 +295,7 @@ class GomaApi(recipe_api.RecipeApi):
     if skip_sendgomatsmon: # pragma: no cover
       args.append('--skip-sendgomatsmon')
 
-    if self.json_path:
-      args.extend(['--json-status', self.json_path])
+    args.extend(['--json-status', self.json_path])
 
     if ninja_log_outdir:
       assert ninja_log_command is not None

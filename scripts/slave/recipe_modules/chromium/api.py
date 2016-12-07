@@ -290,6 +290,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       kwargs.pop('env', {})
 
+    try:
       if use_goma_module:
         self.m.goma.build_with_goma(
             name=name or 'compile',
@@ -300,30 +301,32 @@ class ChromiumApi(recipe_api.RecipeApi):
             ninja_log_compiler=self.c.compile_py.compiler or 'goma',
             allow_build_without_goma=allow_build_without_goma,
             **kwargs)
-      else:
+      elif not use_compile_py:
         self.m.step(name or 'compile',
                     command,
                     env=ninja_env,
                     **kwargs)
-      return
-
-    env = self.get_env()
-    env.update(kwargs.pop('env', {}))
-
-    try:
-      self.m.python(
-          name or 'compile',
-          self.package_repo_resource('scripts', 'tools', 'runit.py'),
-          args,
-          env=env,
-          **kwargs)
+      else:
+        env = self.get_env()
+        env.update(kwargs.pop('env', {}))
+        self.m.python(
+            name or 'compile',
+            self.package_repo_resource('scripts', 'tools', 'runit.py'),
+            args,
+            env=env,
+            **kwargs)
     except self.m.step.StepFailure as e:
       # Handle failures caused by goma.
       if self.c.compile_py.compiler and 'goma' in self.c.compile_py.compiler:
         step_result = self.m.step.active_result
         failure_result_code = ''
         try:
-          json_status = step_result.json.output['notice'][0]
+          if use_goma_module:
+            json_status = self.m.goma.jsonstatus['notice'][0]
+          else:
+            assert use_compile_py
+            json_status = step_result.json.output['notice'][0]
+
           if (not json_status.get('infra_status')):
             failure_result_code = 'GOMA_SETUP_FAILURE'
           elif json_status['infra_status']['ping_status_code'] != 200:

@@ -341,13 +341,28 @@
       "python",
       "-u",
       "[CACHE]/cipd/goma/goma_ctl.py",
-      "jsonstatus",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "jsonstatus"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@\"output of `goma_ctl.py json_status`\"@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "\"output of `goma_ctl.py json_status`\"",
+      "[CACHE]/cipd/goma/jsonstatus"
+    ],
+    "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

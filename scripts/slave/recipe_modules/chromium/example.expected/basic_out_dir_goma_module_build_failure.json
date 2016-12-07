@@ -159,27 +159,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[START_DIR]/src/out/Debug/debug_info_dumps",
-      "[START_DIR]/src/out/Debug/test_logs",
-      "[START_DIR]/src/out/build_product.zip",
-      "[START_DIR]/src"
+      "[START_DIR]/src/tools/swarming_client/swarming.py",
+      "--version"
     ],
-    "name": "clean local files",
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[2], True)@@@",
-      "@@@STEP_LOG_LINE@python.inline@try:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.remove(sys.argv[3])@@@",
-      "@@@STEP_LOG_LINE@python.inline@except OSError:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
-      "@@@STEP_LOG_LINE@python.inline@for base, _dirs, files in os.walk(sys.argv[4]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in files:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    if f.endswith('.pyc'):@@@",
-      "@@@STEP_LOG_LINE@python.inline@      os.remove(os.path.join(base, f))@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_TEXT@0.8.6@@@"
     ]
   },
   {
@@ -194,7 +180,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=arm test_isolation_mode=prepare use_goma=1",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -203,16 +189,55 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Debug",
+      "--use-src-side-runtest-py",
+      "--paths",
+      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "--properties",
+      "{\"buildername\": \"Android Builder (dbg)\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"android\"}"
+    ],
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/src/testing/buildbot/chromium.linux.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec (chromium.linux.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "chromium.linux",
       "-b",
-      "Android Tests (x86 emulator)",
+      "Android Builder (dbg)",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
+      "--android-version-code=3",
+      "--android-version-name=example",
       "//out/Debug"
     ],
     "cwd": "[START_DIR]/src",
@@ -249,7 +274,7 @@
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma",
-      "GOMA_DEPS_CACHE_FILE": "Android_Tests__x86_emulator_.gomadeps",
+      "GOMA_DEPS_CACHE_FILE": "Android_Builder__dbg_.gomadeps",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
@@ -285,26 +310,20 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "/tmp/Debug",
       "-j",
       "50",
-      "android_webview_unittests_apk",
-      "base_unittests_apk",
-      "cc_unittests_apk",
-      "components_unittests_apk",
-      "events_unittests_apk",
-      "gl_tests_apk",
-      "ipc_tests_apk",
-      "skia_unittests_apk",
-      "sql_unittests_apk",
-      "ui_android_unittests_apk",
-      "ui_touch_selection_unittests_apk"
+      "All"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
-    "name": "compile"
+    "name": "compile",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [],
@@ -324,7 +343,16 @@
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@\"output of `goma_ctl.py json_status`\"@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -333,7 +361,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "\"output of `goma_ctl.py json_status`\"",
+      "{\"notice\": [{\"infra_status\": {\"num_user_error\": 1, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
     "name": "postprocess_for_goma.write_jsonstatus",
@@ -380,19 +408,19 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "/tmp/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'android_webview_unittests_apk', 'base_unittests_apk', 'cc_unittests_apk', 'components_unittests_apk', 'events_unittests_apk', 'gl_tests_apk', 'ipc_tests_apk', 'skia_unittests_apk', 'sql_unittests_apk', 'ui_android_unittests_apk', 'ui_touch_selection_unittests_apk']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '/tmp/Debug', '-j', 50, 'All']",
       "--ninja-log-exit-status",
-      "0",
+      "1",
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "Android Tests (x86 emulator)",
+      "Android Builder (dbg)",
       "--buildbot-mastername",
-      "chromium.fyi",
+      "chromium.linux",
       "--buildbot-slavename",
-      "TestSlavename"
+      "build1-a1"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -413,366 +441,14 @@
     ],
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_EXCEPTION@@@",
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_BUILD_ERROR\"]@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/android/install_emulator_deps.py",
-      "--api-level",
-      "23"
-    ],
-    "name": "[emulator] installing emulator deps"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
-      "--",
-      "[START_DIR]/src/build/android/avd.py",
-      "run",
-      "--abi",
-      "x86",
-      "--api-level",
-      "23",
-      "--num",
-      "1",
-      "--headless",
-      "--enable-kvm",
-      "--sdcard-size",
-      "500M"
-    ],
-    "name": "[emulator] spawn 1 emulator (abi x86, api_level 23)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/android/avd.py",
-      "wait",
-      "-n",
-      "1"
-    ],
-    "name": "[emulator] wait for 1 emulators to complete booting"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
-      "--",
-      "[START_DIR]/src/build/android/adb_logcat_monitor.py",
-      "[START_DIR]/src/out/logcat",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "spawn_logcat_monitor"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/android/provision_devices.py",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--output-device-blacklist",
-      "/path/to/tmp/json",
-      "-t",
-      "Debug",
-      "--emulators"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "provision_devices"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_android_webview_unittests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "android_webview_unittests",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 2",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_base_unittests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "base_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_cc_unittests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "cc_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_components_unittests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "components_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_events_unittests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "events_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_gl_tests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "gl_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_ipc_tests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "ipc_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_skia_unittests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "skia_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_sql_unittests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "sql_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_ui_android_unittests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "ui_android_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/out/Debug/bin/run_ui_touch_selection_unittests",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "ui_touch_selection_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
-      "[START_DIR]/src/out/Debug/full_log",
-      "--",
-      "[START_DIR]/src/build/android/adb_logcat_printer.py",
-      "[START_DIR]/src/out/logcat"
-    ],
-    "name": "logcat_dump"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/third_party/android_platform/development/scripts/stack",
-      "--arch",
-      "x86",
-      "--more-info",
-      "[START_DIR]/src/out/Debug/full_log"
-    ],
-    "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Debug",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "stack_tool_with_logcat_dump"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "get version"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/build/android/tombstones.py",
-      "-a",
-      "-s",
-      "-w"
-    ],
-    "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Debug",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "stack_tool_for_tombstones"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[START_DIR]/src/out/Debug/test_logs/*.log"
-    ],
-    "name": "test_report",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@for report in glob.glob(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  with open(report, 'r') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
-      "@@@STEP_LOG_LINE@python.inline@      print l@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/android/avd.py",
-      "kill"
-    ],
-    "name": "[emulator] killing all emulators"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/android/avd.py",
-      "delete"
-    ],
-    "name": "[emulator] deleting all temp avds after running"
   },
   {
     "name": "$result",
-    "reason": "1 out of 11 aggregated steps failed. Failures: Step('android_webview_unittests') failed with return_code 2",
+    "reason": "Infra compile failure: Step Failure in compile",
     "recipe_result": null,
     "status_code": 1
   }

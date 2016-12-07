@@ -5,6 +5,7 @@
 DEPS = [
   'chromium',
   'chromium_tests',
+  'recipe_engine/json',
   'recipe_engine/platform',
   'recipe_engine/properties',
 ]
@@ -106,3 +107,24 @@ def GenTests(api):
              use_goma_module=True,
          ) + api.platform.name('win') +
          api.step_data('preprocess_for_goma.start_goma', retcode=1))
+
+  yield (api.test('basic_out_dir_goma_module_build_failure') +
+         api.properties(
+             mastername='chromium.linux',
+             buildername='Android Builder (dbg)',
+             slavename='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             use_goma_module=True,
+         ) + api.step_data('compile', retcode=1) +
+         api.step_data('postprocess_for_goma.goma_jsonstatus',
+                       stdout=api.json.output({
+                           'notice': [
+                               {
+                                   'infra_status': {
+                                       'ping_status_code': 200,
+                                       'num_user_error': 1,
+                                   },
+                               },
+                           ],
+                       })))
