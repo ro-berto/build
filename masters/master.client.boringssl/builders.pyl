@@ -165,6 +165,7 @@
       "slaves": [
         "slave43-c3",
         "slave44-c3",
+        "slave208-c3",
       ],
     },
     "mac": {
