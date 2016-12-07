@@ -127,6 +127,9 @@ def GenerateCompilationDatabase(api, debug_path, targets, platform):
     step_result = api.step('generate compilation database for %s' % platform,
                            command, stdout=api.raw_io.output())
     ninja_log_exit_status = step_result.retcode
+  except api.step.StepFailure as e:
+    ninja_log_exit_status = e.retcode
+    raise e
   finally:
     api.goma.stop(ninja_log_outdir=debug_path,
                   ninja_log_command=command,
@@ -306,6 +309,17 @@ def GenTests(api):
     api.step_data('generate compilation database for linux',
                   stdout=api.raw_io.output('some compilation data')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
+    api.properties.generic(buildername='ChromiumOS Codesearch',
+                           mastername='chromium.infra.cron')
+  )
+
+  yield (
+    api.test(
+        'full_%s_gen_compile_fail' %
+        _sanitize_nonalpha('ChromiumOS Codesearch')) +
+    api.step_data('generate compilation database for chromeos',
+                  stdout=api.raw_io.output('some compilation data'),
+                  retcode=1) +
     api.properties.generic(buildername='ChromiumOS Codesearch',
                            mastername='chromium.infra.cron')
   )

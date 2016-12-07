@@ -5,17 +5,17 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'native_client', 'url': 'https://chromium.googlesource.com/native_client/src/native_client.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/WebAssembly/waterfall.git'}]",
       "--patch_root",
-      "native_client",
+      "src",
       "--revision_mapping_file",
-      "{\"native_client\": \"got_revision\"}",
+      "{\"src\": \"got_waterfall_revision\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "native_client@abcd",
+      "src@origin/master",
       "--output_manifest"
     ],
     "env": {
@@ -27,40 +27,27 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"native_client\": \"abcd\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"origin/master\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"native_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/native_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"a95eb4c044a154d692a53fdfa564ee8de7aeea5b\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"native_client\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"a95eb4c044a154d692a53fdfa564ee8de7aeea5b\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#256160}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_waterfall_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_waterfall_revision_cp\": \"refs/heads/master@{#170242}\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"root\": \"native_client\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"a95eb4c044a154d692a53fdfa564ee8de7aeea5b\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#256160}\"@@@"
+      "@@@SET_BUILD_PROPERTY@got_waterfall_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_waterfall_revision_cp@\"refs/heads/master@{#170242}\"@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[START_DIR]/native_client",
-    "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "name": "gclient runhooks"
   },
   {
     "cmd": [],
@@ -72,7 +59,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
-      "linux-386",
+      "linux-amd64",
       "--dest-directory",
       "[START_DIR]/cipd",
       "--json-output",
@@ -96,7 +83,7 @@
       "--root",
       "[CACHE]/cipd/goma",
       "--list",
-      "infra/tools/cloudtail/linux-386 goma_recipe_module\ninfra_internal/goma/client/linux-386 release",
+      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -109,11 +96,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -165,23 +152,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/native_client/buildbot/buildbot_selector.py"
+      "[START_DIR]/src/src/build.py"
     ],
-    "cwd": "[START_DIR]/native_client",
+    "cwd": "[START_DIR]/src",
     "env": {
-      "BUILDBOT_BUILDERNAME": "oneiric_32-newlib-arm_hw-pnacl-panda-dbg",
-      "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
-      "BUILDBOT_MASTERNAME": "client.nacl",
+      "BUILDBOT_BUILDERNAME": "linux",
+      "BUILDBOT_GOT_WATERFALL_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "BUILDBOT_MASTERNAME": "client.wasm.llvm",
       "BUILDBOT_REVISION": "abcd",
-      "BUILDBOT_SLAVE_TYPE": "BuilderTester",
-      "BUILDBOT_TRIGGERED_BY_BUILDERNAME": "precise_64-newlib-arm_qemu-pnacl-dbg",
-      "BUILDBOT_TRIGGERED_BY_BUILDNUMBER": "1",
-      "BUILDBOT_TRIGGERED_BY_SLAVENAME": "TestSlave",
-      "GOMA_DIR": "[CACHE]/cipd/goma",
-      "NOCONTROL_GOMA": "1",
-      "RUNTEST": "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py"
+      "GOMA_DIR": "[CACHE]/cipd/goma"
     },
-    "name": "annotated steps"
+    "name": "annotated steps",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [],
@@ -257,13 +242,13 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-exit-status",
-      "0",
+      "1",
       "--buildbot-buildername",
-      "oneiric_32-newlib-arm_hw-pnacl-panda-dbg",
+      "linux",
       "--buildbot-mastername",
-      "client.nacl",
+      "client.wasm.llvm",
       "--buildbot-slavename",
-      "TestSlave"
+      "TestSlavename"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -289,7 +274,8 @@
   },
   {
     "name": "$result",
+    "reason": "Step('annotated steps') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

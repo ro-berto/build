@@ -49,9 +49,9 @@ def main():
                       ' ./goma_ctl.py jsonstatus')
   parser.add_argument('--skip-sendgomatsmon', action='store_true',
                       help='Represent whether send jsonstatus'
-                      ' and exit_status log to TsMon.'
-                      ' This option is only allowed to used when'
-                      ' start() of recipe_modules/goma failes.')
+                      ' and goma or compile.py exit_status log to TsMon.'
+                      ' This option is used when no need to send goma status'
+                      ' to monitoring server.')
 
   # Arguments set to os.environ
   parser.add_argument('--buildbot-buildername',
@@ -96,7 +96,6 @@ def main():
     # So, let me send some logs instead of
     # error in parse_args() using required option.
     assert args.json_status is not None and os.path.exists(args.json_status)
-    assert args.ninja_log_exit_status is not None
     goma_utils.SendGomaTsMon(args.json_status, args.ninja_log_exit_status,
                              builder=args.buildbot_buildername,
                              master=args.buildbot_mastername,

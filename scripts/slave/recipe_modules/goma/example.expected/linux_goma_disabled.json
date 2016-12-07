@@ -94,6 +94,24 @@
       "python",
       "-u",
       "[CACHE]/cipd/goma/goma_ctl.py",
+      "jsonstatus",
+      "[CACHE]/cipd/goma/jsonstatus"
+    ],
+    "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "preprocess_for_goma.goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
     "env": {
@@ -112,11 +130,8 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
       "--upload-compiler-proxy-info",
-      "--skip-sendgomatsmon",
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
-      "--ninja-log-exit-status",
-      "-1",
       "--goma-stats-file",
       "build_data_dir/goma_stats_proto",
       "--goma-crash-report-id-file",
@@ -159,6 +174,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
       "--upload-compiler-proxy-info",
+      "--skip-sendgomatsmon",
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",

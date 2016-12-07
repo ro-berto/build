@@ -9,6 +9,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/step',
 ]
 
 
@@ -26,15 +27,19 @@ def RunSteps(api):
   }
 
   api.goma.start()
-
+  exit_status = -1
   try:
     api.python('annotated steps',
                api.path['checkout'].join('src', 'build.py'),
                allow_subannotations=True,
                cwd=api.path['checkout'],
                env=env)
+    exit_status = 0
+  except api.step.StepFailure as e:
+    exit_status = e.retcode
+    raise e
   finally:
-    api.goma.stop()
+    api.goma.stop(ninja_log_exit_status=exit_status)
 
 
 def GenTests(api):
@@ -46,3 +51,12 @@ def GenTests(api):
       slavename = 'TestSlavename',
       revision = 'abcd',
     ))
+
+  yield (
+    api.test('linux failed') +
+    api.properties(
+      mastername = 'client.wasm.llvm',
+      buildername = 'linux',
+      slavename = 'TestSlavename',
+      revision = 'abcd',
+    ) + api.step_data('annotated steps', retcode=1))

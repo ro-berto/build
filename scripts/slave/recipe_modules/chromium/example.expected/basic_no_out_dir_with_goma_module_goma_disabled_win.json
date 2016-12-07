@@ -294,6 +294,22 @@
       "python",
       "-u",
       "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "jsonstatus",
+      "[CACHE]\\cipd\\goma\\jsonstatus"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "preprocess_for_goma.goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\cipd\\goma\\goma_ctl.py",
       "stop"
     ],
     "env": {
@@ -310,11 +326,8 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
-      "--skip-sendgomatsmon",
       "--json-status",
       "[CACHE]\\cipd\\goma\\jsonstatus",
-      "--ninja-log-exit-status",
-      "-1",
       "--buildbot-buildername",
       "Win Builder",
       "--buildbot-mastername",
@@ -368,6 +381,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
+      "--skip-sendgomatsmon",
       "--json-status",
       "[CACHE]\\cipd\\goma\\jsonstatus",
       "--ninja-log-outdir",

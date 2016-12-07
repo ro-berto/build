@@ -331,7 +331,9 @@ def SendGomaTsMon(json_file, exit_status,
     infra_status = json_status.get('infra_status')
 
     result = 'success'
-    if exit_status != 0:
+    if exit_status is None:
+      result = 'exception'
+    elif exit_status != 0:
       result = 'failure'
       if (exit_status < 0 or
           not infra_status or

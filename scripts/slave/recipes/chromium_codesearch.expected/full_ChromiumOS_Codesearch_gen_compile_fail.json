@@ -3,44 +3,21 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/ios",
-      "511"
-    ],
-    "name": "makedirs checkout path",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}]\ntarget_os = ['ios']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/chrome-devtools-frontend', 'url': 'https://chromium.googlesource.com/chromium/tools/chrome-devtools-frontend'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/gsd_generate_index', 'url': 'https://chromium.googlesource.com/chromium/tools/gsd_generate_index'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/perf', 'url': 'https://chromium.googlesource.com/chromium/tools/perf'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/command_wrapper/bin', 'url': 'https://chromium.googlesource.com/chromium/tools/command_wrapper/bin'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/depot_tools', 'url': 'https://chromium.googlesource.com/chromium/tools/depot_tools'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/chromium-jobqueue', 'url': 'https://chromium.googlesource.com/chromium/tools/chromium-jobqueue'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'tools/chromium-shortener', 'url': 'https://chromium.googlesource.com/chromium/tools/chromium-shortener'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'infra', 'url': 'https://chromium.googlesource.com/infra/infra'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/buildtools\": \"got_buildtools_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]/git",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/ios",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -124,32 +101,20 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios/src/ios/build/bots/chromium.fake/ios.json",
-      "/path/to/tmp/json"
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[START_DIR]/src/third_party/llvm-build"
     ],
-    "name": "read build config",
+    "name": "rmtree llvm-build",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos8.0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"use_goma_canary\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "echo",
-      "-e",
-      "{\n  \"compiler flags\": [], \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"use_goma=true\"\n  ], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"use_goma_canary\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
-    ],
-    "name": "finalize build config"
   },
   {
     "cmd": [],
@@ -161,7 +126,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
-      "mac-amd64",
+      "linux-amd64",
       "--dest-directory",
       "[START_DIR]/cipd",
       "--json-output",
@@ -185,7 +150,7 @@
       "--root",
       "[CACHE]/cipd/goma",
       "--list",
-      "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 candidate",
+      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -198,28 +163,14 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-candidate-------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
-      "--json-file",
-      "/path/to/tmp/json",
-      "--version",
-      "fake xcode version"
-    ],
-    "name": "find xcode",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -230,36 +181,37 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src",
+    "cwd": "[START_DIR]/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "LANDMINES_VERBOSE": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
   {
     "cmd": [
+      "[START_DIR]/src/buildtools/linux64/gn",
+      "gen",
+      "[START_DIR]/src/out/Debug",
+      "--args=is_clang=true is_component_build=true is_debug=true symbol_level=1 target_cpu=\"x64\" target_os=\"chromeos\" use_ozone=true use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "generate build files for chromeos"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb.py",
-      "gen",
-      "-m",
-      "chromium.fake",
-      "-b",
-      "ios",
-      "--config-file",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
-      "//out/Release-iphoneos"
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/utils.py",
+      "jobs",
+      "--file-path",
+      "/path/to/tmp/"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "generate build files (mb)"
+    "name": "calculate the number of recommended jobs"
   },
   {
     "cmd": [],
@@ -305,12 +257,23 @@
     "cmd": [
       "ninja",
       "-C",
-      "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
+      "[START_DIR]/src/out/Debug",
+      "all",
+      "-t",
+      "compdb",
+      "cc",
+      "cxx",
+      "objc",
+      "objcxx",
       "-j",
       "50"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
-    "name": "compile"
+    "name": "generate compilation database for chromeos",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [],
@@ -385,12 +348,20 @@
       "--upload-compiler-proxy-info",
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
+      "--ninja-log-outdir",
+      "[START_DIR]/src/out/Debug",
+      "--ninja-log-command",
+      "['ninja', '-C', Path('checkout', 'out','Debug'), 'all', '-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx', '-j', 50]",
+      "--ninja-log-exit-status",
+      "1",
+      "--ninja-log-compiler",
+      "goma",
       "--buildbot-buildername",
-      "ios",
+      "ChromiumOS Codesearch",
       "--buildbot-mastername",
-      "chromium.fake",
+      "chromium.infra.cron",
       "--buildbot-slavename",
-      "fake-vm"
+      "TestSlavename"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -415,173 +386,9 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "bootstrap swarming"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
-      "--path",
-      "[START_DIR]/swarming.client",
-      "--url",
-      "https://chromium.googlesource.com/external/swarming.client.git"
-    ],
-    "name": "bootstrap swarming.git setup (swarming_client)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "retry",
-      "fetch",
-      "origin",
-      "stable"
-    ],
-    "cwd": "[START_DIR]/swarming.client",
-    "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
-    },
-    "name": "bootstrap swarming.git fetch (swarming_client)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "checkout",
-      "-f",
-      "FETCH_HEAD"
-    ],
-    "cwd": "[START_DIR]/swarming.client",
-    "name": "bootstrap swarming.git checkout (swarming_client)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "rev-parse",
-      "HEAD"
-    ],
-    "cwd": "[START_DIR]/swarming.client",
-    "name": "bootstrap swarming.read revision",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "clean",
-      "-f",
-      "-d",
-      "-x"
-    ],
-    "cwd": "[START_DIR]/swarming.client",
-    "name": "bootstrap swarming.git clean (swarming_client)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "submodule",
-      "sync"
-    ],
-    "cwd": "[START_DIR]/swarming.client",
-    "name": "bootstrap swarming.submodule sync (swarming_client)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "submodule",
-      "update",
-      "--init",
-      "--recursive"
-    ],
-    "cwd": "[START_DIR]/swarming.client",
-    "name": "bootstrap swarming.submodule update (swarming_client)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/swarming.client/swarming.py",
-      "--version"
-    ],
-    "name": "bootstrap swarming.swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@1.2.3@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "isolate"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--args-json\", \n            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--xcode-version\", \n            \"<(xcode_version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
-      "[START_DIR]/template.isolate"
-    ],
-    "name": "isolate.generate template.isolate",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@template.isolate@{@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  \"conditions\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"OS == \\\"ios\\\"\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      {@@@",
-      "@@@STEP_LOG_LINE@template.isolate@        \"variables\": {@@@",
-      "@@@STEP_LOG_LINE@template.isolate@          \"command\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"src/ios/build/bots/scripts/run.py\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--args-json\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--out-dir\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"${ISOLATED_OUTDIR}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--xcode-version\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"<(xcode_version)\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@          ], @@@",
-      "@@@STEP_LOG_LINE@template.isolate@          \"files\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"src/ios/build/bots/scripts/\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@          ]@@@",
-      "@@@STEP_LOG_LINE@template.isolate@        }@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      }@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    ]@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  ]@@@",
-      "@@@STEP_LOG_LINE@template.isolate@}@@@",
-      "@@@STEP_LOG_END@template.isolate@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger"
-  },
-  {
     "name": "$result",
+    "reason": "Step('generate compilation database for chromeos') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

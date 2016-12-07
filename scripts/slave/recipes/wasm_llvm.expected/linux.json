@@ -238,7 +238,7 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-exit-status",
-      "-1",
+      "0",
       "--buildbot-buildername",
       "linux",
       "--buildbot-mastername",
