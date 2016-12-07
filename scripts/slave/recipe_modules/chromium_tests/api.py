@@ -91,6 +91,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def create_generalized_bot_config_object(self, bot_ids):
     return bdb_module.BotConfig(self.builders, bot_ids)
 
+  def create_bot_db_object(self):
+    return bdb_module.BotConfigAndTestDB()
+
   def set_precommit_mode(self):
     """Configures this module to indicate that tests are running before
     the changes are committed. This must be called very early in the

@@ -9,6 +9,7 @@ from recipe_engine.types import freeze
 DEPS = [
   'chromium',
   'chromium_android',
+  'chromium_tests',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/path',
@@ -17,31 +18,7 @@ DEPS = [
   'depot_tools/tryserver',
 ]
 
-@contextmanager
-def FYIStep():
-  try:
-    yield
-  except recipe_api.StepFailure:
-    pass
-
 BUILDERS = freeze({
-  'chromium.android': {
-    'Android x64 Builder (dbg)': {
-      'recipe_config': 'x64_builder_mb',
-      'check_licenses': FYIStep,
-      'gclient_apply_config': ['android', 'chrome_internal'],
-    },
-    'Android x86 Builder (dbg)' : {
-      'recipe_config': 'x86_builder_mb',
-      'check_licenses': FYIStep,
-      'gclient_apply_config': ['android', 'chrome_internal'],
-    },
-    'Android MIPS Builder (dbg)': {
-      'recipe_config': 'mipsel_builder_mb',
-      'check_licenses': FYIStep,
-      'gclient_apply_config': ['android', 'chrome_internal'],
-    },
-  },
   'chromium.perf': {
     'Android Builder': {
       'recipe_config': 'main_builder_rel_mb',
@@ -68,10 +45,8 @@ BUILDERS = freeze({
       'run_mb': True,
       'targets': [
         'android_tools',
-        'cc_perftests',
         'chrome_modern_public_apk',
         'chrome_public_apk',
-        'gpu_perftests',
         'monochrome_public_apk',
         'push_apps_to_background_apk',
         'system_webview_apk',
@@ -103,10 +78,8 @@ BUILDERS = freeze({
       'run_mb': True,
       'targets': [
         'android_tools',
-        'cc_perftests',
         'chrome_modern_public_apk',
         'chrome_public_apk',
-        'gpu_perftests',
 
         # 64-bit Monochrome builds 32-bit libchrome.so as well, so do not add it
         # here unless it's beneficial and doesn't slow the bots down too much.
@@ -185,6 +158,18 @@ PROPERTIES = {
   'revision': Property(default='HEAD'),
 }
 
+def _GetChromiumTestsCompileTargets(api, mastername, buildername, update_step):
+  # This is a bridge to the chromium recipe for the perf bots, allowing us to
+  # solely use src/-side test specifications before switching.
+  ct_bot_config = api.chromium_tests.create_bot_config_object(
+      mastername, buildername)
+  ct_bot_db = api.chromium_tests.create_bot_db_object()
+  ct_bot_config.initialize_bot_db(api.chromium_tests, ct_bot_db, update_step)
+  _, tests_including_triggered = api.chromium_tests.get_tests(
+      ct_bot_config, ct_bot_db)
+  return api.chromium_tests.get_compile_targets(
+      ct_bot_config, ct_bot_db, tests_including_triggered)
+
 def _RunStepsInternal(api, mastername, buildername, revision):
   bot_config = BUILDERS[mastername][buildername]
   droid = api.chromium_android
@@ -223,10 +208,10 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   if bot_config.get('run_mb'):
     api.chromium.run_mb(mastername, buildername, use_goma=True)
 
-  if bot_config.get('check_licenses'):
-    with bot_config['check_licenses']():
-      droid.check_webview_licenses()
-  api.chromium.compile(bot_config.get('targets'), use_goma_module=True)
+  targets = list(bot_config.get('targets', []))
+  targets += _GetChromiumTestsCompileTargets(
+      api, mastername, buildername, update_step)
+  api.chromium.compile(targets, use_goma_module=True)
 
   for apk_name in bot_config.get('resource_sizes_apks', ()):
     apk_path = api.chromium_android.apk_path(apk_name)
@@ -272,19 +257,3 @@ def GenTests(api):
             patchset='1',
             revision='267739',
             got_revision='267739'))
-
-  def step_failure(mastername, buildername, steps, tryserver=False):
-    props = api.properties.tryserver if tryserver else api.properties.generic
-    return (
-      api.test('%s_%s_fail_%s' % (
-        _sanitize_nonalpha(mastername),
-        _sanitize_nonalpha(buildername),
-        '_'.join(_sanitize_nonalpha(step) for step in steps))) +
-      props(mastername=mastername, buildername=buildername) +
-      reduce(lambda a, b: a + b,
-             (api.step_data(step, retcode=1) for step in steps))
-    )
-
-  yield step_failure(mastername='chromium.android',
-                     buildername='Android x64 Builder (dbg)',
-                     steps=['check licenses'])

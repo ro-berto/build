@@ -221,15 +221,6 @@ class AndroidApi(recipe_api.RecipeApi):
         chartjson_file=chartjson_file,
         upload_archives_to_bucket=upload_archives_to_bucket)
 
-  def check_webview_licenses(self, name='check licenses'):
-    self.m.python(
-        name,
-        self.m.path['checkout'].join('android_webview',
-                                     'tools',
-                                     'webview_licenses.py'),
-        args=['scan'],
-        cwd=self.m.path['checkout'])
-
   def upload_apks_for_bisect(self, update_properties, bucket, path):
     """Uploads android apks for functional bisects."""
     archive_name = 'build_product.zip'

@@ -229,6 +229,42 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "--properties",
+      "{\"buildername\": \"android_perf_bisect_builder\", \"buildnumber\": 257, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+    ],
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/src/testing/buildbot/tryserver.chromium.perf.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec (tryserver.chromium.perf.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/tryserver.chromium.perf.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
@@ -291,7 +327,8 @@
       "-C",
       "[START_DIR]/src/out/Release",
       "-j",
-      "50"
+      "50",
+      "chromium_builder_perf"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -375,7 +412,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'chromium_builder_perf']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

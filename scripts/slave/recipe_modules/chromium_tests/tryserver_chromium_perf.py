@@ -48,6 +48,8 @@ def _AddTestSpec(name, platform, target_bits=64):
       'tryserver_chromium_perf', None, platform, target_bits)
 
 
+_AddBuildSpec('android_perf_bisect_builder', 'android', target_bits=32)
+_AddBuildSpec('android_arm64_perf_bisect_builder', 'android')
 _AddBuildSpec('win_perf_bisect_builder', 'win', target_bits=32)
 _AddBuildSpec('winx64_bisect_builder', 'win')
 _AddBuildSpec('mac_perf_bisect_builder', 'mac')
