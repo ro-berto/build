@@ -321,10 +321,11 @@ class iOSApi(recipe_api.RecipeApi):
       self.m.goma.start()
 
     cmd.extend(targets)
-    self.m.step('compile' + suffix, cmd, cwd=cwd)
-
-    if self.use_goma:
-      self.m.goma.stop()
+    try:
+      self.m.step('compile' + suffix, cmd, cwd=cwd)
+    finally:
+      if self.use_goma:
+        self.m.goma.stop()
 
   def bootstrap_swarming(self):
     """Bootstraps Swarming."""

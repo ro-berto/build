@@ -304,3 +304,39 @@ def GenTests(api):
     )
     + suppress_analyze()
   )
+
+  yield (
+    api.test('goma_compilation_failure')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios-simulator-gn',
+      buildnumber='0',
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      rietveld='fake://rietveld.url',
+      slavename='fake-vm',
+      path_config='kitchen',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'gn_args': [
+        'target_os="ios"',
+        'ios_enable_code_signing=false',
+        'use_goma=true',
+      ],
+      'use_analyze': True,
+      'mb_type': 'gn',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.0',
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+    })
+    + api.step_data('compile (with patch)', retcode=1)
+    + suppress_analyze()
+  )

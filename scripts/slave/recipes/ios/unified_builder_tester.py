@@ -111,3 +111,34 @@ def GenTests(api):
         stdout=api.raw_io.output('1.2.3'),
     )
   )
+
+  yield (
+    api.test('goma_compilation_failure')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': '6.1.1',
+      'gn_args': [
+        'use_goma=true',
+      ],
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.1',
+      'tests': [
+        {
+          'app': 'fake test',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+    })
+    + api.step_data(
+        'compile',
+        retcode=1,
+        stdout=api.raw_io.output('1.2.3'),
+    )
+  )
