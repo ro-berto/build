@@ -21,7 +21,7 @@ from buildbot.util import json
 import sqlalchemy as sa
 import sqlalchemy.exc
 from twisted.python import log
-from buildbot.db import base
+from buildbot.db import base, monitoring
 
 class SchedulersConnectorComponent(base.DBConnectorComponent):
     """
@@ -30,6 +30,7 @@ class SchedulersConnectorComponent(base.DBConnectorComponent):
 
     def getState(self, schedulerid):
         """Get this scheduler's state, as a dictionary.  Returs a Deferred"""
+        @monitoring.instrumented_thd('getState')
         def thd(conn):
             schedulers_tbl = self.db.model.schedulers
             q = sa.select([ schedulers_tbl.c.state ],
@@ -48,6 +49,7 @@ class SchedulersConnectorComponent(base.DBConnectorComponent):
         """Set this scheduler's stored state, represented as a JSON-able
         dictionary.  Returs a Deferred.  Note that this will overwrite any
         existing state; be careful with updates!"""
+        @monitoring.instrumented_thd('setState')
         def thd(conn):
             schedulers_tbl = self.db.model.schedulers
             q = schedulers_tbl.update(
@@ -60,6 +62,7 @@ class SchedulersConnectorComponent(base.DBConnectorComponent):
         """Record a collection of classifications in the scheduler_changes
         table. CLASSIFICATIONS is a dictionary mapping CHANGEID to IMPORTANT
         (boolean).  Returns a Deferred."""
+        @monitoring.instrumented_thd('classifyChanges')
         def thd(conn):
             tbl = self.db.model.scheduler_changes
             ins_q = tbl.insert()
@@ -89,6 +92,7 @@ class SchedulersConnectorComponent(base.DBConnectorComponent):
         Flush all scheduler_changes for L{schedulerid}, limiting to those less
         than C{less_than} if the parameter is supplied.  Returns a Deferred.
         """
+        @monitoring.instrumented_thd('flushChangeClassifications')
         def thd(conn):
             scheduler_changes_tbl = self.db.model.scheduler_changes
             wc = (scheduler_changes_tbl.c.schedulerid == schedulerid)
@@ -113,6 +117,7 @@ class SchedulersConnectorComponent(base.DBConnectorComponent):
 
         @returns: dictionary via Deferred
         """
+        @monitoring.instrumented_thd('getChangeClassifications')
         def thd(conn):
             scheduler_changes_tbl = self.db.model.scheduler_changes
             changes_tbl = self.db.model.changes
@@ -141,6 +146,7 @@ class SchedulersConnectorComponent(base.DBConnectorComponent):
         @param sched_class: the class name of this scheduler
         @returns: schedulerid, via a Deferred
         """
+        @monitoring.instrumented_thd('getSchedulerId')
         def thd(conn):
             # get a matching row, *or* one without a class_name (from 0.8.0)
             schedulers_tbl = self.db.model.schedulers

@@ -19,7 +19,7 @@ Support for creating and reading source stamps
 
 import base64
 from twisted.python import log
-from buildbot.db import base
+from buildbot.db import base, monitoring
 
 class SsDict(dict):
     pass
@@ -36,6 +36,7 @@ class SourceStampsConnectorComponent(base.DBConnectorComponent):
         Create a new SourceStamp instance with the given attributes, and return
         its sourcestamp ID, via a Deferred.
         """
+        @monitoring.instrumented_thd('addSourceStamp')
         def thd(conn):
             # handle inserting a patch
             patchid = None
@@ -88,6 +89,7 @@ class SourceStampsConnectorComponent(base.DBConnectorComponent):
 
         @returns: dictionary as above, or None, via Deferred
         """
+        @monitoring.instrumented_thd('getSourceStamp')
         def thd(conn):
             tbl = self.db.model.sourcestamps
             q = tbl.select(whereclause=(tbl.c.id == ssid))

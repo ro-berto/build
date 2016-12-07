@@ -18,7 +18,7 @@
 """
 
 from twisted.internet import reactor
-from buildbot.db import base
+from buildbot.db import base, monitoring
 from buildbot.util import epoch2datetime
 
 class BuildsConnectorComponent(base.DBConnectorComponent):
@@ -31,7 +31,7 @@ class BuildsConnectorComponent(base.DBConnectorComponent):
     such information.  Do not depend on this API.
 
     Note that a single build may be represented in many rows in the builds
-    table, as it the builds table represents 
+    table, as it the builds table represents
 
     Builds are represented as dictionaries with keys C{bid} (the build ID,
     globally unique), C{number} (the build number, unique only within this
@@ -49,6 +49,7 @@ class BuildsConnectorComponent(base.DBConnectorComponent):
 
         @returns: Build dictionary as above or None, via Deferred
         """
+        @monitoring.instrumented_thd('getBuild')
         def thd(conn):
             tbl = self.db.model.builds
             res = conn.execute(tbl.select(whereclause=(tbl.c.id == bid)))
@@ -70,6 +71,7 @@ class BuildsConnectorComponent(base.DBConnectorComponent):
 
         @returns: List of build dictionaries as above, via Deferred
         """
+        @monitoring.instrumented_thd('getBuildsForRequest')
         def thd(conn):
             tbl = self.db.model.builds
             q = tbl.select(whereclause=(tbl.c.brid == brid))
@@ -90,6 +92,7 @@ class BuildsConnectorComponent(base.DBConnectorComponent):
         @returns: build ID via Deferred
         """
 
+        @monitoring.instrumented_thd('addBuild')
         def thd(conn):
             start_time = _reactor.seconds()
             r = conn.execute(self.db.model.builds.insert(),
@@ -111,6 +114,7 @@ class BuildsConnectorComponent(base.DBConnectorComponent):
 
         @returns: Deferred
         """
+        @monitoring.instrumented_thd('finishBuilds')
         def thd(conn):
             tbl = self.db.model.builds
             now = _reactor.seconds()

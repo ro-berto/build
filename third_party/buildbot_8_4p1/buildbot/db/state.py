@@ -16,7 +16,7 @@
 from buildbot.util import json
 import sqlalchemy as sa
 import sqlalchemy.exc
-from buildbot.db import base
+from buildbot.db import base, monitoring
 
 class _IdNotFoundError(Exception):
     pass # used internally
@@ -43,6 +43,7 @@ class StateConnectorComponent(base.DBConnectorComponent):
         @param class_name: object class name
         @returns: the objectid, via a Deferred.
         """
+        @monitoring.instrumented_thd('getObjectId')
         def thd(conn):
             objects_tbl = self.db.model.objects
 
@@ -95,6 +96,7 @@ class StateConnectorComponent(base.DBConnectorComponent):
         @raises TypeError: if JSON parsing fails
         """
 
+        @monitoring.instrumented_thd('getState')
         def thd(conn):
             object_state_tbl = self.db.model.object_state
             q = sa.select([ object_state_tbl.c.value_json ],
@@ -127,6 +129,7 @@ class StateConnectorComponent(base.DBConnectorComponent):
         @param returns: Deferred
         @raises TypeError: if JSONification fails
         """
+        @monitoring.instrumented_thd('setState')
         def thd(conn):
             object_state_tbl = self.db.model.object_state
 

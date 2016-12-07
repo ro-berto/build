@@ -20,7 +20,7 @@ Support for buildsets in the database
 import sqlalchemy as sa
 from twisted.internet import reactor
 from buildbot.util import json
-from buildbot.db import base
+from buildbot.db import base, monitoring
 from buildbot.util import epoch2datetime
 
 class BsDict(dict):
@@ -64,6 +64,7 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
 
         @returns: buildset ID and buildrequest IDs, via a Deferred
         """
+        @monitoring.instrumented_thd('addBuildset')
         def thd(conn):
             submitted_at = _reactor.seconds()
 
@@ -119,6 +120,7 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
         @returns: Deferred
         @raises KeyError: if the row does not exist or is already complete
         """
+        @monitoring.instrumented_thd('completeBuildset')
         def thd(conn):
             tbl = self.db.model.buildsets
 
@@ -153,6 +155,7 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
 
         @returns: dictionary as above, or None, via Deferred
         """
+        @monitoring.instrumented_thd('getBuildset')
         def thd(conn):
             bs_tbl = self.db.model.buildsets
             q = bs_tbl.select(whereclause=(bs_tbl.c.id == bsid))
@@ -177,6 +180,7 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
 
         @returns: list of dictionaries, via Deferred
         """
+        @monitoring.instrumented_thd('getBuildsets')
         def thd(conn):
             bs_tbl = self.db.model.buildsets
             q = bs_tbl.select()
@@ -192,6 +196,7 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
 
     def getRecentBuildsets(self, count, branch=None, repository=None,
                            complete=None):
+        @monitoring.instrumented_thd('getRecentBuildsets')
         def thd(conn):
             bs_tbl = self.db.model.buildsets
             ch_tbl = self.db.model.changes
@@ -232,6 +237,7 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
         @returns: dictionary mapping property name to (value, source), via
         Deferred
         """
+        @monitoring.instrumented_thd('getBuildsetProperties')
         def thd(conn):
             bsp_tbl = self.db.model.buildset_properties
             q = sa.select(
@@ -255,6 +261,7 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
 
         @returns: Deferred
         """
+        @monitoring.instrumented_thd('subscribeToBuildset')
         def thd(conn):
             conn.execute(self.db.model.scheduler_upstream_buildsets.insert(),
                     schedulerid=schedulerid,
@@ -275,6 +282,7 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
 
         @returns: Deferred
         """
+        @monitoring.instrumented_thd('unsubscribeFromBuildset')
         def thd(conn):
             tbl = self.db.model.scheduler_upstream_buildsets
             conn.execute(tbl.delete(
@@ -297,6 +305,7 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
 
         @returns: list as described, via Deferred
         """
+        @monitoring.instrumented_thd('getSubscribedBuildsets')
         def thd(conn):
             bs_tbl = self.db.model.buildsets
             upstreams_tbl = self.db.model.scheduler_upstream_buildsets

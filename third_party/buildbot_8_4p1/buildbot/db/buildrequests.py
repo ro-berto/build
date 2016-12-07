@@ -20,7 +20,7 @@ Support for buildsets in the database
 import sqlalchemy as sa
 from twisted.internet import reactor
 from twisted.python import log
-from buildbot.db import base
+from buildbot.db import base, monitoring
 from buildbot.util import epoch2datetime
 
 class AlreadyClaimedError(Exception):
@@ -57,6 +57,7 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
 
         @returns: Build request dictionary as above or None, via Deferred
         """
+        @monitoring.instrumented_thd('getBuildRequest')
         def thd(conn):
             tbl = self.db.model.buildrequests
             res = conn.execute(tbl.select(whereclause=(tbl.c.id == brid)))
@@ -105,6 +106,7 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
 
         @returns: List of build request dictionaries as above, via Deferred
         """
+        @monitoring.instrumented_thd('getBuildRequests')
         def thd(conn):
             tbl = self.db.model.buildrequests
             q = tbl.select()
@@ -201,6 +203,7 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
                 claimed_by_name=None,
                 claimed_by_incarnation=None)
 
+        @monitoring.instrumented_thd('claimBuildRequests')
         def thd(conn):
             # update conditioned on the request being unclaimed, or claimed by
             # this instance.  In either case, the claimed_at is set to the
@@ -289,6 +292,7 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
 
         @returns: Deferred
         """
+        @monitoring.instrumented_thd('unclaimBuildRequests')
         def thd(conn):
             master_name = self.db.master.master_name
             master_incarnation = self.db.master.master_incarnation
@@ -326,6 +330,7 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
 
         @returns: Deferred
         """
+        @monitoring.instrumented_thd('completeBuildRequests')
         def thd(conn):
             # the update here is simple, but a number of conditions are
             # attached to ensure that we do not update a row inappropriately
@@ -357,6 +362,7 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
 
         @returns: Deferred
         """
+        @monitoring.instrumented_thd('unclaimOldIncarnationRequests')
         def thd(conn):
             tbl = self.db.model.buildrequests
             master_name = self.db.master.master_name
@@ -394,6 +400,7 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
 
         @returns: Deferred
         """
+        @monitoring.instrumented_thd('unclaimExpiredRequests')
         def thd(conn):
             tbl = self.db.model.buildrequests
             old_epoch = _reactor.seconds() - old

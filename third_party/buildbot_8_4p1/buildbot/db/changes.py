@@ -20,7 +20,7 @@ Support for changes in the database
 from buildbot.util import json
 import sqlalchemy as sa
 from twisted.internet import defer, reactor
-from buildbot.db import base
+from buildbot.db import base, monitoring
 from buildbot.util import epoch2datetime, datetime2epoch
 
 class ChDict(dict):
@@ -118,6 +118,7 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
             assert pv[1] == 'Change', ("properties must be qualified with"
                                        "source 'Change'")
 
+        @monitoring.instrumented_thd('addChange')
         def thd(conn):
             # note that in a read-uncommitted database like SQLite this
             # transaction does not buy atomicitiy - other database users may
@@ -188,6 +189,7 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
         @returns: Change dictionary via Deferred
         """
         assert changeid >= 0
+        @monitoring.instrumented_thd('getChange')
         def thd(conn):
             # get the row from the 'changes' table
             changes_tbl = self.db.model.changes
@@ -211,6 +213,7 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
 
         @returns: list of dictionaries via Deferred, ordered by changeid
         """
+        @monitoring.instrumented_thd('getRecentChanges')
         def thd(conn):
             # get the changeids from the 'changes' table
             changes_tbl = self.db.model.changes
@@ -244,6 +247,7 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
 
         @returns: changeid via Deferred
         """
+        @monitoring.instrumented_thd('getLatestChangeid')
         def thd(conn):
             changes_tbl = self.db.model.changes
             q = sa.select([ changes_tbl.c.changeid ],
@@ -258,6 +262,7 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
     def pruneChanges(self, changeHorizon):
         if not changeHorizon:
             return defer.succeed(None)
+        @monitoring.instrumented_thd('pruneChanges')
         def thd(conn):
             changes_tbl = self.db.model.changes
 
