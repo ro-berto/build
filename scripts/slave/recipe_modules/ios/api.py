@@ -321,11 +321,20 @@ class iOSApi(recipe_api.RecipeApi):
       self.m.goma.start()
 
     cmd.extend(targets)
+    exit_status = -1
     try:
       self.m.step('compile' + suffix, cmd, cwd=cwd)
+      exit_status = 0
+    except self.m.step.StepFailure as e:
+      exit_status = e.retcode
+      raise e
     finally:
       if self.use_goma:
-        self.m.goma.stop()
+        self.m.goma.stop(
+            ninja_log_outdir=cwd,
+            ninja_log_compiler='goma',
+            ninja_log_command=cmd,
+            ninja_log_exit_status=exit_status)
 
   def bootstrap_swarming(self):
     """Bootstraps Swarming."""
