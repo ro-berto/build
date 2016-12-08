@@ -473,8 +473,7 @@
             "Android Galaxy S5 Perf (1)",
             "Android Galaxy S5 Perf (2)",
             "Android Galaxy S5 Perf (3)",
-            "Mac Pro 10.11 Perf",
-            "Mac Air 10.11 Perf"
+            "Mac HDD Perf"
         ],
 
         "builders": {
