@@ -4,6 +4,40 @@
 
 import copy
 
+# These fields must appear in the test result output
+REQUIRED = (
+    'interrupted',
+    'num_failures_by_type',
+    'seconds_since_epoch',
+    'tests',
+    )
+
+# These fields are optional, but must have the same value on all shards
+OPTIONAL_MATCHING = (
+    'path_delimiter',
+    'build_number',
+    'builder_name',
+    'chromium_revision',
+    'has_pretty_patch',
+    'has_wdiff',
+    'layout_tests_dir',
+    'pixel_tests_enabled',
+    )
+
+# These fields are optional and will be summed together
+OPTIONAL_COUNTS = (
+    'fixable',
+    'num_flaky',
+    'num_passes',
+    'num_regressions',
+    'skips',
+    'skipped',
+    )
+
+
+class MergeException(Exception):
+  pass
+
 
 def merge_test_results(shard_results_list):
   """ Merge list of results.
@@ -42,7 +76,7 @@ def _merge_simplified_json_format(shard_results_list):
 
     if (not isinstance(successes, list) or not isinstance(failures, list) or
         not isinstance(valid, bool)):
-      raise Exception(
+      raise MergeException(
         'Unexpected value type in %s' % result_json)  # pragma: no cover
 
     merged_results['successes'].extend(successes)
@@ -59,22 +93,29 @@ def _merge_json_test_result_format(shard_results_list):
   merged_results = {
     'tests': {},
     'interrupted': False,
-    'path_delimiter': '',
     'version': 3,
     'seconds_since_epoch': float('inf'),
     'num_failures_by_type': {
     }
   }
+
   # To make sure that we don't mutate existing shard_results_list.
   shard_results_list = copy.deepcopy(shard_results_list)
   for result_json in shard_results_list:
-    if not ('tests' in result_json and
-            'interrupted' in result_json and
-            'path_delimiter' in result_json and
-            'version' in result_json and
-            'seconds_since_epoch' in result_json and
-            'num_failures_by_type' in result_json):
-      raise Exception('Invalid json test results')
+    result_json = copy.deepcopy(result_json)
+
+    # Check the version first
+    version = result_json.get('version', -1)
+    if version != 3:
+      raise MergeException(  # pragma: no cover - covered by results_merger_unittest
+          'Unsupported version %s. Only version 3 is supported' % version)
+    del result_json['version']
+
+    # Check the results for each shard have the required keys
+    for key in REQUIRED:
+      if key not in result_json:
+        raise MergeException(  # pragma: no cover - covered by results_merger_unittest
+            'Invalid json test results (missing %s)' % key)
 
     # Traverse the result_json's test trie & merged_results's test tries in
     # DFS order & add the n to merged['tests'].
@@ -89,23 +130,51 @@ def _merge_json_test_result_format(shard_results_list):
           merged_results_nodes_queue.append(merged_node[k])
         else:
           merged_node[k] = v
+    del result_json['tests']
 
-    # Update the rest of the fields for merged_results.
+    # If any where interrupted, we are interrupted.
     merged_results['interrupted'] |= result_json['interrupted']
-    if not merged_results['path_delimiter']:
-      merged_results['path_delimiter'] = result_json['path_delimiter']
-    elif merged_results['path_delimiter'] != result_json['path_delimiter']:
-      raise Exception(  # pragma: no cover - covered by results_merger_unittest
-          'Incosistent path delimiter: %s %s' %
-          (merged_results['path_delimiter'],
-           result_json['path_delimiter']))
-    if result_json['version'] != 3:
-      raise Exception(  # pragma: no cover - covered by results_merger_unittest
-          'Only version 3 of json test result format is supported')
+    del result_json['interrupted']
+
+    # Use the earliest seconds_since_epoch value
     merged_results['seconds_since_epoch'] = min(
         merged_results['seconds_since_epoch'],
         result_json['seconds_since_epoch'])
+    del result_json['seconds_since_epoch']
+
+    # Sum the number of failure types
     for result_type, count in result_json['num_failures_by_type'].iteritems():
       merged_results['num_failures_by_type'].setdefault(result_type, 0)
       merged_results['num_failures_by_type'][result_type] += count
+    del result_json['num_failures_by_type']
+
+    # Optional values must match
+    for optional in OPTIONAL_MATCHING:
+      optional_value = result_json.get(optional, None)
+      if optional not in merged_results:
+        merged_results[optional] = optional_value
+      elif merged_results[optional] != optional_value:
+        raise MergeException(  # pragma: no cover - covered by results_merger_unittest
+            'Inconsistent %s: %s %s' %
+            (optional,
+             merged_results[optional],
+             optional_value))
+      if optional in result_json:
+        del result_json[optional]
+
+    # Optional value counts
+    for optional in OPTIONAL_COUNTS:
+      if optional in result_json:
+        merged_results[optional] = (  # pragma: no cover - covered by results_merger_unittest
+            merged_results.get(optional, 0) + result_json[optional])
+        del result_json[optional]  # pragma: no cover - covered by results_merger_unittest
+
+    if len(result_json) != 0:
+      raise MergeException(  # pragma: no cover - covered by results_merger_unittest
+          'Unmergable values %s' % result_json.keys())
+
+  for optional in OPTIONAL_MATCHING:
+    if optional in merged_results and merged_results[optional] is None:
+      del merged_results[optional]
+
   return merged_results

@@ -148,7 +148,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         }
       }
       if not valid:
-        del jsonish_results['path_delimiter']
+        jsonish_results['invalid'] = '1'
       idx = 1 + (2 * i)
       if isolated_script_passing:
         tests_run = {
