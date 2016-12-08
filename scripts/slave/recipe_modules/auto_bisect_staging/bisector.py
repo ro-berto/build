@@ -871,9 +871,10 @@ class Bisector(object):
                       unclassified_revisions if r.is_build_failed()]
         if failed_ids:
           if len(failed_ids) > 10:
-            message += 'Over 10 revisions failed, listing only the first 10:\n'
+            message += ('\nOver 10 revisions failed, '
+                        'listing only the first 10:\n')
           else:
-            message += 'The following revisions failed to build:\n'
+            message += '\nThe following revisions failed to build:\n'
           message += '\n'.join(failed_ids[:10])
       else:  # pragma: no cover
         message = 'Something else went wrong, more debugging needed.'

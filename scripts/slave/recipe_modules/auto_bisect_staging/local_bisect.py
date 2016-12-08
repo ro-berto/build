@@ -41,6 +41,9 @@ def perform_bisect(api, **flags):
       bisect_attempts[-1].aborted_reason = message
       bisect_attempts[-1].print_result_debug_info()
       bisect_attempts[-1].post_result()
+    # The message may include line breaks for listing untestable ranges. This is
+    # not accepted by buildbot for the purpose of providing a failure reason
+    message = message.replace('\n', ' ')
     raise api.m.step.StepFailure(message)
   except Exception as e: # pylint: disable=bare-except
     if bisect_attempts:
