@@ -79,6 +79,8 @@ LOG_PROCESSOR_CLASSES = {
     'graphing': performance_log_processor.GraphingLogProcessor,
 }
 
+INFRA_ERROR = 87
+
 
 def _GetTempCount():
   """Returns the number of files and directories inside the temporary dir."""
@@ -1013,7 +1015,7 @@ def _MainMac(options, args, extra_env):
   if options.results_url:
     if not _SendResultsToDashboard(
         log_processor, _ResultsDashboardDict(options)):
-      return 1
+      return result or INFRA_ERROR
 
   return result
 
@@ -1269,7 +1271,7 @@ def _MainLinux(options, args, extra_env):
   if options.results_url:
     if not _SendResultsToDashboard(
         log_processor, _ResultsDashboardDict(options)):
-      return result or 1
+      return result or INFRA_ERROR
 
   return result
 
@@ -1364,7 +1366,7 @@ def _MainWin(options, args, extra_env):
   if options.results_url:
     if not _SendResultsToDashboard(
         log_processor, _ResultsDashboardDict(options)):
-      return 1
+      return result or INFRA_ERROR
 
   return result
 
