@@ -47,6 +47,8 @@ BUILDERS = freeze({
         'android_tools',
         'chrome_modern_public_apk',
         'chrome_public_apk',
+        'dump_syms',
+        'microdump_stackwalk',
         'monochrome_public_apk',
         'push_apps_to_background_apk',
         'system_webview_apk',
@@ -80,6 +82,8 @@ BUILDERS = freeze({
         'android_tools',
         'chrome_modern_public_apk',
         'chrome_public_apk',
+        'dump_syms',
+        'microdump_stackwalk',
 
         # 64-bit Monochrome builds 32-bit libchrome.so as well, so do not add it
         # here unless it's beneficial and doesn't slow the bots down too much.
