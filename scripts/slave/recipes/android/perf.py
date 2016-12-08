@@ -209,6 +209,8 @@ def RunSteps(api):
   finally:
     api.chromium_android.common_tests_final_steps(
         logcat_gs_bucket='chromium-android')
+    api.chromium_android.stackwalker(
+        root_chromium_dir=api.path['checkout'])
 
 
 def _sanitize_nonalpha(text):

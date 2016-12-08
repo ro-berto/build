@@ -834,6 +834,43 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/components/crash/content/tools/generate_breakpad_symbols.py",
+      "--symbols-dir",
+      "[TMP_BASE]/symbols_tmp_1",
+      "--build-dir",
+      "[START_DIR]/src/out/Release",
+      "--binary",
+      "[START_DIR]/src/out/Release/lib.unstripped/libchrome.so"
+    ],
+    "name": "generate breakpad symbols"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/build/android/stacktrace/stackwalker.py",
+      "--stackwalker-binary-path",
+      "[START_DIR]/src/out/Release/microdump_stackwalk",
+      "--stack-trace-path",
+      "[START_DIR]/src/out/Release/full_log",
+      "--symbols-path",
+      "[TMP_BASE]/symbols_tmp_1"
+    ],
+    "name": "symbolized breakpad crashes"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "[TMP_BASE]/symbols_tmp_1"
+    ],
+    "name": "rmtree [TMP_BASE]/symbols_tmp_1"
+  },
+  {
     "name": "$result",
     "reason": "sharded perf tests failed [InfraFailure(\"Infra Failure: Step('perf_test.foo') returned 87\",)]",
     "recipe_result": null,

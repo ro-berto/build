@@ -1049,6 +1049,51 @@ class AndroidApi(recipe_api.RecipeApi):
           infra_step=True,
           )
 
+  def generate_breakpad_symbols(self, symbols_dir, root_chromium_dir):
+    """Generate breakpad symbols.
+
+    This step requires dump_syms binary to exist in the build dir.
+
+    Args:
+      symbols_dir: The directory to dump the breakpad symbols to.
+      root_chromium_dir: Root Chromium directory.
+    """
+    build_dir = root_chromium_dir.join(
+        'out', self.m.chromium.c.BUILD_CONFIG)
+    libchrome_path = build_dir.join('lib.unstripped', 'libchrome.so')
+
+    generate_symbols_args = ['--symbols-dir', symbols_dir,
+                             '--build-dir', build_dir,
+                             '--binary', libchrome_path]
+    self.m.python('generate breakpad symbols',
+                  root_chromium_dir.join(
+                      'components', 'crash', 'content',
+                      'tools', 'generate_breakpad_symbols.py'),
+                  generate_symbols_args)
+
+  def stackwalker(self, root_chromium_dir):
+    """Runs stack walker tool to symbolize breakpad crashes.
+
+    This step requires logcat file. The logcat monitor must have
+    been run on the bot.
+    """
+    build_dir = root_chromium_dir.join(
+        'out', self.m.chromium.c.BUILD_CONFIG)
+    logcat = build_dir.join('full_log')
+    with self.m.tempfile.temp_dir('symbols') as temp_symbols_dir:
+      # TODO(mikecase): Only generate breakpad symbols if we
+      # know there is at least one breakpad crash. This step takes
+      # several minutes and we should only run it if we need to.
+      self.generate_breakpad_symbols(temp_symbols_dir, root_chromium_dir)
+      stackwalker_args = ['--stackwalker-binary-path',
+                          build_dir.join('microdump_stackwalk'),
+                          '--stack-trace-path', logcat,
+                          '--symbols-path', temp_symbols_dir]
+      self.m.python('symbolized breakpad crashes',
+                    root_chromium_dir.join(
+                        'build', 'android', 'stacktrace', 'stackwalker.py'),
+                    stackwalker_args)
+
   def stack_tool_steps(self, force_latest_version=False):
     build_dir = self.m.path['checkout'].join('out',
                                              self.m.chromium.c.BUILD_CONFIG)
