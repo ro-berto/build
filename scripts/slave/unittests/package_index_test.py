@@ -18,10 +18,9 @@ import test_env  # pylint: disable=W0403,W0611
 
 from slave.chromium import package_index
 
-
 TEST_CC_FILE_CONTENT = '#include "test.h"\nint main() {\nreturn 0;\n}\n'
 TEST_H_FILE_CONTENT = ('#ifndef TEST_H\n#define TEST_H\n#include <stdio.h>\n'
-    '#endif\n')
+                       '#endif\n')
 COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc -o test.o'
 INCLUDE_PATH = '/usr/include'
 
@@ -76,11 +75,20 @@ class PackageIndexTest(unittest.TestCase):
       actual_content = data_file.read()
     self.assertEquals(content, actual_content)
 
-  def _CheckRequiredInput(self, required_input, filename, content):
+  def _CheckRequiredInputGrok(self, required_input, filename, content):
     self.assertEquals(required_input['digest'],
                       hashlib.sha256(content).hexdigest())
     self.assertEquals(required_input['size'], len(content))
     self.assertEquals(required_input['path'], filename)
+
+  def _CheckRequiredInputKythe(self, required_input, filename, content):
+    self.assertEquals(required_input['info']['digest'],
+                      hashlib.sha256(content).hexdigest())
+    self.assertEquals(required_input['info']['path'], filename)
+    self.assertEquals(required_input['v_name']['path'], filename)
+    self.assertEquals(required_input['v_name']['corpus'], 'chromium')
+    self.assertEquals(required_input['v_name']['root'], '')
+    self.assertEquals(required_input['v_name']['language'], 'c++')
 
   def testGenerateDataFiles(self):
     self.index_pack._GenerateDataFiles()
@@ -89,7 +97,7 @@ class PackageIndexTest(unittest.TestCase):
     self._CheckDataFile(test_cc_file, TEST_CC_FILE_CONTENT)
     self._CheckDataFile(test_h_file, TEST_H_FILE_CONTENT)
 
-  def testGenerateUnitFiles(self):
+  def testGenerateUnitFilesGrok(self):
     # Setup some dictionaries which are usually filled by _GenerateDataFiles()
     test_cc_file_fullpath = os.path.join('.', self.test_cc_file.name)
     test_h_file_fullpath = os.path.join('.', self.test_h_file.name)
@@ -97,12 +105,12 @@ class PackageIndexTest(unittest.TestCase):
     self.index_pack.filehashes = {
         test_cc_file_fullpath: hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest(),
         test_h_file_fullpath: hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest(),
-        stdio_fullpath: hashlib.sha256('').hexdigest()
+        stdio_fullpath: hashlib.sha256('').hexdigest(),
     }
     self.index_pack.filesizes = {
         test_cc_file_fullpath: len(TEST_CC_FILE_CONTENT),
         test_h_file_fullpath: len(TEST_H_FILE_CONTENT),
-        stdio_fullpath: 0
+        stdio_fullpath: 0,
     }
     # Now _GenerateUnitFiles() can be called.
     self.index_pack._GenerateUnitFiles()
@@ -130,10 +138,75 @@ class PackageIndexTest(unittest.TestCase):
 
         self.assertEquals(len(compilation_unit_dictionary['required_input']),
                           len(self.index_pack.filesizes))
-        self._CheckRequiredInput(
+        self._CheckRequiredInputGrok(
             compilation_unit_dictionary['required_input'][0],
             self.test_cc_file.name, TEST_CC_FILE_CONTENT)
-        self._CheckRequiredInput(
+        self._CheckRequiredInputGrok(
+            compilation_unit_dictionary['required_input'][1],
+            self.test_h_file.name, TEST_H_FILE_CONTENT)
+
+        real_compile_arguments = COMPILE_ARGUMENTS.split()[1:]
+        self.assertEquals(
+            compilation_unit_dictionary['argument'],
+            (
+                ['-isystem%s' % INCLUDE_PATH] + real_compile_arguments +
+                ['-w', '-nostdinc++']
+            ))
+
+  def testGenerateUnitFilesKythe(self):
+    # Setup some dictionaries which are usually filled by _GenerateDataFiles()
+    test_cc_file_fullpath = os.path.join('.', self.test_cc_file.name)
+    test_h_file_fullpath = os.path.join('.', self.test_h_file.name)
+    stdio_fullpath = '%s/stdio.h' % INCLUDE_PATH
+    self.index_pack.filehashes = {
+        test_cc_file_fullpath: hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest(),
+        test_h_file_fullpath: hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest(),
+        stdio_fullpath: hashlib.sha256('').hexdigest(),
+    }
+    self.index_pack.filesizes = {
+        test_cc_file_fullpath: len(TEST_CC_FILE_CONTENT),
+        test_h_file_fullpath: len(TEST_H_FILE_CONTENT),
+        stdio_fullpath: 0,
+    }
+    # Change format to kythe
+    self.index_pack.index_pack_format = 'kythe'
+
+    # Now _GenerateUnitFiles() can be called.
+    self.index_pack._GenerateUnitFiles()
+
+    # Because we only called _GenerateUnitFiles(), the index pack directory
+    # should only contain the one unit file for the one compilation unit in our
+    # test compilation database.
+    for root, _, files in os.walk(self.index_pack.index_directory):
+      for unit_file_name in files:
+        with gzip.open(os.path.join(root, unit_file_name), 'rb') as unit_file:
+          unit_file_content = unit_file.read()
+
+        # Assert that the name of the unit file is correct.
+        unit_file_hash = hashlib.sha256(unit_file_content).hexdigest()
+        self.assertEquals(unit_file_name, unit_file_hash + '.unit')
+
+        # Assert that the json content encodes valid dictionaries.
+        compilation_unit_wrapper = json.loads(unit_file_content)
+        self.assertEquals(compilation_unit_wrapper['format'], 'kythe')
+        compilation_unit_dictionary = compilation_unit_wrapper['content']
+
+        self.assertEquals(compilation_unit_dictionary['v_name']['corpus'],
+                          'chromium')
+        self.assertEquals(compilation_unit_dictionary['v_name']['root'],
+                          '')
+        self.assertEquals(compilation_unit_dictionary['v_name']['language'],
+                          'c++')
+        self.assertEquals(compilation_unit_dictionary['source_file'],
+                          [self.test_cc_file.name])
+        self.assertEquals(compilation_unit_dictionary['output_key'], 'test.o')
+
+        self.assertEquals(len(compilation_unit_dictionary['required_input']),
+                          len(self.index_pack.filesizes))
+        self._CheckRequiredInputKythe(
+            compilation_unit_dictionary['required_input'][0],
+            self.test_cc_file.name, TEST_CC_FILE_CONTENT)
+        self._CheckRequiredInputKythe(
             compilation_unit_dictionary['required_input'][1],
             self.test_h_file.name, TEST_H_FILE_CONTENT)
 
