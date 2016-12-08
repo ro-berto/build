@@ -404,6 +404,7 @@ def main_win(options, args):
   chrome_child_dll = os.path.join(target_dir, 'chrome_child.dll')
   chrome_exe = os.path.join(target_dir, 'chrome.exe')
   mini_installer_exe = os.path.join(target_dir, 'mini_installer.exe')
+  resources_pak = os.path.join(target_dir, 'resources.pak')
   setup_exe = os.path.join(target_dir, 'setup.exe')
 
   result = 0
@@ -419,6 +420,10 @@ def main_win(options, args):
   if os.path.exists(mini_installer_exe):
     fmt = 'RESULT mini_installer.exe: mini_installer.exe= %s bytes'
     print fmt % get_size(mini_installer_exe)
+
+  if os.path.exists(resources_pak):
+    fmt = 'RESULT resources.pak: resources.pak= %s bytes'
+    print fmt % get_size(resources_pak)
 
   if os.path.exists(setup_exe):
     print 'RESULT setup.exe: setup.exe= %s bytes' % get_size(setup_exe)
