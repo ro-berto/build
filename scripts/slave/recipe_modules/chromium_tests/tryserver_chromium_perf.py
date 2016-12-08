@@ -80,6 +80,8 @@ _AddTestSpec('mac_10_11_perf_bisect', 'mac')
 _AddTestSpec('mac_10_10_perf_bisect', 'mac')
 _AddTestSpec('mac_retina_perf_bisect', 'mac')
 _AddTestSpec('mac_hdd_perf_bisect', 'mac')
+_AddTestSpec('mac_pro_perf_bisect', 'mac')
+_AddTestSpec('mac_air_perf_bisect', 'mac')
 
 _AddTestSpec('linux_perf_bisect', 'linux')
 
