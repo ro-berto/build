@@ -62,5 +62,80 @@ SPEC = {
         'platform': 'linux',
       },
     },
+
+    'NDK Next arm Builder': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'ndk_next'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder',
+      'android_config': 'main_builder_mb',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+    'NDK Next arm64 Builder': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'ndk_next'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder',
+      'android_config': 'arm64_builder_mb',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+    'NDK Next MIPS Builder': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'ndk_next'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder',
+      'android_config': 'mipsel_builder_mb',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+    'NDK Next x64 Builder': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'ndk_next'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder',
+      'android_config': 'x64_builder_mb',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+    'NDK Next x86 Builder': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'ndk_next'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder',
+      'android_config': 'x86_builder_mb',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }

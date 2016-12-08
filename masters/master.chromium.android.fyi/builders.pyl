@@ -36,9 +36,44 @@
       "category": "3Testers",
       "mergeRequests": True,
     },
+    "NDK Next arm Builder": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "android_commits",
+      "slave_pools": ["ndk_next_builders"]
+    },
+    "NDK Next arm64 Builder": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "android_commits",
+      "slave_pools": ["ndk_next_builders"]
+    },
+    "NDK Next MIPS Builder": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "android_commits",
+      "slave_pools": ["ndk_next_builders"]
+    },
+    "NDK Next x64 Builder": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "android_commits",
+      "slave_pools": ["ndk_next_builders"]
+    },
+    "NDK Next x86 Builder": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "android_commits",
+      "slave_pools": ["ndk_next_builders"]
+    },
   },
 
-  "schedulers": {},
+  "schedulers": {
+    "android_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/chromium/src",
+    },
+  },
 
   "slave_pools": {
     "jelly_bean_tester": {
@@ -64,6 +99,20 @@
         "bits": "64",
       },
       "slaves": ["build19-b1"],
+    },
+    "ndk_next_builders": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": "64",
+      },
+      "slaves": [
+        "slave174-c1",
+        "slave191-c1",
+        "slave192-c1",
+        "slave193-c1",
+        "slave194-c1",
+      ],
     },
   }
 }
