@@ -71,7 +71,7 @@ class V8Api(recipe_api.RecipeApi):
     'v8_for_dart_archive': 'gs://chromium-v8/v8-for-dart-rel',
   }
 
-  def apply_bot_config(self, builders):
+  def apply_bot_config(self, builders, tryserver_check=True):
     """Entry method for using the v8 api.
 
     Requires the presence of a bot_config dict for any master/builder pair.
@@ -95,7 +95,11 @@ class V8Api(recipe_api.RecipeApi):
       self.m.gclient.apply_config(c)
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
-    if self.m.tryserver.is_tryserver:
+    if tryserver_check and self.m.tryserver.is_tryserver:
+      # TODO(machenbach): This sets the trybot flavor only for gyp. GN
+      # is controlled through MB. Unfortunately also the v8 test driver
+      # reads this and passes e.g. --dcheck-always-on flag. This should
+      # be untangled.
       self.init_tryserver()
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
