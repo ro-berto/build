@@ -29,12 +29,9 @@ def RunSteps(api):
 
     update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
 
-  if api.platform.is_win:
-    api.chromium.run_mb(mastername, buildername, use_goma=True)
-  else:
-    api.chromium.run_mb(mastername, buildername, use_goma=True,
-                        android_version_code=3,
-                        android_version_name="example")
+  api.chromium.run_mb(mastername, buildername, use_goma=True,
+                      android_version_code=3,
+                      android_version_name="example")
 
   env = {}
   use_compile_py = api.properties.get('use_compile_py', True)
@@ -97,16 +94,6 @@ def GenTests(api):
       use_goma_module=True,
       chromeos=True,
   )
-
-  yield (api.test('basic_no_out_dir_with_goma_module_goma_disabled_win') +
-         api.properties(
-             mastername='chromium.win',
-             buildername='Win Builder',
-             slavename='build1-a1',
-             buildnumber='77457',
-             use_goma_module=True,
-         ) + api.platform.name('win') +
-         api.step_data('preprocess_for_goma.start_goma', retcode=1))
 
   yield (api.test('basic_out_dir_goma_module_build_failure') +
          api.properties(
