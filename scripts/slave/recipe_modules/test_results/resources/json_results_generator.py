@@ -25,19 +25,19 @@ def test_did_pass(test_result):
   return not test_result.failed and test_result.modifier == TestResult.NONE
 
 
-def add_path_to_trie(path, value, trie):
-  """Inserts a single flat path and associated value into a directory trie ."""
-  if '/' not in path:
+def add_path_to_trie(path, value, trie, path_delimiter):
+  """Inserts a single flat path and associated value into a directory trie."""
+  if path_delimiter not in path:
     trie[path] = value
     return
 
-  directory, _slash, rest = path.partition('/')
+  directory, _slash, rest = path.partition(path_delimiter)
   if directory not in trie:
     trie[directory] = {}
-  add_path_to_trie(rest, value, trie[directory])
+  add_path_to_trie(rest, value, trie[directory], path_delimiter)
 
 
-def generate_test_timings_trie(individual_test_timings):
+def generate_test_timings_trie(individual_test_timings, path_delimiter):
   """Breaks a test name into chunks.
 
   Formats by directory and puts the test time as a value in lowest part, e.g.
@@ -56,9 +56,8 @@ def generate_test_timings_trie(individual_test_timings):
   # Only use the timing of the first try of each test.
   for test_results in individual_test_timings:
     test = test_results[0].test_name
-
-    add_path_to_trie(test, int(1000 * test_results[-1].test_run_time), trie)
-
+    time_ms = int(1000 * test_results[-1].test_run_time)
+    add_path_to_trie(test, time_ms, trie, path_delimiter)
   return trie
 
 
@@ -77,6 +76,7 @@ class JSONResultsGenerator(object):
   CHROMIUM_REVISION = 'chromium_revision'
   EXPECTED = 'expected'
   FAILURE_SUMMARY = 'num_failures_by_type'
+  PATH_DELIMITER = 'path_delimiter'
   SECONDS_SINCE_EPOCH = 'seconds_since_epoch'
   TEST_TIME = 'time'
   TESTS = 'tests'
@@ -91,27 +91,30 @@ class JSONResultsGenerator(object):
                results_file_base_path,
                test_results_map, svn_revisions=None,
                master_name='',
+               path_delimiter='/',
                file_writer=None):
     """Modifies the results.json file. Grabs it off the archive directory
     if it is not found locally.
 
-    Args
-      builder_name: the builder name (e.g. Webkit).
-      build_number: the build number.
+    Args:
+      builder_name: The builder name.
+      build_number: The build number.
       results_file_base_path: Absolute path to the directory containing the
-        results json file.
+          results json file.
       test_results_map: A dictionary that maps test_name to a list of
-        TestResult, one for each time the test was retried.
+          TestResult, one for each time the test was retried.
       svn_revisions: A (json_field_name, revision) pair for SVN
-        repositories that tests rely on.  The SVN revision will be
-        included in the JSON with the given json_field_name.
-      master_name: the name of the buildbot master.
-      file_writer: if given the parameter is used to write JSON data to a file.
-        The parameter must be the function that takes two arguments, 'file_path'
-        and 'data' to be written into the file_path.
+          repositories that tests rely on.  The SVN revision will be
+          included in the JSON with the given json_field_name.
+      master_name: The name of the buildbot master.
+      path_delimiter: The string separating test path parts.
+      file_writer: If given, the parameter is used to write JSON data to a file.
+          The parameter must be the function that takes two arguments,
+          'file_path' and 'data' to be written into the file_path.
     """
     self._builder_name = builder_name
     self._build_number = build_number
+    self._path_delimiter = path_delimiter
     self._results_directory = results_file_base_path
 
     self._test_results_map = test_results_map
@@ -130,7 +133,8 @@ class JSONResultsGenerator(object):
     self._write_json(json, file_path)
 
   def generate_times_ms_file(self):
-    times = generate_test_timings_trie(self._test_results_map.values())
+    times = generate_test_timings_trie(
+        self._test_results_map.values(), self._path_delimiter)
     file_path = os.path.join(self._results_directory, self.TIMES_MS_FILENAME)
     self._write_json(times, file_path)
 
@@ -140,6 +144,7 @@ class JSONResultsGenerator(object):
     # Metadata generic to all results.
     results[self.BUILDER_NAME] = self._builder_name
     results[self.BUILD_NUMBER] = self._build_number
+    results[self.PATH_DELIMITER] = self._path_delimiter
     results[self.SECONDS_SINCE_EPOCH] = int(time.time())
     for name, revision in self._svn_revisions:
       results[name + '_revision'] = revision
