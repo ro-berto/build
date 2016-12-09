@@ -112,7 +112,7 @@ class LogDogBootstrapTest(unittest.TestCase):
 
     base = ldbs.Params(project='alpha', cipd_tag=ldbs._STABLE_CIPD_TAG,
                        mastername='default', buildername='builder',
-                       buildnumber=24601)
+                       buildnumber=24601, logdog_only=False)
 
     def mp(params):
       props = self.properties.copy()
@@ -171,7 +171,7 @@ class LogDogBootstrapTest(unittest.TestCase):
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='stable', mastername='mastername',
-        buildername='buildername', buildnumber=1337)
+        buildername='buildername', buildnumber=1337, logdog_only=False)
     install_cipd.return_value = (butler_path, annotee_path)
     service_account.return_value = 'creds.json'
     isfile.return_value = True
@@ -202,7 +202,7 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-annotate', 'tee',
                 '-name-base', 'recipes',
                 '-print-summary',
-                '-tee',
+                '-tee', 'true',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
         ])
@@ -225,7 +225,7 @@ class LogDogBootstrapTest(unittest.TestCase):
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='stable', mastername='mastername',
-        buildername='buildername', buildnumber=1337)
+        buildername='buildername', buildnumber=1337, logdog_only=True)
     install_cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
     service_account.return_value = 'creds.json'
     isfile.return_value = True
@@ -256,7 +256,7 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-annotate', 'tee',
                 '-name-base', 'recipes',
                 '-print-summary',
-                '-tee',
+                '-tee', 'false',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
         ])

@@ -110,6 +110,7 @@ _PLATFORM_CONFIG = {
 # Loaded by '_get_params'.
 Params = collections.namedtuple('Params', (
     'project', 'cipd_tag', 'mastername', 'buildername', 'buildnumber',
+    'logdog_only',
 ))
 
 
@@ -220,6 +221,7 @@ def _get_params(properties):
   builder_map = {
     'enabled': True,
     'cipd_tag': _STABLE_CIPD_TAG,
+    'logdog_only': False,
   }
   for bn in (buildername, '*'):
     bn_map = master_config.get(bn)
@@ -239,6 +241,7 @@ def _get_params(properties):
       mastername=mastername,
       buildername=buildername,
       buildnumber=buildnumber,
+      logdog_only=builder_map['logdog_only'],
   )
 
 
@@ -502,7 +505,7 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       '-annotate', 'tee',
       '-name-base', 'recipes',
       '-print-summary',
-      '-tee',
+      '-tee', ('false' if params.logdog_only else 'true'),
       '-json-args-path', cmd_json,
       '-result-path', bootstrap_result_path,
   ]
