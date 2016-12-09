@@ -179,11 +179,15 @@ class RevisionState(object):
                       self.revision_string(), self.build_id))
               return
 
-      self._do_test()
-      # TODO(robertocn): Add a test to remove this CL
-      while not self._check_revision_good():  # pragma: no cover
-        min(self, self.bisector.lkgr, self.bisector.fkbr,
-            key=lambda(x): x.test_run_count)._do_test()
+      # Individual tests failing don't need to break the entire bisect run.
+      try:
+        self._do_test()
+        # TODO(robertocn): Add a test to remove this CL
+        while not self._check_revision_good():  # pragma: no cover
+          min(self, self.bisector.lkgr, self.bisector.fkbr,
+              key=lambda(x): x.test_run_count)._do_test()
+      except api.m.step.StepFailure as e:  # pragma: no cover
+        raise bisect_exceptions.UntestableRevisionException(e.reason)
 
       # If this is the initial good/bad revision, we should to check if any
       # values are even produced and fail if they aren't. This allows the
