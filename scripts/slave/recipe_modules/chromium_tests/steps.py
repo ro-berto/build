@@ -659,7 +659,7 @@ class SwarmingTest(Test):
 
   def __init__(self, name, dimensions=None, tags=None, target_name=None,
                extra_suffix=None, priority=None, expiration=None,
-               hard_timeout=None):
+               hard_timeout=None, io_timeout=None):
     self._name = name
     self._tasks = {}
     self._results = {}
@@ -670,6 +670,7 @@ class SwarmingTest(Test):
     self._priority = priority
     self._expiration = expiration
     self._hard_timeout = hard_timeout
+    self._io_timeout = io_timeout
     if dimensions and not extra_suffix:
       self._extra_suffix = self._get_gpu_suffix(dimensions)
 
@@ -755,6 +756,9 @@ class SwarmingTest(Test):
 
     if self._hard_timeout:
       self._tasks[suffix].hard_timeout = self._hard_timeout
+
+    if self._io_timeout:
+      self._tasks[suffix].io_timeout = self._io_timeout
 
     # Add custom dimensions.
     if self._dimensions:  # pragma: no cover
@@ -1061,9 +1065,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                dimensions=None, tags=None, extra_suffix=None, priority=None,
                expiration=None, hard_timeout=None, upload_test_results=True,
                override_compile_targets=None, perf_id=None,
-               results_url=None, perf_dashboard_id=None):
+               results_url=None, perf_dashboard_id=None, io_timeout=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
-        name, dimensions, tags, target_name, extra_suffix, priority, expiration, hard_timeout)
+        name, dimensions, tags, target_name, extra_suffix, priority, expiration,
+        hard_timeout, io_timeout)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
@@ -1226,6 +1231,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     swarming_priority = None
     swarming_expiration = None
     swarming_hard_timeout = None
+    swarming_io_timeout = None
     if enable_swarming:
       swarming_spec = spec.get('swarming', {})
       if swarming_spec.get('can_use_on_swarming_builders', False):
@@ -1235,6 +1241,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         swarming_priority = swarming_spec.get('priority_adjustment')
         swarming_expiration = swarming_spec.get('expiration')
         swarming_hard_timeout = swarming_spec.get('hard_timeout')
+        swarming_io_timeout = swarming_spec.get('io_timeout')
     name = str(spec['name'])
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't
@@ -1260,7 +1267,8 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
               override_compile_targets=override_compile_targets,
               priority=swarming_priority, expiration=swarming_expiration,
               hard_timeout=swarming_hard_timeout, perf_id=perf_id,
-              results_url=results_url, perf_dashboard_id=perf_dashboard_id)
+              results_url=results_url, perf_dashboard_id=perf_dashboard_id,
+              io_timeout=swarming_io_timeout)
       else:
         yield SwarmingIsolatedScriptTest(
             name=name, args=args, target_name=target_name,
@@ -1268,7 +1276,8 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
             override_compile_targets=override_compile_targets,
             priority=swarming_priority, expiration=swarming_expiration,
             hard_timeout=swarming_hard_timeout, perf_id=perf_id,
-            results_url=results_url, perf_dashboard_id=perf_dashboard_id)
+            results_url=results_url, perf_dashboard_id=perf_dashboard_id,
+            io_timeout=swarming_io_timeout)
     else:
       yield LocalIsolatedScriptTest(
           name=name, args=args, target_name=target_name,

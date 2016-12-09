@@ -538,9 +538,10 @@ def GenTests(api):
                                     'gpu': '8086:22b1',
                                     'id': "build187-b4",
                                     'os': "Windows-10-10586",
-                                    'pool': "Chrome-perf"
+                                    'pool': "Chrome-perf",
                                 },
                             ],
+                          'io_timeout': 900,
                         },
                     },
                 ],
