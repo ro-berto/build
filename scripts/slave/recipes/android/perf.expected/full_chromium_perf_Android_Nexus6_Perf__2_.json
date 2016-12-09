@@ -840,7 +840,7 @@
       "--binary",
       "[START_DIR]/src/out/Release/lib.unstripped/libchrome.so"
     ],
-    "name": "generate breakpad symbols"
+    "name": "generate breakpad symbols for libchrome.so"
   },
   {
     "cmd": [

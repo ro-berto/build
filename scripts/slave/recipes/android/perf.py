@@ -25,11 +25,11 @@ REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
                     num_host_shards=1, target_bits=64,
-                    browser_name=None, remove_system_webview=False,
+                    browser_name=None, uses_webview=False,
                     enable_platform_mode=False):
   def _CreateShardTestSpec(name, perf_id, required_apks, num_device_shards,
                            num_host_shards, shard_index, target_bits,
-                           browser_name, remove_system_webview,
+                           browser_name, uses_webview,
                            enable_platform_mode):
     spec = {
       'perf_id': perf_id,
@@ -42,7 +42,7 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
       'max_battery_temp': 350,
       'known_devices_file': '.known_devices',
       'browser_name': browser_name,
-      'remove_system_webview': remove_system_webview,
+      'uses_webview': uses_webview,
       'enable_platform_mode': enable_platform_mode,
     }
     if target_bits == 32:
@@ -59,7 +59,7 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
     builder_name = '%s (%d)' % (name, shard_index + 1)
     tester_spec[builder_name] = _CreateShardTestSpec(
         name, perf_id, required_apks, num_device_shards, num_host_shards,
-        shard_index, target_bits, browser_name, remove_system_webview,
+        shard_index, target_bits, browser_name, uses_webview,
         enable_platform_mode)
   return tester_spec
 
@@ -86,11 +86,11 @@ def _ChromiumPerfTesters():
     _CreateTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
         required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
         num_device_shards=7, num_host_shards=3, target_bits=64,
-        browser_name='android-webview', remove_system_webview=True),
+        browser_name='android-webview', uses_webview=True),
     _CreateTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
         required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
         num_device_shards=6, num_host_shards=3, target_bits=32,
-        browser_name='android-webview', remove_system_webview=True),
+        browser_name='android-webview', uses_webview=True),
   ]
   master_spec = {}
   for spec in testers:
@@ -174,7 +174,7 @@ def RunSteps(api):
 
   api.chromium_android.common_tests_setup_steps(
       perf_setup=True,
-      remove_system_webview=builder.get('remove_system_webview', False))
+      remove_system_webview=builder.get('uses_webview', False))
 
   required_apks = builder.get('required_apks', [])
   for apk in required_apks:
@@ -209,8 +209,16 @@ def RunSteps(api):
   finally:
     api.chromium_android.common_tests_final_steps(
         logcat_gs_bucket='chromium-android')
+
+    binary_dir = api.path['checkout'].join(
+        'out', api.chromium.c.BUILD_CONFIG, 'lib.unstripped')
+    breakpad_binaries = [binary_dir.join('libchrome.so')]
+    if builder.get('uses_webview'):
+      breakpad_binaries.append(binary_dir.join('libwebviewchromium.so'))
+
     api.chromium_android.stackwalker(
-        root_chromium_dir=api.path['checkout'])
+        root_chromium_dir=api.path['checkout'],
+        binary_paths=breakpad_binaries)
 
 
 def _sanitize_nonalpha(text):

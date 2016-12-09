@@ -1049,33 +1049,39 @@ class AndroidApi(recipe_api.RecipeApi):
           infra_step=True,
           )
 
-  def generate_breakpad_symbols(self, symbols_dir, root_chromium_dir):
+  def generate_breakpad_symbols(
+      self, symbols_dir, binary_path, root_chromium_dir):
     """Generate breakpad symbols.
 
     This step requires dump_syms binary to exist in the build dir.
 
     Args:
       symbols_dir: The directory to dump the breakpad symbols to.
+      binary_path: Path to binary to generate symbols for.
       root_chromium_dir: Root Chromium directory.
     """
     build_dir = root_chromium_dir.join(
         'out', self.m.chromium.c.BUILD_CONFIG)
-    libchrome_path = build_dir.join('lib.unstripped', 'libchrome.so')
 
     generate_symbols_args = ['--symbols-dir', symbols_dir,
                              '--build-dir', build_dir,
-                             '--binary', libchrome_path]
-    self.m.python('generate breakpad symbols',
+                             '--binary', binary_path]
+    self.m.python(('generate breakpad symbols for %s'
+                   % self.m.path.basename(binary_path)),
                   root_chromium_dir.join(
                       'components', 'crash', 'content',
                       'tools', 'generate_breakpad_symbols.py'),
                   generate_symbols_args)
 
-  def stackwalker(self, root_chromium_dir):
+  def stackwalker(self, root_chromium_dir, binary_paths):
     """Runs stack walker tool to symbolize breakpad crashes.
 
     This step requires logcat file. The logcat monitor must have
     been run on the bot.
+
+    Args:
+      binary_paths: Paths to binaries to generate breakpad symbols.
+      root_chromium_dir: Root Chromium directory.
     """
     build_dir = root_chromium_dir.join(
         'out', self.m.chromium.c.BUILD_CONFIG)
@@ -1084,7 +1090,9 @@ class AndroidApi(recipe_api.RecipeApi):
       # TODO(mikecase): Only generate breakpad symbols if we
       # know there is at least one breakpad crash. This step takes
       # several minutes and we should only run it if we need to.
-      self.generate_breakpad_symbols(temp_symbols_dir, root_chromium_dir)
+      for binary in binary_paths:
+        self.generate_breakpad_symbols(
+            temp_symbols_dir, binary, root_chromium_dir)
       stackwalker_args = ['--stackwalker-binary-path',
                           build_dir.join('microdump_stackwalk'),
                           '--stack-trace-path', logcat,
