@@ -502,13 +502,23 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       '-project', params.project,
       '-butler-stream-server', streamserver_uri,
       '-logdog-host', viewer_host,
-      '-annotate', 'tee',
       '-name-base', 'recipes',
       '-print-summary',
-      '-tee', ('false' if params.logdog_only else 'true'),
       '-json-args-path', cmd_json,
       '-result-path', bootstrap_result_path,
   ]
+  if params.logdog_only:
+    # Only tee annotations.
+    cmd += ['-tee', 'annotations']
+  else:
+    # Old-style Annotee parameters. This can be deleted when we bump to
+    # new-style annotee, and should be replaced with:
+    #
+    # -tee text,annotations
+    cmd += [
+        '-annotate', 'tee',
+        '-tee=true',
+    ]
   return BootstrapState(cmd, bootstrap_result_path)
 
 

@@ -48,6 +48,7 @@
       # Used for canarying.
       '*': {
         'cipd_tag': 'git_revision:25755a2c316937ee44a6432163dc5e2f9c85cf58',
+        'logdog_only': True,
       },
     },
     'chromium.infra.cron': {},

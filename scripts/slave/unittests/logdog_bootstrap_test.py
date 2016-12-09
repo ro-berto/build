@@ -199,12 +199,12 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-project', 'myproject',
                 '-butler-stream-server', streamserver_uri,
                 '-logdog-host', 'luci-logdog.appspot.com',
-                '-annotate', 'tee',
                 '-name-base', 'recipes',
                 '-print-summary',
-                '-tee', 'true',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
+                '-annotate', 'tee',
+                '-tee=true',
         ])
 
     service_account.assert_called_once_with(
@@ -253,12 +253,11 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-project', 'myproject',
                 '-butler-stream-server', streamserver_uri,
                 '-logdog-host', 'luci-logdog.appspot.com',
-                '-annotate', 'tee',
                 '-name-base', 'recipes',
                 '-print-summary',
-                '-tee', 'false',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
+                '-tee', 'annotations',
         ])
 
     service_account.assert_called_once_with(
