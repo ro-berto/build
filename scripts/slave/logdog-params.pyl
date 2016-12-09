@@ -48,6 +48,7 @@
       # Used for canarying.
       '*': {
         'cipd_tag': 'git_revision:25755a2c316937ee44a6432163dc5e2f9c85cf58',
+        'logdog_only': True,
       },
     },
     'chromium.infra.cron': {},
@@ -55,7 +56,12 @@
     # Chromium tryservers.
     'tryserver.chromium.android': {},
     'tryserver.chromium.mac': {},
-    'tryserver.chromium.linux': {},
+    'tryserver.chromium.linux': {
+      # Testing on CQ experimental builder: http://crbug.com/669297
+      'linux_chromium_headless_rel': {
+        'logdog_only': True,
+      },
+    },
     'tryserver.chromium.win': {},
 
     # Chromium continuous waterfalls.
