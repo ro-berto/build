@@ -46,7 +46,12 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
                              override_isolate_target=test))
     for test in api.ANDROID_JUNIT_TESTS:
-      tests.append(AndroidJunitTest(test))
+      if api.mastername == 'client.webrtc.fyi':
+        tests.append(GTestTest(test, enable_swarming=enable_swarming,
+                               override_isolate_target=test))
+      else:
+        tests.append(AndroidJunitTest(test))
+
 
   return tests
 

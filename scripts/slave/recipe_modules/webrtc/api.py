@@ -155,7 +155,8 @@ class WebRTCApi(recipe_api.RecipeApi):
         self._isolated_targets = (self.NORMAL_TESTS.keys())
       elif self.c.TEST_SUITE == 'android_swarming':
         self._isolated_targets = (self.ANDROID_DEVICE_TESTS +
-                                  self.ANDROID_INSTRUMENTATION_TESTS)
+                                  self.ANDROID_INSTRUMENTATION_TESTS +
+                                  self.ANDROID_JUNIT_TESTS)
       self._isolated_targets = sorted(self._isolated_targets)
       if not self._isolated_targets: # pragma: no cover
         raise self.m.step.StepFailure('Isolation and swarming are only '
