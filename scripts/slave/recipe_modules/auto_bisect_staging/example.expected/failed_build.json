@@ -518,7 +518,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping",
@@ -527,7 +527,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -1386,7 +1386,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping (2)",
@@ -1395,7 +1395,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]

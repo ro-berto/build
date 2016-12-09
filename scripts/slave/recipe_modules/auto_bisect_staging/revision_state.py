@@ -169,7 +169,7 @@ class RevisionState(object):
                 """
                 import sys
                 import time
-                time.sleep(20*60)
+                time.sleep(5*60)
                 sys.exit(0)
                 """)
             if self.is_build_failed():

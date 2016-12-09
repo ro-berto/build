@@ -562,7 +562,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Gathering reference values.Waiting for build.sleeping",
@@ -571,7 +571,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -2325,7 +2325,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@f021f021f0.Waiting for build.sleeping",
@@ -2334,7 +2334,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -2513,7 +2513,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@0122012201.Waiting for build.sleeping",
@@ -2522,7 +2522,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -2701,7 +2701,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@ef20ef20ef.Waiting for build.sleeping",
@@ -2710,7 +2710,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -2889,7 +2889,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@1223122312.Waiting for build.sleeping",
@@ -2898,7 +2898,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -3059,7 +3059,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@de19de19de.Waiting for build.sleeping",
@@ -3068,7 +3068,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -3229,7 +3229,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@2324232423.Waiting for build.sleeping",
@@ -3238,7 +3238,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -3399,7 +3399,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@cd18cd18cd.Waiting for build.sleeping",
@@ -3408,7 +3408,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -3569,7 +3569,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@3425342534.Waiting for build.sleeping",
@@ -3578,7 +3578,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -3721,7 +3721,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@bc17bc17bc.Waiting for build.sleeping",
@@ -3730,7 +3730,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -3873,7 +3873,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Waiting for build.sleeping",
@@ -3882,7 +3882,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -4020,7 +4020,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@ab16ab16ab.Waiting for build.sleeping",
@@ -4029,7 +4029,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
