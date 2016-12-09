@@ -23,7 +23,7 @@ from . import depot_config
 from . import bisect_exceptions
 
 # These relate to how to increase the number of repetitions during re-test
-MINIMUM_SAMPLE_SIZE = 5
+MINIMUM_SAMPLE_SIZE = 6
 INCREASE_FACTOR = 1.5
 # If after testing a revision this many times it cannot be classified, fail.
 MAX_TESTS_PER_REVISION = 20
