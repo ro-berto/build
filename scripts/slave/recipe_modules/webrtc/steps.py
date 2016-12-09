@@ -11,11 +11,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   elif test_suite == 'desktop_swarming':
     SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
     for test, extra_args in sorted(api.NORMAL_TESTS.items()):
-      if api.mastername == 'client.webrtc.fyi':
-        tests.append(SwarmingTest(test, **extra_args))
-      else:
-        tests.append(WebRTCTest(test, enable_swarming=enable_swarming,
-                                revision=revision, **extra_args))
+      tests.append(SwarmingTest(test, **extra_args))
   elif test_suite == 'webrtc_baremetal':
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
 
@@ -64,26 +60,14 @@ class Test(object):
     self._swarming_task = None
     self._shards = shards
 
-  def run_nonswarming(self, api, suffix): # pragma: no cover:
-    raise NotImplementedError()
-
   def pre_run(self, api, suffix):
     return []
 
-  def run(self, api, suffix):
-    if self._enable_swarming:
-      isolated_hash = api.m.isolate.isolated_tests[self._name]
-      self._swarming_task = api.m.swarming.task(self._name, isolated_hash,
-                                                shards=self._shards)
-      api.m.swarming.trigger_task(self._swarming_task)
-    else:
-      self.run_nonswarming(api, suffix)
+  def run(self, api, suffix): # pragma: no cover:
+    raise NotImplementedError()
 
   def post_run(self, api, suffix):
-    if self._enable_swarming:
-      api.swarming.collect_task(self._swarming_task)
-    else:
-      return []
+    return []
 
 class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
@@ -96,7 +80,7 @@ class WebRTCTest(Test):
     self._perf_test = perf_test
     self._runtest_kwargs = runtest_kwargs
 
-  def run_nonswarming(self, api, suffix):
+  def run(self, api, suffix):
     self._runtest_kwargs['test'] = self._name
     api.add_test(name=self._name, revision=self._revision,
                  parallel=self._parallel, perf_test=self._perf_test,
@@ -112,7 +96,7 @@ class BaremetalTest(WebRTCTest):
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
 
-  def run_nonswarming(self, api, suffix):
+  def run(self, api, suffix):
     api.m.chromium_android.run_java_unit_test_suite(self._name)
 
 class AndroidPerfTest(Test):
@@ -128,7 +112,7 @@ class AndroidPerfTest(Test):
     super(AndroidPerfTest, self).__init__(name)
     self._revision = revision
 
-  def run_nonswarming(self, api, suffix):
+  def run(self, api, suffix):
     wrapper_script = api.m.chromium.output_dir.join('bin',
                                                     'run_%s' % self._name)
     args = ['--verbose']
