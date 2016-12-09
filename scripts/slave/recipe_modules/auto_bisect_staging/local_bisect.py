@@ -94,6 +94,16 @@ def _gather_reference_range(bisector):  # pragma: no cover
         'Testing the "bad" revision failed: ' +
         bisector.bad_rev.failure_reason)
 
+def _get_revision_to_check(bisector):
+  revision_to_check = bisector.get_revision_to_eval()
+  if not revision_to_check:
+    bisector.bisect_over = True
+    if not bisector.culprit:
+      bisector.failed = True
+      raise bisect_exceptions.InconclusiveBisectException(
+          bisector.inconclusive_bisect_details())
+  return revision_to_check
+
 def _bisect_main_loop(bisector):  # pragma: no cover
   """This is the main bisect loop.
 
@@ -101,17 +111,13 @@ def _bisect_main_loop(bisector):  # pragma: no cover
   then it starts them in parallel and waits for them to finish.
   """
   while not bisector.bisect_over:
-    revision_to_check = bisector.get_revision_to_eval()
-    if not revision_to_check:
-      bisector.bisect_over = True
-      if not bisector.culprit:
-        bisector.failed = True
-        raise bisect_exceptions.InconclusiveBisectException(
-            bisector.inconclusive_bisect_details())
-      break
+    with bisector.api.m.step.nest('Bisecting revision'):
+      revision_to_check = _get_revision_to_check(bisector)
+      step_result = bisector.api.m.step.active_result
+      step_result.presentation.step_text += (
+          bisector.api.m.test_utils.format_step_text(
+              [['Revision: %s' % revision_to_check.revision_string()]]))
 
-    with bisector.api.m.step.nest(str('Working on revision ' +
-                                      revision_to_check.revision_string())):
       bisector.post_result(halt_on_failure=False)
       revision_to_check.start_job()
 

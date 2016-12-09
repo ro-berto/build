@@ -2298,6 +2298,14 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Revision: chromium@dcdcdc0ff1<br/>@@@"
+    ]
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -2305,13 +2313,11 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1"
+    "name": "Bisecting revision.resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -2321,7 +2327,7 @@
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "Working on revision chromium@dcdcdc0ff1.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "name": "Bisecting revision.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2335,7 +2341,7 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "Working on revision chromium@dcdcdc0ff1.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "name": "Bisecting revision.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2348,7 +2354,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Post bisect results",
+    "name": "Bisecting revision.Post bisect results",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"23.81%\", \"command\": \"./src/out/Release/cc_perftests --test-launcher-print-test-stdio=always --verbose\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"calc_draw_props_time/touch_region_heavy\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.0, \"n_observations\": 4, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.48074069840786}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -2371,7 +2377,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.gsutil ls",
+    "name": "Bisecting revision.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2399,7 +2405,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.bot_update",
+    "name": "Bisecting revision.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -2484,7 +2490,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory",
+    "name": "Bisecting revision.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2521,7 +2527,7 @@
       "571"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.extract build",
+    "name": "Bisecting revision.extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2537,7 +2543,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory",
+    "name": "Bisecting revision.makedirs results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2575,7 +2581,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 1 of 6",
+    "name": "Bisecting revision.Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2595,7 +2601,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk",
+    "name": "Bisecting revision.write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2611,7 +2617,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (2)",
+    "name": "Bisecting revision.makedirs results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2649,7 +2655,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 2 of 6",
+    "name": "Bisecting revision.Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2669,7 +2675,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (2)",
+    "name": "Bisecting revision.write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2685,7 +2691,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (3)",
+    "name": "Bisecting revision.makedirs results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2723,7 +2729,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 3 of 6",
+    "name": "Bisecting revision.Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2743,7 +2749,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (3)",
+    "name": "Bisecting revision.write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2759,7 +2765,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (4)",
+    "name": "Bisecting revision.makedirs results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2797,7 +2803,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 4 of 6",
+    "name": "Bisecting revision.Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2817,7 +2823,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (4)",
+    "name": "Bisecting revision.write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2833,7 +2839,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (5)",
+    "name": "Bisecting revision.makedirs results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2871,7 +2877,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 5 of 6",
+    "name": "Bisecting revision.Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2891,7 +2897,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (5)",
+    "name": "Bisecting revision.write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2907,7 +2913,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (6)",
+    "name": "Bisecting revision.makedirs results directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2945,7 +2951,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 6 of 6",
+    "name": "Bisecting revision.Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -2965,7 +2971,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (6)",
+    "name": "Bisecting revision.write buildbot output to disk (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2981,7 +2987,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples",
+    "name": "Bisecting revision.Compare samples",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3018,7 +3024,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (2)",
+    "name": "Bisecting revision.Compare samples (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3055,7 +3061,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (7)",
+    "name": "Bisecting revision.makedirs results directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3093,7 +3099,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 1 of 3",
+    "name": "Bisecting revision.Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -3113,7 +3119,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (7)",
+    "name": "Bisecting revision.write buildbot output to disk (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3129,7 +3135,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (8)",
+    "name": "Bisecting revision.makedirs results directory (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3167,7 +3173,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 2 of 3",
+    "name": "Bisecting revision.Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -3187,7 +3193,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (8)",
+    "name": "Bisecting revision.write buildbot output to disk (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3203,7 +3209,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (9)",
+    "name": "Bisecting revision.makedirs results directory (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3241,7 +3247,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 3 of 3",
+    "name": "Bisecting revision.Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -3261,7 +3267,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (9)",
+    "name": "Bisecting revision.write buildbot output to disk (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3277,7 +3283,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (3)",
+    "name": "Bisecting revision.Compare samples (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3314,7 +3320,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (4)",
+    "name": "Bisecting revision.Compare samples (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3363,7 +3369,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.bot_update (2)",
+    "name": "Bisecting revision.bot_update (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -3448,7 +3454,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (2)",
+    "name": "Bisecting revision.rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3485,7 +3491,7 @@
       "571"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.extract build (2)",
+    "name": "Bisecting revision.extract build (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3501,7 +3507,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (10)",
+    "name": "Bisecting revision.makedirs results directory (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3539,7 +3545,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 1 of 3 (2)",
+    "name": "Bisecting revision.Performance Test 1 of 3 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -3559,7 +3565,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (10)",
+    "name": "Bisecting revision.write buildbot output to disk (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3575,7 +3581,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (11)",
+    "name": "Bisecting revision.makedirs results directory (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3613,7 +3619,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 2 of 3 (2)",
+    "name": "Bisecting revision.Performance Test 2 of 3 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -3633,7 +3639,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (11)",
+    "name": "Bisecting revision.write buildbot output to disk (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3649,7 +3655,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (12)",
+    "name": "Bisecting revision.makedirs results directory (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3687,7 +3693,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 3 of 3 (2)",
+    "name": "Bisecting revision.Performance Test 3 of 3 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -3707,7 +3713,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (12)",
+    "name": "Bisecting revision.write buildbot output to disk (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3723,7 +3729,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (5)",
+    "name": "Bisecting revision.Compare samples (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3760,7 +3766,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (6)",
+    "name": "Bisecting revision.Compare samples (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3809,7 +3815,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.bot_update (3)",
+    "name": "Bisecting revision.bot_update (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -3894,7 +3900,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (3)",
+    "name": "Bisecting revision.rmtree build directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3931,7 +3937,7 @@
       "571"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.extract build (3)",
+    "name": "Bisecting revision.extract build (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3947,7 +3953,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (13)",
+    "name": "Bisecting revision.makedirs results directory (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3985,7 +3991,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 1 of 3 (3)",
+    "name": "Bisecting revision.Performance Test 1 of 3 (3)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -4005,7 +4011,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (13)",
+    "name": "Bisecting revision.write buildbot output to disk (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4021,7 +4027,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (14)",
+    "name": "Bisecting revision.makedirs results directory (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4059,7 +4065,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 2 of 3 (3)",
+    "name": "Bisecting revision.Performance Test 2 of 3 (3)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -4079,7 +4085,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (14)",
+    "name": "Bisecting revision.write buildbot output to disk (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4095,7 +4101,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (15)",
+    "name": "Bisecting revision.makedirs results directory (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4133,7 +4139,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 3 of 3 (3)",
+    "name": "Bisecting revision.Performance Test 3 of 3 (3)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -4153,7 +4159,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (15)",
+    "name": "Bisecting revision.write buildbot output to disk (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4169,7 +4175,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (7)",
+    "name": "Bisecting revision.Compare samples (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4206,7 +4212,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (8)",
+    "name": "Bisecting revision.Compare samples (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4255,7 +4261,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.bot_update (4)",
+    "name": "Bisecting revision.bot_update (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -4340,7 +4346,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (4)",
+    "name": "Bisecting revision.rmtree build directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4377,7 +4383,7 @@
       "571"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.extract build (4)",
+    "name": "Bisecting revision.extract build (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4393,7 +4399,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (16)",
+    "name": "Bisecting revision.makedirs results directory (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4431,7 +4437,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 1 of 5",
+    "name": "Bisecting revision.Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -4451,7 +4457,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (16)",
+    "name": "Bisecting revision.write buildbot output to disk (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4467,7 +4473,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (17)",
+    "name": "Bisecting revision.makedirs results directory (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4505,7 +4511,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 2 of 5",
+    "name": "Bisecting revision.Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -4525,7 +4531,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (17)",
+    "name": "Bisecting revision.write buildbot output to disk (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4541,7 +4547,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (18)",
+    "name": "Bisecting revision.makedirs results directory (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4579,7 +4585,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 3 of 5",
+    "name": "Bisecting revision.Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -4599,7 +4605,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (18)",
+    "name": "Bisecting revision.write buildbot output to disk (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4615,7 +4621,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (19)",
+    "name": "Bisecting revision.makedirs results directory (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4653,7 +4659,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 4 of 5",
+    "name": "Bisecting revision.Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -4673,7 +4679,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (19)",
+    "name": "Bisecting revision.write buildbot output to disk (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4689,7 +4695,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (20)",
+    "name": "Bisecting revision.makedirs results directory (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4727,7 +4733,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 5 of 5",
+    "name": "Bisecting revision.Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -4747,7 +4753,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (20)",
+    "name": "Bisecting revision.write buildbot output to disk (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4763,7 +4769,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (9)",
+    "name": "Bisecting revision.Compare samples (9)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4800,7 +4806,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (10)",
+    "name": "Bisecting revision.Compare samples (10)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4849,7 +4855,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.bot_update (5)",
+    "name": "Bisecting revision.bot_update (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -4934,7 +4940,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (5)",
+    "name": "Bisecting revision.rmtree build directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4971,7 +4977,7 @@
       "571"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.extract build (5)",
+    "name": "Bisecting revision.extract build (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4987,7 +4993,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (21)",
+    "name": "Bisecting revision.makedirs results directory (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5025,7 +5031,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 1 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 1 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5045,7 +5051,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (21)",
+    "name": "Bisecting revision.write buildbot output to disk (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5061,7 +5067,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (22)",
+    "name": "Bisecting revision.makedirs results directory (22)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5099,7 +5105,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 2 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 2 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5119,7 +5125,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (22)",
+    "name": "Bisecting revision.write buildbot output to disk (22)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5135,7 +5141,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (23)",
+    "name": "Bisecting revision.makedirs results directory (23)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5173,7 +5179,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 3 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 3 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5193,7 +5199,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (23)",
+    "name": "Bisecting revision.write buildbot output to disk (23)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5209,7 +5215,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (24)",
+    "name": "Bisecting revision.makedirs results directory (24)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5247,7 +5253,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 4 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 4 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5267,7 +5273,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (24)",
+    "name": "Bisecting revision.write buildbot output to disk (24)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5283,7 +5289,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (25)",
+    "name": "Bisecting revision.makedirs results directory (25)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5321,7 +5327,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 5 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 5 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5341,7 +5347,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (25)",
+    "name": "Bisecting revision.write buildbot output to disk (25)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5357,7 +5363,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (11)",
+    "name": "Bisecting revision.Compare samples (11)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5394,7 +5400,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (12)",
+    "name": "Bisecting revision.Compare samples (12)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5443,7 +5449,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.bot_update (6)",
+    "name": "Bisecting revision.bot_update (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -5528,7 +5534,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (6)",
+    "name": "Bisecting revision.rmtree build directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5565,7 +5571,7 @@
       "571"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.extract build (6)",
+    "name": "Bisecting revision.extract build (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5581,7 +5587,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (26)",
+    "name": "Bisecting revision.makedirs results directory (26)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5619,7 +5625,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 1 of 5 (3)",
+    "name": "Bisecting revision.Performance Test 1 of 5 (3)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5639,7 +5645,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (26)",
+    "name": "Bisecting revision.write buildbot output to disk (26)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5655,7 +5661,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (27)",
+    "name": "Bisecting revision.makedirs results directory (27)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5693,7 +5699,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 2 of 5 (3)",
+    "name": "Bisecting revision.Performance Test 2 of 5 (3)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5713,7 +5719,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (27)",
+    "name": "Bisecting revision.write buildbot output to disk (27)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5729,7 +5735,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (28)",
+    "name": "Bisecting revision.makedirs results directory (28)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5767,7 +5773,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 3 of 5 (3)",
+    "name": "Bisecting revision.Performance Test 3 of 5 (3)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5787,7 +5793,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (28)",
+    "name": "Bisecting revision.write buildbot output to disk (28)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5803,7 +5809,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (29)",
+    "name": "Bisecting revision.makedirs results directory (29)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5841,7 +5847,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 4 of 5 (3)",
+    "name": "Bisecting revision.Performance Test 4 of 5 (3)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5861,7 +5867,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (29)",
+    "name": "Bisecting revision.write buildbot output to disk (29)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5877,7 +5883,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (30)",
+    "name": "Bisecting revision.makedirs results directory (30)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5915,7 +5921,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 5 of 5 (3)",
+    "name": "Bisecting revision.Performance Test 5 of 5 (3)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -5935,7 +5941,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (30)",
+    "name": "Bisecting revision.write buildbot output to disk (30)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5951,7 +5957,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (13)",
+    "name": "Bisecting revision.Compare samples (13)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5988,7 +5994,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (14)",
+    "name": "Bisecting revision.Compare samples (14)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6037,7 +6043,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.bot_update (7)",
+    "name": "Bisecting revision.bot_update (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -6122,7 +6128,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.rmtree build directory (7)",
+    "name": "Bisecting revision.rmtree build directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6159,7 +6165,7 @@
       "571"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.extract build (7)",
+    "name": "Bisecting revision.extract build (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6175,7 +6181,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (31)",
+    "name": "Bisecting revision.makedirs results directory (31)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6213,7 +6219,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 1 of 7",
+    "name": "Bisecting revision.Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6233,7 +6239,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (31)",
+    "name": "Bisecting revision.write buildbot output to disk (31)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6249,7 +6255,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (32)",
+    "name": "Bisecting revision.makedirs results directory (32)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6287,7 +6293,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 2 of 7",
+    "name": "Bisecting revision.Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6307,7 +6313,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (32)",
+    "name": "Bisecting revision.write buildbot output to disk (32)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6323,7 +6329,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (33)",
+    "name": "Bisecting revision.makedirs results directory (33)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6361,7 +6367,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 3 of 7",
+    "name": "Bisecting revision.Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6381,7 +6387,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (33)",
+    "name": "Bisecting revision.write buildbot output to disk (33)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6397,7 +6403,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (34)",
+    "name": "Bisecting revision.makedirs results directory (34)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6435,7 +6441,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 4 of 7",
+    "name": "Bisecting revision.Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6455,7 +6461,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (34)",
+    "name": "Bisecting revision.write buildbot output to disk (34)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6471,7 +6477,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (35)",
+    "name": "Bisecting revision.makedirs results directory (35)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6509,7 +6515,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 5 of 7",
+    "name": "Bisecting revision.Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6529,7 +6535,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (35)",
+    "name": "Bisecting revision.write buildbot output to disk (35)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6545,7 +6551,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (36)",
+    "name": "Bisecting revision.makedirs results directory (36)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6583,7 +6589,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 6 of 7",
+    "name": "Bisecting revision.Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6603,7 +6609,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (36)",
+    "name": "Bisecting revision.write buildbot output to disk (36)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6619,7 +6625,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.makedirs results directory (37)",
+    "name": "Bisecting revision.makedirs results directory (37)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6657,7 +6663,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.Performance Test 7 of 7",
+    "name": "Bisecting revision.Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6677,7 +6683,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Working on revision chromium@dcdcdc0ff1.write buildbot output to disk (37)",
+    "name": "Bisecting revision.write buildbot output to disk (37)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6693,7 +6699,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (15)",
+    "name": "Bisecting revision.Compare samples (15)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6730,7 +6736,7 @@
       "--buildbot"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Compare samples (16)",
+    "name": "Bisecting revision.Compare samples (16)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

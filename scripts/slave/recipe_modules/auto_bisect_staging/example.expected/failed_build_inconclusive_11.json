@@ -2148,6 +2148,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -2155,13 +2160,19 @@
       "f021f021f021f021f021f021f021f021f021f021"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash f021f021f021f021f021f021f021f021f021f021",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash f021f021f021f021f021f021f021f021f021f021",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@f021f021f0"
+    "name": "Bisecting revision.Wiggling revision chromium@f021f021f0",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -2175,9 +2186,9 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_f021f021f021f021f021f021f021f021f021f021.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@f021f021f0.gsutil ls",
+    "name": "Bisecting revision.Wiggling revision chromium@f021f021f0.gsutil ls",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
     ]
   },
@@ -2193,16 +2204,12 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_0122012201220122012201220122012201220122.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@f021f021f0.gsutil ls (2)",
+    "name": "Bisecting revision.Wiggling revision chromium@f021f021f0.gsutil ls (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>Revision: chromium@f021f021f0<br/>@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@f021f021f0"
   },
   {
     "cmd": [
@@ -2212,7 +2219,7 @@
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "Working on revision chromium@f021f021f0.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "name": "Bisecting revision.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2226,7 +2233,7 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "Working on revision chromium@f021f021f0.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "name": "Bisecting revision.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2239,7 +2246,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@f021f021f0.Post bisect results",
+    "name": "Bisecting revision.Post bisect results",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -2262,7 +2269,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_f021f021f021f021f021f021f021f021f021f021.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@f021f021f0.gsutil ls",
+    "name": "Bisecting revision.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -2279,7 +2286,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_f021f021f021f021f021f021f021f021f021f021.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f021f021f021f021f021f021f021f021f021f021\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@f021f021f0.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2298,7 +2305,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@f021f021f0.Waiting for build",
+    "name": "Bisecting revision.Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2315,7 +2322,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_f021f021f021f021f021f021f021f021f021f021.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@f021f021f0.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -2328,7 +2335,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@f021f021f0.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2350,7 +2357,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@f021f021f0.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2364,6 +2371,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (2)"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -2371,13 +2383,19 @@
       "0122012201220122012201220122012201220122"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash 0122012201220122012201220122012201220122",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash 0122012201220122012201220122012201220122",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@0122012201"
+    "name": "Bisecting revision.Wiggling revision chromium@0122012201",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -2391,9 +2409,9 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_0122012201220122012201220122012201220122.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@0122012201.gsutil ls",
+    "name": "Bisecting revision.Wiggling revision chromium@0122012201.gsutil ls",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
     ]
   },
@@ -2409,16 +2427,12 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@0122012201.gsutil ls (2)",
+    "name": "Bisecting revision.Wiggling revision chromium@0122012201.gsutil ls (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>Revision: chromium@0122012201<br/>@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@0122012201"
   },
   {
     "cmd": [
@@ -2427,7 +2441,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@0122012201.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (2)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -2450,7 +2464,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_0122012201220122012201220122012201220122.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@0122012201.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -2467,7 +2481,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_0122012201220122012201220122012201220122.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"0122012201220122012201220122012201220122\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@0122012201.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2486,7 +2500,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@0122012201.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2503,7 +2517,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_0122012201220122012201220122012201220122.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@0122012201.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -2516,7 +2530,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@0122012201.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2538,7 +2552,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@0122012201.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2552,6 +2566,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (3)"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -2559,13 +2578,19 @@
       "ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@ef20ef20ef"
+    "name": "Bisecting revision.Wiggling revision chromium@ef20ef20ef",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -2579,9 +2604,9 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@ef20ef20ef.gsutil ls",
+    "name": "Bisecting revision.Wiggling revision chromium@ef20ef20ef.gsutil ls",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
     ]
   },
@@ -2597,16 +2622,12 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@ef20ef20ef.gsutil ls (2)",
+    "name": "Bisecting revision.Wiggling revision chromium@ef20ef20ef.gsutil ls (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>Revision: chromium@ef20ef20ef<br/>@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ef20ef20ef"
   },
   {
     "cmd": [
@@ -2615,7 +2636,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ef20ef20ef.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (3)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -2638,7 +2659,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ef20ef20ef.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -2655,7 +2676,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ef20ef20ef.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2674,7 +2695,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ef20ef20ef.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2691,7 +2712,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ef20ef20ef.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -2704,7 +2725,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ef20ef20ef.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2726,7 +2747,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ef20ef20ef.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2740,6 +2761,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (4)"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -2747,13 +2773,19 @@
       "1223122312231223122312231223122312231223"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash 1223122312231223122312231223122312231223",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash 1223122312231223122312231223122312231223",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@1223122312"
+    "name": "Bisecting revision.Wiggling revision chromium@1223122312",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -2767,9 +2799,9 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@1223122312.gsutil ls",
+    "name": "Bisecting revision.Wiggling revision chromium@1223122312.gsutil ls",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
     ]
   },
@@ -2785,16 +2817,12 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@1223122312.gsutil ls (2)",
+    "name": "Bisecting revision.Wiggling revision chromium@1223122312.gsutil ls (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>Revision: chromium@1223122312<br/>@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@1223122312"
   },
   {
     "cmd": [
@@ -2803,7 +2831,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@1223122312.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (4)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -2826,7 +2854,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@1223122312.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -2843,7 +2871,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"1223122312231223122312231223122312231223\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@1223122312.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2862,7 +2890,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@1223122312.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2879,7 +2907,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@1223122312.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -2892,7 +2920,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@1223122312.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -2914,7 +2942,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@1223122312.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2928,6 +2956,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (5)"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -2935,13 +2968,19 @@
       "de19de19de19de19de19de19de19de19de19de19"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash de19de19de19de19de19de19de19de19de19de19",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash de19de19de19de19de19de19de19de19de19de19",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@de19de19de"
+    "name": "Bisecting revision.Wiggling revision chromium@de19de19de",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -2955,16 +2994,12 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@de19de19de.gsutil ls",
+    "name": "Bisecting revision.Wiggling revision chromium@de19de19de.gsutil ls",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>Revision: chromium@de19de19de<br/>@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@de19de19de"
   },
   {
     "cmd": [
@@ -2973,7 +3008,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@de19de19de.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (5)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -2996,7 +3031,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@de19de19de.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3013,7 +3048,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"de19de19de19de19de19de19de19de19de19de19\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@de19de19de.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3032,7 +3067,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@de19de19de.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3049,7 +3084,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@de19de19de.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3062,7 +3097,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@de19de19de.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3084,7 +3119,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@de19de19de.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3098,6 +3133,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (6)"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -3105,13 +3145,19 @@
       "2324232423242324232423242324232423242324"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash 2324232423242324232423242324232423242324",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash 2324232423242324232423242324232423242324",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@2324232423"
+    "name": "Bisecting revision.Wiggling revision chromium@2324232423",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -3125,16 +3171,12 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_2324232423242324232423242324232423242324.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@2324232423.gsutil ls",
+    "name": "Bisecting revision.Wiggling revision chromium@2324232423.gsutil ls",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>Revision: chromium@2324232423<br/>@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@2324232423"
   },
   {
     "cmd": [
@@ -3143,7 +3185,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@2324232423.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (6)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3166,7 +3208,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_2324232423242324232423242324232423242324.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@2324232423.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3183,7 +3225,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_2324232423242324232423242324232423242324.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"2324232423242324232423242324232423242324\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@2324232423.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3202,7 +3244,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@2324232423.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3219,7 +3261,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_2324232423242324232423242324232423242324.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@2324232423.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3232,7 +3274,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@2324232423.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3254,7 +3296,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@2324232423.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3268,6 +3310,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (7)"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -3275,13 +3322,19 @@
       "cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@cd18cd18cd"
+    "name": "Bisecting revision.Wiggling revision chromium@cd18cd18cd",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -3295,16 +3348,12 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@cd18cd18cd.gsutil ls",
+    "name": "Bisecting revision.Wiggling revision chromium@cd18cd18cd.gsutil ls",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>Revision: chromium@cd18cd18cd<br/>@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@cd18cd18cd"
   },
   {
     "cmd": [
@@ -3313,7 +3362,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@cd18cd18cd.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (7)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3336,7 +3385,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@cd18cd18cd.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3353,7 +3402,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@cd18cd18cd.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3372,7 +3421,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@cd18cd18cd.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3389,7 +3438,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@cd18cd18cd.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3402,7 +3451,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@cd18cd18cd.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3424,7 +3473,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@cd18cd18cd.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3438,6 +3487,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (8)"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -3445,13 +3499,19 @@
       "3425342534253425342534253425342534253425"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash 3425342534253425342534253425342534253425",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash 3425342534253425342534253425342534253425",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@3425342534"
+    "name": "Bisecting revision.Wiggling revision chromium@3425342534",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -3465,16 +3525,12 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_3425342534253425342534253425342534253425.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@3425342534.gsutil ls",
+    "name": "Bisecting revision.Wiggling revision chromium@3425342534.gsutil ls",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>Revision: chromium@3425342534<br/>@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@3425342534"
   },
   {
     "cmd": [
@@ -3483,7 +3539,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@3425342534.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (8)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3506,7 +3562,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_3425342534253425342534253425342534253425.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@3425342534.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3523,7 +3579,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_3425342534253425342534253425342534253425.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"3425342534253425342534253425342534253425\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@3425342534.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3542,7 +3598,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@3425342534.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3559,7 +3615,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_3425342534253425342534253425342534253425.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@3425342534.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3572,7 +3628,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@3425342534.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3594,7 +3650,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@3425342534.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3608,6 +3664,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (9)"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -3615,18 +3676,20 @@
       "bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@bc17bc17bc"
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@bc17bc17bc"
+    "name": "Bisecting revision.Wiggling revision chromium@bc17bc17bc",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>Revision: chromium@bc17bc17bc<br/>@@@"
+    ]
   },
   {
     "cmd": [
@@ -3635,7 +3698,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@bc17bc17bc.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (9)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3658,7 +3721,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@bc17bc17bc.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3675,7 +3738,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@bc17bc17bc.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (9)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3694,7 +3757,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@bc17bc17bc.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3711,7 +3774,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@bc17bc17bc.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3724,7 +3787,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@bc17bc17bc.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3746,7 +3809,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@bc17bc17bc.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (9)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3760,6 +3823,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (10)"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -3767,18 +3835,20 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Wiggling revision chromium@dcdcdc0ff1"
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1"
+    "name": "Bisecting revision.Wiggling revision chromium@dcdcdc0ff1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>Revision: chromium@dcdcdc0ff1<br/>@@@"
+    ]
   },
   {
     "cmd": [
@@ -3787,7 +3857,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (10)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3810,7 +3880,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3827,7 +3897,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (10)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3846,7 +3916,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3863,7 +3933,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3876,7 +3946,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3898,7 +3968,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@dcdcdc0ff1.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (10)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3912,6 +3982,14 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (11)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Revision: chromium@ab16ab16ab<br/>@@@"
+    ]
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -3919,13 +3997,11 @@
       "ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ab16ab16ab"
+    "name": "Bisecting revision.resolving hash ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -3934,7 +4010,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ab16ab16ab.Post bisect results",
+    "name": "Bisecting revision.Post bisect results (11)",
     "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"secondary_regressions\": [], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3957,7 +4033,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ab16ab16ab.gsutil ls",
+    "name": "Bisecting revision.gsutil ls (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3974,7 +4050,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ab16ab16ab.buildbucket.put",
+    "name": "Bisecting revision.buildbucket.put (11)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3993,7 +4069,7 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ab16ab16ab.Waiting for build",
+    "name": "Bisecting revision.Waiting for build (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4010,7 +4086,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16.zip"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ab16ab16ab.Waiting for build.gsutil ls",
+    "name": "Bisecting revision.Waiting for build.gsutil ls (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -4023,7 +4099,7 @@
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ab16ab16ab.Waiting for build.sleeping",
+    "name": "Bisecting revision.Waiting for build.sleeping (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4045,7 +4121,7 @@
       "1201331270"
     ],
     "cwd": "[START_DIR]",
-    "name": "Working on revision chromium@ab16ab16ab.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get (11)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4061,7 +4137,15 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Gathering failed build jobs list"
+    "name": "Bisecting revision (12)"
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision.Gathering failed build jobs list",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
