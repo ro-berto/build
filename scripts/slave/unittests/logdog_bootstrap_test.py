@@ -201,10 +201,9 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-logdog-host', 'luci-logdog.appspot.com',
                 '-name-base', 'recipes',
                 '-print-summary',
+                '-tee', 'annotations,text',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
-                '-annotate', 'tee',
-                '-tee=true',
         ])
 
     service_account.assert_called_once_with(
@@ -255,9 +254,9 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-logdog-host', 'luci-logdog.appspot.com',
                 '-name-base', 'recipes',
                 '-print-summary',
+                '-tee', 'annotations',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
-                '-tee', 'annotations',
         ])
 
     service_account.assert_called_once_with(

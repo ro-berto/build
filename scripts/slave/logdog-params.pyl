@@ -47,8 +47,6 @@
     'chromium.infra': {
       # Used for canarying.
       '*': {
-        # Note: this canary revision includes the new Annotee flags, which
-        # allow us to use "logdog_only".
         'cipd_tag': 'git_revision:a38bcfad366994b9f549448a68400c60e30598e6',
         'logdog_only': True,
       },

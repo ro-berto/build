@@ -31,7 +31,7 @@ class BootstrapError(Exception):
 
 
 # CIPD tag for LogDog Butler/Annotee to use.
-_STABLE_CIPD_TAG = 'git_revision:25755a2c316937ee44a6432163dc5e2f9c85cf58'
+_STABLE_CIPD_TAG = 'git_revision:a38bcfad366994b9f549448a68400c60e30598e6'
 
 
 # Platform is the set of platform-specific LogDog bootstrapping
@@ -504,21 +504,10 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       '-logdog-host', viewer_host,
       '-name-base', 'recipes',
       '-print-summary',
+      '-tee', ('annotations' if params.logdog_only else 'annotations,text'),
       '-json-args-path', cmd_json,
       '-result-path', bootstrap_result_path,
   ]
-  if params.logdog_only:
-    # Only tee annotations.
-    cmd += ['-tee', 'annotations']
-  else:
-    # Old-style Annotee parameters. This can be deleted when we bump to
-    # new-style annotee, and should be replaced with:
-    #
-    # -tee text,annotations
-    cmd += [
-        '-annotate', 'tee',
-        '-tee=true',
-    ]
   return BootstrapState(cmd, bootstrap_result_path)
 
 
