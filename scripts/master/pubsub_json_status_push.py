@@ -11,6 +11,7 @@ import os
 import zlib
 
 from buildbot.status.base import StatusReceiverMultiService
+from buildbot.util.lru import SyncLRUCache
 from master import auth
 from master.deferred_resource import DeferredResource
 from twisted.internet import defer, reactor
@@ -164,6 +165,9 @@ class StatusPush(StatusReceiverMultiService):
     self._updated_builds = set()
     self._pushTimer = None
     self._splits = 1
+    # Cache pending builds by brid, because they are expensive to query.
+    self._pending_build_lru = SyncLRUCache(
+        self._get_build_request, max_size=200)
     log.msg('Creating PubSub service.')
 
   @staticmethod
@@ -357,6 +361,36 @@ class StatusPush(StatusReceiverMultiService):
     build = builder.getBuild(b.build_number)
     return defer.succeed((b, build.asDict()))
 
+  @staticmethod
+  def _get_build_request(_key, pb_request_status):
+    """Retrieves source, reason, builderName, and submittedAt from a pbrs.
+
+    the key param is not used.  It's just there to satisfy the function
+    signature for SyncLRUCache's miss_fn.
+
+    This takes a pending build request status object, and runs a query
+    against postgres.  This is fairly expensive.
+    """
+    return pb_request_status._getBuildRequest()
+
+  @defer.inlineCallbacks
+  def _get_pending_build(self, pb_request_status):
+    """Returns a pending build.
+
+    This tries to fetch the pending build first from the in-memory cache,
+    then tries postgres.  If it goes into postgres, it gets pretty expensive.
+    """
+    result = {}
+
+    br = yield self._pending_build_lru.get(
+        pb_request_status.brid, pb_request_status=pb_request_status)
+    result['builderName'] = pb_request_status.getBuilderName()
+    result['source'] = br.source.asDict()
+    result['reason'] = br.reason
+    result['submittedAt'] = br.submittedAt
+
+    defer.returnValue(result)
+
   @defer.inlineCallbacks
   def _getMasterData(self):
     """Loads and returns a subset of the master data as a JSON.
@@ -375,15 +409,16 @@ class StatusPush(StatusReceiverMultiService):
       # Optimization cheat: only get the first 25 pending builds.
       # This caps the amount of postgres db calls and json size for really out
       # of control builders
+      numPending = len(pending)
       pending = pending[:25]
-      pendingStates = yield defer.DeferredList(
-          [p.asDict_async() for p in pending])
+      pendingStates = yield defer.DeferredList([
+          self._get_pending_build(p) for p in pending])
       # Not included: basedir, cachedBuilds.
       # cachedBuilds isn't useful and takes a ton of resources to compute.
       builder_info = {
         'slaves': builder.slavenames,
         'currentBuilds': sorted(b.getNumber() for b in builder.currentBuilds),
-        'pendingBuilds': len(pending),
+        'pendingBuilds': numPending,
         # p is a tuple of (success, payload)
         'pendingBuildStates': [p[1] for p in pendingStates if p[0]],
         'state': builder.getState()[0],
