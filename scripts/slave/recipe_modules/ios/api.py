@@ -271,7 +271,7 @@ class iOSApi(recipe_api.RecipeApi):
     else:
       # If mb is not being used, set goma_dir before generating build files.
       if self.use_goma:
-        self.__config['gn_args'].append('goma_dir=%s' % self.m.goma.goma_dir)
+        self.__config['gn_args'].append('goma_dir="%s"' % self.m.goma.goma_dir)
 
       step_result = self.m.file.write(
         'write args.gn' + suffix,
