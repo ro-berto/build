@@ -56,7 +56,11 @@
     # Chromium tryservers.
     'tryserver.chromium.android': {},
     'tryserver.chromium.mac': {},
-    'tryserver.chromium.linux': {},
+    'tryserver.chromium.linux': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
     'tryserver.chromium.win': {},
 
     # Chromium continuous waterfalls.
