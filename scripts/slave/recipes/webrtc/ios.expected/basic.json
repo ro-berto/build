@@ -149,64 +149,6 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [],
-    "name": "ensure_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
-      "--platform",
-      "mac-amd64",
-      "--dest-directory",
-      "[START_DIR]/cipd",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "ensure_goma.install cipd",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/cipd/cipd",
-      "ensure",
-      "--root",
-      "[CACHE]/cipd/goma",
-      "--list",
-      "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 release",
-      "--json-output",
-      "/path/to/tmp/json",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
-    ],
-    "name": "ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/mac-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -218,8 +160,6 @@
       "ios debug",
       "--config-file",
       "[BUILDER_CACHE]/ios_debug/src/webrtc/build/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/cipd/goma",
       "//out/Debug-iphonesimulator"
     ],
     "cwd": "[BUILDER_CACHE]/ios_debug/src",

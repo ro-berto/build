@@ -266,8 +266,13 @@ class iOSApi(recipe_api.RecipeApi):
           build_dir='//out/%s' % build_sub_path,
           mb_config_path=mb_config_path,
           name='generate build files (mb)' + suffix,
+          use_goma=self.use_goma,
       )
     else:
+      # If mb is not being used, set goma_dir before generating build files.
+      if self.use_goma:
+        self.__config['gn_args'].append('goma_dir=%s' % self.m.goma.goma_dir)
+
       step_result = self.m.file.write(
         'write args.gn' + suffix,
         self.m.path['checkout'].join('out', build_sub_path, 'args.gn'),

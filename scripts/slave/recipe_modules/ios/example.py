@@ -29,6 +29,9 @@ def GenTests(api):
       slavename='fake-vm',
     )
     + api.ios.make_test_build_config({
+      'gn_args': [
+        'use_goma=true',
+      ],
       'xcode version': '6.1.1',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
