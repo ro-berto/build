@@ -55,13 +55,3 @@ def GenTests(api):
         api.properties.generic(mastername=mastername, buildername=buildername) +
         api.platform('win', 64)
       )
-
-  yield (
-    api.test('full_%s_%s_benchmark_failure' %
-        (_sanitize_nonalpha('chromium_pgo.test'),
-         _sanitize_nonalpha('Test builder'))) +
-    api.properties.generic(mastername='chromium_pgo.test',
-                           buildername='Test builder') +
-    api.platform('win', 32) +
-    api.step_data('Telemetry benchmark: sunspider', retcode=1)
-  )

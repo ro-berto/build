@@ -66,24 +66,18 @@ class PGOApi(recipe_api.RecipeApi):
     """
     Run a suite of telemetry benchmarks to generate some profiling data.
     """
-    for benchmark in _BENCHMARKS_TO_RUN:
-      try:
-        args = [
-            '--checkout-dir', self.m.path['checkout'],
-            '--browser-type', self.m.chromium.c.build_config_fs.lower(),
-            '--target-bits', self.m.chromium.c.TARGET_BITS,
-            '--build-dir', self.m.chromium.output_dir,
-            '--benchmark', benchmark,
-        ]
-        self.m.python(
-          'Telemetry benchmark: %s' % benchmark,
-          self.resource('run_benchmark.py'),
-          args)
-      except self.m.step.StepFailure:
-        # Turn the failures into warning, we shouldn't stop the build for a
-        # benchmark.
-        step_result = self.m.step.active_result
-        step_result.presentation.status = self.m.step.WARNING
+    target_arch = self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']
+    target_cpu = {'ia32': 'x86'}.get(target_arch) or target_arch
+    args = [
+        '--browser-type', self.m.chromium.c.build_config_fs.lower(),
+        '--target-cpu', target_cpu,
+        '--build-dir', self.m.chromium.output_dir,
+    ]
+    self.m.python(
+      'Profiling benchmarks.',
+      self.m.path['checkout'].join('build', 'win',
+                                   'run_pgo_profiling_benchmarks.py'),
+      args)
 
   def _compile_optimized_image(self, bot_config):
     """
