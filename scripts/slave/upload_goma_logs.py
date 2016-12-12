@@ -53,6 +53,9 @@ def main():
                       ' This option is used when no need to send goma status'
                       ' to monitoring server.')
 
+  parser.add_argument('--gsutil-py-path',
+                      help='Specify path to gsutil.py script in depot_tools.')
+
   # Arguments set to os.environ
   parser.add_argument('--buildbot-buildername',
                       default='unknown',
@@ -68,18 +71,29 @@ def main():
 
   args = parser.parse_args()
 
+  override_gsutil = None
+  if args.gsutil_py_path:
+    # Needs to add '--', otherwise gsutil options will be passed to gsutil.py.
+    override_gsutil = [sys.executable, args.gsutil_py_path, '--']
+
   if args.upload_compiler_proxy_info:
     goma_utils.UploadGomaCompilerProxyInfo(
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
-        clobber=args.buildbot_clobber
+        clobber=args.buildbot_clobber,
+        override_gsutil=override_gsutil
     )
+
   if args.ninja_log_outdir:
-    goma_utils.UploadNinjaLog(args.ninja_log_outdir,
-                              args.ninja_log_compiler,
-                              args.ninja_log_command,
-                              args.ninja_log_exit_status)
+    goma_utils.UploadNinjaLog(
+        args.ninja_log_outdir,
+        args.ninja_log_compiler,
+        args.ninja_log_command,
+        args.ninja_log_exit_status,
+        override_gsutil=override_gsutil
+    )
+
   if args.goma_stats_file:
     goma_utils.SendGomaStats(args.goma_stats_file,
                              args.goma_crash_report_id_file,

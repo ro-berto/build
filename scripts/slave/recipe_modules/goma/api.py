@@ -292,6 +292,7 @@ class GomaApi(recipe_api.RecipeApi):
                    name=None, skip_sendgomatsmon=False):
     args = [
         '--upload-compiler-proxy-info',
+        '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
     ]
 
     if skip_sendgomatsmon:
