@@ -274,7 +274,7 @@
       "[BUILDER_CACHE]/Android32_Builder/src/out/Release",
       "-j",
       "50",
-      "webrtc_perf_test"
+      "webrtc_perf_tests"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -360,7 +360,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Android32_Builder/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android32_Builder/src/out/Release', '-j', 50, 'webrtc_perf_test']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android32_Builder/src/out/Release', '-j', 50, 'webrtc_perf_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

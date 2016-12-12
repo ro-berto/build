@@ -261,7 +261,7 @@
       "-j",
       "50",
       "isac_fix_test",
-      "webrtc_perf_test"
+      "webrtc_perf_tests"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -346,7 +346,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\Win7\\src\\out\\Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win7\\\\src\\\\out\\\\Release', '-j', 50, 'isac_fix_test', 'webrtc_perf_test']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win7\\\\src\\\\out\\\\Release', '-j', 50, 'isac_fix_test', 'webrtc_perf_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

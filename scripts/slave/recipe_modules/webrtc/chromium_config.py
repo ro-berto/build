@@ -25,13 +25,13 @@ def webrtc_default(c):
 def webrtc_android_perf(c):
   if c.BUILD_CONFIG != 'Release':
     raise BadConf('Perf bots must use Release configs!') # pragma: no cover
-  c.compile_py.default_targets = ['webrtc_perf_test']
+  c.compile_py.default_targets = ['webrtc_perf_tests']
 
 @CONFIG_CTX(includes=['webrtc_minimal', 'webrtc_openh264'])
 def webrtc_desktop_perf(c):
   if c.BUILD_CONFIG != 'Release':
     raise BadConf('Perf bots must use Release configs!') # pragma: no cover
-  c.compile_py.default_targets = ['webrtc_perf_test', 'isac_fix_test']
+  c.compile_py.default_targets = ['webrtc_perf_tests', 'isac_fix_test']
 
 # TOOD(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
 @CONFIG_CTX(includes=['ninja', 'gcc', 'goma'])
