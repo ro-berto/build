@@ -313,7 +313,7 @@ def GSUtilGetMetadataField(name, provider_prefix=None):
 
 
 def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
-               metadata=None, override_gsutil=None):
+               metadata=None, override_gsutil=None, add_quiet_flag=False):
   """Copy a file to Google Storage.
 
   Runs the following command:
@@ -330,6 +330,7 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
     metadata: (dict) A dictionary of string key/value metadata entries to set
         (see `gsutil cp' '-h' option)
     override_gsutil (list): optional argv to run gsutil
+    add_quiet_flag: add the -q (quiet) flag when invoking gsutil
 
   Returns:
     The status code returned from running the generated gsutil command.
@@ -344,6 +345,8 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
   command = list(override_gsutil or gsutil)
+  if add_quiet_flag:
+    command.append('-q')
 
   if not metadata:
     metadata = {}
@@ -364,8 +367,8 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
 
 def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
                    cache_control=None, metadata=None, override_gsutil=None,
-                   dest_filename=None):
-  """Copy a file to Google Storage.
+                   dest_filename=None, add_quiet_flag=False):
+  """Copies a file to Google Storage.
 
   Runs the following command:
     gsutil -h Content-Type:<mimetype> \
@@ -375,12 +378,13 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
   Args:
     filename: the file to upload
     gs_base: the bucket to upload the file to
-    subdir: optional subdirectory withing the bucket
+    subdir: optional subdirectory within the bucket
     mimetype: optional value to add as a Content-Type header
     gs_acl: optional value to add as a canned-acl
     override_gsutil (list): optional argv to run gsutil
     dest_filename: optional destination filename; if not specified, then the
         destination filename will be the source filename without the path
+    add_quiet_flag: add the -q (quiet) flag when invoking gsutil
 
   Returns:
     The status code returned from running the generated gsutil command.
@@ -399,18 +403,21 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
     dest_filename = os.path.basename(filename)
   dest = '/'.join([dest, dest_filename])
   return GSUtilCopy(source, dest, mimetype, gs_acl, cache_control,
-                    metadata=metadata, override_gsutil=override_gsutil)
+                    metadata=metadata, override_gsutil=override_gsutil,
+                    add_quiet_flag=add_quiet_flag)
 
 
 def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None,
-                  cache_control=None):
-  """Upload the directory and its contents to Google Storage."""
+                  cache_control=None, add_quiet_flag=False):
+  """Uploads the directory and its contents to Google Storage."""
 
   if os.path.isfile(src_dir):
     assert os.path.isdir(src_dir), '%s must be a directory' % src_dir
 
   command = GSUtilSetup()
   command += ['-m']
+  if add_quiet_flag:
+    command.append('-q')
   if cache_control:
     command.extend(['-h', 'Cache-Control:%s' % cache_control])
   command.extend(['cp', '-R'])

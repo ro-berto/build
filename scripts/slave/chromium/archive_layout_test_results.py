@@ -112,13 +112,16 @@ def archive_layout(args):
   # These files never change, cache for a year.
   cache_control = "public, max-age=31556926"
   slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
-                             cache_control=cache_control)
+                             cache_control=cache_control,
+                             add_quiet_flag=True)
   slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
-                            cache_control=cache_control)
+                            cache_control=cache_control,
+                            add_quiet_flag=True)
   slave_utils.GSUtilCopyFile(last_change_file,
                              gs_base + '/' + results_dir_basename,
                              gs_acl=gs_acl,
-                             cache_control=cache_control)
+                             cache_control=cache_control,
+                             add_quiet_flag=True)
 
   # And also to the 'results' directory to provide the 'latest' results
   # and make sure they are not cached at all (Cloud Storage defaults to
@@ -126,13 +129,16 @@ def archive_layout(args):
   gs_base = '/'.join([args.gs_bucket, builder_name, 'results'])
   cache_control = 'no-cache'
   slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
-                             cache_control=cache_control)
+                             cache_control=cache_control,
+                             add_quiet_flag=True)
   slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
-                            cache_control=cache_control)
+                            cache_control=cache_control,
+                            add_quiet_flag=True)
   slave_utils.GSUtilCopyFile(last_change_file,
                              gs_base + '/' + results_dir_basename,
                              gs_acl=gs_acl,
-                             cache_control=cache_control)
+                             cache_control=cache_control,
+                             add_quiet_flag=True)
   return 0
 
 
