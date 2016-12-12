@@ -22,8 +22,8 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc_baremetal',
   },
-  'webrtc_perf': {
-    'chromium_config': 'webrtc_perf',
+  'webrtc_desktop_perf': {
+    'chromium_config': 'webrtc_desktop_perf',
     'gclient_config': 'webrtc',
     'test_suite': 'desktop_perf',
   },
@@ -44,6 +44,12 @@ RECIPE_CONFIGS = freeze({
   },
   'webrtc_android': {
     'chromium_config': 'android',
+    'chromium_android_config': 'webrtc',
+    'gclient_config': 'webrtc',
+    'gclient_apply_config': ['android'],
+  },
+  'webrtc_android_perf': {
+    'chromium_config': 'webrtc_android_perf',
     'chromium_android_config': 'webrtc',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
@@ -693,7 +699,7 @@ BUILDERS = freeze({
     },
     'builders': {
        'Win7': {
-        'recipe_config': 'webrtc_perf',
+        'recipe_config': 'webrtc_desktop_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -705,7 +711,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Mac 10.11': {
-        'recipe_config': 'webrtc_perf',
+        'recipe_config': 'webrtc_desktop_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -717,7 +723,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'Linux Trusty': {
-        'recipe_config': 'webrtc_perf',
+        'recipe_config': 'webrtc_desktop_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -729,7 +735,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Builder': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -748,7 +754,7 @@ BUILDERS = freeze({
         ],
       },
       'Android64 Builder': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -762,7 +768,7 @@ BUILDERS = freeze({
         ],
       },
       'Android32 Tests (J Nexus4)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -777,7 +783,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Tests (K Nexus5)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -792,7 +798,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Tests (L Nexus5)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -807,7 +813,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Tests (L Nexus6)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -822,7 +828,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Tests (L Nexus7.2)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -837,7 +843,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Tests (N Nexus6)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -852,7 +858,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android64 Tests (L Nexus9)': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
