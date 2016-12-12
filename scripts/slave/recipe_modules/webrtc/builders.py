@@ -739,9 +739,12 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
         'triggers': [
+          'Android32 Tests (J Nexus4)',
+          'Android32 Tests (K Nexus5)',
           'Android32 Tests (L Nexus5)',
           'Android32 Tests (L Nexus6)',
           'Android32 Tests (L Nexus7.2)',
+          'Android32 Tests (N Nexus6)',
         ],
       },
       'Android64 Builder': {
