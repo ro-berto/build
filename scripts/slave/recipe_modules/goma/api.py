@@ -174,7 +174,6 @@ class GomaApi(recipe_api.RecipeApi):
             self.cloudtail_service_account_json_path,
             '--pid-file', self.m.raw_io.output(
                 leak_to=self.cloudtail_pid_file)],
-      env=self._goma_ctl_env,
       step_test_data=(
           lambda: self.m.raw_io.test_api.output('12345')),
       infra_step=True)
@@ -334,9 +333,7 @@ class GomaApi(recipe_api.RecipeApi):
       name=name or 'upload_log',
       script=self.package_repo_resource(
           'scripts', 'slave', 'upload_goma_logs.py'),
-      args=args,
-      env=self._goma_ctl_env
-    )
+      args=args)
 
   def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,
                       ninja_log_compiler=None, goma_env=None, ninja_env=None,
