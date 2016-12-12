@@ -7462,15 +7462,17 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Bisecting revision (2)"
+    "name": "Bisecting revision (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Revision: chromium@dcdcdc0ff1,v8@003<br/>@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
     "name": "Bisecting revision.Wiggling revision chromium@dcdcdc0ff1,v8@003",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>Revision: chromium@dcdcdc0ff1,v8@003<br/>@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

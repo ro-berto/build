@@ -112,8 +112,8 @@ def _bisect_main_loop(bisector):  # pragma: no cover
   """
   while not bisector.bisect_over:
     with bisector.api.m.step.nest('Bisecting revision'):
-      revision_to_check = _get_revision_to_check(bisector)
       step_result = bisector.api.m.step.active_result
+      revision_to_check = _get_revision_to_check(bisector)
       step_result.presentation.step_text += (
           bisector.api.m.test_utils.format_step_text(
               [['Revision: %s' % revision_to_check.revision_string()]]))
