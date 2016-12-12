@@ -26,18 +26,13 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
           'Android (swarming)',
-          'Android32 Builder',
-          'Android32 ASan (L Nexus6)',
+          'Android ASan (swarming)',
       ]),
   ])
 
   specs = [
     {'name': 'Android (swarming)'},
-    {'name': 'Android32 Builder'},
-    {'name': 'Android32 ASan (L Nexus6)'},
-    {'name': 'Android32 Tests (J Nexus4)'},
-    {'name': 'Android32 Tests (K Nexus5)'},
-    {'name': 'Android32 Tests (L Nexus6)'},
+    {'name': 'Android ASan (swarming)'},
   ]
 
   c['builders'].extend([
