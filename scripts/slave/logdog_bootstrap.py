@@ -487,6 +487,8 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
     cmd += ['-service-account-json', service_account_json]
   if plat.max_buffer_age:
     cmd += ['-output-max-buffer-age', plat.max_buffer_age]
+  if params.logdog_only:
+    cmd += ['-io-keepalive-stderr', '5m']
   cmd += [
       'run',
       '-stdout', 'tee=stdout',

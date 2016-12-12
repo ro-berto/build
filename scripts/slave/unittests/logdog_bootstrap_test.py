@@ -242,6 +242,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-output', 'logdog,host="services-dot-luci-logdog.appspot.com"',
             '-service-account-json', 'creds.json',
             '-output-max-buffer-age', '30s',
+            '-io-keepalive-stderr', '5m',
             'run',
             '-stdout', 'tee=stdout',
             '-stderr', 'tee=stderr',
