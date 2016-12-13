@@ -107,6 +107,7 @@ class Bisector(object):
 
     # Initial revision range
     with api.m.step.nest('Resolving reference range'):
+      resolving_step = api.m.step.active_result
 
       bad_hash = self._get_hash(bisect_config['bad_revision'])
       good_hash = self._get_hash(bisect_config['good_revision'])
@@ -115,7 +116,7 @@ class Bisector(object):
       self.bad_rev = revision_class(self, bad_hash)
       self.bad_rev.bad = True
       self.bad_rev.read_deps(self.get_perf_tester_name())
-      api.m.step.active_result.presentation.logs['Debug Bad Revision DEPS'] = [
+      resolving_step.presentation.logs['Debug Bad Revision DEPS'] = [
           '%s: %s' % (key, value) for key, value in
           sorted(self.bad_rev.deps.items())]
       self.bad_rev.deps = {}
@@ -123,7 +124,7 @@ class Bisector(object):
       self.good_rev = revision_class(self, good_hash)
       self.good_rev.good = True
       self.good_rev.read_deps(self.get_perf_tester_name())
-      api.m.step.active_result.presentation.logs['Debug Good Revision DEPS'] = [
+      resolving_step.presentation.logs['Debug Good Revision DEPS'] = [
           '%s: %s' % (key, value) for key, value in
           sorted(self.good_rev.deps.items())]
       self.good_rev.deps = {}

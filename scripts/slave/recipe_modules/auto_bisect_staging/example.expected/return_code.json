@@ -321,7 +321,19 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Resolving reference range"
+    "name": "Resolving reference range",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@catapult: None@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@webrtc: None@@@",
+      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@catapult: None@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@webrtc: None@@@",
+      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
+    ]
   },
   {
     "cmd": [
@@ -380,12 +392,7 @@
     "name": "Resolving reference range.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@webrtc: None@@@",
-      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -401,12 +408,7 @@
     "name": "Resolving reference range.fetch file 0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@webrtc: None@@@",
-      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
