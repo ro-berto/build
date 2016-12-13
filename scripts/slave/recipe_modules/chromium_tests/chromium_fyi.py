@@ -49,6 +49,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'checkout_dir': 'mac',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac',
       },
@@ -61,6 +62,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac',
       },
@@ -73,6 +75,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac',
       },
@@ -87,6 +90,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -112,6 +116,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -135,6 +140,7 @@ SPEC = {
           '--additional-driver-flag=--enable-slimming-paint-v2',
         ]),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
           'platform': 'linux',
       },
@@ -157,6 +163,7 @@ SPEC = {
           '--enable-wptserve',
         ]),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
           'platform': 'linux',
       },
@@ -182,6 +189,7 @@ SPEC = {
           '--js-flags=--incremental-marking-wrappers',
         ]),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -206,6 +214,7 @@ SPEC = {
           'src/third_party/WebKit/LayoutTests/RandomOrderExpectations',
         ]),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
           'platform': 'linux',
       },
@@ -276,6 +285,7 @@ SPEC = {
           '--enable-wptserve',
         ]),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
           'platform': 'mac',
       },
@@ -298,6 +308,7 @@ SPEC = {
           '--enable-wptserve',
         ]),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
           'platform': 'win',
       },
@@ -319,6 +330,7 @@ SPEC = {
         steps.PrintPreviewTests(),
       ],
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -338,6 +350,7 @@ SPEC = {
         steps.PrintPreviewTests(),
       ],
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac',
       },
@@ -357,6 +370,7 @@ SPEC = {
         steps.PrintPreviewTests(),
       ],
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -370,6 +384,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -383,6 +398,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -396,6 +412,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -414,6 +431,7 @@ SPEC = {
       'cf_gs_bucket': 'chromium-browser-cfi',
       'cf_gs_acl': 'public-read',
       'cf_archive_name': 'cfi',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux' },
     },
     'LTO Linux': {
@@ -426,6 +444,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -441,6 +460,7 @@ SPEC = {
       },
       'bot_type': 'builder',
       'compile_targets': [ 'chromium_builder_perf' ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -454,6 +474,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -467,6 +488,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -481,6 +503,7 @@ SPEC = {
       'GYP_DEFINES': {
         'use_openssl': '1',
       },
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac',
       },
@@ -496,6 +519,7 @@ SPEC = {
       'bot_type': 'builder',
       'compile_targets': [],
       'checkout_dir': 'linux',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -518,6 +542,7 @@ SPEC = {
       ],
       'android_config': 'arm64_builder_mb',
       'root_devices': True,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -551,6 +576,7 @@ SPEC = {
         ]),
       ],
       'checkout_dir': 'linux',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -582,6 +608,7 @@ SPEC = {
           'src\\third_party\\WebKit\\LayoutTests\\FlagExpectations\\site-per-process',
         ]),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -604,6 +631,7 @@ SPEC = {
       'tests': [
         steps.BlinkTest(["--additional-driver-flag=--enable-browser-side-navigation"]),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -623,6 +651,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -642,6 +671,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -660,6 +690,7 @@ SPEC = {
       ],
       # Recipes builds Debug builds with component=shared_library by default.
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -679,6 +710,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang(dbg)',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -697,6 +729,7 @@ SPEC = {
       ],
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -715,6 +748,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang(shared)',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -733,6 +767,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -752,6 +787,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang64',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -770,6 +806,7 @@ SPEC = {
       ],
       # Recipes builds Debug builds with component=shared_library by default.
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -789,6 +826,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang64(dbg)',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -807,6 +845,7 @@ SPEC = {
       ],
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -825,6 +864,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClang64(dll)',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -844,6 +884,7 @@ SPEC = {
       ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -862,6 +903,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClangLLD',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -880,6 +922,7 @@ SPEC = {
       ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -898,6 +941,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClngLLDdbg',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -916,6 +960,7 @@ SPEC = {
       ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -934,6 +979,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClangLLD64',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -952,6 +998,7 @@ SPEC = {
       ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -970,6 +1017,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClngLLD64dbg',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -984,6 +1032,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -1002,6 +1051,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinAsan',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -1017,6 +1067,7 @@ SPEC = {
       },
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -1035,6 +1086,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinAsan(dll)',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -1049,6 +1101,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -1067,6 +1120,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'CrWinAsanCov',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -1083,6 +1137,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
       }
@@ -1098,6 +1153,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
       }
@@ -1113,6 +1169,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
       }
@@ -1128,6 +1185,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
       }
@@ -1146,6 +1204,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
       }
@@ -1162,6 +1221,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
       }
@@ -1178,6 +1238,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -1201,6 +1262,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
       }
@@ -1216,6 +1278,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
       }
@@ -1231,6 +1294,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
       }
@@ -1246,6 +1310,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
       }
@@ -1261,6 +1326,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
       }
@@ -1280,6 +1346,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
       }
@@ -1299,6 +1366,7 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
       }
@@ -1319,6 +1387,7 @@ SPEC = {
         'gn_all',
       ],
       'goma_canary': True,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -1342,6 +1411,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -1363,6 +1433,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinux',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -1380,6 +1451,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTLinux (dbg)')
@@ -1402,6 +1474,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTLinuxASan')
@@ -1422,6 +1495,7 @@ SPEC = {
       'chromium_apply_config': ['lsan'],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinuxASan',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'enable_swarming': True,
     },
@@ -1437,6 +1511,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'use_isolate': True,
       'enable_swarming': True,
@@ -1453,6 +1528,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinuxLLD',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'enable_swarming': True,
     },
@@ -1468,6 +1544,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTLinuxUBSanVptr')
@@ -1487,6 +1564,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinuxUBSanVptr',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'enable_swarming': True,
     },
@@ -1509,6 +1587,7 @@ SPEC = {
       ],
       'bot_type': 'builder_tester',
       'android_config': 'clang_asan_tot_release_builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1534,6 +1613,7 @@ SPEC = {
       ],
       'bot_type': 'builder',
       'android_config': 'clang_tot_debug_builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1554,6 +1634,7 @@ SPEC = {
       ],
       'bot_type': 'builder_tester',
       'android_config': 'clang_builder_mb_x64',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'enable_swarming': True,
       'use_isolate': True,
@@ -1576,6 +1657,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'mac', },
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTMac')
@@ -1595,6 +1677,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTMac',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac',
       },
@@ -1612,6 +1695,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'mac', },
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTMac (dbg)')
@@ -1634,6 +1718,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'mac', },
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTMacASan')
@@ -1653,6 +1738,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTMacASan',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'mac', },
       'enable_swarming': True,
     },
@@ -1669,6 +1755,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin') },
       'use_isolate': True,
@@ -1686,6 +1773,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
@@ -1701,6 +1789,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin(dbg)') },
       'use_isolate': True,
@@ -1718,6 +1807,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin(dbg)',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
@@ -1734,6 +1824,7 @@ SPEC = {
       ],
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin(dll)') },
       'use_isolate': True,
@@ -1751,6 +1842,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin(dll)',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
@@ -1767,6 +1859,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64') },
       'use_isolate': True,
@@ -1784,6 +1877,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin64',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
@@ -1799,6 +1893,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64(dbg)') },
       'use_isolate': True,
@@ -1816,6 +1911,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin64(dbg)',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
@@ -1832,6 +1928,7 @@ SPEC = {
       ],
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64(dll)') },
       'use_isolate': True,
@@ -1849,6 +1946,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTWin64(dll)',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
@@ -1864,6 +1962,7 @@ SPEC = {
       'compile_targets': [
         'chromium_builder_tests',
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -1881,6 +1980,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Win Builder (ANGLE)',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -1898,6 +1998,7 @@ SPEC = {
         'TARGET_PLATFORM': 'linux',
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -1918,6 +2019,7 @@ SPEC = {
       'compile_targets': [
         'chromedriver_webview_shell_apk',
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -1941,6 +2043,7 @@ SPEC = {
         steps.GTestTest('gfx_unittests'),
         steps.AndroidInstrumentationTest('WebViewUiTest'),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -1957,6 +2060,7 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
       'android_config': 'x64_builder_mb',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -1991,6 +2095,7 @@ SPEC = {
         steps.GTestTest('remoting_unittests'),
         steps.AndroidInstrumentationTest('ChromotingTest'),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -2010,6 +2115,7 @@ SPEC = {
       'tests': [
         steps.FindAnnotatedTest(),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -2033,6 +2139,7 @@ SPEC = {
         steps.AndroidInstrumentationTest('ContentShellTest', tool='asan'),
         steps.AndroidInstrumentationTest('ChromeSyncShellTest', tool='asan'),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -2048,6 +2155,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -2074,6 +2182,7 @@ SPEC = {
         steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
         steps.IncrementalCoverageTest(),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -2089,6 +2198,7 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
       'android_config': 'x86_builder_mb',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -2113,6 +2223,7 @@ SPEC = {
       ],
       'enable_swarming': True,
       'checkout_dir': 'win',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
       },
@@ -2129,6 +2240,7 @@ SPEC = {
       'parent_buildername': 'Android Builder (dbg)',
       'android_config': 'main_builder_mb',
       'root_devices': True,
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -2145,6 +2257,7 @@ SPEC = {
       'enable_swarming': True,
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -2161,6 +2274,7 @@ SPEC = {
       },
       'enable_swarming': True,
       'gclient_config': 'chromium',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
       },
@@ -2180,6 +2294,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -2204,6 +2319,7 @@ SPEC = {
       'tests': [
         steps.GTestTest('base_unittests'),
       ],
+      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -2220,6 +2336,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'use_isolate': True,
       'enable_swarming': True,
@@ -2234,6 +2351,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'use_isolate': True,
       'enable_swarming': True,

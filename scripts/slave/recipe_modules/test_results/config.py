@@ -20,3 +20,7 @@ def BASE(c):
 def public_server(c):
   c.test_results_server = 'test-results.appspot.com'
 
+@config_ctx()
+def staging_server(c):
+  c.test_results_server = 'test-results-test.appspot.com'
+

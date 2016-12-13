@@ -535,6 +535,33 @@
     "name": "base_unittests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.fyi",
+      "--builder-name",
+      "Chromium Mac 10.9 Goma Canary (dbg)(clobber)",
+      "--build-number",
+      "571",
+      "--test-type",
+      "base_unittests",
+      "--test-results-server",
+      "test-results-test.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_10_9_Goma_Canary__dbg__clobber_",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [base_unittests]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -562,6 +589,33 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "content_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.fyi",
+      "--builder-name",
+      "Chromium Mac 10.9 Goma Canary (dbg)(clobber)",
+      "--build-number",
+      "571",
+      "--test-type",
+      "content_unittests",
+      "--test-results-server",
+      "test-results-test.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_10_9_Goma_Canary__dbg__clobber_",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [content_unittests]"
   },
   {
     "name": "$result",
