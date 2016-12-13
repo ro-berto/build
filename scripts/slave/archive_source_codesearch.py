@@ -46,7 +46,8 @@ def main():
       '(', '-regex', '^src/out/[^/]*/gen/.*', '-o',
       '!', '-regex', '^src/out/.*', ')',
       # Exclude all .svn and .git directories, the native client toolchain and
-      # the llvm build directory, and perf/data files.
+      # the llvm build directory, perf/data files, and intermediate .filepaths
+      # files from the creation of the Xref index pack.
       '-a', '!', '-regex', r'.*\.svn.*',
       '-a', '!', '-regex', r'.*\.git.*',
       '-a', '!', '-regex', '^src/data/.*',
