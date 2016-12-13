@@ -5,22 +5,22 @@
 import copy
 
 # These fields must appear in the test result output
-REQUIRED = (
+REQUIRED = { 
     'interrupted',
     'num_failures_by_type',
     'seconds_since_epoch',
     'tests',
-    )
+    }
 
 # These fields are optional, but must have the same value on all shards
 OPTIONAL_MATCHING = (
-    'path_delimiter',
-    'build_number',
     'builder_name',
+    'build_number',
     'chromium_revision',
     'has_pretty_patch',
     'has_wdiff',
     'layout_tests_dir',
+    'path_delimiter',
     'pixel_tests_enabled',
     )
 
@@ -30,8 +30,8 @@ OPTIONAL_COUNTS = (
     'num_flaky',
     'num_passes',
     'num_regressions',
-    'skips',
     'skipped',
+    'skips',
     )
 
 
@@ -102,79 +102,131 @@ def _merge_json_test_result_format(shard_results_list):
   # To make sure that we don't mutate existing shard_results_list.
   shard_results_list = copy.deepcopy(shard_results_list)
   for result_json in shard_results_list:
+    # TODO(tansell): check whether this deepcopy is actually neccessary.
     result_json = copy.deepcopy(result_json)
 
     # Check the version first
-    version = result_json.get('version', -1)
+    version = result_json.pop('version', -1)
     if version != 3:
-      raise MergeException(  # pragma: no cover - covered by results_merger_unittest
+      raise MergeException(  # pragma: no cover (covered by
+                             # results_merger_unittest).
           'Unsupported version %s. Only version 3 is supported' % version)
-    del result_json['version']
 
     # Check the results for each shard have the required keys
-    for key in REQUIRED:
-      if key not in result_json:
-        raise MergeException(  # pragma: no cover - covered by results_merger_unittest
-            'Invalid json test results (missing %s)' % key)
+    missing = REQUIRED - set(result_json)
+    if missing:
+      raise MergeException(  # pragma: no cover (covered by
+                             # results_merger_unittest).
+          'Invalid json test results (missing %s)' % missing)
+
+    # Curry merge_values for this result_json.
+    merge = lambda key, merge_func: merge_value(
+        result_json, merged_results, key, merge_func)
 
     # Traverse the result_json's test trie & merged_results's test tries in
     # DFS order & add the n to merged['tests'].
-    curr_result_nodes_queue = [result_json['tests']]
-    merged_results_nodes_queue = [merged_results['tests']]
-    while curr_result_nodes_queue:
-      curr_node = curr_result_nodes_queue.pop()
-      merged_node = merged_results_nodes_queue.pop()
-      for k, v in curr_node.iteritems():
-        if k in merged_node:
-          curr_result_nodes_queue.append(v)
-          merged_results_nodes_queue.append(merged_node[k])
-        else:
-          merged_node[k] = v
-    del result_json['tests']
+    merge('tests', merge_tries)
 
-    # If any where interrupted, we are interrupted.
-    merged_results['interrupted'] |= result_json['interrupted']
-    del result_json['interrupted']
+    # If any were interrupted, we are interrupted.
+    merge('interrupted', lambda x,y: x|y)
 
     # Use the earliest seconds_since_epoch value
-    merged_results['seconds_since_epoch'] = min(
-        merged_results['seconds_since_epoch'],
-        result_json['seconds_since_epoch'])
-    del result_json['seconds_since_epoch']
+    merge('seconds_since_epoch', min)
 
     # Sum the number of failure types
-    for result_type, count in result_json['num_failures_by_type'].iteritems():
-      merged_results['num_failures_by_type'].setdefault(result_type, 0)
-      merged_results['num_failures_by_type'][result_type] += count
-    del result_json['num_failures_by_type']
+    merge('num_failures_by_type', sum_dicts)
 
     # Optional values must match
-    for optional in OPTIONAL_MATCHING:
-      optional_value = result_json.get(optional, None)
-      if optional not in merged_results:
-        merged_results[optional] = optional_value
-      elif merged_results[optional] != optional_value:
-        raise MergeException(  # pragma: no cover - covered by results_merger_unittest
-            'Inconsistent %s: %s %s' %
-            (optional,
-             merged_results[optional],
-             optional_value))
-      if optional in result_json:
-        del result_json[optional]
+    for optional_key in OPTIONAL_MATCHING:
+      if optional_key not in result_json:
+        continue
 
-    # Optional value counts
-    for optional in OPTIONAL_COUNTS:
-      if optional in result_json:
-        merged_results[optional] = (  # pragma: no cover - covered by results_merger_unittest
-            merged_results.get(optional, 0) + result_json[optional])
-        del result_json[optional]  # pragma: no cover - covered by results_merger_unittest
+      if optional_key not in merged_results:
+        # Set this value to None, then blindly copy over it.
+        merged_results[optional_key] = None
+        merge(optional_key, lambda src, dst: src)
+      else:
+        merge(optional_key, ensure_match)
 
-    if len(result_json) != 0:
-      raise MergeException(  # pragma: no cover - covered by results_merger_unittest
+    # Sum optional value counts
+    for count_key in OPTIONAL_COUNTS:
+      if count_key in result_json:  # pragma: no cover
+        # TODO(mcgreevy): add coverage.
+        merged_results.setdefault(count_key, 0)
+        merge(count_key, lambda a, b: a+b)
+
+    if result_json:
+      raise MergeException(  # pragma: no cover (covered by
+                             # results_merger_unittest).
           'Unmergable values %s' % result_json.keys())
 
-  for optional in OPTIONAL_MATCHING:
-    if optional in merged_results and merged_results[optional] is None:
-      del merged_results[optional]
-
   return merged_results
+
+
+def merge_tries(source, dest):
+  """ Merges test tries.
+
+  This is intended for use as a merge_func parameter to merge_value.
+
+  Args:
+      source: A result json test trie.
+      dest: A json test trie merge destination.
+  """
+  curr_result_nodes_queue = [source]
+  dest_results_nodes_queue = [dest]
+  while curr_result_nodes_queue:
+    curr_node = curr_result_nodes_queue.pop()
+    dest_node = dest_results_nodes_queue.pop()
+    for k, v in curr_node.iteritems():
+      if k in dest_node:
+        curr_result_nodes_queue.append(v)
+        dest_results_nodes_queue.append(dest_node[k])
+      else:
+        dest_node[k] = v
+  return dest
+
+
+def ensure_match(source, dest):
+  """ Returns source if it matches dest.
+
+  This is intended for use as a merge_func parameter to merge_value.
+
+  Raises:
+      MergeException if source != dest
+  """
+  if source != dest:
+    raise MergeException(  # pragma: no cover (covered by
+                           # results_merger_unittest).
+        "Values don't match: %s, %s" % (source, dest))
+  return source
+
+
+def sum_dicts(source, dest):
+  """ Adds values from source to corresponding values in dest.
+
+  This is intended for use as a merge_func parameter to merge_value.
+  """
+  for k, v in source.iteritems():
+    dest.setdefault(k, 0)
+    dest[k] += v
+
+  return dest
+
+
+def merge_value(source, dest, key, merge_func):
+  """ Merges a value from source to dest.
+
+  The value is deleted from source.
+
+  Args:
+    source: A dictionary from which to pull a value, identified by key.
+    dest: The dictionary into to which the value is to be merged.
+    key: The key which identifies the value to be merged.
+    merge_func(src, dst): A function which merges its src into dst,
+        and returns the result. May modify dst. May raise a MergeException.
+
+  Raises:
+    MergeException if the values can not be merged.
+  """
+  dest[key] = merge_func(source[key], dest[key])
+  del source[key]
