@@ -6421,22 +6421,6 @@
     ]
   },
   {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "fc6dfc7ff5b1073408499478969261b826441144"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "resolving hash fc6dfc7ff5b1073408499478969261b826441144",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving hashes"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info",
@@ -6577,6 +6561,17 @@
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "fc6dfc7ff5b1073408499478969261b826441144"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "name": "resolving hash fc6dfc7ff5b1073408499478969261b826441144",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [

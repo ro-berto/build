@@ -7984,24 +7984,12 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Resolving hashes"
+    "name": "Debug Info"
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Debug Info",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@a6298e4afe, mean_value=17.666666666666668, std_dev=18.52925614624973)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: RevisionState(rev=chromium@00316c9ddf, mean_value=18.666666666666668, std_dev=13.165611772087667)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@@@@",
-      "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@a6298e4afe[19, 20, 21, 22, 23, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@dcdcdc0ff1[19, 20, 21, 22, 23, 7]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@00316c9ddf[19, 20, 21, 22, 23, 7]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@LKGR values: [19, 20, 21, 22, 23, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@FKBR values: [19, 20, 21, 22, 23, 7]@@@",
-      "@@@STEP_LOG_END@Debug Info@@@"
-    ]
+    "name": "Resolving hashes"
   },
   {
     "cmd": [

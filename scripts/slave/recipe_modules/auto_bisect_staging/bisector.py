@@ -572,11 +572,12 @@ class Bisector(object):
 
   def print_result_debug_info(self):
     """Prints extra debug info at the end of the bisect process."""
-    lines = self._results_debug_message().splitlines()
     # If we emit a null step then add a log to it, the log should be kept
     # longer than 7 days (which is often needed to debug some issues).
     self.api.m.step('Debug Info', [])
-    self.api.m.step.active_result.presentation.logs['Debug Info'] = lines
+    debug_info_step = self.api.m.step.active_result
+    lines = self._results_debug_message().splitlines()
+    debug_info_step.presentation.logs['Debug Info'] = lines
 
   def post_result(self, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""

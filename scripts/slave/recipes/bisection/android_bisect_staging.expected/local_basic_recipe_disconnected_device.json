@@ -9419,11 +9419,6 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving hashes"
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Debug Info",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -18155,24 +18150,12 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving hashes (2)"
+    "name": "Debug Info (2)"
   },
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Debug Info (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@0000000000, mean_value=11.0, std_dev=11.40175425099138)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: RevisionState(rev=chromium@fc6dfc7ff5, mean_value=172.2, std_dev=184.7127499659945)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@@@@",
-      "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@0000000000[12, 13, 14, 15, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@e28dc0d49c[12, 13, 14, 15, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@fc6dfc7ff5[212, 213, 214, 215, 7]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@LKGR values: [12, 13, 14, 15, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@FKBR values: [212, 213, 214, 215, 7]@@@",
-      "@@@STEP_LOG_END@Debug Info@@@"
-    ]
+    "name": "Resolving hashes"
   },
   {
     "cmd": [
