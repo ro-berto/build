@@ -106,8 +106,8 @@ class Bisector(object):
       self.base_depot = 'android-chrome'  # pragma: no cover
 
     # Initial revision range
-    with api.m.step.nest('Resolving reference range'):
-      resolving_step = api.m.step.active_result
+    with api.m.step.nest('Expanding reference range'):
+      expanding_step = api.m.step.active_result
 
       bad_hash = self._get_hash(bisect_config['bad_revision'])
       good_hash = self._get_hash(bisect_config['good_revision'])
@@ -116,22 +116,23 @@ class Bisector(object):
       self.bad_rev = revision_class(self, bad_hash)
       self.bad_rev.bad = True
       self.bad_rev.read_deps(self.get_perf_tester_name())
-      resolving_step.presentation.logs['Debug Bad Revision DEPS'] = [
-          '%s: %s' % (key, value) for key, value in
-          sorted(self.bad_rev.deps.items())]
       self.bad_rev.deps = {}
       self.fkbr = self.bad_rev
       self.good_rev = revision_class(self, good_hash)
       self.good_rev.good = True
       self.good_rev.read_deps(self.get_perf_tester_name())
-      resolving_step.presentation.logs['Debug Good Revision DEPS'] = [
-          '%s: %s' % (key, value) for key, value in
-          sorted(self.good_rev.deps.items())]
       self.good_rev.deps = {}
       self.lkgr = self.good_rev
 
-    if init_revisions:
-      self._expand_initial_revision_range()
+      expanding_step.presentation.logs['DEPS - Bad'] = [
+          '%s: %s' % (key, value) for key, value in
+          sorted(self.bad_rev.deps.items())]
+      expanding_step.presentation.logs['DEPS - Good'] = [
+          '%s: %s' % (key, value) for key, value in
+          sorted(self.good_rev.deps.items())]
+
+      if init_revisions:
+        self._expand_initial_revision_range(expanding_step.presentation)
 
   def _get_hash(self, rev):
     """Returns a commit hash given either a commit hash or commit position.
@@ -250,23 +251,28 @@ class Bisector(object):
     rel_change = self.api.m.math_utils.relative_change(old_value, new_value)
     self.relative_change = '%.2f%%' % (100 * rel_change)
 
-  def _expand_initial_revision_range(self):
+  def _expand_initial_revision_range(self, presentation):
     """Sets the initial contents of |self.revisions|."""
-    with self.api.m.step.nest('Expanding revision range'):
-      good_hash = self.good_rev.commit_hash
-      bad_hash = self.bad_rev.commit_hash
-      depot = self.good_rev.depot_name
-      step_name = 'for revisions %s:%s' % (good_hash, bad_hash)
-      revisions = self._revision_range(
-          start=good_hash,
-          end=bad_hash,
-          depot_name=self.base_depot,
-          step_name=step_name,
-          exclude_end=True,
-          step_test_data=lambda: self.api._test_data['revision_list'][depot]
-      )
-      self.revisions = [self.good_rev] + revisions + [self.bad_rev]
-      self._update_revision_list_indexes()
+    good_hash = self.good_rev.commit_hash
+    bad_hash = self.bad_rev.commit_hash
+    depot = self.good_rev.depot_name
+    step_name = 'for revisions %s:%s' % (good_hash, bad_hash)
+    revisions = self._revision_range(
+        start=good_hash,
+        end=bad_hash,
+        depot_name=self.base_depot,
+        step_name=step_name,
+        exclude_end=True,
+        step_test_data=lambda: self.api._test_data['revision_list'][depot]
+    )
+    self.revisions = [self.good_rev] + revisions + [self.bad_rev]
+    self._update_revision_list_indexes()
+
+    presentation.step_text += (
+        self.api.m.test_utils.format_step_text(
+            [['Range: %s:%s (%d commits)' % (
+                good_hash, bad_hash, len(revisions))]]))
+
 
   def _revision_range(self, start, end, depot_name, base_revision=None,
                       step_name=None, exclude_end=False, **kwargs):

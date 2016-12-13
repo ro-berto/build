@@ -321,18 +321,11 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Resolving reference range",
+    "name": "Expanding reference range",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@webrtc: None@@@",
-      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@webrtc: None@@@",
-      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
+      "@@@STEP_TEXT@<br/>Range: a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111 (1 commits)<br/>@@@",
+      "@@@STEP_LOG_END@DEPS - Bad@@@",
+      "@@@STEP_LOG_END@DEPS - Good@@@"
     ]
   },
   {
@@ -347,7 +340,7 @@
       "3"
     ],
     "cwd": "[START_DIR]",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314017}",
+    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#314017}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -369,7 +362,7 @@
       "3"
     ],
     "cwd": "[START_DIR]",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314015}",
+    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#314015}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -389,7 +382,7 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[START_DIR]",
-    "name": "Resolving reference range.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
+    "name": "Expanding reference range.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -405,16 +398,11 @@
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[START_DIR]",
-    "name": "Resolving reference range.fetch file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
+    "name": "Expanding reference range.fetch file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]",
-    "name": "Expanding revision range"
   },
   {
     "cmd": [
@@ -426,7 +414,7 @@
       "https://chromium.googlesource.com/chromium/src"
     ],
     "cwd": "[START_DIR]",
-    "name": "Expanding revision range.for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "name": "Expanding reference range.for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

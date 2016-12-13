@@ -704,18 +704,11 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range",
+    "name": "Expanding reference range",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@webrtc: None@@@",
-      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@webrtc: None@@@",
-      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
+      "@@@STEP_TEXT@<br/>Range: e28dc0d49c331def2a3bbf3ddd0096eb51551155:fc6dfc7ff5b1073408499478969261b826441144 (0 commits)<br/>@@@",
+      "@@@STEP_LOG_END@DEPS - Bad@@@",
+      "@@@STEP_LOG_END@DEPS - Good@@@"
     ]
   },
   {
@@ -730,7 +723,7 @@
       "3"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306476}",
+    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#306476}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -752,7 +745,7 @@
       "3"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306475}",
+    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#306475}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -772,7 +765,7 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS",
+    "name": "Expanding reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -788,16 +781,11 @@
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.fetch file e28dc0d49c331def2a3bbf3ddd0096eb51551155:DEPS",
+    "name": "Expanding reference range.fetch file e28dc0d49c331def2a3bbf3ddd0096eb51551155:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Expanding revision range"
   },
   {
     "cmd": [
@@ -809,7 +797,7 @@
       "https://chromium.googlesource.com/chromium/src"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Expanding revision range.for revisions e28dc0d49c331def2a3bbf3ddd0096eb51551155:fc6dfc7ff5b1073408499478969261b826441144",
+    "name": "Expanding reference range.for revisions e28dc0d49c331def2a3bbf3ddd0096eb51551155:fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
