@@ -52,7 +52,8 @@ def main():
       '-a', '!', '-regex', '^src/data/.*',
       '-a', '!', '-regex', '^src/native_client/toolchain/.*',
       '-a', '!', '-regex', '^src/third_party/llvm-build/.*',
-      '-a', '!', '-regex', '^tools/perf/data/.*'
+      '-a', '!', '-regex', '^tools/perf/data/.*',
+      '-a', '!', '-regex', '^.*\.filepaths',
   ]
 
   find_proc = subprocess.Popen(find_command, stdout=subprocess.PIPE)
