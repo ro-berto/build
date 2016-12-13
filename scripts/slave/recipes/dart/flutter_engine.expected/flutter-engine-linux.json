@@ -1,0 +1,274 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\npath = sys.argv[1]\nif os.path.exists(path):\n  for p in (os.path.join(path, x) for x in os.listdir(path)):\n    if os.path.isdir(p):\n      chromium_utils.RemoveDirectory(p)\n    else:\n      os.unlink(p)\n",
+      "[START_DIR]"
+    ],
+    "name": "rmcontents everything",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for p in (os.path.join(path, x) for x in os.listdir(path)):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if os.path.isdir(p):@@@",
+      "@@@STEP_LOG_LINE@python.inline@      chromium_utils.RemoveDirectory(p)@@@",
+      "@@@STEP_LOG_LINE@python.inline@    else:@@@",
+      "@@@STEP_LOG_LINE@python.inline@      os.unlink(p)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/flutter', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]\ntarget_os = ['android']",
+      "--patch_root",
+      "src/flutter",
+      "--revision_mapping_file",
+      "{}",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "src/dart@foo",
+      "--revision",
+      "src/flutter@bar",
+      "--output_manifest"
+    ],
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/dart\": \"foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/flutter\": \"bar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src/flutter\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src/flutter\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[START_DIR]/src/flutter",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/flutter/tools/gn",
+      "--unoptimized"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --unoptimized"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/host_debug_unopt",
+      "generate_dart_ui"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build host_debug_unopt generate_dart_ui"
+  },
+  {
+    "cmd": [
+      "/bin/sh",
+      "flutter/travis/analyze.sh"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "analyze dart_ui"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/flutter/tools/gn",
+      "--unoptimized"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --unoptimized (2)"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/host_debug_unopt"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build host_debug_unopt"
+  },
+  {
+    "cmd": [
+      "dart",
+      "[START_DIR]/src/flutter/shell/testing/observatory/test.dart",
+      "[START_DIR]/src/out/host_debug_unopt/sky_shell",
+      "[START_DIR]/src/flutter/shell/testing/observatory/empty_main.dart"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "test observatory and service protocol"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/flutter/tools/gn",
+      "--android"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --android"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/android_debug"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build android_debug"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/android_debug",
+      ":dist"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build android_debug :dist"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/flutter/tools/gn",
+      "--android",
+      "--runtime-mode=profile"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --android --runtime-mode=profile"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/android_profile"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build android_profile"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/flutter/tools/gn",
+      "--android",
+      "--runtime-mode=release"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --android --runtime-mode=release"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/android_release"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build android_release"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/flutter/tools/gn",
+      "--android",
+      "--android-cpu=x64"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --android --android-cpu=x64"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/android_debug_x64"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build android_debug_x64"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/flutter/tools/gn",
+      "--android",
+      "--android-cpu=x86"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --android --android-cpu=x86"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/android_debug_x86"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build android_debug_x86"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
