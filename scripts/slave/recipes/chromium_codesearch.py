@@ -221,30 +221,51 @@ def RunSteps(api):
     api.step.active_result.presentation.step_text = f.reason_message()
     api.step.active_result.presentation.status = api.step.WARNING
 
-  # Create the index pack
+  # Create the grok index pack
   got_revision_cp = api.chromium.build_properties.get('got_revision_cp')
   commit_position = api.commit_position.parse_revision(got_revision_cp)
-  index_pack_name = 'index_pack_%s.zip' % platform
-  index_pack_name_with_revision = 'index_pack_%s_%s.zip' % (
+  index_pack_grok_name = 'index_pack_%s.zip' % platform
+  index_pack_grok_name_with_revision = 'index_pack_%s_%s.zip' % (
       platform, commit_position)
-  api.python('create index pack',
+  api.python('create grok index pack',
              api.package_repo_resource('scripts', 'slave', 'chromium',
-                                    'package_index.py'),
+                                       'package_index.py'),
              ['--path-to-compdb', debug_path.join('compile_commands.json'),
-              '--path-to-archive-output', debug_path.join(index_pack_name)])
+              '--path-to-archive-output', debug_path.join(index_pack_grok_name),
+              '--keep-filepaths-files'])
 
-  # Upload the index pack
+  # Create the kythe index pack
+  index_pack_kythe_name = 'index_pack_%s_kythe.zip' % platform
+  index_pack_kythe_name_with_revision = 'index_pack_%s_kythe_%s.zip' % (
+      platform, commit_position)
+  api.python('create kythe index pack',
+             api.package_repo_resource('scripts', 'slave', 'chromium',
+                                       'package_index.py'),
+             ['--path-to-compdb', debug_path.join('compile_commands.json'),
+              '--path-to-archive-output',
+              debug_path.join(index_pack_kythe_name),
+              '--index-pack-format', 'kythe'])
+
+  # Upload the grok index pack
   api.gsutil.upload(
-      name='upload index pack',
-      source=debug_path.join(index_pack_name),
+      name='upload grok index pack',
+      source=debug_path.join(index_pack_grok_name),
       bucket=BUCKET_NAME,
-      dest='%s/%s' % (environment, index_pack_name_with_revision)
+      dest='%s/%s' % (environment, index_pack_grok_name_with_revision)
+  )
+
+  # Upload the kythe index pack
+  api.gsutil.upload(
+      name='upload kythe index pack',
+      source=debug_path.join(index_pack_kythe_name),
+      bucket=BUCKET_NAME,
+      dest='%s/%s' % (environment, index_pack_kythe_name_with_revision)
   )
 
   # Package the source code.
   tarball_name = 'chromium_src_%s.tar.bz2' % platform
   tarball_name_with_revision = 'chromium_src_%s_%s.tar.bz2' % (
-      platform,commit_position)
+      platform, commit_position)
   api.python('archive source',
              api.package_repo_resource('scripts','slave',
                                     'archive_source_codesearch.py'),
