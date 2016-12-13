@@ -17,19 +17,18 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
-  'simulated_version': Property(),
+  'platforms': Property(default=('win',)),
   'show_isolated_out_in_collect_step': Property(default=True),
   'show_shards_in_collect_step': Property(default=False),
 }
 
-def RunSteps(api, simulated_version,
-             show_isolated_out_in_collect_step, show_shards_in_collect_step):
+def RunSteps(api, platforms, show_isolated_out_in_collect_step,
+             show_shards_in_collect_step):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
   # Ensure swarming_client version is fresh enough.
-  api.swarming.check_client_version(
-      step_test_data=simulated_version)
+  api.swarming.check_client_version(step_test_data=(0, 8, 6))
 
   # Configure isolate & swarming modules (this is optional).
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
@@ -65,7 +64,7 @@ def RunSteps(api, simulated_version,
 
   # Prepare a bunch of swarming tasks to run hello_world on multiple platforms.
   tasks = []
-  for platform in ('win', 'linux', 'mac'):
+  for platform in platforms:
     # Isolate example hello_world.isolate from swarming client repo.
     # TODO(vadimsh): Add a thin wrapper around isolate.py to 'isolate' module?
     step_result = api.python(
@@ -120,7 +119,7 @@ def RunSteps(api, simulated_version,
 
 def GenTests(api):
   yield (
-      api.test('basic_0.8') +
+      api.test('basic') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
@@ -130,70 +129,36 @@ def GenTests(api):
       api.step_data(
           'archive for mac',
           stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
-      api.properties(simulated_version=(0, 8, 6)))
+      api.properties(platforms=('win', 'linux', 'mac')))
 
   yield (
-      api.test('basic_0.8_trybot') +
+      api.test('trybot') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
-      api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
       api.properties(
-          rietveld="https://codereview.chromium.org",
-          issue="123",
-          patchset="1001",
-          simulated_version=(0, 8, 6)))
+          rietveld='https://codereview.chromium.org',
+          issue='123',
+          patchset='1001'))
 
   yield (
-      api.test('basic_0.8_show_shards_in_collect_step') +
+      api.test('show_shards_in_collect_step') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
-      api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
       api.properties(
-          rietveld="https://codereview.chromium.org",
-          issue="123",
-          patchset="1001",
-          simulated_version=(0, 8, 6),
+          rietveld='https://codereview.chromium.org',
+          issue='123',
+          patchset='1001',
           show_shards_in_collect_step=True))
 
   yield (
-      api.test('basic_0.8_show_isolated_out_in_collect_step') +
+      api.test('show_isolated_out_in_collect_step') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
-      api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
       api.properties(
-          rietveld="https://codereview.chromium.org",
-          issue="123",
-          patchset="1001",
-          simulated_version=(0, 8, 6),
+          rietveld='https://codereview.chromium.org',
+          issue='123',
+          patchset='1001',
           show_isolated_out_in_collect_step=False))
-
-  yield (
-      api.test('basic_0.8.6_cipd_packages') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
-      api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
-      api.properties(simulated_version=(0, 8, 6)))
