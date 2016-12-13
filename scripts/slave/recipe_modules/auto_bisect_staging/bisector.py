@@ -826,17 +826,21 @@ class Bisector(object):
   def _revision_data(self):
     revision_rows = []
     for r in self.revisions:
+      row = {
+          'depot_name': r.depot_name,
+          'commit_hash': r.commit_hash,
+          'revision_string': r.revision_string(),
+          'n_observations': len(r.display_values),
+          'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
+          'failed': r.failed,
+          'failure_reason': r.failure_reason,
+          'build_id': r.build_id,
+      }
       if r.test_run_count:
-        revision_rows.append({
-            'depot_name': r.depot_name,
-            'commit_hash': r.commit_hash,
-            'revision_string': r.revision_string(),
-            'mean_value': (r.overall_return_code if
-                           r.bisector.is_return_code_mode() else r.mean),
-            'std_dev': r.std_dev,
-            'n_observations': len(r.display_values),
-            'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
-        })
+        row['mean_value'] = (r.overall_return_code
+            if r.bisector.is_return_code_mode() else r.mean)
+        row['std_dev'] = r.std_dev
+      revision_rows.append(row)
     return revision_rows
 
   def _get_build_url(self):
@@ -861,23 +865,14 @@ class Bisector(object):
       A string detailing the reasons.
     """
 
-    with self.api.m.step.nest('Gathering failed build jobs list'):
+    with self.api.m.step.nest('Generating Inconclusive Bisect Details'):
       unclassified_revisions = self.revisions[
           self.lkgr.list_index + 1:self.fkbr.list_index]
       if unclassified_revisions:
         # The possible culprits are those after lkgr, up to and including fkbr.
-        message = 'No single culprit between %s and %s could be identified' % (
+        message = 'No single culprit between %s and %s could be identified.' % (
             self.lkgr.next_revision.revision_string(),
             self.fkbr.revision_string())
-        failed_ids = ['Buildbucket ID: ' + r.build_id for r in
-                      unclassified_revisions if r.is_build_failed()]
-        if failed_ids:
-          if len(failed_ids) > 10:
-            message += ('\nOver 10 revisions failed, '
-                        'listing only the first 10:\n')
-          else:
-            message += '\nThe following revisions failed to build:\n'
-          message += '\n'.join(failed_ids[:10])
       else:  # pragma: no cover
         message = 'Something else went wrong, more debugging needed.'
     return message

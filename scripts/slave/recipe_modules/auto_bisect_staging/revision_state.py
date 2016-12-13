@@ -321,7 +321,7 @@ class RevisionState(object):
     return self.build_archived
 
   def is_build_failed(self):
-    if self._built:
+    if self._built:  # pragma: no cover
       return self._failed_build
     api = self.bisector.api
     try:
