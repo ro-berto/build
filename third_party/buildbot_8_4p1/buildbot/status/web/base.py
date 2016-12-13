@@ -271,7 +271,7 @@ class HtmlResource(resource.Resource, ContextMixin):
         context['content'] = body
         template = req.site.buildbot_service.templates.get_template(
             "empty.html")
-        return template.render(**context)
+        return template.render(**unicodify(context))
 
 
     def render(self, request):
@@ -338,7 +338,7 @@ class StaticHTML(HtmlResource):
         cxt['content'] = self.bodyHTML
         cxt['pageTitle'] = self.pageTitle
         template = request.site.buildbot_service.templates.get_template("empty.html")
-        return template.render(**cxt)
+        return template.render(**unicodify(cxt))
 
 # DirectoryLister isn't available in Twisted-2.5.0, and isn't compatible with what
 # we need until 9.0.0, so we just skip this particular feature.
@@ -366,7 +366,7 @@ if hasattr(static, 'DirectoryLister'):
             cxt['directories'] = dirs
             cxt['files'] = files
             template = request.site.buildbot_service.templates.get_template("directory.html")
-            data = template.render(**cxt)
+            data = template.render(**unicodify(cxt))
             if isinstance(data, unicode):
                 data = data.encode("utf-8")
             return data
@@ -774,3 +774,17 @@ class AlmostStrictUndefined(jinja2.StrictUndefined):
         fully as strict as StrictUndefined '''
     def __nonzero__(self):
         return False
+
+
+def unicodify(e):
+    '''Converts (recursively) strings in "e" to unicode.'''
+    if isinstance(e, dict):
+        return dict((k, unicodify(v)) for k, v in e.iteritems())
+    elif isinstance(e, tuple):
+        return tuple(unicodify(v) for v in e)
+    elif isinstance(e, list):
+        return list(unicodify(v) for v in e)
+    elif isinstance(e, str):
+        return e.decode('utf-8')
+    else:
+        return e

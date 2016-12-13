@@ -22,7 +22,7 @@ import urllib, time
 from twisted.python import log
 from buildbot.status.web.base import HtmlResource, \
      css_classes, path_to_build, path_to_builder, path_to_slave, \
-     getAndCheckProperties, path_to_authfail
+     getAndCheckProperties, path_to_authfail, unicodify
 
 from buildbot.status.web.step import StepsResource
 from buildbot.status.web.tests import TestsResource
@@ -93,7 +93,7 @@ class StatusResourceBuild(HtmlResource):
         cxt['steps'] = []
 
         for s in b.getSteps():
-            step = {'name': s.getName().decode('utf-8') }
+            step = {'name': s.getName() }
 
             if s.isHidden():
               continue
@@ -117,7 +117,7 @@ class StatusResourceBuild(HtmlResource):
 
             step['link'] = req.childLink("steps/%s" % urllib.quote(s.getName(),
                                                                    safe=''))
-            step['text'] = " ".join(s.getText()).decode('utf-8')
+            step['text'] = " ".join(s.getText())
             step['urls'] = map(lambda x:dict(url=x[1],logname=x[0]), s.getURLs().items())
             step['nest_level'] = s.getNestLevel()
 
@@ -134,7 +134,7 @@ class StatusResourceBuild(HtmlResource):
             seen_aliases = set()
             for base, aliases in s.getAliases().iteritems():
                 step['aliases'][base] = [{
-                    'text': a[0].decode('utf-8'),
+                    'text': a[0],
                     'url': a[1],
                 } for a in aliases]
                 seen_aliases.add(base)
@@ -180,7 +180,7 @@ class StatusResourceBuild(HtmlResource):
         cxt['authz'] = self.getAuthz(req)
 
         template = req.site.buildbot_service.templates.get_template("build.html")
-        return template.render(**cxt)
+        return template.render(**unicodify(cxt))
 
     def stop(self, req, auth_ok=False):
         # check if this is allowed

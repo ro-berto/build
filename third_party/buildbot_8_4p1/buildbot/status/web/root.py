@@ -15,7 +15,7 @@
 
 from twisted.web.util import redirectTo
 
-from buildbot.status.web.base import HtmlResource, path_to_authfail
+from buildbot.status.web.base import HtmlResource, path_to_authfail, unicodify
 from buildbot.util.eventual import eventually
 
 class RootPage(HtmlResource):
@@ -35,4 +35,4 @@ class RootPage(HtmlResource):
                 cancel_shutdown_url = request.childLink("cancel_shutdown"),
                 )
         template = request.site.buildbot_service.templates.get_template("root.html")
-        return template.render(**cxt)
+        return template.render(**unicodify(cxt))

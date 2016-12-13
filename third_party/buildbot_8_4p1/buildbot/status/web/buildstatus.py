@@ -13,7 +13,7 @@
 #
 # Copyright Buildbot Team Members
 
-from buildbot.status.web.base import HtmlResource, IBox
+from buildbot.status.web.base import HtmlResource, IBox, unicodify
 
 class BuildStatusStatusResource(HtmlResource):
     def __init__(self, categories=None):
@@ -57,7 +57,7 @@ class BuildStatusStatusResource(HtmlResource):
         ctx['build'] = IBox(build).getBox(request).td(align="center")
         
         template = request.site.buildbot_service.templates.get_template("buildstatus.html")
-        data = template.render(**ctx)
+        data = template.render(**unicodify(ctx))
 
         # We want all links to display in a new tab/window instead of in the
         # current one.

@@ -16,7 +16,7 @@
 
 import urllib
 from buildbot.status.web.base import HtmlResource, path_to_builder, \
-     path_to_build, css_classes
+     path_to_build, css_classes, unicodify
 from buildbot.status.web.logs import LogsResource
 from buildbot import util
 from time import ctime
@@ -64,7 +64,7 @@ class StatusResourceBuildStep(HtmlResource):
                         result_css = css_classes[s.getResults()[0]]))
         
         template = req.site.buildbot_service.templates.get_template("buildstep.html");        
-        return template.render(**cxt)
+        return template.render(**unicodify(cxt))
 
     def getChild(self, path, req):
         if path == "logs":

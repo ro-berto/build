@@ -20,7 +20,7 @@ import urllib
 from twisted.internet import defer
 from buildbot import util
 from buildbot.status import builder
-from buildbot.status.web.base import HtmlResource
+from buildbot.status.web.base import HtmlResource, unicodify
 from buildbot.changes import changes
 
 class DoesNotPassFilter(Exception): pass # Used for filtering revs
@@ -826,7 +826,7 @@ class ConsoleStatusResource(HtmlResource):
             template = templates.get_template("console.html")
             cxt['mastername'] = (
                 request.site.buildbot_service.master.properties['mastername'])
-            data = template.render(cxt)
+            data = template.render(unicodify(cxt))
 
             # Clean up the cache.
             if debugInfo["added_blocks"]:

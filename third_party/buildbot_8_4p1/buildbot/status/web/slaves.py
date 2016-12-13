@@ -20,7 +20,7 @@ from twisted.web.util import Redirect
 from twisted.web.error import NoResource
 
 from buildbot.status.web.base import HtmlResource, abbreviate_age, \
-    BuildLineMixin, path_to_slave, path_to_authfail
+    BuildLineMixin, path_to_slave, path_to_authfail, unicodify
 from buildbot import util
 
 # /buildslaves/$slavename
@@ -80,7 +80,7 @@ class OneBuildSlaveResource(HtmlResource, BuildLineMixin):
         connect_count = slave.getConnectCount()
 
         ctx.update(dict(slave=slave,
-                        slavename = self.slavename,  
+                        slavename = self.slavename,
                         current = current_builds, 
                         recent = recent_builds, 
                         shutdown_url = request.childLink("shutdown"),
@@ -93,7 +93,7 @@ class OneBuildSlaveResource(HtmlResource, BuildLineMixin):
                         show_builder_column = True,
                         connect_count = connect_count)
         template = request.site.buildbot_service.templates.get_template("buildslave.html")
-        data = template.render(**ctx)
+        data = template.render(**unicodify(ctx))
         return data
 
 # /buildslaves
@@ -144,7 +144,7 @@ class BuildSlavesResource(HtmlResource):
                                                             time.localtime(last))
 
         template = request.site.buildbot_service.templates.get_template("buildslaves.html")
-        data = template.render(**ctx)
+        data = template.render(**unicodify(ctx))
         return data
 
     def getChild(self, path, req):

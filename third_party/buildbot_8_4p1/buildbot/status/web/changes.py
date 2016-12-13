@@ -19,7 +19,7 @@ from twisted.python import components
 from twisted.web.error import NoResource
 
 from buildbot.changes.changes import Change
-from buildbot.status.web.base import HtmlResource, IBox, Box
+from buildbot.status.web.base import HtmlResource, IBox, Box, unicodify
 
 class ChangeResource(HtmlResource):
     def __init__(self, changeid):
@@ -34,7 +34,7 @@ class ChangeResource(HtmlResource):
             templates = req.site.buildbot_service.templates
             cxt['c'] = change.asDict()
             template = templates.get_template("change.html")
-            data = template.render(cxt)
+            data = template.render(unicodify(cxt))
             return data
         d.addCallback(cb)
         return d
@@ -45,7 +45,7 @@ class ChangesResource(HtmlResource):
     def content(self, req, cxt):
         cxt['sources'] = self.getStatus(req).getChangeSources()
         template = req.site.buildbot_service.templates.get_template("change_sources.html")
-        return template.render(**cxt)
+        return template.render(**unicodify(cxt))
 
     def getChild(self, path, req):
         try:
@@ -61,11 +61,14 @@ class ChangeBox(components.Adapter):
     def getBox(self, req):
         url = req.childLink("../changes/%d" % self.original.number)
         template = req.site.buildbot_service.templates.get_template("change_macros.html")
-        text = template.module.box_contents(url=url,
-                                            who=self.original.getShortAuthor(),
-                                            pageTitle=self.original.comments,
-                                            revision=self.original.revision,
-                                            project=self.original.project)
+        ctx = {
+            'url': url,
+            'who': self.original.getShortAuthor(),
+            'pageTitle': self.original.comments,
+            'revision': self.original.revision,
+            'project': self.original.project
+        }
+        text = template.module.box_contents(unicodify(ctx))
         return Box([text], class_="Change")
 components.registerAdapter(ChangeBox, Change, IBox)
 

@@ -23,7 +23,7 @@ from buildbot import interfaces
 from buildbot.status.web.base import HtmlResource, BuildLineMixin, \
     path_to_build, path_to_slave, path_to_builder, path_to_change, \
     path_to_root, getAndCheckProperties, ICurrentBox, build_get_class, \
-    map_branches, path_to_authfail, ActionResource
+    map_branches, path_to_authfail, ActionResource, unicodify
 
 from buildbot.status.web.build import BuildsResource, StatusResourceBuild
 from buildbot import util
@@ -135,7 +135,7 @@ class StatusResourceBuilder(HtmlResource, BuildLineMixin):
         cxt['mastername'] = (
             req.site.buildbot_service.master.properties['mastername'])
         template = req.site.buildbot_service.templates.get_template("builder.html")
-        yield template.render(**cxt)
+        yield template.render(**unicodify(cxt))
 
     def force(self, req, auth_ok=False):
         name = req.args.get("username", ["<unknown>"])[0]
@@ -521,7 +521,7 @@ class BuildersResource(HtmlResource):
         cxt['num_online'] = online
 
         template = req.site.buildbot_service.templates.get_template("builders.html")
-        yield template.render(**cxt)
+        yield template.render(**unicodify(cxt))
 
     def getChild(self, path, req):
         s = self.getStatus(req)

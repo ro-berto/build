@@ -28,7 +28,7 @@ from buildbot.changes import changes
 
 from buildbot.status.web.base import Box, HtmlResource, IBox, ICurrentBox, \
      ITopBox, build_get_class, path_to_build, path_to_step, path_to_root, \
-     map_branches
+     map_branches, unicodify
 
 
 def earlier(old, new):
@@ -157,7 +157,12 @@ class BuildBox(components.Adapter):
         url = path_to_build(req, b)
         reason = b.getReason()
         template = req.site.buildbot_service.templates.get_template("box_macros.html")
-        text = template.module.build_box(reason=reason,url=url,number=number)
+        cxt = {
+            'reason': reason,
+            'url': url,
+            'number': number,
+        }
+        text = template.module.build_box(**unicodify(cxt))
         class_ = "start"
         if b.isFinished() and not b.getSteps():
             # the steps have been pruned, so there won't be any indication
@@ -192,7 +197,7 @@ class StepBox(components.Adapter):
             cxt['urls'].append(dict(link=target,name=name))
 
         template = req.site.buildbot_service.templates.get_template("box_macros.html")
-        text = template.module.step_box(**cxt)
+        text = template.module.step_box(**unicodify(cxt))
 
         class_ = "BuildStep " + build_get_class(self.original)
         return Box(text, class_=class_,
@@ -312,7 +317,7 @@ class WaterfallHelp(HtmlResource):
         cxt['current_reload_time'] = current_reload_time
 
         template = request.site.buildbot_service.templates.get_template("waterfallhelp.html")
-        return template.render(**cxt)
+        return template.render(**unicodify(cxt))
 
 
 class ChangeEventSource(object):
@@ -539,7 +544,7 @@ class WaterfallStatusResource(HtmlResource):
         template = request.site.buildbot_service.templates.get_template("waterfall.html")
         ctx['mastername'] = (
             request.site.buildbot_service.master.properties['mastername'])
-        data = template.render(**ctx)
+        data = template.render(**unicodify(ctx))
         return data
 
     def buildGrid(self, request, builders, changes):
