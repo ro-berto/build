@@ -3,8 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
   'chromium',
+  'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'goma',
   'recipe_engine/json',
@@ -13,6 +14,21 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/step',
 ]
+
+def build_with_goma_module(api):
+  # chromedriver compile with goma module step
+  build_target_dir = str(api.path["checkout"].join("out", "Default"))
+  api.goma.build_with_goma(
+      name='compile',
+      ninja_command=[str(api.depot_tools.ninja_path),
+                     '-C', build_target_dir,
+                     '-j', api.goma.recommended_goma_jobs,
+                     'chromedriver',
+                     'chromedriver_tests',
+                     'chromedriver_unittests'],
+      ninja_log_outdir=build_target_dir,
+      ninja_log_compiler='goma')
+
 
 def Linux32_steps(api):
   # update scripts step; implicitly run by recipe engine.
@@ -65,17 +81,9 @@ def Linux32_steps(api):
       args=["gen", "-m", "chromium.chromedriver", "-b",
           build_properties.get('buildername'), "--goma-dir", goma_dir,
           "//out/Default"])
-  # chromedriver compile.py step
-  api.python("compile",
-             api.package_repo_resource("scripts", "slave", "compile.py"),
-             args=['--target', 'Default',
-                   '--compiler', 'goma',
-                   '--goma-dir', goma_dir,
-                   '--goma-service-account-json-file',
-                         api.goma.service_account_json_path,
-                   'chromedriver',
-                   'chromedriver_tests',
-                   'chromedriver_unittests'])
+
+  build_with_goma_module(api)
+
   # strip binary
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
@@ -141,17 +149,9 @@ def Mac_10_6_steps(api):
       args=["gen", "-m", "chromium.chromedriver", "-b",
           build_properties.get('buildername'), "--goma-dir", goma_dir,
           "//out/Default"])
-  # chromedriver compile.py step
-  api.python("compile",
-             api.package_repo_resource("scripts", "slave", "compile.py"),
-             args=['--target', 'Default',
-                   '--compiler', 'goma',
-                   '--goma-dir', goma_dir,
-                   '--goma-service-account-json-file',
-                         api.goma.service_account_json_path,
-                   'chromedriver',
-                   'chromedriver_tests',
-                   'chromedriver_unittests'])
+
+  build_with_goma_module(api)
+
   # strip binary
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
@@ -219,18 +219,9 @@ def Win7_steps(api):
       args=["gen", "-m", "chromium.chromedriver", "-b",
           build_properties.get('buildername'), "--goma-dir", goma_dir,
           "//out/Default"])
-  # chromedriver compile.py step
-  api.step("compile",
-           ["python_slave",
-            api.package_repo_resource("scripts", "slave", "compile.py"),
-            '--target', 'Default',
-            '--compiler', 'goma',
-            '--goma-dir', goma_dir,
-            '--goma-service-account-json-file',
-                api.goma.service_account_json_path,
-            'chromedriver',
-            'chromedriver_tests',
-            'chromedriver_unittests'])
+
+  build_with_goma_module(api)
+
   # annotated_steps step
   api.step("annotated_steps", ["python_slave", api.package_repo_resource("scripts",
     "slave", "chromium", "chromedriver_buildbot_run.py"),
@@ -292,17 +283,9 @@ def Linux_steps(api):
       args=["gen", "-m", "chromium.chromedriver", "-b",
           build_properties.get('buildername'), "--goma-dir", goma_dir,
           "//out/Default"])
-  # chromedriver compile.py step
-  api.python("compile",
-             api.package_repo_resource("scripts", "slave", "compile.py"),
-             args=['--target', 'Default',
-                   '--compiler', 'goma',
-                   '--goma-dir', goma_dir,
-                   '--goma-service-account-json-file',
-                         api.goma.service_account_json_path,
-                   'chromedriver',
-                   'chromedriver_tests',
-                   'chromedriver_unittests'])
+
+  build_with_goma_module(api)
+
   # strip binary
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
