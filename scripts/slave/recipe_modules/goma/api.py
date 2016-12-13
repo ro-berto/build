@@ -178,6 +178,26 @@ class GomaApi(recipe_api.RecipeApi):
           lambda: self.m.raw_io.test_api.output('12345')),
       infra_step=True)
 
+  def _run_jsonstatus(self):
+    jsonstatus_result = self.m.python(
+        name='goma_jsonstatus', script=self.goma_ctl,
+        args=['jsonstatus'],
+        stdout=self.m.json.output(),
+        step_test_data=lambda: self.m.json.test_api.output_stream(
+            {'notice':[{
+                'infra_status': {
+                    'ping_status_code': 200,
+                    'num_user_error': 0,
+                }
+            }]}),
+        env=self._goma_ctl_env)
+    self._goma_jsonstatus_called = True
+
+    self._jsonstatus = jsonstatus_result.stdout
+    self.m.shutil.write('write_jsonstatus',
+                        path=self.json_path,
+                        data=json.dumps(self._jsonstatus))
+
   def _stop_cloudtail(self):  # pragma: nocover
     """Stop cloudtail started by _start_cloudtail
 
@@ -230,10 +250,8 @@ class GomaApi(recipe_api.RecipeApi):
 
       except self.m.step.InfraFailure as e:
         with self.m.step.defer_results():
-          self.m.python(name='goma_jsonstatus', script=self.goma_ctl,
-                        args=['jsonstatus', self.json_path],
-                        env=self._goma_ctl_env)
-          self._goma_jsonstatus_called = True
+          self._run_jsonstatus()
+
           self.m.python(
               name='stop_goma (start failure)',
               script=self.goma_ctl,
@@ -258,21 +276,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     with self.m.step.nest('postprocess_for_goma'):
       with self.m.step.defer_results():
-        jsonstatus_result = self.m.python(
-            name='goma_jsonstatus', script=self.goma_ctl,
-            args=['jsonstatus'],
-            stdout=self.m.json.output(),
-            step_test_data=lambda: self.m.json.test_api.output_stream(
-                'output of `goma_ctl.py json_status`'),
-            env=self._goma_ctl_env,
-            **kwargs)
-        self._goma_jsonstatus_called = True
-
-        if jsonstatus_result.is_ok:
-          self._jsonstatus = jsonstatus_result.get_result().stdout
-          self.m.shutil.write('write_jsonstatus',
-                              path=self.json_path,
-                              data=json.dumps(self._jsonstatus))
+        self._run_jsonstatus()
 
         self.m.python(name='goma_stat', script=self.goma_ctl,
                       args=['stat'],
