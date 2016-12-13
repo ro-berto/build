@@ -116,20 +116,19 @@ class Bisector(object):
       self.bad_rev = revision_class(self, bad_hash)
       self.bad_rev.bad = True
       self.bad_rev.read_deps(self.get_perf_tester_name())
+      expanding_step.presentation.logs['DEPS - Bad'] = [
+          '%s: %s' % (key, value) for key, value in
+          sorted(self.bad_rev.deps.items())]
       self.bad_rev.deps = {}
       self.fkbr = self.bad_rev
       self.good_rev = revision_class(self, good_hash)
       self.good_rev.good = True
       self.good_rev.read_deps(self.get_perf_tester_name())
-      self.good_rev.deps = {}
-      self.lkgr = self.good_rev
-
-      expanding_step.presentation.logs['DEPS - Bad'] = [
-          '%s: %s' % (key, value) for key, value in
-          sorted(self.bad_rev.deps.items())]
       expanding_step.presentation.logs['DEPS - Good'] = [
           '%s: %s' % (key, value) for key, value in
           sorted(self.good_rev.deps.items())]
+      self.good_rev.deps = {}
+      self.lkgr = self.good_rev
 
       if init_revisions:
         self._expand_initial_revision_range(expanding_step.presentation)

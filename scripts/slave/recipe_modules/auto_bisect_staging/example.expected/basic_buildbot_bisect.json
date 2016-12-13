@@ -324,7 +324,15 @@
     "name": "Expanding reference range",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Range: a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111 (1 commits)<br/>@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@catapult: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@skia: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@v8: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@webrtc: None@@@",
       "@@@STEP_LOG_END@DEPS - Bad@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@catapult: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@skia: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@v8: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@webrtc: None@@@",
       "@@@STEP_LOG_END@DEPS - Good@@@"
     ]
   },
