@@ -19,6 +19,7 @@ def m_remote_run(recipe, **kwargs):
       repository='https://chromium.googlesource.com/chromium/tools/build.git',
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
+      max_time=7200, # 2 hours
       **kwargs)
 
 
