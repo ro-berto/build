@@ -93,7 +93,7 @@ class StatusResourceBuild(HtmlResource):
         cxt['steps'] = []
 
         for s in b.getSteps():
-            step = {'name': s.getName() }
+            step = {'name': s.getName().decode('utf-8') }
 
             if s.isHidden():
               continue
@@ -117,7 +117,7 @@ class StatusResourceBuild(HtmlResource):
 
             step['link'] = req.childLink("steps/%s" % urllib.quote(s.getName(),
                                                                    safe=''))
-            step['text'] = " ".join(s.getText())
+            step['text'] = " ".join(s.getText()).decode('utf-8')
             step['urls'] = map(lambda x:dict(url=x[1],logname=x[0]), s.getURLs().items())
             step['nest_level'] = s.getNestLevel()
 
@@ -134,7 +134,7 @@ class StatusResourceBuild(HtmlResource):
             seen_aliases = set()
             for base, aliases in s.getAliases().iteritems():
                 step['aliases'][base] = [{
-                    'text': a[0],
+                    'text': a[0].decode('utf-8'),
                     'url': a[1],
                 } for a in aliases]
                 seen_aliases.add(base)
