@@ -16,6 +16,7 @@ def RunSteps(api):
   buildername = api.properties.get('buildername')
   use_goma_module = api.properties.get('use_goma_module', False)
   out_dir = api.properties.get('out_dir', None)
+  failfast = api.properties.get('failfast', False);
 
   if api.properties.get('codesearch'):
     api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
@@ -26,6 +27,9 @@ def RunSteps(api):
     bot_config = api.chromium_tests.create_bot_config_object(
         mastername, buildername)
     api.chromium_tests.configure_build(bot_config)
+
+    if failfast:
+      api.chromium.apply_config('goma_failfast')
 
     update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
 
@@ -49,6 +53,26 @@ def GenTests(api):
       slavename='build1-a1',
       buildnumber='77457',
       out_dir='/tmp',
+  )
+
+  yield (api.test('basic_out_dir_compile_py_goma_failure') +
+         api.properties(
+             mastername='chromium.linux',
+             buildername='Android Builder (dbg)',
+             slavename='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             use_goma_module=False,
+         ) + api.override_step_data(
+             'compile',
+             api.json.output({
+                 'notice': [
+                     {
+                         "compile_error": "COMPILER_PROXY_UNREACHABLE",
+                     },
+                 ],
+             }),
+             retcode=1)
   )
 
   yield api.test('basic_out_dir_without_compile_py') + api.properties(
@@ -103,15 +127,59 @@ def GenTests(api):
              buildnumber='77457',
              out_dir='/tmp',
              use_goma_module=True,
+             failfast=True,
          ) + api.step_data('compile', retcode=1) +
-         api.step_data('postprocess_for_goma.goma_jsonstatus',
-                       stdout=api.json.output({
-                           'notice': [
-                               {
-                                   'infra_status': {
-                                       'ping_status_code': 200,
-                                       'num_user_error': 1,
-                                   },
-                               },
-                           ],
-                       })))
+         api.override_step_data(
+             'postprocess_for_goma.goma_jsonstatus',
+             stdout=api.json.output({
+                 'notice': [
+                     {
+                         'infra_status': {
+                             'ping_status_code': 200,
+                             'num_user_error': 1,
+                         },
+                     },
+                 ],
+             })))
+
+  yield (api.test('basic_out_dir_goma_module_start_failure') +
+         api.properties(
+             mastername='chromium.linux',
+             buildername='Android Builder (dbg)',
+             slavename='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             use_goma_module=True,
+             failfast=True,
+         ) + api.step_data('preprocess_for_goma.start_goma', retcode=1) +
+         api.override_step_data(
+             'preprocess_for_goma.goma_jsonstatus',
+             stdout=api.json.output({
+                 'notice': [
+                     {
+                         "compile_error": "COMPILER_PROXY_UNREACHABLE",
+                     },
+                 ],
+             })))
+
+  yield (api.test('basic_out_dir_goma_module_ping_failure') +
+         api.properties(
+             mastername='chromium.linux',
+             buildername='Android Builder (dbg)',
+             slavename='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             use_goma_module=True,
+             failfast=True,
+         ) + api.step_data('preprocess_for_goma.start_goma', retcode=1) +
+         api.override_step_data(
+             'preprocess_for_goma.goma_jsonstatus',
+             stdout=api.json.output({
+                 'notice': [
+                     {
+                         'infra_status': {
+                             'ping_status_code': 408,
+                         },
+                     },
+                 ],
+             })))
