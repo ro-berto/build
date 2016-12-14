@@ -66,8 +66,9 @@ class AnnotatedRunTest(unittest.TestCase):
         mock.call([sys.executable, 'annotated_run.py', 'foo']),
         ])
     update_scripts_run_command.assert_has_calls([
-        mock.call([gclient_path, 'sync', '--force', '--verbose', '--jobs=2',
-                   '--break_repo_locks'],
+        mock.call([gclient_path, 'sync',
+                   '--force', '--delete_unversioned_trees',
+                   '--break_repo_locks', '--verbose', '--jobs=2'],
                   cwd=env.Build),
         ])
     main.assert_not_called()

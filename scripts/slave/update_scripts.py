@@ -70,8 +70,11 @@ def update_scripts():
       gclient_name += '.bat'
     gclient_path = os.path.join(env.Build, os.pardir, 'depot_tools',
                                 gclient_name)
-    gclient_cmd = [gclient_path, 'sync', '--force', '--verbose', '--jobs=2',
-                   '--break_repo_locks']
+    gclient_cmd = [gclient_path, 'sync',
+                   # these two need to both be here to actually get
+                   # `git checkout --force` to happen.
+                   '--force', '--delete_unversioned_trees',
+                   '--break_repo_locks', '--verbose', '--jobs=2']
     try:
       fd, output_json = tempfile.mkstemp()
       os.close(fd)
