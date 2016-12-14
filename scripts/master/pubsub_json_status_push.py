@@ -8,6 +8,7 @@ import datetime
 import functools
 import json
 import os
+import time
 import zlib
 
 from buildbot.status.base import StatusReceiverMultiService
@@ -272,12 +273,15 @@ class StatusPush(StatusReceiverMultiService):
       updated_builds: (collection) A collection of _Build instances to push.
     """
     # Load all build information for builds that we're pushing.
+    t_start = time.time()
     builds = sorted(updated_builds)
     if self.verbose:
       log.msg('PusSub: Pushing status for builds: %s' % (builds,))
     loaded_builds = yield defer.DeferredList([self._loadBuild(b)
                                               for b in builds])
 
+    t_load_build = time.time()
+    d_load_build = t_load_build - t_start
     send_builds = []
     for i, build in enumerate(builds):
       success, result = loaded_builds[i]
@@ -292,14 +296,26 @@ class StatusPush(StatusReceiverMultiService):
 
     # Add in master builder state into the message.
     master_data = yield self._getMasterData()
+    t_master_data = time.time()
+    d_master = t_master_data - t_load_build
 
     # Split the data into batches because PubSub has a message limit of 10MB.
     res = yield self._send_messages(master_data, send_builds)
+    t_send_messages = time.time()
+    d_send_messages = t_send_messages - t_master_data
     for success, result in res:
       if success:
         log.msg('PubSub: Send successful: %s' % result)
       else:
         log.msg('PubSub: Failed to push: %s' % result)
+
+    # Log how long everything took.
+    t_complete = time.time()
+    d_total = t_complete - t_start
+    len_tcq = len(reactor.threadCallQueue)
+    log.msg('PubSub: Last send session took total %.1fs, %.1f load build, '
+            '%.1f master, %.1f send. len_tcq %d' % (
+                d_total, d_load_build, d_master, d_send_messages, len_tcq))
 
   def _pushTimerExpired(self):
     """Callback invoked when the push timer has expired.
