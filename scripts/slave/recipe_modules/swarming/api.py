@@ -335,10 +335,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
-    For google test executables, use gtest_task() instead.
-
-    At the time of this writting, this code is used by V8, Skia and iOS.
-
     The return value can be customized if necessary (see SwarmingTask class
     below). Pass it to 'trigger_task' to launch it on swarming. Later pass the
     same instance to 'collect_task' to wait for the task to finish and fetch its
@@ -432,9 +428,6 @@ class SwarmingApi(recipe_api.RecipeApi):
   def isolated_script_task(self, title, isolated_hash, extra_args=None,
                            idempotent=False, **kwargs):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
-
-    At the time of this writting, this code is used by WebRTC and
-    "isolated_scripts" entries in Chromium's src/testing/buildbot/*.json.
 
     Swarming recipe module knows how collect JSON file with test execution
     summary produced by isolated script tests launcher. Since isolated script
@@ -659,11 +652,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       try:
         json_data = step_result.json.output
         links = step_result.presentation.links
-        for index, shard in enumerate(json_data.get('shards') or []):
-          if shard.get('state') == self.State.TIMED_OUT:
-            url = task.get_shard_view_url(index)
-            if url:
-              links['shard #%d timed out, took much time to complete' % index] = url
         if self.show_shards_in_collect_step:
           for index in xrange(task.shards):
             url = task.get_shard_view_url(index)
@@ -676,17 +664,12 @@ class SwarmingApi(recipe_api.RecipeApi):
               link_name = 'shard #%d isolated out' % index
               links[link_name] = isolated_out['view_url']
         self._display_pending(json_data, step_result.presentation)
-        if any(shard.get('state') == self.State.EXPIRED
-               for shard in json_data.get('shards') or []):
-          raise recipe_api.InfraFailure(
-              'There isn\'t enough capacity to run your test')
       except (KeyError, AttributeError):  # pragma: no cover
         # No isolated_out data exists (or any JSON at all)
         pass
 
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
-    """Produces a step that collects and processes a result of google-test task.
-    """
+    """Produces a step that collects and processes a result of gtest task."""
     args = [
       'python',
       self.resource('collect_gtest_task.py'),
@@ -814,8 +797,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     return results_merger.merge_test_results(shard_results_list)
 
   def _isolated_script_collect_step(self, task, **kwargs):
-    """Collects results for a step that is *not* a googletest, like telemetry.
-    """
     step_test_data = kwargs.pop('step_test_data', None)
     if not step_test_data:
       step_test_data = self.m.test_utils.test_api.canned_isolated_script_output(
@@ -825,7 +806,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     args.extend(['--task-output-dir', self.m.raw_io.output_dir()])
 
     try:
-      return self.m.python(
+      self.m.python(
           name=self._get_step_name('', task),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args, step_test_data=lambda: step_test_data,
@@ -844,18 +825,12 @@ class SwarmingApi(recipe_api.RecipeApi):
         step_result.presentation.step_text = text_for_run_on_os(
             task.dimensions['os'])
 
-        # Check if it's an internal failure. 'summary.json' is saved in the
-        # output directory.
+        # Check if it's an internal failure.
         summary = self.m.json.loads(
             step_result.raw_io.output_dir['summary.json'])
-        # internal_failure is always set when the state is State.BOT_DIED.
         if any(not shard or shard['internal_failure']
                for shard in summary['shards']):
-          raise recipe_api.InfraFailure('Internal Swarming failure')
-        if any(shard.get('state') == self.State.EXPIRED
-               for shard in summary['shards']):
-          raise recipe_api.InfraFailure(
-              'There isn\'t enough capacity to run your test')
+          raise recipe_api.InfraFailure('Internal swarming failure.')
 
         # Always show the shards' links in the collect step. (It looks
         # like show_isolated_out_in_collect_step is false by default
@@ -863,10 +838,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         links = step_result.presentation.links
         for index in xrange(task.shards):
           url = task.get_shard_view_url(index)
-          if summary['shards'][index].get('state') == self.State.TIMED_OUT:
-            display_text = (
-              'shard #%d timed out, took much time to complete' % index)
-          elif summary['shards'][index].get('exit_code', None) != '0':
+          if summary['shards'][index].get('exit_code', None) != '0':
             display_text = 'shard #%d (failed)' % index
           else:
             display_text = 'shard #%d' % index
@@ -975,7 +947,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             'Foo',
           ],
           'started_ts': '2014-09-25T01:42:11.123',
-          'state': self.State.COMPLETED,
+          'state': 112,
           'try_number': 1,
           'user': 'unknown',
         } for i in xrange(task.shards)

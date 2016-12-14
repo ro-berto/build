@@ -233,6 +233,42 @@ def GenTests(api):
   )
 
   yield (
+    api.test('expired')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': '6.1.1',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.1',
+      'tests': [
+        {
+          'app': 'fake test',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+    + api.override_step_data(
+        'fake test (fake device iOS 8.1)',
+        api.json.output({
+          'shards': [{
+            'state': 48,
+          }],
+        }),
+        retcode=1,
+    )
+  )
+
+  yield (
     api.test('no_exit_code')
     + api.platform('mac', 64)
     + api.properties(

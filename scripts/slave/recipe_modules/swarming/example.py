@@ -2,12 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
-
 DEPS = [
   'file',
   'isolate',
-  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -23,11 +20,10 @@ PROPERTIES = {
   'platforms': Property(default=('win',)),
   'show_isolated_out_in_collect_step': Property(default=True),
   'show_shards_in_collect_step': Property(default=False),
-  'isolated_script_task': Property(default=False),
 }
 
 def RunSteps(api, platforms, show_isolated_out_in_collect_step,
-             show_shards_in_collect_step, isolated_script_task):
+             show_shards_in_collect_step):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -89,13 +85,8 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
     # Create a task to run the isolated file on swarming, set OS dimension.
     # Also generate code coverage for multi-shard case by triggering multiple
     # shards on Linux.
-    if isolated_script_task:
-      task = api.swarming.isolated_script_task(
-          'hello_world', isolated_hash,
-          task_output_dir=temp_dir.join('task_output_dir'))
-    else:
-      task = api.swarming.task('hello_world', isolated_hash,
-                              task_output_dir=temp_dir.join('task_output_dir'))
+    task = api.swarming.task('hello_world', isolated_hash,
+                             task_output_dir=temp_dir.join('task_output_dir'))
     task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
     task.shards = 2 if platform == 'linux' else 1
     task.tags.add('os:' + platform)
@@ -116,16 +107,10 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
   # Wait for all tasks to complete.
   for task in tasks:
     step_result = api.swarming.collect_task(task)
-    if isolated_script_task:
-      # Due to the way isolated_script_task is written, it uses raw_io instead
-      # of json.
-      data = json.loads(step_result.raw_io.output_dir['summary.json'])
-    else:
-      data = step_result.json.output
-    state = data['shards'][0]['state']
-    if api.swarming.State.COMPLETED == state:
-      state_name = api.swarming.State.to_string(state)
-      assert 'Completed' == state_name, state_name
+    state = step_result.json.output['shards'][0]['state']
+    assert api.swarming.State.COMPLETED == state, state
+    state_name = api.swarming.State.to_string(state)
+    assert 'Completed' == state_name, state_name
     assert step_result.swarming_task in tasks
 
   # Cleanup.
@@ -177,59 +162,3 @@ def GenTests(api):
           issue='123',
           patchset='1001',
           show_isolated_out_in_collect_step=False))
-
-  data = {
-    'shards': [
-      {
-        'abandoned_ts': '2014-09-25T01:41:00.123',
-        'bot_id': 'vm30',
-        'completed_ts': None,
-        'created_ts': '2014-09-25T01:41:00.123',
-        'durations': None,
-        'exit_codes': [],
-        'failure': False,
-        'id': '148aa78d7aa0100',
-        'internal_failure': False,
-        'isolated_out': None,
-        'modified_ts': '2014-09-25 01:42:00',
-        'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
-        'outputs': [],
-        'started_ts': '2014-09-25T01:42:11.123',
-        'state': 0x30, # EXPIRED
-        'try_number': None,
-        'user': 'unknown',
-      }
-    ],
-  }
-  yield (
-      api.test('swarming_expired') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
-  yield (
-      api.test('isolated_script_expired') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
-      api.properties(isolated_script_task=True))
-
-  data['shards'][0]['state'] = 0x40  # TIMED_OUT
-  yield (
-      api.test('swarming_timeout') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
-  yield (
-      api.test('isolated_script_timeout') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
-      api.properties(isolated_script_task=True))
