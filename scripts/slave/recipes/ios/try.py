@@ -19,7 +19,7 @@ def RunSteps(api):
     # Ensure try bots mirror configs from chromium.mac.
     api.ios.read_build_config(master_name='chromium.mac')
     try:
-      api.ios.build(suffix='with patch')
+      api.ios.build(analyze=True, suffix='with patch')
     except api.step.StepFailure:
       bot_update_json = bot_update_step.json.output
       api.gclient.c.revisions['src'] = str(

@@ -112,7 +112,6 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config.setdefault('gn_args', [])
     self.__config.setdefault('tests', [])
     self.__config.setdefault('triggered bots', {})
-    self.__config.setdefault('use_analyze', True)
 
     self.__config['mastername'] = master_name
 
@@ -205,6 +204,7 @@ class iOSApi(recipe_api.RecipeApi):
 
   def build(
       self,
+      analyze=False,
       default_gn_args_path=None,
       mb_config_path=None,
       setup_gn=False,
@@ -214,6 +214,9 @@ class iOSApi(recipe_api.RecipeApi):
     """Builds from this bot's build config.
 
     Args:
+      analyze: Whether to use the gyp_chromium analyzer to only build affected
+        targets and filter out unaffected tests.
+      allow_analyzer: Allows use of analyze.
       default_gn_args_path: Path to default gn args file to import with
         setup-gn.py.
       mb_config_path: Custom path to mb_config.pyl. Uses the default if
@@ -289,9 +292,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     targets = []
 
-    if (self.__config['use_analyze'] and
-        self.m.tryserver.is_tryserver and
-        'without patch' not in suffix):
+    if analyze:
       affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
           cwd=self.m.path['checkout'])
       # The same test may be configured to run on multiple simulators.
