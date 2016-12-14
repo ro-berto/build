@@ -137,6 +137,10 @@ def RunSteps(api, target_mastername, target_buildername,
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 
+  # TODO(tikuta): Remove 'no_compile_py' after removing compile.py.
+  for additional_config in ['goma_failfast', 'no_compile_py']:
+    api.chromium.apply_config(additional_config)
+
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(
       bot_config,
@@ -417,15 +421,16 @@ def GenTests(api):
                                  'not_found': [],
                              })) +
       api.override_step_data(
-          'test r1.compile',
-          api.json.output({
+          'test r1.preprocess_for_goma.start_goma', retcode=1) +
+      api.override_step_data(
+          'test r1.preprocess_for_goma.goma_jsonstatus',
+          stdout=api.json.output({
               'notice': [
                   {
                       "compile_error": "COMPILER_PROXY_UNREACHABLE",
                   },
               ],
-          }),
-          retcode=1)
+          }))
   )
 
   yield (
@@ -437,8 +442,10 @@ def GenTests(api):
                                  'not_found': [],
                              })) +
       api.override_step_data(
-          'test r1.compile',
-          api.json.output({
+          'test r1.preprocess_for_goma.start_goma', retcode=1) +
+      api.override_step_data(
+          'test r1.preprocess_for_goma.goma_jsonstatus',
+          stdout=api.json.output({
               'notice': [
                   {
                       'infra_status': {
@@ -446,8 +453,7 @@ def GenTests(api):
                       },
                   },
               ],
-          }),
-          retcode=1)
+          }))
   )
 
   yield (
@@ -459,8 +465,10 @@ def GenTests(api):
                                  'not_found': [],
                              })) +
       api.override_step_data(
-          'test r1.compile',
-          api.json.output({
+          'test r1.compile', retcode=1) +
+      api.override_step_data(
+          'test r1.postprocess_for_goma.goma_jsonstatus',
+          stdout=api.json.output({
               'notice': [
                   {
                       'infra_status': {
@@ -469,8 +477,7 @@ def GenTests(api):
                       },
                   },
               ],
-          }),
-          retcode=1)
+          }))
   )
 
   yield (

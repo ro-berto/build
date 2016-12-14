@@ -229,6 +229,10 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 
+  # TODO(tikuta): Remove 'no_compile_py' after removing compile.py.
+  for additional_config in ['goma_failfast', 'no_compile_py']:
+    api.chromium.apply_config(additional_config)
+
   # Configure to match the test config on the tester, as builders don't have the
   # settings for swarming tests.
   if target_buildername != target_testername:
@@ -1092,8 +1096,10 @@ def GenTests(api):
           })
       ) +
       api.override_step_data(
-          'test r1.compile',
-          api.json.output({
+          'test r1.preprocess_for_goma.start_goma', retcode=1) +
+      api.override_step_data(
+          'test r1.preprocess_for_goma.goma_jsonstatus',
+          stdout=api.json.output({
               'notice': [
                   {
                       'infra_status': {
@@ -1101,8 +1107,7 @@ def GenTests(api):
                       },
                   },
               ],
-          }),
-          retcode=1)
+          }))
   )
 
   yield (
