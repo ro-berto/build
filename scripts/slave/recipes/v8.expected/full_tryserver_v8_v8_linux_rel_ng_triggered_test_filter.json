@@ -1888,20 +1888,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "CQ integrity - used testfilter",
-    "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "CQ integrity - used extra flags",
-    "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

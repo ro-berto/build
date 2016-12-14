@@ -1047,15 +1047,6 @@ class V8Api(recipe_api.RecipeApi):
     ]
     return full_args, env
 
-  def verify_cq_integrity(self):
-    # TODO(machenbach): Remove this as soon as crbug.com/487822 is resolved.
-    if self.test_filter:
-      result = self.m.step('CQ integrity - used testfilter', cmd=None)
-      result.presentation.status = self.m.step.FAILURE
-    if self.extra_flags:
-      result = self.m.step('CQ integrity - used extra flags', cmd=None)
-      result.presentation.status = self.m.step.FAILURE
-
   def maybe_trigger(self, **additional_properties):
     triggers = self.bot_config.get('triggers', [])
     triggers_proxy = self.bot_config.get('triggers_proxy', False)

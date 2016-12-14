@@ -101,7 +101,6 @@ def RunSteps(api):
     v8.upload_gcov_coverage_report()
 
   v8.maybe_trigger(**additional_trigger_properties)
-  v8.verify_cq_integrity()
 
 
 def GenTests(api):
