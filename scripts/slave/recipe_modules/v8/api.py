@@ -1087,6 +1087,11 @@ class V8Api(recipe_api.RecipeApi):
         # triggering builder checked out.
         properties['revision'] = self.revision
 
+      if self.m.properties.get('testfilter'):
+        properties.update(testfilter=list(self.m.properties['testfilter']))
+      if self.m.properties.get('extra_flags'):
+        properties.update(extra_flags=self.m.properties['extra_flags'])
+
       # TODO(machenbach): Also set meaningful buildbucket tags of triggering
       # parent.
 

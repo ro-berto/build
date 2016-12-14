@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.post_process import Filter
+
 DEPS = [
   'archive',
   'chromium',
@@ -163,6 +165,21 @@ def GenTests(api):
         testfilter=['mjsunit/regression/*', 'test262/foo', 'test262/bar'],
         extra_flags='--trace_gc --turbo_stats',
     )
+  )
+
+  # Test extra properties on a builder bot to ensure it triggers the tester
+  # with the right properties.
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_win64_rel_ng',
+        'test_filter_builder',
+    ) +
+    api.properties(
+        testfilter=['mjsunit/regression/*', 'test262/foo', 'test262/bar'],
+        extra_flags='--trace_gc --turbo_stats',
+    ) +
+    api.post_process(Filter('trigger'))
   )
 
   # Test using extra flags with a bot that already uses some extra flags as
