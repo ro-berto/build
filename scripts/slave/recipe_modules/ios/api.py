@@ -617,13 +617,6 @@ class iOSApi(recipe_api.RecipeApi):
         step_result.presentation.status = self.m.step.FAILURE
         step_result.presentation.step_text = 'Test timed out.'
         test_failures.append(task.step_name)
-      elif state == self.m.swarming.State.EXPIRED:
-        # No Swarming bot accepted the task in time.
-        step_result.presentation.status = self.m.step.EXCEPTION
-        step_result.presentation.step_text = (
-          'No suitable Swarming bot found in time.'
-        )
-        infra_failures.append(task.step_name)
       else:
         step_result.presentation.status = self.m.step.EXCEPTION
         step_result.presentation.step_text = (

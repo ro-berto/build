@@ -141,11 +141,14 @@ GOOD_GTEST_JSON_MERGED = {
     }],
   }],
   'swarming_summary': {
-    'shards': [{
-      'outputs_ref': {
-        'view_url': 'blah',
-      },
-    }],
+    'shards': [
+      {
+        'state': 0x70,
+        'outputs_ref': {
+          'view_url': 'blah',
+        },
+      }
+      ],
   },
 }
 
@@ -326,17 +329,29 @@ class MergeShardResultsTest(auto_stub.TestCase):
   def test_ok(self):
     # Two shards, both successfully finished.
     self.stage({
-      'summary.json': {'shards': [{'dummy': 0}, {'dummy': 0}]},
+      'summary.json': {
+        'shards': [
+          {
+            'state': 0x70,
+          },
+          {
+            'state': 0x70,
+          },
+        ],
+      },
       '0/output.json': GOOD_GTEST_JSON_0,
       '1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call()
     merged['swarming_summary'] = {
-      'shards': [{
-        'outputs_ref': {
-          'view_url': 'blah',
-        },
-      }],
+      'shards': [
+        {
+          'state': 0x70,
+          'outputs_ref': {
+            'view_url': 'blah',
+          },
+        }
+      ],
     }
     self.assertEqual(GOOD_GTEST_JSON_MERGED, merged)
     self.assertEqual('', stdout)
@@ -351,7 +366,14 @@ class MergeShardResultsTest(auto_stub.TestCase):
   def test_unfinished_shards(self):
     # Only one shard (#1) finished. Shard #0 did not.
     self.stage({
-      'summary.json': {'shards': [None, {'dummy': 0}]},
+      'summary.json': {
+        'shards': [
+          None,
+          {
+            'state': 0x70,
+          },
+        ],
+      },
       '1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call(1)
