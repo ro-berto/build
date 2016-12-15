@@ -473,9 +473,8 @@ class StatusPush(StatusReceiverMultiService):
     # This info is included in the master json.
     return self
 
-  @event_handler
   def stepStarted(self, build, _step):
-    # This info is included in the master json.
+    # This info is included in the master json.  No need to log this.
     return self
 
   @event_handler
