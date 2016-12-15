@@ -3,22 +3,29 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py"
+      "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
+      "https://chrome-perf.googleplex.com/add_point"
     ],
     "name": "perf dashboard post",
-    "stdin": "{\"data\": [{\"bot\": \"multivm-windows-perf-be\", \"buildername\": \"multivm-windows-perf-be\", \"buildnumber\": 75, \"error\": \"0.5\", \"master\": \"client.dart.fyi\", \"masterid\": \"client.dart.fyi\", \"revision\": 33241, \"supplemental_columns\": {\"r_webkit_rev\": \"167808\"}, \"test\": \"sunspider/string-unpack-code/ref\", \"units\": \"ms\", \"value\": \"18.5\"}, {\"bot\": \"multivm-windows-perf-be\", \"buildername\": \"multivm-windows-perf-be\", \"buildnumber\": 75, \"error\": \"0.4898\", \"master\": \"client.dart.fyi\", \"masterid\": \"client.dart.fyi\", \"revision\": 33241, \"supplemental_columns\": {\"r_webkit_rev\": \"167808\"}, \"test\": \"sunspider/string-unpack-code\", \"units\": \"ms\", \"value\": \"18.4\"}], \"url\": \"https://chrome-perf.googleplex.com/add_point\"}",
+    "stdin": "{\"data\": [{\"bot\": \"multivm-windows-perf-be\", \"buildername\": \"multivm-windows-perf-be\", \"buildnumber\": 75, \"error\": \"0.5\", \"master\": \"client.dart.fyi\", \"masterid\": \"client.dart.fyi\", \"revision\": 33241, \"supplemental_columns\": {\"r_webkit_rev\": \"167808\"}, \"test\": \"sunspider/string-unpack-code/ref\", \"units\": \"ms\", \"value\": \"18.5\"}, {\"bot\": \"multivm-windows-perf-be\", \"buildername\": \"multivm-windows-perf-be\", \"buildnumber\": 75, \"error\": \"0.4898\", \"master\": \"client.dart.fyi\", \"masterid\": \"client.dart.fyi\", \"revision\": 33241, \"supplemental_columns\": {\"r_webkit_rev\": \"167808\"}, \"test\": \"sunspider/string-unpack-code\", \"units\": \"ms\", \"value\": \"18.4\"}]}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LINK@Results Dashboard@https://chrome-perf.googleplex.com/report?rev=33241&masters=client.dart.fyi&tests=sunspider%2Fstring-unpack-code&bots=bot_name@@@"
+      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LINK@Results Dashboard@https://chrome-perf.googleplex.com/report?rev=33241&masters=client.dart.fyi&tests=sunspider%2Fstring-unpack-code&bots=bot_name@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py"
+      "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
+      "https://chrome-perf.googleplex.com/post_bisect_results"
     ],
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"status\": \"completed\", \"try_job_id\": 1}, \"url\": \"https://chrome-perf.googleplex.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"status\": \"completed\", \"try_job_id\": 1}}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

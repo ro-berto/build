@@ -1206,14 +1206,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/post_bisect_results"
     ],
     "cwd": "[BUILDER_CACHE]/android_fyi_perf_bisect",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"bisect_bot\": \"android_fyi_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_fyi_perf_bisect/builds/571\", \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\", \"metric\": null, \"status\": \"completed\", \"try_job_id\": null, \"warnings\": [\"No values from test with patch, or none from test without patch.\\n Output with patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\n\\n\\nOutput without patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\n\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"bisect_bot\": \"android_fyi_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_fyi_perf_bisect/builds/571\", \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\", \"metric\": null, \"status\": \"completed\", \"try_job_id\": null, \"warnings\": [\"No values from test with patch, or none from test without patch.\\n Output with patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\n\\n\\nOutput without patch:\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\nAvg dummy: 5.907711ms\\nSd  dummy: 0.255921ms\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\n\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\n\"]}}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_FAILURE@@@"
@@ -1437,7 +1438,7 @@
   },
   {
     "name": "$result",
-    "reason": "Failed to upload result to Perf Dashboard. Error response: None",
+    "reason": "Failed to post to Perf Dashboard. Error response: None",
     "recipe_result": null,
     "status_code": 1
   }

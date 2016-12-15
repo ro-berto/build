@@ -1313,14 +1313,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/post_bisect_results"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"bisect_bot\": \"android_webview_arm64_aosp_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_webview_arm64_aosp_perf_bisect/builds/571\", \"change\": 88.88888888888889, \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\", \"metric\": \"dummy/dummy\", \"profiler_links\": [], \"result\": \"Revision    Mean        Std.Error\\nPatch       1.0         0.0\\nNo Patch    9.0         0.0\", \"status\": \"completed\", \"std_err\": 0.0, \"try_job_id\": null}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdin": "{\"data\": {\"bisect_bot\": \"android_webview_arm64_aosp_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_webview_arm64_aosp_perf_bisect/builds/571\", \"change\": 88.88888888888889, \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\", \"metric\": \"dummy/dummy\", \"profiler_links\": [], \"result\": \"Revision    Mean        Std.Error\\nPatch       1.0         0.0\\nNo Patch    9.0         0.0\", \"status\": \"completed\", \"std_err\": 0.0, \"try_job_id\": null}}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_FAILURE@@@"
@@ -1544,7 +1545,7 @@
   },
   {
     "name": "$result",
-    "reason": "Failed to upload result to Perf Dashboard. Error response: None",
+    "reason": "Failed to post to Perf Dashboard. Error response: None",
     "recipe_result": null,
     "status_code": 1
   }
