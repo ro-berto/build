@@ -49,9 +49,8 @@ def RunSteps(api):
   # Run the roll script. It will take care of branch creation, modifying DEPS,
   # uploading etc. It will also delete any previous roll branch.
   api.python(
-      'autoroll chromium_revision',
-      api.path['checkout'].join('tools', 'autoroller',
-                                'roll_chromium_revision.py'),
+      'autoroll DEPS',
+      api.path['checkout'].join('tools-webrtc', 'autoroller', 'roll_deps.py'),
       ['--clean', '--verbose'],
       cwd=api.path['checkout'],
   )

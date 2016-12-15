@@ -109,12 +109,12 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/autoroller/roll_chromium_revision.py",
+      "[START_DIR]/src/tools-webrtc/autoroller/roll_deps.py",
       "--clean",
       "--verbose"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "autoroll chromium_revision"
+    "name": "autoroll DEPS"
   },
   {
     "name": "$result",
