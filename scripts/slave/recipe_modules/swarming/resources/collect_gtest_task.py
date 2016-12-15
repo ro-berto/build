@@ -64,18 +64,36 @@ def merge_shard_results(output_dir):
   }
   for index, result in enumerate(summary['shards']):
     if result is not None:
-      json_data = load_shard_json(output_dir, index)
-      if json_data:
-        # Set-like fields.
-        for key in ('all_tests', 'disabled_tests', 'global_tags'):
-          merged[key].update(json_data.get(key), [])
+      # Author note: this code path doesn't trigger convert_to_old_format() in
+      # client/swarming.py, which means the state enum is saved in its string
+      # name form, not in the number form.
+      state = result.get('state')
+      if state == u'BOT_DIED':
+        emit_warning('Shard #%d had a Swarming internal failure' % index)
+      elif state == u'EXPIRED':
+        emit_warning('There wasn\'t enough capacity to run your test')
+      elif state == u'TIMED_OUT':
+        emit_warning(
+            'Test runtime exceeded allocated time',
+            'Either it ran for too long (hard timeout) or it didn\'t produce '
+            'I/O for an extended period of time (I/O timeout)')
+      elif state == u'COMPLETED':
+        json_data = load_shard_json(output_dir, index)
+        if json_data:
+          # Set-like fields.
+          for key in ('all_tests', 'disabled_tests', 'global_tags'):
+            merged[key].update(json_data.get(key), [])
 
-        # 'per_iteration_data' is a list of dicts. Dicts should be merged
-        # together, not the 'per_iteration_data' list itself.
-        merged['per_iteration_data'] = merge_list_of_dicts(
-            merged['per_iteration_data'],
-            json_data.get('per_iteration_data', []))
-        continue
+          # 'per_iteration_data' is a list of dicts. Dicts should be merged
+          # together, not the 'per_iteration_data' list itself.
+          merged['per_iteration_data'] = merge_list_of_dicts(
+              merged['per_iteration_data'],
+              json_data.get('per_iteration_data', []))
+          continue
+        else:
+          emit_warning('Task ran but no result was found')
+      else:
+        emit_warning('Invalid Swarming task state: %s' % state)
     merged['missing_shards'].append(index)
 
   # If some shards are missing, make it known. Continue parsing anyway. Step

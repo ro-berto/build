@@ -141,11 +141,14 @@ GOOD_GTEST_JSON_MERGED = {
     }],
   }],
   'swarming_summary': {
-    'shards': [{
-      'outputs_ref': {
-        'view_url': 'blah',
-      },
-    }],
+    u'shards': [
+      {
+        u'state': u'COMPLETED',
+        u'outputs_ref': {
+          u'view_url': u'blah',
+        },
+      }
+      ],
   },
 }
 
@@ -326,17 +329,29 @@ class MergeShardResultsTest(auto_stub.TestCase):
   def test_ok(self):
     # Two shards, both successfully finished.
     self.stage({
-      'summary.json': {'shards': [{'dummy': 0}, {'dummy': 0}]},
+      'summary.json': {
+        u'shards': [
+          {
+            u'state': u'COMPLETED',
+          },
+          {
+            u'state': u'COMPLETED',
+          },
+        ],
+      },
       '0/output.json': GOOD_GTEST_JSON_0,
       '1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call()
     merged['swarming_summary'] = {
-      'shards': [{
-        'outputs_ref': {
-          'view_url': 'blah',
-        },
-      }],
+      'shards': [
+        {
+          u'state': u'COMPLETED',
+          u'outputs_ref': {
+            u'view_url': u'blah',
+          },
+        }
+      ],
     }
     self.assertEqual(GOOD_GTEST_JSON_MERGED, merged)
     self.assertEqual('', stdout)
@@ -351,8 +366,15 @@ class MergeShardResultsTest(auto_stub.TestCase):
   def test_unfinished_shards(self):
     # Only one shard (#1) finished. Shard #0 did not.
     self.stage({
-      'summary.json': {'shards': [None, {'dummy': 0}]},
-      '1/output.json': GOOD_GTEST_JSON_1,
+      'summary.json': {
+        u'shards': [
+          None,
+          {
+            u'state': u'COMPLETED',
+          },
+        ],
+      },
+      u'1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call(1)
     merged.pop('swarming_summary')
