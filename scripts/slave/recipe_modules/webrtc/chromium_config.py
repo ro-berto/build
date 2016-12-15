@@ -17,9 +17,7 @@ def webrtc_minimal(c):
 
 @CONFIG_CTX(includes=['webrtc_minimal', 'dcheck', 'webrtc_openh264'])
 def webrtc_default(c):
-  c.runtests.memory_tests_runner = c.CHECKOUT_PATH.join(
-      'tools', 'valgrind-webrtc', 'webrtc_tests',
-      platform_ext={'win': '.bat', 'mac': '.sh', 'linux': '.sh'})
+  pass
 
 @CONFIG_CTX(includes=['android'])
 def webrtc_android_perf(c):
