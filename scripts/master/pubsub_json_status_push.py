@@ -299,6 +299,13 @@ class StatusPush(StatusReceiverMultiService):
     t_master_data = time.time()
     d_master = t_master_data - t_load_build
 
+    # Gather on statistics on how many pending builds we have, for logging.
+    num_build_requests = sum([
+        bi['pendingBuilds'] for bi in master_data['builders'].itervalues()])
+    num_build_states = sum([
+        len(bi['pendingBuildStates']) for bi
+        in master_data['builders'].itervalues()])
+
     # Split the data into batches because PubSub has a message limit of 10MB.
     res = yield self._send_messages(master_data, send_builds)
     t_send_messages = time.time()
@@ -314,8 +321,9 @@ class StatusPush(StatusReceiverMultiService):
     d_total = t_complete - t_start
     len_tcq = len(reactor.threadCallQueue)
     log.msg('PubSub: Last send session took total %.1fs, %.1f load build, '
-            '%.1f master, %.1f send. len_tcq %d' % (
-                d_total, d_load_build, d_master, d_send_messages, len_tcq))
+            '%.1f master, %.1f send. len_tcq %d. br %d. bs %d' % (
+                d_total, d_load_build, d_master, d_send_messages, len_tcq,
+                num_build_requests, num_build_states))
 
   def _pushTimerExpired(self):
     """Callback invoked when the push timer has expired.
@@ -341,7 +349,7 @@ class StatusPush(StatusReceiverMultiService):
 
     def eb_status_push(failure, updates):
       # Re-add these builds to our 'updated_builds' list.
-      log.err('Failed to do status push for %s: %s' % (
+      log.msg('PubSub: ERROR - Failed to do status push for %s:\n%s' % (
           sorted(updates), failure))
       self._updated_builds.update(updates)
     d.addErrback(eb_status_push, updates)
@@ -400,12 +408,42 @@ class StatusPush(StatusReceiverMultiService):
 
     br = yield self._pending_build_lru.get(
         pb_request_status.brid, pb_request_status=pb_request_status)
+    if not br:
+      log.msg(
+          'PubSub: WARNING - no build request found for %s'
+          % pb_request_status.brid)
+      defer.returnValue(None)
     result['builderName'] = pb_request_status.getBuilderName()
     result['source'] = br.source.asDict()
     result['reason'] = br.reason
     result['submittedAt'] = br.submittedAt
 
     defer.returnValue(result)
+
+  @defer.inlineCallbacks
+  def _getBuilderData(self, name, builder):
+    # This requires a deferred call since the data is queried from
+    # the postgres DB (sigh).
+    pending = yield builder.getPendingBuildRequestStatuses()
+    # Optimization cheat: only get the first 25 pending builds.
+    # This caps the amount of postgres db calls and json size for really out
+    # of control builders
+    num_pending = len(pending)
+    pending = pending[:25]
+    pendingStates = yield defer.DeferredList([
+        self._get_pending_build(p) for p in pending])
+    # Not included: basedir, cachedBuilds.
+    # cachedBuilds isn't useful and takes a ton of resources to compute.
+    builder_info = {
+      'slaves': builder.slavenames,
+      'currentBuilds': sorted(b.getNumber() for b in builder.currentBuilds),
+      'pendingBuilds': num_pending,
+      # p is a tuple of (success, payload)
+      'pendingBuildStates': [p[1] for p in pendingStates if p[0] and p[1]],
+      'state': builder.getState()[0],
+      'category': builder.category,
+    }
+    defer.returnValue((name, builder_info))
 
   @defer.inlineCallbacks
   def _getMasterData(self):
@@ -418,29 +456,13 @@ class StatusPush(StatusReceiverMultiService):
     builders = {builder_name: self._status.getBuilder(builder_name)
                 for builder_name in self._status.getBuilderNames()}
     builder_infos = {}
-    for name, builder in builders.iteritems():
-      # This requires a deferred call since the data is queried from
-      # the postgres DB (sigh).
-      pending = yield builder.getPendingBuildRequestStatuses()
-      # Optimization cheat: only get the first 25 pending builds.
-      # This caps the amount of postgres db calls and json size for really out
-      # of control builders
-      numPending = len(pending)
-      pending = pending[:25]
-      pendingStates = yield defer.DeferredList([
-          self._get_pending_build(p) for p in pending])
-      # Not included: basedir, cachedBuilds.
-      # cachedBuilds isn't useful and takes a ton of resources to compute.
-      builder_info = {
-        'slaves': builder.slavenames,
-        'currentBuilds': sorted(b.getNumber() for b in builder.currentBuilds),
-        'pendingBuilds': numPending,
-        # p is a tuple of (success, payload)
-        'pendingBuildStates': [p[1] for p in pendingStates if p[0]],
-        'state': builder.getState()[0],
-        'category': builder.category,
-      }
-      builder_infos[name] = builder_info
+
+    # Fetch all builder info in parallel.
+    builder_info_list = yield defer.DeferredList([
+        self._getBuilderData(name, builder)
+        for name, builder in builders.iteritems()])
+    builder_infos = {
+        data[0]: data[1] for success, data in builder_info_list if success}
 
     slaves = {slave_name: self._status.getSlave(slave_name).asDict()
               for slave_name in self._status.getSlaveNames()}
