@@ -931,6 +931,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     api.chromium.apply_config('trybot_flavor')
 
+    # TODO(tikuta): Remove this after removing compile.py.
+    api.chromium.apply_config('no_compile_py')
+
     bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
         bot_config_object)
 

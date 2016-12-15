@@ -338,22 +338,19 @@ class ChromiumApi(recipe_api.RecipeApi):
       if self.c.compile_py.compiler and 'goma' in self.c.compile_py.compiler:
         step_result = self.m.step.active_result
         failure_result_code = ''
-        try:
-          if use_goma_module:
-            json_status = self.m.goma.jsonstatus['notice'][0]
-          else:
-            assert use_compile_py
-            json_status = step_result.json.output['notice'][0]
 
-          if (not json_status.get('infra_status')):
-            failure_result_code = 'GOMA_SETUP_FAILURE'
-          elif json_status['infra_status']['ping_status_code'] != 200:
-            failure_result_code = 'GOMA_PING_FAILURE'
-          elif json_status['infra_status'].get('num_user_error', 0) > 0:
-            failure_result_code = 'GOMA_BUILD_ERROR'
-        except Exception as ex:
-          step_result.presentation.logs['exception'] = ['%r' % ex]
-          step_result.presentation.status = self.m.step.WARNING
+        if use_goma_module:
+          json_status = self.m.goma.jsonstatus['notice'][0]
+        else:
+          assert use_compile_py
+          json_status = step_result.json.output['notice'][0]
+
+        if (not json_status.get('infra_status')):
+          failure_result_code = 'GOMA_SETUP_FAILURE'
+        elif json_status['infra_status']['ping_status_code'] != 200:
+          failure_result_code = 'GOMA_PING_FAILURE'
+        elif json_status['infra_status'].get('num_user_error', 0) > 0:
+          failure_result_code = 'GOMA_BUILD_ERROR'
 
         if failure_result_code:
           # Mark goma setup failure as exception instead of step failure.
