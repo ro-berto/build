@@ -106,6 +106,23 @@ BUILDERS = freeze({
         'bucket': 'chrome-perf',
       },
       'run_mb': True,
+      'targets': [
+        'android_tools',
+        'chrome_modern_public_apk',
+        'chrome_public_apk',
+        'dump_syms',
+        'microdump_stackwalk',
+        'monochrome_public_apk',
+        'push_apps_to_background_apk',
+        'system_webview_apk',
+        'system_webview_shell_apk',
+
+        # TODO(jbudorick): Remove these once the bisectors pick them
+        # up from the src/-side JSONs.
+        'cc_perftests',
+        'gpu_perftests',
+        'tracing_perftests',
+      ],
     },
     'android_arm64_perf_bisect_builder': {
       'recipe_config': 'arm64_builder_rel_mb',
@@ -119,6 +136,25 @@ BUILDERS = freeze({
         'bucket': 'chrome-perf',
       },
       'run_mb': True,
+      'targets': [
+        'android_tools',
+        'chrome_modern_public_apk',
+        'chrome_public_apk',
+        'dump_syms',
+        'microdump_stackwalk',
+
+        # 64-bit Monochrome builds 32-bit libchrome.so as well, so do not add it
+        # here unless it's beneficial and doesn't slow the bots down too much.
+        'push_apps_to_background_apk',
+        'system_webview_apk',
+        'system_webview_shell_apk',
+
+        # TODO(jbudorick): Remove these once the bisectors pick them
+        # up from the src/-side JSONs.
+        'cc_perftests',
+        'gpu_perftests',
+        'tracing_perftests',
+      ],
     },
   },
   'client.v8.fyi': {
