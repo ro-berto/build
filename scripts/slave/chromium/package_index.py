@@ -344,15 +344,16 @@ def main():
                       choices=['grok', 'kythe'],
                       help='format of the index pack, either grok or kythe')
   parser.add_argument('--keep-filepaths-files',
-                      help='keep the .filepaths files used for index pack'
-                      'generation')
+                      help='keep the .filepaths files used for index pack '
+                      'generation',
+                      action='store_true')
   options = parser.parse_args()
 
   print '%s: Index generation...' % time.strftime('%X')
   index_pack = IndexPack(options.path_to_compdb, options.index_pack_format)
   index_pack.GenerateIndexPack()
 
-  if options.keep_filepaths_files:
+  if not options.keep_filepaths_files:
     # Clean up the *.filepaths files.
     chromium_utils.RemoveFilesWildcards(
         '*.filepaths', os.path.join(os.getcwd(), 'src'))
