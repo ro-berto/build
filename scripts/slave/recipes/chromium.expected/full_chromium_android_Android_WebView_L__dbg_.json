@@ -638,181 +638,27 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/android_webview/tools/cts_config/webview_cts_gcs_path.json",
-      "/path/to/tmp/"
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/android_webview/tools/run_cts.py",
+      "--arch",
+      "arm_64",
+      "--platform",
+      "L",
+      "--skip-expected-failures",
+      "--apk-dir",
+      "[CACHE]",
+      "--json-results-file",
+      "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
-    },
-    "name": "Fetch CTS filename data",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                      {@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                        \"arm_64\": {@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          \"L\": {@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"filename\": \"cts_arm64_L.zip\",@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"_origin\": \"aosp-lollipop-mr1-cts-dev@12345\"@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          },@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          \"M\": {@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"filename\": \"cts_arm64_M.zip\",@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"_origin\": \"aosp-marshmallow-cts-dev@12345\"@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          },@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          \"N\": {@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"filename\": \"cts_arm64_N.zip\",@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                            \"_origin\": \"aosp-nougat-cts-release@12345\"@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                          }@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                        }@@@",
-      "@@@STEP_LOG_LINE@webview_cts_gcs_path.json@                      }@@@",
-      "@@@STEP_LOG_END@webview_cts_gcs_path.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/android_webview/tools/cts_config/expected_failure_on_bot.json",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
-    },
-    "name": "Fetch expected failures data"
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
-    },
-    "name": "Update CTS"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[CACHE]/android_cts"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
-    },
-    "name": "Update CTS.rmtree Delete old CTS",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/android_cts",
-      "511"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
-    },
-    "name": "Update CTS.makedirs Create CTS dir",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "gs://chromium-cts/cts_arm64_L.zip",
-      "[CACHE]/android_cts/cts_arm64_L.zip"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
-    },
-    "name": "Update CTS.gsutil Download new CTS",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/unzip.py"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android:%(PATH)s"
-    },
-    "name": "Update CTS.Extract new CTS",
-    "stdin": "{\"output\": \"[CACHE]/android_cts/unzipped\", \"quiet\": false, \"zip_file\": \"[CACHE]/android_cts/cts_arm64_L.zip\"}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/android_cts/unzipped/android-cts/tools/cts-tradefed",
-      "run",
-      "cts",
-      "-p",
-      "android.webkit"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/build-tools/23.0.1:%(PATH)s"
     },
     "name": "Run CTS",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@disabled_tests@@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                        {@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                          \"android.webkit.cts.ExampleBlacklistedTest\":@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                            [@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                              {@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                                \"name\": \"testA\",@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                                \"_bug_id\": \"crbug.com/123\"@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                              },@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                              {\"name\": \"testB\"}@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                            ]@@@",
-      "@@@STEP_LOG_LINE@disabled_tests@                          }@@@",
-      "@@@STEP_LOG_END@disabled_tests@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

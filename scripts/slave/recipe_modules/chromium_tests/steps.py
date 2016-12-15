@@ -1854,7 +1854,7 @@ class WebViewCTSTest(Test):
     self._platform = platform
 
   @property
-  def name(self):
+  def name(self):  # pragma: no cover
     return 'WebView CTS: %s' % self._platform
 
   @property

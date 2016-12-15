@@ -1326,147 +1326,35 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_webview_cts(self, command_line_args=None, suffix=None,
                       android_platform='L', arch='arm_64'):
-    is_cts_v2 = (android_platform == 'N')
-
     suffix = ' (%s)' % suffix if suffix else ''
     if command_line_args:
       self._set_webview_command_line(command_line_args)
 
-    _CTS_CONFIG_SRC_PATH = self.m.path['checkout'].join(
-        'android_webview', 'tools', 'cts_config')
-    cts_filenames_json = self.m.file.read(
-        'Fetch CTS filename data',
-        _CTS_CONFIG_SRC_PATH.join('webview_cts_gcs_path.json'),
-        test_data='''
-                      {
-                        "arm_64": {
-                          "L": {
-                            "filename": "cts_arm64_L.zip",
-                            "_origin": "aosp-lollipop-mr1-cts-dev@12345"
-                          },
-                          "M": {
-                            "filename": "cts_arm64_M.zip",
-                            "_origin": "aosp-marshmallow-cts-dev@12345"
-                          },
-                          "N": {
-                            "filename": "cts_arm64_N.zip",
-                            "_origin": "aosp-nougat-cts-release@12345"
-                          }
-                        }
-                      }''')
-    cts_filenames = self.m.json.loads(cts_filenames_json)
-    result = self.m.step.active_result
-    result.presentation.logs['webview_cts_gcs_path.json'] = (
-          cts_filenames_json.splitlines())
-    try:
-      cts_filename = cts_filenames[arch][android_platform]["filename"]
-    except KeyError:
-      raise self.m.step.StepFailure(
-          'No CTS test found to use for arch:%s android:%s' % (
-              arch, android_platform))
+    json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
 
-    expected_failure_json = self.m.file.read(
-        'Fetch expected failures data',
-        _CTS_CONFIG_SRC_PATH.join('expected_failure_on_bot.json'),
-        test_data = '''
-                        {
-                          "android.webkit.cts.ExampleBlacklistedTest":
-                            [
-                              {
-                                "name": "testA",
-                                "_bug_id": "crbug.com/123"
-                              },
-                              {"name": "testB"}
-                            ]
-                          }''')
-    expected_failure = self.m.json.loads(expected_failure_json)
-
-    cts_base_dir = self.m.path['cache'].join('android_cts')
-    cts_zip_path = cts_base_dir.join(cts_filename)
-    cts_extract_dir = cts_base_dir.join('unzipped')
-    if not self.m.path.exists(cts_zip_path):
-      with self.m.step.nest('Update CTS'):
-        # Remove all old cts files before downloading new one.
-        self.m.file.rmtree('Delete old CTS', cts_base_dir)
-        self.m.file.makedirs('Create CTS dir', cts_base_dir)
-        self.m.gsutil.download(name='Download new CTS',
-                               bucket='chromium-cts',
-                               source=cts_filename,
-                               dest=cts_zip_path)
-        self.m.zip.unzip(step_name='Extract new CTS',
-                         zip_file=cts_zip_path,
-                         output=cts_extract_dir)
-
-    cts_path = cts_extract_dir.join('android-cts', 'tools', 'cts-tradefed')
-    env = {'PATH': self.m.path.pathsep.join(
-        [self.m.adb.adb_dir(),
-         str(self.m.path['checkout'].join(
-            'third_party', 'android_tools', 'sdk', 'build-tools', '23.0.1')),
-         '%(PATH)s'])
-    }
+    cts_runner_args = ['--arch', arch,
+                       '--platform', android_platform,
+                       '--skip-expected-failures',
+                       '--apk-dir', self.m.path['cache'],
+                       '--json-results-file', json_results_file]
 
     try:
-      cts_v1_command = [cts_path, 'run', 'cts', '-p', 'android.webkit']
-      cts_v2_command = [cts_path, 'run', 'cts', '-m', 'CtsWebkitTestCases']
-      self.m.step('Run CTS%s' % suffix,
-                  cts_v2_command if is_cts_v2 else cts_v1_command,
-                  env=env, stdout=self.m.raw_io.output())
+      self.m.python(
+          'Run CTS%s' % suffix,
+          self.m.path['checkout'].join(
+              'android_webview', 'tools', 'run_cts.py'),
+          cts_runner_args,
+          step_test_data=lambda: (
+              self.m.test_utils.test_api.canned_gtest_output(passing=False)))
+
     finally:
-      result = self.m.step.active_result
-      if result.stdout:
-        result.presentation.logs['stdout'] = result.stdout.splitlines()
-      result.presentation.logs['disabled_tests'] = (
-          expected_failure_json.splitlines())
-
-    from xml.etree import ElementTree
-
-    def find_test_report_xml(test_output):
-      test_results_line = ('Test Result: ' if is_cts_v2 else
-                           'Created xml report file at file://')
-      if test_output:
-        for line in test_output.splitlines():
-          split = line.split(test_results_line)
-          if (len(split) > 1):
-            return split[1]
-      raise self.m.step.StepFailure(
-          "Failed to parse the CTS output for the xml report file location")
-
-    report_xml = self.m.file.read('Read test result and report failures',
-                                  find_test_report_xml(result.stdout))
-    root = ElementTree.fromstring(report_xml)
-    not_executed_tests = []
-    unexpected_test_failures = []
-
-    _CTS_XML_TESTCASE_ELEMENTS = ('./TestPackage/TestSuite[@name="android"]/'
-                                  'TestSuite[@name="webkit"]/'
-                                  'TestSuite[@name="cts"]/TestCase')
-    test_classes = root.findall(_CTS_XML_TESTCASE_ELEMENTS)
-
-    for test_class in test_classes:
-      class_name = 'android.webkit.cts.%s' % test_class.get('name')
-      test_methods = test_class.findall('./Test')
-
-      for test_method in test_methods:
-        method_name = '%s#%s' % (class_name, test_method.get('name'))
-        if test_method.get('result') == 'notExecuted':
-          not_executed_tests.append(method_name)
-        elif (test_method.find('./FailedScene') is not None and
-              test_method.get('name') not in
-                [ t.get('name') for t in
-                  expected_failure.get(class_name, []) ]):
-          unexpected_test_failures.append(method_name)
-
-    if unexpected_test_failures or not_executed_tests:
-      self.m.step.active_result.presentation.status = self.m.step.FAILURE
-      self.m.step.active_result.presentation.step_text += (
-          self.m.test_utils.format_step_text(
-              [['unexpected failures:', unexpected_test_failures],
-               ['not executed:', not_executed_tests]]))
-
-    if unexpected_test_failures:
-      raise self.m.step.StepFailure("Unexpected Test Failures.")
-    if not_executed_tests:
-      raise self.m.step.StepFailure("Tests not executed.")
+      step_result = self.m.step.active_result
+      if (hasattr(step_result, 'test_utils') and
+          hasattr(step_result.test_utils, 'gtest_results')):
+        gtest_results = step_result.test_utils.gtest_results
+        step_result.presentation.step_text += (
+            self.m.test_utils.format_step_text(
+                [['failures:', gtest_results.failures]]))
 
   def coverage_report(self, upload=True, **kwargs):
     """Creates an EMMA HTML report and optionally uploads it to storage bucket.

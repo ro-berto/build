@@ -26,9 +26,6 @@ class AdbApi(recipe_api.RecipeApi):
     return self.m.path['checkout'].join(
         'third_party', 'android_tools', 'sdk', 'platform-tools', 'adb')
 
-  def adb_dir(self):
-    return self.m.path.dirname(self.adb_path())
-
   def list_devices(self, step_test_data=None, **kwargs):
     cmd = [
         str(self.adb_path()),
