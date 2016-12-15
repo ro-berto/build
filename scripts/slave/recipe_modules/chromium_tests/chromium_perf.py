@@ -144,6 +144,7 @@ def _AddTestSpec(name, perf_id, platform, target_bits=64,
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)
+_AddBuildSpec('Android arm64 Builder', 'android')
 _AddBuildSpec('Android Compile', 'android', target_bits=32,
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
@@ -154,7 +155,14 @@ _AddBuildSpec('Android Compile', 'android', target_bits=32,
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
-_AddBuildSpec('Android arm64 Builder', 'android')
+_AddBuildSpec('Android arm64 Compile', 'android',
+              extra_compile_targets=['android_tools',
+                                     'cc_perftests',
+                                     'chrome_public_apk',
+                                     'gpu_perftests',
+                                     'push_apps_to_background_apk',
+                                     'system_webview_apk',
+                                     'system_webview_shell_apk',])
 _AddBuildSpec('Win Builder', 'win', target_bits=32, enable_swarming=True)
 _AddBuildSpec( \
   'Win x64 Builder', 'win', add_to_bisect=True, enable_swarming=True)
