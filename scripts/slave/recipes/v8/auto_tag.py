@@ -202,7 +202,8 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
 
   # Function to check if commit has landed.
   def has_landed():
-    api.git('fetch', cwd=api.path['checkout'])
+    api.git('fetch', REPO, 'refs/branch-heads/*:refs/remotes/branch-heads/*',
+            cwd=api.path['checkout'])
     real_latest_version = V8Version.from_version_file(
         GetVersionContent(api, ref, 'committed'))
     return real_latest_version == latest_version
