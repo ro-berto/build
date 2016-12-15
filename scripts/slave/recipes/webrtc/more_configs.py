@@ -82,7 +82,7 @@ def BuildSteps(api, gn_arg=None, name=None):
   api.chromium.c.gn_args = [gn_arg] if gn_arg else []
   api.chromium.run_gn(use_goma=True)
   api.step.active_result.presentation.step_text = 'gn (%s)' % (name or gn_arg)
-  api.chromium.compile()
+  api.chromium.compile(use_goma_module=True)
 
 
 def RunSteps(api):
