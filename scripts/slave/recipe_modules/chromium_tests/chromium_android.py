@@ -275,7 +275,7 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'android',
       },
-      'parent_buildername': 'Android arm Builder (dbg)',
+      'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'test_results_config': 'public_server',
