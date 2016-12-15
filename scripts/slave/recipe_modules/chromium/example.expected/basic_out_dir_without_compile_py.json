@@ -262,6 +262,25 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "/tmp/Debug",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '/tmp/Debug', 'All']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "goma"
+    ],
+    "name": "upload_ninja_log"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

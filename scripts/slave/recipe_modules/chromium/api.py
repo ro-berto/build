@@ -302,10 +302,28 @@ class ChromiumApi(recipe_api.RecipeApi):
             allow_build_without_goma=allow_build_without_goma,
             **kwargs)
       elif not use_compile_py:
-        self.m.step(name or 'compile',
-                    command,
-                    env=ninja_env,
-                    **kwargs)
+        compile_exit_status = 1
+        try:
+          self.m.step(name or 'compile',
+                      command,
+                      env=ninja_env,
+                      **kwargs)
+          compile_exit_status = 0
+        finally:
+          upload_ninja_log_args = [
+              '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
+              '--skip-sendgomatsmon',
+              '--ninja-log-outdir', target_output_dir,
+              '--ninja-log-command', str(command),
+              '--ninja-log-exit-status', compile_exit_status,
+              '--ninja-log-compiler', self.c.compile_py.compiler or 'unknown'
+          ]
+          self.m.python(
+              name='upload_ninja_log',
+              script=self.package_repo_resource(
+                  'scripts', 'slave', 'upload_goma_logs.py'),
+              args=upload_ninja_log_args)
+
       else:
         env = self.get_env()
         env.update(kwargs.pop('env', {}))

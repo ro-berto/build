@@ -200,6 +200,25 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[START_DIR]\\src\\out\\Release",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[START_DIR]\\\\src\\\\out\\\\Release', 'chrome']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "unknown"
+    ],
+    "name": "upload_ninja_log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]\\src\\build\\win\\run_pgo_profiling_benchmarks.py",
       "--browser-type",
       "release",
@@ -262,6 +281,25 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "Compile: Optimization phase."
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[START_DIR]\\src\\out\\Release",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[START_DIR]\\\\src\\\\out\\\\Release', 'chrome']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "unknown"
+    ],
+    "name": "upload_ninja_log (2)"
   },
   {
     "allow_subannotations": true,
