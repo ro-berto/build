@@ -2041,16 +2041,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://chromeperf.appspot.com/post_bisect_results"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1.Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_WARNINGS@@@"
@@ -7466,16 +7465,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://chromeperf.appspot.com/post_bisect_results"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1,v8@003.Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_WARNINGS@@@"
@@ -8326,16 +8324,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://chromeperf.appspot.com/post_bisect_results"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
     "name": "Working on revision chromium@dcdcdc0ff1,v8@002.Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"003\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@003\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"003\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@003\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_WARNINGS@@@"
@@ -9825,15 +9822,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://chromeperf.appspot.com/post_bisect_results"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": {\"author\": \"DummyAuthor\", \"cl\": \"002\", \"cl_date\": \"01/01/2015\", \"commit_info\": \"A long description for a CL.\\nContaining multiple lines\", \"email\": \"dummy@nowhere.com\", \"revisions_links\": [], \"subject\": \"Some random CL\"}, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"002\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@002\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"003\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@003\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": {\"author\": \"DummyAuthor\", \"cl\": \"002\", \"cl_date\": \"01/01/2015\", \"commit_info\": \"A long description for a CL.\\nContaining multiple lines\", \"email\": \"dummy@nowhere.com\", \"revisions_links\": [], \"subject\": \"Some random CL\"}, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"002\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@002\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"003\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@003\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_FAILURE@@@"
@@ -9865,15 +9861,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://chromeperf.appspot.com/post_bisect_results"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[START_DIR]",
     "name": "Post bisect results (2)",
-    "stdin": "{\"data\": {\"aborted_reason\": \"Failed to post to Perf Dashboard. Error response: None\", \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": {\"author\": \"DummyAuthor\", \"cl\": \"002\", \"cl_date\": \"01/01/2015\", \"commit_info\": \"A long description for a CL.\\nContaining multiple lines\", \"email\": \"dummy@nowhere.com\", \"revisions_links\": [], \"subject\": \"Some random CL\"}, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"002\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@002\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"003\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@003\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdin": "{\"data\": {\"aborted_reason\": \"Failed to upload result to Perf Dashboard. Error response: None\", \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"26.51%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": {\"author\": \"DummyAuthor\", \"cl\": \"002\", \"cl_date\": \"01/01/2015\", \"commit_info\": \"A long description for a CL.\\nContaining multiple lines\", \"email\": \"dummy@nowhere.com\", \"revisions_links\": [], \"subject\": \"Some random CL\"}, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"mean_value\": 16.6, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": 17.58408371226661}, {\"commit_hash\": \"002\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@002\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"003\", \"depot_name\": \"v8\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1,v8@003\", \"std_dev\": 6.2289646009589745}, {\"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_WARNINGS@@@"
@@ -9881,7 +9876,7 @@
   },
   {
     "name": "$result",
-    "reason": "Failed to post to Perf Dashboard. Error response: None",
+    "reason": "Failed to upload result to Perf Dashboard. Error response: None",
     "recipe_result": null,
     "status_code": 1
   }

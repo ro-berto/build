@@ -179,7 +179,7 @@ def RunSteps(api, libvpx_git_url, buildername):
       points.append(p)
 
   api.perf_dashboard.set_default_config()
-  api.perf_dashboard.add_point(points)
+  api.perf_dashboard.post(points)
 
 def GenTests(api):
   # Right now we just support linux, but one day we will have mac and windows

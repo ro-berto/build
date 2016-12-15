@@ -30,7 +30,7 @@ def RunSteps(api):
   s2['units'] = 'ms'
 
   api.perf_dashboard.set_default_config()
-  api.perf_dashboard.add_point([s1, s2])
+  api.perf_dashboard.post([s1, s2])
 
   api.perf_dashboard.add_dashboard_link(
       api.step.active_result.presentation,

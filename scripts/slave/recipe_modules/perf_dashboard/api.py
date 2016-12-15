@@ -68,36 +68,35 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     else:
       self.set_config('testing')
 
-  def add_point(self, data, halt_on_failure=False):
-    return self.post('perf dashboard post',
-                     '%s/add_point' % self.c.url,
-                     {'data': data}, halt_on_failure)
+  def post(self, data):
+    """Takes a data object which can be jsonified and posts it to url."""
+    self.m.python(name='perf dashboard post',
+                  script=self.resource('post_json.py'),
+                  stdin=self.m.json.input({
+                      'url': '%s/add_point' % self.c.url,
+                      'data': data
+                  }))
 
   def post_bisect_results(self, data, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""
-    return self.post('Post bisect results',
-                     '%s/post_bisect_results' % self.c.url,
-                     {'data': data}, halt_on_failure)
+    response = self.m.python(
+        name='Post bisect results',
+        script=self.resource('post_json.py'),
+        stdin=self.m.json.input({
+            'url' : '%s/post_bisect_results' % self.c.url,
+            'data' : data
+        }),
+        stdout=self.m.json.output())
 
-  def post(self, name, url, data, halt_on_failure):
-    """Takes a data object which can be jsonified and posts it to url."""
-    step_result = self.m.python(name=name,
-                         script=self.resource('post_json.py'),
-                         args=[url],
-                         stdin=self.m.json.input(data),
-                         stdout=self.m.json.output())
-
-    response = step_result.stdout
-    if not response or response['status_code'] != 200:  # pragma: no cover
-      error = response['status_code'] if response else 'None'
-      reason = ('Failed to post to Perf Dashboard. '
+    stdout = response.stdout
+    if not stdout or stdout['status_code'] != 200:  # pragma: no cover
+      error = (stdout['status_code'] if stdout else 'None')
+      reason = ('Failed to upload result to Perf Dashboard. '
                 'Error response: %s' % error)
       if halt_on_failure:
-        self.halt(step_result, reason)
+        self.halt(response, reason)
       else:
-        self.warning(step_result, reason)
-
-    return step_result
+        self.warning(response, reason)
 
   def halt(self, step_result, reason):  # pragma: no cover
     step_result.presentation.step_text = reason
