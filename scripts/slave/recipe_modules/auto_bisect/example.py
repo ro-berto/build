@@ -561,6 +561,42 @@ def GenTests(api):
               'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 1}],
           }]))
   yield (
+      api.test('return_code_fail')
+      + api.properties(
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          slavename='dummyslave',
+          buildnumber=571,
+          bisect_config={
+              'test_type': 'return_code',
+              'command':
+                  ('src/tools/perf/run_benchmark -v --browser=release '
+                   '--output-format=valueset smoothness.tough_scrolling_cases'),
+              'good_revision': '314014',
+              'bad_revision': '314017',
+              'bug_id': '-1',
+              'gs_bucket': 'chrome-perf',
+              'dummy_builds': 'True',
+              'dummy_tests': 'True',
+              'dummy_job_names': 'True',
+              'bypass_stats_check': 'True',
+              'skip_gclient_ops': 'True',
+              'recipe_tester_name': 'linux_perf_tester'
+          })
+      + api.auto_bisect([
+          {
+              'hash': '0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f',
+              'commit_pos': '314014',
+              'parsed_values': [19, 20, 23, 1],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          },
+          {
+              'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
+              'commit_pos': '314017',
+              'parsed_values': [20, 19, 23, 7],
+              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+          }]))
+  yield (
       api.test('basic_bisect_other_direction')
       + api.properties(
           mastername='tryserver.chromium.perf',

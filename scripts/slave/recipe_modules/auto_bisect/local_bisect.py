@@ -49,27 +49,33 @@ def perform_bisect(api, **flags):
     raise
 
 def _perform_single_bisect(api, bisect_attempts, **flags):
-      bisect_config = dict(api.m.properties.get('bisect_config'))
-      if bisect_attempts:
-        bisect_config['good_revision'] = bisect_attempts[-1].lkgr.commit_hash
-        bisect_config['bad_revision'] = bisect_attempts[-1].fkbr.commit_hash
-      bisector = api.create_bisector(bisect_config, **flags)
-      bisect_attempts.append(bisector)
-      with api.m.step.nest('Gathering reference values'):
-        _gather_reference_range(bisector)
-      if (not bisector.failed and bisector.check_improvement_direction() and
-          bisector.check_initial_confidence()):
-        if bisector.check_reach_adjacent_revision(
-            bisector.good_rev): # pragma: no cover
-          # Only show this step if bisect has reached adjacent revisions.
-          with api.m.step.nest(str('Check bisect finished on revision ' +
-                                   bisector.good_rev.revision_string())):
-            if bisector.check_bisect_finished(bisector.good_rev):
-              bisector.bisect_over = True
-        if not bisector.bisect_over:
-          _bisect_main_loop(bisector)
-      bisector.print_result_debug_info()
-      bisector.post_result(halt_on_failure=True)
+  bisect_config = dict(api.m.properties.get('bisect_config'))
+  if bisect_attempts:
+    bisect_config['good_revision'] = bisect_attempts[-1].lkgr.commit_hash
+    bisect_config['bad_revision'] = bisect_attempts[-1].fkbr.commit_hash
+  bisector = api.create_bisector(bisect_config, **flags)
+  try:
+    bisect_attempts.append(bisector)
+    with api.m.step.nest('Gathering reference values'):
+      _gather_reference_range(bisector)
+    if (not bisector.failed and bisector.check_improvement_direction() and
+        bisector.check_initial_confidence()):
+      if bisector.check_reach_adjacent_revision(
+          bisector.good_rev): # pragma: no cover
+        # Only show this step if bisect has reached adjacent revisions.
+        with api.m.step.nest(str('Check bisect finished on revision ' +
+                                 bisector.good_rev.revision_string())):
+          if bisector.check_bisect_finished(bisector.good_rev):
+            bisector.bisect_over = True
+      if not bisector.bisect_over:
+        _bisect_main_loop(bisector)
+    else:
+      bisector.bisect_over = True
+    bisector.print_result_debug_info()
+    bisector.post_result(halt_on_failure=True)
+  except bisect_exceptions.BisectException as e:
+    bisector.bisect_over = True
+    raise e
 
 def _get_connected_devices(api):
   api.m.chromium_android.device_status()
