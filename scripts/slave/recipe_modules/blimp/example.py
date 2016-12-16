@@ -60,13 +60,15 @@ def RunSteps(api):
                       build_dir=linux_debug_dir,
                       phase='engine')
   api.chromium.compile(targets=['blimp'],
-                       out_dir=linux_build)
+                       out_dir=linux_build,
+                       use_goma_module=True)
   api.chromium.run_mb(mastername=mastername,
                       buildername=buildername,
                       build_dir=android_debug_dir,
                       phase='client')
   api.chromium.compile(targets=['blimp', 'chrome_public_apk'],
-                       out_dir=android_build)
+                       out_dir=android_build,
+                       use_goma_module=True)
 
   apk_path = android_debug_dir.join('apks', 'ChromePublic.apk')
 
