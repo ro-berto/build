@@ -214,7 +214,7 @@
       "slave_pools": ["ccompute_android_launch"],
     },
     "android_unswarmed_n5_rel": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 36000,  # 60 * 60 * 6
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -222,7 +222,7 @@
       "slave_pools": ["slaves_with_n5s"],
     },
     "android_unswarmed_n5x_rel": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 36000,  # 60 * 60 * 6
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
