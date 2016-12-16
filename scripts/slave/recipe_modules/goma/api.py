@@ -33,12 +33,12 @@ class GomaApi(recipe_api.RecipeApi):
     return '/creds/service_accounts/service-account-goma-cloudtail.json'
 
   @property
-  def cloudtail_path(self):  # pragma: nocover
+  def cloudtail_path(self):
     assert self._goma_dir
     return self.m.path.join(self._goma_dir, 'cloudtail')
 
   @property
-  def cloudtail_pid_file(self):  # pragma: nocover
+  def cloudtail_pid_file(self):
     return self.m.path['tmp_base'].join('cloudtail.pid')
 
   @property
@@ -158,7 +158,7 @@ class GomaApi(recipe_api.RecipeApi):
   def build_data_dir(self):
     return self.m.properties.get('build_data_dir')
 
-  def _start_cloudtail(self):  # pragma: nocover
+  def _start_cloudtail(self):
     """Start cloudtail to upload compiler_proxy.INFO
 
     Raises:
@@ -198,7 +198,7 @@ class GomaApi(recipe_api.RecipeApi):
                         path=self.json_path,
                         data=json.dumps(self._jsonstatus))
 
-  def _stop_cloudtail(self):  # pragma: nocover
+  def _stop_cloudtail(self):
     """Stop cloudtail started by _start_cloudtail
 
     Raises:
@@ -397,9 +397,6 @@ class GomaApi(recipe_api.RecipeApi):
         except self.m.step.StepFailure as e: # pragma: no cover
           ninja_log_exit_status = e.retcode
           raise e
-        except self.m.step.InfraFailure as e: # pragma: no cover
-          ninja_log_exit_status = -1
-          raise e
         finally:
           # Drop goma from ninja_log_compiler
           ninja_log_compiler = ninja_log_compiler.replace('goma-', '')
@@ -420,11 +417,8 @@ class GomaApi(recipe_api.RecipeApi):
       self.m.step(name or 'compile', ninja_command,
                   env=ninja_env, **kwargs)
       ninja_log_exit_status = 0
-    except self.m.step.StepFailure as e: # pragma: no cover
+    except self.m.step.StepFailure as e:
       ninja_log_exit_status = e.retcode
-      raise e
-    except self.m.step.InfraFailure as e: # pragma: no cover
-      ninja_log_exit_status = -1
       raise e
     finally:
       self.stop(ninja_log_outdir=ninja_log_outdir,
