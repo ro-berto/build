@@ -13,8 +13,15 @@ from . import results_merger
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
 
-def text_for_run_on_os(os_name):
-  return 'Run on OS: %r' % os_name
+def text_for_task(task):
+  lines = []
+
+  if task.dimensions.get('id'):
+    lines.append('Bot id: %r' % task.dimensions['id'])
+  if task.dimensions.get('os'):
+    lines.append('Run on OS: %r' % task.dimensions['os'])
+
+  return '<br/>'.join(lines)
 
 
 def parse_time(value):
@@ -566,8 +573,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     finally:
       # Store trigger output with the |task|, print links to triggered shards.
       step_result = self.m.step.active_result
-      step_result.presentation.step_text = text_for_run_on_os(
-          task.dimensions['os'])
+      step_result.presentation.step_text += text_for_task(task)
 
       if step_result.presentation != self.m.step.FAILURE:
         task._trigger_output = step_result.json.output
@@ -654,8 +660,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     finally:
       step_result = self.m.step.active_result
 
-      step_result.presentation.step_text = text_for_run_on_os(
-          task.dimensions['os'])
+      step_result.presentation.step_text = text_for_task(task)
       try:
         json_data = step_result.json.output
         links = step_result.presentation.links
@@ -736,8 +741,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       # gtest_task(...). It's not enforced in any way.
       step_result = self.m.step.active_result
 
-      step_result.presentation.step_text = text_for_run_on_os(
-          task.dimensions['os'])
+      step_result.presentation.step_text = text_for_task(task)
       gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
       if gtest_results and gtest_results.raw:
         p = step_result.presentation
@@ -844,8 +848,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         step_result = self.m.step.active_result
         outdir_json = self.m.json.dumps(step_result.raw_io.output_dir, indent=2)
         step_result.presentation.logs['outdir_json'] = outdir_json.splitlines()
-        step_result.presentation.step_text = text_for_run_on_os(
-            task.dimensions['os'])
+        step_result.presentation.step_text = text_for_task(task)
 
         # Check if it's an internal failure. 'summary.json' is saved in the
         # output directory.
