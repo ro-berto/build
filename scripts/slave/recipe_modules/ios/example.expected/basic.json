@@ -295,6 +295,10 @@
       "//out/Debug-iphonesimulator"
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
     "name": "generate build files (gn)"
   },
   {
@@ -343,6 +347,10 @@
       "50"
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
     "name": "compile"
   },
   {

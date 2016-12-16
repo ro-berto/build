@@ -239,7 +239,8 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb)"
   },
@@ -289,6 +290,10 @@
       "50"
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
     "name": "compile",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

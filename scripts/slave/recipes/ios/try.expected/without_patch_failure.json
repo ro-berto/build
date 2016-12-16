@@ -204,7 +204,9 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb) (with patch)"
   },
@@ -289,6 +291,10 @@
       "fake tests"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
     "name": "compile (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -449,7 +455,9 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb) (without patch)"
   },
@@ -460,6 +468,10 @@
       "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
     "name": "compile (without patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

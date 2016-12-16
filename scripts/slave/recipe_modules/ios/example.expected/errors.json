@@ -206,6 +206,10 @@
       "//out/Release-iphoneos"
     ],
     "cwd": "[START_DIR]/src/out/Release-iphoneos",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
     "name": "generate build files (gn)"
   },
   {
@@ -215,6 +219,10 @@
       "[START_DIR]/src/out/Release-iphoneos"
     ],
     "cwd": "[START_DIR]/src/out/Release-iphoneos",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
     "name": "compile"
   },
   {

@@ -248,7 +248,8 @@ class iOSApi(recipe_api.RecipeApi):
       'device': 'iphoneos',
     }[self.platform])
 
-    self.m.gclient.runhooks(name='runhooks' + suffix, env=env)
+    # runhooks modifies env, so pass a copy.
+    self.m.gclient.runhooks(name='runhooks' + suffix, env=env.copy())
 
     if setup_gn:
       cmd = [
@@ -267,6 +268,7 @@ class iOSApi(recipe_api.RecipeApi):
           self.__config['mastername'],
           self.m.properties['buildername'],
           build_dir='//out/%s' % build_sub_path,
+          env=env,
           mb_config_path=mb_config_path,
           name='generate build files (mb)' + suffix,
           use_goma=self.use_goma,
@@ -288,7 +290,7 @@ class iOSApi(recipe_api.RecipeApi):
         'gen',
         '--check',
         '//out/%s' % build_sub_path,
-      ], cwd=self.m.path['checkout'].join('out', build_sub_path))
+      ], cwd=self.m.path['checkout'].join('out', build_sub_path), env=env)
 
     targets = []
 
@@ -329,7 +331,7 @@ class iOSApi(recipe_api.RecipeApi):
     cmd.extend(targets)
     exit_status = -1
     try:
-      self.m.step('compile' + suffix, cmd, cwd=cwd)
+      self.m.step('compile' + suffix, cmd, cwd=cwd, env=env)
       exit_status = 0
     except self.m.step.StepFailure as e:
       exit_status = e.retcode

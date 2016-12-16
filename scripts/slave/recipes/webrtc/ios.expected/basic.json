@@ -164,7 +164,9 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios_debug/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb)"
   },
@@ -175,6 +177,10 @@
       "[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator"
     ],
     "cwd": "[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
     "name": "compile"
   },
   {

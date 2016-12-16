@@ -751,6 +751,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       },
       'cwd': self.m.path['checkout'],
     }
+    step_kwargs['env'].update(kwargs.pop('env', {}))
+
     if self.c.env.FORCE_MAC_TOOLCHAIN:
       step_kwargs['env']['FORCE_MAC_TOOLCHAIN'] = (
         self.c.env.FORCE_MAC_TOOLCHAIN)
