@@ -464,8 +464,6 @@
       "--step-name",
       "webkit_tests",
       "--order=random",
-      "--additional-expectations",
-      "src/third_party/WebKit/LayoutTests/RandomOrderExpectations",
       "--master-name",
       "chromium.fyi",
       "--debug-rwt-logging"

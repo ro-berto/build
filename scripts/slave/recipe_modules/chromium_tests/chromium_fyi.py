@@ -208,11 +208,7 @@ SPEC = {
         'blink_tests',
       ],
       'tests': [
-        steps.BlinkTest(extra_args=[
-          '--order=random',
-          '--additional-expectations',
-          'src/third_party/WebKit/LayoutTests/RandomOrderExpectations',
-        ]),
+        steps.BlinkTest(),
       ],
       'test_results_config': 'staging_server',
       'testing': {
@@ -233,11 +229,7 @@ SPEC = {
         'blink_tests',
       ],
       'tests': [
-        steps.BlinkTest(extra_args=[
-          '--order=random',
-          '--additional-expectations',
-          'src/third_party/WebKit/LayoutTests/RandomOrderExpectations',
-        ]),
+        steps.BlinkTest(),
       ],
       'testing': {
           'platform': 'mac',
@@ -258,9 +250,9 @@ SPEC = {
       ],
       'tests': [
         steps.BlinkTest(extra_args=[
+          # TODO(jeffcarp): This is still necessary until Windows
+          # is also moved to random order.
           '--order=random',
-          '--additional-expectations',
-          'src/third_party/WebKit/LayoutTests/RandomOrderExpectations',
         ]),
       ],
       'testing': {
