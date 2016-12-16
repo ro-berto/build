@@ -474,8 +474,6 @@
       "--num-retries",
       "0",
       "--collect-chartjson-data",
-      "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -486,32 +484,6 @@
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "Sharded Perf Tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
-      "gs://None/Android arm64 Builder/trace_257.json"
-    ],
-    "name": "gsutil Upload Test Trace",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/None/Android arm64 Builder/trace_257.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/test_runner_trace_tmp_1"
-    ],
-    "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
   },
   {
     "cmd": [
@@ -663,8 +635,6 @@
       "--num-retries",
       "0",
       "--collect-chartjson-data",
-      "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.json",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -675,32 +645,6 @@
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "Sharded Perf Tests (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.json",
-      "gs://None/Android arm64 Builder/trace_257.json"
-    ],
-    "name": "gsutil Upload Test Trace (2)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/None/Android arm64 Builder/trace_257.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/test_runner_trace_tmp_2"
-    ],
-    "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_2"
   },
   {
     "cmd": [
@@ -852,8 +796,6 @@
       "--num-retries",
       "0",
       "--collect-chartjson-data",
-      "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.json",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -864,32 +806,6 @@
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "Sharded Perf Tests (3)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.json",
-      "gs://None/Android arm64 Builder/trace_257.json"
-    ],
-    "name": "gsutil Upload Test Trace (3)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/None/Android arm64 Builder/trace_257.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/test_runner_trace_tmp_3"
-    ],
-    "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_3"
   },
   {
     "cmd": [

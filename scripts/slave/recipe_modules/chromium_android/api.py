@@ -731,7 +731,6 @@ class AndroidApi(recipe_api.RecipeApi):
                          enable_platform_mode=False,
                          write_buildbot_json=False,
                          num_retries=0,
-                         test_trace=None,
                          **kwargs):
     args = [
         'perf',
@@ -753,8 +752,6 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--enable-platform-mode'])
     if write_buildbot_json:
       args.extend(['--write-buildbot-json'])
-    if test_trace:
-      args.extend(['--trace-output', test_trace])
 
     self.test_runner(
         'Sharded Perf Tests',
@@ -790,29 +787,15 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     # TODO(jbudorick): Remove pass_adb_path once telemetry can use a
     # configurable adb path.
-    with self.m.tempfile.temp_dir('test_runner_trace') as trace_dir:
-      test_trace_path = self.m.path.join(trace_dir, 'test_trace.json')
 
-      # test_runner.py actually runs the tests and records the results
-      self._run_sharded_tests(config=config, flaky_config=flaky_config,
-                              chartjson_output=chartjson_file,
-                              max_battery_temp=max_battery_temp,
-                              known_devices_file=known_devices_file,
-                              enable_platform_mode=enable_platform_mode,
-                              pass_adb_path=pass_adb_path,
-                              num_retries=num_retries,
-                              test_trace=test_trace_path, **kwargs)
-
-      # now upload test trace.
-      dest = '{builder}/trace_{buildno}.json'.format(
-          builder=self.m.properties['buildername'],
-          buildno=self.m.properties['buildnumber'])
-      self.m.gsutil.upload(
-          name='Upload Test Trace',
-          source=test_trace_path,
-          bucket=upload_archives_to_bucket,
-          dest=dest,
-          link_name='Test Trace')
+    # test_runner.py actually runs the tests and records the results
+    self._run_sharded_tests(config=config, flaky_config=flaky_config,
+                            chartjson_output=chartjson_file,
+                            max_battery_temp=max_battery_temp,
+                            known_devices_file=known_devices_file,
+                            enable_platform_mode=enable_platform_mode,
+                            pass_adb_path=pass_adb_path,
+                            num_retries=num_retries, **kwargs)
 
     # now obtain the list of tests that were executed.
     result = self.test_runner(

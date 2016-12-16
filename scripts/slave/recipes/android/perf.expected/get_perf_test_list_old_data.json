@@ -581,8 +581,6 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--enable-platform-mode",
-      "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
       "--adb-path",
       "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
@@ -593,32 +591,6 @@
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "Sharded Perf Tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
-      "gs://None/Android Nexus5 Perf (1)/trace_571.json"
-    ],
-    "name": "gsutil Upload Test Trace",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/None/Android Nexus5 Perf (1)/trace_571.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/test_runner_trace_tmp_1"
-    ],
-    "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
   },
   {
     "cmd": [
@@ -855,7 +827,7 @@
       "-u",
       "[START_DIR]/src/components/crash/content/tools/generate_breakpad_symbols.py",
       "--symbols-dir",
-      "[TMP_BASE]/symbols_tmp_2",
+      "[TMP_BASE]/symbols_tmp_1",
       "--build-dir",
       "[START_DIR]/src/out/Release",
       "--binary",
@@ -873,7 +845,7 @@
       "--stack-trace-path",
       "[START_DIR]/src/out/Release/full_log",
       "--symbols-path",
-      "[TMP_BASE]/symbols_tmp_2"
+      "[TMP_BASE]/symbols_tmp_1"
     ],
     "name": "symbolized breakpad crashes"
   },
@@ -882,9 +854,9 @@
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/symbols_tmp_2"
+      "[TMP_BASE]/symbols_tmp_1"
     ],
-    "name": "rmtree [TMP_BASE]/symbols_tmp_2"
+    "name": "rmtree [TMP_BASE]/symbols_tmp_1"
   },
   {
     "name": "$result",

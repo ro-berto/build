@@ -1059,8 +1059,6 @@
       "0",
       "--flaky-steps",
       "flake_fakes.json",
-      "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -1071,32 +1069,6 @@
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "Sharded Perf Tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
-      "gs://archives-bucket/perf_runner_disable_location/trace_571.json"
-    ],
-    "name": "gsutil Upload Test Trace",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/archives-bucket/perf_runner_disable_location/trace_571.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/test_runner_trace_tmp_1"
-    ],
-    "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
   },
   {
     "cmd": [
@@ -1213,7 +1185,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--get-output-dir-archive",
-      "[TMP_BASE]/perf_archives_tmp_2/output_dir.zip"
+      "[TMP_BASE]/perf_archives_tmp_1/output_dir.zip"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1234,7 +1206,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/perf_archives_tmp_2/output_dir.zip",
+      "[TMP_BASE]/perf_archives_tmp_1/output_dir.zip",
       "gs://archives-bucket/perf_runner_disable_location/perf_test.foo/20150928T110712_build_571.zip"
     ],
     "name": "gsutil upload perf_test.foo output dir archive",
