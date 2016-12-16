@@ -93,7 +93,7 @@
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
-      "slave_pools": ["slaves_with_devices"],
+      "slave_pools": ["slaves_with_n5s"],
     },
     "android_coverage": {
       "builder_timeout_s": 6900,  # 60 * 115
@@ -101,7 +101,7 @@
       "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android",
-      "slave_pools": ["slaves_with_devices"],
+      "slave_pools": ["slaves_with_n5s"],
     },
     "android_cronet": {
       "builder_timeout_s": 6900,  # 60 * 115
@@ -115,7 +115,7 @@
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "cronet",
       "scheduler": None,
-      "slave_pools": ["slaves_with_devices"],
+      "slave_pools": ["slaves_with_n5s"],
     },
     "linux_android_dbg_ng": {
       "builder_timeout_s": 6900,  # 60 * 115
@@ -123,7 +123,7 @@
       "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android",
-      "slave_pools": ["slaves_with_devices"],
+      "slave_pools": ["slaves_with_n5s"],
     },
     "linux_android_rel_ng": {
       "builder_timeout_s": 11400,  # 60 * 190
@@ -131,6 +131,14 @@
       "use_remote_run": True,
       "scheduler": None,
       "slavebuilddir": "android",
+      "slave_pools": ["ccompute_android_launch"],
+    },
+    "android_n5x_swarming_dbg": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "chromium_trybot",
+      "use_remote_run": True,
+      "scheduler": None,
+      "slavebuilddir": "android_arm64_dbg",
       "slave_pools": ["ccompute_android_launch"],
     },
     "android_n5x_swarming_rel": {
@@ -204,6 +212,22 @@
       "scheduler": None,
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_android_launch"],
+    },
+    "android_unswarmed_n5_rel": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "chromium_trybot",
+      "use_remote_run": True,
+      "scheduler": None,
+      "slavebuilddir": "android",
+      "slave_pools": ["slaves_with_n5s"],
+    },
+    "android_unswarmed_n5x_rel": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "chromium_trybot",
+      "use_remote_run": True,
+      "scheduler": None,
+      "slavebuilddir": "android",
+      "slave_pools": ["slaves_with_n5xs"],
     },
   },
 
@@ -566,7 +590,7 @@
         "slave1275-c4",
       ],
     },
-    "slaves_with_devices": {
+    "slaves_with_n5s": {
       "slave_data": {
         "os": "linux",
         "version": "trusty",
@@ -576,6 +600,16 @@
         "build134-b4",
         "build38-b4",
         "build97-b4",
+      ],
+    },
+    "slaves_with_n5xs": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": [
+        "build247-m4",
       ],
     },
     "slaves_with_nexus4_devices": {

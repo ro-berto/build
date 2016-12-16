@@ -127,6 +127,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'Android Cronet Builder'
       }),
+      'android_n5x_swarming_dbg': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Marshmallow 64 bit Tester',
+        'tester': 'Android arm64 Builder (dbg)',
+       }),
       'android_n5x_swarming_rel': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android N5X Swarm Builder',
@@ -148,6 +153,14 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder',
         'tester': 'Android Tests',
+      }),
+      'android_unswarmed_n5_rel': simple_bot({
+        'mastername': 'chromium.android.fyi',
+        'buildername': 'Unswarmed N5 Tests Dummy Builder',
+      }),
+      'android_unswarmed_n5x_rel': simple_bot({
+        'mastername': 'chromium.android.fyi',
+        'buildername': 'Unswarmed N5X Tests Dummy Builder',
       }),
     },
   },
