@@ -64,6 +64,16 @@ class LogDogBootstrapTest(unittest.TestCase):
       'buildnumber': 24601,
     }
 
+    # Stable (default) API.
+    self.stable_api = ldbs._CIPD_TAG_API_MAP[ldbs._STABLE_CIPD_TAG]
+    self.latest_api = ldbs._CIPD_TAG_API_MAP[ldbs._CANARY_CIPD_TAG]
+
+    # Set of default base params.
+    self.base = ldbs.Params(
+        project='alpha', cipd_tag=ldbs._STABLE_CIPD_TAG, api=self.stable_api,
+        mastername='default', buildername='builder', buildnumber=24601,
+        logdog_only=False)
+
     # Control whether we think we're a GCE instnace.
     gce.Authenticator.is_gce.return_value = False
 
@@ -110,10 +120,7 @@ class LogDogBootstrapTest(unittest.TestCase):
       },
     }
 
-    base = ldbs.Params(project='alpha', cipd_tag=ldbs._STABLE_CIPD_TAG,
-                       mastername='default', buildername='builder',
-                       buildnumber=24601, logdog_only=False)
-
+    base = self.base
     def mp(params):
       props = self.properties.copy()
       props.update({
@@ -170,8 +177,9 @@ class LogDogBootstrapTest(unittest.TestCase):
 
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
-        project='myproject', cipd_tag='stable', mastername='mastername',
-        buildername='buildername', buildnumber=1337, logdog_only=False)
+        project='myproject', cipd_tag='stable', api=self.stable_api,
+        mastername='mastername', buildername='buildername', buildnumber=1337,
+        logdog_only=False)
     install_cipd.return_value = (butler_path, annotee_path)
     service_account.return_value = 'creds.json'
     isfile.return_value = True
@@ -223,7 +231,8 @@ class LogDogBootstrapTest(unittest.TestCase):
 
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
-        project='myproject', cipd_tag='stable', mastername='mastername',
+        project='myproject', cipd_tag='stable',
+        api=self.latest_api, mastername='mastername',
         buildername='buildername', buildnumber=1337, logdog_only=True)
     install_cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
     service_account.return_value = 'creds.json'
@@ -240,6 +249,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
             '-output', 'logdog,host="services-dot-luci-logdog.appspot.com"',
+            '-coordinator-host', 'luci-logdog.appspot.com',
             '-service-account-json', 'creds.json',
             '-output-max-buffer-age', '30s',
             '-io-keepalive-stderr', '5m',
@@ -263,6 +273,26 @@ class LogDogBootstrapTest(unittest.TestCase):
     service_account.assert_called_once_with(
         self.opts, ldbs._PLATFORM_CONFIG[('win',)]['credential_path'])
     self._assertAnnoteeCommand(recipe_cmd)
+
+  @mock.patch('os.path.isfile')
+  @mock.patch('slave.logdog_bootstrap._install_cipd')
+  @mock.patch('slave.logdog_bootstrap._get_service_account_json')
+  @mock.patch('slave.logdog_bootstrap._get_params')
+  @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
+  def test_registered_apis_work(self, tempdir, get_params, service_account,
+                                install_cipd, isfile):
+    tempdir.return_value = 'foo'
+    isfile.return_value = True
+    butler_path = self._bp('.recipe_logdog_cipd', 'logdog_butler')
+    annotee_path = self._bp('.recipe_logdog_cipd', 'logdog_annotee')
+    service_account.return_value = 'creds.json'
+
+    install_cipd.return_value = (butler_path, annotee_path)
+
+    for api in sorted(ldbs._CIPD_TAG_API_MAP.values()):
+      get_params.return_value = self.base._replace(api=api)
+      ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
+                     self.properties, [])
 
   def test_get_bootstrap_result(self):
     mo = mock.mock_open(read_data='{"return_code": 1337}')
@@ -328,12 +358,6 @@ class LogDogBootstrapTest(unittest.TestCase):
     )
 
   def test_will_not_bootstrap_if_recursive(self):
-    os.environ['LOGDOG_STREAM_PREFIX'] = 'foo'
-    with self.assertRaises(ldbs.NotBootstrapped):
-      ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
-                    self.properties, [])
-
-  def test_(self):
     os.environ['LOGDOG_STREAM_PREFIX'] = 'foo'
     with self.assertRaises(ldbs.NotBootstrapped):
       ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,

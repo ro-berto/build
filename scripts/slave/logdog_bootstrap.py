@@ -32,7 +32,25 @@ class BootstrapError(Exception):
 
 # CIPD tag for LogDog Butler/Annotee to use.
 _STABLE_CIPD_TAG = 'git_revision:a38bcfad366994b9f549448a68400c60e30598e6'
+_CANARY_CIPD_TAG = 'git_revision:810ed5b424ae8559c0680a07ec5e047f18401b42'
 
+_CIPD_TAG_MAP = {
+    '$stable': _STABLE_CIPD_TAG,
+    '$canary': _CANARY_CIPD_TAG,
+}
+
+# Map between CIPD versions and LogDog API version strings. This can be updated
+# if API-based decisions are needed.
+#
+# If a CIPD tag is explicitly mentioned here, the associated API will be used.
+# Otherwise, the "_STABLE_CIPD_TAG" API will be used.
+#
+# As CIPD tags rotate, old API versions and their respective logic can be
+# removed from this code.
+_CIPD_TAG_API_MAP = {
+    _STABLE_CIPD_TAG: 1,
+    _CANARY_CIPD_TAG: 2,
+}
 
 # Platform is the set of platform-specific LogDog bootstrapping
 # configuration parameters. Platform is loaded by cascading the _PLATFORM_CONFIG
@@ -109,7 +127,7 @@ _PLATFORM_CONFIG = {
 #
 # Loaded by '_get_params'.
 Params = collections.namedtuple('Params', (
-    'project', 'cipd_tag', 'mastername', 'buildername', 'buildnumber',
+    'project', 'cipd_tag', 'api', 'mastername', 'buildername', 'buildnumber',
     'logdog_only',
 ))
 
@@ -220,7 +238,7 @@ def _get_params(properties):
   # specific builder or all builders ('*').
   builder_map = {
     'enabled': True,
-    'cipd_tag': _STABLE_CIPD_TAG,
+    'cipd_tag': '$stable',
     'logdog_only': False,
   }
   for bn in (buildername, '*'):
@@ -235,9 +253,17 @@ def _get_params(properties):
                 mastername, buildername)
     raise NotBootstrapped('LogDog is disabled.')
 
+  # Resolve our CIPD tag.
+  cipd_tag = builder_map['cipd_tag']
+  cipd_tag = _CIPD_TAG_MAP.get(cipd_tag, cipd_tag)
+
+  # Determine our API version.
+  api = _CIPD_TAG_API_MAP.get(cipd_tag, _CIPD_TAG_API_MAP[_STABLE_CIPD_TAG])
+
   return Params(
       project=project,
-      cipd_tag=builder_map['cipd_tag'],
+      cipd_tag=cipd_tag,
+      api=api,
       mastername=mastername,
       buildername=buildername,
       buildnumber=buildnumber,
@@ -370,6 +396,21 @@ def _build_prefix(params):
   return 'bb/%s/%s/%s' % (mastername, buildername, buildnumber)
 
 
+def _prune_arg(l, key, extra=0):
+  """Removes list entry "key" and "extra" additional entries, if present.
+
+  Args:
+    l (list): The list to prune.
+    key (object): The list entry to identify and remove.
+    extra (int): Additional entries after key to prune, if found.
+  """
+  try:
+    idx = l.index(key)
+    del(l[idx:idx+extra+1])
+  except ValueError:
+    pass
+
+
 def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   """Executes the recipe engine, bootstrapping it through LogDog/Annotee.
 
@@ -475,30 +516,32 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   with open(cmd_json, 'w') as fd:
     json.dump(cmd, fd)
 
-  # Butler Command.
-  cmd = [
+  # Butler Command, global options.
+  butler_args = [
       butler,
       '-log-level', log_level,
       '-project', params.project,
       '-prefix', prefix,
       '-output', 'logdog,host="%s"' % (service_host,),
+      '-coordinator-host', viewer_host,
   ]
   if service_account_json:
-    cmd += ['-service-account-json', service_account_json]
+    butler_args += ['-service-account-json', service_account_json]
   if plat.max_buffer_age:
-    cmd += ['-output-max-buffer-age', plat.max_buffer_age]
+    butler_args += ['-output-max-buffer-age', plat.max_buffer_age]
   if params.logdog_only:
-    cmd += ['-io-keepalive-stderr', '5m']
-  cmd += [
+    butler_args += ['-io-keepalive-stderr', '5m']
+
+  # Butler: subcommand run.
+  butler_args += [
       'run',
       '-stdout', 'tee=stdout',
       '-stderr', 'tee=stderr',
       '-streamserver-uri', streamserver_uri,
-      '--',
   ]
 
   # Annotee Command.
-  cmd += [
+  annotee_args = [
       annotee,
       '-log-level', log_level,
       '-project', params.project,
@@ -510,6 +553,29 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       '-json-args-path', cmd_json,
       '-result-path', bootstrap_result_path,
   ]
+
+  # API transformation switch. Please prune as API versions become
+  # unused.
+  #
+  # NOTE: Please update the above comment as new API versions and translation
+  # functions are added.
+  start_api = cur_api = max(_CIPD_TAG_API_MAP.itervalues())
+  if cur_api == 2 and params.api <= 1:
+    # Convert from API 2 => 1.
+    cur_api = 1
+
+    # Remove the "io-keepalive-stderr" flag and parameter.
+    # ['-io-keepalive-stderr', <arg>]
+    _prune_arg(butler_args, '-io-keepalive-stderr', 1)
+
+    # Remove ['-coordinator-host', <arg>]
+    _prune_arg(butler_args, '-coordinator-host', 1)
+
+  # Assert that we've hit the target "params.api".
+  assert cur_api == params.api, 'Failed to transform API %s => %s' % (
+      start_api, params.api)
+
+  cmd = butler_args + ['--'] + annotee_args
   return BootstrapState(cmd, bootstrap_result_path)
 
 
