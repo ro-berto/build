@@ -807,7 +807,7 @@ class FactoryCommands(object):
     # This will be run in the '..' directory to udpate the slave's own script
     # checkout.
     command = [chromium_utils.GetGClientCommand(self._target_platform),
-               'sync', '--verbose', '--force']
+               'sync', '--verbose', '--force', '--delete_unversioned_trees']
     if gclient_jobs:
       command.append('-j%d' % gclient_jobs)
     if solutions:
