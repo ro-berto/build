@@ -1611,6 +1611,46 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
     },
+    'ClangToTAndroid': {
+      'chromium_config': 'clang_tot_android',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'android',
+        'TARGET_ARCH': 'arm',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [ 'all', ],
+      'bot_type': 'builder',
+      'android_config': 'clang_tot_release_builder',
+      'test_results_config': 'staging_server',
+      'testing': { 'platform': 'linux', },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'ClangToTAndroid64': {
+      'chromium_config': 'clang_tot_android',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'android',
+        'TARGET_ARCH': 'arm',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [ 'all', ],
+      'bot_type': 'builder',
+      'android_config': 'clang_tot_release_builder',
+      'test_results_config': 'staging_server',
+      'testing': { 'platform': 'linux', },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
     'ClangToTAndroid x64': {
       'chromium_config': 'clang_tot_android',
       'gclient_config': 'chromium',
