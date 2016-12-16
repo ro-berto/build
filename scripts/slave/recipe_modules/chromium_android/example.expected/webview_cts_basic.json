@@ -1144,7 +1144,8 @@
       "--apk-dir",
       "[CACHE]",
       "--json-results-file",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--verbose"
     ],
     "name": "Run CTS",
     "~followup_annotations": [

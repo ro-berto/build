@@ -1336,7 +1336,8 @@ class AndroidApi(recipe_api.RecipeApi):
                        '--platform', android_platform,
                        '--skip-expected-failures',
                        '--apk-dir', self.m.path['cache'],
-                       '--json-results-file', json_results_file]
+                       '--json-results-file', json_results_file,
+                       '--verbose']
 
     try:
       self.m.python(

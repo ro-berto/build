@@ -647,7 +647,8 @@
       "--apk-dir",
       "[CACHE]",
       "--json-results-file",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--verbose"
     ],
     "cwd": "[BUILDER_CACHE]/Android_WebView_M__dbg_",
     "env": {
