@@ -143,12 +143,21 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
           mb_buildername=target_buildername,
           override_bot_type='builder_tester')
 
+    for test in actual_tests_to_run:
+      try:
+        test.test_options = api.m.chromium_tests.steps.TestOptions(
+            test_filter=requested_tests.get(test.name))
+      except NotImplementedError:
+        # ScriptTests do not support test_options property
+
+        # TODO(robertocn): Figure out how to handle ScriptTests without hiding
+        # ths error.
+        pass
     # Run the tests.
     with api.chromium_tests.wrap_chromium_tests(
         bot_config, actual_tests_to_run):
       failed_tests = api.test_utils.run_tests(
-          api, actual_tests_to_run,
-          suffix=revision, test_filters=requested_tests)
+          api, actual_tests_to_run, suffix=revision)
 
     # Process failed tests.
     failed_tests_dict = defaultdict(list)

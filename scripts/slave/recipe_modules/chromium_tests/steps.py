@@ -7,6 +7,26 @@ import json
 import re
 import string
 
+from recipe_engine.types import freeze
+
+
+class TestOptions(object):
+  """Abstracts command line flags to be passed to the test."""
+  def __init__(self, test_filter=None):
+    """Construct a TestOptions object with immutable attributes.
+
+    Args:
+      test_filter - a list of tests, e.g.
+                       ['suite11.test1',
+                        'suite12.test2']
+     """
+
+    self._test_filter=freeze(test_filter)
+
+  @property
+  def test_filter(self):
+    return self._test_filter
+
 
 class Test(object):
   """
@@ -17,6 +37,16 @@ class Test(object):
   def __init__(self):
     super(Test, self).__init__()
     self._test_runs = {}
+    self._test_options = None
+
+  @property
+  def test_options(self):
+    return self._test_options or TestOptions()
+
+  @test_options.setter
+  def test_options(self, value):
+    raise NotImplementedError(
+        'This test %s does not support test options objects yet' % type(self))
 
   @property
   def abort_on_failure(self):
@@ -41,15 +71,15 @@ class Test(object):
     """List of compile targets needed by this test."""
     raise NotImplementedError()  # pragma: no cover
 
-  def pre_run(self, api, suffix, test_filter=None):  # pragma: no cover
+  def pre_run(self, api, suffix):  # pragma: no cover
     """Steps to execute before running the test."""
     return []
 
-  def run(self, api, suffix, test_filter=None):  # pragma: no cover
+  def run(self, api, suffix):  # pragma: no cover
     """Run the test. suffix is 'with patch' or 'without patch'."""
     raise NotImplementedError()
 
-  def post_run(self, api, suffix, test_filter=None):  # pragma: no cover
+  def post_run(self, api, suffix):  # pragma: no cover
     """Steps to execute after running the test."""
     return []
 
@@ -88,7 +118,7 @@ class ArchiveBuildStep(Test):
     self.gs_bucket = gs_bucket
     self.gs_acl = gs_acl
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     return api.chromium.archive_build(
         'archive build',
         self.gs_bucket,
@@ -105,7 +135,7 @@ class SizesStep(Test):
     self.results_url = results_url
     self.perf_id = perf_id
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     return api.chromium.sizes(self.results_url, self.perf_id)
 
   @staticmethod
@@ -176,7 +206,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
       raise
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     name = self.name
     if suffix:
       name += ' (%s)' % suffix
@@ -266,6 +296,10 @@ class LocalGTestTest(Test):
     self._use_xvfb = use_xvfb
     self._runtest_kwargs = runtest_kwargs
 
+  @Test.test_options.setter
+  def test_options(self, value):
+    self._test_options = value
+
   @property
   def name(self):
     return self._name
@@ -295,21 +329,27 @@ class LocalGTestTest(Test):
 
     return [self.target_name]
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     # Copy the list because run can be invoked multiple times and we modify
     # the local copy.
     args = self._args[:]
     is_android = api.chromium.c.TARGET_PLATFORM == 'android'
+    options = self.test_options
+    test_filter = options.test_filter
 
     if suffix == 'without patch':
       test_filter = self.failures(api, 'with patch')
 
     kwargs = {}
-    if test_filter:
-      if is_android:
-        kwargs['gtest_filter'] = ':'.join(test_filter)  # pragma: no cover
-      else:
-        args.append(api.chromium.test_launcher_filter(test_filter))
+    if test_filter and is_android:  # pragma: no cover
+      kwargs['gtest_filter'] = ':'.join(test_filter)
+      test_filter = None
+
+    # We pass a local test_filter variable to override the immutable
+    # options.test_filter, in case test_filter was modified in the suffix ==
+    # without patch clause above.
+    args = GTestTest.args_from_options(api, args, self,
+                                       override_test_filter=test_filter)
 
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
@@ -582,7 +622,7 @@ class DynamicPerfTests(Test):
   def uses_local_devices(self):
     return True
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     tests = self._test_list(api)
 
     if self._num_device_shards == 1:
@@ -660,6 +700,7 @@ class SwarmingTest(Test):
   def __init__(self, name, dimensions=None, tags=None, target_name=None,
                extra_suffix=None, priority=None, expiration=None,
                hard_timeout=None, io_timeout=None):
+    super(SwarmingTest, self).__init__()
     self._name = name
     self._tasks = {}
     self._results = {}
@@ -713,7 +754,7 @@ class SwarmingTest(Test):
   def isolate_target(self, _api):
     return self.target_name
 
-  def create_task(self, api, suffix, isolated_hash, test_filter=None):
+  def create_task(self, api, suffix, isolated_hash):
     """Creates a swarming task. Must be overridden in subclasses.
 
     Args:
@@ -726,7 +767,7 @@ class SwarmingTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
-  def pre_run(self, api, suffix, test_filter=None):
+  def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
     assert suffix not in self._tasks, (
         'Test %s was already triggered' % self._step_name(suffix))
@@ -745,8 +786,7 @@ class SwarmingTest(Test):
           args=[self.isolate_target(api)])
 
     # Create task.
-    self._tasks[suffix] = self.create_task(
-        api, suffix, isolated_hash, test_filter=test_filter)
+    self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
 
     if self._priority in self.PRIORITY_ADJUSTMENTS:
       self._tasks[suffix].priority += self.PRIORITY_ADJUSTMENTS[self._priority]
@@ -787,7 +827,7 @@ class SwarmingTest(Test):
 
     return api.swarming.trigger_task(self._tasks[suffix])
 
-  def run(self, api, suffix, test_filter=None):  # pylint: disable=R0201
+  def run(self, api, suffix):  # pylint: disable=R0201
     """Not used. All logic in pre_run, post_run."""
     return []
 
@@ -807,7 +847,7 @@ class SwarmingTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
-  def post_run(self, api, suffix, test_filter=None):
+  def post_run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
     assert suffix not in self._results, (
         'Results of %s were already collected' % self._step_name(suffix))
@@ -863,6 +903,10 @@ class SwarmingGTestTest(SwarmingTest):
     self._override_isolate_target = override_isolate_target
     self._cipd_packages = cipd_packages
 
+  @Test.test_options.setter
+  def test_options(self, value):
+    self._test_options = value
+
   def compile_targets(self, api):
     # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
     # It is a convention, not a hard coded rule.
@@ -887,23 +931,20 @@ class SwarmingGTestTest(SwarmingTest):
       return self.target_name + '_apk'
     return self.target_name
 
-  def create_task(self, api, suffix, isolated_hash, test_filter=None):
+  def create_task(self, api, suffix, isolated_hash):
     # For local tests test_args are added inside api.chromium.runtest.
     args = self._args[:]
     args.extend(api.chromium.c.runtests.test_args)
 
+    options = self.test_options
+    test_filter = options.test_filter
+
     if suffix == 'without patch':
       # If rerunning without a patch, run only tests that failed.
       test_filter = sorted(self.failures(api, 'with patch'))
-      # Make sure there's no existing --test-launcher-filter-file.
-      # http://crbug.com/587527.
-      # TODO(phajdan.jr): write test.
-      for arg in args:
-        if arg.startswith("--test-launcher-filter-file"):  # pragma: no cover
-          args.remove(arg)
-    if test_filter:
-      args.append('--gtest_filter=%s' % ':'.join(test_filter))
 
+    args = GTestTest.args_from_options(api, args, self,
+                                       override_test_filter=test_filter)
     args.extend(api.chromium.c.runtests.swarming_extra_args)
 
     return api.swarming.gtest_task(
@@ -927,11 +968,10 @@ class SwarmingGTestTest(SwarmingTest):
 
     return True, gtest_results.failures
 
-  def post_run(self, api, suffix, test_filter=None):
+  def post_run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
     try:
-      super(SwarmingGTestTest, self).post_run(
-          api, suffix,test_filter=test_filter)
+      super(SwarmingGTestTest, self).post_run(api, suffix)
     finally:
       step_result = api.step.active_result
       # Only upload test results if we have gtest results.
@@ -1007,7 +1047,7 @@ class LocalIsolatedScriptTest(Test):
 
   # TODO(nednguyen, kbr): figure out what to do with Android.
   # (crbug.com/533480)
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     # Copy the list because run can be invoked multiple times and we modify
     # the local copy.
     args = self._args[:]
@@ -1091,7 +1131,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def uses_swarming(self):
     return True
 
-  def create_task(self, api, suffix, isolated_hash, test_filter=None):
+  def create_task(self, api, suffix, isolated_hash):
     browser_config = api.chromium.c.build_config_fs.lower()
     args = self._args[:]
 
@@ -1151,10 +1191,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._output_chartjson_results_if_present(api, step_result)
     return valid, failures
 
-  def post_run(self, api, suffix, test_filter=None):
+  def post_run(self, api, suffix):
     try:
-      super(SwarmingIsolatedScriptTest, self).post_run(
-          api, suffix, test_filter=test_filter)
+      super(SwarmingIsolatedScriptTest, self).post_run(api, suffix)
     finally:
       results = self._isolated_script_results
       if self._upload_test_results and is_json_results_format(results):
@@ -1306,6 +1345,10 @@ class GTestTest(Test):
 
     self.enable_swarming = enable_swarming
 
+  @Test.test_options.setter
+  def test_options(self, value):
+    self._test.test_options = value
+
   @property
   def name(self):
     return self._test.name
@@ -1321,14 +1364,14 @@ class GTestTest(Test):
   def compile_targets(self, api):
     return self._test.compile_targets(api)
 
-  def pre_run(self, api, suffix, test_filter=None):
-    return self._test.pre_run(api, suffix, test_filter=test_filter)
+  def pre_run(self, api, suffix):
+    return self._test.pre_run(api, suffix)
 
-  def run(self, api, suffix, test_filter=None):
-    return self._test.run(api, suffix, test_filter=test_filter)
+  def run(self, api, suffix):
+    return self._test.run(api, suffix)
 
-  def post_run(self, api, suffix, test_filter=None):
-    return self._test.post_run(api, suffix, test_filter=test_filter)
+  def post_run(self, api, suffix):
+    return self._test.post_run(api, suffix)
 
   def has_valid_results(self, api, suffix):
     return self._test.has_valid_results(api, suffix)
@@ -1340,6 +1383,35 @@ class GTestTest(Test):
   def uses_swarming(self):
     return self._test.uses_swarming
 
+  @staticmethod
+  def args_from_options(api, original_args, test, **kwargs):
+    """Returns a list of command line options for gtest from a test's
+    .test_options property
+
+    Args:
+      api - The caller api.
+      original_args - Any args previously defined.
+      test - The test object.
+      kwargs - A dictionary to override fields from options.
+    Returns:
+      a list of command line options for gtest.
+    """
+    args = []
+    options = test.test_options
+    test_filter = kwargs.get('override_test_filter', options.test_filter)
+    if test_filter:
+      if test.uses_swarming:
+        args.append('--gtest_filter=%s' % ':'.join(test_filter))
+      else:
+        args.append(api.chromium.test_launcher_filter(test_filter))
+      # TODO(robertocn): Remove this code, because test launcher supports both
+      # flags now.
+      for a in original_args:  # pragma: no cover
+        if a.startswith('--test-launcher-filter-file'):
+          original_args.remove(a)
+
+    return original_args + args
+
 
 class PythonBasedTest(Test):
   @staticmethod
@@ -1349,7 +1421,7 @@ class PythonBasedTest(Test):
   def run_step(self, api, suffix, cmd_args, **kwargs):
     raise NotImplementedError()  # pragma: no cover
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     cmd_args = ['--write-full-results-to',
                 api.test_utils.test_results(add_json_log=False)]
     if suffix == 'without patch':
@@ -1439,12 +1511,12 @@ class BisectTest(Test):  # pylint: disable=W0232
   def compile_targets(_):  # pragma: no cover
     return ['chrome'] # Bisect always uses a separate bot for building.
 
-  def pre_run(self, api, _, test_filter=None):
+  def pre_run(self, api, _):
     self.test_config = api.bisect_tester.load_config_from_dict(
         self._test_parameters.get('bisect_config',
                                   api.properties.get('bisect_config')))
 
-  def run(self, api, _, test_filter=None):
+  def run(self, api, _):
     self.run_results = api.bisect_tester.run_test(
         self.test_config, **self.kwargs)
 
@@ -1476,12 +1548,12 @@ class BisectTestStaging(Test):  # pylint: disable=W0232
   def compile_targets(_):  # pragma: no cover
     return ['chrome'] # Bisect always uses a separate bot for building.
 
-  def pre_run(self, api, _, test_filter=None):
+  def pre_run(self, api, _):
     self.test_config = api.bisect_tester_staging.load_config_from_dict(
         self._test_parameters.get('bisect_config',
                                   api.properties.get('bisect_config')))
 
-  def run(self, api, _, test_filter=None):
+  def run(self, api, _):
     self.run_results = api.bisect_tester_staging.run_test(
         self.test_config, **self.kwargs)
 
@@ -1515,7 +1587,7 @@ class AndroidTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
     json_results_file = api.test_utils.gtest_results(add_json_log=False)
     try:
@@ -1703,7 +1775,7 @@ class BlinkTest(Test):
   def uses_local_devices(self):
     return True
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     results_dir = api.path['start_dir'].join('layout-test-results')
 
     step_name = self._step_name(suffix)
@@ -1865,7 +1937,7 @@ class WebViewCTSTest(Test):
   def compile_targets(api):
     return ['system_webview_apk']
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     api.chromium_android.adb_install_apk(
         api.chromium_android.apk_path('SystemWebView.apk'))
     api.chromium_android.run_webview_cts(android_platform=self._platform)
@@ -1894,7 +1966,7 @@ class IncrementalCoverageTest(Test):
     """List of compile targets needed by this test."""
     return []
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     api.chromium_android.coverage_report(upload=False)
     api.chromium_android.get_changed_lines_for_revision()
     api.chromium_android.incremental_coverage_report()
@@ -1913,7 +1985,7 @@ class FindAnnotatedTest(Test):
   def compile_targets(api):
     return FindAnnotatedTest._TEST_APKS.keys()
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     with api.tempfile.temp_dir('annotated_tests_json') as temp_output_dir:
       timestamp_string = datetime.datetime.utcnow().strftime('%Y%m%dT%H%M%S')
       if api.properties.get('buildername') is not None:

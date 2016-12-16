@@ -76,7 +76,7 @@ class WebRTCPerfTest(steps.LocalGTestTest):
     runtest_kwargs['annotate'] = 'graphing'
     super(WebRTCPerfTest, self).__init__(name, args, **runtest_kwargs)
 
-  def run(self, api, suffix, test_filter=None):
+  def run(self, api, suffix):
     webrtc_subtree_git_hash = api.bot_update.last_returned_properties.get(
         'got_webrtc_revision', 'deadbeef')
     self._runtest_kwargs['perf_config'] = {
@@ -84,7 +84,7 @@ class WebRTCPerfTest(steps.LocalGTestTest):
         'r_webrtc_subtree_git': webrtc_subtree_git_hash,
         'a_default_rev': 'r_webrtc_subtree_git',
     }
-    steps.LocalGTestTest.run(self, api, suffix, test_filter=test_filter)
+    steps.LocalGTestTest.run(self, api, suffix)
 
 
 def TestSpec(parent_builder, perf_id, platform, target_bits,
