@@ -47,6 +47,10 @@ DEPS = [
 
 def V8Builder(config, bits, platform):
   chromium_configs = []
+
+  # TODO(tikuta): Removing this after removing compile.py.
+  chromium_configs.append('no_compile_py')
+
   if config == 'Debug':
     chromium_configs.append('v8_optimize_medium')
     chromium_configs.append('v8_slow_dchecks')
