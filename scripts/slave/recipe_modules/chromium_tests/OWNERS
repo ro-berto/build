@@ -10,7 +10,8 @@ sergiyb@chromium.org
 stip@chromium.org
 tandrii@chromium.org
 
-per-file chromium_android.py=jbudorick@chromium.org
+per-file chromium_android*=bpastene@chromium.org
+per-file chromium_android*=jbudorick@chromium.org
 per-file chromium_fyi*=thakis@chromium.org
 per-file chromium_gpu*=kbr@chromium.org
 per-file chromium_perf*=dtu@chromium.org
