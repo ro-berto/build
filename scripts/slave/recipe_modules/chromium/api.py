@@ -699,15 +699,14 @@ class ChromiumApi(recipe_api.RecipeApi):
     else:
       self.m.step(name='gn', cmd=[gn_path] + step_args, **kwargs)
 
-  def run_mb(self, mastername, buildername, use_goma=True,
+  def run_mb(self, mastername, buildername, use_goma=True, mb_path=None,
              mb_config_path=None, gn_isolate_map_path=None,
              isolated_targets=None, name=None,
              build_dir=None, android_version_code=None,
              android_version_name=None, gyp_script=None, phase=None,
              **kwargs):
-    mb_config_path = (mb_config_path or
-                      self.m.path['checkout'].join('tools', 'mb',
-                                                   'mb_config.pyl'))
+    mb_path = mb_path or self.m.path['checkout'].join('tools', 'mb')
+    mb_config_path = mb_config_path or mb_path.join('mb_config.pyl')
     isolated_targets = isolated_targets or []
 
     out_dir = 'out'
@@ -759,7 +758,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     # environment without any GYP_DEFINES being present to cause confusion.
     step_kwargs = {
       'name': name or 'generate_build_files',
-      'script': self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
+      'script': mb_path.join('mb.py'),
       'args': args,
       'env': {
         'GOMA_SERVICE_ACCOUNT_JSON_FILE': self.m.goma.service_account_json_path,
