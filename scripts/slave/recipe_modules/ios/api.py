@@ -206,7 +206,7 @@ class iOSApi(recipe_api.RecipeApi):
       self,
       analyze=False,
       default_gn_args_path=None,
-      mb_config_path=None,
+      mb_path=None,
       setup_gn=False,
       suffix=None,
       use_mb=True,
@@ -219,8 +219,7 @@ class iOSApi(recipe_api.RecipeApi):
       allow_analyzer: Allows use of analyze.
       default_gn_args_path: Path to default gn args file to import with
         setup-gn.py.
-      mb_config_path: Custom path to mb_config.pyl. Uses the default if
-        unspecified.
+      mb_path: Custom path to MB. Uses the default if unspecified.
       setup_gn: Whether or not to call setup-gn.py.
       suffix: Suffix to use at the end of step names.
       use_mb: Whether or not to use mb to generate build files.
@@ -269,7 +268,7 @@ class iOSApi(recipe_api.RecipeApi):
           self.m.properties['buildername'],
           build_dir='//out/%s' % build_sub_path,
           env=env,
-          mb_config_path=mb_config_path,
+          mb_path=mb_path,
           name='generate build files (mb)' + suffix,
           use_goma=self.use_goma,
       )

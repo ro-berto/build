@@ -141,14 +141,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/ios/src/tools-webrtc/mb/mb.py",
       "gen",
       "-m",
       "chromium.fake",
       "-b",
       "ios",
       "--config-file",
-      "[BUILDER_CACHE]/ios/src/webrtc/build/mb_config.pyl",
+      "[BUILDER_CACHE]/ios/src/tools-webrtc/mb/mb_config.pyl",
       "//out/Release-iphoneos"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",

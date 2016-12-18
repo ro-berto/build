@@ -28,12 +28,8 @@ def RunSteps(api):
   buildername = api.properties['buildername'].replace(' ', '_')
   api.ios.read_build_config(build_config_base_dir=build_config_base_dir,
                             buildername=buildername)
-  mb_config_path = api.path['checkout'].join(
-      'webrtc',
-      'build',
-      'mb_config.pyl',
-  )
-  api.ios.build(mb_config_path=mb_config_path)
+  mb_path = api.path['checkout'].join('tools-webrtc', 'mb')
+  api.ios.build(mb_path=mb_path)
   api.ios.test_swarming(scripts_dir='src/chromium/src/ios/build/bots/scripts')
 
 def GenTests(api):
