@@ -522,7 +522,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       tags.add('os:' + task.dimensions['os'])
     if self.m.properties.get('slavename'):
       tags.add('slavename:%s' % self.m.properties['slavename'])
-    tags.add('stepname:%s' % self._get_step_name('', task))
+    tags.add('stepname:%s' % self.get_step_name('', task))
     rietveld = self.m.properties.get('rietveld')
     issue = self.m.properties.get('issue')
     patchset = self.m.properties.get('patchset')
@@ -556,7 +556,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # The step can fail only on infra failures, so mark it as 'infra_step'.
     try:
       return self.m.python(
-          name=self._get_step_name('trigger', task),
+          name=self.get_step_name('trigger', task),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args,
           step_test_data=functools.partial(
@@ -645,7 +645,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     try:
       return self.m.python(
-          name=self._get_step_name('', task),
+          name=self.get_step_name('', task),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args,
           step_test_data=functools.partial(
@@ -724,7 +724,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # collect_gtest_task.py to emit all necessary annotations itself.
     try:
       return self.m.python(
-          name=self._get_step_name('', task),
+          name=self.get_step_name('', task),
           script=self.package_repo_resource('scripts', 'tools', 'runit.py'),
           args=args,
           allow_subannotations=True,
@@ -829,7 +829,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     try:
       return self.m.python(
-          name=self._get_step_name('', task),
+          name=self.get_step_name('', task),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args, step_test_data=lambda: step_test_data,
           **kwargs)
@@ -892,7 +892,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         self.m.step.active_result.presentation.logs['no_results_exc'] = [str(e)]
         self.m.step.active_result.isolated_script_results = None
 
-  def _get_step_name(self, prefix, task):
+  def get_step_name(self, prefix, task):
     """SwarmingTask -> name of a step of a waterfall.
 
     Will take a task title (+ step name prefix) and append OS dimension to it.
@@ -1089,3 +1089,14 @@ class SwarmingTask(object):
       for shard_dict in self._trigger_output['tasks'].itervalues():
         if shard_dict['shard_index'] == index:
           return shard_dict['view_url']
+
+  def get_task_ids(self):
+    """Returns task id of all shards.
+
+    Works only after the task has been successfully triggered.
+    """
+    task_ids = []
+    if self._trigger_output and self._trigger_output.get('tasks'):
+      for shard_dict in self._trigger_output['tasks'].itervalues():
+        task_ids.append(shard_dict['task_id'])
+    return task_ids
