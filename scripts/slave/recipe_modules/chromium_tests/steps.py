@@ -2003,8 +2003,9 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
 class WebViewCTSTest(Test):
 
   # TODO(yolandyan): create a generator and move specifications to src/
-  def __init__(self, platform='L'):
+  def __init__(self, platform='L', command_line_args=None):
     super(WebViewCTSTest, self).__init__()
+    self._command_line_args = command_line_args
     self._platform = platform
 
   @property
@@ -2022,7 +2023,9 @@ class WebViewCTSTest(Test):
   def run(self, api, suffix):
     api.chromium_android.adb_install_apk(
         api.chromium_android.apk_path('SystemWebView.apk'))
-    api.chromium_android.run_webview_cts(android_platform=self._platform)
+    api.chromium_android.run_webview_cts(
+        command_line_args=self._command_line_args,
+        android_platform=self._platform)
 
 
 class IncrementalCoverageTest(Test):

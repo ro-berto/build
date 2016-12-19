@@ -1346,6 +1346,8 @@ class AndroidApi(recipe_api.RecipeApi):
   def run_webview_cts(self, command_line_args=None, suffix=None,
                       android_platform='L', arch='arm_64'):
     suffix = ' (%s)' % suffix if suffix else ''
+    command_line_suffix = (' with %s' % ' '.join(command_line_args)
+                           if command_line_args else '')
     if command_line_args:
       self._set_webview_command_line(command_line_args)
 
@@ -1360,7 +1362,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     try:
       self.m.python(
-          'Run CTS%s' % suffix,
+          'Run CTS%s%s' % (command_line_suffix, suffix),
           self.m.path['checkout'].join(
               'android_webview', 'tools', 'run_cts.py'),
           cts_runner_args,

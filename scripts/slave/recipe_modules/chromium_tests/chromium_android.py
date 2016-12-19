@@ -281,7 +281,11 @@ SPEC = {
       'test_results_config': 'public_server',
       'remove_system_webview': True,
       'tests': [
-        steps.WebViewCTSTest('N'),
+        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
+        steps.WebViewCTSTest('N',
+            command_line_args=['""']),
+        steps.WebViewCTSTest('N',
+            command_line_args=['--webview-sandboxed-renderer']),
       ],
       'testing': {
         'platform': 'linux',
