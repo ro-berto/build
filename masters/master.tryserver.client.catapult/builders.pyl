@@ -28,7 +28,7 @@
       "properties": {
         "platform": "android",
       },
-      "builder_timeout_s": 1200,  # 20 minutes max
+      "builder_timeout_s": 1800,  # 30 minutes max
     },
     "Catapult Linux Tryserver": {
       "recipe": "catapult",
