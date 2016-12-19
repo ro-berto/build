@@ -266,35 +266,11 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "--target",
-      "Debug",
-      "--src-dir",
-      "[BUILDER_CACHE]/ClangToTAndroidASan/src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--buildbot-buildername",
-      "ClangToTAndroidASan",
-      "--buildbot-mastername",
-      "chromium.fyi",
-      "--buildbot-slavename",
-      "TestSlavename",
-      "--goma-deps-cache-file",
-      "ClangToTAndroidASan.gomadeps",
-      "--build-data-dir",
-      "[ROOT]/build_data_dir",
-      "--compiler",
-      "clang",
-      "--",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/ClangToTAndroidASan/src/out/Debug",
       "all"
     ],
     "env": {
@@ -303,6 +279,25 @@
       "PATH": "[BUILDER_CACHE]/ClangToTAndroidASan/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/ClangToTAndroidASan/src/build/android:%(PATH)s"
     },
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[BUILDER_CACHE]/ClangToTAndroidASan/src/out/Debug",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/ClangToTAndroidASan/src/out/Debug', 'all']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "clang"
+    ],
+    "name": "upload_ninja_log"
   },
   {
     "name": "$result",

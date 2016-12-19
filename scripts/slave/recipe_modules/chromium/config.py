@@ -48,7 +48,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
       # TODO(tikuta): Remove this after removing compile.py.
-      use_compile_py = Single(bool, empty_val=True, required=False),
+      use_compile_py = Single(bool, empty_val=False, required=False),
     ),
     runtest_py = ConfigGroup(
       src_side = Single(bool),

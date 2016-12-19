@@ -196,39 +196,36 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[BUILDER_CACHE]\\Win_SyzyASAN_LKGR\\src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--buildbot-buildername",
-      "Win SyzyASAN LKGR",
-      "--buildbot-mastername",
-      "chromium.lkgr",
-      "--buildbot-slavename",
-      "TestSlavename",
-      "--goma-deps-cache-file",
-      "Win_SyzyASAN_LKGR.gomadeps",
-      "--build-data-dir",
-      "[ROOT]\\build_data_dir",
-      "--",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]\\Win_SyzyASAN_LKGR\\src\\out\\Release",
       "chromium_builder_asan"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[BUILDER_CACHE]\\Win_SyzyASAN_LKGR\\src\\out\\Release",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win_SyzyASAN_LKGR\\\\src\\\\out\\\\Release', 'chromium_builder_asan']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "unknown"
+    ],
+    "name": "upload_ninja_log"
   },
   {
     "cmd": [

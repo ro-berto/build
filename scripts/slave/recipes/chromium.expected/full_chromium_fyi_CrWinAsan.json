@@ -297,35 +297,11 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[BUILDER_CACHE]\\CrWinAsan\\src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--buildbot-buildername",
-      "CrWinAsan",
-      "--buildbot-mastername",
-      "chromium.fyi",
-      "--buildbot-slavename",
-      "TestSlavename",
-      "--goma-deps-cache-file",
-      "CrWinAsan.gomadeps",
-      "--build-data-dir",
-      "[ROOT]\\build_data_dir",
-      "--compiler",
-      "clang",
-      "--",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]\\CrWinAsan\\src\\out\\Release",
       "browser_tests",
       "browser_tests_run",
       "chromium_builder_asan"
@@ -335,6 +311,25 @@
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[BUILDER_CACHE]\\CrWinAsan\\src\\out\\Release",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\CrWinAsan\\\\src\\\\out\\\\Release', 'browser_tests', 'browser_tests_run', 'chromium_builder_asan']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "clang"
+    ],
+    "name": "upload_ninja_log"
   },
   {
     "cmd": [

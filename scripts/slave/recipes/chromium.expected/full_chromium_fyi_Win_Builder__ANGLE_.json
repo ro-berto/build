@@ -288,43 +288,11 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[BUILDER_CACHE]\\Win_Builder__ANGLE_\\src",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--buildbot-buildername",
-      "Win Builder (ANGLE)",
-      "--buildbot-mastername",
-      "chromium.fyi",
-      "--buildbot-slavename",
-      "TestSlavename",
-      "--goma-deps-cache-file",
-      "Win_Builder__ANGLE_.gomadeps",
-      "--build-data-dir",
-      "[ROOT]\\build_data_dir",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "--cloudtail-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json",
-      "--goma-dir",
-      "[CACHE]\\cipd\\goma",
-      "--",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]\\Win_Builder__ANGLE_\\src\\out\\Release",
       "browser_tests",
       "browser_tests_run",
       "chromium_builder_tests"
@@ -332,11 +300,26 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[BUILDER_CACHE]\\Win_Builder__ANGLE_\\src\\out\\Release",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win_Builder__ANGLE_\\\\src\\\\out\\\\Release', 'browser_tests', 'browser_tests_run', 'chromium_builder_tests']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "goma"
+    ],
+    "name": "upload_ninja_log"
   },
   {
     "cmd": [
