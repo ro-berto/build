@@ -38,11 +38,9 @@ def RunSteps(api):
                       android_version_name="example")
 
   env = {}
-  use_compile_py = api.properties.get('use_compile_py', True)
   api.chromium.compile(
       targets=['All'], out_dir=out_dir,
       use_goma_module=use_goma_module,
-      use_compile_py=use_compile_py,
       env=env)
 
 
@@ -55,33 +53,12 @@ def GenTests(api):
       out_dir='/tmp',
   )
 
-  yield (api.test('basic_out_dir_compile_py_goma_failure') +
-         api.properties(
-             mastername='chromium.linux',
-             buildername='Android Builder (dbg)',
-             slavename='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             use_goma_module=False,
-         ) + api.override_step_data(
-             'compile',
-             api.json.output({
-                 'notice': [
-                     {
-                         "compile_error": "COMPILER_PROXY_UNREACHABLE",
-                     },
-                 ],
-             }),
-             retcode=1)
-  )
-
   yield api.test('basic_out_dir_without_compile_py') + api.properties(
       mastername='chromium.linux',
       buildername='Android Builder (dbg)',
       slavename='build1-a1',
       buildnumber='77457',
       out_dir='/tmp',
-      use_compile_py=False,
   )
 
   yield api.test('basic_out_dir_with_goma_module') + api.properties(

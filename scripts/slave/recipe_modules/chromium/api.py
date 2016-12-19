@@ -151,11 +151,13 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
-  # TODO(tikuta): Remove use_compile_py=True after removing compile.py.
+  # TODO(tikuta): Remove use_compile_py=False before removing compile.py.
   def compile(self, targets=None, name=None, out_dir=None,
               target=None, use_goma_module=False,
-              use_compile_py=True, **kwargs):
+              use_compile_py=False, **kwargs):
     """Return a compile.py invocation."""
+    assert use_compile_py == False
+
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
 
@@ -167,51 +169,15 @@ class ChromiumApi(recipe_api.RecipeApi):
     goma_env.update(kwargs.get('env', {}))
     ninja_env = goma_env.copy()
 
-    # TODO(tikuta): remove args if compile.py is removed.
-    args = [
-      '--show-path',
-      'python',
-      self.package_repo_resource('scripts', 'slave', 'compile.py'),
-      '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
-      '--ninja-path', self.m.depot_tools.ninja_path,
-      '--target', target or self.c.build_config_fs,
-      '--src-dir', self.m.path['checkout'],
-      '--goma-cache-dir', self.m.goma.default_cache_path,
-    ]
-
     goma_env['GOMA_CACHE_DIR'] = self.m.goma.default_cache_path
-
-    # Set some buildbot info used in goma_utils.
-    for key in ['buildername', 'mastername', 'slavename', 'clobber']:
-      if key in self.m.properties:
-        args.extend([
-            '--buildbot-%s' % key, self.m.properties[key]
-        ])
 
     safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
                               self.m.properties['buildername']) + '.gomadeps'
-    args.extend(['--goma-deps-cache-file', safe_buildername])
+
     goma_env['GOMA_DEPS_CACHE_FILE'] = safe_buildername
 
-    if self.c.compile_py.build_args:
-      for arg in self.c.compile_py.build_args:
-        args += ['--build-args', arg]
-    if self.m.properties.get('build_data_dir'):
-      args += ['--build-data-dir', self.m.properties.get('build_data_dir')]
-    if self.c.compile_py.compiler:
-      args += ['--compiler', self.c.compile_py.compiler]
-      if 'goma' in self.c.compile_py.compiler:
-        args += [
-            '--goma-jsonstatus', self.m.json.output(),
-            '--goma-service-account-json-file',
-            self.m.goma.service_account_json_path,
-            '--cloudtail-service-account-json',
-            self.m.goma.cloudtail_service_account_json_path,
-        ]
-    if out_dir:
-      args += ['--out-dir', out_dir]
+
     if self.c.compile_py.mode:
-      args += ['--mode', self.c.compile_py.mode]
       if (self.c.compile_py.mode == 'google_chrome' or
           self.c.compile_py.mode == 'official'):
         ninja_env['CHROMIUM_BUILD'] = '_google_chrome'
@@ -220,75 +186,58 @@ class ChromiumApi(recipe_api.RecipeApi):
         # Official builds are always Google Chrome.
         ninja_env['CHROME_BUILD_TYPE'] = '_official'
 
-    if self.c.compile_py.goma_dir:
-      args += ['--goma-dir', self.c.compile_py.goma_dir]
     if self.c.compile_py.goma_hermetic:
-      args += ['--goma-hermetic', self.c.compile_py.goma_hermetic]
       goma_env['GOMA_HERMETIC'] = self.c.compile_py.goma_hermetic
     if self.c.compile_py.goma_enable_remote_link:
-      args += ['--goma-enable-remote-link']
       goma_env['GOMA_ENABLE_REMOTE_LINK'] = 'true'
     if self.c.compile_py.goma_store_local_run_output:
-      args += ['--goma-store-local-run-output']
       goma_env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = 'true'
     if self.c.compile_py.goma_max_active_fail_fallback_tasks:
-      args += ['--goma-max-active-fail-fallback-tasks',
-               self.c.compile_py.goma_max_active_fail_fallback_tasks]
       goma_env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = (
           self.c.compile_py.goma_max_active_fail_fallback_tasks)
     if (self.m.tryserver.is_tryserver or
         self.c.compile_py.goma_failfast):
       # We rely on goma to meet cycle time goals on the tryserver. It's better
       # to fail early.
-      args += ['--goma-fail-fast', '--goma-disable-local-fallback']
       goma_env['GOMA_FAIL_FAST'] = 'true'
       allow_build_without_goma = False
     else:
       goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
       allow_build_without_goma = True
-    if self.c.compile_py.ninja_confirm_noop:
-      args.append('--ninja-ensure-up-to-date')
-    if self.c.TARGET_CROS_BOARD:
-      args += ['--cros-board', self.c.TARGET_CROS_BOARD]
-
-    args.append('--')
-    args.extend(targets)
 
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'compile' through 'cros chrome-sdk'
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
       kwargs.setdefault('cwd', self.m.path['checkout'])
 
-    if use_goma_module or not use_compile_py:
+    if self.m.platform.is_linux and self.c.TARGET_CROS_BOARD:
+      out_dir = 'out_%s' % self.c.TARGET_CROS_BOARD
+    elif out_dir is None:
+      out_dir = 'out'
 
-      if self.m.platform.is_linux and self.c.TARGET_CROS_BOARD:
-        out_dir = 'out_%s' % self.c.TARGET_CROS_BOARD
-      elif out_dir is None:
-        out_dir = 'out'
+    target_output_dir = self.m.path.abspath(
+        self.m.path.join(self.m.path['checkout'], out_dir,
+                         target or self.c.build_config_fs))
 
-      target_output_dir = self.m.path.abspath(
-          self.m.path.join(self.m.path['checkout'], out_dir,
-                           target or self.c.build_config_fs))
+    command = [str(self.m.depot_tools.ninja_path), '-w', 'dupbuild=err',
+               '-C', target_output_dir]
 
-      command = [str(self.m.depot_tools.ninja_path), '-w', 'dupbuild=err',
-                 '-C', target_output_dir]
+    if self.c.compile_py.build_args:
+      command.extend(self.c.compile_py.build_args)
 
-      if self.c.compile_py.build_args:
-        command.extend(self.c.compile_py.build_args)
+    # TODO(tikuta): Remove this and let goma module set '-j'
+    #               inside build_with_goma.
+    if use_goma_module:
+      # Set -j just before 'with self.m.goma.build_with_goma('
+      # for ninja_log_command being set correctly if starting goma
+      # fails.
+      command += ['-j', self.m.goma.recommended_goma_jobs]
 
-      # TODO(tikuta): Remove this and let goma module set '-j'
-      #               inside build_with_goma.
-      if use_goma_module:
-        # Set -j just before 'with self.m.goma.build_with_goma('
-        # for ninja_log_command being set correctly if starting goma
-        # fails.
-        command += ['-j', self.m.goma.recommended_goma_jobs]
+    if targets is not None:
+      # Add build targets to command ('All', 'chrome' etc).
+      command += targets
 
-      if targets is not None:
-        # Add build targets to command ('All', 'chrome' etc).
-        command += targets
-
-      kwargs.pop('env', {})
+    kwargs.pop('env', {})
 
     try:
       if use_goma_module:
@@ -301,7 +250,8 @@ class ChromiumApi(recipe_api.RecipeApi):
             ninja_log_compiler=self.c.compile_py.compiler or 'goma',
             allow_build_without_goma=allow_build_without_goma,
             **kwargs)
-      elif not use_compile_py:
+      else:
+        # TODO(tikuta): Extract this from outside of try.
         compile_exit_status = 1
         try:
           self.m.step(name or 'compile',
@@ -324,26 +274,13 @@ class ChromiumApi(recipe_api.RecipeApi):
                   'scripts', 'slave', 'upload_goma_logs.py'),
               args=upload_ninja_log_args)
 
-      else:
-        env = self.get_env()
-        env.update(kwargs.pop('env', {}))
-        self.m.python(
-            name or 'compile',
-            self.package_repo_resource('scripts', 'tools', 'runit.py'),
-            args,
-            env=env,
-            **kwargs)
     except self.m.step.StepFailure as e:
       # Handle failures caused by goma.
-      if self.c.compile_py.compiler and 'goma' in self.c.compile_py.compiler:
+      if use_goma_module:
         step_result = self.m.step.active_result
         failure_result_code = ''
 
-        if use_goma_module:
-          json_status = self.m.goma.jsonstatus['notice'][0]
-        else:
-          assert use_compile_py
-          json_status = step_result.json.output['notice'][0]
+        json_status = self.m.goma.jsonstatus['notice'][0]
 
         if (not json_status.get('infra_status')):
           failure_result_code = 'GOMA_SETUP_FAILURE'

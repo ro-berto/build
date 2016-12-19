@@ -518,9 +518,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
                          mb_mastername=None, mb_buildername=None):
-    # TODO(tikuta): Remove use_compile_py after removing compile.py.
-    use_compile_py = self.m.chromium.c.compile_py.use_compile_py
-
     use_goma_module=False
     if self.m.chromium.c.project_generator.tool == 'mb':
       mb_mastername = mb_mastername or self.m.properties['mastername']
@@ -530,12 +527,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.run_mb(mb_mastername, mb_buildername, use_goma=use_goma,
                              isolated_targets=isolated_targets,
                              name='generate_build_files%s' % name_suffix)
-      if use_goma and not use_compile_py:
+      if use_goma:
         use_goma_module = True
 
     self.m.chromium.compile(compile_targets, name='compile%s' % name_suffix,
-                            use_goma_module=use_goma_module,
-                            use_compile_py=use_compile_py)
+                            use_goma_module=use_goma_module)
 
   def download_and_unzip_build(self, mastername, buildername, update_step,
                                bot_db, build_archive_url=None,
@@ -930,9 +926,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     api.chromium_swarming.configure_swarming('chromium', precommit=True)
 
     api.chromium.apply_config('trybot_flavor')
-
-    # TODO(tikuta): Remove this after removing compile.py.
-    api.chromium.apply_config('no_compile_py')
 
     bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
         bot_config_object)
