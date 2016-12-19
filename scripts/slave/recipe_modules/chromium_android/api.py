@@ -626,10 +626,16 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--chrome-specific-wipe')
     if emulators:
       args.append('--emulators')
+    if self.c and self.c.use_devil_provision:
+      provision_path = self.m.path['checkout'].join(
+          'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
+          'provision_devices.py')
+    else:
+      provision_path = self.m.path['checkout'].join(
+          'build', 'android', 'provision_devices.py')
     result = self.m.python(
       'provision_devices',
-      self.m.path['checkout'].join(
-          'build', 'android', 'provision_devices.py'),
+      provision_path,
       args=args,
       env=self.m.chromium.get_env(),
       infra_step=True,

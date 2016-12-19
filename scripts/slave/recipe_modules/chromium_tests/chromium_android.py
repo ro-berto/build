@@ -126,6 +126,8 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'android_apply_config': ['use_devil_provision'],
+      'test_results_config': 'public_server',
       'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux',
@@ -144,6 +146,7 @@ SPEC = {
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
+      'test_results_config': 'public_server',
       'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux',
@@ -180,6 +183,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'android_apply_config': ['use_devil_provision'],
       'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux',
@@ -197,6 +201,7 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'android_apply_config': ['use_devil_provision'],
       'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux',
