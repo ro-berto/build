@@ -42,6 +42,9 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     ),
     restart_usb = Single(bool, required=False, empty_val=False),
     use_devil_adb = Single(bool, required=False, empty_val=False),
+    # TODO(jbudorick): Remove this once everything has switched to devil
+    # provisioning.
+    use_devil_provision = Single(bool, required=False, empty_val=False),
   )
 
 
@@ -243,3 +246,7 @@ def restart_usb(c):
 @config_ctx()
 def use_devil_adb(c):
   c.use_devil_adb = True
+
+@config_ctx()
+def use_devil_provision(c):
+  c.use_devil_provision = True
