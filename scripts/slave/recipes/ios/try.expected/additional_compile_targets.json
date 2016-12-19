@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/ios_simulator_swarming",
+      "[BUILDER_CACHE]/ios_simulator",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -46,7 +46,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming",
+    "cwd": "[BUILDER_CACHE]/ios_simulator",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -131,21 +131,18 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/ios/build/bots/chromium.mac/ios-simulator-swarming.json",
+      "[BUILDER_CACHE]/ios_simulator/src/ios/build/bots/chromium.mac/ios-simulator.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"additional_compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake_target\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -155,7 +152,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"additional_compile_targets\": [], \n  \"compiler flags\": [], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.mac\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake test\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"additional_compile_targets\": [\n    \"fake_target\"\n  ], \n  \"compiler flags\": [], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.mac\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "name": "finalize build config"
   },
@@ -180,7 +177,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "LANDMINES_VERBOSE": "1",
@@ -192,17 +189,17 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
-      "ios-simulator-swarming",
+      "ios-simulator",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb_config.pyl",
       "//out/Debug-iphonesimulator"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -217,7 +214,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -230,7 +227,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/testing/buildbot/trybot_analyze_config.json",
+      "[BUILDER_CACHE]/ios_simulator/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -254,15 +251,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "chromium.mac",
       "-b",
-      "ios-simulator-swarming",
+      "ios-simulator",
       "-v",
       "//out/None",
-      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake test\"]}",
+      "{\"additional_compile_targets\": [\"fake_target\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -278,13 +275,13 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"fake_target\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"fake test\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]
@@ -293,9 +290,9 @@
     "cmd": [
       "ninja",
       "-C",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/out/Debug-iphonesimulator"
+      "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src/out/Debug-iphonesimulator",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "LANDMINES_VERBOSE": "1"
@@ -468,18 +465,6 @@
       "@@@STEP_LOG_LINE@template.isolate@  ]@@@",
       "@@@STEP_LOG_LINE@template.isolate@}@@@",
       "@@@STEP_LOG_END@template.isolate@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "skipped"
-  },
-  {
-    "cmd": [],
-    "name": "skipped.[skipped] fake test (fake device iOS 8.1)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@This test was skipped because it was not affected.@@@"
     ]
   },
   {

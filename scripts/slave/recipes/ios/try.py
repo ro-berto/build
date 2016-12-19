@@ -340,3 +340,31 @@ def GenTests(api):
     + api.step_data('compile (with patch)', retcode=1)
     + suppress_analyze()
   )
+
+  yield (
+    api.test('additional_compile_targets')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios-simulator',
+      buildnumber='0',
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      rietveld='fake://rietveld.url',
+      slavename='fake-vm',
+      path_config='kitchen',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.0',
+      'additional_compile_targets': ['fake_target'],
+      'tests': [
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+  )
+

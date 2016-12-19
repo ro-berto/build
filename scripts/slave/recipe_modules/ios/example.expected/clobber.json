@@ -120,7 +120,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"compiler flags\": [], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"xcode version\": \"6.1.1\"\n}"
+      "{\n  \"additional_compile_targets\": [], \n  \"compiler flags\": [], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.fake\", \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"xcode version\": \"6.1.1\"\n}"
     ],
     "name": "finalize build config"
   },

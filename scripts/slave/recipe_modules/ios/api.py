@@ -107,6 +107,7 @@ class iOSApi(recipe_api.RecipeApi):
     # we default to empty values of their respective types, so in other places
     # we can iterate over them without having to check if they are in the dict
     # at all.
+    self.__config.setdefault('additional_compile_targets', [])
     self.__config.setdefault('compiler flags', [])
     self.__config.setdefault('env', {})
     self.__config.setdefault('gn_args', [])
@@ -304,7 +305,7 @@ class iOSApi(recipe_api.RecipeApi):
         self.m.filter.analyze(
           affected_files,
           tests,
-          tests,
+          self.__config['additional_compile_targets'],
           'trybot_analyze_config.json',
           additional_names=['chromium', 'ios'],
           mb_mastername=self.__config['mastername'],
