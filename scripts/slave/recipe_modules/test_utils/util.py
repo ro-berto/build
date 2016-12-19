@@ -95,6 +95,7 @@ class TestResults(object):
 class GTestResults(object):
   def __init__(self, jsonish=None):
     self.raw = jsonish or {}
+    self.pass_fail_counts = {}
 
     if not jsonish:
       self.valid = False
@@ -107,14 +108,27 @@ class GTestResults(object):
     for cur_iteration_data in self.raw.get('per_iteration_data', []):
       for test_fullname, results in cur_iteration_data.iteritems():
         # Results is a list with one entry per test try. Last one is the final
-        # result, the only we care about here.
+        # result, the only we care about for the .passes and .failures
+        # attributes.
         last_result = results[-1]
-
         # martiniss: this will go away once aggregate steps lands (I think)
         if last_result['status'] == 'SUCCESS':
           self.passes.add(test_fullname)
         elif last_result['status'] != 'SKIPPED':
           self.failures.add(test_fullname)
+
+        # The pass_fail_counts attribute takes into consideration all runs.
+
+        # TODO (robertocn): Consider a failure in any iteration a failure of
+        # the whole test, but allow for an override that makes a test pass if
+        # it passes at least once.
+        self.pass_fail_counts.setdefault(
+            test_fullname, {'pass_count': 0, 'fail_count': 0})
+        for cur_result in results:
+          if cur_result['status'] == 'SUCCESS':
+            self.pass_fail_counts[test_fullname]['pass_count'] += 1
+          elif cur_result['status'] != 'SKIPPED':
+            self.pass_fail_counts[test_fullname]['fail_count'] += 1
 
     # With multiple iterations a test could have passed in one but failed
     # in another. Remove tests that ever failed from the passing set.

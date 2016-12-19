@@ -310,6 +310,7 @@ class LocalGTestTest(Test):
     self._override_isolate_target = override_isolate_target
     self._use_xvfb = use_xvfb
     self._runtest_kwargs = runtest_kwargs
+    self._gtest_results = {}
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -400,6 +401,7 @@ class LocalGTestTest(Test):
       if hasattr(step_result, 'test_utils'):
         r = step_result.test_utils.gtest_results
         p = step_result.presentation
+        self._gtest_results[suffix] = r
 
         if r.valid:
           p.step_text += api.test_utils.format_step_text([
@@ -415,6 +417,10 @@ class LocalGTestTest(Test):
 
 
     return step_result
+
+  def pass_fail_counts(self, suffix):
+    if suffix in self._gtest_results:
+      return self._gtest_results[suffix].pass_fail_counts
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:
@@ -947,6 +953,7 @@ class SwarmingGTestTest(SwarmingTest):
     self._override_compile_targets = override_compile_targets
     self._override_isolate_target = override_isolate_target
     self._cipd_packages = cipd_packages
+    self._gtest_results = {}
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -1014,18 +1021,22 @@ class SwarmingGTestTest(SwarmingTest):
 
     return True, gtest_results.failures
 
+  def pass_fail_counts(self, suffix):
+    if suffix in self._gtest_results:
+      return self._gtest_results[suffix].pass_fail_counts
+
   def post_run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
     try:
       super(SwarmingGTestTest, self).post_run(api, suffix)
     finally:
       step_result = api.step.active_result
-      # Only upload test results if we have gtest results.
-      if (self._upload_test_results and
-          hasattr(step_result, 'test_utils') and
+      if (hasattr(step_result, 'test_utils') and
           hasattr(step_result.test_utils, 'gtest_results')):
         gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
-        if gtest_results and gtest_results.raw:
+        self._gtest_results[suffix] = gtest_results
+        # Only upload test results if we have gtest results.
+        if self._upload_test_results and gtest_results and gtest_results.raw:
           parsed_gtest_data = gtest_results.raw
           chrome_revision_cp = api.bot_update.last_returned_properties.get(
               'got_revision_cp', 'x@{#0}')
@@ -1442,6 +1453,9 @@ class GTestTest(Test):
   @property
   def uses_swarming(self):
     return self._test.uses_swarming
+
+  def pass_fail_counts(self, suffix):
+    return self._test.pass_fail_counts(suffix)
 
   @staticmethod
   def args_from_options(api, original_args, test, **kwargs):

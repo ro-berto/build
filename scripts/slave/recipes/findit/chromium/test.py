@@ -180,6 +180,13 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
             'valid': True,
         }
 
+    # TODO(robertocn): Remove this once flake.py lands. For now, it's required
+    # to provide coverage for the .pass_fail_coutns code.
+    for test in actual_tests_to_run:
+      if hasattr(test, 'pass_fail_counts'):
+        pass_fail_counts = test.pass_fail_counts(suffix=revision)
+        results[test.name]['pass_fail_counts'] = pass_fail_counts
+
     # Process skipped tests in two scenarios:
     # 1. Skipped by "analyze": tests are not affected by the given revision.
     # 2. Skipped because the requested tests don't exist at the given revision.
