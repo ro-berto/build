@@ -36,9 +36,13 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.gclient.runhooks()
 
-  # Enforce a clean state.
+  # Enforce a clean state, and discard any local commits from previous runs.
   api.git(
       'checkout', '-f', 'master',
+      cwd=api.path['checkout'],
+  )
+  api.git(
+      'pull', 'origin', 'master',
       cwd=api.path['checkout'],
   )
   api.git(

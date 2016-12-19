@@ -99,6 +99,16 @@
   {
     "cmd": [
       "git",
+      "pull",
+      "origin",
+      "master"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "git pull"
+  },
+  {
+    "cmd": [
+      "git",
       "clean",
       "-ffd"
     ],
