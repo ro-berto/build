@@ -26,9 +26,11 @@ sys.path.append(os.path.join(RUN_SLAVE_PATH, 'third_party', tw_ver))
 import twisted.scripts.twistd
 
 
-class ExecvExecuted(Exception):
-  # This exception is raised within a mocked os.execv() so that
-  # the execution flow gets interrupted.
+class ExitInvoked(Exception):
+  # Raises when a mocked sys.exit() is invoked.
+  # With mocking sys.exit() with this exception, the execution flow doesn't
+  # continue after sys.exit(), but interrupted and the control is passed back to
+  # a unit test.
   pass
 
 
@@ -39,10 +41,12 @@ def _GetCallArgumentFromMock(mock_call, position, keyword=None):
 
 class RunSlaveTest(unittest.TestCase):
   @mock.patch('subprocess.call')
-  @mock.patch('os.execv', mock.Mock(side_effect=ExecvExecuted))
-  def test_run_slave_restart_after_gclient_sync(self, subprocess_call):
+  @mock.patch('subprocess.Popen')
+  @mock.patch('sys.exit', mock.Mock(side_effect=ExitInvoked))
+  def test_run_slave_restart_after_gclient_sync(self, popen_call,
+                                                subprocess_call):
     """Tests if run_slave restarts itself after gclient sync."""
-    with self.assertRaises(ExecvExecuted):
+    with self.assertRaises(ExitInvoked):
       runpy.run_module("run_slave", run_name="__main__", alter_sys=True)
 
     # verify that gclient sync has been executed
@@ -51,13 +55,17 @@ class RunSlaveTest(unittest.TestCase):
     self.assertEqual(call_cmd_args[0], run_slave.GetGClientPath())
     self.assertEqual(call_cmd_args[1], 'sync')
 
-    # verify that run_slave.py was execv()-ed with --no-gclient-sync
+    # verify that run_slave was re-executed by Popen() with --no-gclient-sync
     run_slave_py_path = re.sub(
         r'pyc$', 'py', os.path.abspath(run_slave.__file__))
 
-    execv_cmd_args = _GetCallArgumentFromMock(os.execv, 1, 'args')
-    self.assertIn(run_slave_py_path, execv_cmd_args[:2])
-    self.assertIn('--no-gclient-sync', execv_cmd_args[1:])
+    popen_cmd_args = _GetCallArgumentFromMock(popen_call, 0, 'args')
+
+    # run_slave.py should be placed either at the beinning of the args
+    # after the path python executable
+    # : i.e., python run_slave.py --foo, or run_slave.py --foo
+    self.assertIn(run_slave_py_path, popen_cmd_args[:2])
+    self.assertIn('--no-gclient-sync', popen_cmd_args[1:])
 
   @mock.patch('subprocess.call')
   @mock.patch('subprocess.check_call')

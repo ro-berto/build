@@ -8,6 +8,7 @@
 
 import os
 import shutil
+import signal
 import socket
 import subprocess
 import sys
@@ -64,15 +65,7 @@ def SigTerm(*_args):
 
 def UpdateSignals():
   """Override the twisted SIGTERM handler with our own.
-
-  Ensure that the signal module is available and do nothing if it is not.
   """
-  try:
-    import signal
-  except ImportError:
-    Log('UpdateSignals: Warning: signal module unavailable -- '
-        'not installing signal handlers.')
-    return
   # Twisted installs a SIGTERM signal handler which tries to shut the system
   # down.  Use our own handler instead.
   Log('UpdateSignals: installed new SIGTERM handler')
@@ -627,6 +620,17 @@ def GetGClientPath():
   return gclient_path
 
 
+def CreateForwardSignalHandler(popen_object, signal_to_send):
+  """Returns a signal handler that sends a given signal to a given process."""
+
+  def _SignalHandler(signal_received, _frame):
+    Log('Received signal %s. Send a signal %s to pid %s' %
+        (signal_received, signal_to_send, popen_object.pid))
+    popen_object.send_signal(signal_to_send)
+
+  return _SignalHandler
+
+
 if '__main__' == __name__:
   skip_sync_arg = '--no-gclient-sync'
   if skip_sync_arg not in sys.argv:
@@ -636,7 +640,11 @@ if '__main__' == __name__:
         env=EnvWithDepotTools()) != 0:
       print >> sys.stderr, (
           '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0])
-    os.execv(sys.executable, [sys.executable] + sys.argv + [skip_sync_arg])
+
+    child = subprocess.Popen([sys.executable] + sys.argv + [skip_sync_arg])
+    signal.signal(signal.SIGTERM,
+                  CreateForwardSignalHandler(child, signal.SIGTERM))
+    sys.exit(child.wait())
 
   # Remove skip_sync_arg from arg list.  Needed because twistd.
   sys.argv.remove(skip_sync_arg)
