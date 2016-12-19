@@ -245,9 +245,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 
-  # TODO(tikuta): Remove 'no_compile_py' after removing compile.py.
-  for additional_config in ['goma_failfast', 'no_compile_py']:
-    api.chromium.apply_config(additional_config)
+  api.chromium.apply_config('goma_failfast')
 
   # Configure to match the test config on the tester, as builders don't have the
   # settings for swarming tests.

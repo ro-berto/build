@@ -137,9 +137,7 @@ def RunSteps(api, target_mastername, target_buildername,
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 
-  # TODO(tikuta): Remove 'no_compile_py' after removing compile.py.
-  for additional_config in ['goma_failfast', 'no_compile_py']:
-    api.chromium.apply_config(additional_config)
+  api.chromium.apply_config('goma_failfast')
 
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(
