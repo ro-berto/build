@@ -1128,6 +1128,10 @@
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"perf_test.foo.reference\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test\": \"page_cycler.foo\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
@@ -1239,6 +1243,50 @@
     "name": "gsutil upload perf_test.foo output dir archive",
     "~followup_annotations": [
       "@@@STEP_LINK@output_dir.zip@https://storage.cloud.google.com/archives-bucket/perf_runner/perf_test.foo/20150928T110712_build_571.zip@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--test-platform",
+      "android",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"perf_runner\", \"buildnumber\": 571, \"internal\": true, \"issue\": \"123456789\", \"mastername\": \"chromium.testing.master\", \"patchset\": \"1\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"rietveld\": \"http://rietveld.example.com\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"perf_runner\", \"buildnumber\": 571, \"internal\": true, \"issue\": \"123456789\", \"mastername\": \"chromium.testing.master\", \"patchset\": \"1\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"rietveld\": \"http://rietveld.example.com\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=perf_test.foo.reference",
+      "--test-type=perf_test.foo.reference",
+      "--step-name=perf_test.foo.reference",
+      "--builder-name=perf_runner",
+      "--slave-name=tehslave",
+      "--build-number=571",
+      "--run-python-script",
+      "[START_DIR]/src/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "perf_test.foo.reference",
+      "--verbose",
+      "--adb-path",
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "--blacklist-file",
+      "[START_DIR]/src/out/bad_devices.json"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+    },
+    "name": "perf_test.foo.reference",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
     ]
   },
   {

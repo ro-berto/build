@@ -824,6 +824,7 @@ class AndroidApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output([
             {'test': 'perf_test.foo', 'device_affinity': 0,
              'end_time': 1443438432.949711, 'has_archive': True},
+            {'test': 'perf_test.foo.reference', 'device_affinity': 0},
             {'test': 'page_cycler.foo', 'device_affinity': 0}]),
         env=self.m.chromium.get_env()
     )
@@ -875,7 +876,14 @@ class AndroidApi(recipe_api.RecipeApi):
             env=env,
             chartjson_file=chartjson_file)
       except self.m.step.StepFailure as f:
-        failures.append(f)
+        # Only warn for failures on reference builds.
+        if test_name.endswith('.reference'):
+          if f.result.presentation.status == self.m.step.FAILURE:
+            f.result.presentation.status = self.m.step.WARNING
+          else:
+            failures.append(f)
+        else:
+          failures.append(f)
       finally:
         if 'device_affinity' in test_data:
           step_result = self.m.step.active_result

@@ -318,6 +318,14 @@ def GenTests(api):
       properties_for('perf_runner') +
       api.step_data('perf_test.foo', retcode=87))
 
+  yield (api.test('perf_tests_reference_failure') +
+      properties_for('perf_runner') +
+      api.step_data('perf_test.foo.reference', retcode=1))
+
+  yield (api.test('perf_tests_infra_reference_failure') +
+      properties_for('perf_runner') +
+      api.step_data('perf_test.foo.reference', retcode=87))
+
   yield (api.test('gerrit_refs') +
       api.properties.generic(
         buildername='gerrit_try_builder',
