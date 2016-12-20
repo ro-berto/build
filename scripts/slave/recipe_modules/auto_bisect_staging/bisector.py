@@ -851,29 +851,3 @@ class Bisector(object):
     builder_name = urllib.quote(properties.get('buildername', ''))
     builder_number = str(properties.get('buildnumber', ''))
     return '%sbuilders/%s/builds/%s' % (bot_url, builder_name, builder_number)
-
-  def inconclusive_bisect_details(self):
-    """Produces a message detailing the cause of inconclusive bisect.
-
-    There are four main scenarios here:
-      1. The bisect was inconclusive because the data shows no clear culprit,
-      2. The bisect was inconclusive because the tests failed to produce,
-      sufficient data.
-      3. A combination of 1 and 2, or
-      4. Something unexpected.
-
-    Returns:
-      A string detailing the reasons.
-    """
-
-    with self.api.m.step.nest('Generating Inconclusive Bisect Details'):
-      unclassified_revisions = self.revisions[
-          self.lkgr.list_index + 1:self.fkbr.list_index]
-      if unclassified_revisions:
-        # The possible culprits are those after lkgr, up to and including fkbr.
-        message = 'No single culprit between %s and %s could be identified.' % (
-            self.lkgr.next_revision.revision_string(),
-            self.fkbr.revision_string())
-      else:  # pragma: no cover
-        message = 'Something else went wrong, more debugging needed.'
-    return message
