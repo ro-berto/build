@@ -493,12 +493,10 @@ class RevisionState(object):
         # TODO(robertocn): Add way to handle the secondary regression
         #self.bisector.handle_secondary_regression(self, fkbr)
         self.bad = True
-        self.bisector.secondary_regressions.append((self, fkbr))
         return True
       else:
         #self.bisector.handle_secondary_regression(lkgr, self)
         self.good = True
-        self.bisector.secondary_regressions.append((lkgr, self))
         return True
     if diff_from_good == SIGNIFICANTLY_DIFFERENT:
       self.bad = True

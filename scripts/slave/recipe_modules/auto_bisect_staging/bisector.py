@@ -75,7 +75,6 @@ class Bisector(object):
     self._validate_config()
     self.revision_class = revision_class
     self.last_tested_revision = None
-    self.secondary_regressions = []
 
     # Test-only properties.
     # TODO: Replace these with proper mod_test_data.
@@ -787,8 +786,6 @@ class Bisector(object):
     elif self.failed_direction:  # pragma: no cover
       aborted_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
 
-    secondary_regressions = ['%s - %s' % (a.revision_string, b.revision_string)
-                             for a, b in self.secondary_regressions]
     return {
         'try_job_id': config.get('try_job_id'),
         'bug_id': config.get('bug_id'),
@@ -805,7 +802,6 @@ class Bisector(object):
         'aborted_reason': self.aborted_reason or aborted_reason,
         'culprit_data': self._culprit_data(),
         'revision_data': self._revision_data(),
-        'secondary_regressions': secondary_regressions
     }
 
   def _culprit_data(self):
