@@ -909,13 +909,6 @@ BUILDERS = {
           IgnitionTurbofan,
         ],
         'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux64 ASAN no inline - release builder',
-          'V8 Linux64 ASAN - debug builder',
-          'V8 Linux64 ASAN arm64 - debug builder',
-          'V8 Linux ASAN arm - debug builder',
-          'V8 Linux ASAN mipsel - debug builder',
-        ],
       },
       'V8 Linux64 ASAN no inline - release builder': {
         'chromium_apply_config': [
