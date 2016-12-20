@@ -4,8 +4,8 @@
             "https://build.chromium.org/p/chromiumos": ["*"],
             "https://build.chromium.org/p/chromium.chromiumos": ["*"]
         }
-   },
-   "build": {
+    },
+    "build": {
         "build-db": "build_db.json",
         "masters": {
             "https://build.chromium.org/p/chromium.tools.build": ["*"]
@@ -66,6 +66,23 @@
         "status-url": "https://infra-status.appspot.com",
         "set-status": true,
         "password-file": "/creds/gatekeeper/infra_status_password"
+    },
+    "ios": {
+        "build-db": "ios_db.json",
+        "open-tree": false,
+        "set-status": false,
+        "masters": {
+          "https://build.chromium.org/p/chromium.fyi": [
+              "EarlGreyiOS",
+              "ios-simulator"
+          ],
+          "https://build.chromium.org/p/chromium.mac": [
+              "ios-device",
+              "ios-device-xcode-clang",
+              "ios-simulator",
+              "ios-simulator-xcode-clang"
+          ]
+        }
     },
     "nacl": {
         "build-db": "nacl_build_db.json",

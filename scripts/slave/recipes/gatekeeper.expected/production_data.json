@@ -118,6 +118,23 @@
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://infra-status.appspot.com\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ios\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"ios_db.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.fyi\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"EarlGreyiOS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ios-simulator\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.mac\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ios-device\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ios-device-xcode-clang\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ios-simulator\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ios-simulator-xcode-clang\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"open-tree\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"set-status\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nacl\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"nacl_build_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
@@ -379,6 +396,23 @@
       "https://build.chromium.org/p/client.pdfium"
     ],
     "name": "gatekeeper: pdfium"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
+      "-v",
+      "--json",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper.json",
+      "--email-app-secret-file",
+      "/creds/gatekeeper/mailer_password",
+      "--build-db",
+      "ios_db.json",
+      "https://build.chromium.org/p/chromium.fyi:EarlGreyiOS,ios-simulator",
+      "https://build.chromium.org/p/chromium.mac:ios-device,ios-device-xcode-clang,ios-simulator,ios-simulator-xcode-clang"
+    ],
+    "name": "gatekeeper: ios"
   },
   {
     "cmd": [
