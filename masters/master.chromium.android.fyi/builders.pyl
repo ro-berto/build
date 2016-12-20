@@ -73,8 +73,6 @@
     },
     "Nougat Phone Tester": {
       "recipe": "chromium",
-      "remote_run_sync_revision": True,
-      "remote_run_use_gitiles": True,
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["nougat_phone"],
