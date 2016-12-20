@@ -46,20 +46,4 @@ def Update(config, active_master, c):
           'machenbach@chromium.org',
         ],
     ),
-    V8Notifier(
-        config,
-        active_master,
-        categories_steps={
-          'node': [
-            'configure node.js',
-            'build and test node.js',
-          ],
-        },
-        extraRecipients=[
-          'machenbach@chromium.org',
-          'mattloring@google.com',
-          'node-build-notifications@google.com',
-          'ofrobots@google.com',
-        ],
-    ),
   ])
