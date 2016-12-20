@@ -385,6 +385,61 @@ class MergeShardResultsTest(auto_stub.TestCase):
         '@@@STEP_LOG_LINE@some shards did not complete: 0@'
         'Missing results from the following shard(s): 0@@@\n', stdout)
 
+  def test_missing_output_json(self):
+    # Shard #0 output json is missing.
+    self.stage({
+      'summary.json': {
+        u'shards': [
+          {
+            u'state': u'COMPLETED',
+          },
+          {
+            u'state': u'COMPLETED',
+          },
+        ],
+      },
+      u'1/output.json': GOOD_GTEST_JSON_1,
+    })
+    merged, stdout = self.call(1)
+    merged.pop('swarming_summary')
+    self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
+    self.assertIn(
+        '@@@STEP_WARNINGS@@@\nTask ran but no result was found: '
+        'shard 0 test output was missing or invalid', stdout)
+
+  def test_large_output_json(self):
+    # a shard is too large.
+    self.stage({
+      'summary.json': {
+        u'shards': [
+          {
+            u'state': u'COMPLETED',
+          },
+          {
+            u'state': u'COMPLETED',
+          },
+        ],
+      },
+      '0/output.json': GOOD_GTEST_JSON_0,
+      '1/output.json': GOOD_GTEST_JSON_1,
+    })
+    old_json_limit = collect_gtest_task.OUTPUT_JSON_SIZE_LIMIT
+    len0 = len(json.dumps(GOOD_GTEST_JSON_0))
+    len1 = len(json.dumps(GOOD_GTEST_JSON_1))
+    large_shard = "0" if len0 > len1 else "1"
+    try:
+      # Override max output.json size just for this test.
+      collect_gtest_task.OUTPUT_JSON_SIZE_LIMIT = min(len0,len1)
+  
+      merged, stdout = self.call(1)
+      merged.pop('swarming_summary')
+      self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
+      self.assertIn(
+          '@@@STEP_WARNINGS@@@\nTask ran but no result was found: '
+          'shard %s test output exceeded the size limit' % large_shard, stdout)
+    finally:
+      collect_gtest_task.OUTPUT_JSON_SIZE_LIMIT = old_json_limit
+
 
 class EmitTestAnnotationsTest(auto_stub.TestCase):
   """Test for emit_test_annotations function."""

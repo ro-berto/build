@@ -19,11 +19,11 @@ from slave import slave_utils
 
 MISSING_SHARDS_MSG = r"""Missing results from the following shard(s): %s
 
-It can happen in following cases:
+This can happen in following cases:
   * Test failed to start (missing *.dll/*.so dependency for example)
   * Test crashed or hung
   * Task expired because there are not enough bots available and are all used
-  * Swarming service experiences problems
+  * Swarming service experienced problems
 
 Please examine logs to figure out what happened.
 """
@@ -78,7 +78,7 @@ def merge_shard_results(output_dir):
             'Either it ran for too long (hard timeout) or it didn\'t produce '
             'I/O for an extended period of time (I/O timeout)')
       elif state == u'COMPLETED':
-        json_data = load_shard_json(output_dir, index)
+        json_data, err_msg = load_shard_json(output_dir, index)
         if json_data:
           # Set-like fields.
           for key in ('all_tests', 'disabled_tests', 'global_tags'):
@@ -91,7 +91,7 @@ def merge_shard_results(output_dir):
               json_data.get('per_iteration_data', []))
           continue
         else:
-          emit_warning('Task ran but no result was found')
+          emit_warning('Task ran but no result was found: %s' % err_msg)
       else:
         emit_warning('Invalid Swarming task state: %s' % state)
     merged['missing_shards'].append(index)
@@ -113,12 +113,21 @@ def merge_shard_results(output_dir):
   return merged
 
 
-# 100 MB
-OUTPUT_JSON_SIZE_LIMIT = 100 * 1024 * 1024
+OUTPUT_JSON_SIZE_LIMIT = 100 * 1024 * 1024  # 100 MB
 
 
 def load_shard_json(output_dir, index):
-  """Reads JSON output of a single shard."""
+  """Reads JSON output of the specified shard.
+
+  Args:
+    output_dir: The directory in which to look for the JSON output to load.
+    index: The index of the shard to load data for.
+
+  Returns: A tuple containing:
+    * The contents of path, deserialized into a python object.
+    * An error string.
+    (exactly one of the tuple elements will be non-None).
+  """
   # 'output.json' is set in swarming/api.py, gtest_task method.
   path = os.path.join(output_dir, str(index), 'output.json')
   try:
@@ -126,14 +135,15 @@ def load_shard_json(output_dir, index):
     if filesize > OUTPUT_JSON_SIZE_LIMIT:
       print >> sys.stderr, 'output.json is %d bytes. Max size is %d' % (
            filesize, OUTPUT_JSON_SIZE_LIMIT)
-      return None
+      return (None, 'shard %s test output exceeded the size limit' % index)
 
     with open(path) as f:
-      return json.load(f)
+      return (json.load(f), None)
   except (IOError, ValueError, OSError) as e:
     print >> sys.stderr, 'Missing or invalid gtest JSON file: %s' % path
     print >> sys.stderr, '%s: %s' % (type(e).__name__, e)
-    return None
+
+    return (None, 'shard %s test output was missing or invalid' % index)
 
 
 def merge_list_of_dicts(left, right):
