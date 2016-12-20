@@ -174,7 +174,9 @@
     "cmd": [
       "ninja",
       "-C",
-      "[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator"
+      "[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator",
+      "fake tests 1",
+      "fake tests 2"
     ],
     "cwd": "[BUILDER_CACHE]/ios_debug/src/out/Debug-iphonesimulator",
     "env": {

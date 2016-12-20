@@ -287,7 +287,8 @@
       "-C",
       "[START_DIR]/src/out/Debug-iphonesimulator",
       "-j",
-      "50"
+      "50",
+      "fake test"
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
     "env": {
@@ -387,7 +388,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Debug-iphonesimulator",
       "--ninja-log-command",
-      "['ninja', '-C', Path('checkout', 'out','Debug-iphonesimulator'), '-j', '50']",
+      "['ninja', '-C', Path('checkout', 'out','Debug-iphonesimulator'), '-j', '50', 'fake test']",
       "--ninja-log-exit-status",
       "1",
       "--ninja-log-compiler",

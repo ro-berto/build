@@ -201,7 +201,8 @@
     "cmd": [
       "ninja",
       "-C",
-      "[START_DIR]/src/out/Debug-iphonesimulator"
+      "[START_DIR]/src/out/Debug-iphonesimulator",
+      "fake test"
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
     "env": {

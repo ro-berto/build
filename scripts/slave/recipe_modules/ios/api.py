@@ -292,16 +292,14 @@ class iOSApi(recipe_api.RecipeApi):
         '//out/%s' % build_sub_path,
       ], cwd=self.m.path['checkout'].join('out', build_sub_path), env=env)
 
-    targets = []
+    # The same test may be configured to run on multiple platforms.
+    tests = sorted(set(test['app'] for test in self.__config['tests']))
 
     if analyze:
       affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
           cwd=self.m.path['checkout'])
-      # The same test may be configured to run on multiple simulators.
-      # Only specify each test once for the analyzer.
-      tests = list(set(test['app'] for test in self.__config['tests']))
 
-      test_targets, compile_targets = (
+      test_targets, compilation_targets = (
         self.m.filter.analyze(
           affected_files,
           tests,
@@ -317,8 +315,10 @@ class iOSApi(recipe_api.RecipeApi):
       for test in self.__config['tests']:
         if test['app'] not in test_targets:
           test['skip'] = True
-
-      targets.extend(compile_targets)
+    else:
+      compilation_targets = []
+      compilation_targets.extend(tests)
+      compilation_targets.extend(self.__config['additional_compile_targets'])
 
     cwd = self.m.path['checkout'].join('out', build_sub_path)
     cmd = ['ninja', '-C', cwd]
@@ -328,7 +328,7 @@ class iOSApi(recipe_api.RecipeApi):
       cmd.extend(['-j', '50'])
       self.m.goma.start()
 
-    cmd.extend(targets)
+    cmd.extend(sorted(compilation_targets))
     exit_status = -1
     try:
       self.m.step('compile' + suffix, cmd, cwd=cwd, env=env)
