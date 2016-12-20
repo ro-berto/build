@@ -69,16 +69,12 @@ def mipsel_builder_mb(c):
 
 @CONFIG_CTX(includes=['clobber'])
 def cronet_builder(c):
-  c.gyp_env.GYP_DEFINES['disable_brotli_filter'] = 1
-  c.gyp_env.GYP_DEFINES['disable_file_support'] = 1
-  c.gyp_env.GYP_DEFINES['disable_ftp_support'] = 1
-  c.gyp_env.GYP_DEFINES['enable_websockets'] = 0
-  c.gyp_env.GYP_DEFINES['use_platform_icu_alternatives'] = 1
   c.gn_args.append('disable_brotli_filter=true')
   c.gn_args.append('disable_file_support=true')
   c.gn_args.append('disable_ftp_support=true')
   c.gn_args.append('enable_websockets=false')
   c.gn_args.append('use_platform_icu_alternatives=true')
+  c.gn_args.append('use_partition_alloc=false')
   # TODO(jbudorick): Remove {cronet,net}_unittests_apk targets after
   # gn switch is finished.
   c.compile_py.default_targets=['cronet_package',

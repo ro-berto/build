@@ -236,7 +236,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library disable_brotli_filter=1 disable_file_support=1 disable_ftp_support=1 enable_websockets=0 fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1 use_platform_icu_alternatives=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -247,7 +247,7 @@
       "--root=[START_DIR]/src",
       "gen",
       "//out/Debug",
-      "--args=disable_brotli_filter=true disable_file_support=true disable_ftp_support=true enable_websockets=false use_platform_icu_alternatives=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+      "--args=disable_brotli_filter=true disable_file_support=true disable_ftp_support=true enable_websockets=false use_platform_icu_alternatives=true use_partition_alloc=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
     ],
     "cwd": "[START_DIR]/src",
     "name": "gn"
