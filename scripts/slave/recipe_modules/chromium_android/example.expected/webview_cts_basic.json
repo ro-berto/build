@@ -1147,7 +1147,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
-    "name": "Run CTS with --webview_arg_1 --webview_arg_2",
+    "name": "Run CTS",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
@@ -1156,7 +1156,7 @@
   },
   {
     "name": "$result",
-    "reason": "Step('Run CTS with --webview_arg_1 --webview_arg_2') failed with return_code 1",
+    "reason": "Step('Run CTS') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }
