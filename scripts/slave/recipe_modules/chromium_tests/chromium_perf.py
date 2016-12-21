@@ -21,7 +21,7 @@ SPEC = {
     # Bucket for storing builds for manual bisect
     'bisect_build_gs_bucket': 'chrome-test-builds',
     'bisect_build_gs_extra': 'official-by-commit',
-    'bisect_builders': []
+    'bisect_builders': [],
   },
 }
 
@@ -77,6 +77,7 @@ def BuildSpec(
 
   if enable_swarming:
     spec['enable_swarming'] = True
+    spec['perf_isolate_lookup'] = True
     spec['use_isolate'] = True
   spec['compile_targets'] = ['chromium_builder_perf']
   if extra_compile_targets:

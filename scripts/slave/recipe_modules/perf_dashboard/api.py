@@ -79,13 +79,21 @@ class PerfDashboardApi(recipe_api.RecipeApi):
                      '%s/post_bisect_results' % self.c.url,
                      {'data': data}, halt_on_failure)
 
+  def upload_isolated(self, builder_name, git_hash, isolate_map,
+                      halt_on_failure=False):
+    data = {
+        'builder_name': builder_name,
+        'git_hash': git_hash,
+        'isolate_map': isolate_map,
+    }
+    return self.post('pinpoint isolate upload',
+                     '%s/isolated' % self.c.pinpoint_url, data, halt_on_failure)
+
   def post(self, name, url, data, halt_on_failure):
     """Takes a data object which can be jsonified and posts it to url."""
-    step_result = self.m.python(name=name,
-                         script=self.resource('post_json.py'),
-                         args=[url],
-                         stdin=self.m.json.input(data),
-                         stdout=self.m.json.output())
+    step_result = self.m.python(
+        name=name, script=self.resource('post_json.py'), args=[url],
+        stdin=self.m.json.input(data), stdout=self.m.json.output())
 
     response = step_result.stdout
     if not response or response['status_code'] != 200:  # pragma: no cover
