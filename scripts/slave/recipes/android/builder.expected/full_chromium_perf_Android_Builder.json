@@ -498,11 +498,11 @@
       "----",
       "cp",
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
-      "gs://chromium-testrunner-trace/Android Builder/trace_257.json"
+      "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "name": "gsutil Upload Test Trace",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.json@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.html@@@"
     ]
   },
   {
@@ -740,11 +740,11 @@
       "----",
       "cp",
       "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.json",
-      "gs://chromium-testrunner-trace/Android Builder/trace_257.json"
+      "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "name": "gsutil Upload Test Trace (2)",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.json@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.html@@@"
     ]
   },
   {
@@ -982,11 +982,11 @@
       "----",
       "cp",
       "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.json",
-      "gs://chromium-testrunner-trace/Android Builder/trace_257.json"
+      "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "name": "gsutil Upload Test Trace (3)",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.json@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.html@@@"
     ]
   },
   {
@@ -1224,11 +1224,11 @@
       "----",
       "cp",
       "[TMP_BASE]/test_runner_trace_tmp_4/test_trace.json",
-      "gs://chromium-testrunner-trace/Android Builder/trace_257.json"
+      "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "name": "gsutil Upload Test Trace (4)",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.json@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.html@@@"
     ]
   },
   {

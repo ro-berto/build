@@ -673,7 +673,7 @@
       "----",
       "cp",
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
-      "gs://chromium-testrunner-trace/Android Nexus7v2 Perf (2)/trace_571.json"
+      "gs://chromium-testrunner-trace/Android Nexus7v2 Perf (2)/trace_571.html"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus7v2_Perf__2_",
     "env": {
@@ -682,7 +682,7 @@
     },
     "name": "gsutil Upload Test Trace",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Nexus7v2 Perf (2)/trace_571.json@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Nexus7v2 Perf (2)/trace_571.html@@@"
     ]
   },
   {

@@ -812,7 +812,7 @@ class AndroidApi(recipe_api.RecipeApi):
                               test_trace=test_trace_path, **kwargs)
 
       # now upload test trace.
-      dest = '{builder}/trace_{buildno}.json'.format(
+      dest = '{builder}/trace_{buildno}.html'.format(
           builder=self.m.properties['buildername'],
           buildno=self.m.properties['buildnumber'])
       self.m.gsutil.upload(
