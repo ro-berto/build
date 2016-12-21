@@ -71,3 +71,5 @@ def GenTests(api):
       api.properties.generic(buildername='Windows Swarm Test'))
   # No expectations, and nothing has been found, produces warning.
   yield make_test('none', None, [])
+  # Test the `exparchive` special case.
+  yield make_test('exparchive', ['test_exparchive'], [])

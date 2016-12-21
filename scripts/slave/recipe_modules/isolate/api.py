@@ -138,8 +138,31 @@ class IsolateApi(recipe_api.RecipeApi):
     if not targets:  # pragma: no cover
       return
 
-    input_files = [build_dir.join('%s.isolated.gen.json' % t) for t in targets]
+    batch_targets = []
+    exparchive_targets = []
+    for t in targets:
+      if t.endswith('_exparchive'):
+        exparchive_targets.append(t)
+      else:
+        batch_targets.append(t)
     try:
+      args = [
+          self.m.swarming_client.path,
+          'exparchive',
+          '--dump-json', self.m.json.output(),
+          '--isolate-server', self._isolate_server,
+        ] + (['--verbose'] if verbose else [])
+      for target in exparchive_targets:
+        self.m.python(
+          'isolate %s' % target,
+          self.resource('isolate.py'),
+          args + [
+            '--isolate', build_dir.join('%s.isolate' % t),
+            '--isolated', build_dir.join('%s.isolated' % t),
+          ],
+          step_test_data=lambda: self.test_api.output_json([target]),
+          **kwargs)
+
       # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
       # Raise InfraFailure on upload errors.
       args = [
@@ -147,11 +170,12 @@ class IsolateApi(recipe_api.RecipeApi):
         'batcharchive',
         '--dump-json', self.m.json.output(),
         '--isolate-server', self._isolate_server,
-      ] + (['--verbose'] if verbose else []) + input_files
-      return self.m.python(
-          'isolate tests', self.resource('isolate.py'), args,
-          step_test_data=lambda: (self.test_api.output_json(targets)),
-          **kwargs)
+      ] + (['--verbose'] if verbose else []) +  [
+        build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
+      ]
+      return self.m.python('isolate tests', self.resource('isolate.py'), args,
+                    step_test_data=lambda: (self.test_api.output_json(targets)),
+                    **kwargs)
     finally:
       step_result = self.m.step.active_result
       self._isolated_tests = step_result.json.output
