@@ -581,7 +581,7 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
@@ -602,7 +602,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "gs://chromium-testrunner-trace/Android Nexus6 Perf (3)/trace_571.html"
     ],
     "name": "gsutil Upload Test Trace",

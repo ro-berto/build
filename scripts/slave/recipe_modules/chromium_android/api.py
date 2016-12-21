@@ -796,7 +796,7 @@ class AndroidApi(recipe_api.RecipeApi):
     """
 
     with self.m.tempfile.temp_dir('test_runner_trace') as trace_dir:
-      test_trace_path = self.m.path.join(trace_dir, 'test_trace.json')
+      test_trace_path = self.m.path.join(trace_dir, 'test_trace.html')
 
       # TODO(jbudorick): Remove pass_adb_path once telemetry can use a
       # configurable adb path.

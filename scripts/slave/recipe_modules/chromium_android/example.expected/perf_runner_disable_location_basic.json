@@ -1060,7 +1060,7 @@
       "--flaky-steps",
       "flake_fakes.json",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -1081,7 +1081,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "gs://chromium-testrunner-trace/perf_runner_disable_location/trace_571.html"
     ],
     "name": "gsutil Upload Test Trace",

@@ -651,7 +651,7 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "--adb-path",
       "[BUILDER_CACHE]/Android_Nexus9_Perf__2_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
@@ -672,7 +672,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "gs://chromium-testrunner-trace/Android Nexus9 Perf (2)/trace_571.html"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus9_Perf__2_",

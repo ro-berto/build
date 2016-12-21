@@ -476,7 +476,7 @@
       "0",
       "--collect-chartjson-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -497,7 +497,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "name": "gsutil Upload Test Trace",
@@ -718,7 +718,7 @@
       "0",
       "--collect-chartjson-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -739,7 +739,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.html",
       "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "name": "gsutil Upload Test Trace (2)",
@@ -960,7 +960,7 @@
       "0",
       "--collect-chartjson-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -981,7 +981,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.html",
       "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "name": "gsutil Upload Test Trace (3)",
@@ -1202,7 +1202,7 @@
       "0",
       "--collect-chartjson-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_4/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_4/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -1223,7 +1223,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_4/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_4/test_trace.html",
       "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "name": "gsutil Upload Test Trace (4)",
