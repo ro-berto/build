@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 from buildbot.process.properties import WithProperties
+from buildbot.scheduler import Scheduler
 from buildbot.scheduler import Triggerable
-from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master import master_utils
 from master.factory import remote_run_factory
@@ -23,24 +23,43 @@ def m_remote_run(recipe, **kwargs):
 
 def Update(_config, active_master, c):
   c['schedulers'].extend([
-      SingleBranchScheduler(name='linux_asan_rel',
-                            branch='master',
-                            treeStableTimer=60,
-                            builderNames=[
-          'Linux ASan LSan Builder'
+      Scheduler(name='linux_memory_rel',
+                branch='master',
+                treeStableTimer=60,
+                builderNames=[
+          'Linux ASan LSan Builder',
+          'Linux TSan Builder',
       ]),
       Triggerable(name='linux_asan_rel_trigger', builderNames=[
           'Linux ASan LSan Tests (1)',
           'Linux ASan Tests (sandboxed)',
       ]),
+      Triggerable(name='linux_tsan_rel_trigger',
+                  builderNames=['Linux TSan Tests']),
   ])
   specs = [
     {
       'name': 'Linux ASan LSan Builder',
       'triggers': ['linux_asan_rel_trigger'],
+      'category': '1linux asan lsan',
     },
-    {'name': 'Linux ASan LSan Tests (1)'},
-    {'name': 'Linux ASan Tests (sandboxed)'},
+    {
+      'name': 'Linux ASan LSan Tests (1)',
+      'category': '1linux asan lsan',
+    },
+    {
+      'name': 'Linux ASan Tests (sandboxed)',
+      'category': '1linux asan lsan',
+    },
+    {
+      'name': 'Linux TSan Builder',
+      'triggers': ['linux_tsan_rel_trigger'],
+      'category': '10TSan v2|compile',
+    },
+    {
+      'name': 'Linux TSan Tests',
+      'category': '10TSan v2',
+    },
   ]
 
   c['builders'].extend([
@@ -49,6 +68,6 @@ def Update(_config, active_master, c):
         'factory': m_remote_run(
             'chromium', triggers=spec.get('triggers')),
         'notify_on_missing': True,
-        'category': '1linux asan lsan',
+        'category': spec['category'],
       } for spec in specs
   ])

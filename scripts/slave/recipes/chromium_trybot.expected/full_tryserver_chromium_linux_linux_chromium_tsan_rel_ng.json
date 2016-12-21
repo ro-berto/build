@@ -223,6 +223,7 @@
       "--",
       "--build-config-fs",
       "Release",
+      "--use-src-side-runtest-py",
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux_chromium_tsan_rel_ng/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
@@ -239,12 +240,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/linux_chromium_tsan_rel_ng/src/testing/buildbot/chromium.memory.full.json",
+      "[BUILDER_CACHE]/linux_chromium_tsan_rel_ng/src/testing/buildbot/chromium.memory.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.memory.full.json)",
+    "name": "read test spec (chromium.memory.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux_chromium_tsan_rel_ng/src/testing/buildbot/chromium.memory.full.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux_chromium_tsan_rel_ng/src/testing/buildbot/chromium.memory.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

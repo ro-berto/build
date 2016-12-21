@@ -357,8 +357,8 @@ TRYBOTS = freeze({
         'tester': 'Linux MSan Tests',
       }),
       'linux_chromium_tsan_rel_ng': simple_bot({
-        'mastername': 'chromium.memory.full',
-        'buildername': 'Chromium Linux TSan Builder',
+        'mastername': 'chromium.memory',
+        'buildername': 'Linux TSan Builder',
         'tester': 'Linux TSan Tests',
       }),
       'linux_chromium_headless_rel': simple_bot({
