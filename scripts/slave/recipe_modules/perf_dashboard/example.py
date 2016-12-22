@@ -56,15 +56,11 @@ def GenTests(api):
       'status_code': 200
   }
   for platform in ('linux', 'win', 'mac'):
-    for production in (True, False):
-      yield (api.test('%s%s' %
-                      (platform, '_testing'
-                       if not production else '')) +
-             api.platform.name(platform) +
-             api.properties(perf_production=production,
-                            slavename='multivm-windows-release',
-                            buildername='multivm-windows-perf-be',
-                            buildnumber=75,
-                            mastername='client.dart.fyi') +
-             api.step_data('Post bisect results',
-                           stdout=api.json.output(bisect_response)))
+    yield (api.test(platform) +
+           api.platform.name(platform) +
+           api.properties(slavename='multivm-windows-release',
+                          buildername='multivm-windows-perf-be',
+                          buildnumber=75,
+                          mastername='client.dart.fyi') +
+           api.step_data('Post bisect results',
+                         stdout=api.json.output(bisect_response)))

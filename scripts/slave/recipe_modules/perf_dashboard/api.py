@@ -8,6 +8,10 @@ import urllib
 from recipe_engine import recipe_api
 
 
+_BASE_URL = 'https://chromeperf.appspot.com'
+_PINPOINT_BASE_URL = 'https://pinpoint-dot-chromeperf.appspot.com'
+
+
 class PerfDashboardApi(recipe_api.RecipeApi):
   """Provides steps to take a list of perf points and post them to the
   Chromium Perf Dashboard.  Can also use the test url for testing purposes."""
@@ -51,32 +55,22 @@ class PerfDashboardApi(recipe_api.RecipeApi):
         'tests': test,
         'rev': revision,
     })
-    presentation.links['Results Dashboard'] = ('%s/report?%s' %
-                                               (self.c.url, params))
+    presentation.links['Results Dashboard'] = (
+        '%s/report?%s' % (_BASE_URL, params))
 
   def set_default_config(self):
-    """If in golo, use real perf server, otherwise use testing perf server."""
-    # TODO: This property should be passed explicitly supplied by the recipe
-    # scheduler, not inferred from arbitrary bot environment.
-    on_production_bot = self.m.properties.get('perf_production',
-        not any(v in os.environ for v in (
-          'TESTING_MASTERNAME',
-          'TESTING_SLAVENAME',
-        )))
-    if on_production_bot:  # We're on a bot
-      self.set_config('production')
-    else:
-      self.set_config('testing')
+    # TODO: Remove.
+    pass
 
   def add_point(self, data, halt_on_failure=False):
     return self.post('perf dashboard post',
-                     '%s/add_point' % self.c.url,
+                     '%s/add_point' % _BASE_URL,
                      {'data': data}, halt_on_failure)
 
   def post_bisect_results(self, data, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""
     return self.post('Post bisect results',
-                     '%s/post_bisect_results' % self.c.url,
+                     '%s/post_bisect_results' % _BASE_URL,
                      {'data': data}, halt_on_failure)
 
   def upload_isolated(self, builder_name, git_hash, isolate_map,
@@ -87,7 +81,7 @@ class PerfDashboardApi(recipe_api.RecipeApi):
         'isolate_map': isolate_map,
     }
     return self.post('pinpoint isolate upload',
-                     '%s/isolated' % self.c.pinpoint_url, data, halt_on_failure)
+                     '%s/isolated' % _PINPOINT_BASE_URL, data, halt_on_failure)
 
   def post(self, name, url, data, halt_on_failure):
     """Takes a data object which can be jsonified and posts it to url."""
