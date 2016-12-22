@@ -582,6 +582,8 @@ class Bisector(object):
     debug_info_step = self.api.m.step.active_result
     lines = self._results_debug_message().splitlines()
     debug_info_step.presentation.logs['Debug Info'] = lines
+    lines = json.dumps(self.get_result(), indent=2).splitlines()
+    debug_info_step.presentation.logs['Posted JSON'] = lines
 
   def post_result(self, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""

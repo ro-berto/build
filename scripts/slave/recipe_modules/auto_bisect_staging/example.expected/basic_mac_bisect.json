@@ -7876,6 +7876,28 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::auto_bisect_staging]/resources/fetch_revision_info.py",
+      "dcdcdc0ff1122212323134879ddceeb1240b0988",
+      "chromium"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Reading culprit cl information. (2)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"author\": \"DummyAuthor\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"body\": \"A long description for a CL.\\nContaining multiple lines\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"date\": \"01/01/2015\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"email\": \"dummy@nowhere.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"subject\": \"Some random CL\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/post_bisect_results"
     ],
@@ -7899,7 +7921,7 @@
       "chromium"
     ],
     "cwd": "[START_DIR]",
-    "name": "Reading culprit cl information. (2)",
+    "name": "Reading culprit cl information. (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
