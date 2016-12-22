@@ -250,3 +250,25 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       return self.m.raw_io.output_dir(files_dict)
     else:
       return self.m.json.output(per_shard_results[0])
+
+  def simulated_gtest_output(self, failed_test_names=(), passed_test_names=()):
+    cur_iteration_data = {}
+    for test_name in failed_test_names:
+      cur_iteration_data[test_name] = [{
+          'elapsed_time_ms': 0,
+          'output_snippet': '',
+          'status': 'FAILURE',
+      }]
+    for test_name in passed_test_names:
+      cur_iteration_data[test_name] = [{
+          'elapsed_time_ms': 0,
+          'output_snippet': '',
+          'status': 'SUCCESS',
+      }]
+
+    canned_jsonish = {
+        'per_iteration_data': [cur_iteration_data]
+    }
+
+    return self.raw_gtest_output(
+        canned_jsonish, 1 if failed_test_names else 0)

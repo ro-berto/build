@@ -69,137 +69,6 @@ PROPERTIES = {
 }
 
 
-class TestResult(object):
-  SKIPPED = 'skipped'  # A commit doesn't impact the test.
-  PASSED = 'passed'  # The compile or test passed.
-  FAILED = 'failed'  # The compile or test failed.
-  INFRA_FAILED = 'infra_failed'  # Infra failed.
-
-
-def _compile_and_test_at_revision(api, target_mastername, target_buildername,
-                                  target_testername, revision, requested_tests,
-                                  use_analyze):
-  results = {}
-  with api.step.nest('test %s' % str(revision)):
-    # Checkout code at the given revision to recompile.
-    bot_id = {
-        'mastername': target_mastername,
-        'buildername': target_buildername,
-        'tester': target_testername}
-    bot_config = api.chromium_tests.create_generalized_bot_config_object(
-        [bot_id])
-    bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
-        bot_config, root_solution_revision=revision)
-
-    # Figure out which test steps to run.
-    all_tests, _ = api.chromium_tests.get_tests(bot_config, bot_db)
-    requested_tests_to_run = [
-        test for test in all_tests if test.name in requested_tests]
-
-    # Figure out the test targets to be compiled.
-    requested_test_targets = []
-    for test in requested_tests_to_run:
-      requested_test_targets.extend(test.compile_targets(api))
-    requested_test_targets = sorted(set(requested_test_targets))
-
-    actual_tests_to_run = requested_tests_to_run
-    actual_compile_targets = requested_test_targets
-    # Use dependency "analyze" to reduce tests to be run.
-    if use_analyze:
-      changed_files = api.findit.files_changed_by_revision(revision)
-
-      affected_test_targets, actual_compile_targets = (
-          api.filter.analyze(
-              changed_files,
-              test_targets=requested_test_targets,
-              additional_compile_targets=[],
-              config_file_name='trybot_analyze_config.json',
-              mb_mastername=target_mastername,
-              mb_buildername=target_buildername,
-              additional_names=None))
-
-      actual_tests_to_run = []
-      for test in requested_tests_to_run:
-        targets = test.compile_targets(api)
-        if not targets:
-          # No compile is needed for the test. Eg: checkperms.
-          actual_tests_to_run.append(test)
-          continue
-
-        # Check if the test is affected by the given revision.
-        for target in targets:
-          if target in affected_test_targets:
-            actual_tests_to_run.append(test)
-            break
-
-    if actual_compile_targets:
-      api.chromium_tests.compile_specific_targets(
-          bot_config,
-          bot_update_step,
-          bot_db,
-          actual_compile_targets,
-          tests_including_triggered=actual_tests_to_run,
-          mb_mastername=target_mastername,
-          mb_buildername=target_buildername,
-          override_bot_type='builder_tester')
-
-    for test in actual_tests_to_run:
-      try:
-        test.test_options = api.m.chromium_tests.steps.TestOptions(
-            test_filter=requested_tests.get(test.name))
-      except NotImplementedError:
-        # ScriptTests do not support test_options property
-
-        # TODO(robertocn): Figure out how to handle ScriptTests without hiding
-        # ths error.
-        pass
-    # Run the tests.
-    with api.chromium_tests.wrap_chromium_tests(
-        bot_config, actual_tests_to_run):
-      failed_tests = api.test_utils.run_tests(
-          api, actual_tests_to_run, suffix=revision)
-
-    # Process failed tests.
-    failed_tests_dict = defaultdict(list)
-    for failed_test in failed_tests:
-      valid = failed_test.has_valid_results(api, suffix=revision)
-      results[failed_test.name] = {
-          'status': TestResult.FAILED,
-          'valid': valid,
-      }
-      if valid:
-        test_list = list(failed_test.failures(api, suffix=revision))
-        results[failed_test.name]['failures'] = test_list
-        failed_tests_dict[failed_test.name].extend(test_list)
-
-    # Process passed tests.
-    for test in actual_tests_to_run:
-      if test not in failed_tests:
-        results[test.name] = {
-            'status': TestResult.PASSED,
-            'valid': True,
-        }
-
-    # TODO(robertocn): Remove this once flake.py lands. For now, it's required
-    # to provide coverage for the .pass_fail_coutns code.
-    for test in actual_tests_to_run:
-      if hasattr(test, 'pass_fail_counts'):
-        pass_fail_counts = test.pass_fail_counts(suffix=revision)
-        results[test.name]['pass_fail_counts'] = pass_fail_counts
-
-    # Process skipped tests in two scenarios:
-    # 1. Skipped by "analyze": tests are not affected by the given revision.
-    # 2. Skipped because the requested tests don't exist at the given revision.
-    for test_name in requested_tests.keys():
-      if test_name not in results:
-        results[test_name] = {
-            'status': TestResult.SKIPPED,
-            'valid': True,
-        }
-
-    return results, failed_tests_dict
-
-
 def _get_reduced_test_dict(original_test_dict, failed_tests_dict):
   # Remove tests that are in both dicts from the original test dict.
   if not failed_tests_dict:
@@ -322,7 +191,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
       if potential_green_rev:
         revision_being_checked = potential_green_rev
         test_results[potential_green_rev], tests_failed_in_potential_green = (
-            _compile_and_test_at_revision(
+            api.findit.compile_and_test_at_revision(
                 api, target_mastername, target_buildername, target_testername,
                 potential_green_rev,tests_have_not_found_culprit, use_analyze))
       else:
@@ -341,7 +210,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
           # whichever test that fails now will find current revision is the
           # culprit.
           test_results[revision], tests_failed_in_revision = (
-              _compile_and_test_at_revision(
+              api.findit.compile_and_test_at_revision(
                   api, target_mastername, target_buildername, target_testername,
                   revision, tests_to_run, use_analyze))
 
@@ -363,7 +232,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
             break
 
   except api.step.InfraFailure:
-    test_results[revision_being_checked] = TestResult.INFRA_FAILED
+    test_results[revision_being_checked] = api.findit.TestResult.INFRA_FAILED
     report['metadata']['infra_failure'] = True
     raise
   finally:
@@ -404,39 +273,6 @@ def GenTests(api):
     if buildbucket:
       properties['buildbucket'] = buildbucket
     return api.properties(**properties) + api.platform.name(platform_name)
-
-  def simulated_gtest_output(failed_test_names=(), passed_test_names=()):
-    cur_iteration_data = {}
-    for test_name in failed_test_names:
-      cur_iteration_data[test_name] = [{
-          'elapsed_time_ms': 0,
-          'output_snippet': '',
-          'status': 'FAILURE',
-      }]
-    for test_name in passed_test_names:
-      cur_iteration_data[test_name] = [{
-          'elapsed_time_ms': 0,
-          'output_snippet': '',
-          'status': 'SUCCESS',
-      }]
-
-    canned_jsonish = {
-        'per_iteration_data': [cur_iteration_data]
-    }
-
-    return api.test_utils.raw_gtest_output(
-        canned_jsonish, 1 if failed_test_names else 0)
-
-  def simulated_buildbucket_output(additional_build_parameters):
-    buildbucket_output = {
-        'build':{
-          'parameters_json': json.dumps(additional_build_parameters)
-        }
-    }
-
-    return api.buildbucket.step_data(
-        'buildbucket.get',
-        stdout=api.raw_io.output(json.dumps(buildbucket_output)))
 
   yield (
       api.test('nonexistent_test_step_skipped') +
@@ -488,7 +324,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.affected_tests (r1)',
-          simulated_gtest_output(passed_test_names=['Test.One'])
+          api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
       )
   )
 
@@ -544,7 +380,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
-          simulated_gtest_output(
+          api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two', 'Test.Three'])
       )
   )
@@ -568,7 +404,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
-          simulated_gtest_output(
+          api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One', 'Test.Two', 'Test.Three'])
       )
   )
@@ -592,7 +428,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
-          simulated_gtest_output(
+          api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two'],
               passed_test_names=['Test.Three'])
       )
@@ -635,7 +471,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
-          simulated_gtest_output(
+          api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two'],
               passed_test_names=['Test.Three'])
       )
@@ -659,7 +495,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
-          simulated_gtest_output(passed_test_names=['Test.One'])
+          api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
       )
   )
 
@@ -700,10 +536,11 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
-          simulated_gtest_output(passed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
-          simulated_gtest_output(failed_test_names=['Test.One']))
+          api.test_utils.simulated_gtest_output(failed_test_names=['Test.One']))
   )
 
   yield (
@@ -770,16 +607,19 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
-          simulated_gtest_output(passed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
-          simulated_gtest_output(failed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r5.gl_tests (r5)',
-          simulated_gtest_output(passed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r6.gl_tests (r6)',
-          simulated_gtest_output(passed_test_names=['Test.One']))
+          api.test_utils.simulated_gtest_output(passed_test_names=['Test.One']))
   )
 
   yield (
@@ -833,13 +673,15 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
-          simulated_gtest_output(failed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r5.gl_tests (r5)',
-          simulated_gtest_output(passed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r6.gl_tests (r6)',
-          simulated_gtest_output(passed_test_names=['Test.One']))
+          api.test_utils.simulated_gtest_output(passed_test_names=['Test.One']))
   )
 
   yield (
@@ -923,19 +765,24 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r5.gl_tests (r5)',
-          simulated_gtest_output(failed_test_names=['Test.gl_One'])) +
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.gl_One'])) +
       api.override_step_data(
           'test r5.browser_tests (r5)',
-          simulated_gtest_output(passed_test_names=['Test.browser_One'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.browser_One'])) +
       api.override_step_data(
           'test r6.browser_tests (r6)',
-          simulated_gtest_output(failed_test_names=['Test.browser_One']))+
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.browser_One']))+
       api.override_step_data(
           'test r2.gl_tests (r2)',
-          simulated_gtest_output(passed_test_names=['Test.gl_One'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.gl_One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
-          simulated_gtest_output(failed_test_names=['Test.gl_One']))
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.gl_One']))
   )
 
   yield (
@@ -1015,21 +862,25 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r4.gl_tests (r4)',
-          simulated_gtest_output(passed_test_names=['Test.One', 'Test.Three'],
-                                 failed_test_names=['Test.Two'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One', 'Test.Three'],
+              failed_test_names=['Test.Two'])) +
       api.override_step_data(
           'test r5.gl_tests (r5)',
-          simulated_gtest_output(passed_test_names=['Test.One'],
-                                 failed_test_names=['Test.Three'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One'],
+              failed_test_names=['Test.Three'])) +
       api.override_step_data(
           'test r6.gl_tests (r6)',
-          simulated_gtest_output(failed_test_names=['Test.One']))+
-      api.override_step_data(
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.One']))+
+          api.override_step_data(
           'test r2.gl_tests (r2)',
-          simulated_gtest_output(passed_test_names=['Test.Two'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.Two'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
-          simulated_gtest_output(failed_test_names=['Test.Two']))
+          api.test_utils.simulated_gtest_output(failed_test_names=['Test.Two']))
   )
 
   yield (
@@ -1084,13 +935,15 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r4.gl_tests (r4)',
-          simulated_gtest_output(failed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
-          simulated_gtest_output(passed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
-          simulated_gtest_output(passed_test_names=['Test.One']))
+          api.test_utils.simulated_gtest_output(passed_test_names=['Test.One']))
   )
 
   yield (
@@ -1130,7 +983,7 @@ def GenTests(api):
             good_revision='r0', bad_revision='r6',
             suspected_revisions=['r3', 'r4'],
             buildbucket=json.dumps({'build': {'id': 'id1'}})) +
-      simulated_buildbucket_output({
+      api.buildbucket.simulated_buildbucket_output({
           'additional_build_parameters' : {
               'tests': {
                   'gl_tests': ['Test.One']
@@ -1181,13 +1034,15 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r4.gl_tests (r4)',
-          simulated_gtest_output(failed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
-          simulated_gtest_output(passed_test_names=['Test.One'])) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
-          simulated_gtest_output(passed_test_names=['Test.One']))
+          api.test_utils.simulated_gtest_output(passed_test_names=['Test.One']))
   )
 
   yield (
@@ -1227,8 +1082,9 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
-          simulated_gtest_output(passed_test_names=['Test.One'])) +
-      api.override_step_data(
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One'])) +
+          api.override_step_data(
           'test r3.gl_tests (r3)',
-          simulated_gtest_output(failed_test_names=['Test.One']))
+          api.test_utils.simulated_gtest_output(failed_test_names=['Test.One']))
   )

@@ -2,10 +2,17 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from collections import defaultdict
+
 from recipe_engine import recipe_api
 
 
 class FinditApi(recipe_api.RecipeApi):
+  class TestResult(object):
+    SKIPPED = 'skipped'  # A commit doesn't impact the test.
+    PASSED = 'passed'  # The compile or test passed.
+    FAILED = 'failed'  # The compile or test failed.
+    INFRA_FAILED = 'infra_failed'  # Infra failed.
 
   def _calculate_repo_dir(self, solution_name):
     """Returns the relative path of the solution checkout to the root one."""
@@ -109,3 +116,144 @@ class FinditApi(recipe_api.RecipeApi):
     step = self.m.python(
         'check_targets', self.resource('check_target_existence.py'), args=args)
     return step.json.output['found']
+
+  def compile_and_test_at_revision(self, api, target_mastername,
+                                   target_buildername, target_testername,
+                                   revision, requested_tests, use_analyze):
+    """Compile the targets needed to execute the specified tests and run them.
+
+    Args:
+      api (RecipeApi): With the dependencies injected by the calling recipe.
+      target_mastername (str): Which master to derive the configuration off of.
+      target_buildername (str): likewise
+      target_tester_name (str): likewise
+      revision (str): A string representing the commit hash of the revision to
+                      test.
+      requested_tests (dict):
+          maps the test name (step name) to the names of the subtest to run.
+          i.e. for GTests these are built into a test filter string, and passed
+          in the command line. E.g.
+              {'browser_tests': ['suite.test1', 'suite.test2']}
+      use_analyze (bool):
+          Whether to trim the list of tests to perform based on which files
+          are actually affected by the revision.
+      """
+    results = {}
+    with api.m.step.nest('test %s' % str(revision)):
+      # Checkout code at the given revision to recompile.
+      bot_id = {
+          'mastername': target_mastername,
+          'buildername': target_buildername,
+          'tester': target_testername}
+      bot_config = api.m.chromium_tests.create_generalized_bot_config_object(
+          [bot_id])
+      bot_update_step, bot_db = api.m.chromium_tests.prepare_checkout(
+          bot_config, root_solution_revision=revision)
+
+      # Figure out which test steps to run.
+      all_tests, _ = api.m.chromium_tests.get_tests(bot_config, bot_db)
+      requested_tests_to_run = [
+          test for test in all_tests if test.name in requested_tests]
+
+      # Figure out the test targets to be compiled.
+      requested_test_targets = []
+      for test in requested_tests_to_run:
+        requested_test_targets.extend(test.compile_targets(api))
+      requested_test_targets = sorted(set(requested_test_targets))
+
+      actual_tests_to_run = requested_tests_to_run
+      actual_compile_targets = requested_test_targets
+      # Use dependency "analyze" to reduce tests to be run.
+      if use_analyze:
+        changed_files = self.files_changed_by_revision(revision)
+
+        affected_test_targets, actual_compile_targets = (
+            api.m.filter.analyze(
+                changed_files,
+                test_targets=requested_test_targets,
+                additional_compile_targets=[],
+                config_file_name='trybot_analyze_config.json',
+                mb_mastername=target_mastername,
+                mb_buildername=target_buildername,
+                additional_names=None))
+
+        actual_tests_to_run = []
+        for test in requested_tests_to_run:
+          targets = test.compile_targets(api)
+          if not targets:
+            # No compile is needed for the test. Eg: checkperms.
+            actual_tests_to_run.append(test)
+            continue
+
+          # Check if the test is affected by the given revision.
+          for target in targets:
+            if target in affected_test_targets:
+              actual_tests_to_run.append(test)
+              break
+
+      if actual_compile_targets:
+        api.m.chromium_tests.compile_specific_targets(
+            bot_config,
+            bot_update_step,
+            bot_db,
+            actual_compile_targets,
+            tests_including_triggered=actual_tests_to_run,
+            mb_mastername=target_mastername,
+            mb_buildername=target_buildername,
+            override_bot_type='builder_tester')
+
+      for test in actual_tests_to_run:
+        try:
+          test.test_options = api.m.chromium_tests.steps.TestOptions(
+              test_filter=requested_tests.get(test.name))
+        except NotImplementedError:
+          # ScriptTests do not support test_options property
+
+          # TODO(robertocn): Figure out how to handle ScriptTests without hiding
+          # ths error.
+          pass
+      # Run the tests.
+      with api.m.chromium_tests.wrap_chromium_tests(
+          bot_config, actual_tests_to_run):
+        failed_tests = api.m.test_utils.run_tests(
+            api, actual_tests_to_run, suffix=str(revision))
+
+      # Process failed tests.
+      failed_tests_dict = defaultdict(list)
+      for failed_test in failed_tests:
+        valid = failed_test.has_valid_results(api, suffix=revision)
+        results[failed_test.name] = {
+            'status': self.TestResult.FAILED,
+            'valid': valid,
+        }
+        if valid:
+          test_list = list(failed_test.failures(api, suffix=revision))
+          results[failed_test.name]['failures'] = test_list
+          failed_tests_dict[failed_test.name].extend(test_list)
+
+      # Process passed tests.
+      for test in actual_tests_to_run:
+        if test not in failed_tests:
+          results[test.name] = {
+              'status': self.TestResult.PASSED,
+              'valid': True,
+          }
+
+      # TODO(robertocn): Remove this once flake.py lands. For now, it's required
+      # to provide coverage for the .pass_fail_coutns code.
+      for test in actual_tests_to_run:
+        if hasattr(test, 'pass_fail_counts'):
+          pass_fail_counts = test.pass_fail_counts(suffix=revision)
+          results[test.name]['pass_fail_counts'] = pass_fail_counts
+
+      # Process skipped tests in two scenarios:
+      # 1. Skipped by "analyze": tests are not affected by the given revision.
+      # 2. Skipped because the requested tests don't exist at the given revision.
+      for test_name in requested_tests.keys():
+        if test_name not in results:
+          results[test_name] = {
+              'status': self.TestResult.SKIPPED,
+              'valid': True,
+          }
+
+      return results, failed_tests_dict
