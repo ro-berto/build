@@ -9801,6 +9801,11 @@
     "name": "Resolving hashes"
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Posted JSON"
+  },
+  {
     "cmd": [
       "python",
       "-u",
