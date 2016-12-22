@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'buildbucket',
   'chromium',
   'depot_tools/git',
   'recipe_engine/json',
@@ -10,4 +11,5 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'test_utils',
 ]

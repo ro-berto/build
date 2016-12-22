@@ -12,16 +12,34 @@ from recipe_engine.types import freeze
 
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
-  def __init__(self, test_filter=None):
+  def __init__(self, repeat_count=None, test_filter=None, run_disabled=False,
+               retry_limit=None):
     """Construct a TestOptions object with immutable attributes.
 
     Args:
+      repeat_count - how many times to run each test
       test_filter - a list of tests, e.g.
                        ['suite11.test1',
                         'suite12.test2']
+      run_disabled - whether to run tests that have been disabled.
+      retry_limit - how many times to retry a test until getting a pass.
      """
+    self._test_filter = freeze(test_filter)
+    self._repeat_count = repeat_count
+    self._run_disabled = run_disabled
+    self._retry_limit = retry_limit
 
-    self._test_filter=freeze(test_filter)
+  @property
+  def repeat_count(self):
+    return self._repeat_count
+
+  @property
+  def run_disabled(self):
+    return self._run_disabled
+
+  @property
+  def retry_limit(self):
+    return self._retry_limit
 
   @property
   def test_filter(self):
@@ -1473,6 +1491,8 @@ class GTestTest(Test):
     args = []
     options = test.test_options
     test_filter = kwargs.get('override_test_filter', options.test_filter)
+    if options.repeat_count and options.repeat_count > 1:
+      args.append('--gtest_repeat=%d' % options.repeat_count)
     if test_filter:
       if test.uses_swarming:
         args.append('--gtest_filter=%s' % ':'.join(test_filter))
@@ -1483,6 +1503,11 @@ class GTestTest(Test):
       for a in original_args:  # pragma: no cover
         if a.startswith('--test-launcher-filter-file'):
           original_args.remove(a)
+
+    if options.retry_limit is not None:
+      args.append('--test-launcher-retry-limit=%d' % options.retry_limit)
+    if options.run_disabled:
+      args.append('--gtest_also_run_disabled_tests')
 
     return original_args + args
 

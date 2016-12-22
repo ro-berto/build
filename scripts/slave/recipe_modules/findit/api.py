@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 from collections import defaultdict
 
 from recipe_engine import recipe_api
@@ -119,14 +120,15 @@ class FinditApi(recipe_api.RecipeApi):
 
   def compile_and_test_at_revision(self, api, target_mastername,
                                    target_buildername, target_testername,
-                                   revision, requested_tests, use_analyze):
+                                   revision, requested_tests, use_analyze,
+                                   test_repeat_count=None):
     """Compile the targets needed to execute the specified tests and run them.
 
     Args:
       api (RecipeApi): With the dependencies injected by the calling recipe.
       target_mastername (str): Which master to derive the configuration off of.
       target_buildername (str): likewise
-      target_tester_name (str): likewise
+      target_testername (str): likewise
       revision (str): A string representing the commit hash of the revision to
                       test.
       requested_tests (dict):
@@ -137,7 +139,13 @@ class FinditApi(recipe_api.RecipeApi):
       use_analyze (bool):
           Whether to trim the list of tests to perform based on which files
           are actually affected by the revision.
-      """
+      test_repeat_count (int or None):
+          Repeat count to pass to the test. Note that we don't call the test
+          this many times, we call the test once but pass this repeat factor as
+          a parameter, and it's up to the test implementation to perform the
+          repeats. Either 1 or None imply that no special flag for repeat will
+          be passed.
+    """
     results = {}
     with api.m.step.nest('test %s' % str(revision)):
       # Checkout code at the given revision to recompile.
@@ -205,12 +213,12 @@ class FinditApi(recipe_api.RecipeApi):
       for test in actual_tests_to_run:
         try:
           test.test_options = api.m.chromium_tests.steps.TestOptions(
-              test_filter=requested_tests.get(test.name))
+              test_filter=requested_tests.get(test.name),
+              repeat_count=test_repeat_count,
+              retry_limit=0 if test_repeat_count else None,
+              run_disabled=bool(test_repeat_count))
         except NotImplementedError:
           # ScriptTests do not support test_options property
-
-          # TODO(robertocn): Figure out how to handle ScriptTests without hiding
-          # ths error.
           pass
       # Run the tests.
       with api.m.chromium_tests.wrap_chromium_tests(
@@ -239,8 +247,6 @@ class FinditApi(recipe_api.RecipeApi):
               'valid': True,
           }
 
-      # TODO(robertocn): Remove this once flake.py lands. For now, it's required
-      # to provide coverage for the .pass_fail_coutns code.
       for test in actual_tests_to_run:
         if hasattr(test, 'pass_fail_counts'):
           pass_fail_counts = test.pass_fail_counts(suffix=revision)
@@ -257,3 +263,75 @@ class FinditApi(recipe_api.RecipeApi):
           }
 
       return results, failed_tests_dict
+
+  def configure_and_sync(self, api, tests, buildbucket_str, target_mastername,
+                         target_testername, revision):
+    """Loads tests from buildbucket, applies bot/swarming configs & syncs code.
+
+    These are common tasks done in preparation ahead of building and testing
+    chromium revisions, extracted as code share between the test and flake
+    recipes.
+
+    Args:
+      api (RecipeApi): With the dependencies injected by the calling recipe.
+      tests (dict):
+          maps the test name (step name) to the names of the subtest to run.
+          i.e. for GTests these are built into a test filter string, and passed
+          in the command line. E.g.
+              {'browser_tests': ['suite.test1', 'suite.test2']}
+          These are likely superseded by the contents of buildbucket_str below.
+      buildbucket_str (str):
+          JSON string containing a buildbucket job spec from which to extract
+          the tests to execute. Parsed if the `tests` parameter above is not
+          provided.
+      target_mastername (str): Which master to derive the configuration off of.
+      target_testername (str): likewise
+      revision (str): A string representing the commit hash of the revision to
+                      test.
+    Returns: (tests, target_buildername)
+    """
+
+    if not tests:
+      # tests should be saved in build parameter in this case.
+      buildbucket_json = json.loads(buildbucket_str)
+      build_id = buildbucket_json['build']['id']
+      get_build_result = api.buildbucket.get_build(build_id)
+      tests = json.loads(
+          get_build_result.stdout['build']['parameters_json']).get(
+              'additional_build_parameters', {}).get('tests')
+
+    assert tests, 'No failed tests were specified.'
+
+    # Figure out which builder configuration we should match for compile config.
+    # Sometimes, the builder itself runs the tests and there is no tester. In
+    # such cases, just treat the builder as a "tester". Thus, we default to
+    # the target tester.
+    tester_config = api.chromium_tests.builders.get(
+        target_mastername).get('builders', {}).get(target_testername)
+    target_buildername = (tester_config.get('parent_buildername') or
+                          target_testername)
+
+    # Configure to match the compile config on the builder.
+    bot_config = api.chromium_tests.create_bot_config_object(
+        target_mastername, target_buildername)
+    api.chromium_tests.configure_build(
+        bot_config, override_bot_type='builder_tester')
+
+    api.chromium.apply_config('goma_failfast')
+
+    # Configure to match the test config on the tester, as builders don't have
+    # the settings for swarming tests.
+    if target_buildername != target_testername:
+      for key, value in tester_config.get('swarming_dimensions', {}
+                                          ).iteritems():
+        api.swarming.set_default_dimension(key, value)
+    # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
+    api.chromium_swarming.configure_swarming('chromium', precommit=False)
+
+    # Sync to revision,
+    api.chromium_tests.prepare_checkout(
+        bot_config,
+        root_solution_revision=revision)
+
+    return tests, target_buildername
+

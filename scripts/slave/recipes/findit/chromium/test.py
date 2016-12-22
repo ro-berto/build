@@ -83,51 +83,15 @@ def _get_reduced_test_dict(original_test_dict, failed_tests_dict):
       reduced_dict[step].extend(tests)
   return reduced_dict
 
-
 def RunSteps(api, target_mastername, target_testername, good_revision,
-             bad_revision, tests, buildbucket,
-             use_analyze, suspected_revisions):
+             bad_revision, tests, buildbucket, use_analyze,
+             suspected_revisions):
 
-  if not tests:
-    # tests should be saved in build parameter in this case.
-    buildbucket_json = json.loads(buildbucket)
-    build_id = buildbucket_json['build']['id']
-    get_build_result = api.buildbucket.get_build(build_id)
-    tests = json.loads(
-        get_build_result.stdout['build']['parameters_json']).get(
-            'additional_build_parameters', {}).get('tests')
+  tests, target_buildername = api.findit.configure_and_sync(
+      api, tests, buildbucket, target_mastername, target_testername,
+      bad_revision)
 
-  assert tests, 'No failed tests were specified.'
-
-  # Figure out which builder configuration we should match for compile config.
-  # Sometimes, the builder itself runs the tests and there is no tester. In
-  # such cases, just treat the builder as a "tester". Thus, we default to
-  # the target tester.
-  tester_config = api.chromium_tests.builders.get(
-      target_mastername).get('builders', {}).get(target_testername)
-  target_buildername = (tester_config.get('parent_buildername') or
-                        target_testername)
-
-  # Configure to match the compile config on the builder.
-  bot_config = api.chromium_tests.create_bot_config_object(
-      target_mastername, target_buildername)
-  api.chromium_tests.configure_build(
-      bot_config, override_bot_type='builder_tester')
-
-  api.chromium.apply_config('goma_failfast')
-
-  # Configure to match the test config on the tester, as builders don't have the
-  # settings for swarming tests.
-  if target_buildername != target_testername:
-    for key, value in tester_config.get('swarming_dimensions', {}).iteritems():
-      api.swarming.set_default_dimension(key, value)
-  # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
-  api.chromium_swarming.configure_swarming('chromium', precommit=False)
-
-  # Sync to bad revision, and retrieve revisions in the regression range.
-  api.chromium_tests.prepare_checkout(
-      bot_config,
-      root_solution_revision=bad_revision)
+  # retrieve revisions in the regression range.
   revisions_to_check = api.findit.revisions_between(good_revision, bad_revision)
 
   suspected_revision_index = [
