@@ -796,7 +796,18 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range"
+    "name": "Expanding reference range",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Range: 0000000000000000000000000000000000000000:fc6dfc7ff5b1073408499478969261b826441144 (1 commits)<br/>@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@catapult: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@skia: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@v8: None@@@",
+      "@@@STEP_LOG_END@DEPS - Bad@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@catapult: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@skia: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@v8: None@@@",
+      "@@@STEP_LOG_END@DEPS - Good@@@"
+    ]
   },
   {
     "cmd": [
@@ -810,7 +821,7 @@
       "3"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306476}",
+    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#306476}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -832,7 +843,7 @@
       "3"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306474}",
+    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#306474}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -852,14 +863,10 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS",
+    "name": "Expanding reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -872,20 +879,11 @@
       "0000000000000000000000000000000000000000"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.fetch file 0000000000000000000000000000000000000000:DEPS",
+    "name": "Expanding reference range.fetch file 0000000000000000000000000000000000000000:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Expanding revision range"
   },
   {
     "cmd": [
@@ -897,7 +895,7 @@
       "https://chromium.googlesource.com/chromium/src"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Expanding revision range.for revisions 0000000000000000000000000000000000000000:fc6dfc7ff5b1073408499478969261b826441144",
+    "name": "Expanding reference range.for revisions 0000000000000000000000000000000000000000:fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6482,6 +6480,14 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Bisecting revision",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Revision: chromium@e28dc0d49c<br/>@@@"
+    ]
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -6489,13 +6495,11 @@
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c"
+    "name": "Bisecting revision.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -6505,7 +6509,7 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "Working on revision chromium@e28dc0d49c.resolving hash fc6dfc7ff5b1073408499478969261b826441144",
+    "name": "Bisecting revision.resolving hash fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6519,8 +6523,8 @@
       "https://chromeperf.appspot.com/post_bisect_results"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", \"change\": \"1465.45%\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"0000000000000000000000000000000000000000\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"0000000000000000000000000000000000000000\", \"depot_name\": \"chromium\", \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@0000000000\", \"std_dev\": 11.40175425099138}, {\"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"mean_value\": 172.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": 184.7127499659945}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "name": "Bisecting revision.Post bisect results",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", \"change\": \"1465.45%\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"0000000000000000000000000000000000000000\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"build_id\": null, \"commit_hash\": \"0000000000000000000000000000000000000000\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@0000000000\", \"std_dev\": 11.40175425099138}, {\"build_id\": null, \"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"n_observations\": 0, \"result\": \"unknown\", \"revision_string\": \"chromium@e28dc0d49c\"}, {\"build_id\": null, \"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 172.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": 184.7127499659945}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6542,7 +6546,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.gsutil ls",
+    "name": "Bisecting revision.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6576,7 +6580,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "Working on revision chromium@e28dc0d49c.bot_update",
+    "name": "Bisecting revision.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -6661,7 +6665,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.rmtree build directory",
+    "name": "Bisecting revision.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6689,7 +6693,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.gsutil download_build_product",
+    "name": "Bisecting revision.gsutil download_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6701,7 +6705,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "Working on revision chromium@e28dc0d49c.unzip_build_product",
+    "name": "Bisecting revision.unzip_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6718,7 +6722,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.get version",
+    "name": "Bisecting revision.get version",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6738,7 +6742,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.install ChromePublic.apk",
+    "name": "Bisecting revision.install ChromePublic.apk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6755,7 +6759,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory",
+    "name": "Bisecting revision.makedirs results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6802,7 +6806,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 1 of 6",
+    "name": "Bisecting revision.Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6825,7 +6829,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk",
+    "name": "Bisecting revision.write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6842,7 +6846,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results",
+    "name": "Bisecting revision.Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6863,7 +6867,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (2)",
+    "name": "Bisecting revision.makedirs results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6910,7 +6914,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 2 of 6",
+    "name": "Bisecting revision.Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6933,7 +6937,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (2)",
+    "name": "Bisecting revision.write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6950,7 +6954,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (2)",
+    "name": "Bisecting revision.Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6971,7 +6975,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (3)",
+    "name": "Bisecting revision.makedirs results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7018,7 +7022,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 3 of 6",
+    "name": "Bisecting revision.Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -7041,7 +7045,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (3)",
+    "name": "Bisecting revision.write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7058,7 +7062,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (3)",
+    "name": "Bisecting revision.Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7079,7 +7083,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (4)",
+    "name": "Bisecting revision.makedirs results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7126,7 +7130,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 4 of 6",
+    "name": "Bisecting revision.Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -7149,7 +7153,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (4)",
+    "name": "Bisecting revision.write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7166,7 +7170,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (4)",
+    "name": "Bisecting revision.Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7187,7 +7191,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (5)",
+    "name": "Bisecting revision.makedirs results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7234,7 +7238,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 5 of 6",
+    "name": "Bisecting revision.Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -7257,7 +7261,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (5)",
+    "name": "Bisecting revision.write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7274,7 +7278,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (5)",
+    "name": "Bisecting revision.Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7295,7 +7299,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (6)",
+    "name": "Bisecting revision.makedirs results directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7342,7 +7346,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 6 of 6",
+    "name": "Bisecting revision.Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -7363,7 +7367,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (6)",
+    "name": "Bisecting revision.write buildbot output to disk (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7380,7 +7384,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (6)",
+    "name": "Bisecting revision.Reading valueset results (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7400,7 +7404,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.test_report",
+    "name": "Bisecting revision.test_report",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7424,7 +7428,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples",
+    "name": "Bisecting revision.Compare samples",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7463,7 +7467,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (2)",
+    "name": "Bisecting revision.Compare samples (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7503,7 +7507,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (7)",
+    "name": "Bisecting revision.makedirs results directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7550,7 +7554,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 1 of 3",
+    "name": "Bisecting revision.Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -7571,7 +7575,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (7)",
+    "name": "Bisecting revision.write buildbot output to disk (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7588,7 +7592,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (7)",
+    "name": "Bisecting revision.Reading valueset results (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7609,7 +7613,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (8)",
+    "name": "Bisecting revision.makedirs results directory (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7656,7 +7660,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 2 of 3",
+    "name": "Bisecting revision.Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -7677,7 +7681,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (8)",
+    "name": "Bisecting revision.write buildbot output to disk (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7694,7 +7698,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (8)",
+    "name": "Bisecting revision.Reading valueset results (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7715,7 +7719,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (9)",
+    "name": "Bisecting revision.makedirs results directory (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7762,7 +7766,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 3 of 3",
+    "name": "Bisecting revision.Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -7783,7 +7787,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (9)",
+    "name": "Bisecting revision.write buildbot output to disk (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7800,7 +7804,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (9)",
+    "name": "Bisecting revision.Reading valueset results (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7820,7 +7824,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.test_report (2)",
+    "name": "Bisecting revision.test_report (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7844,7 +7848,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (3)",
+    "name": "Bisecting revision.Compare samples (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7883,7 +7887,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (4)",
+    "name": "Bisecting revision.Compare samples (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7923,7 +7927,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (10)",
+    "name": "Bisecting revision.makedirs results directory (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7970,7 +7974,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 1 of 5",
+    "name": "Bisecting revision.Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -7991,7 +7995,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (10)",
+    "name": "Bisecting revision.write buildbot output to disk (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8008,7 +8012,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (10)",
+    "name": "Bisecting revision.Reading valueset results (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8029,7 +8033,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (11)",
+    "name": "Bisecting revision.makedirs results directory (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -8076,7 +8080,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 2 of 5",
+    "name": "Bisecting revision.Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -8097,7 +8101,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (11)",
+    "name": "Bisecting revision.write buildbot output to disk (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8114,7 +8118,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (11)",
+    "name": "Bisecting revision.Reading valueset results (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8135,7 +8139,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (12)",
+    "name": "Bisecting revision.makedirs results directory (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -8182,7 +8186,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 3 of 5",
+    "name": "Bisecting revision.Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -8203,7 +8207,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (12)",
+    "name": "Bisecting revision.write buildbot output to disk (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8220,7 +8224,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (12)",
+    "name": "Bisecting revision.Reading valueset results (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8241,7 +8245,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (13)",
+    "name": "Bisecting revision.makedirs results directory (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -8288,7 +8292,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 4 of 5",
+    "name": "Bisecting revision.Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -8309,7 +8313,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (13)",
+    "name": "Bisecting revision.write buildbot output to disk (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8326,7 +8330,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (13)",
+    "name": "Bisecting revision.Reading valueset results (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8347,7 +8351,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (14)",
+    "name": "Bisecting revision.makedirs results directory (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -8394,7 +8398,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 5 of 5",
+    "name": "Bisecting revision.Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -8415,7 +8419,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (14)",
+    "name": "Bisecting revision.write buildbot output to disk (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8432,7 +8436,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (14)",
+    "name": "Bisecting revision.Reading valueset results (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8452,7 +8456,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.test_report (3)",
+    "name": "Bisecting revision.test_report (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -8476,7 +8480,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (5)",
+    "name": "Bisecting revision.Compare samples (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8515,7 +8519,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (6)",
+    "name": "Bisecting revision.Compare samples (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8555,7 +8559,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (15)",
+    "name": "Bisecting revision.makedirs results directory (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -8602,7 +8606,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 1 of 7",
+    "name": "Bisecting revision.Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -8623,7 +8627,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (15)",
+    "name": "Bisecting revision.write buildbot output to disk (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8640,7 +8644,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (15)",
+    "name": "Bisecting revision.Reading valueset results (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8661,7 +8665,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (16)",
+    "name": "Bisecting revision.makedirs results directory (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -8708,7 +8712,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 2 of 7",
+    "name": "Bisecting revision.Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -8729,7 +8733,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (16)",
+    "name": "Bisecting revision.write buildbot output to disk (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8746,7 +8750,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (16)",
+    "name": "Bisecting revision.Reading valueset results (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8767,7 +8771,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (17)",
+    "name": "Bisecting revision.makedirs results directory (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -8814,7 +8818,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 3 of 7",
+    "name": "Bisecting revision.Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -8835,7 +8839,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (17)",
+    "name": "Bisecting revision.write buildbot output to disk (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8852,7 +8856,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (17)",
+    "name": "Bisecting revision.Reading valueset results (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8873,7 +8877,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (18)",
+    "name": "Bisecting revision.makedirs results directory (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -8920,7 +8924,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 4 of 7",
+    "name": "Bisecting revision.Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -8941,7 +8945,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (18)",
+    "name": "Bisecting revision.write buildbot output to disk (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8958,7 +8962,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (18)",
+    "name": "Bisecting revision.Reading valueset results (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8979,7 +8983,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (19)",
+    "name": "Bisecting revision.makedirs results directory (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -9026,7 +9030,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 5 of 7",
+    "name": "Bisecting revision.Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -9047,7 +9051,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (19)",
+    "name": "Bisecting revision.write buildbot output to disk (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9064,7 +9068,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (19)",
+    "name": "Bisecting revision.Reading valueset results (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9085,7 +9089,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (20)",
+    "name": "Bisecting revision.makedirs results directory (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -9132,7 +9136,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 6 of 7",
+    "name": "Bisecting revision.Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -9153,7 +9157,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (20)",
+    "name": "Bisecting revision.write buildbot output to disk (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9170,7 +9174,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (20)",
+    "name": "Bisecting revision.Reading valueset results (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9191,7 +9195,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (21)",
+    "name": "Bisecting revision.makedirs results directory (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -9238,7 +9242,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 7 of 7",
+    "name": "Bisecting revision.Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -9259,7 +9263,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (21)",
+    "name": "Bisecting revision.write buildbot output to disk (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9276,7 +9280,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (21)",
+    "name": "Bisecting revision.Reading valueset results (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9296,7 +9300,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.test_report (4)",
+    "name": "Bisecting revision.test_report (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -9320,7 +9324,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (7)",
+    "name": "Bisecting revision.Compare samples (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9359,7 +9363,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (8)",
+    "name": "Bisecting revision.Compare samples (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9406,11 +9410,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving hashes"
   },
   {
     "cmd": [],
@@ -9577,7 +9576,18 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range (2)"
+    "name": "Expanding reference range (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Range: 0000000000000000000000000000000000000000:fc6dfc7ff5b1073408499478969261b826441144 (1 commits)<br/>@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@catapult: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@skia: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@v8: None@@@",
+      "@@@STEP_LOG_END@DEPS - Bad@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@catapult: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@skia: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@v8: None@@@",
+      "@@@STEP_LOG_END@DEPS - Good@@@"
+    ]
   },
   {
     "cmd": [
@@ -9589,14 +9599,10 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS (2)",
+    "name": "Expanding reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -9609,20 +9615,11 @@
       "0000000000000000000000000000000000000000"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.fetch file 0000000000000000000000000000000000000000:DEPS (2)",
+    "name": "Expanding reference range.fetch file 0000000000000000000000000000000000000000:DEPS (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Expanding revision range (2)"
   },
   {
     "cmd": [
@@ -9634,7 +9631,7 @@
       "https://chromium.googlesource.com/chromium/src"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Expanding revision range.for revisions 0000000000000000000000000000000000000000:fc6dfc7ff5b1073408499478969261b826441144 (2)",
+    "name": "Expanding reference range.for revisions 0000000000000000000000000000000000000000:fc6dfc7ff5b1073408499478969261b826441144 (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -15219,6 +15216,14 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Bisecting revision (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Revision: chromium@e28dc0d49c<br/>@@@"
+    ]
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -15226,13 +15231,11 @@
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155 (2)",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c (2)"
+    "name": "Bisecting revision.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155 (2)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -15242,7 +15245,7 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "Working on revision chromium@e28dc0d49c.resolving hash fc6dfc7ff5b1073408499478969261b826441144 (2)",
+    "name": "Bisecting revision.resolving hash fc6dfc7ff5b1073408499478969261b826441144 (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -15256,8 +15259,8 @@
       "https://chromeperf.appspot.com/post_bisect_results"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Post bisect results (2)",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", \"change\": \"1465.45%\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"0000000000000000000000000000000000000000\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"0000000000000000000000000000000000000000\", \"depot_name\": \"chromium\", \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@0000000000\", \"std_dev\": 11.40175425099138}, {\"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"mean_value\": 172.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": 184.7127499659945}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "name": "Bisecting revision.Post bisect results (2)",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", \"change\": \"1465.45%\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"0000000000000000000000000000000000000000\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"build_id\": null, \"commit_hash\": \"0000000000000000000000000000000000000000\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@0000000000\", \"std_dev\": 11.40175425099138}, {\"build_id\": null, \"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"n_observations\": 0, \"result\": \"unknown\", \"revision_string\": \"chromium@e28dc0d49c\"}, {\"build_id\": null, \"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 172.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": 184.7127499659945}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -15279,7 +15282,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.gsutil ls (2)",
+    "name": "Bisecting revision.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -15313,7 +15316,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "Working on revision chromium@e28dc0d49c.bot_update (2)",
+    "name": "Bisecting revision.bot_update (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -15398,7 +15401,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.rmtree build directory (2)",
+    "name": "Bisecting revision.rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -15426,7 +15429,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.gsutil download_build_product (2)",
+    "name": "Bisecting revision.gsutil download_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -15438,7 +15441,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
-    "name": "Working on revision chromium@e28dc0d49c.unzip_build_product (2)",
+    "name": "Bisecting revision.unzip_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -15455,7 +15458,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.get version (2)",
+    "name": "Bisecting revision.get version (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -15475,7 +15478,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.install ChromePublic.apk (2)",
+    "name": "Bisecting revision.install ChromePublic.apk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -15492,7 +15495,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (22)",
+    "name": "Bisecting revision.makedirs results directory (22)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -15539,7 +15542,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 1 of 6 (2)",
+    "name": "Bisecting revision.Performance Test 1 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -15560,7 +15563,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (22)",
+    "name": "Bisecting revision.write buildbot output to disk (22)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -15577,7 +15580,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (22)",
+    "name": "Bisecting revision.Reading valueset results (22)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -15598,7 +15601,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (23)",
+    "name": "Bisecting revision.makedirs results directory (23)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -15645,7 +15648,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 2 of 6 (2)",
+    "name": "Bisecting revision.Performance Test 2 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -15666,7 +15669,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (23)",
+    "name": "Bisecting revision.write buildbot output to disk (23)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -15683,7 +15686,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (23)",
+    "name": "Bisecting revision.Reading valueset results (23)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -15704,7 +15707,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (24)",
+    "name": "Bisecting revision.makedirs results directory (24)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -15751,7 +15754,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 3 of 6 (2)",
+    "name": "Bisecting revision.Performance Test 3 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -15772,7 +15775,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (24)",
+    "name": "Bisecting revision.write buildbot output to disk (24)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -15789,7 +15792,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (24)",
+    "name": "Bisecting revision.Reading valueset results (24)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -15810,7 +15813,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (25)",
+    "name": "Bisecting revision.makedirs results directory (25)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -15857,7 +15860,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 4 of 6 (2)",
+    "name": "Bisecting revision.Performance Test 4 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -15878,7 +15881,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (25)",
+    "name": "Bisecting revision.write buildbot output to disk (25)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -15895,7 +15898,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (25)",
+    "name": "Bisecting revision.Reading valueset results (25)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -15916,7 +15919,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (26)",
+    "name": "Bisecting revision.makedirs results directory (26)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -15963,7 +15966,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 5 of 6 (2)",
+    "name": "Bisecting revision.Performance Test 5 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -15984,7 +15987,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (26)",
+    "name": "Bisecting revision.write buildbot output to disk (26)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -16001,7 +16004,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (26)",
+    "name": "Bisecting revision.Reading valueset results (26)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -16022,7 +16025,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (27)",
+    "name": "Bisecting revision.makedirs results directory (27)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -16069,7 +16072,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 6 of 6 (2)",
+    "name": "Bisecting revision.Performance Test 6 of 6 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -16090,7 +16093,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (27)",
+    "name": "Bisecting revision.write buildbot output to disk (27)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -16107,7 +16110,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (27)",
+    "name": "Bisecting revision.Reading valueset results (27)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -16127,7 +16130,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.test_report (5)",
+    "name": "Bisecting revision.test_report (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -16151,7 +16154,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (9)",
+    "name": "Bisecting revision.Compare samples (9)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -16190,7 +16193,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (10)",
+    "name": "Bisecting revision.Compare samples (10)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -16230,7 +16233,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (28)",
+    "name": "Bisecting revision.makedirs results directory (28)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -16277,7 +16280,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 1 of 3 (2)",
+    "name": "Bisecting revision.Performance Test 1 of 3 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -16298,7 +16301,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (28)",
+    "name": "Bisecting revision.write buildbot output to disk (28)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -16315,7 +16318,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (28)",
+    "name": "Bisecting revision.Reading valueset results (28)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -16336,7 +16339,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (29)",
+    "name": "Bisecting revision.makedirs results directory (29)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -16383,7 +16386,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 2 of 3 (2)",
+    "name": "Bisecting revision.Performance Test 2 of 3 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -16404,7 +16407,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (29)",
+    "name": "Bisecting revision.write buildbot output to disk (29)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -16421,7 +16424,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (29)",
+    "name": "Bisecting revision.Reading valueset results (29)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -16442,7 +16445,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (30)",
+    "name": "Bisecting revision.makedirs results directory (30)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -16489,7 +16492,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 3 of 3 (2)",
+    "name": "Bisecting revision.Performance Test 3 of 3 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -16510,7 +16513,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (30)",
+    "name": "Bisecting revision.write buildbot output to disk (30)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -16527,7 +16530,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (30)",
+    "name": "Bisecting revision.Reading valueset results (30)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -16547,7 +16550,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.test_report (6)",
+    "name": "Bisecting revision.test_report (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -16571,7 +16574,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (11)",
+    "name": "Bisecting revision.Compare samples (11)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -16610,7 +16613,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (12)",
+    "name": "Bisecting revision.Compare samples (12)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -16650,7 +16653,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (31)",
+    "name": "Bisecting revision.makedirs results directory (31)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -16697,7 +16700,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 1 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 1 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -16718,7 +16721,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (31)",
+    "name": "Bisecting revision.write buildbot output to disk (31)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -16735,7 +16738,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (31)",
+    "name": "Bisecting revision.Reading valueset results (31)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -16756,7 +16759,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (32)",
+    "name": "Bisecting revision.makedirs results directory (32)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -16803,7 +16806,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 2 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 2 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -16824,7 +16827,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (32)",
+    "name": "Bisecting revision.write buildbot output to disk (32)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -16841,7 +16844,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (32)",
+    "name": "Bisecting revision.Reading valueset results (32)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -16862,7 +16865,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (33)",
+    "name": "Bisecting revision.makedirs results directory (33)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -16909,7 +16912,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 3 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 3 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -16930,7 +16933,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (33)",
+    "name": "Bisecting revision.write buildbot output to disk (33)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -16947,7 +16950,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (33)",
+    "name": "Bisecting revision.Reading valueset results (33)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -16968,7 +16971,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (34)",
+    "name": "Bisecting revision.makedirs results directory (34)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17015,7 +17018,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 4 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 4 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -17036,7 +17039,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (34)",
+    "name": "Bisecting revision.write buildbot output to disk (34)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -17053,7 +17056,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (34)",
+    "name": "Bisecting revision.Reading valueset results (34)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -17074,7 +17077,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (35)",
+    "name": "Bisecting revision.makedirs results directory (35)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17121,7 +17124,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 5 of 5 (2)",
+    "name": "Bisecting revision.Performance Test 5 of 5 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -17142,7 +17145,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (35)",
+    "name": "Bisecting revision.write buildbot output to disk (35)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -17159,7 +17162,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (35)",
+    "name": "Bisecting revision.Reading valueset results (35)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -17179,7 +17182,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.test_report (7)",
+    "name": "Bisecting revision.test_report (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17203,7 +17206,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (13)",
+    "name": "Bisecting revision.Compare samples (13)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -17242,7 +17245,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (14)",
+    "name": "Bisecting revision.Compare samples (14)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -17282,7 +17285,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (36)",
+    "name": "Bisecting revision.makedirs results directory (36)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17329,7 +17332,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 1 of 7 (2)",
+    "name": "Bisecting revision.Performance Test 1 of 7 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -17350,7 +17353,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (36)",
+    "name": "Bisecting revision.write buildbot output to disk (36)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -17367,7 +17370,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (36)",
+    "name": "Bisecting revision.Reading valueset results (36)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -17388,7 +17391,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (37)",
+    "name": "Bisecting revision.makedirs results directory (37)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17435,7 +17438,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 2 of 7 (2)",
+    "name": "Bisecting revision.Performance Test 2 of 7 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -17456,7 +17459,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (37)",
+    "name": "Bisecting revision.write buildbot output to disk (37)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -17473,7 +17476,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (37)",
+    "name": "Bisecting revision.Reading valueset results (37)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -17494,7 +17497,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (38)",
+    "name": "Bisecting revision.makedirs results directory (38)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17541,7 +17544,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 3 of 7 (2)",
+    "name": "Bisecting revision.Performance Test 3 of 7 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -17562,7 +17565,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (38)",
+    "name": "Bisecting revision.write buildbot output to disk (38)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -17579,7 +17582,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (38)",
+    "name": "Bisecting revision.Reading valueset results (38)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -17600,7 +17603,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (39)",
+    "name": "Bisecting revision.makedirs results directory (39)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17647,7 +17650,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 4 of 7 (2)",
+    "name": "Bisecting revision.Performance Test 4 of 7 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -17668,7 +17671,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (39)",
+    "name": "Bisecting revision.write buildbot output to disk (39)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -17685,7 +17688,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (39)",
+    "name": "Bisecting revision.Reading valueset results (39)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -17706,7 +17709,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (40)",
+    "name": "Bisecting revision.makedirs results directory (40)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17753,7 +17756,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 5 of 7 (2)",
+    "name": "Bisecting revision.Performance Test 5 of 7 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -17774,7 +17777,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (40)",
+    "name": "Bisecting revision.write buildbot output to disk (40)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -17791,7 +17794,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (40)",
+    "name": "Bisecting revision.Reading valueset results (40)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -17812,7 +17815,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (41)",
+    "name": "Bisecting revision.makedirs results directory (41)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17859,7 +17862,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 6 of 7 (2)",
+    "name": "Bisecting revision.Performance Test 6 of 7 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -17880,7 +17883,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (41)",
+    "name": "Bisecting revision.write buildbot output to disk (41)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -17897,7 +17900,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (41)",
+    "name": "Bisecting revision.Reading valueset results (41)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -17918,7 +17921,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.makedirs results directory (42)",
+    "name": "Bisecting revision.makedirs results directory (42)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -17965,7 +17968,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Performance Test 7 of 7 (2)",
+    "name": "Bisecting revision.Performance Test 7 of 7 (2)",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -17986,7 +17989,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.write buildbot output to disk (42)",
+    "name": "Bisecting revision.write buildbot output to disk (42)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -18003,7 +18006,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.Reading valueset results (42)",
+    "name": "Bisecting revision.Reading valueset results (42)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -18023,7 +18026,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "Working on revision chromium@e28dc0d49c.test_report (8)",
+    "name": "Bisecting revision.test_report (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -18047,7 +18050,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (15)",
+    "name": "Bisecting revision.Compare samples (15)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -18086,7 +18089,7 @@
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Working on revision chromium@e28dc0d49c.Compare samples (16)",
+    "name": "Bisecting revision.Compare samples (16)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -18137,24 +18140,12 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving hashes (2)"
+    "name": "Debug Info (2)"
   },
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Debug Info (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@0000000000, mean_value=11.0, std_dev=11.40175425099138)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: RevisionState(rev=chromium@fc6dfc7ff5, mean_value=172.2, std_dev=184.7127499659945)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@@@@",
-      "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@0000000000[12, 13, 14, 15, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@e28dc0d49c[12, 13, 14, 15, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@fc6dfc7ff5[212, 213, 214, 215, 7]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@LKGR values: [12, 13, 14, 15, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@FKBR values: [212, 213, 214, 215, 7]@@@",
-      "@@@STEP_LOG_END@Debug Info@@@"
-    ]
+    "name": "Resolving hashes"
   },
   {
     "cmd": [
@@ -18181,7 +18172,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", \"change\": \"1465.45%\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"0000000000000000000000000000000000000000\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"0000000000000000000000000000000000000000\", \"depot_name\": \"chromium\", \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@0000000000\", \"std_dev\": 11.40175425099138}, {\"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": 11.40175425099138}, {\"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"mean_value\": 172.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": 184.7127499659945}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", \"change\": \"1465.45%\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"0000000000000000000000000000000000000000\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"build_id\": null, \"commit_hash\": \"0000000000000000000000000000000000000000\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@0000000000\", \"std_dev\": 11.40175425099138}, {\"build_id\": null, \"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": 11.40175425099138}, {\"build_id\": null, \"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 172.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": 184.7127499659945}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

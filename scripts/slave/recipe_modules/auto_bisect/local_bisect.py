@@ -41,6 +41,9 @@ def perform_bisect(api, **flags):
       bisect_attempts[-1].aborted_reason = message
       bisect_attempts[-1].print_result_debug_info()
       bisect_attempts[-1].post_result()
+    # The message may include line breaks for listing untestable ranges. This is
+    # not accepted by buildbot for the purpose of providing a failure reason
+    message = message.replace('\n', ' ')
     raise api.m.step.StepFailure(message)
   except Exception as e: # pylint: disable=bare-except
     if bisect_attempts:
@@ -104,13 +107,16 @@ def _bisect_main_loop(bisector):  # pragma: no cover
   then it starts them in parallel and waits for them to finish.
   """
   while not bisector.bisect_over:
-    revision_to_check = bisector.get_revision_to_eval()
-    if not revision_to_check:
-      bisector.bisect_over = True
-      break
+    with bisector.api.m.step.nest('Bisecting revision'):
+      step_result = bisector.api.m.step.active_result
+      revision_to_check = bisector.get_revision_to_eval()
+      if not revision_to_check:
+        bisector.bisect_over = True
+        break
+      step_result.presentation.step_text += (
+          bisector.api.m.test_utils.format_step_text(
+              [['Revision: %s' % revision_to_check.revision_string()]]))
 
-    with bisector.api.m.step.nest(str('Working on revision ' +
-                                      revision_to_check.revision_string())):
       bisector.post_result(halt_on_failure=False)
       revision_to_check.start_job()
 

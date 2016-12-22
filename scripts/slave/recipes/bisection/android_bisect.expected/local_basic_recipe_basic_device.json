@@ -802,7 +802,18 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range"
+    "name": "Expanding reference range",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Range: e28dc0d49c331def2a3bbf3ddd0096eb51551155:fc6dfc7ff5b1073408499478969261b826441144 (0 commits)<br/>@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@catapult: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@skia: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Bad@v8: None@@@",
+      "@@@STEP_LOG_END@DEPS - Bad@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@catapult: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@skia: None@@@",
+      "@@@STEP_LOG_LINE@DEPS - Good@v8: None@@@",
+      "@@@STEP_LOG_END@DEPS - Good@@@"
+    ]
   },
   {
     "cmd": [
@@ -816,7 +827,7 @@
       "3"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306476}",
+    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#306476}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -838,7 +849,7 @@
       "3"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#306475}",
+    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#306475}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -858,14 +869,10 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS",
+    "name": "Expanding reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -878,20 +885,11 @@
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Resolving reference range.fetch file e28dc0d49c331def2a3bbf3ddd0096eb51551155:DEPS",
+    "name": "Expanding reference range.fetch file e28dc0d49c331def2a3bbf3ddd0096eb51551155:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@catapult: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Expanding revision range"
   },
   {
     "cmd": [
@@ -903,7 +901,7 @@
       "https://chromium.googlesource.com/chromium/src"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Expanding revision range.for revisions e28dc0d49c331def2a3bbf3ddd0096eb51551155:fc6dfc7ff5b1073408499478969261b826441144",
+    "name": "Expanding reference range.for revisions e28dc0d49c331def2a3bbf3ddd0096eb51551155:fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6515,6 +6513,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Debug Info"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -6529,22 +6532,6 @@
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Resolving hashes"
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Debug Info",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, mean_value=11.0, std_dev=11.40175425099138)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: RevisionState(rev=chromium@fc6dfc7ff5, mean_value=172.2, std_dev=184.7127499659945)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@@@@",
-      "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@e28dc0d49c[12, 13, 14, 15, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@chromium@fc6dfc7ff5[212, 213, 214, 215, 7]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@LKGR values: [12, 13, 14, 15, 1]@@@",
-      "@@@STEP_LOG_LINE@Debug Info@FKBR values: [212, 213, 214, 215, 7]@@@",
-      "@@@STEP_LOG_END@Debug Info@@@"
-    ]
   },
   {
     "cmd": [
@@ -6571,7 +6558,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", \"change\": \"1465.45%\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": 11.40175425099138}, {\"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"mean_value\": 172.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": 184.7127499659945}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", \"change\": \"1465.45%\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"culprit_data\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"build_id\": null, \"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 11.0, \"n_observations\": 5, \"result\": \"good\", \"revision_string\": \"chromium@e28dc0d49c\", \"std_dev\": 11.40175425099138}, {\"build_id\": null, \"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 172.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@fc6dfc7ff5\", \"std_dev\": 184.7127499659945}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

@@ -302,7 +302,7 @@
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
-      "@@@STEP_LOG_LINE@Bisect job configuration@  \"bad_revision\": \"314016\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"bad_revision\": \"314017\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"bug_id\": \"-1\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"bypass_stats_check\": \"True\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", @@@",
@@ -324,7 +324,7 @@
     "cwd": "[START_DIR]",
     "name": "Expanding reference range",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Range: a6298e4afedbf2cd461755ea6f45b0ad64222222:dcdcdc0ff1122212323134879ddceeb1240b0988 (0 commits)<br/>@@@",
+      "@@@STEP_TEXT@<br/>Range: a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111 (1 commits)<br/>@@@",
       "@@@STEP_LOG_LINE@DEPS - Bad@catapult: None@@@",
       "@@@STEP_LOG_LINE@DEPS - Bad@skia: None@@@",
       "@@@STEP_LOG_LINE@DEPS - Bad@v8: None@@@",
@@ -342,17 +342,17 @@
       "RECIPE_MODULE[build::crrev]/resources/crrev_client.py",
       "get_numbering",
       "--params-file",
-      "{\"number\": 314016, \"numbering_identifier\": \"refs/heads/master\", \"numbering_type\": \"COMMIT_POSITION\", \"project\": \"chromium\", \"repo\": \"chromium/src\"}",
+      "{\"number\": 314017, \"numbering_identifier\": \"refs/heads/master\", \"numbering_type\": \"COMMIT_POSITION\", \"project\": \"chromium\", \"repo\": \"chromium/src\"}",
       "--attempts",
       "3"
     ],
     "cwd": "[START_DIR]",
-    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#314016}",
+    "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#314017}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"git_sha\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"git_sha\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -386,10 +386,10 @@
       "RECIPE_MODULE[build::auto_bisect]/resources/fetch_file.py",
       "DEPS",
       "--commit",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988"
+      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[START_DIR]",
-    "name": "Expanding reference range.fetch file dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS",
+    "name": "Expanding reference range.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -417,11 +417,11 @@
       "-u",
       "RECIPE_MODULE[build::auto_bisect]/resources/fetch_intervening_revisions.py",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988",
+      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "https://chromium.googlesource.com/chromium/src"
     ],
     "cwd": "[START_DIR]",
-    "name": "Expanding reference range.for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "name": "Expanding reference range.for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -429,6 +429,10 @@
       "@@@STEP_LOG_LINE@json.output@  [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"dcdcdc0ff1122212323134879ddceeb1240b0988\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"314016\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"314017\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -453,7 +457,120 @@
     "cwd": "[START_DIR]",
     "name": "Gathering reference values.gsutil ls",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "step returned non-zero exit code: 1"
+    ]
+  },
+  {
+    "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Gathering reference values.buildbucket.put",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1201331270\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Gathering reference values.Waiting for build",
+    "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Gathering reference values.Waiting for build.gsutil ls",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Gathering reference values.Waiting for build.sleeping",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@import time@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "get",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
+      "1201331270"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Gathering reference values.Waiting for build.buildbucket.get",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Gathering reference values.Waiting for build.gsutil ls (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -641,9 +758,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 1 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -664,10 +781,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -741,9 +856,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 2 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -764,10 +879,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -841,9 +954,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 3 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -864,10 +977,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -941,9 +1052,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 4 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -964,10 +1075,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -1041,9 +1150,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 5 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -1064,10 +1173,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -1141,9 +1248,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 6 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -1213,7 +1320,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
+      "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
     "cwd": "[START_DIR]",
     "name": "Gathering reference values.gsutil ls (2)",
@@ -1237,7 +1344,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
+      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "--output_manifest"
     ],
     "cwd": "[START_DIR]",
@@ -1251,7 +1358,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -1359,7 +1466,7 @@
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-archive-url",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
+      "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
       "--master-name",
       "tryserver.chromium.perf",
       "--build-number",
@@ -1406,9 +1513,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 1 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -1429,10 +1536,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -1506,9 +1611,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 2 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -1529,10 +1634,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -1606,9 +1709,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 3 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -1629,10 +1732,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -1706,9 +1807,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 4 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -1729,10 +1830,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -1806,9 +1905,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 5 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -1829,10 +1928,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
-      "@@@STEP_LOG_END@Failure Output@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
   {
@@ -1906,9 +2003,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"314016\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"-1\", \"bypass_stats_check\": \"True\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"dummy_job_names\": \"True\", \"dummy_tests\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"recipe_tester_name\": \"linux_perf_tester\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\"}, \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}",
       "--step-name=Performance Test 6 of 6",
       "--builder-name=linux_perf_bisect",
       "--slave-name=dummyslave",
@@ -1929,7 +2026,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -1938,7 +2035,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -1966,25 +2063,53 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_REF_RANGE_FAIL\"]@@@"
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy,[START_DIR]/bisect_results/dummy/results-valueset.json.copy",
+      "mean_input_event_latency/mean_input_event_latency",
+      "--valueset"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Compare samples",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"U\": 123, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"p\": 0.001, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"significance\": \"NEED_MORE_DATA\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleA\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    19, @@@",
+      "@@@STEP_LOG_LINE@json.output@    20, @@@",
+      "@@@STEP_LOG_LINE@json.output@    23, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleB\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    12, @@@",
+      "@@@STEP_LOG_LINE@json.output@    13, @@@",
+      "@@@STEP_LOG_LINE@json.output@    14, @@@",
+      "@@@STEP_LOG_LINE@json.output@    15, @@@",
+      "@@@STEP_LOG_LINE@json.output@    7@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]",
-    "name": "Debug Info"
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222"
-    ],
-    "cwd": "[START_DIR]/src",
-    "name": "resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Revision: chromium@dcdcdc0ff1<br/>@@@"
+    ]
   },
   {
     "cmd": [
@@ -1994,8 +2119,181 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/"
+    "name": "Bisecting revision.resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "a6298e4afedbf2cd461755ea6f45b0ad64222222"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "Bisecting revision.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "footers",
+      "--position",
+      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "Bisecting revision.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/post_bisect_results"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision.Post bisect results",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"build_id\": \"1201331270\", \"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"build_id\": null, \"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"n_observations\": 0, \"result\": \"unknown\", \"revision_string\": \"chromium@dcdcdc0ff1\"}, {\"build_id\": null, \"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"started\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision.gsutil ls",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "step returned non-zero exit code: 1"
+    ]
+  },
+  {
+    "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision.buildbucket.put",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1201331270\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision.Waiting for build",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision.Waiting for build.gsutil ls",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "step returned non-zero exit code: 1"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision.Waiting for build.sleeping",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@import time@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(5*60)@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "get",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
+      "1201331270"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision.Waiting for build.buildbucket.get",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"result\": \"FAILED\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Bisecting revision (2)"
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]",
+    "name": "Debug Info"
   },
   {
     "cmd": [],
@@ -2011,7 +2309,25 @@
     ],
     "cwd": "[START_DIR]",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"aborted_reason\": \"Bisect cannot identify a culprit: Testing the \\\"good\\\" revision failed: Test runs failed to produce output.\", \"bad_revision\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": null, \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"build_id\": null, \"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"failed\": true, \"failure_reason\": \"Test runs failed to produce output.\", \"mean_value\": null, \"n_observations\": 0, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": null}, {\"build_id\": null, \"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"failed\": true, \"failure_reason\": \"Test runs failed to produce output.\", \"mean_value\": null, \"n_observations\": 0, \"result\": \"bad\", \"revision_string\": \"chromium@dcdcdc0ff1\", \"std_dev\": null}], \"status\": \"failed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdin": "{\"data\": {\"aborted_reason\": null, \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"build_id\": \"1201331270\", \"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"build_id\": \"1201331270\", \"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"failed\": true, \"failure_reason\": \"Failed to compile revision chromium@dcdcdc0ff1. Buildbucket job id 1201331270\", \"n_observations\": 0, \"result\": \"unknown\", \"revision_string\": \"chromium@dcdcdc0ff1\"}, {\"build_id\": null, \"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/post_bisect_results"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Post bisect results (2)",
+    "stdin": "{\"data\": {\"aborted_reason\": \"Failed to post to Perf Dashboard. Error response: None\", \"bad_revision\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"-1\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders/linux_perf_bisect/builds/571\", \"change\": \"22.54%\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release --output-format=valueset smoothness.tough_scrolling_cases\", \"culprit_data\": null, \"good_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [{\"build_id\": \"1201331270\", \"commit_hash\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 15.75, \"n_observations\": 4, \"result\": \"good\", \"revision_string\": \"chromium@a6298e4afe\", \"std_dev\": 17.284386017443605}, {\"build_id\": \"1201331270\", \"commit_hash\": \"dcdcdc0ff1122212323134879ddceeb1240b0988\", \"depot_name\": \"chromium\", \"failed\": true, \"failure_reason\": \"Failed to compile revision chromium@dcdcdc0ff1. Buildbucket job id 1201331270\", \"n_observations\": 0, \"result\": \"unknown\", \"revision_string\": \"chromium@dcdcdc0ff1\"}, {\"build_id\": null, \"commit_hash\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", \"depot_name\": \"chromium\", \"failed\": false, \"failure_reason\": null, \"mean_value\": 12.2, \"n_observations\": 5, \"result\": \"bad\", \"revision_string\": \"chromium@00316c9ddf\", \"std_dev\": 6.2289646009589745}], \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -2022,7 +2338,7 @@
   },
   {
     "name": "$result",
-    "reason": "Bisect cannot identify a culprit: Testing the \"good\" revision failed: Test runs failed to produce output.",
+    "reason": "Failed to post to Perf Dashboard. Error response: None",
     "recipe_result": null,
     "status_code": 1
   }

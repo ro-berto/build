@@ -52,6 +52,8 @@ class RevisionState(object):
     super(RevisionState, self).__init__()
     self.bisector = bisector
     self._good = None
+    self._built = False
+    self._failed_build = None
     self.failed = False
     self.deps = None
     self.test_results_url = None
@@ -170,18 +172,22 @@ class RevisionState(object):
                 time.sleep(5*60)
                 sys.exit(0)
                 """)
-            if self._is_build_failed():
+            if self.is_build_failed():
               self.failed = True
               self.failure_reason = (
                   'Failed to compile revision %s. Buildbucket job id %s' % (
                       self.revision_string(), self.build_id))
               return
 
-      self._do_test()
-      # TODO(robertocn): Add a test to remove this CL
-      while not self._check_revision_good():  # pragma: no cover
-        min(self, self.bisector.lkgr, self.bisector.fkbr,
-            key=lambda(x): x.test_run_count)._do_test()
+      # Individual tests failing don't need to break the entire bisect run.
+      try:
+        self._do_test()
+        # TODO(robertocn): Add a test to remove this CL
+        while not self._check_revision_good():  # pragma: no cover
+          min(self, self.bisector.lkgr, self.bisector.fkbr,
+              key=lambda(x): x.test_run_count)._do_test()
+      except api.m.step.StepFailure as e:  # pragma: no cover
+        raise bisect_exceptions.UntestableRevisionException(e.reason)
 
       # If this is the initial good/bad revision, we should to check if any
       # values are even produced and fail if they aren't. This allows the
@@ -311,10 +317,12 @@ class RevisionState(object):
                 [collections.namedtuple('retcode_attr', ['retcode'])(0)])
       self.build_archived = api.gsutil_file_exists(
           self.build_url, step_test_data=data.pop)
-
+    self._built = self.build_archived
     return self.build_archived
 
-  def _is_build_failed(self):
+  def is_build_failed(self):
+    if self._built:  # pragma: no cover
+      return self._failed_build
     api = self.bisector.api
     try:
       result = api.m.buildbucket.get_build(
@@ -325,8 +333,12 @@ class RevisionState(object):
     except api.m.step.StepFailure:
       # If the check fails, we cannot assume that the build is failed.
       return False
-    return (result.stdout['build']['status'] == 'COMPLETED' and
-            result.stdout['build'].get('result') != 'SUCCESS')
+    if result.stdout['build']['status'] == 'COMPLETED':
+      self._built = True
+      if result.stdout['build'].get('result') != 'SUCCESS':
+        self._failed_build = True
+        return True
+    return False
 
   def _gs_suffix(self):
     """Provides the expected right half of the build filename.

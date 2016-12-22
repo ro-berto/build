@@ -105,7 +105,8 @@ class Bisector(object):
       self.base_depot = 'android-chrome'  # pragma: no cover
 
     # Initial revision range
-    with api.m.step.nest('Resolving reference range'):
+    with api.m.step.nest('Expanding reference range'):
+      expanding_step = api.m.step.active_result
 
       bad_hash = self._get_hash(bisect_config['bad_revision'])
       good_hash = self._get_hash(bisect_config['good_revision'])
@@ -114,22 +115,22 @@ class Bisector(object):
       self.bad_rev = revision_class(self, bad_hash)
       self.bad_rev.bad = True
       self.bad_rev.read_deps(self.get_perf_tester_name())
-      api.m.step.active_result.presentation.logs['Debug Bad Revision DEPS'] = [
+      expanding_step.presentation.logs['DEPS - Bad'] = [
           '%s: %s' % (key, value) for key, value in
-          self.bad_rev.deps.iteritems()]
+          sorted(self.bad_rev.deps.items())]
       self.bad_rev.deps = {}
       self.fkbr = self.bad_rev
       self.good_rev = revision_class(self, good_hash)
       self.good_rev.good = True
       self.good_rev.read_deps(self.get_perf_tester_name())
-      api.m.step.active_result.presentation.logs['Debug Good Revision DEPS'] = [
+      expanding_step.presentation.logs['DEPS - Good'] = [
           '%s: %s' % (key, value) for key, value in
-          self.good_rev.deps.iteritems()]
+          sorted(self.good_rev.deps.items())]
       self.good_rev.deps = {}
       self.lkgr = self.good_rev
 
-    if init_revisions:
-      self._expand_initial_revision_range()
+      if init_revisions:
+        self._expand_initial_revision_range(expanding_step.presentation)
 
   def _get_hash(self, rev):
     """Returns a commit hash given either a commit hash or commit position.
@@ -248,23 +249,28 @@ class Bisector(object):
     rel_change = self.api.m.math_utils.relative_change(old_value, new_value)
     self.relative_change = '%.2f%%' % (100 * rel_change)
 
-  def _expand_initial_revision_range(self):
+  def _expand_initial_revision_range(self, presentation):
     """Sets the initial contents of |self.revisions|."""
-    with self.api.m.step.nest('Expanding revision range'):
-      good_hash = self.good_rev.commit_hash
-      bad_hash = self.bad_rev.commit_hash
-      depot = self.good_rev.depot_name
-      step_name = 'for revisions %s:%s' % (good_hash, bad_hash)
-      revisions = self._revision_range(
-          start=good_hash,
-          end=bad_hash,
-          depot_name=self.base_depot,
-          step_name=step_name,
-          exclude_end=True,
-          step_test_data=lambda: self.api._test_data['revision_list'][depot]
-      )
-      self.revisions = [self.good_rev] + revisions + [self.bad_rev]
-      self._update_revision_list_indexes()
+    good_hash = self.good_rev.commit_hash
+    bad_hash = self.bad_rev.commit_hash
+    depot = self.good_rev.depot_name
+    step_name = 'for revisions %s:%s' % (good_hash, bad_hash)
+    revisions = self._revision_range(
+        start=good_hash,
+        end=bad_hash,
+        depot_name=self.base_depot,
+        step_name=step_name,
+        exclude_end=True,
+        step_test_data=lambda: self.api._test_data['revision_list'][depot]
+    )
+    self.revisions = [self.good_rev] + revisions + [self.bad_rev]
+    self._update_revision_list_indexes()
+
+    presentation.step_text += (
+        self.api.m.test_utils.format_step_text(
+            [['Range: %s:%s (%d commits)' % (
+                good_hash, bad_hash, len(revisions))]]))
+
 
   def _revision_range(self, start, end, depot_name, base_revision=None,
                       step_name=None, exclude_end=False, **kwargs):
@@ -570,11 +576,12 @@ class Bisector(object):
 
   def print_result_debug_info(self):
     """Prints extra debug info at the end of the bisect process."""
-    lines = self._results_debug_message().splitlines()
     # If we emit a null step then add a log to it, the log should be kept
     # longer than 7 days (which is often needed to debug some issues).
     self.api.m.step('Debug Info', [])
-    self.api.m.step.active_result.presentation.logs['Debug Info'] = lines
+    debug_info_step = self.api.m.step.active_result
+    lines = self._results_debug_message().splitlines()
+    debug_info_step.presentation.logs['Debug Info'] = lines
 
   def post_result(self, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""
@@ -778,6 +785,7 @@ class Bisector(object):
       aborted_reason = _FAILED_INITIAL_CONFIDENCE_ABORT_REASON
     elif self.failed_direction:  # pragma: no cover
       aborted_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
+
     return {
         'try_job_id': config.get('try_job_id'),
         'bug_id': config.get('bug_id'),
@@ -793,7 +801,7 @@ class Bisector(object):
         'warnings': self.warnings,
         'aborted_reason': self.aborted_reason or aborted_reason,
         'culprit_data': self._culprit_data(),
-        'revision_data': self._revision_data()
+        'revision_data': self._revision_data(),
     }
 
   def _culprit_data(self):
@@ -819,17 +827,21 @@ class Bisector(object):
   def _revision_data(self):
     revision_rows = []
     for r in self.revisions:
+      row = {
+          'depot_name': r.depot_name,
+          'commit_hash': r.commit_hash,
+          'revision_string': r.revision_string(),
+          'n_observations': len(r.display_values),
+          'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
+          'failed': r.failed,
+          'failure_reason': r.failure_reason,
+          'build_id': r.build_id,
+      }
       if r.test_run_count:
-        revision_rows.append({
-            'depot_name': r.depot_name,
-            'commit_hash': r.commit_hash,
-            'revision_string': r.revision_string(),
-            'mean_value': (r.overall_return_code if
-                           r.bisector.is_return_code_mode() else r.mean),
-            'std_dev': r.std_dev,
-            'n_observations': len(r.display_values),
-            'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
-        })
+        row['mean_value'] = (r.overall_return_code
+            if r.bisector.is_return_code_mode() else r.mean)
+        row['std_dev'] = r.std_dev
+      revision_rows.append(row)
     return revision_rows
 
   def _get_build_url(self):
