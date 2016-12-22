@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import os
 import urllib
 
@@ -65,26 +66,34 @@ class PerfDashboardApi(recipe_api.RecipeApi):
   def add_point(self, data, halt_on_failure=False):
     return self.post('perf dashboard post',
                      '%s/add_point' % _BASE_URL,
-                     {'data': data}, halt_on_failure)
+                     {'data': json.dumps(data)}, halt_on_failure)
 
   def post_bisect_results(self, data, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""
     return self.post('Post bisect results',
                      '%s/post_bisect_results' % _BASE_URL,
-                     {'data': data}, halt_on_failure)
+                     {'data': json.dumps(data)}, halt_on_failure)
 
   def upload_isolated(self, builder_name, git_hash, isolate_map,
                       halt_on_failure=False):
     data = {
         'builder_name': builder_name,
         'git_hash': git_hash,
-        'isolate_map': isolate_map,
+        'isolate_map': json.dumps(isolate_map),
     }
     return self.post('pinpoint isolate upload',
                      '%s/isolated' % _PINPOINT_BASE_URL, data, halt_on_failure)
 
   def post(self, name, url, data, halt_on_failure):
-    """Takes a data object which can be jsonified and posts it to url."""
+    """Send a POST request to a URL with a payload.
+
+    Args:
+      name: The name of the step.
+      url: The URL to post to.
+      data: A dict of parameters to send in the body of the request.
+      halt_on_failure: If True, the step turns purple on failure. Otherwise, it
+          turns orange.
+    """
     step_result = self.m.python(
         name=name, script=self.resource('post_json.py'), args=[url],
         stdin=self.m.json.input(data), stdout=self.m.json.output())

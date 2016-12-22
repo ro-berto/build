@@ -1318,7 +1318,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "Post bisect results",
-    "stdin": "{\"data\": {\"bisect_bot\": \"android_nexus6_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_nexus6_perf_bisect/builds/571\", \"change\": 88.88888888888889, \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\", \"metric\": \"dummy/dummy\", \"profiler_links\": [], \"result\": \"Revision    Mean        Std.Error\\nPatch       1.0         0.0\\nNo Patch    9.0         0.0\", \"status\": \"completed\", \"std_err\": 0.0, \"try_job_id\": null}}",
+    "stdin": "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"std_err\\\": 0.0, \\\"metric\\\": \\\"dummy/dummy\\\", \\\"profiler_links\\\": [], \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/android_nexus6_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\\\", \\\"result\\\": \\\"Revision    Mean        Std.Error\\\\nPatch       1.0         0.0\\\\nNo Patch    9.0         0.0\\\", \\\"bisect_bot\\\": \\\"android_nexus6_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\\", \\\"change\\\": 88.88888888888889}\"}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",

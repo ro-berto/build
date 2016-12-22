@@ -443,7 +443,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.perf_dashboard.upload_isolated(
               self.m.properties['buildername'],
               update_step.presentation.properties['got_revision'],
-              json.dumps(step_result.json.output))
+              step_result.json.output)
 
   def archive_build(self, mastername, buildername, update_step, bot_db):
     bot_config = bot_db.get_bot_config(mastername, buildername)
