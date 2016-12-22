@@ -30,7 +30,7 @@ def RunSteps(api):
                             buildername=buildername)
   mb_path = api.path['checkout'].join('tools-webrtc', 'mb')
   api.ios.build(mb_path=mb_path)
-  api.ios.test_swarming(scripts_dir='src/chromium/src/ios/build/bots/scripts')
+  api.ios.test_swarming()
 
 def GenTests(api):
   yield (
