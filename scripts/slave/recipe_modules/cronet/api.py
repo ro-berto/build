@@ -68,8 +68,7 @@ class CronetApi(recipe_api.RecipeApi):
           self.m.properties['mastername'],
           self.m.properties['buildername'],
           use_goma=use_goma)
-    self.m.chromium.compile(use_goma_module=use_goma,
-                            use_compile_py=False)
+    self.m.chromium.compile(use_goma_module=use_goma)
 
 
   def get_version(self):

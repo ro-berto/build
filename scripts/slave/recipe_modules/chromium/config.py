@@ -47,8 +47,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       xcode_sdk = Single(basestring, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
-      # TODO(tikuta): Remove this after removing compile.py.
-      use_compile_py = Single(bool, empty_val=False, required=False),
     ),
     runtest_py = ConfigGroup(
       src_side = Single(bool),
@@ -248,13 +246,13 @@ def msvs2015(c):
 def goma_failfast(c):
   c.compile_py.goma_failfast = True
 
-@config_ctx(includes=['no_compile_py'])
+@config_ctx()
 def goma_canary(c):
   c.compile_py.goma_canary = True
   c.compile_py.goma_hermetic = 'error'
   c.compile_py.goma_failfast = True
 
-@config_ctx(includes=['no_compile_py'])
+@config_ctx()
 def goma_staging(c):
   c.compile_py.goma_failfast = True
   c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'sandbox.google.com'
@@ -308,11 +306,6 @@ def goma(c):
 
   if c.TARGET_PLATFORM == 'win' and c.compile_py.compiler != 'goma-clang':
     fastbuild(c)
-
-# TODO(tikuta): Remove this after removing compile.py.
-@config_ctx()
-def no_compile_py(c):
-  c.compile_py.use_compile_py = False
 
 @config_ctx()
 def dcheck(c, invert=False):

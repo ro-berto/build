@@ -39,7 +39,7 @@ def RunSteps(api):
   api.chromium.run_mb('chromium.fyi', 'Chromium Windows Analyze',
                       use_goma=False)
 
-  api.chromium.compile(targets=['chrome'], use_compile_py=False)
+  api.chromium.compile(targets=['chrome'])
 
 
 def GenTests(api):

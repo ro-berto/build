@@ -59,8 +59,7 @@ class PGOApi(recipe_api.RecipeApi):
         phase=1)
     # Remove the profile files from the previous builds.
     self.m.file.rmwildcard('*.pg[cd]', str(self.m.chromium.output_dir))
-    self.m.chromium.compile(name='Compile: Instrumentation phase.',
-                            use_compile_py=False)
+    self.m.chromium.compile(name='Compile: Instrumentation phase.')
 
   def _run_pgo_benchmarks(self):
     """
@@ -91,8 +90,7 @@ class PGOApi(recipe_api.RecipeApi):
         self.m.properties['buildername'],
         use_goma=False,
         phase=2)
-    self.m.chromium.compile(name='Compile: Optimization phase.',
-                            use_compile_py=False)
+    self.m.chromium.compile(name='Compile: Optimization phase.')
 
   def compile_pgo(self, bot_config):
     """

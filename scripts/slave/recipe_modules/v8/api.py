@@ -479,7 +479,7 @@ class V8Api(recipe_api.RecipeApi):
     self.peek_gn()
     if self.m.properties['buildername'] != 'V8 Mips - builder':
       kwargs['use_goma_module'] = True
-    self.m.chromium.compile(use_compile_py=False, **kwargs)
+    self.m.chromium.compile(**kwargs)
     self.isolate_tests()
 
   # TODO(machenbach): This should move to a dynamorio module as soon as one

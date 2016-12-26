@@ -151,12 +151,11 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
-  # TODO(tikuta): Remove use_compile_py=False before removing compile.py.
+  # TODO(tikuta): Remove use_goma_module.
+  # Decrease the number of ways configuring with or without goma.
   def compile(self, targets=None, name=None, out_dir=None,
-              target=None, use_goma_module=False,
-              use_compile_py=False, **kwargs):
+              target=None, use_goma_module=False, **kwargs):
     """Return a compile.py invocation."""
-    assert use_compile_py == False
 
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
