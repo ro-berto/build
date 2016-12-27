@@ -1664,16 +1664,14 @@ class BisectTestStaging(Test):  # pylint: disable=W0232
 
 
 class AndroidTest(Test):
-  def __init__(self, name, compile_targets, isolate_file_path=None,
-               waterfall_mastername=None, waterfall_buildername=None):
+  def __init__(self, name, compile_targets, waterfall_mastername=None,
+               waterfall_buildername=None):
     super(AndroidTest, self).__init__(
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername)
 
     self._name = name
     self._compile_targets = compile_targets
-
-    self.isolate_file_path = isolate_file_path
 
   @property
   def name(self):
@@ -1729,8 +1727,8 @@ class AndroidTest(Test):
 class AndroidJunitTest(AndroidTest):
   def __init__(
       self, name, waterfall_mastername=None, waterfall_buildername=None):
-    super(AndroidJunitTest, self).__init__(name, compile_targets=[name],
-        isolate_file_path=None, waterfall_mastername=None,
+    super(AndroidJunitTest, self).__init__(
+        name, compile_targets=[name], waterfall_mastername=None,
         waterfall_buildername=None)
 
   @property
@@ -1803,11 +1801,11 @@ class AndroidInstrumentationTest(AndroidTest):
   }
 
   def __init__(self, name, compile_targets=None, apk_under_test=None,
-               test_apk=None, isolate_file_path=None, timeout_scale=None,
-               annotation=None, except_annotation=None, screenshot=False,
-               verbose=True, tool=None, additional_apks=None,
-               store_tombstones=False, result_details=False, args=None,
-               waterfall_mastername=None, waterfall_buildername=None):
+               test_apk=None, timeout_scale=None, annotation=None,
+               except_annotation=None, screenshot=False, verbose=True,
+               tool=None, additional_apks=None, store_tombstones=False,
+               result_details=False, args=None, waterfall_mastername=None,
+               waterfall_buildername=None):
     suite_defaults = (
         AndroidInstrumentationTest._DEFAULT_SUITES.get(name)
         or AndroidInstrumentationTest._DEFAULT_SUITES_BY_TARGET.get(name)
@@ -1820,7 +1818,6 @@ class AndroidInstrumentationTest(AndroidTest):
     super(AndroidInstrumentationTest, self).__init__(
         name,
         compile_targets,
-        isolate_file_path or suite_defaults.get('isolate_file_path'),
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername)
     self._additional_apks = (
@@ -1853,7 +1850,6 @@ class AndroidInstrumentationTest(AndroidTest):
             api.chromium_android.apk_path(a)
             for a in self._additional_apks or []],
         suffix=suffix,
-        isolate_file_path=self.isolate_file_path,
         annotation=self._annotation, except_annotation=self._except_annotation,
         screenshot=self._screenshot, verbose=self._verbose, tool=self._tool,
         json_results_file=json_results_file,

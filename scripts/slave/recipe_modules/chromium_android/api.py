@@ -937,7 +937,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                 test_apk=None,
                                 apk_under_test=None,
                                 additional_apks=None,
-                                isolate_file_path=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
                                 screenshot=False, verbose=False, tool=None,
@@ -992,8 +991,6 @@ class AndroidApi(recipe_api.RecipeApi):
 
     if not wrapper_script_suite_name:
       args.insert(0, 'instrumentation')
-      if isolate_file_path:
-        args.extend(['--isolate-file-path', isolate_file_path])
       if self.m.chromium.c.BUILD_CONFIG == 'Release':
         args.append('--release')
       if official_build:
@@ -1271,19 +1268,14 @@ class AndroidApi(recipe_api.RecipeApi):
                                       'run-bisect-perf-regression.py'),
          '-w', self.m.path['start_dir']] + args, **kwargs)
 
-  def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
-                     gtest_filter=None, tool=None, result_details=False,
-                     store_tombstones=False,
-                     name=None, json_results_file=None, shard_timeout=None,
-                     args=None, **kwargs):
+  def run_test_suite(self, suite, verbose=True, gtest_filter=None, tool=None,
+                     result_details=False, store_tombstones=False, name=None,
+                     json_results_file=None, shard_timeout=None, args=None,
+                     **kwargs):
     args = args or []
     args.extend(['--blacklist-file', self.blacklist_file])
     if verbose:
       args.append('--verbose')
-    # TODO(agrieve): Remove once no more tests pass isolate_file_path (contained
-    #     in wrapper scripts).
-    if isolate_file_path:
-      args.append('--isolate_file_path=%s' % isolate_file_path)
     if gtest_filter:
       args.append('--gtest_filter=%s' % gtest_filter)
     if tool:

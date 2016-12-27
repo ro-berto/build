@@ -33,7 +33,7 @@ BUILDERS = freeze({
         'disable_system_chrome': True,
         'remove_system_webview': True,
       },
-      'sample_gtest_suite': ['sample_test', 'sample_isolate_file'],
+      'sample_gtest_suite': 'sample_test',
     }
   }
 })
@@ -71,9 +71,9 @@ def RunSteps(api, mastername, buildername):
       partition_size=builder.get('partition_size'),
       sdcard_size=builder.get('sdcard_size')):
     api.emulator.wait_for_emulator(num=1)
-    suite, isolate_file = builder.get('sample_gtest_suite')
+    suite = builder.get('sample_gtest_suite')
     api.chromium_android.provision_devices(emulators=True, **provision_settings)
-    api.chromium_android.run_test_suite(suite, isolate_file_path=isolate_file)
+    api.chromium_android.run_test_suite(suite)
 
 def GenTests(api):
   sanitize = lambda s: ''.join(c if c.isalnum() else '_' for c in s)

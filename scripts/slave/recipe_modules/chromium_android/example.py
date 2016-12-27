@@ -211,7 +211,6 @@ def RunSteps(api, buildername):
       name='AndroidWebViewTest',
       apk_under_test=api.chromium_android.apk_path('AndroidWebView.apk'),
       test_apk=api.chromium_android.apk_path('AndroidWebViewTest.apk'),
-      isolate_file_path='android_webview/android_webview_test_data.isolate',
       flakiness_dashboard='test-results.appspot.com',
       annotation='SmallTest',
       except_annotation='FlakyTest',
@@ -227,7 +226,6 @@ def RunSteps(api, buildername):
       store_tombstones=config.get('store_tombstones'))
   api.chromium_android.run_test_suite(
       'unittests',
-      isolate_file_path=api.path['checkout'].join('some_file.isolate'),
       gtest_filter='WebRtc*',
       result_details=config.get('result_details'),
       store_tombstones=config.get('store_tombstones'),
