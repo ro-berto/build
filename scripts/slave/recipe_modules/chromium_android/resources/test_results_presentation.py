@@ -40,9 +40,7 @@ def result_details(json_path, cs_base_url, master_name):
                 'tombstones': tr['tombstones'] if 'tombstones' in tr else '',
                 'logcat': tr['logcat_url'] if 'logcat_url' in tr else '',
             } for tr in test_runs]
-    results_list = list(
-        itertools.chain.from_iterable(test_results_dict.values()))
-    return results_to_html(results_list, cs_base_url, master_name)
+    return results_to_html(test_results_dict, cs_base_url, master_name)
 
 def code_search(test, cs_base_url):
   search = test.replace('#', '.')
@@ -54,39 +52,59 @@ def status_class(status):
     return 'failure %s' % status
   return status
 
-def create_test_row_data(results, cs_base_url):
+def create_test_row_data(results_dict, cs_base_url):
   tombstones_data = []
-  test_row_list = []
-  for result in results:
-    add_tombstone = result['status'] == 'CRASH' and result['tombstones']
-    tombstones_name = '%s_tombstones' % result['name']
-    if add_tombstone:
-      tombstones_data.append(
-          {
-            'id': tombstones_name,
-            'data': result['tombstones']
-          })
-    test_case = ([
-        {'data': result['name'], 'class': 'left',
-         'link': code_search(result['name'], cs_base_url)},
-        {'data': result['status'],
-         'class': 'center ' + status_class(result['status']),
-         'action': add_tombstone,
-         'action_argument': tombstones_name,
-         'title': 'Show tombstones of this crashed test case.'},
-        {'data': result['duration'], 'class': 'center'},
-        {'data': 'logcat' if result['logcat'] else '', 'class': 'center',
-         'link': result['logcat']},
-        {'data': result['output_snippet'],
-         'class': 'left', 'is_pre': True}
-        ])
-    test_row_list.append(test_case)
-  return test_row_list, tombstones_data
+  tests_list = []
+  for test in results_dict:
+    test_runs = []
+    for index, result in enumerate(results_dict[test]):
+      add_tombstone = result['status'] == 'CRASH' and result['tombstones']
+      tombstones_name = '%s_tombstones' % result['name']
+      if add_tombstone:
+        tombstones_data.append(
+            {
+              'id': tombstones_name,
+              'data': result['tombstones']
+            })
+      if index == 0:
+        test_run = [
+            {'data': result['name'], 'class': 'left ' + result['name'],
+             'link': code_search(result['name'], cs_base_url),
+             'target': '_blank',
+             'rowspan': len(results_dict[test]),
+             'first_row_of_the_block': True,
+            }]
+      else:
+        test_run = []
+      # class: The class of html element.
+      # link: href link of the element.
+      # target: The openning page, whether existing or new, of link.
+      # TODO(hzl): Change action, action_argument to link.
+      test_run.extend([
+          {'data': result['status'],
+           'class': 'center ' + status_class(result['status']),
+           'action': add_tombstone,
+           'action_argument': tombstones_name,
+           'title': 'Show tombstones of this crashed test case.'},
+          {'data': result['duration'], 'class': 'center'},
+          {'data': 'logcat' if result['logcat'] else '', 'class': 'center',
+           'link': result['logcat'],
+           'target': '_blank'},
+          {'data': result['output_snippet'],
+           'class': 'left', 'is_pre': True}
+          ])
+      test_runs.append(test_run)
+    tests_list.append(test_runs)
+  return tests_list, tombstones_data
 
-def create_suite_row_data(results):
+def create_suite_row_data(results_dict):
   # Summary of all suites.
+  # class: The class of html element.
+  # link: href link of the element.
+  # target: The openning page, whether existing or new, of link.
   suites_summary = [{'data': 'TOTAL', 'class' : 'center',
-                     'action': True},
+                     'link': ('?suite=%s' % 'TOTAL'),
+                     'target': '_self'},
                     {'data': 0, 'class': 'center'},
                     {'data': 0, 'class': 'center'},
                     {'data': 0, 'class': 'center'},
@@ -99,7 +117,10 @@ def create_suite_row_data(results):
   ALL_COUNT = 3
   TIME = 4
 
-  for result in results:
+  for result_name in results_dict:
+    # Since we only care about the result of the last test run.
+    result = results_dict[result_name][-1]
+
     # Constructing suite_row_dict and suites_summary
     test_case_path = result['name']
     suite_name = (test_case_path.split('#')[0] if '#' in test_case_path
@@ -108,7 +129,8 @@ def create_suite_row_data(results):
       suite_row = suite_row_dict[suite_name]
     else:
       suite_row = [{'data': suite_name, 'class' : 'left',
-                    'action': True},
+                    'link': ('?suite=%s' % suite_name),
+                    'target': '_self',},
                    {'data': 0, 'class': 'center'},
                    {'data': 0, 'class': 'center'},
                    {'data': 0, 'class': 'center'},
@@ -135,22 +157,22 @@ def create_suite_row_data(results):
     suites_summary[FAIL_COUNT]['class'] += ' failure'
   else:
     suites_summary[FAIL_COUNT]['class'] += ' success'
-  return suite_row_dict.values(), suites_summary
+  return [[suite_row] for suite_row in suite_row_dict.values()], suites_summary
 
 # Convert list of test results into html format.
 def results_to_html(results, cs_base_url, master_name):
-  test_row_list, tombstones_data = create_test_row_data(results, cs_base_url)
-  suite_row_list, suites_summary = create_suite_row_data(results)
+  test_row_blocks, tombstones_data = create_test_row_data(results, cs_base_url)
+  suite_row_blocks, suites_summary = create_suite_row_data(results)
 
   test_table_values = {
     'table_id' : 'test-table',
     'table_headers' : [('text', 'test_name'),
-                       ('text', 'status'),
+                       ('flaky', 'status'),
                        ('number', 'duration'),
                        ('text', 'logcat'),
                        ('text', 'output_snippet'),
                       ],
-    'table_rows' : test_row_list,
+    'table_row_blocks' : test_row_blocks,
   }
 
   suite_table_values = {
@@ -161,7 +183,7 @@ def results_to_html(results, cs_base_url, master_name):
                        ('number', 'all_tests'),
                        ('number', 'elapsed_time_ms'),
                       ],
-    'table_rows' : suite_row_list,
+    'table_row_blocks' : suite_row_blocks,
     'summary' : suites_summary,
   }
 

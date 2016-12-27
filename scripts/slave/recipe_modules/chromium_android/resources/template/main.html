@@ -30,101 +30,12 @@
         text-decoration: underline;
         cursor: pointer;
       }
-      tr:hover {
+      .row_block:hover {
         background-color: #F6F6F6;
       }
     </style>
     <script type="text/javascript">
-      function showTestsOfOneSuiteOnly(suite_name) {
-        var testTableRows = document.getElementsByClassName(
-            'test-table-body-row');
-        Array.prototype.slice.call(testTableRows)
-            .forEach(function(row) {
-                var testCasePath = row.firstElementChild.firstElementChild
-                    .innerHTML;
-                if (testCasePath.startsWith(suite_name)) {
-                  row.style.display = 'table-row';
-                } else {
-                  row.style.display = 'none';
-                }
-            }
-        );
-      }
-
-      function showAllTests() {
-        var testTableRows = document.getElementsByClassName(
-            'test-table-body-row');
-        Array.prototype.slice.call(testTableRows)
-            .forEach(function(row) {
-                row.style.display = 'table-row';
-            }
-        );
-      }
-
-      function presentTombstones(tombstonesId) {
-        var tombstonesWindow = window.open("", "_blank");
-        var tombstones = document.getElementById(tombstonesId).cloneNode(true);
-        tombstones.style.display = "inline";
-        var formattedTombstones = document.createElement("pre");
-        formattedTombstones.appendChild(tombstones);
-        tombstonesWindow.document.body.appendChild(formattedTombstones);
-      }
-
-      function sortByColumn(head) {
-        var tbody = head.parentNode.parentNode.nextElementSibling;
-        var rows = tbody.rows;
-
-        // Put 'tr' in rows to an array.
-        var arr = Array.prototype.slice.call(rows);
-
-        // Determine whether to asc or desc and set arrows.
-        var headers = head.parentNode.getElementsByTagName('th');
-        var headIndex = Array.prototype.slice.call(headers).indexOf(head);
-        var asc = 1;
-        for (var i = 0; i < headers.length; i++) {
-          if (headers[i].dataset.ascSorted != 0) {
-            if (headers[i].dataset.ascSorted == 1) {
-                headers[i].getElementsByClassName('up')[0]
-                    .style.display = 'none';
-            } else {
-              headers[i].getElementsByClassName('down')[0]
-                  .style.display = 'none';
-            }
-            if (headers[i] == head) {
-              asc = headers[i].dataset.ascSorted * -1;
-            } else {
-              headers[i].dataset.ascSorted = 0;
-            }
-            break;
-          }
-        }
-        headers[headIndex].dataset.ascSorted = asc;
-        if (asc == 1) {
-            headers[headIndex].getElementsByClassName('up')[0]
-                .style.display = 'inline';
-        } else {
-            headers[headIndex].getElementsByClassName('down')[0]
-                .style.display = 'inline';
-        }
-
-        // Sort the array by the specified column number (col) and order (asc).
-        arr.sort(function (a, b) {
-          var aInnerHTML = a.children[headIndex].innerHTML;
-          var bInnerHTML = b.children[headIndex].innerHTML;
-          if (head.className == "number") {
-            var avalue = Number(aInnerHTML);
-            var bvalue = Number(bInnerHTML);
-          } else if (head.className == "text") {
-            var avalue = aInnerHTML;
-            var bvalue = bInnerHTML;
-          }
-          return (avalue == bvalue) ? 0 : ((avalue > bvalue) ? asc : -1 * asc);
-        });
-
-        for (var i = 0; i < arr.length; i++) {
-          tbody.appendChild(arr[i]);
-        }
-      }
+      {% include "javascript/main_html.js" %}
     </script>
   </head>
   <body class="interface">
@@ -132,41 +43,20 @@
       {% for datum in hidden_data %}
         <div id="{{datum.id}}" style="display:none;">{{datum.data}}</div>
       {% endfor %}
+      <h2 id="summary-header"></h2>
       {% for tb_value in tb_values %}
         {% include 'template/table.html' %}
-        <br>
-        <br>
-        <br>
       {% endfor %}
     </div>
   </body>
   <script>
+    loadPage();
     // Enable sorting for each column of tables.
     Array.prototype.slice.call(document.getElementsByTagName('th'))
         .forEach(function(head) {
             head.addEventListener(
                 "click",
                 function() { sortByColumn(head); });
-        }
-    );
-
-    // Show all test cases after clicking 'Total'.
-    Array.prototype.slice.call(
-        document.getElementsByClassName('suite-table-summary-column-0'))
-        .forEach(function(summaryTotal) {
-            summaryTotal.addEventListener(
-                "click",
-                function() { showAllTests(); });
-        }
-    );
-
-    // Show test cases only in the suite being clicked.
-    Array.prototype.slice.call(
-        document.getElementsByClassName('suite-table-body-column-0'))
-        .forEach(function(suiteName) {
-            suiteName.addEventListener(
-                "click",
-                function() { showTestsOfOneSuiteOnly(suiteName.innerText); });
         }
     );
 
