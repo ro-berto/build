@@ -1886,7 +1886,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/webrtc/build/android/test_runner.py",
+      "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/build/android/test_runner.py",
       "junit",
       "-s",
       "android_junit_tests",

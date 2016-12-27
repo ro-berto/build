@@ -1896,7 +1896,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_arm64_rel/src/webrtc/build/android/test_runner.py",
+      "[BUILDER_CACHE]/android_arm64_rel/src/build/android/test_runner.py",
       "junit",
       "-s",
       "android_junit_tests",
