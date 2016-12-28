@@ -23,6 +23,7 @@ def m_remote_run(recipe, **kwargs):
 
 def Update(c):
   hourly_builders = [
+    'Android Builder',
     'Android Builder (dbg)',
     'Android Builder ARM64 (dbg)',
     'Linux Builder',
@@ -55,6 +56,7 @@ def Update(c):
     {'name': 'Mac Tester', 'category': 'mac'},
     {'name': 'Linux Builder', 'category': 'linux'},
     {'name': 'Linux Tester', 'category': 'linux'},
+    {'name': 'Android Builder', 'category': 'android'},
     {'name': 'Android Builder (dbg)', 'category': 'android'},
     {
       'name': 'Android Builder ARM64 (dbg)',

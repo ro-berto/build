@@ -27,14 +27,15 @@ SPEC = {
 # they run at.
 _builders = collections.defaultdict(dict)
 
-def AddBuildSpec(name, platform, target_bits=64, build_config='Release'):
+def AddBuildSpec(name, platform, target_bits=64, build_config='Release',
+                 bot_type='builder'):
   spec = chromium_webrtc.BuildSpec(
       platform, target_bits, build_config=build_config,
       gclient_config='chromium_webrtc_tot')
   _ConfigureSyncingWebRTCToT(spec)
-  SPEC['builders'][name] = spec
+  spec['bot_type'] = bot_type
 
-  assert target_bits not in _builders[platform]
+  SPEC['builders'][name] = spec
   _builders[platform][target_bits] = name
 
 
@@ -63,6 +64,13 @@ def _ConfigureSyncingWebRTCToT(spec):
 AddBuildSpec('Win Builder', 'win', target_bits=32)
 AddBuildSpec('Mac Builder', 'mac')
 AddBuildSpec('Linux Builder', 'linux')
+
+# The Release bot is actually only a builder (not builder+tester). It's
+# configured as builder+tester only to skip the archiving of the full build
+# (Release bot builds 'all' while Debug builds only the necessary test APK).
+# That's the only easy way to avoid archiving the full debug build (13 GB).
+AddBuildSpec('Android Builder', 'android', target_bits=32,
+             bot_type='builder_tester')
 AddBuildSpec('Android Builder (dbg)', 'android', target_bits=32,
              build_config='Debug')
 AddBuildSpec('Android Builder ARM64 (dbg)', 'android', build_config='Debug')
