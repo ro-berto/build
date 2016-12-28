@@ -5,13 +5,14 @@
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
   if test_suite == 'webrtc':
-    for test in sorted(api.NORMAL_TESTS):
-      parallel = test != 'webrtc_nonparallel_tests'
-      tests.append(WebRTCTest(test, revision=revision, parallel=parallel))
-  elif test_suite == 'desktop_swarming':
-    SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
-    for test, extra_args in sorted(api.NORMAL_TESTS.items()):
-      tests.append(SwarmingTest(test, **extra_args))
+    if enable_swarming:
+      SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
+      for test, extra_args in sorted(api.NORMAL_TESTS.items()):
+        tests.append(SwarmingTest(test, **extra_args))
+    else:
+      for test in sorted(api.NORMAL_TESTS):
+        parallel = test != 'webrtc_nonparallel_tests'
+        tests.append(WebRTCTest(test, revision=revision, parallel=parallel))
   elif test_suite == 'webrtc_baremetal':
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
 
@@ -39,7 +40,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision))
-  elif test_suite == 'android_swarming':
+  elif test_suite == 'android':
     GTestTest = api.m.chromium_tests.steps.GTestTest
     for test in (api.ANDROID_DEVICE_TESTS +
                  api.ANDROID_INSTRUMENTATION_TESTS):

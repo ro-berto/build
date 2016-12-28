@@ -148,20 +148,19 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def configure_swarming(self):
     self.c.use_isolate = self.bot_config.get('use_isolate')
-    self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.use_isolate:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
-      if self.c.TEST_SUITE == 'desktop_swarming':
+      if self.c.TEST_SUITE == 'webrtc':
         self._isolated_targets = (self.NORMAL_TESTS.keys())
-      elif self.c.TEST_SUITE == 'android_swarming':
+      elif self.c.TEST_SUITE == 'android':
         self._isolated_targets = (self.ANDROID_DEVICE_TESTS +
                                   self.ANDROID_INSTRUMENTATION_TESTS +
                                   self.ANDROID_JUNIT_TESTS)
       self._isolated_targets = sorted(self._isolated_targets)
       if not self._isolated_targets: # pragma: no cover
         raise self.m.step.StepFailure('Isolation and swarming are only '
-                                      'supported for desktop_swarming and '
-                                      'android_swarming test suites.')
+                                      'supported for webrtc and '
+                                      'android test suites.')
 
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.enable_swarming:
@@ -236,8 +235,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       with self.m.step.defer_results():
         if tests:
           run_android_device_steps = (not self.c.enable_swarming and
-              self.m.chromium.c.TARGET_PLATFORM == 'android' and
-              self.c.TEST_SUITE != 'android_swarming')
+              self.m.chromium.c.TARGET_PLATFORM == 'android')
 
           if run_android_device_steps:
             self.m.chromium_android.common_tests_setup_steps()

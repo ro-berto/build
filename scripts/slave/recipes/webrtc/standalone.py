@@ -131,7 +131,8 @@ def GenTests(api):
                              rietveld='https://fake.rietveld.url')
     test += api.properties(buildnumber=1337)
 
-    if 'webrtc_swarming' in bot_config['recipe_config']:
+    if (chromium_kwargs.get('TARGET_PLATFORM') != 'android' and
+        bot_config.get('enable_swarming', False)):
       os_suffix = ' on %s' % bot_config['swarming_dimensions']['os']
       if 'Windows' in os_suffix:
         os_suffix = ''
