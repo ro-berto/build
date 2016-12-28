@@ -162,6 +162,7 @@ SPEC = {
         'test_spec_file': 'chromium.memory.json',
       },
     },
+    # TODO(machenbach): Remove obsolete config.
     'Linux ASan LSan Tests (1)': {
       'chromium_config': 'chromium_linux_asan',
       'gclient_config': 'chromium',
