@@ -13,10 +13,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc',
   },
-  'webrtc_gcc': {
-    'chromium_config': 'webrtc_gcc',
-    'gclient_config': 'webrtc',
-  },
   'webrtc_baremetal': {
     'chromium_config': 'webrtc_default',
     'gclient_config': 'webrtc',
@@ -633,7 +629,7 @@ BUILDERS = freeze({
         }
       },
       'Linux64 GCC': {
-        'recipe_config': 'webrtc_gcc',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

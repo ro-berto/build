@@ -13,11 +13,11 @@ DEPS = [
 ]
 
 RECIPE_CONFIGS = freeze({
-  'webrtc_minimal': {
-    'chromium_config': 'webrtc_minimal',
+  'webrtc_default': {
+    'chromium_config': 'webrtc_default',
     'gclient_config': 'webrtc',
   },
-  'webrtc_android_minimal': {
+  'webrtc_android': {
     'chromium_config': 'android',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
@@ -28,7 +28,7 @@ BUILDERS = freeze({
   'client.webrtc': {
     'builders': {
       'Linux (more configs)': {
-        'recipe_config': 'webrtc_minimal',
+        'recipe_config': 'webrtc_default',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -37,7 +37,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 (more configs)': {
-        'recipe_config': 'webrtc_android_minimal',
+        'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -52,7 +52,7 @@ BUILDERS = freeze({
   'tryserver.webrtc': {
     'builders': {
       'linux_more_configs': {
-        'recipe_config': 'webrtc_minimal',
+        'recipe_config': 'webrtc_default',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -61,7 +61,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'android_more_configs': {
-        'recipe_config': 'webrtc_android_minimal',
+        'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',

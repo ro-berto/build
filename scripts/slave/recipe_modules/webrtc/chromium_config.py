@@ -9,51 +9,28 @@ import DEPS
 CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 
 
-SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
-
 @CONFIG_CTX(includes=['chromium'])
-def webrtc_minimal(c):
+def webrtc_default(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX(includes=['webrtc_minimal', 'dcheck', 'webrtc_openh264'])
-def webrtc_default(c):
-  pass
-
-@CONFIG_CTX(includes=['android'])
+@CONFIG_CTX(includes=['webrtc_default'])
 def webrtc_android_perf(c):
   if c.BUILD_CONFIG != 'Release':
     raise BadConf('Perf bots must use Release configs!') # pragma: no cover
   c.compile_py.default_targets = ['webrtc_perf_tests']
 
-@CONFIG_CTX(includes=['webrtc_minimal', 'webrtc_openh264'])
+@CONFIG_CTX(includes=['webrtc_default'])
 def webrtc_desktop_perf(c):
   if c.BUILD_CONFIG != 'Release':
     raise BadConf('Perf bots must use Release configs!') # pragma: no cover
   c.compile_py.default_targets = ['webrtc_perf_tests', 'isac_fix_test']
 
-# TOOD(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
-@CONFIG_CTX(includes=['ninja', 'gcc', 'goma'])
-def webrtc_gcc(c):
-  _compiler_defaults(c)
-
-# TOOD(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
-@CONFIG_CTX(includes=['chromium_clang', 'dcheck', 'webrtc_openh264'])
+# TODO(kjellander): Remove as soon there's a way to get the sanitizer bots to
+# set swarming tags properly without the chromium recipe module configs (which
+# depend on clang)
+@CONFIG_CTX(includes=['chromium_clang'])
 def webrtc_clang(c):
   _compiler_defaults(c)
-
-# TODO(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
-@CONFIG_CTX()
-def webrtc_openh264(c):
-  if c.TARGET_PLATFORM == 'ios':
-    raise BadConf('ffmpeg decode not supported for iOS')  # pragma: no cover
-  if c.TARGET_PLATFORM == 'android':
-    raise BadConf('h264 decode not supported for Android')  # pragma: no cover
-  c.gyp_env.GYP_DEFINES['ffmpeg_branding'] = 'Chrome'
-  c.gyp_env.GYP_DEFINES['rtc_use_h264'] = 1
-  c.gn_args = [
-    'ffmpeg_branding="Chrome"',
-    'rtc_use_h264=true',
-  ]
 
 def _compiler_defaults(c):
   c.compile_py.default_targets = []

@@ -124,8 +124,8 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=static_library target_arch=arm",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -197,8 +197,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/build/android:%(PATH)s"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "spawn_logcat_monitor"
   },
@@ -232,8 +231,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/build/android:%(PATH)s"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "authorize_adb_devices"
   },
@@ -250,8 +248,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/build/android:%(PATH)s"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "device_recovery"
   },
@@ -271,8 +268,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/build/android:%(PATH)s"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "provision_devices"
   },
@@ -294,8 +290,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/build/android:%(PATH)s"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "device_status",
     "~followup_annotations": [
@@ -485,8 +480,7 @@
     "cwd": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/build/android:%(PATH)s"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "stack_tool_with_logcat_dump"
   },
@@ -502,8 +496,7 @@
     "cwd": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__N_Nexus6_/src/build/android:%(PATH)s"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "stack_tool_for_tombstones"
   },

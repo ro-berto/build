@@ -124,8 +124,8 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm",
-      "PATH": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=static_library target_arch=arm",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
