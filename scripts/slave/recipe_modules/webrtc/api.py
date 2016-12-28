@@ -203,7 +203,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.c.enable_swarming:
       self.m.swarming.check_client_version()
 
-  def compile(self):
+  def run_mb(self):
     self.m.chromium.run_mb(
       self.mastername, self.buildername, use_goma=True,
       mb_path=self.m.path['checkout'].join('tools-webrtc', 'mb'),
@@ -211,13 +211,14 @@ class WebRTCApi(recipe_api.RecipeApi):
                                                        'gn_isolate_map.pyl'),
       isolated_targets=self._isolated_targets)
 
+  def compile(self):
+    self.run_mb()
     self.m.chromium.compile(use_goma_module=True)
 
     if self.c.use_isolate:
       self.m.isolate.remove_build_metadata()
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                    targets=self._isolated_targets)
-
 
   def runtests(self):
     """Add a suite of test steps.

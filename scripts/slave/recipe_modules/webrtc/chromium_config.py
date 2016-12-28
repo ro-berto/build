@@ -41,13 +41,6 @@ def webrtc_gcc(c):
 def webrtc_clang(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX()
-def webrtc_libfuzzer(c):
-  c.gn_args.extend([
-    'use_libfuzzer=true',
-    'is_asan=true',
-  ])
-
 # TODO(kjellander): Cleanup after migrating client.webrtc.fyi bots to MB.
 @CONFIG_CTX()
 def webrtc_openh264(c):

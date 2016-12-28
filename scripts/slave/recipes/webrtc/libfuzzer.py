@@ -31,7 +31,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'chromium_apply_config': ['webrtc_libfuzzer'],
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
@@ -45,7 +44,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'chromium_apply_config': ['webrtc_libfuzzer'],
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
@@ -58,11 +56,10 @@ def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(BUILDERS, webrtc.RECIPE_CONFIGS)
 
-  api.webrtc.checkout()
+  webrtc.checkout()
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-
-  api.chromium.run_gn(use_goma=True)
+  webrtc.run_mb()
 
   step_result = api.python('calculate targets',
           api.depot_tools.gn_py_path,
