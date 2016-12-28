@@ -32,7 +32,7 @@ class BootstrapError(Exception):
 
 # CIPD tag for LogDog Butler/Annotee to use.
 _STABLE_CIPD_TAG = 'git_revision:a38bcfad366994b9f549448a68400c60e30598e6'
-_CANARY_CIPD_TAG = 'git_revision:810ed5b424ae8559c0680a07ec5e047f18401b42'
+_CANARY_CIPD_TAG = 'git_revision:e47b1bfb1b44f13037fd98207c42bd8b7a703749'
 
 _CIPD_TAG_MAP = {
     '$stable': _STABLE_CIPD_TAG,
@@ -49,7 +49,7 @@ _CIPD_TAG_MAP = {
 # removed from this code.
 _CIPD_TAG_API_MAP = {
     _STABLE_CIPD_TAG: 1,
-    _CANARY_CIPD_TAG: 2,
+    _CANARY_CIPD_TAG: 3,
 }
 
 # Platform is the set of platform-specific LogDog bootstrapping
@@ -373,12 +373,16 @@ def _install_cipd(path, *binaries):
 
 
 def _build_prefix(params):
-  """Constructs a LogDog stream prefix from the supplied properties.
+  """Constructs a LogDog stream prefix and tags from the supplied properties.
 
   The returned prefix is of the form:
   bb/<mastername>/<buildername>/<buildnumber>
 
   Any path-incompatible characters will be flattened to underscores.
+
+  Returns (prefix, tags):
+    prefix (str): the LogDog stream prefix.
+    tags (dict): A dict of LogDog tags to add.
   """
   def normalize(s):
     parts = []
@@ -393,7 +397,13 @@ def _build_prefix(params):
 
   mastername, buildername, buildnumber = (normalize(p) for p in (
       params.mastername, params.buildername, params.buildnumber))
-  return 'bb/%s/%s/%s' % (mastername, buildername, buildnumber)
+  prefix = 'bb/%s/%s/%s' % (mastername, buildername, buildnumber)
+  tags = {
+      'buildbot.master': mastername,
+      'buildbot.builder': buildername,
+      'buildbot.buildnumber': str(buildnumber),
+  }
+  return prefix, tags
 
 
 def _prune_arg(l, key, extra=0):
@@ -407,8 +417,9 @@ def _prune_arg(l, key, extra=0):
   try:
     idx = l.index(key)
     del(l[idx:idx+extra+1])
+    return True
   except ValueError:
-    pass
+    return False
 
 
 def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
@@ -454,7 +465,7 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   plat = _get_platform()
 
   # Determine LogDog prefix.
-  prefix = _build_prefix(params)
+  prefix, tags = _build_prefix(params)
   LOGGER.debug('Using log stream prefix: [%s]', prefix)
 
   def var(title, v, dflt):
@@ -525,6 +536,10 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       '-output', 'logdog,host="%s"' % (service_host,),
       '-coordinator-host', viewer_host,
   ]
+  for k, v in tags.iteritems():
+    if v:
+      k = '%s=%s' % (k, v)
+    butler_args += ['-tag', k]
   if service_account_json:
     butler_args += ['-service-account-json', service_account_json]
   if plat.max_buffer_age:
@@ -560,9 +575,12 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   # NOTE: Please update the above comment as new API versions and translation
   # functions are added.
   start_api = cur_api = max(_CIPD_TAG_API_MAP.itervalues())
-  if cur_api == 2 and params.api <= 1:
-    # Convert from API 2 => 1.
+  if cur_api == 3 and params.api <= 2:
     cur_api = 1
+
+    # Remove all '-tag' calls.
+    while _prune_arg(butler_args, '-tag', 1):
+      pass
 
     # Remove the "io-keepalive-stderr" flag and parameter.
     # ['-io-keepalive-stderr', <arg>]
