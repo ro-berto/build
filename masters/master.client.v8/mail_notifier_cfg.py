@@ -40,7 +40,6 @@ categories_steps = {
 }
 
 exclusions = {
-  'V8 Linux - swarming staging': [],
   'V8 Linux64 - cfi': [],
   'V8 Linux64 - gcov coverage': [],
   'V8 Linux - predictable': [],
