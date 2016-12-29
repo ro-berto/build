@@ -4,6 +4,7 @@
 
 from buildbot.schedulers.basic import SingleBranchScheduler
 
+from master.factory import annotator_factory
 from master.factory import remote_run_factory
 
 import master_site_config
@@ -19,6 +20,9 @@ def m_remote_run(recipe, **kwargs):
       **kwargs)
 
 
+m_annotator = annotator_factory.AnnotatorFactory()
+
+
 def Update(c):
   c['schedulers'].extend([
       SingleBranchScheduler(name='webrtc_mac_scheduler',
@@ -26,17 +30,25 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Mac (swarming)',
+                                'iOS64 Sim Debug (iOS 9.0)',
                             ]),
   ])
 
   specs = [
     {'name': 'Mac (swarming)', 'slavebuilddir': 'mac_swarming'},
+    {
+      'name': 'iOS64 Sim Debug (iOS 9.0)',
+      'slavebuilddir': 'mac64',
+      'recipe': 'webrtc/ios',
+    },
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_remote_run('webrtc/standalone'),
+        'factory': m_annotator.BaseFactory(spec['recipe'])
+                   if 'recipe' in spec and spec['recipe'] == 'webrtc/ios'
+                   else m_remote_run(spec.get('recipe', 'webrtc/standalone')),
         'notify_on_missing': True,
         'category': 'mac',
         'slavebuilddir': spec['slavebuilddir'],
