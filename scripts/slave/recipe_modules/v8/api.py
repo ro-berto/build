@@ -217,11 +217,9 @@ class V8Api(recipe_api.RecipeApi):
     if self.bot_config.get('enable_swarming'):
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
       self.m.swarming.check_client_version()
-      for key, value in self.bot_config.get(
-          'swarming_dimensions', {}).iteritems():
-        self.m.swarming.set_default_dimension(key, value)
 
     self.m.swarming.set_default_dimension('pool', 'Chrome')
+    self.m.swarming.set_default_dimension('os', 'Ubuntu-14.04')
     self.m.swarming.add_default_tag('project:v8')
     self.m.swarming.default_hard_timeout = 45 * 60
 

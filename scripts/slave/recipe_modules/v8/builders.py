@@ -280,7 +280,6 @@ BUILDERS = {
         'tests': [V8Testing, Benchmarks, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'pool': 'V8-AVX2',
           'gpu': '102b',
         },
@@ -455,7 +454,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'pool': 'V8-AVX2',
           'gpu': '102b',
         },
@@ -500,7 +498,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'pool': 'V8-AVX2',
           'gpu': '102b',
         },
@@ -899,9 +896,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'tests': [
           V8Testing_2,
           V8TestingExtra_2,
@@ -1034,9 +1028,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'tests': [
           V8Testing_3,
           V8TestingExtra_2,
@@ -1064,9 +1055,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'tests': [
           V8Testing_4,
           V8TestingExtra_2,
@@ -1084,9 +1072,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'tests': [
           V8Testing,
           V8TestingExtra_2,
@@ -1260,7 +1245,6 @@ BUILDERS = {
           'default_expiration': 6 * 60 * 60,
         },
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
         },
         'testing': {'platform': 'linux'},
@@ -1286,7 +1270,6 @@ BUILDERS = {
           'default_expiration': 6 * 60 * 60,
         },
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
         },
         'testing': {'platform': 'linux'},
@@ -1309,7 +1292,6 @@ BUILDERS = {
           'default_expiration': 6 * 60 * 60,
         },
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
         },
         'testing': {'platform': 'linux'},
@@ -1561,9 +1543,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing_2, Test262, SimdJs],
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
       },
 ####### Category: PPC
       'V8 Linux - ppc - sim': {
@@ -1577,9 +1556,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - ppc64 - sim': {
@@ -1593,9 +1569,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'swarming_properties': SWARMING_FYI_PROPS,
       },
 ####### Category: S390
@@ -1610,9 +1583,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - s390x - sim': {
@@ -1626,9 +1596,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'swarming_properties': SWARMING_FYI_PROPS,
       },
 ####### Category: X87
@@ -1661,9 +1628,6 @@ BUILDERS = {
         'tests': [V8Testing_4],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'swarming_properties': {
           'default_expiration': 3 * 60 * 60,
           'default_hard_timeout': 3 * 60 * 60,
@@ -1729,7 +1693,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'pool': 'V8-AVX2',
           'gpu': '102b',
         },
@@ -1985,7 +1948,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'pool': 'V8-AVX2',
           'gpu': '102b',
         },
@@ -2005,7 +1967,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'pool': 'V8-AVX2',
           'gpu': '102b',
         },
@@ -2074,9 +2035,6 @@ BUILDERS = {
         # on swarming.
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
       },
       'v8_linux64_msan_rel': {
         # 'simulate_arm' is actually implied by 'msan'. We still set it
@@ -2098,9 +2056,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'tests': [
           V8Testing_5,
           V8TestingExtra_2,
@@ -2124,9 +2079,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'tests': [
           V8Testing_4,
           V8TestingExtra_2,
@@ -2153,9 +2105,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
         'sanitizer_coverage_folder': 'linux64',
         'tests': [
           V8Testing_3,

@@ -538,11 +538,6 @@ class V8SwarmingTest(V8Test):
     if self.v8.bot_config.get('swarming_dimensions'):
       self.task.dimensions.update(self.v8.bot_config['swarming_dimensions'])
 
-    # Set default value.
-    if 'os' not in self.task.dimensions:
-      self.task.dimensions['os'] = self.api.swarming.prefered_os_dimension(
-          self.api.platform.name)
-
     self.api.swarming.trigger_task(self.task)
 
   def run(self, coverage_context=NULL_COVERAGE, **kwargs):
@@ -610,10 +605,6 @@ class V8GenericSwarmingTest(BaseTest):
         task_output_dir=self.task_output_dir,
     )
 
-    # Set default value.
-    if 'os' not in self.task.dimensions:
-      self.task.dimensions['os'] = self.api.swarming.prefered_os_dimension(
-          self.api.platform.name)
     self.api.swarming.trigger_task(self.task)
 
   def run(self, **kwargs):
