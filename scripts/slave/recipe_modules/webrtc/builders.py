@@ -549,9 +549,9 @@ BUILDERS = freeze({
       'build_gs_bucket': 'chromium-webrtc',
     },
     'builders':  {
-      'Win32 SyzyASan (swarming)': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['syzyasan'],
+      'Win32 ASan (swarming)': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
