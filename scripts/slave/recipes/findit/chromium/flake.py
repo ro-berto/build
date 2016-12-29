@@ -44,7 +44,7 @@ PROPERTIES = {
         kind=str,
         help='The target tester to match test config to. If the tests are run '
              'on a builder, just treat the builder as a tester.'),
-    'revision': Property(
+    'test_revision': Property(
         kind=str, help='The revision to test.'),
     'tests': Property(
         kind=Dict(value_type=list),
@@ -65,11 +65,11 @@ PROPERTIES = {
 
 
 def RunSteps(api, target_mastername, target_testername,
-             revision, tests, buildbucket, test_repeat_count):
+             test_revision, tests, buildbucket, test_repeat_count):
 
   tests, target_buildername = api.findit.configure_and_sync(
       api, tests, buildbucket, target_mastername, target_testername,
-      revision)
+      test_revision)
 
   test_results = {}
   report = {
@@ -78,11 +78,11 @@ def RunSteps(api, target_mastername, target_testername,
   }
 
   try:
-    test_results[revision], _ = api.findit.compile_and_test_at_revision(
+    test_results[test_revision], _ = api.findit.compile_and_test_at_revision(
         api, target_mastername, target_buildername, target_testername,
-        revision, tests, False, test_repeat_count)
+        test_revision, tests, False, test_repeat_count)
   except api.step.InfraFailure:
-    test_results[revision] = api.findit.TestResult.INFRA_FAILED
+    test_results[test_revision] = api.findit.TestResult.INFRA_FAILED
     report['metadata']['infra_failure'] = True
     raise
   finally:
@@ -109,7 +109,7 @@ def GenTests(api):
         'buildnumber': 1,
         'target_mastername': 'chromium.%s' % platform_name,
         'target_testername': tester_name,
-        'revision': revision or 'r0',
+        'test_revision': revision or 'r0',
     }
     if tests:
       properties['tests'] = tests
