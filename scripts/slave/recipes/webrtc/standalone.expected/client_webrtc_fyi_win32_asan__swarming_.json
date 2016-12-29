@@ -2034,6 +2034,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 ASan (swarming)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 ASan (swarming)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--test-type=modules_tests",
+      "--step-name=modules_tests (screen capture disabled tests)",
+      "--builder-name=Win32 ASan (swarming)",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "--enable-asan",
+      "[BUILDER_CACHE]\\Win32_ASan__swarming_\\src\\third_party\\gtest-parallel\\gtest-parallel",
+      "[BUILDER_CACHE]\\Win32_ASan__swarming_\\src\\out\\Release\\modules_tests",
+      "--",
+      "--gtest_filter=ScreenCapturerIntegrationTest.*",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win32_ASan__swarming_",
+    "name": "modules_tests (screen capture disabled tests)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILDER_CACHE]\\Win32_ASan__swarming_\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",

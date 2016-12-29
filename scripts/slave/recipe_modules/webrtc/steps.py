@@ -13,17 +13,24 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       for test in sorted(api.NORMAL_TESTS):
         parallel = test != 'webrtc_nonparallel_tests'
         tests.append(WebRTCTest(test, revision=revision, parallel=parallel))
+    if api.mastername == 'client.webrtc.fyi' and api.m.platform.is_win:
+      tests.append(WebRTCTest(
+          'modules_tests',
+          name='modules_tests (screen capture disabled tests)',
+          args=['--gtest_filter=ScreenCapturerIntegrationTest.*',
+                '--gtest_also_run_disabled_tests'],
+          parallel=True))
   elif test_suite == 'webrtc_baremetal':
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
 
     # This test currently fails on Trusty Linux due to pulseaudio issues. See
     # http://crbug.com/589101
     if api.m.platform.is_mac or api.m.platform.is_win:
-      tests.append(BaremetalTest('audio_device_tests', revision))
+      tests.append(BaremetalTest('audio_device_tests', revision=revision))
 
     tests.extend([
-        BaremetalTest('voe_auto_test', revision, args=['--automated']),
-        BaremetalTest('video_capture_tests', revision),
+        BaremetalTest('voe_auto_test', revision=revision, args=['--automated']),
+        BaremetalTest('video_capture_tests', revision=revision),
     ])
   elif test_suite == 'desktop_perf':
     assert api.c.PERF_ID
@@ -31,15 +38,16 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       f = api.m.path['checkout'].join
       tests.append(
           BaremetalTest('isac_fix_test',
-                        revision,
+                        revision=revision,
                         args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
                               'isac_speech_and_misc_wb.pcm'],
                         perf_test=True),
       )
-    tests.append(BaremetalTest('webrtc_perf_tests', revision, perf_test=True))
+    tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
+                               perf_test=True))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
-    tests.append(AndroidPerfTest('webrtc_perf_tests', revision))
+    tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
   elif test_suite == 'android':
     GTestTest = api.m.chromium_tests.steps.GTestTest
     for test in (api.ANDROID_DEVICE_TESTS +
@@ -60,8 +68,9 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
 # TODO(kjellander): Continue refactoring an integrate the classes in the
 # chromium_tests recipe module instead (if possible).
 class Test(object):
-  def __init__(self, name, enable_swarming=False, shards=1):
-    self._name = name
+  def __init__(self, test, name=None, enable_swarming=False, shards=1):
+    self._test = test
+    self._name = name or test
     self._enable_swarming = enable_swarming
     self._swarming_task = None
     self._shards = shards
@@ -77,27 +86,29 @@ class Test(object):
 
 class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
-  def __init__(self, name, revision=None, enable_swarming=False,
+  def __init__(self, test, name=None, revision=None, enable_swarming=False,
                shards=1, parallel=True, perf_test=False,
                **runtest_kwargs):
-    super(WebRTCTest, self).__init__(name, enable_swarming, shards)
+    super(WebRTCTest, self).__init__(test, name, enable_swarming, shards)
     self._revision = revision
     self._parallel = parallel
     self._perf_test = perf_test
     self._runtest_kwargs = runtest_kwargs
 
   def run(self, api, suffix):
-    self._runtest_kwargs['test'] = self._name
-    api.add_test(name=self._name, revision=self._revision,
+    api.add_test(self._test, name=self._name, revision=self._revision,
                  parallel=self._parallel, perf_test=self._perf_test,
                  **self._runtest_kwargs)
 
 class BaremetalTest(WebRTCTest):
   """A WebRTC desktop test that uses audio and/or video devices."""
-  def __init__(self, name, revision, perf_test=False, **runtest_kwargs):
+  def __init__(self, test, name=None, revision=None, perf_test=False, **runtest_kwargs):
     # Tests accessing hardware devices shouldn't be run in parallel.
-    super(BaremetalTest, self).__init__(name, revision, parallel=False,
-                                        perf_test=perf_test, **runtest_kwargs)
+    super(BaremetalTest, self).__init__(test, name, revision=revision,
+                                        parallel=False, perf_test=perf_test,
+                                        **runtest_kwargs)
+    if perf_test:
+      assert revision, 'Revision is mandatory for perf tests'
 
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
@@ -114,8 +125,9 @@ class AndroidPerfTest(Test):
     is entirely different.
   """
 
-  def __init__(self, name, revision):
-    super(AndroidPerfTest, self).__init__(name)
+  def __init__(self, test, name=None, revision=None):
+    super(AndroidPerfTest, self).__init__(test, name, revision)
+    assert revision, 'Revision is mandatory for perf tests'
     self._revision = revision
 
   def run(self, api, suffix):
