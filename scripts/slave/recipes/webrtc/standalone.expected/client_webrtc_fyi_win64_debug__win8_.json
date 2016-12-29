@@ -812,6 +812,7 @@
     "name": "xmllite_xmpp_unittests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -822,15 +823,16 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win64 Debug (Win8)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win64 Debug (Win8)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=modules_tests",
       "--step-name=modules_tests (screen capture disabled tests)",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/modules_tests.exe",
       "--builder-name=Win64 Debug (Win8)",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--run-python-script",
-      "[BUILDER_CACHE]\\Win64_Debug__Win8_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win8_\\src\\out\\Debug_x64\\modules_tests",
-      "--",
+      "modules_tests.exe",
       "--gtest_filter=ScreenCapturerIntegrationTest.*",
       "--gtest_also_run_disabled_tests"
     ],

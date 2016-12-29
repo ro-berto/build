@@ -2031,6 +2031,7 @@
     ]
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -2041,16 +2042,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 ASan (swarming)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 ASan (swarming)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
       "--test-type=modules_tests",
       "--step-name=modules_tests (screen capture disabled tests)",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/modules_tests.exe",
       "--builder-name=Win32 ASan (swarming)",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--run-python-script",
       "--enable-asan",
-      "[BUILDER_CACHE]\\Win32_ASan__swarming_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win32_ASan__swarming_\\src\\out\\Release\\modules_tests",
-      "--",
+      "modules_tests.exe",
       "--gtest_filter=ScreenCapturerIntegrationTest.*",
       "--gtest_also_run_disabled_tests"
     ],
