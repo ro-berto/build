@@ -5,40 +5,18 @@
 from master.v8.v8_notifier import V8Notifier
 
 
-V8_STEPS = [
-  'update',
-  'runhooks',
-  'gn',
-  'compile',
-  'Presubmit',
-  'Static-Initializers',
-  'Check',
-  'Unittests',
-  'OptimizeForSize',
-  'Mjsunit',
-  'Webkit',
-  'Benchmarks',
-  'Test262',
-  'Mozilla',
-  'GCMole',
-  'Fuzz',
-  'Deopt Fuzz',
-  'Simple Leak Check',
-]
-
-
 def Update(config, active_master, c):
   c['status'].extend([
     V8Notifier(
         config,
         active_master,
-        categories_steps={'release': V8_STEPS},
+        categories_steps={'release': []},
         sendToInterestedUsers=True,
     ),
     V8Notifier(
         config,
         active_master,
-        categories_steps={'mips': V8_STEPS},
+        categories_steps={'mips': []},
         extraRecipients=[
           'akos.palfi@imgtec.com',
           'balazs.kilvady@imgtec.com',
@@ -50,7 +28,7 @@ def Update(config, active_master, c):
     V8Notifier(
         config,
         active_master,
-        categories_steps={'ppc': V8_STEPS},
+        categories_steps={'ppc': []},
         extraRecipients=[
           'mbrandy@us.ibm.com',
           'michael_dawson@ca.ibm.com',
@@ -59,7 +37,7 @@ def Update(config, active_master, c):
     V8Notifier(
         config,
         active_master,
-        categories_steps={'s390': V8_STEPS},
+        categories_steps={'s390': []},
         extraRecipients=[
           'joransiu@ca.ibm.com',
           'jyan@ca.ibm.com',

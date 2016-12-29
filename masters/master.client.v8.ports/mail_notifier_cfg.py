@@ -5,76 +5,34 @@
 from master.v8.v8_notifier import V8Notifier
 
 
-v8_steps = [
-  'runhooks',
-  'gn',
-  'compile',
-  'Check',
-  'OptimizeForSize',
-  'Mjsunit',
-  'Webkit',
-  'Benchmarks',
-  'Test262',
-  'Mozilla',
-]
-
 def Update(config, active_master, c):
   c['status'].extend([
     V8Notifier(
         config,
         active_master,
         categories_steps={
-          '': v8_steps,
-        },
-        exclusions={
-          'V8 Arm': [],
-          'V8 Arm - debug': [],
-          'V8 Arm GC Stress': [],
-          'V8 Linux - mipsel - sim': [],
-          'V8 Mips - big endian - nosnap - 1': [],
-          'V8 Mips - big endian - nosnap - 2': [],
-          'V8 Linux - ppc - sim': [],
-          'V8 Linux - ppc64 - sim': [],
-          'V8 Linux - s390 - sim': [],
-          'V8 Linux - s390x - sim': [],
-          'V8 Linux - x87 - nosnap - debug builder': [],
-          'V8 Linux - x87 - nosnap - debug': [],
-        },
-        sendToInterestedUsers=True,
-    ),
-    V8Notifier(
-        config,
-        active_master,
-        categories_steps={
-          'mem_sheriff': v8_steps,
-        },
-        extraRecipients=[
-          'hpayer@chromium.org',
-          'ulan@chromium.org',
-        ],
-    ),
-    V8Notifier(
-        config,
-        active_master,
-        categories_steps={
-          's390': ['runhooks', 'compile', 'Check'],
+          's390': [],
         },
         extraRecipients=[
           'joransiu@ca.ibm.com',
           'jyan@ca.ibm.com',
           'michael_dawson@ca.ibm.com',
+          # TODO(machenbach): Remove after verifying that it works.
+          'machenbach@chromium.org',
         ],
     ),
     V8Notifier(
         config,
         active_master,
         categories_steps={
-          'x87': ['runhooks', 'compile', 'Check'],
+          'x87': [],
         },
         extraRecipients=[
           'weiliang.lin@intel.com',
           'chunyang.dai@intel.com',
           'zhengxing.li@intel.com',
+          # TODO(machenbach): Remove after verifying that it works.
+          'machenbach@chromium.org',
         ],
     ),
   ])
