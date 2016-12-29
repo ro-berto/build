@@ -205,9 +205,6 @@ BUILDERS = {
         ),
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-12.04',
-        },
       },
       'V8 Linux - swarming staging': {
         'chromium_apply_config': [
