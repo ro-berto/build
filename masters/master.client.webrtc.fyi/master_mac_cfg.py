@@ -30,15 +30,15 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Mac (swarming)',
-                                'iOS64 Sim Debug (iOS 9.0)',
+                                'iOS32 Sim Debug (iOS 9.0)',
                             ]),
   ])
 
   specs = [
     {'name': 'Mac (swarming)', 'slavebuilddir': 'mac_swarming'},
     {
-      'name': 'iOS64 Sim Debug (iOS 9.0)',
-      'slavebuilddir': 'mac64',
+      'name': 'iOS32 Sim Debug (iOS 9.0)',
+      'slavebuilddir': 'mac32',
       'recipe': 'webrtc/ios',
     },
   ]
