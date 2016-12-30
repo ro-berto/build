@@ -18,6 +18,10 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('webrtc')
 
+  # Make sure the checkout contains all deps for all platforms.
+  for os in ['linux', 'android', 'mac', 'ios', 'win', 'unix']:
+    api.gclient.c.target_os.add(os)
+
   step_result = api.python(
         'check roll status',
         api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
