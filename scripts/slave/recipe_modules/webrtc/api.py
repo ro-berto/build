@@ -294,7 +294,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       if parallel and not self.m.chromium.c.runtests.enable_memcheck:
         test_executable = self.m.chromium.c.build_dir.join(
           self.m.chromium.c.build_config_fs, test)
-        args = [test_executable, '--'] + args
+        args = [test_executable] + args
         test = self.m.path['checkout'].join('third_party', 'gtest-parallel',
                                             'gtest-parallel')
         python_mode = True

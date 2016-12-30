@@ -19,8 +19,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
           name='modules_tests (screen capture disabled tests)',
           args=['--gtest_filter=ScreenCapturerIntegrationTest.*',
                 '--gtest_also_run_disabled_tests'],
-          # TODO(kjellander): Enable parallel after webrtc:6946 is fixed.
-          parallel=False))
+          parallel=True))
   elif test_suite == 'webrtc_baremetal':
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
 

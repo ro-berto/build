@@ -403,8 +403,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\audio_decoder_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\audio_decoder_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "audio_decoder_unittests"
@@ -428,8 +427,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\common_audio_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\common_audio_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "common_audio_unittests"
@@ -453,8 +451,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\common_video_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\common_video_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "common_video_unittests"
@@ -478,8 +475,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_tests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "modules_tests"
@@ -503,8 +499,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "modules_unittests"
@@ -528,8 +523,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\peerconnection_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\peerconnection_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "peerconnection_unittests"
@@ -553,8 +547,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_media_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_media_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "rtc_media_unittests"
@@ -578,8 +571,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_pc_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_pc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "rtc_pc_unittests"
@@ -603,8 +595,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_stats_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_stats_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "rtc_stats_unittests"
@@ -628,8 +619,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "rtc_unittests"
@@ -653,8 +643,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\system_wrappers_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\system_wrappers_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "system_wrappers_unittests"
@@ -678,8 +667,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\test_support_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\test_support_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "test_support_unittests"
@@ -703,8 +691,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\tools_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\tools_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "tools_unittests"
@@ -728,8 +715,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\video_engine_tests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\video_engine_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "video_engine_tests"
@@ -753,8 +739,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\voice_engine_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\voice_engine_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "voice_engine_unittests"
@@ -805,14 +790,12 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\xmllite_xmpp_unittests",
-      "--"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\xmllite_xmpp_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "xmllite_xmpp_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -823,16 +806,14 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win64 Debug (Win10)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Win64 Debug (Win10)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=modules_tests",
       "--step-name=modules_tests (screen capture disabled tests)",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/modules_tests.exe",
       "--builder-name=Win64 Debug (Win10)",
       "--slave-name=slavename",
       "--build-number=1337",
-      "modules_tests.exe",
+      "--run-python-script",
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_tests",
       "--gtest_filter=ScreenCapturerIntegrationTest.*",
       "--gtest_also_run_disabled_tests"
     ],
