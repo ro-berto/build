@@ -261,11 +261,9 @@ class WebRTCApi(recipe_api.RecipeApi):
             test.post_run(self.m, suffix='')
 
           if run_android_device_steps:
-            self.m.chromium_android.shutdown_device_monitor()
-            self.m.chromium_android.logcat_dump(
-                gs_bucket=self.master_config.get('build_gs_bucket'))
-            self.m.chromium_android.stack_tool_steps(force_latest_version=True)
-            self.m.chromium_android.test_report()
+            self.m.chromium_android.common_tests_final_steps(
+                logcat_gs_bucket=self.master_config.get('build_gs_bucket'),
+                force_latest_version=True)
 
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
