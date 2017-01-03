@@ -13,12 +13,18 @@ import sys
 def main(args):
   if len(args) != 1:
     print >> sys.stderr, ('Please specify a single directory as an argument, '
-                          'which points to the checkout src/ dir).')
+                          'which points to the checkout root (dir above src/).')
     return 1
 
-  checkout_src = args[0]
-  if not os.path.isdir(checkout_src):
-    print 'Cannot find checkout dir at %s. Skipping reset.' % checkout_src
+  checkout_root = args[0]
+  if not os.path.isdir(checkout_root):
+    print 'Cannot find any directory at %s. Skipping reset.' % checkout_root
+    return 0
+
+  checkout_src = os.path.join(checkout_root, 'src')
+  if not os.path.exists(checkout_src):
+    print ('Cannot find a src/ dir in the checkout at %s. '
+           'Skipping reset.' % checkout_src)
     return 0
 
   print 'Resetting checkout...'
