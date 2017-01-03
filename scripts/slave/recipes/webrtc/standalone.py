@@ -11,6 +11,7 @@ DEPS = [
   'chromium_android',
   'depot_tools/gclient',
   'depot_tools/tryserver',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -129,6 +130,8 @@ def GenTests(api):
     if mastername.startswith('tryserver'):
       test += api.properties(issue=666666, patchset=1,
                              rietveld='https://fake.rietveld.url')
+      test += api.override_step_data('listdir checkout root',
+                                     api.json.output(['src']))
     test += api.properties(buildnumber=1337)
 
     if (chromium_kwargs.get('TARGET_PLATFORM') != 'android' and
