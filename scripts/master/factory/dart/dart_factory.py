@@ -13,7 +13,6 @@ import random
 from buildbot.changes import gitpoller
 from buildbot.process.buildstep import RemoteShellCommand
 from buildbot.status.mail import MailNotifier
-from buildbot.status.status_push import HttpStatusPush
 from buildbot.steps import trigger
 
 from master.factory.dart import dart_commands
@@ -547,10 +546,6 @@ class DartUtils(object):
     statuses.append(
         master_utils.CreateWebStatus(master_port_alt, allowForce=False,
                                      **kwargs))
-
-    http_status_push_url = self._active_master.http_status_push_url
-    if self._active_master.is_production_host and http_status_push_url:
-      statuses.append(HttpStatusPush(serverUrl=http_status_push_url))
     return statuses
 
   @staticmethod
