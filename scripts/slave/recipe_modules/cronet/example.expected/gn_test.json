@@ -319,6 +319,8 @@
       "cronet_package",
       "cronet_perf_test_apk",
       "cronet_sample_test_apk",
+      "cronet_smoketests_missing_native_library_instrumentation_apk",
+      "cronet_smoketests_platform_only_instrumentation_apk",
       "cronet_test_instrumentation_apk",
       "cronet_unittests",
       "cronet_unittests_apk",
@@ -418,7 +420,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'cronet_package', 'cronet_perf_test_apk', 'cronet_sample_test_apk', 'cronet_test_instrumentation_apk', 'cronet_unittests', 'cronet_unittests_apk', 'net_unittests', 'net_unittests_apk']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'cronet_package', 'cronet_perf_test_apk', 'cronet_sample_test_apk', 'cronet_smoketests_missing_native_library_instrumentation_apk', 'cronet_smoketests_platform_only_instrumentation_apk', 'cronet_test_instrumentation_apk', 'cronet_unittests', 'cronet_unittests_apk', 'net_unittests', 'net_unittests_apk']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -757,6 +759,36 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "name": "cronet_sample_test_apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/out/Debug/bin/run_cronet_smoketests_missing_native_library_instrumentation_apk",
+      "--blacklist-file",
+      "[START_DIR]/src/out/bad_devices.json",
+      "--verbose",
+      "--num-retries",
+      "0",
+      "--adb-path",
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "name": "cronet_smoketests_missing_native_library_instrumentation_apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/out/Debug/bin/run_cronet_smoketests_platform_only_instrumentation_apk",
+      "--blacklist-file",
+      "[START_DIR]/src/out/bad_devices.json",
+      "--verbose",
+      "--num-retries",
+      "0",
+      "--adb-path",
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "name": "cronet_smoketests_platform_only_instrumentation_apk"
   },
   {
     "cmd": [

@@ -17,6 +17,12 @@ class CronetApi(recipe_api.RecipeApi):
       'target': 'cronet_sample_test_apk',
     },
     {
+      'target': 'cronet_smoketests_missing_native_library_instrumentation_apk',
+    },
+    {
+      'target': 'cronet_smoketests_platform_only_instrumentation_apk',
+    },
+    {
       'target': 'cronet_test_instrumentation_apk',
     },
   ])
