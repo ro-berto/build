@@ -69,8 +69,8 @@
       "reset",
       "--hard"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_clang_rel",
-    "name": "reset checkout (crbug.com/677823)"
+    "cwd": "[BUILDER_CACHE]\\win_clang_rel\\src",
+    "name": "reset checkout [crbug.com/677823]"
   },
   {
     "cmd": [

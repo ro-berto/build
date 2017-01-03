@@ -195,8 +195,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     if (self.m.tryserver.is_tryserver and
         'src' in  self.m.file.listdir('checkout root', self._working_dir)):
       self.m.git('reset', '--hard',
-                 name='reset checkout (crbug.com/677823)',
-                 cwd=self._working_dir,
+                 name='reset checkout [crbug.com/677823]',
+                 cwd=self._working_dir.join('src'),
                  infra_step=True)
 
     update_step = self.m.bot_update.ensure_checkout(**kwargs)
