@@ -98,6 +98,9 @@ def GenTests(api):
       mastername='chromium.fake',
       slavename='fake-vm',
       path_config='kitchen',
+      issue=666666,
+      patchset=1,
+      rietveld='https://fake.rietveld.url'
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',

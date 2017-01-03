@@ -189,6 +189,15 @@ class WebRTCApi(recipe_api.RecipeApi):
                   args=[self._working_dir],
                   infra_step=True)
 
+    # bot_update seems unable to deal with some trybot changes currently, so
+    # do a git reset --hard before it runs on trybots.
+    # TODO(kjellander): Remove as soon crbug.com/677823 is resolved.
+    if self.m.tryserver.is_tryserver:
+      self.m.python('reset checkout (crbug.com/677823)',
+                  script=self.resource('reset_checkout.py'),
+                  args=[self._working_dir],
+                  infra_step=True)
+
     update_step = self.m.bot_update.ensure_checkout(**kwargs)
     assert update_step.json.output['did_run']
 

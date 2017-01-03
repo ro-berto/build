@@ -34,6 +34,15 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::webrtc]\\resources\\reset_checkout.py",
+      "[BUILDER_CACHE]\\win_x64_clang_dbg"
+    ],
+    "name": "reset checkout (crbug.com/677823)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",

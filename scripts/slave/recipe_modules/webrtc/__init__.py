@@ -10,6 +10,7 @@ DEPS = [
   'file',
   'gsutil',
   'depot_tools/gclient',
+  'depot_tools/git',
   'isolate',
   'recipe_engine/json',
   'recipe_engine/path',
