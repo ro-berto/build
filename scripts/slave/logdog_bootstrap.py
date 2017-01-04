@@ -31,7 +31,7 @@ class BootstrapError(Exception):
 
 
 # CIPD tag for LogDog Butler/Annotee to use.
-_STABLE_CIPD_TAG = 'git_revision:e47b1bfb1b44f13037fd98207c42bd8b7a703749'
+_STABLE_CIPD_TAG = 'git_revision:a38bcfad366994b9f549448a68400c60e30598e6'
 _CANARY_CIPD_TAG = 'git_revision:e47b1bfb1b44f13037fd98207c42bd8b7a703749'
 
 _CIPD_TAG_MAP = {
@@ -48,7 +48,7 @@ _CIPD_TAG_MAP = {
 # As CIPD tags rotate, old API versions and their respective logic can be
 # removed from this code.
 _CIPD_TAG_API_MAP = {
-    _STABLE_CIPD_TAG: 3,
+    _STABLE_CIPD_TAG: 1,
     _CANARY_CIPD_TAG: 3,
 }
 
@@ -575,6 +575,19 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   # NOTE: Please update the above comment as new API versions and translation
   # functions are added.
   start_api = cur_api = max(_CIPD_TAG_API_MAP.itervalues())
+  if cur_api == 3 and params.api <= 2:
+    cur_api = 1
+
+    # Remove all '-tag' calls.
+    while _prune_arg(butler_args, '-tag', 1):
+      pass
+
+    # Remove the "io-keepalive-stderr" flag and parameter.
+    # ['-io-keepalive-stderr', <arg>]
+    _prune_arg(butler_args, '-io-keepalive-stderr', 1)
+
+    # Remove ['-coordinator-host', <arg>]
+    _prune_arg(butler_args, '-coordinator-host', 1)
 
   # Assert that we've hit the target "params.api".
   assert cur_api == params.api, 'Failed to transform API %s => %s' % (
