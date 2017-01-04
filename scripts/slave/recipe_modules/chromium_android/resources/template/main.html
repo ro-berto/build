@@ -40,9 +40,6 @@
   </head>
   <body class="interface">
     <div class="content">
-      {% for datum in hidden_data %}
-        <div id="{{datum.id}}" style="display:none;">{{datum.data}}</div>
-      {% endfor %}
       <h2 id="summary-header"></h2>
       {% for tb_value in tb_values %}
         {% include 'template/table.html' %}
@@ -57,19 +54,6 @@
             head.addEventListener(
                 "click",
                 function() { sortByColumn(head); });
-        }
-    );
-
-    // Show tombstones in a new window after clicking 'CRASH'.
-    Array.prototype.slice.call(
-        document.getElementsByClassName('crash'))
-        .forEach(function(crash) {
-            crash.addEventListener(
-                "click",
-                function() {
-                  var tombstones = crash.children[0].dataset.actionArgument;
-                  presentTombstones(tombstones);
-                });
         }
     );
   </script>

@@ -54,15 +54,6 @@ function setTitle(title) {
   document.getElementById('summary-header').textContent = title;
 }
 
-function presentTombstones(tombstonesId) {
-  var tombstonesWindow = window.open("", "_blank");
-  var tombstones = document.getElementById(tombstonesId).cloneNode(true);
-  tombstones.style.display = "inline";
-  var formattedTombstones = document.createElement("pre");
-  formattedTombstones.appendChild(tombstones);
-  tombstonesWindow.document.body.appendChild(formattedTombstones);
-}
-
 function sortByColumn(head) {
   var table = head.parentNode.parentNode.parentNode;
   var rowBlocks = Array.prototype.slice.call(
