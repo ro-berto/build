@@ -817,30 +817,6 @@
     "name": "webrtc_nonparallel_tests"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Debug_x64",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"win_x64_win8\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"win_x64_win8\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--test-type=xmllite_xmpp_unittests",
-      "--step-name=xmllite_xmpp_unittests",
-      "--builder-name=win_x64_win8",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[BUILDER_CACHE]\\win_x64_win8\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\win_x64_win8\\src\\out\\Debug_x64\\xmllite_xmpp_unittests"
-    ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_win8",
-    "name": "xmllite_xmpp_unittests"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

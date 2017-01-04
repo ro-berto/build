@@ -32,7 +32,6 @@ NORMAL_TESTS = freeze({
   },
   'voice_engine_unittests': {},
   'webrtc_nonparallel_tests': {},
-  'xmllite_xmpp_unittests': {},
 })
 
 ANDROID_DEVICE_TESTS = (
