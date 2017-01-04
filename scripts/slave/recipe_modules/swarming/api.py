@@ -99,6 +99,20 @@ class SwarmingApi(recipe_api.RecipeApi):
       """Returns a user-readable string representing a State."""
       return cls._NAMES[state]
 
+  def _is_expired(self, shard):
+    # FIXME: We really should only have one format for enums. We want to move to
+    # strings, currently have numbers.
+    return (
+        shard.get('state') == self.State.EXPIRED or
+        shard.get('state') == 'EXPIRED')
+
+  def _is_timed_out(self, shard):
+    # FIXME: We really should only have one format for enums. We want to move to
+    # strings, currently have numbers.
+    return (
+        shard.get('state') == self.State.TIMED_OUT or
+        shard.get('state') == 'TIMED_OUT')
+
   def __init__(self, **kwargs):
     super(SwarmingApi, self).__init__(**kwargs)
     # All tests default to a x86-64 bot running with no GPU. This simplifies
@@ -665,7 +679,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         json_data = step_result.json.output
         links = step_result.presentation.links
         for index, shard in enumerate(json_data.get('shards') or []):
-          if shard.get('state') == self.State.TIMED_OUT:
+          if self._is_timed_out(shard):
             url = task.get_shard_view_url(index)
             if url:
               links['shard #%d timed out, took much time to complete' % index] = url
@@ -681,8 +695,8 @@ class SwarmingApi(recipe_api.RecipeApi):
               link_name = 'shard #%d isolated out' % index
               links[link_name] = isolated_out['view_url']
         self._display_pending(json_data, step_result.presentation)
-        if any(shard.get('state') == self.State.EXPIRED
-               for shard in json_data.get('shards') or []):
+        if any(
+            self._is_expired(shard) for shard in json_data.get('shards') or []):
           # TODO: Find a clean way.
           step_result._retcode = step_result.retcode or -1
           raise recipe_api.InfraFailure(
@@ -860,7 +874,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           step_result._retcode = step_result.retcode or -1
           raise recipe_api.InfraFailure('Internal Swarming failure',
                                         result=step_result)
-        if any(shard.get('state') == self.State.EXPIRED
+        if any(self._is_expired(shard)
                for shard in summary['shards']):
           step_result._retcode = step_result.retcode or -1
           raise recipe_api.InfraFailure(
@@ -873,7 +887,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         links = step_result.presentation.links
         for index in xrange(task.shards):
           url = task.get_shard_view_url(index)
-          if summary['shards'][index].get('state') == self.State.TIMED_OUT:
+          if self._is_timed_out(summary['shards'][index]):
             display_text = (
               'shard #%d timed out, took much time to complete' % index)
           elif summary['shards'][index].get('exit_code', None) != '0':
