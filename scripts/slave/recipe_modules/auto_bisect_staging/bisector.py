@@ -583,16 +583,13 @@ class Bisector(object):
     lines = self._results_debug_message().splitlines()
     current_step.presentation.logs['Debug Info'] = lines
     
-    self.api.m.step('Posted JSON', [])
-    current_step = self.api.m.step.active_result
-    lines = json.dumps(self.get_result(), indent=2).splitlines()
-    current_step.presentation.logs['Posted JSON'] = lines
-
   def post_result(self, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""
     self.api.m.perf_dashboard.set_default_config()
-    self.api.m.perf_dashboard.post_bisect_results(
+    step_result = self.api.m.perf_dashboard.post_bisect_results(
         self.get_result(), halt_on_failure)
+    lines = json.dumps(self.get_result(), indent=2).splitlines()
+    step_result.presentation.logs['Debug Info'] = lines
 
   def get_revision_to_eval(self):
     """Gets the next RevisionState object in the candidate range.

@@ -6536,11 +6536,6 @@
     "name": "Resolving hashes"
   },
   {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Posted JSON"
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -6550,22 +6545,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Reading culprit cl information.",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect_staging]/resources/fetch_revision_info.py",
-      "fc6dfc7ff5b1073408499478969261b826441144",
-      "chromium"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Reading culprit cl information. (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -6587,6 +6566,22 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::auto_bisect_staging]/resources/fetch_revision_info.py",
+      "fc6dfc7ff5b1073408499478969261b826441144",
+      "chromium"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Reading culprit cl information. (2)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
