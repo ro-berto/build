@@ -58,36 +58,7 @@ def _sanitize_nonalpha(text):
 
 def GenTests(api):
   builders = api.webrtc.BUILDERS
-
-  NORMAL_TESTS = {
-    'audio_decoder_unittests': {},
-    'common_audio_unittests': {},
-    'common_video_unittests': {},
-    'modules_tests': {
-      'shards': 2,
-    },
-    'modules_unittests': {
-      'shards': 6,
-    },
-    'peerconnection_unittests': {
-      'shards': 4,
-    },
-    'rtc_media_unittests': {},
-    'rtc_pc_unittests': {},
-    'rtc_stats_unittests': {},
-    'rtc_unittests': {
-      'shards': 6,
-    },
-    'system_wrappers_unittests': {},
-    'test_support_unittests': {},
-    'tools_unittests': {},
-    'video_engine_tests': {
-      'shards': 4,
-    },
-    'voice_engine_unittests': {},
-    'webrtc_nonparallel_tests': {},
-    'xmllite_xmpp_unittests': {},
-  }
+  NORMAL_TESTS = api.webrtc.NORMAL_TESTS
 
   def generate_builder(mastername, buildername, revision,
                        parent_got_revision=None, failing_test=None,

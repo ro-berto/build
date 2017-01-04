@@ -2,12 +2,71 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.types import freeze
+
+
+NORMAL_TESTS = freeze({
+  'audio_decoder_unittests': {},
+  'common_audio_unittests': {},
+  'common_video_unittests': {},
+  'modules_tests': {
+    'shards': 2,
+  },
+  'modules_unittests': {
+    'shards': 6,
+  },
+  'peerconnection_unittests': {
+    'shards': 4,
+  },
+  'rtc_media_unittests': {},
+  'rtc_pc_unittests': {},
+  'rtc_stats_unittests': {},
+  'rtc_unittests': {
+    'shards': 6,
+  },
+  'system_wrappers_unittests': {},
+  'test_support_unittests': {},
+  'tools_unittests': {},
+  'video_engine_tests': {
+    'shards': 4,
+  },
+  'voice_engine_unittests': {},
+  'webrtc_nonparallel_tests': {},
+  'xmllite_xmpp_unittests': {},
+})
+
+ANDROID_DEVICE_TESTS = (
+  'audio_decoder_unittests',
+  'common_audio_unittests',
+  'common_video_unittests',
+  'modules_tests',
+  'modules_unittests',
+  'peerconnection_unittests',
+  'rtc_stats_unittests',
+  'rtc_unittests',
+  'system_wrappers_unittests',
+  'test_support_unittests',
+  'tools_unittests',
+  'video_engine_tests',
+  'voice_engine_unittests',
+  'webrtc_nonparallel_tests',
+)
+
+ANDROID_INSTRUMENTATION_TESTS = (
+  'AppRTCMobileTest',
+  'libjingle_peerconnection_android_unittest',
+)
+
+ANDROID_JUNIT_TESTS = (
+  'android_junit_tests',
+)
+
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
   if test_suite == 'webrtc':
     if enable_swarming:
       SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
-      for test, extra_args in sorted(api.NORMAL_TESTS.items()):
+      for test, extra_args in sorted(NORMAL_TESTS.items()):
         tests.append(SwarmingTest(test, **extra_args))
     else:
       for test in sorted(api.NORMAL_TESTS):
@@ -50,11 +109,11 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
   elif test_suite == 'android':
     GTestTest = api.m.chromium_tests.steps.GTestTest
-    for test in (api.ANDROID_DEVICE_TESTS +
-                 api.ANDROID_INSTRUMENTATION_TESTS):
+    for test in (ANDROID_DEVICE_TESTS +
+                 ANDROID_INSTRUMENTATION_TESTS):
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
                              override_isolate_target=test))
-    for test in api.ANDROID_JUNIT_TESTS:
+    for test in ANDROID_JUNIT_TESTS:
       if api.mastername == 'client.webrtc.fyi':
         tests.append(GTestTest(test, enable_swarming=enable_swarming,
                                override_isolate_target=test))

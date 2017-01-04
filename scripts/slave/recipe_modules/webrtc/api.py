@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import builders
 from . import steps
@@ -21,61 +20,10 @@ class WebRTCApi(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
-  NORMAL_TESTS = freeze({
-    'audio_decoder_unittests': {},
-    'common_audio_unittests': {},
-    'common_video_unittests': {},
-    'modules_tests': {
-      'shards': 2,
-    },
-    'modules_unittests': {
-      'shards': 6,
-    },
-    'peerconnection_unittests': {
-      'shards': 4,
-    },
-    'rtc_media_unittests': {},
-    'rtc_pc_unittests': {},
-    'rtc_stats_unittests': {},
-    'rtc_unittests': {
-      'shards': 6,
-    },
-    'system_wrappers_unittests': {},
-    'test_support_unittests': {},
-    'tools_unittests': {},
-    'video_engine_tests': {
-      'shards': 4,
-    },
-    'voice_engine_unittests': {},
-    'webrtc_nonparallel_tests': {},
-    'xmllite_xmpp_unittests': {},
-  })
-
-  ANDROID_DEVICE_TESTS = (
-    'audio_decoder_unittests',
-    'common_audio_unittests',
-    'common_video_unittests',
-    'modules_tests',
-    'modules_unittests',
-    'peerconnection_unittests',
-    'rtc_stats_unittests',
-    'rtc_unittests',
-    'system_wrappers_unittests',
-    'test_support_unittests',
-    'tools_unittests',
-    'video_engine_tests',
-    'voice_engine_unittests',
-    'webrtc_nonparallel_tests',
-  )
-
-  ANDROID_INSTRUMENTATION_TESTS = (
-    'AppRTCMobileTest',
-    'libjingle_peerconnection_android_unittest',
-  )
-
-  ANDROID_JUNIT_TESTS = (
-    'android_junit_tests',
-  )
+  NORMAL_TESTS = steps.NORMAL_TESTS
+  ANDROID_DEVICE_TESTS = steps.ANDROID_DEVICE_TESTS
+  ANDROID_INSTRUMENTATION_TESTS = steps.ANDROID_INSTRUMENTATION_TESTS
+  ANDROID_JUNIT_TESTS = steps.ANDROID_JUNIT_TESTS
 
   PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
