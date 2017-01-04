@@ -219,6 +219,7 @@ class AndroidApi(recipe_api.RecipeApi):
         flaky_config=None,
         perf_id=perf_id or self.m.properties['buildername'],
         chartjson_file=chartjson_file,
+        json_output=False,
         upload_archives_to_bucket=upload_archives_to_bucket)
 
   def upload_apks_for_bisect(self, update_properties, bucket, path):
@@ -732,6 +733,7 @@ class AndroidApi(recipe_api.RecipeApi):
                          config='sharded_perf_tests.json',
                          flaky_config=None,
                          chartjson_output=False,
+                         json_output=True,
                          max_battery_temp=None,
                          known_devices_file=None,
                          enable_platform_mode=False,
@@ -751,6 +753,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--flaky-steps', flaky_config])
     if chartjson_output:
       args.append('--collect-chartjson-data')
+    if json_output:
+      args.append('--collect-json-data')
     if max_battery_temp:
       args.extend(['--max-battery-temp', max_battery_temp])
     if known_devices_file:
@@ -777,7 +781,8 @@ class AndroidApi(recipe_api.RecipeApi):
                              enable_platform_mode=False,
                              timestamp_as_point_id=False,
                              pass_adb_path=True,
-                             num_retries=0, **kwargs):
+                             num_retries=0,
+                             json_output=True, **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -804,6 +809,7 @@ class AndroidApi(recipe_api.RecipeApi):
       # test_runner.py actually runs the tests and records the results
       self._run_sharded_tests(config=config, flaky_config=flaky_config,
                               chartjson_output=chartjson_file,
+                              json_output=json_output,
                               max_battery_temp=max_battery_temp,
                               known_devices_file=known_devices_file,
                               enable_platform_mode=enable_platform_mode,
@@ -865,6 +871,54 @@ class AndroidApi(recipe_api.RecipeApi):
       if enable_platform_mode:
         print_step_cmd.extend(['--enable-platform-mode'])
 
+      # JSON output is used to determine which individual pages failed.
+      if json_output:
+        print_step_cmd.extend(
+            ['--output-json-data', self.m.json.output(name='output_json')])
+
+      example_output_json = {
+        'format_version': '0.2',
+        'summary_values': [],
+        'per_page_values': [
+          {
+            'name': 'network_data_sent',
+            'type': 'failure',
+            'page_id': 0
+          },
+          {
+            'name': 'network_data_sent',
+            'type': 'failure',
+            'page_id': 1
+          },
+          {
+            'name': 'network_data_sent',
+            'type': 'failure',
+            'page_id': 2
+          }
+        ],
+        'benchmark_metadata': {
+          'rerun_options': [],
+          'type': 'telemetry_benchmark',
+          'name': 'example.example',
+          'description': 'Example perf test.'
+        },
+        'pages': {
+          '0': {
+            'name': 'failing_page_name',
+            'id': 0
+          },
+          '1': {
+            'url': 'www.failing_webpage.com',
+            'id': 1
+          },
+          '2': {
+            'id': 2
+          }
+        },
+        'next_version': '0.3',
+        'benchmark_name': 'example.example'
+      }
+
       try:
         with self.handle_exit_codes():
           env = self.m.chromium.get_env()
@@ -880,7 +934,11 @@ class AndroidApi(recipe_api.RecipeApi):
             results_url='https://chromeperf.appspot.com',
             perf_id=perf_id,
             env=env,
-            chartjson_file=chartjson_file)
+            chartjson_file=chartjson_file,
+            step_test_data=(
+                lambda: self.m.json.test_api.output([]) +
+                        self.m.json.test_api.output(
+                            example_output_json, name='output_json')))
       except self.m.step.StepFailure as f:
         # Only warn for failures on reference builds.
         if test_name.endswith('.reference'):
@@ -891,8 +949,32 @@ class AndroidApi(recipe_api.RecipeApi):
         else:
           failures.append(f)
       finally:
+        step_result = self.m.step.active_result
+
+        if (hasattr(step_result, 'json') and
+            hasattr(step_result.json, 'outputs')):
+
+          json_results = step_result.json.outputs.get('output_json')
+          if json_results:
+            failed_pages = []
+            pages_info = json_results.get('pages', {})
+
+            for value in json_results.get('per_page_values', []):
+              if value.get('type') == 'failure':
+                failed_page_info = pages_info.get(str(value.get('page_id')), {})
+                if failed_page_info.get('name'):
+                  failed_pages.append(failed_page_info.get('name'))
+                elif failed_page_info.get('url'):
+                  failed_pages.append(failed_page_info.get('url'))
+                else:
+                  failed_pages.append(
+                      'page_id:%s' % value.get('page_id', 'unknown'))
+
+            step_result.presentation.step_text += (
+                self.m.test_utils.format_step_text(
+                    [['failures:', failed_pages]]))
+
         if 'device_affinity' in test_data:
-          step_result = self.m.step.active_result
           step_result.presentation.step_text += (
               self.m.test_utils.format_step_text(
                   [['Device Affinity: %s' % test_data['device_affinity']]]))

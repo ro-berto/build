@@ -353,7 +353,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if chartjson_file:
       full_args.append('--chartjson-file')
       full_args.append(self.m.json.output())
-      kwargs['step_test_data'] = lambda: self.m.json.test_api.output([])
+      if 'step_test_data' not in kwargs:
+        kwargs['step_test_data'] = lambda: self.m.json.test_api.output([])
     if test_launcher_summary_output:
       full_args.extend([
         '--test-launcher-summary-output',
