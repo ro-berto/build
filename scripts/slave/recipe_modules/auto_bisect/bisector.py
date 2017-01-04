@@ -586,8 +586,10 @@ class Bisector(object):
   def post_result(self, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""
     self.api.m.perf_dashboard.set_default_config()
-    self.api.m.perf_dashboard.post_bisect_results(
+    step_result = self.api.m.perf_dashboard.post_bisect_results(
         self.get_result(), halt_on_failure)
+    lines = json.dumps(self.get_result(), indent=2).splitlines()
+    step_result.presentation.logs['Debug Info'] = lines
 
   def get_revision_to_eval(self):
     """Gets the next RevisionState object in the candidate range.
