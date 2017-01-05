@@ -175,6 +175,7 @@
       "BUILDBOT_TRIGGERED_BY_BUILDNUMBER": "1",
       "BUILDBOT_TRIGGERED_BY_SLAVENAME": "TestSlave",
       "GOMA_DIR": "[CACHE]/cipd/goma",
+      "GOMA_TMP_DIR": "[TMP_BASE]",
       "NOCONTROL_GOMA": "1",
       "RUNTEST": "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py"
     },

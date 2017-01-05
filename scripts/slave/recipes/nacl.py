@@ -65,6 +65,7 @@ def _AnnotatedStepsSteps(api, got_revision):
   if goma_dir:
     env.update({
         'GOMA_DIR': goma_dir,
+        'GOMA_TMP_DIR': api.path['tmp_base'],
         'NOCONTROL_GOMA': '1',
     })
   api.goma.start()

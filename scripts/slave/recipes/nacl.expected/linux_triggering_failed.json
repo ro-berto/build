@@ -172,6 +172,7 @@
       "BUILDBOT_REVISION": "abcd",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
       "GOMA_DIR": "[CACHE]/cipd/goma",
+      "GOMA_TMP_DIR": "[TMP_BASE]",
       "NOCONTROL_GOMA": "1",
       "RUNTEST": "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py"
     },
