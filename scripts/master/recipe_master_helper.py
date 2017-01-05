@@ -162,6 +162,7 @@ def AddRemoteRunBuilders(buildmaster_config=None,
         'factory': annotator(
           slave['recipe'],
           factory_properties,
+          max_time=slave.get('max_time'),
           triggers=triggers),
         'gatekeeper': slave.get('gatekeeper_categories', ''),
       }
