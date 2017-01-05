@@ -238,41 +238,44 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     kwargs.pop('env', {})
 
-    try:
-      if use_goma_module:
-        self.m.goma.build_with_goma(
-            name=name or 'compile',
-            ninja_command=command,
-            ninja_env=ninja_env,
-            goma_env=goma_env,
-            ninja_log_outdir=target_output_dir,
-            ninja_log_compiler=self.c.compile_py.compiler or 'goma',
-            allow_build_without_goma=allow_build_without_goma,
-            **kwargs)
-      else:
-        # TODO(tikuta): Extract this from outside of try.
-        compile_exit_status = 1
-        try:
-          self.m.step(name or 'compile',
-                      command,
-                      env=ninja_env,
-                      **kwargs)
-          compile_exit_status = 0
-        finally:
-          upload_ninja_log_args = [
-              '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
-              '--skip-sendgomatsmon',
-              '--ninja-log-outdir', target_output_dir,
-              '--ninja-log-command', str(command),
-              '--ninja-log-exit-status', compile_exit_status,
-              '--ninja-log-compiler', self.c.compile_py.compiler or 'unknown'
-          ]
-          self.m.python(
-              name='upload_ninja_log',
-              script=self.package_repo_resource(
-                  'scripts', 'slave', 'upload_goma_logs.py'),
-              args=upload_ninja_log_args)
+    if not use_goma_module:
+      compile_exit_status = 1
+      try:
+        self.m.step(name or 'compile',
+                    command,
+                    env=ninja_env,
+                    **kwargs)
+        compile_exit_status = 0
+      except self.m.step.StepFailure as e:
+        compile_exit_status = e.retcode
+        raise e
+      finally:
+        upload_ninja_log_args = [
+            '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
+            '--skip-sendgomatsmon',
+            '--ninja-log-outdir', target_output_dir,
+            '--ninja-log-command', str(command),
+            '--ninja-log-exit-status', compile_exit_status,
+            '--ninja-log-compiler', self.c.compile_py.compiler or 'unknown'
+        ]
+        self.m.python(
+            name='upload_ninja_log',
+            script=self.package_repo_resource(
+                'scripts', 'slave', 'upload_goma_logs.py'),
+            args=upload_ninja_log_args)
 
+      return
+
+    try:
+      self.m.goma.build_with_goma(
+          name=name or 'compile',
+          ninja_command=command,
+          ninja_env=ninja_env,
+          goma_env=goma_env,
+          ninja_log_outdir=target_output_dir,
+          ninja_log_compiler=self.c.compile_py.compiler or 'goma',
+          allow_build_without_goma=allow_build_without_goma,
+          **kwargs)
     except self.m.step.StepFailure as e:
       # Handle failures caused by goma.
       if use_goma_module:

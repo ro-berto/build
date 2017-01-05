@@ -119,6 +119,16 @@ def GenTests(api):
                  ],
              })))
 
+  yield (api.test('basic_out_dir_ninja_build_failure') +
+         api.properties(
+             mastername='chromium.linux',
+             buildername='Android Builder (dbg)',
+             slavename='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             use_goma_module=False,
+         ) + api.step_data('compile', retcode=1))
+
   yield (api.test('basic_out_dir_goma_module_start_failure') +
          api.properties(
              mastername='chromium.linux',
