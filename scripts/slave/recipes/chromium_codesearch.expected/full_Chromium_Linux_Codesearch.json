@@ -597,7 +597,7 @@
       "tools/clang/scripts/update.py",
       "--force-local-build",
       "--without-android",
-      "--tools",
+      "--extra-tools",
       "translation_unit"
     ],
     "cwd": "[START_DIR]/src",
