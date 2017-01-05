@@ -241,7 +241,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/Mac_Builder/src/testing/buildbot/chromium.perf.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Perf\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.11 Perf\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -251,7 +251,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.11 Perf\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.12 Perf\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -698,7 +698,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Mac 10.10 Perf",
+        "builder_name": "Mac 10.11 Perf",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -718,7 +718,7 @@
         }
       },
       {
-        "builder_name": "Mac 10.11 Perf",
+        "builder_name": "Mac 10.12 Perf",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -862,7 +862,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Perf<br />Mac 10.11 Perf<br />Mac Air 10.11 Perf<br />Mac Power Dual-GPU Perf<br />Mac Power Low-End Perf<br />Mac Pro 10.11 Perf<br />Mac Retina Perf<br />Mac Test Retina Perf@@@"
+      "@@@STEP_TEXT@Mac 10.11 Perf<br />Mac 10.12 Perf<br />Mac Air 10.11 Perf<br />Mac Power Dual-GPU Perf<br />Mac Power Low-End Perf<br />Mac Pro 10.11 Perf<br />Mac Retina Perf<br />Mac Test Retina Perf@@@"
     ]
   },
   {
