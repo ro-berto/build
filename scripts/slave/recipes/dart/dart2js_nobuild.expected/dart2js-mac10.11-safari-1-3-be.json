@@ -205,6 +205,34 @@
       "--shards=3",
       "--shard=1",
       "--append_logs",
+      "pkg"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js safari package tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=safari",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=3",
+      "--shard=1",
+      "--append_logs",
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
@@ -296,6 +324,35 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "dart2js safari observatory_ui fast-startup tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=safari",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps",
+      "--shards=3",
+      "--shard=1",
+      "--fast-startup",
+      "--append_logs",
+      "pkg"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js safari package fast-startup tests"
   },
   {
     "cmd": [

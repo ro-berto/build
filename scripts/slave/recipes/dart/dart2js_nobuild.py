@@ -167,6 +167,8 @@ def RunSteps(api):
            'tests': ['--exclude-suite=observatory_ui,co19']},
           {'name': 'dart2js %s observatory_ui tests' % runtime,
            'tests': ['observatory_ui']},
+          {'name': 'dart2js %s package tests' % runtime,
+           'tests': ['pkg']},
           {'name': 'dart2js %s co19 tests' % runtime,
            'tests': ['co19']},
           {'name': 'dart2js %s extra tests' % runtime,

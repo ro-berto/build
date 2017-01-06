@@ -49,8 +49,7 @@ builders = {
     'mode': 'release',
     'target_arch': 'x64',
     'env': default_envs['linux'],
-    'checked': True,
-    'clobber': True},
+    'checked': True},
 }
 
 for platform in ['linux', 'mac', 'win']:
@@ -155,10 +154,11 @@ def RunSteps(api):
   assert channel in ['be', 'dev', 'stable', 'integration']
   b = builders[buildername]
 
-  if b.get('clobber', False):
-      api.python('clobber',
-                 api.path['tools'].join('clean_output_directory.py'),
-                 cwd=api.path['checkout'])
+  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
+  if 'clobber' in api.properties:
+    api.python('clobber',
+               api.path['tools'].join('clean_output_directory.py'),
+               cwd=api.path['checkout'])
 
   api.gclient.runhooks(env=b['env'].copy())  # Modifies its env argument.
 
@@ -212,4 +212,5 @@ def GenTests(api):
    yield (
       api.test('test-coverage') + api.platform('linux', 32) +
       api.properties.generic(mastername='client.dart',
-                             buildername='test-coverage-be'))
+                             buildername='test-coverage-be',
+                             clobber=''))
