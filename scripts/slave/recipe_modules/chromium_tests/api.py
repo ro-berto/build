@@ -922,6 +922,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     buildername = api.properties.get('buildername')
     bot_config = api.chromium_tests.trybots.get(mastername, {}).get(
         'builders', {}).get(buildername)
+    assert bot_config, 'No bot config for master/builder [%s / %s]' % (
+        mastername, buildername)
 
     bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
         bot_config['bot_ids'])
