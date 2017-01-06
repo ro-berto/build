@@ -246,18 +246,18 @@
     "cronet_arm64": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
-      "slaves": ["vm982-m1"],
+      "slaves": ["slave188-c1"],
     },
     "cronet_arm64_dbg": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
-      "slaves": ["vm983-m1"],
+      "slaves": ["slave189-c1"],
     },
     "cronet_mips": {
       "slave_data": {
@@ -278,10 +278,10 @@
     "cronet_x86_dbg": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
-      "slaves": ["vm990-m1"],
+      "slaves": ["slave190-c1"],
     },
     "cronet_k_hammerhead": {
       "slave_data": {
