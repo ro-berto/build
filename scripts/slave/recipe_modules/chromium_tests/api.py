@@ -433,7 +433,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.isolate.remove_build_metadata()
         # 'compile' just prepares all information needed for the isolation,
         # and the isolation is a separate step.
-        step_result = self.m.isolate.isolate_tests(
+        self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,
             targets=list(set(isolated_targets)),
             verbose=True,
@@ -443,7 +443,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.perf_dashboard.upload_isolated(
               self.m.properties['buildername'],
               update_step.presentation.properties['got_revision'],
-              step_result.json.output)
+              self.m.isolate.isolated_tests)
 
   def archive_build(self, mastername, buildername, update_step, bot_db):
     bot_config = bot_db.get_bot_config(mastername, buildername)
