@@ -229,14 +229,6 @@ class iOSApi(recipe_api.RecipeApi):
 
     suffix = ' (%s)' % suffix if suffix else ''
 
-    self.m.step(
-      'find xcode', [
-      self.package_repo_resource(
-        'scripts', 'slave', 'ios', 'find_xcode.py'),
-      '--json-file', self.m.json.output(),
-      '--version', self.__config['xcode version'],
-    ], step_test_data=lambda: self.m.json.test_api.output({}))
-
     env = {
       'LANDMINES_VERBOSE': '1',
       'FORCE_MAC_TOOLCHAIN': '1',
