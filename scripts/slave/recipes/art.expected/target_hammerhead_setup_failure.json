@@ -26,7 +26,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -57,7 +57,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -98,7 +98,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -130,7 +130,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -164,7 +164,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -200,7 +200,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -231,7 +231,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -264,7 +264,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -299,7 +299,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -336,7 +336,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -367,7 +367,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -400,7 +400,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -435,7 +435,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -471,7 +471,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -502,7 +502,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -535,7 +535,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -570,7 +570,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -606,7 +606,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -637,7 +637,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -670,7 +670,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -704,7 +704,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -740,7 +740,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -771,7 +771,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -804,7 +804,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -838,7 +838,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -874,7 +874,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -905,7 +905,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -938,7 +938,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -973,7 +973,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -1009,7 +1009,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -1040,7 +1040,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
@@ -1073,7 +1073,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15A28014510",
+      "ANDROID_SERIAL": "84B7N15B03000829",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",

@@ -343,7 +343,7 @@ _CONFIG_MAP = {
 
     'target': {
       'hammerhead-ndebug': {
-        'serial': '84B7N15A28014510',
+        'serial': '84B7N15B03000829',
         'device': 'hammerhead',
         'debug': False,
       },
