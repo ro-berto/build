@@ -603,6 +603,7 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
       yield AndroidInstrumentationTest(
           test_name,
           compile_targets=test.get('override_compile_targets'),
+          render_results_dir=test.get('render_results_dir'),
           timeout_scale=test.get('timeout_scale'),
           result_details=True,
           store_tombstones=True,
@@ -1689,27 +1690,33 @@ class AndroidTest(Test):
 
   def run(self, api, suffix):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
-    json_results_file = api.test_utils.gtest_results(add_json_log=False)
-    try:
-      self.run_tests(api, suffix, json_results_file)
-    finally:
-      step_result = api.step.active_result
-      self._test_runs[suffix] = {'valid': False}
-      if (hasattr(step_result, 'test_utils') and
-          hasattr(step_result.test_utils, 'gtest_results')):
-        gtest_results = step_result.test_utils.gtest_results
 
-        failures = gtest_results.failures
-        self._test_runs[suffix] = {'valid': True, 'failures': failures}
-        step_result.presentation.step_text += (
-            api.test_utils.format_step_text([['failures:', failures]]))
+    nested_step_name = '%s%s' % (self._name, ' (%s)' % suffix if suffix else '')
+    with api.step.nest(nested_step_name) as nested_step:
+      json_results_file = api.test_utils.gtest_results(add_json_log=False)
+      try:
+        step_result = self.run_tests(api, suffix, json_results_file)
+      except api.step.StepFailure as f:
+        step_result = f.result
+        raise
+      finally:
+        nested_step.presentation.status = step_result.presentation.status
+        self._test_runs[suffix] = {'valid': False}
+        if (hasattr(step_result, 'test_utils') and
+            hasattr(step_result.test_utils, 'gtest_results')):
+          gtest_results = step_result.test_utils.gtest_results
 
-        api.test_results.upload(
-            api.json.input(gtest_results.raw),
-            test_type=self.name,
-            chrome_revision=api.bot_update.last_returned_properties.get(
-                'got_revision_cp', 'x@{#0}'),
-            test_results_server='test-results.appspot.com')
+          failures = gtest_results.failures
+          self._test_runs[suffix] = {'valid': True, 'failures': failures}
+          nested_step.presentation.step_text += (
+              api.test_utils.format_step_text([['failures:', failures]]))
+
+          api.test_results.upload(
+              api.json.input(gtest_results.raw),
+              test_type=self.name,
+              chrome_revision=api.bot_update.last_returned_properties.get(
+                  'got_revision_cp', 'x@{#0}'),
+              test_results_server='test-results.appspot.com')
 
   def compile_targets(self, _):
     return self._compile_targets
@@ -1737,7 +1744,7 @@ class AndroidJunitTest(AndroidTest):
 
   #override
   def run_tests(self, api, suffix, json_results_file):
-    api.chromium_android.run_java_unit_test_suite(
+    return api.chromium_android.run_java_unit_test_suite(
         self.name, verbose=True, suffix=suffix,
         json_results_file=json_results_file,
         step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False))
@@ -1804,7 +1811,8 @@ class AndroidInstrumentationTest(AndroidTest):
                test_apk=None, timeout_scale=None, annotation=None,
                except_annotation=None, screenshot=False, verbose=True,
                tool=None, additional_apks=None, store_tombstones=False,
-               result_details=False, args=None, waterfall_mastername=None,
+               result_details=False, render_results_dir=None,
+               args=None, waterfall_mastername=None,
                waterfall_buildername=None):
     suite_defaults = (
         AndroidInstrumentationTest._DEFAULT_SUITES.get(name)
@@ -1834,6 +1842,7 @@ class AndroidInstrumentationTest(AndroidTest):
     self._wrapper_script_suite_name = compile_targets[0]
     self._store_tombstones = store_tombstones
     self._result_details = result_details
+    self._render_results_dir = render_results_dir
     self._args = args
 
   @property
@@ -1842,7 +1851,7 @@ class AndroidInstrumentationTest(AndroidTest):
 
   #override
   def run_tests(self, api, suffix, json_results_file):
-    api.chromium_android.run_instrumentation_suite(
+    return api.chromium_android.run_instrumentation_suite(
         self.name,
         test_apk=api.chromium_android.apk_path(self._test_apk),
         apk_under_test=api.chromium_android.apk_path(self._apk_under_test),
@@ -1857,6 +1866,7 @@ class AndroidInstrumentationTest(AndroidTest):
         result_details=self._result_details,
         store_tombstones=self._store_tombstones,
         wrapper_script_suite_name=self._wrapper_script_suite_name,
+        render_results_dir=self._render_results_dir,
         step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False),
         args=self._args)
 

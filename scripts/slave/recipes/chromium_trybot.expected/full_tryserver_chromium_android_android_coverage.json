@@ -862,6 +862,19 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "AndroidWebViewTest (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -881,10 +894,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "AndroidWebViewTest (with patch)",
+    "name": "AndroidWebViewTest (with patch).AndroidWebViewTest (with patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -913,7 +926,23 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "Upload to test-results [AndroidWebViewTest]"
+    "name": "AndroidWebViewTest (with patch).Upload to test-results [AndroidWebViewTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "ChromePublicTest (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -935,10 +964,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "ChromePublicTest (with patch)",
+    "name": "ChromePublicTest (with patch).ChromePublicTest (with patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -967,7 +996,23 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "Upload to test-results [ChromePublicTest]"
+    "name": "ChromePublicTest (with patch).Upload to test-results [ChromePublicTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "ContentShellTest (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -989,10 +1034,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "ContentShellTest (with patch)",
+    "name": "ContentShellTest (with patch).ContentShellTest (with patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1021,7 +1066,23 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "Upload to test-results [ContentShellTest]"
+    "name": "ContentShellTest (with patch).Upload to test-results [ContentShellTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "ChromeSyncShellTest (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -1043,10 +1104,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "ChromeSyncShellTest (with patch)",
+    "name": "ChromeSyncShellTest (with patch).ChromeSyncShellTest (with patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1075,7 +1136,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "Upload to test-results [ChromeSyncShellTest]"
+    "name": "ChromeSyncShellTest (with patch).Upload to test-results [ChromeSyncShellTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1640,6 +1704,19 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "AndroidWebViewTest (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1659,10 +1736,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "AndroidWebViewTest (without patch)",
+    "name": "AndroidWebViewTest (without patch).AndroidWebViewTest (without patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1691,7 +1768,23 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "Upload to test-results [AndroidWebViewTest] (2)"
+    "name": "AndroidWebViewTest (without patch).Upload to test-results [AndroidWebViewTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "ChromePublicTest (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -1713,10 +1806,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "ChromePublicTest (without patch)",
+    "name": "ChromePublicTest (without patch).ChromePublicTest (without patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1745,7 +1838,23 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "Upload to test-results [ChromePublicTest] (2)"
+    "name": "ChromePublicTest (without patch).Upload to test-results [ChromePublicTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "ContentShellTest (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -1767,10 +1876,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "ContentShellTest (without patch)",
+    "name": "ContentShellTest (without patch).ContentShellTest (without patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1799,7 +1908,23 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "Upload to test-results [ContentShellTest] (2)"
+    "name": "ContentShellTest (without patch).Upload to test-results [ContentShellTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "ChromeSyncShellTest (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -1821,10 +1946,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "ChromeSyncShellTest (without patch)",
+    "name": "ChromeSyncShellTest (without patch).ChromeSyncShellTest (without patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1853,7 +1978,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "Upload to test-results [ChromeSyncShellTest] (2)"
+    "name": "ChromeSyncShellTest (without patch).Upload to test-results [ChromeSyncShellTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

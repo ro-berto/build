@@ -90,7 +90,10 @@ BUILDERS = freeze({
         'use_git_cache': False,
     },
     'json_results_file': {
-        'json_results_file': 'json_results_file'
+        'json_results_file': 'json_results_file',
+    },
+    'render_results': {
+        'render_results_dir': 'chrome/test/data/android/render_tests',
     },
     'result_details': {
         'result_details': True,
@@ -223,7 +226,8 @@ def RunSteps(api, buildername):
       json_results_file=config.get('json_results_file'),
       result_details=config.get('result_details'),
       cs_base_url=config.get('cs_base_url'),
-      store_tombstones=config.get('store_tombstones'))
+      store_tombstones=config.get('store_tombstones'),
+      render_results_dir=config.get('render_results_dir'))
   api.chromium_android.run_test_suite(
       'unittests',
       gtest_filter='WebRtc*',

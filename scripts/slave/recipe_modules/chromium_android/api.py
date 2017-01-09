@@ -1032,6 +1032,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 result_details=False,
                                 cs_base_url=None,
                                 store_tombstones=False,
+                                render_results_dir=None,
                                 args=None,
                                 **kwargs):
     args = args or []
@@ -1089,6 +1090,8 @@ class AndroidApi(recipe_api.RecipeApi):
           **kwargs)
     finally:
       result_step = self.m.step.active_result
+      if render_results_dir:
+        self._upload_render_test_failures(render_results_dir)
       if result_details:
         if (hasattr(result_step, 'test_utils') and
             hasattr(result_step.test_utils, 'gtest_results')):
@@ -1097,10 +1100,12 @@ class AndroidApi(recipe_api.RecipeApi):
           details = self.create_result_details(step_name,
                                                json_results,
                                                cs_base_url)
-          self.m.step.active_result.presentation.logs[
-              'result_details'] = details
-        self.copy_gtest_results(result_step,
-                                self.m.step.active_result)
+          self.m.step.active_result.presentation.logs['result_details'] = (
+              details)
+      # Need to copy gtest results over. A few places call
+      # |run_instrumentation_suite| function and then look for results in
+      # the active_result.
+      self.copy_gtest_results(result_step, self.m.step.active_result)
     return step_result
 
   def copy_gtest_results(self, result_step, active_step):
@@ -1124,6 +1129,23 @@ class AndroidApi(recipe_api.RecipeApi):
             lambda: self.m.raw_io.test_api.stream_output(
                 '<!DOCTYPE html><html></html>')))
     return result_details.stdout.splitlines()
+
+  def _upload_render_test_failures(self, render_results_dir):
+    """Uploads render test results. Generates HTML file displaying results."""
+    args = ['--output-html-file', self.m.raw_io.output(),
+            '--buildername', self.m.properties['buildername'],
+            '--build-number', self.m.properties['buildnumber'],
+            '--render-results-dir', render_results_dir]
+    step_result = self.m.python(
+        name='[Render Tests] Upload Results',
+        script=self.m.path['checkout'].join(
+            'build', 'android', 'render_tests',
+            'process_render_test_results.py'),
+        args=args,
+        step_test_data=lambda: self.m.raw_io.test_api.output(
+            '<!DOCTYPE html><html></html>'))
+    step_result.presentation.logs['render results'] = (
+        step_result.raw_io.output.splitlines())
 
   def logcat_dump(self, gs_bucket=None):
     if gs_bucket:
@@ -1406,7 +1428,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
 
-    self.test_runner(
+    return self.test_runner(
         '%s%s' % (str(suite), ' (%s)' % suffix if suffix else ''),
         ['junit', '-s', suite] + args,
         env=self.m.chromium.get_env(),

@@ -549,6 +549,19 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_M__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_M__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_M__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "SystemWebViewShellLayoutTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -568,10 +581,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_WebView_M__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_M__dbg_/src/build/android:%(PATH)s"
     },
-    "name": "SystemWebViewShellLayoutTest",
+    "name": "SystemWebViewShellLayoutTest.SystemWebViewShellLayoutTest",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -600,7 +613,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_WebView_M__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_M__dbg_/src/build/android:%(PATH)s"
     },
-    "name": "Upload to test-results [SystemWebViewShellLayoutTest]"
+    "name": "SystemWebViewShellLayoutTest.Upload to test-results [SystemWebViewShellLayoutTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
