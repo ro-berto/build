@@ -159,11 +159,11 @@
       "--json-file",
       "/path/to/tmp/json",
       "--url",
-      "https://chromium.googlesource.com/chromium/src/+/refs/pending/heads/master/DEPS",
+      "https://chromium.googlesource.com/chromium/src/+/refs/heads/master/DEPS",
       "--format",
       "text"
     ],
-    "name": "fetch refs/pending/heads/master:DEPS"
+    "name": "fetch refs/heads/master:DEPS"
   },
   {
     "cmd": [

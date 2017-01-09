@@ -123,26 +123,26 @@ def RunSteps(api):
 
     api.bot_update.ensure_checkout(no_shallow=True)
 
-    # Get deps file from pending ref.
-    pending_deps = api.gitiles.download_file(
+    # Get deps file from gitiles.
+    gitiles_deps = api.gitiles.download_file(
         'https://chromium.googlesource.com/chromium/src',
         'DEPS',
-        branch='refs/pending/heads/master',
+        branch='refs/heads/master',
         step_test_data= lambda: api.json.test_api.output({
           'value': base64.b64encode(TEST_DEPS_FILE % 'deadbeef'),
         }),
     )
 
     # Get the deps file used by the auto roller.
-    real_deps = api.git(
+    local_deps = api.git(
         'cat-file', 'blob', 'HEAD:DEPS',
         stdout=api.raw_io.output(),
         step_test_data= lambda: api.raw_io.test_api.stream_output(
             TEST_DEPS_FILE % 'deadbeef'),
     ).stdout
 
-    # Require HEAD and pending HEAD to be consistent before proceeding.
-    if V8RevisionFrom(pending_deps) != V8RevisionFrom(real_deps):
+    # Require both HEADs to be consistent before proceeding.
+    if V8RevisionFrom(gitiles_deps) != V8RevisionFrom(local_deps):
       api.step('Local checkout is lagging behind.', cmd=None)
       api.step.active_result.presentation.status = api.step.WARNING
       monitoring_state = 'inconsistent'
