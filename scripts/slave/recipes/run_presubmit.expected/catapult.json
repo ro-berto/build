@@ -68,7 +68,7 @@
       "Committed patch"
     ],
     "cwd": "[START_DIR]/catapult",
-    "name": "commit git patch"
+    "name": "commit-git-patch"
   },
   {
     "cmd": [

@@ -68,7 +68,7 @@
       "Committed patch"
     ],
     "cwd": "[START_DIR]/v8",
-    "name": "commit git patch"
+    "name": "commit-git-patch"
   },
   {
     "cmd": [
