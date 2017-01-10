@@ -46,17 +46,25 @@ GENERATED_REPO = '%s/chromium/src/out' % CHROMIUM_GIT_URL
 GENERATED_AUTHOR_EMAIL = 'git-generated-files-sync@chromium.org'
 GENERATED_AUTHOR_NAME = 'Automatic Generated Files Sync'
 
-LINUX_GN_ARGS = [
+BASE_GN_ARGS = [
   'is_clang=true',
   'is_component_build=true',
   'is_debug=true',
   'symbol_level=1',
+]
+
+LINUX_GN_ARGS = BASE_GN_ARGS + [
   'target_cpu="x64"',
 ]
 
 CHROMEOS_GN_ARGS = LINUX_GN_ARGS + [
   'target_os="chromeos"',
   'use_ozone=true',
+]
+
+ANDROID_GN_ARGS = BASE_GN_ARGS + [
+  'target_cpu="arm"',
+  'target_os="android"',
 ]
 
 SPEC = freeze({
@@ -118,6 +126,15 @@ SPEC = freeze({
       'package_filename': 'chromiumos-src',
       'platform': 'chromeos',
     },
+    'Chromium Android Codesearch': {
+      'compile_targets': [
+        'all',
+      ],
+      'environment': 'prod',
+      'package_filename': 'chromium-android-src',
+      'platform': 'android',
+      'sync_generated_files': True,
+    },
     'Chromium Linux Codesearch Builder': {
       'compile_targets': [
         'all',
@@ -166,6 +183,14 @@ SPEC = freeze({
       'package_filename': 'chromiumos-src',
       'platform': 'chromeos',
     },
+    'Chromium Android Codesearch Builder': {
+      'compile_targets': [
+        'all',
+      ],
+      'environment': 'staging',
+      'package_filename': 'chromium-android-src',
+      'platform': 'android',
+    },
   },
 })
 
@@ -173,7 +198,13 @@ def GenerateCompilationDatabase(api, debug_path, targets, platform):
   # TODO(akuegel): If we ever build on Windows or Mac, this needs to be
   # adjusted.
   gn_path = api.path['checkout'].join('buildtools', 'linux64', 'gn')
-  args = LINUX_GN_ARGS if platform == 'linux' else CHROMEOS_GN_ARGS
+  if platform == 'linux':
+    args = LINUX_GN_ARGS
+  elif platform == 'chromeos':
+    args = CHROMEOS_GN_ARGS
+  elif platform == 'android':
+    args = ANDROID_GN_ARGS
+
   args.extend(['use_goma=true',
                'goma_dir="%s"' % api.goma.goma_dir])
   command = [gn_path, 'gen', debug_path, '--args=%s' % ' '.join(args)]
