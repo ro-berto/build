@@ -424,7 +424,7 @@ def debounce_failures(failed_builds, current_builds_successful, build_db):
                         buildnum-1)
           continue
 
-        logging.debug('  new failing steps since build %d: %s', buildnum-1,
+        logging.debug('  new failing steps since build %d: %s', buildnum,
                       ','.join(sorted(new_tests)))
 
         # If we're here it's a legit failing build.
