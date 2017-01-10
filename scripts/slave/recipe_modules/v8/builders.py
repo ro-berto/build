@@ -901,6 +901,25 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 - release builder': {
+        'chromium_apply_config': [
+          'clang',
+          'v8_ninja',
+          'goma',
+          'mb',
+          'default_target_d8',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8',
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64 ASAN no inline - release builder': {
         'chromium_apply_config': [
           'clang',
