@@ -36,6 +36,9 @@ total = ts_mon.GaugeMetric('buildbot/master/builders/total_slaves',
     description='Number of slaves configured on this builder - connected or '
                 'not')
 
+reactor_queue = ts_mon.GaugeMetric('buildbot/master/reactor/queue',
+    description='Number of items in the reactor queue.')
+
 pool_queue = ts_mon.GaugeMetric('buildbot/master/thread_pool/queue',
     description='Number of runnables queued in the database thread pool')
 pool_waiting = ts_mon.GaugeMetric('buildbot/master/thread_pool/waiting',
@@ -125,6 +128,7 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     pool_queue.set(pool.q.qsize(), fields={'master': ''})
     pool_waiting.set(len(pool.waiters), fields={'master': ''})
     pool_working.set(len(pool.working), fields={'master': ''})
+    reactor_queue.set(len(reactor.threadCallQueue))
 
     builder_names = set()
     for builder_name in self.status.getBuilderNames():
