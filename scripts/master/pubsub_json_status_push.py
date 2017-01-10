@@ -459,11 +459,10 @@ class StatusPush(StatusReceiverMultiService):
                 for builder_name in self._status.getBuilderNames()}
     builder_infos = {}
 
-    # HACK(hinoka): Disable getting pending build info for tryserver until
+    # TODO(hinoka): Re-enable getting pending build info for masters when
     #               performance issues are fixed crbug.com/679563
-    get_pending = True
-    if self.name == 'tryserver.chromium.linux':
-      get_pending = False
+    get_pending = False
+
     # Fetch all builder info in parallel.
     builder_info_list = yield defer.DeferredList([
         self._getBuilderData(name, builder, get_pending)
