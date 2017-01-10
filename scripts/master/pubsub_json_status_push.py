@@ -421,10 +421,12 @@ class StatusPush(StatusReceiverMultiService):
     defer.returnValue(result)
 
   @defer.inlineCallbacks
-  def _getBuilderData(self, name, builder):
+  def _getBuilderData(self, name, builder, get_pending=True):
     # This requires a deferred call since the data is queried from
     # the postgres DB (sigh).
-    pending = yield builder.getPendingBuildRequestStatuses()
+    pending = []
+    if get_pending:
+      pending = yield builder.getPendingBuildRequestStatuses()
     # Optimization cheat: only get the first 25 pending builds.
     # This caps the amount of postgres db calls and json size for really out
     # of control builders
@@ -457,9 +459,14 @@ class StatusPush(StatusReceiverMultiService):
                 for builder_name in self._status.getBuilderNames()}
     builder_infos = {}
 
+    # HACK(hinoka): Disable getting pending build info for tryserver until
+    #               performance issues are fixed crbug.com/679563
+    get_pending = True
+    if self.name == 'tryserver.chromium.linux':
+      get_pending = False
     # Fetch all builder info in parallel.
     builder_info_list = yield defer.DeferredList([
-        self._getBuilderData(name, builder)
+        self._getBuilderData(name, builder, get_pending)
         for name, builder in builders.iteritems()])
     builder_infos = {
         data[0]: data[1] for success, data in builder_info_list if success}
