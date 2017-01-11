@@ -446,14 +446,14 @@ class StatusEventLogger(StatusReceiverMultiService):
       project_id,
       subproject_tag)
 
-    if re.match('bot_update', step_name):
+    if re.match('bot_update|update_scripts', step_name):
       values = {
           'slave': bot,
           'project_id': project_id,
           'builder': builder_name,
           'result': step_result,
           'subproject_tag': subproject_tag,
-          'step_name': 'bot_update',
+          'step_name': step_name.split()[0],
           'master': self.master_dir
       }
       fields = { key: value if value is not None else ''
