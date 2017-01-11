@@ -318,9 +318,11 @@ def RunSteps(api):
     api.step.active_result.presentation.step_text = f.reason_message()
     api.step.active_result.presentation.status = api.step.WARNING
 
-  # Create the grok index pack
   got_revision_cp = api.chromium.build_properties.get('got_revision_cp')
   commit_position = api.commit_position.parse_revision(got_revision_cp)
+  got_revision = api.chromium.build_properties.get('got_revision')
+
+  # Create the grok index pack
   index_pack_grok_name = 'index_pack_%s.zip' % platform
   index_pack_grok_name_with_revision = 'index_pack_%s_%s.zip' % (
       platform, commit_position)
@@ -330,6 +332,8 @@ def RunSteps(api):
              ['--path-to-compdb', debug_path.join('compile_commands.json'),
               '--path-to-archive-output', debug_path.join(index_pack_grok_name),
               '--keep-filepaths-files'])
+
+  corpus = bot_config.get('corpus', 'chromium-linux')
 
   # Create the kythe index pack
   index_pack_kythe_name = 'index_pack_%s_kythe.zip' % platform
@@ -341,7 +345,9 @@ def RunSteps(api):
              ['--path-to-compdb', debug_path.join('compile_commands.json'),
               '--path-to-archive-output',
               debug_path.join(index_pack_kythe_name),
-              '--index-pack-format', 'kythe'])
+              '--index-pack-format', 'kythe',
+              '--corpus', corpus,
+              '--revision', got_revision])
 
   # Upload the grok index pack
   api.gsutil.upload(

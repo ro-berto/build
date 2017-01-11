@@ -81,13 +81,12 @@ class PackageIndexTest(unittest.TestCase):
     self.assertEquals(required_input['size'], len(content))
     self.assertEquals(required_input['path'], filename)
 
-  def _CheckRequiredInputKythe(self, required_input, filename, content):
+  def _CheckRequiredInputKythe(self, required_input, filename, content, corpus):
     self.assertEquals(required_input['info']['digest'],
                       hashlib.sha256(content).hexdigest())
     self.assertEquals(required_input['info']['path'], filename)
     self.assertEquals(required_input['v_name']['path'], filename)
-    self.assertEquals(required_input['v_name']['corpus'], 'chromium')
-    self.assertEquals(required_input['v_name']['root'], '')
+    self.assertEquals(required_input['v_name']['corpus'], corpus)
     self.assertEquals(required_input['v_name']['language'], 'c++')
 
   def testGenerateDataFiles(self):
@@ -171,6 +170,12 @@ class PackageIndexTest(unittest.TestCase):
     # Change format to kythe
     self.index_pack.index_pack_format = 'kythe'
 
+    # Set corpus and revision
+    corpus = 'chromium-test'
+    self.index_pack.corpus = corpus
+    revision = '0123456789'
+    self.index_pack.revision = revision
+
     # Now _GenerateUnitFiles() can be called.
     self.index_pack._GenerateUnitFiles()
 
@@ -192,23 +197,23 @@ class PackageIndexTest(unittest.TestCase):
         compilation_unit_dictionary = compilation_unit_wrapper['content']
 
         self.assertEquals(compilation_unit_dictionary['v_name']['corpus'],
-                          'chromium')
-        self.assertEquals(compilation_unit_dictionary['v_name']['root'],
-                          '')
+                          corpus)
         self.assertEquals(compilation_unit_dictionary['v_name']['language'],
                           'c++')
         self.assertEquals(compilation_unit_dictionary['source_file'],
                           [self.test_cc_file.name])
+        self.assertEquals(compilation_unit_dictionary['revision'],
+                          revision)
         self.assertEquals(compilation_unit_dictionary['output_key'], 'test.o')
 
         self.assertEquals(len(compilation_unit_dictionary['required_input']),
                           len(self.index_pack.filesizes))
         self._CheckRequiredInputKythe(
             compilation_unit_dictionary['required_input'][0],
-            self.test_cc_file.name, TEST_CC_FILE_CONTENT)
+            self.test_cc_file.name, TEST_CC_FILE_CONTENT, corpus)
         self._CheckRequiredInputKythe(
             compilation_unit_dictionary['required_input'][1],
-            self.test_h_file.name, TEST_H_FILE_CONTENT)
+            self.test_h_file.name, TEST_H_FILE_CONTENT, corpus)
 
         real_compile_arguments = COMPILE_ARGUMENTS.split()[1:]
         self.assertEquals(
