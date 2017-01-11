@@ -406,6 +406,8 @@ def main_win(options, args):
   mini_installer_exe = os.path.join(target_dir, 'mini_installer.exe')
   resources_pak = os.path.join(target_dir, 'resources.pak')
   setup_exe = os.path.join(target_dir, 'setup.exe')
+  lib_egl_dll = os.path.join(target_dir, 'libEGL.dll')
+  lib_glesv2_dll = os.path.join(target_dir, 'libGLESv2.dll')
 
   result = 0
 
@@ -427,6 +429,12 @@ def main_win(options, args):
 
   if os.path.exists(setup_exe):
     print 'RESULT setup.exe: setup.exe= %s bytes' % get_size(setup_exe)
+
+  if os.path.exists(lib_egl_dll):
+    print 'RESULT libEGL.dll: libEGL.dll= %s bytes' % get_size(lib_egl_dll)
+
+  if os.path.exists(lib_glesv2_dll):
+    print 'RESULT libGLESv2.dll: libGLESv2.dll= %s bytes' % get_size(lib_glesv2_dll)
 
   return result
 
