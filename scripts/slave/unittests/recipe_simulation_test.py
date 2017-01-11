@@ -9,8 +9,6 @@ import shutil
 import subprocess
 import sys
 
-import test_env  # pylint: disable=W0403,W0611
-
 # Delete the old recipe_engine directory which might have stale pyc files
 # that will mess us up.
 shutil.rmtree(os.path.join(
@@ -25,6 +23,7 @@ RECIPES_PY = os.path.join(
 
 args = [
     RECIPES_PY,
+    '--use-bootstrap',
     '--deps-path=-',
     'simulation_test',
 ] + sys.argv[1:]
