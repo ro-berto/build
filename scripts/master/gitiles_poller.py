@@ -114,7 +114,7 @@ class GitilesRevisionComparator(RevisionComparator):
     # is undefined (by we presumably don't care because they are ancient
     # history).
     if sha1_rev in self.sha1_lookup:
-      return self.self.sha1_lookup[sha1_rev]
+      return self.sha1_lookup[sha1_rev]
     return -1
 
   def compareSHA1Commits(self, x, y):
