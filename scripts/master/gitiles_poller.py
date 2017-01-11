@@ -63,7 +63,7 @@ class Revision(object):
 
   def __cmp__(self, other):
     assert self.comparator.initialized, "The comparator must be initialized"
-    return self.comparator.tagcmp(self.commit, other.commit)
+    return self.comparator.compareSHA1Commits(self.commit, other.commit)
 
   def __repr__(self):
     return self.commit
@@ -108,17 +108,28 @@ class GitilesRevisionComparator(RevisionComparator):
     idx = len(self.sha1_lookup)
     self.sha1_lookup[revision] = idx
 
-  def tagcmp(self, x, y):
-    return cmp(self.sha1_lookup[x], self.sha1_lookup[y])
+  def sortingKeyForSHA1(self, sha1_rev):
+    # Sort known commits by their index in the DB (~= by time), sort unknown
+    # commits as before any known commit. The order between unknown commits
+    # is undefined (by we presumably don't care because they are ancient
+    # history).
+    if sha1_rev in self.sha1_lookup:
+      return self.self.sha1_lookup[sha1_rev]
+    return -1
+
+  def compareSHA1Commits(self, x, y):
+    return cmp(self.sortingKeyForSHA1(x), self.sortingKeyForSHA1(y))
+
+  # RevisionComparator interface implementation.
 
   def isValidRevision(self, revision):
     return revision in self.sha1_lookup
 
-  def isRevisionEarlier(self, first_change, second_change):
-    return self.tagcmp(first_change.revision, second_change.revision) < 0
+  def isRevisionEarlier(self, first, second):
+    return self.compareSHA1Commits(first.revision, second.revision) < 0
 
   def getSortingKey(self):
-    return lambda c: self.sha1_lookup.__getitem__(c.revision)
+    return lambda c: self.sortingKeyForSHA1(c.revision)
 
 
 class GitilesPoller(PollingChangeSource):
