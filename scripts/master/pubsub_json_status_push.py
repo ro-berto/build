@@ -462,6 +462,8 @@ class StatusPush(StatusReceiverMultiService):
     # TODO(hinoka): Re-enable getting pending build info for masters when
     #               performance issues are fixed crbug.com/679563
     get_pending = False
+    if self.name == 'chromium.fyi':
+      get_pending = True
 
     # Fetch all builder info in parallel.
     builder_info_list = yield defer.DeferredList([
