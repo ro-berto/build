@@ -2,6 +2,7 @@
   "class_map": {
     "general": {
       "null": [
+        "build247-m2", 
         "build264-m2", 
         "build265-m2", 
         "build266-m2", 
@@ -15,7 +16,20 @@
         "build274-m2", 
         "build275-m2", 
         "build276-m2", 
-        "build277-m2"
+        "build277-m2", 
+        "build296-m2", 
+        "build312-m2", 
+        "build315-m2", 
+        "build318-m2", 
+        "build320-m2", 
+        "build329-m2", 
+        "build331-m2", 
+        "build332-m2", 
+        "build335-m2", 
+        "build34-m2", 
+        "build42-m2", 
+        "build43-m2", 
+        "build46-m2"
       ]
     }, 
     "precq": {
