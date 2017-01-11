@@ -96,7 +96,6 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
-      "--exclude-suite=pkg",
       "--builder-tag=asan",
       "--timeout=240"
     ],
@@ -122,7 +121,6 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
-      "--exclude-suite=pkg",
       "--builder-tag=asan",
       "--timeout=240",
       "--checked"

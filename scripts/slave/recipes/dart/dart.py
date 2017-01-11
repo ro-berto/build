@@ -70,5 +70,4 @@ def GenTests(api):
                              test_args=[
                                  '-cprecompiler',
                                  '-rdart_precompiled',
-                                 '--exclude-suite=pkg',
                                  '--system=android']))

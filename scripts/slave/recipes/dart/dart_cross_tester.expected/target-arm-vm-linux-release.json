@@ -98,8 +98,7 @@
       "--time",
       "--failure-summary",
       "--write-debug-log",
-      "--write-test-outcome-log",
-      "--exclude-suite=pkg"
+      "--write-test-outcome-log"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
@@ -117,7 +116,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--exclude-suite=pkg",
       "--checked",
       "--append_logs"
     ],

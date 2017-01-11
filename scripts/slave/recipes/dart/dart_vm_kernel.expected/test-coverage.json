@@ -96,8 +96,7 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
-      "--exclude-suite=pkg"
+      "--copy-coredumps"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"

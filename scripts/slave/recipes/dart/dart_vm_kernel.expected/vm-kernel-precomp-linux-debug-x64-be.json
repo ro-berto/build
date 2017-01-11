@@ -90,7 +90,6 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
-      "--exclude-suite=pkg",
       "-cdartkp",
       "-rdart_precompiled",
       "co19",

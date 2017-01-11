@@ -88,7 +88,6 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
-      "--exclude-suite=pkg",
       "-cdartk",
       "-rvm",
       "co19",

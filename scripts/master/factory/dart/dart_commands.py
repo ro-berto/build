@@ -150,6 +150,16 @@ class DartCommands(commands.FactoryCommands):
                             command=cmd,
                             logfiles=self.logfiles,
                             lazylogfiles=True)
+      self._factory.addStep(shell.ShellCommand,
+                            name='pkg tests %s' % checked_config,
+                            description='pkg tests %s' % checked_config,
+                            timeout=timeout,
+                            env=self._custom_env,
+                            haltOnFailure=False,
+                            workdir=self._dart_build_dir,
+                            command=cmd + ' pkg',
+                            logfiles=self.logfiles,
+                            lazylogfiles=True)
 
   def AddVMTests(self, options, timeout, channel):
     cmd = ('python ' + self._tools_dir + '/test.py '

@@ -90,7 +90,6 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
-      "--exclude-suite=pkg",
       "--shard=1",
       "--shards=4",
       "-cdartkp",

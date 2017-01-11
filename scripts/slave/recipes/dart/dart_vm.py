@@ -177,8 +177,7 @@ def RunSteps(api):
                  '--failure-summary',
                  '--write-debug-log',
                  '--write-test-outcome-log',
-                 '--copy-coredumps',
-                 '--exclude-suite=pkg']
+                 '--copy-coredumps']
     test_args.extend(b.get('test_args', []))
     api.python('vm tests',
                api.path['checkout'].join('tools', 'test.py'),
