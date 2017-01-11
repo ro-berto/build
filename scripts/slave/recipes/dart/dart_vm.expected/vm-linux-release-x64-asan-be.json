@@ -49,13 +49,8 @@
     "cwd": "[START_DIR]/sdk",
     "env": {
       "ASAN_OPTIONS": "handle_segv=0:detect_stack_use_after_return=1",
-      "CC": "third_party/clang/linux/bin/clang",
-      "CC_host": "third_party/clang/linux/bin/clang",
-      "CPLUS_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
-      "CXX": "third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC",
-      "CXX_host": "third_party/clang/linux/bin/clang++",
-      "C_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
-      "GYP_DEFINES": "asan=1",
+      "ASAN_SYMBOLIZER_PATH": "third_party/clang/linux/bin/llvm-symbolizer",
+      "DART_USE_ASAN": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -82,13 +77,8 @@
     "cwd": "[START_DIR]/sdk",
     "env": {
       "ASAN_OPTIONS": "handle_segv=0:detect_stack_use_after_return=1",
-      "CC": "third_party/clang/linux/bin/clang",
-      "CC_host": "third_party/clang/linux/bin/clang",
-      "CPLUS_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
-      "CXX": "third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC",
-      "CXX_host": "third_party/clang/linux/bin/clang++",
-      "C_INCLUDE_PATH": "third_party/clang/linux/lib/clang/3.4/include/",
-      "GYP_DEFINES": "asan=1"
+      "ASAN_SYMBOLIZER_PATH": "third_party/clang/linux/bin/llvm-symbolizer",
+      "DART_USE_ASAN": "1"
     },
     "name": "build dart"
   },
@@ -111,6 +101,11 @@
       "--timeout=240"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env": {
+      "ASAN_OPTIONS": "handle_segv=0:detect_stack_use_after_return=1",
+      "ASAN_SYMBOLIZER_PATH": "third_party/clang/linux/bin/llvm-symbolizer",
+      "DART_USE_ASAN": "1"
+    },
     "name": "vm tests"
   },
   {
@@ -133,6 +128,11 @@
       "--checked"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env": {
+      "ASAN_OPTIONS": "handle_segv=0:detect_stack_use_after_return=1",
+      "ASAN_SYMBOLIZER_PATH": "third_party/clang/linux/bin/llvm-symbolizer",
+      "DART_USE_ASAN": "1"
+    },
     "name": "checked vm tests"
   },
   {

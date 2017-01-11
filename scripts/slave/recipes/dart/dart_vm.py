@@ -14,32 +14,25 @@ DEPS = [
   'test_utils',
 ]
 
-gn_env = {
-  'DART_USE_GN': '1',
-}
-
 asan64 = {
-  'CC': 'third_party/clang/linux/bin/clang',
-  'CXX': 'third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC',
-  'CC_host': 'third_party/clang/linux/bin/clang',
-  'CXX_host': 'third_party/clang/linux/bin/clang++',
-  'C_INCLUDE_PATH': 'third_party/clang/linux/lib/clang/3.4/include/',
-  'CPLUS_INCLUDE_PATH': 'third_party/clang/linux/lib/clang/3.4/include/',
-  'GYP_DEFINES': 'asan=1',
-  'ASAN_OPTIONS':'handle_segv=0:detect_stack_use_after_return=1',
+  'DART_USE_ASAN': '1',
+  'ASAN_OPTIONS': 'handle_segv=0:detect_stack_use_after_return=1',
+  'ASAN_SYMBOLIZER_PATH': 'third_party/clang/linux/bin/llvm-symbolizer',
 }
-asan32 = asan64.copy()
-asan32['ASAN_OPTIONS'] = 'handle_segv=0:detect_stack_use_after_return=0'
+asan32 = {
+  'DART_USE_ASAN': '1',
+  'ASAN_OPTIONS': 'handle_segv=0:detect_stack_use_after_return=0',
+  'ASAN_SYMBOLIZER_PATH': 'third_party/clang/linux/bin/llvm-symbolizer',
+}
 linux_asan_env = {
   'x64': asan64,
   'ia32': asan32,
 }
 windows_env = {'LOGONSERVER': '\\\\AD1',
-               'DART_USE_GN': '1',
 }
 default_envs = {
-  'linux': gn_env,
-  'mac': gn_env,
+  'linux': {},
+  'mac': {},
   'win': windows_env,
 }
 
@@ -190,13 +183,15 @@ def RunSteps(api):
     api.python('vm tests',
                api.path['checkout'].join('tools', 'test.py'),
                args=test_args,
-               cwd=api.path['checkout'])
+               cwd=api.path['checkout'],
+               env=b['env'])
     if b.get('checked', False):
       test_args.append('--checked')
       api.python('checked vm tests',
                  api.path['checkout'].join('tools', 'test.py'),
                  args=test_args,
-                 cwd=api.path['checkout'])
+                 cwd=api.path['checkout'],
+                 env=b['env'])
 
     # TODO(whesse): Add archive coredumps step from dart_factory.py.
     api.python('taskkill after testing',

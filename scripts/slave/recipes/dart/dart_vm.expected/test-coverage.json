@@ -57,7 +57,6 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "env": {
-      "DART_USE_GN": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -82,9 +81,6 @@
       "runtime"
     ],
     "cwd": "[START_DIR]/sdk",
-    "env": {
-      "DART_USE_GN": "1"
-    },
     "name": "build dart"
   },
   {
