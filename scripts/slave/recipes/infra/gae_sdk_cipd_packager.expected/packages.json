@@ -3,23 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cat",
-      "gs://appengine-sdks/featured/VERSION"
-    ],
-    "name": "gsutil Get Latest",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@ 1.2.3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
       "linux-amd64",
@@ -40,7 +23,25 @@
   },
   {
     "cmd": [],
-    "name": "Sync infra/gae_sdk/go/linux-386"
+    "name": "Sync go/linux-386"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://appengine-sdks/featured/go_appengine_sdk_linux_386-*.zip"
+    ],
+    "name": "Sync go/linux-386.gsutil Get Latest",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@ 10.2.3@@@"
+    ]
   },
   {
     "cmd": [
@@ -48,13 +49,13 @@
       "search",
       "infra/gae_sdk/go/linux-386",
       "--tag",
-      "gae_sdk_version:1.2.3",
+      "gae_sdk_version:10.2.3",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
       "/creds/service_accounts/service-account-cipd-builder.json"
     ],
-    "name": "Sync infra/gae_sdk/go/linux-386.cipd search infra/gae_sdk/go/linux-386 gae_sdk_version:1.2.3",
+    "name": "Sync go/linux-386.cipd search infra/gae_sdk/go/linux-386 gae_sdk_version:10.2.3",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -78,7 +79,7 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "name": "Sync infra/gae_sdk/go/linux-386.Synced",
+    "name": "Sync go/linux-386.Synced",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Package is up to date.@@@"
@@ -86,7 +87,25 @@
   },
   {
     "cmd": [],
-    "name": "Sync infra/gae_sdk/go/linux-amd64"
+    "name": "Sync go/linux-amd64"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://appengine-sdks/featured/go_appengine_sdk_linux_amd64-*.zip"
+    ],
+    "name": "Sync go/linux-amd64.gsutil Get Latest",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@ 10.2.3@@@"
+    ]
   },
   {
     "cmd": [
@@ -94,13 +113,13 @@
       "search",
       "infra/gae_sdk/go/linux-amd64",
       "--tag",
-      "gae_sdk_version:1.2.3",
+      "gae_sdk_version:10.2.3",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
       "/creds/service_accounts/service-account-cipd-builder.json"
     ],
-    "name": "Sync infra/gae_sdk/go/linux-amd64.cipd search infra/gae_sdk/go/linux-amd64 gae_sdk_version:1.2.3",
+    "name": "Sync go/linux-amd64.cipd search infra/gae_sdk/go/linux-amd64 gae_sdk_version:10.2.3",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -118,10 +137,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://appengine-sdks/featured/go_appengine_sdk_linux_amd64-1.2.3.zip",
-      "[TMP_BASE]/gae_sdk_tmp_2/go_appengine_sdk_linux_amd64-1.2.3.zip"
+      "gs://appengine-sdks/featured/go_appengine_sdk_linux_amd64-10.2.3.zip",
+      "[TMP_BASE]/gae_sdk_tmp_2/go_appengine_sdk_linux_amd64-10.2.3.zip"
     ],
-    "name": "Sync infra/gae_sdk/go/linux-amd64.gsutil Download go linux-amd64",
+    "name": "Sync go/linux-amd64.gsutil Download go linux-amd64",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -132,8 +151,8 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
-    "name": "Sync infra/gae_sdk/go/linux-amd64.Unzip go linux-amd64",
-    "stdin": "{\"output\": \"[TMP_BASE]/gae_sdk_tmp_2/unpack\", \"quiet\": true, \"zip_file\": \"[TMP_BASE]/gae_sdk_tmp_2/go_appengine_sdk_linux_amd64-1.2.3.zip\"}",
+    "name": "Sync go/linux-amd64.Unzip go linux-amd64",
+    "stdin": "{\"output\": \"[TMP_BASE]/gae_sdk_tmp_2/unpack\", \"quiet\": true, \"zip_file\": \"[TMP_BASE]/gae_sdk_tmp_2/go_appengine_sdk_linux_amd64-10.2.3.zip\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -153,7 +172,7 @@
       "--install-mode",
       "copy"
     ],
-    "name": "Sync infra/gae_sdk/go/linux-amd64.build linux-amd64",
+    "name": "Sync go/linux-amd64.build linux-amd64",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -177,9 +196,9 @@
       "--ref",
       "latest",
       "--tag",
-      "gae_sdk_version:1.2.3"
+      "gae_sdk_version:10.2.3"
     ],
-    "name": "Sync infra/gae_sdk/go/linux-amd64.register infra/gae_sdk/go/linux-amd64",
+    "name": "Sync go/linux-amd64.register infra/gae_sdk/go/linux-amd64",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -193,7 +212,25 @@
   },
   {
     "cmd": [],
-    "name": "Sync infra/gae_sdk/go/mac-amd64"
+    "name": "Sync go/mac-amd64"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://appengine-sdks/featured/go_appengine_sdk_darwin_amd64-*.zip"
+    ],
+    "name": "Sync go/mac-amd64.gsutil Get Latest",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@ 10.2.3@@@"
+    ]
   },
   {
     "cmd": [
@@ -201,13 +238,13 @@
       "search",
       "infra/gae_sdk/go/mac-amd64",
       "--tag",
-      "gae_sdk_version:1.2.3",
+      "gae_sdk_version:10.2.3",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
       "/creds/service_accounts/service-account-cipd-builder.json"
     ],
-    "name": "Sync infra/gae_sdk/go/mac-amd64.cipd search infra/gae_sdk/go/mac-amd64 gae_sdk_version:1.2.3",
+    "name": "Sync go/mac-amd64.cipd search infra/gae_sdk/go/mac-amd64 gae_sdk_version:10.2.3",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -231,7 +268,7 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "name": "Sync infra/gae_sdk/go/mac-amd64.Synced",
+    "name": "Sync go/mac-amd64.Synced",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Package is up to date.@@@"
@@ -239,7 +276,25 @@
   },
   {
     "cmd": [],
-    "name": "Sync infra/gae_sdk/python/all"
+    "name": "Sync python/all"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://appengine-sdks/featured/google_appengine_*.zip"
+    ],
+    "name": "Sync python/all.gsutil Get Latest",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@ 10.2.3@@@"
+    ]
   },
   {
     "cmd": [
@@ -247,13 +302,13 @@
       "search",
       "infra/gae_sdk/python/all",
       "--tag",
-      "gae_sdk_version:1.2.3",
+      "gae_sdk_version:10.2.3",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
       "/creds/service_accounts/service-account-cipd-builder.json"
     ],
-    "name": "Sync infra/gae_sdk/python/all.cipd search infra/gae_sdk/python/all gae_sdk_version:1.2.3",
+    "name": "Sync python/all.cipd search infra/gae_sdk/python/all gae_sdk_version:10.2.3",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -271,10 +326,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://appengine-sdks/featured/google_appengine_1.2.3.zip",
-      "[TMP_BASE]/gae_sdk_tmp_3/google_appengine_1.2.3.zip"
+      "gs://appengine-sdks/featured/google_appengine_10.2.3.zip",
+      "[TMP_BASE]/gae_sdk_tmp_3/google_appengine_10.2.3.zip"
     ],
-    "name": "Sync infra/gae_sdk/python/all.gsutil Download python all",
+    "name": "Sync python/all.gsutil Download python all",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -285,8 +340,8 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
-    "name": "Sync infra/gae_sdk/python/all.Unzip python all",
-    "stdin": "{\"output\": \"[TMP_BASE]/gae_sdk_tmp_3/unpack\", \"quiet\": true, \"zip_file\": \"[TMP_BASE]/gae_sdk_tmp_3/google_appengine_1.2.3.zip\"}",
+    "name": "Sync python/all.Unzip python all",
+    "stdin": "{\"output\": \"[TMP_BASE]/gae_sdk_tmp_3/unpack\", \"quiet\": true, \"zip_file\": \"[TMP_BASE]/gae_sdk_tmp_3/google_appengine_10.2.3.zip\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -306,7 +361,7 @@
       "--install-mode",
       "copy"
     ],
-    "name": "Sync infra/gae_sdk/python/all.build all",
+    "name": "Sync python/all.build all",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -330,9 +385,9 @@
       "--ref",
       "latest",
       "--tag",
-      "gae_sdk_version:1.2.3"
+      "gae_sdk_version:10.2.3"
     ],
-    "name": "Sync infra/gae_sdk/python/all.register infra/gae_sdk/python/all",
+    "name": "Sync python/all.register infra/gae_sdk/python/all",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

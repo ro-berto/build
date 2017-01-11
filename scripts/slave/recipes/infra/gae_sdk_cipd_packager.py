@@ -25,23 +25,24 @@ _CIPD_CREDENTIAL_PATH = ('/creds/service_accounts/'
 def RunSteps(api):
   pb = _PackageBuilder(api)
 
-  # Determine the current GAE SDK version.
-  try:
-    version = pb.latest_upstream_version()
-  except pb.VersionParseError as e:
-    api.python.failing_step('Version Fetch',
-        'Failed to fetch latest version: %s' % (e,))
-
   # Make sure the CIPD client is installed.
   api.cipd.install_client()
   api.cipd.set_service_account_credentials(_CIPD_CREDENTIAL_PATH)
 
   # Iterate over all of the GAE SDK packages and build any that don't exist.
-  version_tag = pb.version_tag(version)
   pkg_outdir = api.path.mkdtemp('gae_sdk_package')
   for plat, arch in api.gae_sdk.all_packages:
-    pkg_name = api.gae_sdk.package(plat, arch=arch)
-    with api.step.nest('Sync %s' % (pkg_name,)):
+    with api.step.nest('Sync %s/%s' % (plat, arch,)):
+      # Determine the current GAE SDK version.
+      try:
+        version = pb.latest_upstream_version(plat, arch)
+      except pb.VersionParseError as e:
+        api.step.active_result.presentation.step_summary_text = str(e)
+        api.step.active_result.presentation.status = api.step.FAILURE
+        continue
+
+      version_tag = pb.version_tag(version)
+      pkg_name = api.gae_sdk.package(plat, arch=arch)
       step = api.cipd.search(pkg_name, '%s:%s' % (version_tag))
       if len(step.json.output['result']) > 0:
         api.python.succeeding_step('Synced', 'Package is up to date.')
@@ -70,11 +71,6 @@ class _PackageBuilder(object):
   # The Google Storage GAE SDK bucket base. All SDK packages are stored in here
   # under a basename + version ZIP file.
   _GS_BUCKET_BASE = 'gs://appengine-sdks/featured'
-  # The GS path to the "LATEST" YAML file.
-  _GS_VERSION_YAML = '%s/VERSION' % (_GS_BUCKET_BASE,)
-
-  # Hacky regex for the "release" YAML variable.
-  _RE_RELEASE = re.compile(r'^release:\s+"([^"]+)"$')
 
   class VersionParseError(Exception):
     pass
@@ -89,26 +85,36 @@ class _PackageBuilder(object):
   def api(self):
     return self._api
 
-  def latest_upstream_version(self):
-    step_result = self.api.gsutil.cat(
-        self._GS_VERSION_YAML,
+  def latest_upstream_version(self, plat, arch):
+    _, base, _ = self.api.gae_sdk.package_spec(plat, arch)
+    prefix = '%s/%s' % (self._GS_BUCKET_BASE, base)
+
+    step_result = self.api.gsutil.list(
+        prefix + '*.zip',
         name='Get Latest',
         stdout=self.api.raw_io.output())
-    latest = self._parse_latest_yaml(step_result.stdout)
+
+    latest_version = None
+    for line in step_result.stdout.splitlines():
+      if not line.startswith(prefix):
+        continue
+
+      # gs://..../prefix-#.#.#.zip
+      vstr = line[len(prefix):].rstrip('.zip')
+      try:
+        version = tuple(int(d) for d in vstr.split('.'))
+      except ValueError:
+        version = ()
+      if len(version) == 3 and (not latest_version or latest_version < version):
+        latest_version = version
+
+    if not latest_version:
+      raise self.VersionParseError('No latest version for prefix: %s' % (
+          prefix,))
+
+    latest = '.'.join(str(d) for d in latest_version)
     step_result.presentation.step_text += ' %s' % (latest,)
     return latest
-
-  @classmethod
-  def _parse_latest_yaml(cls, text):
-    # Rather than import a YAML parser, we will specifically search for the
-    # string:
-    #
-    # release: "<version>"
-    for line in text.splitlines():
-      m = cls._RE_RELEASE.match(line)
-      if m:
-        return m.group(1)
-    raise cls.VersionParseError('Could not parse release version from YAML.')
 
   def download_and_unpack(self, plat, arch, version):
     # Get the package base for this OS.
@@ -137,28 +143,45 @@ class _PackageBuilder(object):
 
 
 def GenTests(api):
-  LATEST_YAML = '\n'.join((
-    'release: "1.2.3"',
-    'foo: bar',
-    'baz:',
-    '  - qux',
-  ))
+  BUCKET_LIST = '\n'.join(
+      (_PackageBuilder._GS_BUCKET_BASE + '/' + s)
+      for s in (
+        'go_appengine_sdk_linux_amd64-1.2.3.zip',
+        'go_appengine_sdk_linux_amd64-10.2.3.zip',
+        'go_appengine_sdk_linux_amd64-junk.zip',
+        'go_appengine_sdk_linux_amd64-99.99.zip',
+        'go_appengine_sdk_linux_386-10.2.3.zip',
+        'go_appengine_sdk_darwin_amd64-10.2.3.zip',
+        'google_appengine_10.2.3.zip',
+        'junk',
+      ))
 
-  def cipd_pkg(plat, pkg_base, exists):
-    pkg_name = 'infra/gae_sdk/%s/%s' % (plat, pkg_base)
-    cipd_step = 'cipd search %s gae_sdk_version:1.2.3' % (pkg_name,)
+  def latest(plat, arch):
+    return api.step_data('Sync %s/%s.gsutil Get Latest' % (plat, arch),
+          api.raw_io.stream_output(BUCKET_LIST, stream='stdout'))
+
+  def bad_latest(plat, arch):
+    return api.step_data('Sync %s/%s.gsutil Get Latest' % (plat, arch),
+          api.raw_io.stream_output('foobar', stream='stdout'))
+
+  def cipd_pkg(plat, arch, exists):
+    pkg_name = 'infra/gae_sdk/%s/%s' % (plat, arch)
+    cipd_step = 'cipd search %s gae_sdk_version:10.2.3' % (pkg_name,)
     instances = (2) if exists else (0)
-    return api.step_data('Sync %s.%s' % (pkg_name, cipd_step),
+    return api.step_data('Sync %s/%s.%s' % (plat, arch, cipd_step),
           api.cipd.example_search(pkg_name, instances=instances))
 
-  yield (api.test('packages') +
-      api.step_data('gsutil Get Latest',
-          api.raw_io.stream_output(LATEST_YAML, stream='stdout')) +
-      cipd_pkg('go', 'linux-amd64', False) +
-      cipd_pkg('go', 'linux-386', True) +
-      cipd_pkg('go', 'mac-amd64', True) +
-      cipd_pkg('python', 'all', False))
+  packages_test = api.test('packages')
+  bad_version_test = api.test('bad_version_list')
+  for plat, arch, exists in (
+      ('go', 'linux-amd64', False),
+      ('go', 'linux-386', True),
+      ('go', 'mac-amd64', True),
+      ('python', 'all', False)):
+    packages_test += (
+        latest(plat, arch) +
+        cipd_pkg(plat, arch, exists))
+    bad_version_test += bad_latest(plat, arch)
 
-  yield (api.test('bad_version_yaml') +
-      api.step_data('gsutil Get Latest',
-          api.raw_io.stream_output('', stream='stdout')))
+  yield packages_test
+  yield bad_version_test
