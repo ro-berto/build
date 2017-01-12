@@ -1421,7 +1421,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           V8TestingExtra_2,
           Test262,
           Test262Extra_2,
@@ -1444,8 +1444,8 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_5],
-        'variants': V8NoExhaustiveVariants(),
+        'tests': [V8Testing_4],
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
