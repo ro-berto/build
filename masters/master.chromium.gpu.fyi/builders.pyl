@@ -41,6 +41,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win7_rel_nvidia"],
       "builder_timeout_s": 10800,
       "category": "0Windows",
@@ -49,6 +51,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win7_dbg_nvidia"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -57,6 +61,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win10_rel_nvidia"],
       "builder_timeout_s": 10800,
       "category": "0Windows",
@@ -65,6 +71,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win10_dbg_nvidia"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -73,6 +81,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win7_rel_amd"],
       "builder_timeout_s": 10800,
       "category": "0Windows",
@@ -81,6 +91,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win7_dbg_amd"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -89,6 +101,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win_rel_nvidia_geforce_730"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -97,6 +111,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win10_rel_new_intel"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -105,6 +121,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win10_dbg_new_intel"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -113,6 +131,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win10_rel_intel_hd_530"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -121,6 +141,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win10_dbg_intel_hd_530"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -129,6 +151,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win7_rel_amd_r5_230"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -153,6 +177,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win_x64_rel_nvidia"],
       "builder_timeout_s": 10800,
       "category": "0Windows",
@@ -161,6 +187,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["win_x64_dbg_nvidia"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
@@ -194,6 +222,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["mac_10_10_rel_intel"],
       "builder_timeout_s": 7200,
       "category": "1Mac",
@@ -202,6 +232,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["mac_10_10_dbg_intel"],
       "builder_timeout_s": 7200,
       "category": "1Mac",
@@ -210,6 +242,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["mac_pro_rel_amd"],
       "builder_timeout_s": 21600,
       "category": "1Mac",
@@ -218,6 +252,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["mac_pro_dbg_amd"],
       "builder_timeout_s": 7200,
       "category": "1Mac",
@@ -226,6 +262,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["mac_retina_rel_nvidia"],
       "builder_timeout_s": 21600,
       "category": "1Mac",
@@ -234,6 +272,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["mac_retina_dbg_nvidia"],
       "builder_timeout_s": 21600,
       "category": "1Mac",
@@ -242,6 +282,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["mac_10_10_retina_rel_amd"],
       "builder_timeout_s": 7200,
       "category": "1Mac",
@@ -250,6 +292,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["mac_10_10_retina_dbg_amd"],
       "builder_timeout_s": 7200,
       "category": "1Mac",
@@ -258,6 +302,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["mac_retina_amd_10_11"],
       "builder_timeout_s": 7200,
       "category": "1Mac",
@@ -291,6 +337,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["linux_rel_nvidia"],
       "builder_timeout_s": 7200,
       "category": "2Linux",
@@ -299,6 +347,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["linux_dbg_nvidia"],
       "builder_timeout_s": 10800,
       "category": "2Linux",
@@ -307,6 +357,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["linux_rel_amd_r5_230"],
       "builder_timeout_s": 21600,
       "category": "2Linux",
@@ -315,6 +367,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["linux_rel_amd_r7_240"],
       "builder_timeout_s": 21600,
       "category": "2Linux",
@@ -323,6 +377,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["linux_rel_nvidia_geforce_730"],
       "builder_timeout_s": 21600,
       "category": "2Linux",
@@ -331,6 +387,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["linux_rel_new_intel"],
       "builder_timeout_s": 21600,
       "category": "2Linux",
@@ -339,6 +397,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["linux_dbg_new_intel"],
       "builder_timeout_s": 21600,
       "category": "2Linux",
@@ -347,6 +407,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["linux_rel_intel_hd_530"],
       "builder_timeout_s": 21600,
       "category": "2Linux",
@@ -355,6 +417,8 @@
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
       "slave_pools": ["linux_dbg_intel_hd_530"],
       "builder_timeout_s": 21600,
       "category": "2Linux",
