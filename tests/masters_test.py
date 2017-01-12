@@ -260,7 +260,6 @@ def main(argv):
       'master.client.nacl.ports': 'WebPorts',
       'master.client.nacl.sdk': 'NativeClientSDK',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
-      'master.client.offline_pages': 'ClientOffline_pages',
       'master.client.pdfium': 'Pdfium',
       'master.client.skia': 'Skia',
       'master.client.skia.android': 'SkiaAndroid',
