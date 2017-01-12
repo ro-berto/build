@@ -40,7 +40,7 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
   m_annotator = annotator_factory.AnnotatorFactory(active_master_cls)
 
   c = BuildmasterConfig
-  c['logCompressionLimit'] = False
+  c['logCompressionLimit'] = builders.get('logCompressionLimit', False)
   c['projectName'] = active_master_cls.project_name
   c['projectURL'] = Master.project_url
   c['buildbotURL'] = active_master_cls.buildbot_url
