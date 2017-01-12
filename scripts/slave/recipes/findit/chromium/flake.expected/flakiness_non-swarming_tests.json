@@ -823,6 +823,12 @@
       "@@@STEP_LOG_LINE@report@      \"gl_tests\": {@@@",
       "@@@STEP_LOG_LINE@report@        \"status\": \"passed\", @@@",
       "@@@STEP_LOG_LINE@report@        \"valid\": true, @@@",
+      "@@@STEP_LOG_LINE@report@        \"step_metadata\": {@@@",
+      "@@@STEP_LOG_LINE@report@          \"waterfall_mastername\": \"chromium.mac\", @@@",
+      "@@@STEP_LOG_LINE@report@          \"canonical_step_name\": \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@report@          \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@report@          \"waterfall_buildername\": \"Mac10.9 Tests\"@@@",
+      "@@@STEP_LOG_LINE@report@        }, @@@",
       "@@@STEP_LOG_LINE@report@        \"pass_fail_counts\": {@@@",
       "@@@STEP_LOG_LINE@report@          \"Test.One\": {@@@",
       "@@@STEP_LOG_LINE@report@            \"pass_count\": 1, @@@",
@@ -835,7 +841,7 @@
       "@@@STEP_LOG_LINE@report@  \"metadata\": {}@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
       "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {}, \"result\": {\"r0\": {\"gl_tests\": {\"pass_fail_counts\": {\"Test.One\": {\"fail_count\": 0, \"pass_count\": 1}}, \"status\": \"passed\", \"valid\": true}}}}@@@"
+      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {}, \"result\": {\"r0\": {\"gl_tests\": {\"pass_fail_counts\": {\"Test.One\": {\"fail_count\": 0, \"pass_count\": 1}}, \"status\": \"passed\", \"step_metadata\": {\"canonical_step_name\": \"gl_tests\", \"patched\": false, \"waterfall_buildername\": \"Mac10.9 Tests\", \"waterfall_mastername\": \"chromium.mac\"}, \"valid\": true}}}}@@@"
     ]
   },
   {

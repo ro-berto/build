@@ -247,10 +247,13 @@ class FinditApi(recipe_api.RecipeApi):
               'valid': True,
           }
 
-      for test in actual_tests_to_run:
         if hasattr(test, 'pass_fail_counts'):
           pass_fail_counts = test.pass_fail_counts(suffix=revision)
           results[test.name]['pass_fail_counts'] = pass_fail_counts
+
+        if hasattr(test, 'step_metadata'):
+          step_metadata = test.step_metadata(api, suffix=revision)
+          results[test.name]['step_metadata'] = step_metadata
 
       # Process skipped tests in two scenarios:
       # 1. Skipped by "analyze": tests are not affected by the given revision.

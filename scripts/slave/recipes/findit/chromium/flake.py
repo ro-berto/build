@@ -119,22 +119,24 @@ def GenTests(api):
 
   yield (
       api.test('flakiness_swarming_tests') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
+      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
       api.override_step_data(
           'test r0.read test spec (chromium.mac.json)',
           api.json.output({
               'Mac10.9 Tests': {
                   'gtest_tests': [
                       {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                          'test': 'browser_tests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                              'shards': 10},
                       },
                   ],
               },
           })
       ) +
       api.override_step_data(
-          'test r0.gl_tests (r0)',
+          'test r0.browser_tests (r0)',
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
       )
   )

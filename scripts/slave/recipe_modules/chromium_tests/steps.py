@@ -454,6 +454,14 @@ class LocalGTestTest(Test):
   def failures(self, api, suffix):
     return self._test_runs[suffix].test_utils.gtest_results.failures
 
+  def step_metadata(self, api, suffix):
+    return {
+        'waterfall_mastername': self._waterfall_mastername,
+        'waterfall_buildername': self._waterfall_buildername,
+        'canonical_step_name': self._name,
+        'patched': suffix == 'with patch',
+    }
+
 
 def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   """Gets the argument list for a dynamically generated test, as
@@ -942,7 +950,7 @@ class SwarmingTest(Test):
     return True
 
   def step_metadata(self, api, suffix):
-    meta_data = {
+    return {
       'waterfall_mastername': self._waterfall_mastername,
       'waterfall_buildername': self._waterfall_buildername,
       'canonical_step_name': self._name,
@@ -950,9 +958,8 @@ class SwarmingTest(Test):
           prefix=None, task=self._tasks[suffix]),
       'dimensions': self._tasks[suffix].dimensions,
       'patched': suffix == 'with patch',
-      'swarm_task_ids': self._tasks[suffix].get_task_ids()
+      'swarm_task_ids': self._tasks[suffix].get_task_ids(),
     }
-    return meta_data
 
 
 class SwarmingGTestTest(SwarmingTest):
@@ -1467,6 +1474,9 @@ class GTestTest(Test):
 
   def failures(self, api, suffix):
     return self._test.failures(api, suffix)
+
+  def step_metadata(self, api, suffix):
+    return self._test.step_metadata(api, suffix)
 
   @property
   def uses_swarming(self):

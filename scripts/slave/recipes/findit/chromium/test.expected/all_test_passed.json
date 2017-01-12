@@ -1037,6 +1037,22 @@
       "@@@STEP_LOG_LINE@report@      \"gl_tests\": {@@@",
       "@@@STEP_LOG_LINE@report@        \"status\": \"passed\", @@@",
       "@@@STEP_LOG_LINE@report@        \"valid\": true, @@@",
+      "@@@STEP_LOG_LINE@report@        \"step_metadata\": {@@@",
+      "@@@STEP_LOG_LINE@report@          \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@report@            \"gpu\": \"none\", @@@",
+      "@@@STEP_LOG_LINE@report@            \"os\": \"Windows-7-SP1\", @@@",
+      "@@@STEP_LOG_LINE@report@            \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@report@            \"pool\": \"Chrome\"@@@",
+      "@@@STEP_LOG_LINE@report@          }, @@@",
+      "@@@STEP_LOG_LINE@report@          \"waterfall_buildername\": \"Win7 Tests (1)\", @@@",
+      "@@@STEP_LOG_LINE@report@          \"full_step_name\": \"gl_tests (r1)\", @@@",
+      "@@@STEP_LOG_LINE@report@          \"waterfall_mastername\": \"chromium.win\", @@@",
+      "@@@STEP_LOG_LINE@report@          \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@report@          \"canonical_step_name\": \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@report@          \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@report@            \"10000\"@@@",
+      "@@@STEP_LOG_LINE@report@          ]@@@",
+      "@@@STEP_LOG_LINE@report@        }, @@@",
       "@@@STEP_LOG_LINE@report@        \"pass_fail_counts\": {@@@",
       "@@@STEP_LOG_LINE@report@          \"Test.Three\": {@@@",
       "@@@STEP_LOG_LINE@report@            \"pass_count\": 1, @@@",
@@ -1059,7 +1075,7 @@
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
       "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1}, \"result\": {\"r1\": {\"gl_tests\": {\"pass_fail_counts\": {\"Test.One\": {\"fail_count\": 0, \"pass_count\": 1}, \"Test.Three\": {\"fail_count\": 0, \"pass_count\": 1}, \"Test.Two\": {\"fail_count\": 0, \"pass_count\": 1}}, \"status\": \"passed\", \"valid\": true}}}}@@@"
+      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1}, \"result\": {\"r1\": {\"gl_tests\": {\"pass_fail_counts\": {\"Test.One\": {\"fail_count\": 0, \"pass_count\": 1}, \"Test.Three\": {\"fail_count\": 0, \"pass_count\": 1}, \"Test.Two\": {\"fail_count\": 0, \"pass_count\": 1}}, \"status\": \"passed\", \"step_metadata\": {\"canonical_step_name\": \"gl_tests\", \"dimensions\": {\"cpu\": \"x86-64\", \"gpu\": \"none\", \"os\": \"Windows-7-SP1\", \"pool\": \"Chrome\"}, \"full_step_name\": \"gl_tests (r1)\", \"patched\": false, \"swarm_task_ids\": [\"10000\"], \"waterfall_buildername\": \"Win7 Tests (1)\", \"waterfall_mastername\": \"chromium.win\"}, \"valid\": true}}}}@@@"
     ]
   },
   {
