@@ -29,6 +29,7 @@ DEPS = [
 ]
 
 from recipe_engine import config_types
+from recipe_engine import post_process
 
 def ignore_undumpable(obj):  # pragma: no cover
   try:
@@ -763,6 +764,48 @@ def GenTests(api):
             shards=2, isolated_script_passing=True, valid=True,
             output_chartjson=True, benchmark_enabled=False),
         retcode=0)
+  )
+
+  yield (
+    api.test(
+        'dynamic_swarmed_sharded_isolated_chartjson_test_missing_all_shards') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder',
+                           got_revision_cp='refs/heads/master@{#291141}'
+                           ) +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                        },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.override_step_data(
+      'telemetry_gpu_unittests',
+      api.test_utils.canned_isolated_script_output(
+        passing=True, is_win=False, swarming=True,
+        shards=1, isolated_script_passing=True, valid=True,
+        missing_shards=[1], output_chartjson=True),
+      retcode=1) +
+    api.post_process(
+        post_process.DoesNotRun, 'telemetry_gpu_unittests Dashboard Upload') +
+    api.post_process(
+        post_process.Filter('telemetry_gpu_unittests'))
   )
 
   yield (

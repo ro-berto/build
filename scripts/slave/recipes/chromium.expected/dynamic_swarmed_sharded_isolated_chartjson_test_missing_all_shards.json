@@ -1,0 +1,56 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/tools/swarming_client/swarming.py",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--json",
+      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "--task-output-dir",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "telemetry_gpu_unittests",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@list index out of range@@@",
+      "@@@STEP_LOG_END@no_results_exc@@@",
+      "@@@STEP_LOG_LINE@invalid_results_exc@KeyError('valid',)@@@",
+      "@@@STEP_LOG_END@invalid_results_exc@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"none\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-12.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"10100\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.linux\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  }
+]
