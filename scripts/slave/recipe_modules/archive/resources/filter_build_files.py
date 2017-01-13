@@ -59,6 +59,19 @@ EXCLUDED_TOP_LEVEL_DIRS = {
   ]),
 }
 
+# Subdirectories located anywhere inside of build_dir. For example, 'obj' will
+# filter out all subdirectories named 'obj' of any depth inside the build dir.
+EXCLUDED_SUBDIRS_ALL_PLATFORMS = [
+  'gen',
+  'obj',
+]
+
+EXCLUDED_SUBDIRS = {
+  'win': set(EXCLUDED_SUBDIRS_ALL_PLATFORMS + []),
+  'mac': set(EXCLUDED_SUBDIRS_ALL_PLATFORMS + []),
+  'linux': set(EXCLUDED_SUBDIRS_ALL_PLATFORMS + []),
+}
+
 # Basenames of the files to be excluded from the archive.
 EXCLUDED_FILES_ALL_PLATFORMS = [
   '.landmines',
@@ -101,7 +114,7 @@ EXCLUDED_FILES = {
 
 # Pattern for excluded files on specific platforms.
 EXCLUDED_FILES_PATTERN = {
-  'win': re.compile(r'^.+\.(o|a|obj|lib|pch|exp|ninja|stamp)$'),
+  'win': re.compile(r'^.+\.(o|a|d|obj|lib|pch|exp|ninja|stamp)$'),
   'mac': re.compile(r'^.+\.(a|ninja|stamp)$'),
   'linux': re.compile(r'^.+\.(o|a|d|ninja|stamp)$'),
 }
@@ -113,14 +126,17 @@ def walk_and_filter(dir_path, platform_name):
   for root, dirnames, filenames in os.walk(dir_path):
     relative_root = os.path.relpath(root, dir_path)
 
-    # Filter top-level subdirectories.
+    # Clear relative_root to avoid top-level paths looking like './path'.
     if relative_root == '.':
-      for d in list(dirnames):
-        if d in EXCLUDED_TOP_LEVEL_DIRS[platform_name]:
-          dirnames.remove(d)
-      # Clear relative_root to avoid top-level paths looking like './some_path'.
       relative_root = ''
 
+    # Filter out unneeded directories.
+    for d in list(dirnames):
+      if (not relative_root and d in EXCLUDED_TOP_LEVEL_DIRS[platform_name] or
+          d in EXCLUDED_SUBDIRS[platform_name]):
+        dirnames.remove(d)
+
+    # Filter out unneeded files.
     for filename in filenames:
       # Filter files by filename pattern.
       if EXCLUDED_FILES_PATTERN[platform_name].match(filename):
