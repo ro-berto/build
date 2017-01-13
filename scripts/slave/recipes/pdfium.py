@@ -205,7 +205,7 @@ def get_gold_params(api, build_config):
     'gitHash', api.m.properties['revision'],
     'master', api.m.properties['mastername'],
     'builder', builder_name,
-    'build_number', api.m.properties['buildnumber']
+    'build_number', str(api.m.properties['buildnumber'])
   ]
 
   # Add the trybot information if this is a trybot run.
