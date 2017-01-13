@@ -22,7 +22,7 @@ import sys
 # Excluded top level directories located exactly inside the build dir. Example:
 # 'obj' will filter out 'out/Release/obj' but not 'out/Release/x64/obj'.
 EXCLUDED_TOP_LEVEL_DIRS_ALL_PLATFORMS = [
-  'gen'
+  'gen',
   'obj',
 ]
 
