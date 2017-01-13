@@ -213,7 +213,7 @@ def main():
   if os.path.exists(args.json_file):
     result_html_string = result_details(args.json_file, args.cs_base_url,
                                         args.master_name)
-    print result_html_string
+    print result_html_string.encode('UTF-8')
   else:
     raise Exception('Json file of result details is not found.')
 
