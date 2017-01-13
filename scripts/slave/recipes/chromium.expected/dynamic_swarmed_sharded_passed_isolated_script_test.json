@@ -433,50 +433,9 @@
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@Error: Unable to upload chartjson results to perf dashboard@@@",
+      "@@@STEP_LOG_LINE@chartjson_info@TypeError(\"While assigning key 'cmd': Expected None to be of type (<type 'int'>, <type 'long'>, <type 'basestring'>, <class 'recipe_engine.config_types.Path'>, <class 'recipe_engine.util.Placeholder'>)\",)@@@",
       "@@@STEP_LOG_END@chartjson_info@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
-      "--results-file",
-      "{\"dummy\": \"dummy0\", \"enabled\": true, \"charts\": {\"entry2\": \"chart2\", \"entry3\": \"chart3\", \"entry1\": \"chart1\", \"entry4\": \"chart4\"}}",
-      "--output-json-file",
-      "/path/to/tmp/json",
-      "--perf-id",
-      "",
-      "--results-url",
-      "",
-      "--name",
-      "telemetry_gpu_unittests",
-      "--buildername",
-      "Linux Tests",
-      "--buildnumber",
-      "1234",
-      "--build-dir",
-      "[START_DIR]/src/out",
-      "--got-revision-cp",
-      "refs/heads/master@{#291141}",
-      "--version",
-      "v23523",
-      "--git-revision",
-      "asdfawe2342",
-      "--got-webrtc-revision",
-      "asdfas",
-      "--got-v8-revision",
-      "asdfadsfa4e3w"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "telemetry_gpu_unittests Dashboard Upload",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
@@ -494,7 +453,9 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.linux\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@"
+      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
     ]
   },
   {
