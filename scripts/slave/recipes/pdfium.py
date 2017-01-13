@@ -49,10 +49,11 @@ def _CheckoutSteps(api, target_os):
   api.gclient.set_config('pdfium')
   if target_os:
     api.gclient.c.target_os = {target_os}
-  api.bot_update.ensure_checkout()
+  api.gclient.c.got_revision_mapping['pdfium'] = 'got_revision'
+  update_step = api.bot_update.ensure_checkout()
 
   api.gclient.runhooks()
-
+  return update_step.presentation.properties['got_revision']
 
 def _OutPath(memory_tool, skia, xfa, v8, clang, rel):
   out_dir = 'release' if rel else 'debug'
@@ -124,7 +125,7 @@ def _BuildSteps(api, clang, out_dir):
       ninja_log_compiler='clang' if clang else 'unknown')
 
 # _RunTests runs the tests and uploads the results to Gold.
-def _RunTests(api, memory_tool, v8, out_dir, build_config):
+def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
   env = {}
   if memory_tool == 'asan':
     options = ['detect_leaks=1',
@@ -163,7 +164,7 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config):
 
   # Add the arguments needed to upload the resulting images.
   gold_output_dir = api.path['checkout'].join('out', out_dir, 'gold_output')
-  gold_props, gold_key = get_gold_params(api, build_config)
+  gold_props, gold_key = get_gold_params(api, build_config, revision)
   script_args.extend([
     '--gold_properties', gold_props,
     '--gold_key', gold_key,
@@ -178,7 +179,7 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config):
 
 def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, skip_test,
              target_os):
-  _CheckoutSteps(api, target_os)
+  revision = _CheckoutSteps(api, target_os)
 
   out_dir = _OutPath(memory_tool, skia, xfa, v8, clang, rel)
 
@@ -191,9 +192,9 @@ def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, skip_test,
     return
 
   with api.step.defer_results():
-    _RunTests(api, memory_tool, v8, out_dir, build_config)
+    _RunTests(api, memory_tool, v8, out_dir, build_config, revision)
 
-def get_gold_params(api, build_config):
+def get_gold_params(api, build_config, revision):
   """Get the parameters to be passed to the testing call to
   generate the dm.json file expected by Gold and to upload
   the generated images. Returns:
@@ -202,7 +203,7 @@ def get_gold_params(api, build_config):
   """
   builder_name = api.m.properties['buildername'].strip()
   props = [
-    'gitHash', api.m.properties['revision'],
+    'gitHash', revision,
     'master', api.m.properties['mastername'],
     'builder', builder_name,
     'build_number', str(api.m.properties['buildnumber'])
