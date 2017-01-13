@@ -9,69 +9,6 @@ import manual_bisect_files
 from recipe_engine import recipe_api
 
 
-# TODO(machenbach): Chromium specific data should move out of the archive
-# module, into e.g. the chromium test configs.
-EXCLUDED_FILES_ALL_PLATFORMS = [
-  '.landmines',
-  '.ninja_deps',
-  '.ninja_log',
-  'gen',
-  'obj',
-]
-
-# Excluded files on specific platforms.
-EXCLUDED_FILES = {
-  'win': set(EXCLUDED_FILES_ALL_PLATFORMS + [
-    'cfinstaller_archive',
-    'installer_archive',
-    'lib',
-  ]),
-  'mac': set(EXCLUDED_FILES_ALL_PLATFORMS + [
-    '.deps',
-    'App Shim Socket',
-    # We copy the framework into the app bundle, we don't need the second
-    # copy outside the app.
-    # TODO(mark): Since r28431, the copy in the build directory is actually
-    # used by tests.  Putting two copies in the .zip isn't great, so maybe
-    # we can find another workaround.
-    # 'Chromium Framework.framework',
-    # 'Google Chrome Framework.framework',
-    # We copy the Helper into the app bundle, we don't need the second
-    # copy outside the app.
-    'Chromium Helper.app',
-    'Google Chrome Helper.app',
-    # We don't need the arm bits v8 builds.
-    'd8_arm',
-    'v8_shell_arm',
-    'lib',
-    'obj.host',
-    'obj.target',
-    # pdfsqueeze is a build helper, no need to copy it to testers.
-    'pdfsqueeze',
-  ]),
-  'linux': set(EXCLUDED_FILES_ALL_PLATFORMS + [
-    '.deps',
-    # Scons build cruft.
-    '.sconsign.dblite',
-    # Intermediate build directories (full of .o, .d, etc.).
-    'appcache',
-    'glue',
-    'lib.host',
-    # Build helper, not needed on testers.
-    'mksnapshot',
-    'obj.host',
-    'obj.target',
-    'src',
-  ]),
-}
-
-# Pattern for excluded files on specific platforms.
-EXCLUDED_FILES_PATTERN = {
-  'win': re.compile(r'^.+\.(obj|lib|pch|exp)$'),
-  'mac': re.compile(r'^.+\.(a)$'),
-  'linux': re.compile(r'^.+\.(o|a|d)$'),
-}
-
 # Regular expression to identify a Git hash.
 GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
 # The Google Storage metadata key for the full commit position.
@@ -162,17 +99,6 @@ class ArchiveApi(recipe_api.RecipeApi):
       infra_step=True,
       **kwargs
     )
-
-  def _cf_should_package_file(self, filename):
-    """Returns true if the file should be a part of the resulting archive."""
-    if EXCLUDED_FILES_PATTERN[self.m.platform.name].match(filename):
-      return False
-
-    # Skip files that we don't care about. Mostly directories.
-    if filename in EXCLUDED_FILES[self.m.platform.name]:
-      return False
-
-    return True
 
   def _get_commit_position(self, update_properties, primary_project):
     """Returns the commit position of the project (or the specified primary
@@ -292,8 +218,20 @@ class ArchiveApi(recipe_api.RecipeApi):
         pass
 
     # Build the list of files to archive.
-    zip_file_list = [f for f in self.m.file.listdir('build_dir', build_dir)
-                     if self._cf_should_package_file(f)]
+    filter_result = self.m.python(
+        'filter build_dir',
+        self.resource('filter_build_files.py'),
+        [
+          '--dir', build_dir,
+          '--platform', self.m.platform.name,
+          '--output', self.m.json.output(),
+        ],
+        infra_step=True,
+        step_test_data=lambda: self.m.json.test_api.output(['file1', 'file2']),
+        **kwargs
+    )
+
+    zip_file_list = filter_result.json.output
 
     # Use the legacy platform name as Clusterfuzz has some expectations on
     # this (it only affects Windows, where it replace 'win' by 'win32').

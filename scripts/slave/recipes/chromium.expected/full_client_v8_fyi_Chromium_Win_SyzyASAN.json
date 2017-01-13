@@ -311,23 +311,21 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "RECIPE_MODULE[build::archive]\\resources\\filter_build_files.py",
+      "--dir",
       "[BUILDER_CACHE]\\Chromium_Win_SyzyASAN\\src\\out\\Release",
+      "--platform",
+      "win",
+      "--output",
       "/path/to/tmp/json"
     ],
-    "name": "listdir build_dir",
+    "name": "filter build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"file 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"file 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file2\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -337,7 +335,7 @@
       "RECIPE_MODULE[build::archive]\\resources\\zip_archive.py",
       "[START_DIR]\\chrome_staging",
       "syzyasan-win32-release-v8-component-43426",
-      "[\"file 1\", \"file 2\"]",
+      "[\"file1\", \"file2\"]",
       "[BUILDER_CACHE]\\Chromium_Win_SyzyASAN\\src\\out\\Release"
     ],
     "name": "zipping"

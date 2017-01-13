@@ -62,7 +62,7 @@ def GenTests(api):
           gs_acl='public-read',
           archive_subdir_suffix='subdir',
       ) +
-      api.override_step_data('listdir build_dir', api.json.output(build_files))
+      api.override_step_data('filter build_dir', api.json.output(build_files))
     )
 
   # An svn project with a separate git property.
@@ -76,7 +76,7 @@ def GenTests(api):
     api.platform('linux', 64) +
     api.properties(update_properties=update_properties) +
     api.override_step_data(
-        'listdir build_dir', api.json.output(['chrome']))
+        'filter build_dir', api.json.output(['chrome']))
   )
 
   # An svn project without git hash.
@@ -89,7 +89,7 @@ def GenTests(api):
     api.platform('linux', 64) +
     api.properties(update_properties=update_properties) +
     api.override_step_data(
-        'listdir build_dir', api.json.output(['chrome']))
+        'filter build_dir', api.json.output(['chrome']))
   )
 
   # A component build with git.
@@ -106,7 +106,7 @@ def GenTests(api):
         primary_project='x10',
     ) +
     api.override_step_data(
-        'listdir build_dir', api.json.output(['chrome', 'resources']))
+        'filter build_dir', api.json.output(['chrome', 'resources']))
   )
 
   # A component on svn with a separate git property.
@@ -124,7 +124,7 @@ def GenTests(api):
         primary_project='x10',
     ) +
     api.override_step_data(
-        'listdir build_dir', api.json.output(['chrome']))
+        'filter build_dir', api.json.output(['chrome']))
   )
 
   update_properties = {
@@ -139,7 +139,7 @@ def GenTests(api):
       no_llvm=True,
     ) +
     api.override_step_data(
-      'listdir build_dir', api.json.output(['chrome']))
+      'filter build_dir', api.json.output(['chrome']))
   )
 
   yield(

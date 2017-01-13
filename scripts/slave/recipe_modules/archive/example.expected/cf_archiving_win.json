@@ -3,11 +3,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "RECIPE_MODULE[build::archive]\\resources\\filter_build_files.py",
+      "--dir",
       "[START_DIR]\\src\\out\\Release",
+      "--platform",
+      "win",
+      "--output",
       "/path/to/tmp/json"
     ],
-    "name": "listdir build_dir",
+    "name": "filter build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"chrome\", @@@",
@@ -15,13 +19,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"lib\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"file.obj\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -31,7 +29,7 @@
       "RECIPE_MODULE[build::archive]\\resources\\zip_archive.py",
       "[TMP_BASE]\\chrome_staging_tmp_1",
       "chrome-asan-win32-release-refs_heads_B1-123456",
-      "[\"chrome\", \"icu.dat\"]",
+      "[\"chrome\", \"icu.dat\", \"lib\", \"file.obj\"]",
       "[START_DIR]\\src\\out\\Release"
     ],
     "name": "zipping"
