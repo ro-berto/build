@@ -26,6 +26,8 @@ def linux_builder_steps(api):
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
     soln.custom_deps = {"drmemory/dynamorio":
                         "https://github.com/DynamoRIO/dynamorio.git",
+                        "drmemory/third_party/googletest":
+                        "https://github.com/DynamoRIO/googletest.git",
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
@@ -52,6 +54,8 @@ def linux_lucid_x64_drm_steps(api):
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
     soln.custom_deps = {"drmemory/dynamorio":
                         "https://github.com/DynamoRIO/dynamorio.git",
+                        "drmemory/third_party/googletest":
+                        "https://github.com/DynamoRIO/googletest.git",
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
@@ -94,6 +98,8 @@ def win_8_x64_drm_steps(api):
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
     soln.custom_deps = {"drmemory/dynamorio":
                         "https://github.com/DynamoRIO/dynamorio.git",
+                        "drmemory/third_party/googletest":
+                        "https://github.com/DynamoRIO/googletest.git",
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
@@ -241,6 +247,8 @@ def win_7_x64_drm_steps(api):
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
     soln.custom_deps = {"drmemory/dynamorio":
                         "https://github.com/DynamoRIO/dynamorio.git",
+                        "drmemory/third_party/googletest":
+                        "https://github.com/DynamoRIO/googletest.git",
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
@@ -388,6 +396,8 @@ def win_builder_steps(api):
     soln.url = "https://github.com/DynamoRIO/drmemory.git"
     soln.custom_deps = {"drmemory/dynamorio":
                         "https://github.com/DynamoRIO/dynamorio.git",
+                        "drmemory/third_party/googletest":
+                        "https://github.com/DynamoRIO/googletest.git",
                         "tools/buildbot":
                         "https://github.com/DynamoRIO/buildbot.git"}
     api.gclient.c = src_cfg
