@@ -135,7 +135,7 @@ results-without_patch
          api.step_data('Performance Test (With Patch) 1 of 1',
                        stdout=api.raw_io.output(str(results_with_patch))) +
          api.step_data('Post bisect results',
-                       stdout=api.json.output({'status_code': 200})))
+                       api.json.output({'status_code': 200})))
   perf_try_json = {
       'command': 'src/tools/perf/run_benchmark -v --browser=release sunspider',
       'max_time_minutes': '25',
@@ -171,7 +171,7 @@ results-without_patch
          api.step_data('Performance Test (With Patch) 1 of 1',
                        stdout=api.raw_io.output(str(results_with_patch))) +
          api.step_data('Post bisect results',
-                       stdout=api.json.output({'status_code': 200})))
+                       api.json.output({'status_code': 200})))
   config_json.update({'metric': 'dummy/dummy'})
 
   yield (api.test('basic_perf_tryjob_with_metric') + api.properties.tryserver(
@@ -200,7 +200,7 @@ results-without_patch
          api.step_data('Performance Test (With Patch) 1 of 1',
                        stdout=api.raw_io.output(results_with_patch)) +
          api.step_data('Post bisect results',
-                       stdout=api.json.output({'status_code': 200})))
+                       api.json.output({'status_code': 200})))
 
   config_valueset = config_json
   config_valueset['command'] += ' --output_format=valueset'
@@ -233,7 +233,7 @@ results-without_patch
       + api.step_data('Performance Test (With Patch) 1 of 1',
                       stdout=api.raw_io.output(results_with_patch))
       + api.step_data('Post bisect results',
-                      stdout=api.json.output({'status_code': 200})))
+                      api.json.output({'status_code': 200})))
 
 
 
@@ -297,7 +297,7 @@ results-without_patch
               'Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
               stdout=api.raw_io.output(results_with_patch)) +
       api.step_data('Post bisect results',
-                    stdout=api.json.output({'status_code': 200})))
+                    api.json.output({'status_code': 200})))
 
   config_json = {
       'max_time_minutes': '25',

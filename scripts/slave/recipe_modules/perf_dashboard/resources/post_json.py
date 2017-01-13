@@ -20,7 +20,13 @@ import requests
 
 def main():
   args = parse_arguments()
-  data = json.load(sys.stdin)
+
+  if args.input:
+    with open(args.input) as f:
+      data = json.load(f)
+  else:
+    data = json.load(sys.stdin)
+
   response = requests.post(args.url, data=data)
   print_response(response, args.output)
 
@@ -28,6 +34,8 @@ def main():
 def parse_arguments():
   parser = argparse.ArgumentParser()
   parser.add_argument('url', help='URL to post to.')
+  parser.add_argument('-i', '--input',
+                      help='Input file for JSON to pass to server')
   parser.add_argument('-o', '--output',
                       help='Output file for response in JSON format.')
   return parser.parse_args()

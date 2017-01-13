@@ -95,10 +95,10 @@ class PerfDashboardApi(recipe_api.RecipeApi):
           turns orange.
     """
     step_result = self.m.python(
-        name=name, script=self.resource('post_json.py'), args=[url],
-        stdin=self.m.json.input(data), stdout=self.m.json.output())
+        name=name, script=self.resource('post_json.py'), args=[
+            url, '-i', self.m.json.input(data), '-o', self.m.json.output()])
 
-    response = step_result.stdout
+    response = step_result.json.output
     if not response or response['status_code'] != 200:  # pragma: no cover
       error = response['status_code'] if response else 'None'
       reason = ('Failed to post to Perf Dashboard. '

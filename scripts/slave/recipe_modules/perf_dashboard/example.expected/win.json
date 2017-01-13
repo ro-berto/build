@@ -4,11 +4,13 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
-      "https://chromeperf.appspot.com/add_point"
+      "https://chromeperf.appspot.com/add_point",
+      "-i",
+      "{\"data\": \"[{\\\"buildername\\\": \\\"multivm-windows-perf-be\\\", \\\"masterid\\\": \\\"client.dart.fyi\\\", \\\"test\\\": \\\"sunspider/string-unpack-code/ref\\\", \\\"supplemental_columns\\\": {\\\"r_webkit_rev\\\": \\\"167808\\\"}, \\\"bot\\\": \\\"multivm-windows-perf-be\\\", \\\"value\\\": \\\"18.5\\\", \\\"buildnumber\\\": 75, \\\"master\\\": \\\"client.dart.fyi\\\", \\\"error\\\": \\\"0.5\\\", \\\"units\\\": \\\"ms\\\", \\\"revision\\\": 33241}, {\\\"buildername\\\": \\\"multivm-windows-perf-be\\\", \\\"masterid\\\": \\\"client.dart.fyi\\\", \\\"test\\\": \\\"sunspider/string-unpack-code\\\", \\\"supplemental_columns\\\": {\\\"r_webkit_rev\\\": \\\"167808\\\"}, \\\"bot\\\": \\\"multivm-windows-perf-be\\\", \\\"value\\\": \\\"18.4\\\", \\\"buildnumber\\\": 75, \\\"master\\\": \\\"client.dart.fyi\\\", \\\"error\\\": \\\"0.4898\\\", \\\"units\\\": \\\"ms\\\", \\\"revision\\\": 33241}]\"}",
+      "-o",
+      "/path/to/tmp/json"
     ],
     "name": "perf dashboard post",
-    "stdin": "{\"data\": \"[{\\\"buildername\\\": \\\"multivm-windows-perf-be\\\", \\\"masterid\\\": \\\"client.dart.fyi\\\", \\\"test\\\": \\\"sunspider/string-unpack-code/ref\\\", \\\"supplemental_columns\\\": {\\\"r_webkit_rev\\\": \\\"167808\\\"}, \\\"bot\\\": \\\"multivm-windows-perf-be\\\", \\\"value\\\": \\\"18.5\\\", \\\"buildnumber\\\": 75, \\\"master\\\": \\\"client.dart.fyi\\\", \\\"error\\\": \\\"0.5\\\", \\\"units\\\": \\\"ms\\\", \\\"revision\\\": 33241}, {\\\"buildername\\\": \\\"multivm-windows-perf-be\\\", \\\"masterid\\\": \\\"client.dart.fyi\\\", \\\"test\\\": \\\"sunspider/string-unpack-code\\\", \\\"supplemental_columns\\\": {\\\"r_webkit_rev\\\": \\\"167808\\\"}, \\\"bot\\\": \\\"multivm-windows-perf-be\\\", \\\"value\\\": \\\"18.4\\\", \\\"buildnumber\\\": 75, \\\"master\\\": \\\"client.dart.fyi\\\", \\\"error\\\": \\\"0.4898\\\", \\\"units\\\": \\\"ms\\\", \\\"revision\\\": 33241}]\"}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
@@ -22,11 +24,13 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
-      "https://chromeperf.appspot.com/post_bisect_results"
+      "https://chromeperf.appspot.com/post_bisect_results",
+      "-i",
+      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"try_job_id\\\": 1}\"}",
+      "-o",
+      "/path/to/tmp/json"
     ],
     "name": "Post bisect results",
-    "stdin": "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"try_job_id\\\": 1}\"}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"post_data\": {@@@",

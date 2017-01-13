@@ -63,4 +63,4 @@ def GenTests(api):
                           buildnumber=75,
                           mastername='client.dart.fyi') +
            api.step_data('Post bisect results',
-                         stdout=api.json.output(bisect_response)))
+                         api.json.output(bisect_response)))

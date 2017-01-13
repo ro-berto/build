@@ -596,7 +596,7 @@ results-without_patch
     api.override_step_data('device_status (2)',
         api.json.output(two_devices)) +
     api.step_data('Post bisect results',
-        stdout=api.json.output({'status_code': 200})) +
+        api.json.output({'status_code': 200})) +
     api.auto_bisect([
           {
               'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
@@ -654,7 +654,7 @@ results-without_patch
         api.json.output(working_device)) +
     api.step_data('Debug Info', retcode=1) +
     api.step_data('Post bisect results',
-        stdout=api.json.output({'status_code': 200})) +
+        api.json.output({'status_code': 200})) +
     api.override_step_data('device_status (3)',
         api.json.output(working_device)) +
     api.auto_bisect([
@@ -703,7 +703,7 @@ results-without_patch
     api.override_step_data('device_status (3)',
         api.json.output(working_device)) +
     api.step_data('Post bisect results',
-        stdout=api.json.output({'status_code': 200})) +
+        api.json.output({'status_code': 200})) +
     api.auto_bisect([
           {
               'hash': '0000000000000000000000000000000000000000',

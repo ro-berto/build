@@ -549,11 +549,13 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://pinpoint-dot-chromeperf.appspot.com/isolated"
+      "https://pinpoint-dot-chromeperf.appspot.com/isolated",
+      "-i",
+      "{\"builder_name\": \"Linux Builder\", \"git_hash\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"isolate_map\": \"{\\\"browser_tests\\\": \\\"[dummy hash for browser_tests]\\\"}\"}",
+      "-o",
+      "/path/to/tmp/json"
     ],
     "name": "pinpoint isolate upload",
-    "stdin": "{\"builder_name\": \"Linux Builder\", \"git_hash\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"isolate_map\": \"{\\\"browser_tests\\\": \\\"[dummy hash for browser_tests]\\\"}\"}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",

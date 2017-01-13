@@ -1207,12 +1207,14 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://chromeperf.appspot.com/post_bisect_results"
+      "https://chromeperf.appspot.com/post_bisect_results",
+      "-i",
+      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"warnings\\\": [\\\"No values from test with patch, or none from test without patch.\\\\n Output with patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\\\n\\\\n\\\\nOutput without patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\\\n\\\"], \\\"metric\\\": null, \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/android_s5_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\\\", \\\"bisect_bot\\\": \\\"android_s5_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\\"}\"}",
+      "-o",
+      "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_s5_perf_bisect",
     "name": "Post bisect results",
-    "stdin": "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"warnings\\\": [\\\"No values from test with patch, or none from test without patch.\\\\n Output with patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\\\n\\\\n\\\\nOutput without patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\\\n\\\"], \\\"metric\\\": null, \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/android_s5_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\\\", \\\"bisect_bot\\\": \\\"android_s5_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\\"}\"}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
