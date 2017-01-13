@@ -49,12 +49,11 @@
   {
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/drmemory/build_env.bat",
-      "ctest",
-      "--timeout",
-      "120",
-      "-VV",
-      "-S",
-      "dynamorio/suite/runsuite.cmake,nightly;long;site=X64.Windows7.VS2010.BuildBot"
+      "perl",
+      "dynamorio/suite/runsuite_wrapper.pl",
+      "nightly",
+      "long",
+      "site=X64.Windows7.VS2010.BuildBot"
     ],
     "cwd": "[START_DIR]",
     "env": {

@@ -22,8 +22,8 @@ def linux_dr_steps(api):
   result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # pre-commit suite step
-  api.step("pre-commit suite", ['ctest', '--timeout', '120', '-VV', '-S',
-    api.path["checkout"].join("suite", "runsuite.cmake")],
+  api.step("pre-commit suite", ['perl',
+    api.path["checkout"].join("suite", "runsuite_wrapper.pl")],
     cwd=api.path["start_dir"], ok_ret="all")
   # upload dynamorio docs step
   api.gsutil.upload(api.path["start_dir"].join("install", "docs", "html"),
@@ -48,8 +48,8 @@ def win_7_dr_steps(api):
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # build_env step
   api.step("pre-commit suite", [api.package_repo_resource("scripts", "slave",
-    "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
-    api.path["checkout"].join("suite", "runsuite.cmake")],
+    "drmemory", "build_env.bat"), 'perl',
+    api.path["checkout"].join("suite", "runsuite_wrapper.pl")],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
       "bot_tools")}, cwd=api.path["start_dir"])
 
@@ -95,8 +95,8 @@ def win_8_dr_steps(api):
   # build_env step
   api.step("pre-commit suite",
       [api.package_repo_resource("scripts", "slave", "drmemory", "build_env.bat"),
-        'ctest', '--timeout', '120', '-VV', '-S',
-        api.path["checkout"].join("suite", "runsuite.cmake")],
+        'perl',
+        api.path["checkout"].join("suite", "runsuite_wrapper.pl")],
       env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
         "bot_tools")}, cwd=api.path["start_dir"])
 
@@ -119,9 +119,9 @@ def win_7_dr_nightly_steps(api):
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # dynamorio win nightly suite step
   api.step("nightly suite", [api.package_repo_resource("scripts", "slave",
-    "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
-    'dynamorio/suite/runsuite.cmake,nightly;long;'+\
-        'site=X64.Windows7.VS2010.BuildBot'],
+    "drmemory", "build_env.bat"), 'perl',
+    'dynamorio/suite/runsuite_wrapper.pl', 'nightly', 'long',
+    'site=X64.Windows7.VS2010.BuildBot'],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
       "bot_tools")}, cwd=api.path["start_dir"])
 
@@ -144,9 +144,9 @@ def win_8_dr_nightly_steps(api):
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # dynamorio win nightly suite step
   api.step("nightly suite", [api.package_repo_resource("scripts", "slave",
-    "drmemory", "build_env.bat"), 'ctest', '--timeout', '120', '-VV', '-S',
-    'dynamorio/suite/runsuite.cmake,nightly;long;'+\
-        'site=X64.Windows8.VS2010.BuildBot'],
+    "drmemory", "build_env.bat"), 'perl',
+    'dynamorio/suite/runsuite_wrapper.pl', 'nightly', 'long',
+    'site=X64.Windows8.VS2010.BuildBot'],
     env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
       "bot_tools")}, cwd=api.path["start_dir"])
 
@@ -193,9 +193,9 @@ def linux_dr_nightly_steps(api):
   result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # dynamorio nightly suite step
-  api.step("nightly suite", ["ctest", "--timeout", "120", "-VV", "-S",
-    str(api.path["checkout"].join("suite", "runsuite.cmake")) +
-    ",nightly;long;site=X64.Linux.VS2010.BuildBot"])
+  api.step("nightly suite", ["perl",
+    str(api.path["checkout"].join("suite", "runsuite_wrapper.pl")),
+    "nightly", "long", "site=X64.Linux.VS2010.BuildBot"])
 
 
 dispatch_directory = {

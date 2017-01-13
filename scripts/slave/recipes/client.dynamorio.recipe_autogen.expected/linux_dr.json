@@ -41,12 +41,8 @@
   },
   {
     "cmd": [
-      "ctest",
-      "--timeout",
-      "120",
-      "-VV",
-      "-S",
-      "[START_DIR]/dynamorio/suite/runsuite.cmake"
+      "perl",
+      "[START_DIR]/dynamorio/suite/runsuite_wrapper.pl"
     ],
     "cwd": "[START_DIR]",
     "name": "pre-commit suite"

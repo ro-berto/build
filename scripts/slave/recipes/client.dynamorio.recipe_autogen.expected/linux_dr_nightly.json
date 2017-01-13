@@ -41,12 +41,11 @@
   },
   {
     "cmd": [
-      "ctest",
-      "--timeout",
-      "120",
-      "-VV",
-      "-S",
-      "[START_DIR]/dynamorio/suite/runsuite.cmake,nightly;long;site=X64.Linux.VS2010.BuildBot"
+      "perl",
+      "[START_DIR]/dynamorio/suite/runsuite_wrapper.pl",
+      "nightly",
+      "long",
+      "site=X64.Linux.VS2010.BuildBot"
     ],
     "name": "nightly suite"
   },

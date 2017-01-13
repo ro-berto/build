@@ -49,12 +49,8 @@
   {
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/drmemory/build_env.bat",
-      "ctest",
-      "--timeout",
-      "120",
-      "-VV",
-      "-S",
-      "[START_DIR]/dynamorio/suite/runsuite.cmake"
+      "perl",
+      "[START_DIR]/dynamorio/suite/runsuite_wrapper.pl"
     ],
     "cwd": "[START_DIR]",
     "env": {
