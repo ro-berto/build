@@ -5,13 +5,19 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]",
       "--patch_root",
       "pdfium",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
       "[CACHE]/git",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -117,8 +123,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/pdfium",
       "gen",
-      "//out/debug_v8",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/cipd/goma\" use_sysroot=false target_os=\"android\""
+      "//out/debug_xfa_v8_asan",
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/cipd/goma\" use_sysroot=false is_asan=true is_lsan=true"
     ],
     "cwd": "[START_DIR]/pdfium",
     "name": "gn gen"
@@ -178,7 +184,7 @@
     "cmd": [
       "ninja",
       "-C",
-      "[START_DIR]/pdfium/out/debug_v8",
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan",
       "-j",
       "50"
     ],
@@ -269,19 +275,19 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[START_DIR]/pdfium/out/debug_v8",
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan",
       "--ninja-log-command",
-      "['ninja', '-C', Path('checkout', 'out','debug_v8'), '-j', 50]",
+      "['ninja', '-C', Path('checkout', 'out','debug_xfa_v8_asan'), '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
       "unknown",
       "--buildbot-buildername",
-      "android",
+      "linux_xfa_asan_lsan",
       "--buildbot-mastername",
-      "client.pdfium",
+      "tryserver.client.pdfium",
       "--buildbot-slavename",
-      "test_slave"
+      "TestSlavename"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -300,6 +306,121 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan/pdfium_unittests"
+    ],
+    "cwd": "[START_DIR]/pdfium",
+    "env": {
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "unittests"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan/pdfium_embeddertests"
+    ],
+    "cwd": "[START_DIR]/pdfium",
+    "env": {
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "embeddertests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/pdfium/testing/tools/run_javascript_tests.py",
+      "--build-dir",
+      "out/debug_xfa_v8_asan"
+    ],
+    "cwd": "[START_DIR]/pdfium",
+    "env": {
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "javascript tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/pdfium/testing/tools/run_pixel_tests.py",
+      "--build-dir",
+      "out/debug_xfa_v8_asan"
+    ],
+    "cwd": "[START_DIR]/pdfium",
+    "env": {
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "pixel tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/pdfium/testing/tools/run_corpus_tests.py",
+      "--build-dir",
+      "out/debug_xfa_v8_asan",
+      "--gold_properties",
+      "gitHash abc123 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 1234 patchset 5 patch_storage gerrit",
+      "--gold_key",
+      "asan true debug true is_standalone true lsan true os linux skia false v8 true xfa true",
+      "--gold_output_dir",
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan/gold_output"
+    ],
+    "cwd": "[START_DIR]/pdfium",
+    "env": {
+      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "corpus tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
+      "/path/to/tmp/",
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan/gold_output/*.png"
+    ],
+    "name": "find images"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan/gold_output/*.png",
+      "gs://skia-pdfium-gm/dm-images-v1"
+    ],
+    "name": "gsutil upload images",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/dm-images-v1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "-z",
+      "json,log",
+      "[START_DIR]/pdfium/out/debug_xfa_v8_asan/gold_output/dm.json",
+      "gs://skia-pdfium-gm/trybot/dm-json-v1/2012/05/14/12/abc123/linux_xfa_asan_lsan/1337000001/1234/5/dm.json"
+    ],
+    "name": "gsutil upload JSON",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/trybot/dm-json-v1/2012/05/14/12/abc123/linux_xfa_asan_lsan/1337000001/1234/5/dm.json@@@"
     ]
   },
   {

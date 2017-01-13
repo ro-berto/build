@@ -15,7 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "pdfium@HEAD",
+      "pdfium@abc123",
       "--output_manifest"
     ],
     "env": {
@@ -27,7 +27,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pdfium\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pdfium\": \"abc123\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -344,10 +344,63 @@
       "-u",
       "[START_DIR]\\pdfium\\testing\\tools\\run_corpus_tests.py",
       "--build-dir",
-      "out\\debug_xfa_v8_clang"
+      "out\\debug_xfa_v8_clang",
+      "--gold_properties",
+      "gitHash abc123 master client.pdfium builder windows_xfa_clang build_number 1234",
+      "--gold_key",
+      "clang true debug true is_standalone true os windows skia false symbol_level 1 v8 true xfa true",
+      "--gold_output_dir",
+      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_clang\\gold_output"
     ],
     "cwd": "[START_DIR]\\pdfium",
     "name": "corpus tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
+      "/path/to/tmp/",
+      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_clang\\gold_output\\*.png"
+    ],
+    "name": "find images"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]\\resources\\gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_clang\\gold_output\\*.png",
+      "gs://skia-pdfium-gm/dm-images-v1"
+    ],
+    "name": "gsutil upload images",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/dm-images-v1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]\\resources\\gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "-z",
+      "json,log",
+      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_clang\\gold_output\\dm.json",
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/abc123/windows_xfa_clang/1337000001/dm.json"
+    ],
+    "name": "gsutil upload JSON",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/dm-json-v1/2012/05/14/12/abc123/windows_xfa_clang/1337000001/dm.json@@@"
+    ]
   },
   {
     "name": "$result",
