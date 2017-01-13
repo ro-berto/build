@@ -229,46 +229,33 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, bot_db
 
-  @property
-  def _api_for_tests(self):
-    """Methods of Test objects receive this as their api object to allow them
-    to access the 'chromium_tests' module as well as the other modules
-    in chromium_tests' module DEPS"""
-    api = copy.copy(self.m)
-    api.chromium_tests = self
-    return api
-
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def generate_tests_from_test_spec(self, _api, test_spec, builder_dict,
+  def generate_tests_from_test_spec(self, api, test_spec, builder_dict,
       buildername, mastername, enable_swarming, swarming_dimensions,
       scripts_compile_targets, generators, bot_update_step):
     tests = builder_dict.get('tests', ())
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators:
       tests = (
-          tuple(generator(
-              self._api_for_tests, self, mastername, buildername, test_spec,
-              bot_update_step, enable_swarming=enable_swarming,
-              swarming_dimensions=swarming_dimensions,
-              scripts_compile_targets=scripts_compile_targets)) +
+          tuple(generator(api, self, mastername, buildername, test_spec,
+                          bot_update_step, enable_swarming=enable_swarming,
+                          swarming_dimensions=swarming_dimensions,
+                          scripts_compile_targets=scripts_compile_targets)) +
           tuple(tests))
     return tests
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def read_test_spec(self, _api, test_spec_file):
-    test_spec_path = self.m.path['checkout'].join(
-        'testing', 'buildbot', test_spec_file)
-    test_spec_result = self.m.json.read(
-        'read test spec (%s)' % self.m.path.basename(test_spec_path),
+  def read_test_spec(self, api, test_spec_file):
+    test_spec_path = api.path['checkout'].join('testing', 'buildbot',
+                                               test_spec_file)
+    test_spec_result = api.json.read(
+        'read test spec (%s)' % api.path.basename(test_spec_path),
         test_spec_path,
-        step_test_data=lambda: self.m.json.test_api.output({}))
+        step_test_data=lambda: api.json.test_api.output({}))
     test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
     test_spec = test_spec_result.json.output
 
     return test_spec
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def create_test_runner(self, _api, tests, suffix='', serialize_tests=False):
+  def create_test_runner(self, api, tests, suffix='', serialize_tests=False):
     """Creates a test runner to run a set of tests.
 
     Args:
@@ -289,28 +276,28 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       for t in tests:
         try:
-          t.pre_run(self._api_for_tests, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
+          t.pre_run(api, suffix)
+        except api.step.InfraFailure:  # pragma: no cover
           raise
-        except self.m.step.StepFailure:  # pragma: no cover
+        except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
 
       for t in tests:
         try:
-          t.run(self._api_for_tests, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
+          t.run(api, suffix)
+        except api.step.InfraFailure:  # pragma: no cover
           raise
-        except self.m.step.StepFailure:  # pragma: no cover
+        except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
           if t.abort_on_failure:
             raise
 
       for t in tests:
         try:
-          t.post_run(self._api_for_tests, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
+          t.post_run(api, suffix)
+        except api.step.InfraFailure:  # pragma: no cover
           raise
-        except self.m.step.StepFailure:  # pragma: no cover
+        except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
           if t.abort_on_failure:
             raise
@@ -325,26 +312,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       for t in tests:
         try:
-          t.pre_run(self._api_for_tests, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
+          t.pre_run(api, suffix)
+        except api.step.InfraFailure:  # pragma: no cover
           raise
-        except self.m.step.StepFailure:  # pragma: no cover
+        except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
 
         try:
-          t.run(self._api_for_tests, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
+          t.run(api, suffix)
+        except api.step.InfraFailure:  # pragma: no cover
           raise
-        except self.m.step.StepFailure:  # pragma: no cover
+        except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
           if t.abort_on_failure:
             raise
 
         try:
-          t.post_run(self._api_for_tests, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
+          t.post_run(api, suffix)
+        except api.step.InfraFailure:  # pragma: no cover
           raise
-        except self.m.step.StepFailure:  # pragma: no cover
+        except api.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
           if t.abort_on_failure:
             raise
@@ -421,7 +408,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if bot_type in ['builder', 'builder_tester']:
       isolated_targets = [
-          t.isolate_target(self._api_for_tests)
+          t.isolate_target(self.m)
           for t in tests_including_triggered if t.uses_swarming
       ]
 
@@ -615,8 +602,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if bot_type in ('tester', 'builder_tester'):
         isolated_targets = [
-            t.isolate_target(self._api_for_tests)
-            for t in tests if t.uses_swarming]
+            t.isolate_target(self.m) for t in tests if t.uses_swarming]
         if isolated_targets:
           self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
 
@@ -626,13 +612,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.adb.root_devices()
 
       # Some recipes use this wrapper to setup devices and have their own way
-      # to run tests. If platform is Android and tests is None, run device
-      # steps.
+      # to run tests. If platform is Android and tests is None, run device steps.
       require_device_steps = (tests is None or
                               any([t.uses_local_devices for t in tests]))
 
-      if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
-          require_device_steps):
+      if self.m.chromium.c.TARGET_PLATFORM == 'android' and require_device_steps:
         #TODO(prasadv): Remove this hack and implement specific functions
         # at the point of call.
         remove_system_webview = bot_config.get('remove_system_webview')
@@ -719,20 +703,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         patch=False, update_presentation=False, **kwargs)
     self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def run_tests_on_tryserver(self, bot_config, _api, tests, bot_update_step,
+  def run_tests_on_tryserver(self, bot_config, api, tests, bot_update_step,
                              affected_files, mb_mastername=None,
                              mb_buildername=None, disable_deapply_patch=False):
     def deapply_patch_fn(failing_tests):
       self.deapply_patch(bot_update_step)
       compile_targets = list(itertools.chain(
-          *[t.compile_targets(self._api_for_tests) for t in failing_tests]))
+          *[t.compile_targets(api) for t in failing_tests]))
       if compile_targets:
         # Remove duplicate targets.
         compile_targets = sorted(set(compile_targets))
         failing_swarming_tests = [
-            t.isolate_target(self._api_for_tests)
-            for t in failing_tests if t.uses_swarming]
+            t.isolate_target(api) for t in failing_tests if t.uses_swarming]
         if failing_swarming_tests:
           self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
         self.run_mb_and_compile(compile_targets, failing_swarming_tests,
@@ -756,10 +738,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     with self.wrap_chromium_tests(bot_config, tests):
       if deapply_patch:
-        self.m.test_utils.determine_new_failures(
-            self._api_for_tests, tests, deapply_patch_fn)
+        self.m.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
       else:
-        failing_tests = self.m.test_utils.run_tests_with_patch(self.m, tests)
+        failing_tests = self.m.test_utils.run_tests_with_patch(api, tests)
         if failing_tests:
           self.m.python.failing_step(
               'test results',
@@ -877,75 +858,94 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output({}))
     return result.json.output
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def main_waterfall_steps(self, _api):
-    mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
+  @staticmethod
+  # TODO(phajdan.jr): try to get rid of api parameter.
+  # We currently have to use it because clients of this dereference
+  # chromium_tests, and currently recipe engine does not set up
+  # self-reference self.m.chromium_tests in chromium_tests.
+  def main_waterfall_steps(api):
+    mastername = api.properties.get('mastername')
+    buildername = api.properties.get('buildername')
 
-    bot_config = self.create_bot_config_object(mastername, buildername)
-    self.configure_build(bot_config)
-    update_step, bot_db = self.prepare_checkout(bot_config)
-    tests, tests_including_triggered = self.get_tests(bot_config, bot_db)
-    compile_targets = self.get_compile_targets(
+    bot_config = api.chromium_tests.create_bot_config_object(
+        mastername, buildername)
+    api.chromium_tests.configure_build(bot_config)
+    update_step, bot_db = api.chromium_tests.prepare_checkout(
+        bot_config)
+    tests, tests_including_triggered = api.chromium_tests.get_tests(
+        bot_config, bot_db)
+    compile_targets = api.chromium_tests.get_compile_targets(
         bot_config, bot_db, tests_including_triggered)
-    self.compile_specific_targets(
+    api.chromium_tests.compile_specific_targets(
         bot_config, update_step, bot_db,
         compile_targets, tests_including_triggered)
-    self.archive_build(
+    api.chromium_tests.archive_build(
         mastername, buildername, update_step, bot_db)
-    self.download_and_unzip_build(mastername, buildername, update_step, bot_db)
+    api.chromium_tests.download_and_unzip_build(mastername, buildername,
+                                                update_step, bot_db)
 
     if not tests:
       return
 
-    self.m.chromium_swarming.configure_swarming(
+    api.chromium_swarming.configure_swarming(
         'chromium', precommit=False, mastername=mastername)
-    test_runner = self.create_test_runner(
-        self._api_for_tests, tests,
-        serialize_tests=bot_config.get('serialize_tests'))
-    with self.wrap_chromium_tests(bot_config, tests):
+    test_runner = api.chromium_tests.create_test_runner(
+        api, tests, serialize_tests=bot_config.get('serialize_tests'))
+    with api.chromium_tests.wrap_chromium_tests(bot_config, tests):
       test_runner()
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def trybot_steps(self, _api):
-    with self.m.tryserver.set_failure_hash():
+  @staticmethod
+  # TODO(phajdan.jr): try to get rid of api parameter.
+  # We currently have to use it because clients of this dereference
+  # chromium_tests, and currently recipe engine does not set up
+  # self-reference self.m.chromium_tests in chromium_tests.
+  def trybot_steps(api):
+    with api.tryserver.set_failure_hash():
       try:
         (bot_config_object, bot_update_step, affected_files, tests,
-         disable_deapply_patch) = self._trybot_steps_internal()
+         disable_deapply_patch) = ChromiumTestsApi._trybot_steps_internal(api)
       finally:
-        self.m.python.succeeding_step('mark: before_tests', '')
+        api.python.succeeding_step('mark: before_tests', '')
 
       if tests:
-        self.run_tests_on_tryserver(
-            bot_config_object, self._api_for_tests, tests, bot_update_step,
-            affected_files, disable_deapply_patch=disable_deapply_patch)
+        api.chromium_tests.run_tests_on_tryserver(
+            bot_config_object, api, tests, bot_update_step, affected_files,
+            disable_deapply_patch=disable_deapply_patch)
 
-  def _trybot_steps_internal(self):
-    mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
-    bot_config = self.trybots.get(mastername, {}).get(
+  @staticmethod
+  # TODO(phajdan.jr): try to get rid of api parameter.
+  # We currently have to use it because clients of this dereference
+  # chromium_tests, and currently recipe engine does not set up
+  # self-reference self.m.chromium_tests in chromium_tests.
+  def _trybot_steps_internal(api):
+    mastername = api.properties.get('mastername')
+    buildername = api.properties.get('buildername')
+    bot_config = api.chromium_tests.trybots.get(mastername, {}).get(
         'builders', {}).get(buildername)
     assert bot_config, 'No bot config for master/builder [%s / %s]' % (
         mastername, buildername)
 
-    bot_config_object = self.create_generalized_bot_config_object(
+    bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
         bot_config['bot_ids'])
-    self.set_precommit_mode()
-    self.configure_build(bot_config_object, override_bot_type='builder_tester')
+    api.chromium_tests.set_precommit_mode()
+    api.chromium_tests.configure_build(
+        bot_config_object, override_bot_type='builder_tester')
 
-    self.m.chromium_swarming.configure_swarming('chromium', precommit=True)
+    api.chromium_swarming.configure_swarming('chromium', precommit=True)
 
-    self.m.chromium.apply_config('trybot_flavor')
+    api.chromium.apply_config('trybot_flavor')
 
-    bot_update_step, bot_db = self.prepare_checkout(bot_config_object)
-    tests, tests_including_triggered = self.get_tests(bot_config_object, bot_db)
+    bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
+        bot_config_object)
+
+    tests, tests_including_triggered = api.chromium_tests.get_tests(
+        bot_config_object, bot_db)
 
     def add_tests(additional_tests):
       tests.extend(additional_tests)
       tests_including_triggered.extend(additional_tests)
 
-    affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
-        'src/')
+    affected_files = api.chromium_checkout.get_files_affected_by_patch('src/')
 
     affects_blink_paths = any(
         f.startswith(path) for f in affected_files
@@ -960,7 +960,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     else:
       subproject_tag = 'chromium'
 
-    self.m.tryserver.set_subproject_tag(subproject_tag)
+    api.tryserver.set_subproject_tag(subproject_tag)
 
     # TODO(phajdan.jr): Remove special case for layout tests.
     add_blink_tests = (affects_blink_paths and
@@ -970,22 +970,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # that bypass it (like the layout tests) are added later.
     if add_blink_tests:
       add_tests([
-          self.steps.GTestTest('blink_heap_unittests'),
-          self.steps.GTestTest('blink_platform_unittests'),
-          self.steps.GTestTest('webkit_unit_tests'),
-          self.steps.GTestTest('wtf_unittests'),
+          api.chromium_tests.steps.GTestTest('blink_heap_unittests'),
+          api.chromium_tests.steps.GTestTest('blink_platform_unittests'),
+          api.chromium_tests.steps.GTestTest('webkit_unit_tests'),
+          api.chromium_tests.steps.GTestTest('wtf_unittests'),
       ])
 
-    compile_targets = self.get_compile_targets(
+    compile_targets = api.chromium_tests.get_compile_targets(
         bot_config_object,
         bot_db,
         tests_including_triggered)
 
-    test_targets = sorted(set(
-        self._all_compile_targets(tests + tests_including_triggered)))
-    additional_compile_targets = sorted(
-        set(compile_targets) - set(test_targets))
-    test_targets, compile_targets = self.m.filter.analyze(
+    test_targets = sorted(set(ChromiumTestsApi._all_compile_targets(
+        api, tests + tests_including_triggered)))
+    additional_compile_targets = sorted(set(compile_targets) - set(test_targets))
+    test_targets, compile_targets = api.filter.analyze(
         affected_files, test_targets, additional_compile_targets,
         'trybot_analyze_config.json')
 
@@ -995,30 +994,30 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # Blink tests have to bypass "analyze", see below.
     if compile_targets or add_blink_tests:
-      tests = self._tests_in_compile_targets(test_targets, tests)
-      tests_including_triggered = self._tests_in_compile_targets(
-          test_targets, tests_including_triggered)
+      tests = ChromiumTestsApi._tests_in_compile_targets(
+          api, test_targets, tests)
+      tests_including_triggered = ChromiumTestsApi._tests_in_compile_targets(
+          api, test_targets, tests_including_triggered)
 
       # Blink tests are tricky at this moment. We'd like to use "analyze" for
-      # everything else. However, there are blink changes that only add or
-      # modify layout test files (html etc). This is not recognized by "analyze"
-      # as compile dependency. However, the blink tests should still be
-      # executed.
+      # everything else. However, there are blink changes that only add or modify
+      # layout test files (html etc). This is not recognized by "analyze" as
+      # compile dependency. However, the blink tests should still be executed.
       if add_blink_tests:
         blink_tests = [
-            self.steps.ScriptTest(
+            api.chromium_tests.steps.ScriptTest(
                 'webkit_lint', 'webkit_lint.py', collections.defaultdict(list)),
-            self.steps.ScriptTest(
+            api.chromium_tests.steps.ScriptTest(
                 'webkit_python_tests', 'webkit_python_tests.py',
                 collections.defaultdict(list)),
-            self.steps.BlinkTest(),
+            api.chromium_tests.steps.BlinkTest(),
         ]
         add_tests(blink_tests)
         for test in blink_tests:
-          compile_targets.extend(test.compile_targets(self._api_for_tests))
+          compile_targets.extend(test.compile_targets(api))
         compile_targets = sorted(set(compile_targets))
 
-      self.compile_specific_targets(
+      api.chromium_tests.compile_specific_targets(
           bot_config_object,
           bot_update_step,
           bot_db,
@@ -1030,8 +1029,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # we'd still like to run tests not depending on
       # compiled targets (that's obviously not covered by the
       # 'analyze' step) if any source files change.
-      if any(self._is_source_file(f) for f in affected_files):
-        tests = [t for t in tests if not t.compile_targets(self._api_for_tests)]
+      if any(ChromiumTestsApi._is_source_file(api, f) for f in affected_files):
+        tests = [t for t in tests if not t.compile_targets(api)]
       else:
         tests = []
 
@@ -1039,23 +1038,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return (bot_config_object, bot_update_step, affected_files, tests,
             disable_deapply_patch)
 
-  def _all_compile_targets(self, tests):
+  @staticmethod
+  def _all_compile_targets(api, tests):
     """Returns the compile_targets for all the Tests in |tests|."""
     return sorted(set(x
                       for test in tests
-                      for x in test.compile_targets(self._api_for_tests)))
+                      for x in test.compile_targets(api)))
 
-  def _is_source_file(self, filepath):
+  @staticmethod
+  def _is_source_file(api, filepath):
     """Returns true iff the file is a source file."""
-    _, ext = self.m.path.splitext(filepath)
+    _, ext = api.path.splitext(filepath)
     return ext in ['.c', '.cc', '.cpp', '.h', '.java', '.mm']
 
-  def _tests_in_compile_targets(self, compile_targets, tests):
+  @staticmethod
+  def _tests_in_compile_targets(api, compile_targets, tests):
     """Returns the tests in |tests| that have at least one of their compile
     targets in |compile_targets|."""
     result = []
     for test in tests:
-      test_compile_targets = test.compile_targets(self._api_for_tests)
+      test_compile_targets = test.compile_targets(api)
       # Always return tests that don't require compile. Otherwise we'd never
       # run them.
       if ((set(compile_targets) & set(test_compile_targets)) or
