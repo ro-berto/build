@@ -1131,7 +1131,7 @@ def GenTests(api):
             'Android Tests': {
                 'instrumentation_tests': [
                     {
-                        'test': 'blimp_test_apk',
+                        'test': 'chrome_public_test_apk',
                     }
                 ],
             },
@@ -1150,7 +1150,7 @@ def GenTests(api):
             'Android Tests': {
                 'instrumentation_tests': [
                     {
-                        'test': 'blimp_test_apk',
+                        'test': 'chrome_public_test_apk',
                     }
                 ],
             },

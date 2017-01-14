@@ -222,7 +222,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"Android Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instrumentation_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"blimp_test_apk\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"chrome_public_test_apk\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -593,7 +593,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
-    "name": "blimp_test_apk",
+    "name": "chrome_public_test_apk",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@"
@@ -603,7 +603,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/out/Release/bin/run_blimp_test_apk",
+      "[START_DIR]/src/out/Release/bin/run_chrome_public_test_apk",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
@@ -617,7 +617,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
-    "name": "blimp_test_apk.blimp_test_apk",
+    "name": "chrome_public_test_apk.chrome_public_test_apk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
@@ -638,7 +638,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
-    "name": "blimp_test_apk.blimp_test_apk: generate result details",
+    "name": "chrome_public_test_apk.chrome_public_test_apk: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -660,7 +660,7 @@
       "--build-number",
       "571",
       "--test-type",
-      "blimp_test_apk",
+      "chrome_public_test_apk",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -670,7 +670,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
-    "name": "blimp_test_apk.Upload to test-results [blimp_test_apk]",
+    "name": "chrome_public_test_apk.Upload to test-results [chrome_public_test_apk]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -799,7 +799,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['blimp_test_apk']",
+    "reason": "1 tests failed: ['chrome_public_test_apk']",
     "recipe_result": null,
     "status_code": 1
   }

@@ -32,11 +32,7 @@ def Update(_config, active_master, c):
           'Linux Builder (dbg)(32)',
           'Linux Builder (dbg)',
           'Cast Linux',
-          'Blimp Linux (dbg)',
           # Trusty
-          # TODO(yyanagisawa): rename Blimp Linux to Blimp Linux Trusty?
-          # This change adds builders for trusty but Blimp is already using
-          # trusty.
           'Linux Builder Trusty',
           'Linux Builder Trusty (dbg)(32)',
           'Linux Builder Trusty (dbg)',
@@ -51,7 +47,6 @@ def Update(_config, active_master, c):
     {'name': 'Linux Builder (dbg)'},
     {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Cast Linux'},
-    {'name': 'Blimp Linux (dbg)'},
     # Trusty
     {'name': 'Linux Builder Trusty'},
     {'name': 'Linux Tests Trusty'},

@@ -241,10 +241,6 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.linux': {
     'builders': {
-      'blimp_linux_dbg': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Blimp Linux (dbg)',
-      }),
       'cast_shell_linux': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Cast Linux',
