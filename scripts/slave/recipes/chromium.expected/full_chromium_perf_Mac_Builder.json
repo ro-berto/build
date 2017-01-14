@@ -628,7 +628,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/isolated",
       "-i",
-      "{\"builder_name\": \"Mac Builder\", \"git_hash\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"isolate_map\": \"{\\\"browser_tests\\\": \\\"[dummy hash for browser_tests]\\\"}\"}",
+      "{\"builder_name\": \"Mac Builder\", \"git_hash\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"isolated_map\": \"{\\\"browser_tests\\\": \\\"[dummy hash for browser_tests]\\\"}\"}",
       "-o",
       "/path/to/tmp/json"
     ],
