@@ -101,6 +101,7 @@ def BuildLinuxAndroidx86(api):
     folder = 'android-' + x86_variant
     UploadArtifacts(api, folder, [
       'build/android/ant/chromium-debug.keystore',
+      'out/%s/flutter.jar' % out_dir,
       ('out/%s/gen/flutter/shell/platform/android/android/android/libs/%s/'
        'libsky_shell.so' % (out_dir, abi)),
       'out/%s/icudtl.dat' % out_dir,
