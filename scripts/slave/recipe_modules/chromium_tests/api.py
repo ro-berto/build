@@ -238,8 +238,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     api.chromium_tests = self
     return api
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def generate_tests_from_test_spec(self, _api, test_spec, builder_dict,
+  def generate_tests_from_test_spec(self, test_spec, builder_dict,
       buildername, mastername, enable_swarming, swarming_dimensions,
       scripts_compile_targets, generators, bot_update_step):
     tests = builder_dict.get('tests', ())
@@ -254,8 +253,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           tuple(tests))
     return tests
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def read_test_spec(self, _api, test_spec_file):
+  def read_test_spec(self, test_spec_file):
     test_spec_path = self.m.path['checkout'].join(
         'testing', 'buildbot', test_spec_file)
     test_spec_result = self.m.json.read(
@@ -267,8 +265,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return test_spec
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def create_test_runner(self, _api, tests, suffix='', serialize_tests=False):
+  def create_test_runner(self, tests, suffix='', serialize_tests=False):
     """Creates a test runner to run a set of tests.
 
     Args:
@@ -719,8 +716,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         patch=False, update_presentation=False, **kwargs)
     self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def run_tests_on_tryserver(self, bot_config, _api, tests, bot_update_step,
+  def run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
                              affected_files, mb_mastername=None,
                              mb_buildername=None, disable_deapply_patch=False):
     def deapply_patch_fn(failing_tests):
@@ -878,8 +874,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output({}))
     return result.json.output
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def main_waterfall_steps(self, _api):
+  def main_waterfall_steps(self):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
 
@@ -902,13 +897,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium_swarming.configure_swarming(
         'chromium', precommit=False, mastername=mastername)
     test_runner = self.create_test_runner(
-        self._api_for_tests, tests,
-        serialize_tests=bot_config.get('serialize_tests'))
+        tests, serialize_tests=bot_config.get('serialize_tests'))
     with self.wrap_chromium_tests(bot_config, tests):
       test_runner()
 
-  # TODO(phajdan.jr): Remove unused _api after updating callers.
-  def trybot_steps(self, _api):
+  def trybot_steps(self):
     with self.m.tryserver.set_failure_hash():
       try:
         (bot_config_object, bot_update_step, affected_files, tests,
@@ -918,7 +911,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if tests:
         self.run_tests_on_tryserver(
-            bot_config_object, self._api_for_tests, tests, bot_update_step,
+            bot_config_object, tests, bot_update_step,
             affected_files, disable_deapply_patch=disable_deapply_patch)
 
   def _trybot_steps_internal(self):

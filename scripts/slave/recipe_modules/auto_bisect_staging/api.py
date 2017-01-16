@@ -285,7 +285,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
       return
     self.m.chromium_swarming.configure_swarming(
         'chromium', precommit=False, mastername=mastername)
-    test_runner = self.m.chromium_tests.create_test_runner(self.m, tests)
+    test_runner = self.m.chromium_tests.create_test_runner(tests)
 
     bot_config_object = self.m.chromium_tests.create_bot_config_object(
         mastername, buildername)

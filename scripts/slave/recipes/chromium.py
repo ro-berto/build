@@ -46,7 +46,7 @@ def RunSteps(api):
         api.json.dumps(api.chromium_tests.builders, default=ignore_undumpable))
     return
 
-  api.chromium_tests.main_waterfall_steps(api)
+  api.chromium_tests.main_waterfall_steps()
 
 
 def _sanitize_nonalpha(text):

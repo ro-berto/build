@@ -65,7 +65,7 @@ class BotConfig(object):
     # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
       return {}
-    return chromium_tests_api.read_test_spec(chromium_tests_api.m, test_spec_file)
+    return chromium_tests_api.read_test_spec(test_spec_file)
 
   def initialize_bot_db(self, chromium_tests_api, bot_db, bot_update_step):
     # TODO(phajdan.jr): Get rid of disable_tests.
@@ -98,7 +98,7 @@ class BotConfig(object):
               dict(builders[loop_buildername]))
           builders[loop_buildername]['tests'] = (
               chromium_tests_api.generate_tests_from_test_spec(
-                  chromium_tests_api.m, test_spec, builder_dict,
+                  test_spec, builder_dict,
                   loop_buildername, mastername,
                   # TODO(phajdan.jr): Get enable_swarming value from
                   # builder_dict. Above should remove the need to get

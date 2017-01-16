@@ -140,13 +140,13 @@ def RunSteps(api):
   test_spec_file = builder.get('test_spec_file')
   test_spec = {}
   if test_spec_file:
-    test_spec = api.chromium_tests.read_test_spec(api, test_spec_file)
+    test_spec = api.chromium_tests.read_test_spec(test_spec_file)
 
     scripts_compile_targets = \
         api.chromium_tests.get_compile_targets_for_scripts()
 
     builder['tests'] = api.chromium_tests.generate_tests_from_test_spec(
-        api, test_spec, builder, buildername, mastername, False, None,
+        test_spec, builder, buildername, mastername, False, None,
         scripts_compile_targets, [api.chromium_tests.steps.generate_script],
         bot_update_step)
 
@@ -183,8 +183,7 @@ def RunSteps(api):
   api.chromium_android.host_info(
       args=api.chromium_tests.get_common_args_for_scripts())
 
-  test_runner = api.chromium_tests.create_test_runner(
-      api, builder.get('tests', []))
+  test_runner = api.chromium_tests.create_test_runner(builder.get('tests', []))
 
   try:
     failures = []
