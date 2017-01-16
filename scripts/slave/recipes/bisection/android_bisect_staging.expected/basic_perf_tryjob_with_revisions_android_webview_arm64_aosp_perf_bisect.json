@@ -1245,7 +1245,8 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/catapult/tracing/bin/parse_metric_cmdline",
+      "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/catapult/tracing/bin/compare_samples",
+      "",
       "",
       "dummy/dummy",
       "--chartjson"
@@ -1254,32 +1255,18 @@
     "name": "Parse metric values",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/catapult/tracing/bin/parse_metric_cmdline",
-      "",
-      "dummy/dummy",
-      "--chartjson"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
-    "name": "Parse metric values (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleA\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleB\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -1307,41 +1294,28 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/catapult/tracing/bin/parse_metric_cmdline",
+      "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/catapult/tracing/bin/compare_samples",
+      "",
       "",
       "dummy/dummy",
       "--chartjson"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
-    "name": "Parse metric values (3)",
+    "name": "Parse metric values (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/catapult/tracing/bin/parse_metric_cmdline",
-      "",
-      "dummy/dummy",
-      "--chartjson"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
-    "name": "Parse metric values (4)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleA\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleB\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },

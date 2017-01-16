@@ -281,16 +281,11 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     """Parses results and creates Results step."""
     output_with_patch = results_with_patch.get('output')
     output_without_patch = results_without_patch.get('output')
-    values_with_patch = self.parse_values_only(
+    values_with_patch, values_without_patch = self.parse_values(
         results_with_patch.get('results'),
-        cfg.get('metric'),
-        _output_format(cfg.get('command')),
-        step_test_data=lambda: self.m.json.test_api.output_stream([1, 1, 1]))
-    values_without_patch = self.parse_values_only(
         results_without_patch.get('results'),
         cfg.get('metric'),
-        _output_format(cfg.get('command')),
-        step_test_data=lambda: self.m.json.test_api.output_stream([9, 9, 9]))
+        _output_format(cfg.get('command')))
 
     cloud_links_without_patch = self.parse_cloud_links(output_without_patch)
     cloud_links_with_patch = self.parse_cloud_links(output_with_patch)
@@ -378,16 +373,12 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     """Returns the results as a dict."""
     output_with_patch = results_with_patch.get('output')
     output_without_patch = results_without_patch.get('output')
-    values_with_patch = self.parse_values_only(
+
+    values_with_patch, values_without_patch = self.parse_values(
         results_with_patch.get('results'),
-        config.get('metric'),
-        _output_format(config.get('command')),
-        step_test_data=lambda: self.m.json.test_api.output_stream([1, 1, 1]))
-    values_without_patch = self.parse_values_only(
         results_without_patch.get('results'),
         config.get('metric'),
-        _output_format(config.get('command')),
-        step_test_data=lambda: self.m.json.test_api.output_stream([9, 9, 9]))
+        _output_format(config.get('command')))
 
     cloud_links_without_patch = self.parse_cloud_links(output_without_patch)
     cloud_links_with_patch = self.parse_cloud_links(output_with_patch)
@@ -465,33 +456,43 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     return '%sbuilders/%s/builds/%s' % (bot_url, builder_name, builder_number)
 
 
-  def parse_values_only(self, results, metric, output_format, **kwargs):
+  def parse_values(self, results_a, results_b, metric, output_format, **kwargs):
     """Parse the values for a given metric for the given results.
 
     This is meant to be used by tryjobs with a metric."""
     if not metric:
-      return None
+      return None, None
 
+    results_index = None
     if output_format == 'buildbot':
-      files = results['stdout_paths']
+      results_index = 'stdout_paths'
     elif output_format == 'chartjson':
-      files = results['chartjson_paths']
+      results_index = 'chartjson_paths'
     elif output_format == 'valueset':
-      files = results['valueset_paths']
+      results_index = 'valueset_paths'
     else:  # pragma: no cover
       raise self.m.step.StepFailure('Unsupported format: ' + output_format)
 
+    files_a = ','.join(map(str, results_a[results_index]))
+    files_b = ','.join(map(str, results_b[results_index]))
+
     # Apply str to files to constrain cmdline args to ascii, as this used to
     # break when unicode things were passed instead.
-    args = [','.join(map(str, files)), str(metric), '--' + output_format]
+    args = [files_a, files_b, str(metric), '--' + output_format]
     script = self.m.path['catapult'].join(
-        'tracing', 'bin', 'parse_metric_cmdline')
-    return self.m.python(
+        'tracing', 'bin', 'compare_samples')
+    result = self.m.python(
         'Parse metric values',
         script=script,
         args=args,
         stdout=self.m.json.output(),
+        step_test_data=lambda: self.m.json.test_api.output_stream(
+            {'sampleA':[1, 1, 1], 'sampleB':[9, 9, 9]}),
         **kwargs).stdout
+
+    sample_a = result.get('sampleA', [])
+    sample_b = result.get('sampleB', [])
+    return sample_a, sample_b
 
 
 def _validate_perf_config(config_contents, required_parameters):
