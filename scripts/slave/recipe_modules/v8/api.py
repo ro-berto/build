@@ -444,6 +444,33 @@ class V8Api(recipe_api.RecipeApi):
         l for l in match.group(1).strip().splitlines()
         if not l.startswith('goma_dir'))
 
+  def _upload_build_dependencies(self, deps):
+    values = {
+      'ext_h_avg_deps': deps['by_extension']['h']['avg_deps'],
+      'ext_h_top100_avg_deps': deps['by_extension']['h']['top100_avg_deps'],
+      'ext_h_top200_avg_deps': deps['by_extension']['h']['top200_avg_deps'],
+      'ext_h_top500_avg_deps': deps['by_extension']['h']['top500_avg_deps'],
+    }
+    points = []
+    root = '/'.join([
+      'v8.infra',
+      'build_dependencies',
+      self.m.properties['mastername'],
+      self.m.properties['buildername'],
+      '',
+    ])
+    for k, v in values.iteritems():
+      p = self.m.perf_dashboard.get_skeleton_point(
+          root + k, self.revision_number, str(v))
+      p['units'] = 'count'
+      p['supplemental_columns'] = {
+        'a_default_rev': 'r_v8_git',
+        'r_v8_git': self.revision,
+      }
+      points.append(p)
+    if points:
+      self.m.perf_dashboard.add_point(points)
+
   def compile(self, **kwargs):
     if self.m.chromium.c.project_generator.tool == 'mb':
       use_goma = (self.m.chromium.c.compile_py.compiler and
@@ -482,7 +509,7 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.compile(**kwargs)
 
     if self.bot_config.get('track_build_dependencies', False):
-      self.m.python(
+      deps = self.m.python(
           name='track build dependencies (fyi)',
           script=self.resource('build-dep-stats.py'),
           args=[
@@ -492,7 +519,9 @@ class V8Api(recipe_api.RecipeApi):
           ],
           step_test_data=lambda: self.test_api.example_build_dependencies(),
           ok_ret='any',
-      )
+      ).json.output
+      if deps:
+        self._upload_build_dependencies(deps)
 
     self.isolate_tests()
 

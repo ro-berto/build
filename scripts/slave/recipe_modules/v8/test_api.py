@@ -308,10 +308,12 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     return self.m.json.output({
       'avg_deps': 1.2,
       'by_extension': {
-        'c': {
-          'avg_deps': 1.0,
+        'h': {
+          'avg_deps': 53.7,
           'num_files': 53,
-          'top100_avg_deps': 1.0,
+          'top100_avg_deps': 67.2,
+          'top200_avg_deps': 55.1,
+          'top500_avg_deps': 34.94,
         }
       },
       'num_files': 3615,

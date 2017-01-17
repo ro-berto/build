@@ -8,6 +8,7 @@ DEPS = [
   'gitiles',
   'gsutil',
   'isolate',
+  'perf_dashboard',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
