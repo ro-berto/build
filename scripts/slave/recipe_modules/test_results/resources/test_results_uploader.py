@@ -56,6 +56,8 @@ def _try_uploading_test_results(host, attrs, file_objs, timeout_secs):
   content_type, data = _encode_form_data(attrs, file_objs)
   headers = {'Content-Type': content_type}
   request = urllib2.Request(url, data, headers)
+  logging.debug(
+      'Sending request to %s with data %r and headers %r', url, data, headers)
   return urllib2.urlopen(request, timeout=timeout_secs)
 
 
@@ -128,8 +130,8 @@ def _retry_exp_backoff(func, timeout_secs):
         raise TimeoutError()
       # Don't retry if we aren't getting a 5xx response.
       if e.code / 100 != 5:
-        raise PermanentError('Received HTTP status %s loading "%s".'
-                             % (e.code, e.filename))
+        raise PermanentError('Received HTTP status %s loading "%s": %s'
+                             % (e.code, e.filename, e.read()))
       logging.warn('Received HTTP status %s loading "%s".  '
                    'Retrying in %s seconds...',
                    e.code, e.filename, backoff_secs)
