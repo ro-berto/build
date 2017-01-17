@@ -334,12 +334,11 @@
       "20160101T000000",
       "-v",
       "--test-apks",
-      "ContentShellTest",
-      "SystemWebViewShellLayoutTest",
       "ChromePublicTest",
-      "ChromeSyncShellTest",
-      "BlimpTest",
-      "AndroidWebViewTest"
+      "ContentShellTest",
+      "AndroidWebViewTest",
+      "SystemWebViewShellLayoutTest",
+      "ChromeSyncShellTest"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Find_Annotated_Test/src",
     "env": {

@@ -2097,7 +2097,6 @@ class IncrementalCoverageTest(Test):
 class FindAnnotatedTest(Test):
   _TEST_APKS = {
       'android_webview_test_apk': 'AndroidWebViewTest',
-      'blimp_test_apk': 'BlimpTest',
       'chrome_public_test_apk': 'ChromePublicTest',
       'chrome_sync_shell_test_apk': 'ChromeSyncShellTest',
       'content_shell_test_apk': 'ContentShellTest',
