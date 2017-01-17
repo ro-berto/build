@@ -456,6 +456,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::v8]/resources/build-dep-stats.py",
+      "-C",
+      "[START_DIR]/v8/out/Release",
+      "-o",
+      "/path/to/tmp/json"
+    ],
+    "name": "track build dependencies (fyi)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"avg_deps\": 1.2, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"by_extension\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"avg_deps\": 1.0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"num_files\": 53, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"top100_avg_deps\": 1.0@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"num_files\": 3615, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"top100_avg_deps\": 1.3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[START_DIR]/v8/tools/swarming_client",
       "batcharchive",

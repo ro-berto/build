@@ -367,6 +367,7 @@ BUILDERS = {
         'build_gs_archive': 'linux64_rel_archive',
         'enable_swarming': True,
         'testing': {'platform': 'linux'},
+        'track_build_dependencies': True,
         'triggers': [
           'V8 Linux64',
           'V8 Linux64 - avx2',

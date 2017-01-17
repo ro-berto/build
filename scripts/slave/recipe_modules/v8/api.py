@@ -480,6 +480,20 @@ class V8Api(recipe_api.RecipeApi):
     if self.m.properties['buildername'] != 'V8 Mips - builder':
       kwargs['use_goma_module'] = True
     self.m.chromium.compile(**kwargs)
+
+    if self.bot_config.get('track_build_dependencies', False):
+      self.m.python(
+          name='track build dependencies (fyi)',
+          script=self.resource('build-dep-stats.py'),
+          args=[
+            '-C', self.m.chromium.c.build_dir.join(
+                self.m.chromium.c.build_config_fs),
+            '-o', self.m.json.output(),
+          ],
+          step_test_data=lambda: self.test_api.example_build_dependencies(),
+          ok_ret='any',
+      )
+
     self.isolate_tests()
 
   # TODO(machenbach): This should move to a dynamorio module as soon as one

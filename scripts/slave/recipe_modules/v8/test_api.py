@@ -304,6 +304,20 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         stream='stdout',
     )
 
+  def example_build_dependencies(self):
+    return self.m.json.output({
+      'avg_deps': 1.2,
+      'by_extension': {
+        'c': {
+          'avg_deps': 1.0,
+          'num_files': 53,
+          'top100_avg_deps': 1.0,
+        }
+      },
+      'num_files': 3615,
+      'top100_avg_deps': 1.3,
+    })
+
   def _get_test_branch_name(self, mastername, buildername):
     if mastername == 'client.dart.fyi':
       return STABLE_BRANCH
