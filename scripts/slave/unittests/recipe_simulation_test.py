@@ -23,15 +23,14 @@ RECIPES_PY = os.path.join(
     'recipes.py')
 
 args = [
-    RECIPES_PY,
+  RECIPES_PY,
+  "--use-bootstrap",
 ]
-try:
-  import coverage
-  # if this works, then don't use bootstrap
-except ImportError:
-  args += ['--use-bootstrap']
+
+if 'CHROME_HEADLESS' in os.environ:
+  args += ["--deps-path=-"]
+
 args += [
-    '--deps-path=-',
     'simulation_test',
 ] + sys.argv[1:]
 ret = subprocess.call(args)
