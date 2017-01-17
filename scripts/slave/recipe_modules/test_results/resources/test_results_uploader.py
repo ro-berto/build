@@ -56,8 +56,9 @@ def _try_uploading_test_results(host, attrs, file_objs, timeout_secs):
   content_type, data = _encode_form_data(attrs, file_objs)
   headers = {'Content-Type': content_type}
   request = urllib2.Request(url, data, headers)
-  logging.debug(
-      'Sending request to %s with data %r and headers %r', url, data, headers)
+  logging.info(
+      'Sending request to %s at %s', url,
+      time.strftime('%Y-%m-%d %H:%M:%S.%f UTC', time.gmtime()))
   return urllib2.urlopen(request, timeout=timeout_secs)
 
 
