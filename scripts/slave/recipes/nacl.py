@@ -61,14 +61,17 @@ def _AnnotatedStepsSteps(api, got_revision):
         'BUILDBOT_TRIGGERED_BY_SLAVENAME':
           api.properties['parent_slavename'],
     })
-  goma_dir = api.goma.ensure_goma()
+  goma_dir = None
+  # HACK(yyanagisawa): won't set up goma client on 32bit OSes.
+  if api.platform.bits == 64:
+    goma_dir = api.goma.ensure_goma()
   if goma_dir:
     env.update({
         'GOMA_DIR': goma_dir,
         'GOMA_TMP_DIR': api.path['tmp_base'],
         'NOCONTROL_GOMA': '1',
     })
-  api.goma.start()
+    api.goma.start()
   exit_status = -1
   try:
     api.python('annotated steps',
@@ -81,7 +84,8 @@ def _AnnotatedStepsSteps(api, got_revision):
     exit_status = e.retcode
     raise e
   finally:
-    api.goma.stop(ninja_log_exit_status=exit_status)
+    if goma_dir:
+      api.goma.stop(ninja_log_exit_status=exit_status)
 
 def _TriggerTestsSteps(api):
   if api.properties['buildername'] in trigger_map:
