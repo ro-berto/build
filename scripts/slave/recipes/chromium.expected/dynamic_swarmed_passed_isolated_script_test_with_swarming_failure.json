@@ -423,7 +423,7 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": true, \\\"failure\\\": true, \\\"exit_code\\\": \\\"1\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Infra Failure in Internal Swarming failure@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@Infra Failure in Shard #0 failed: Internal swarming failure@@@",
       "@@@STEP_LOG_END@no_results_exc@@@",
       "@@@STEP_LOG_LINE@invalid_results_exc@KeyError('valid',)@@@",
       "@@@STEP_LOG_END@invalid_results_exc@@@",
@@ -448,6 +448,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.linux\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@shard #0 had an internal swarming failure@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

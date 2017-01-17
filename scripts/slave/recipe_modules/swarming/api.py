@@ -99,6 +99,11 @@ class SwarmingApi(recipe_api.RecipeApi):
       """Returns a user-readable string representing a State."""
       return cls._NAMES[state]
 
+  #############################################################################
+  # The below are helper functions to help transition between the old and new #
+  # swarming result formats. TODO(martiniss): remove these                    #
+  #############################################################################
+
   def _is_expired(self, shard):
     # FIXME: We really should only have one format for enums. We want to move to
     # strings, currently have numbers.
@@ -112,6 +117,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     return (
         shard.get('state') == self.State.TIMED_OUT or
         shard.get('state') == 'TIMED_OUT')
+
+  def _get_exit_code(self, shard):
+    if shard.get('exit_code'):
+      return shard.get('exit_code')
+    lst = shard.get('exit_codes', [])
+    return str(lst[0]) if lst else None
 
   def __init__(self, **kwargs):
     super(SwarmingApi, self).__init__(**kwargs)
@@ -654,7 +665,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # Only display annotation when pending more than 10 seconds to reduce noise.
     if max_pending > 10:
-      step_presentation.step_text = 'swarming pending %ds' % max_pending
+      step_presentation.step_text += '<br>swarming pending %ds' % max_pending
 
   def _default_collect_step(self, task, **kwargs):
     """Produces a step that collects a result of an arbitrary task."""
@@ -675,36 +686,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       step_result = self.m.step.active_result
 
       step_result.presentation.step_text = text_for_task(task)
-      try:
-        json_data = step_result.json.output
-        links = step_result.presentation.links
-        for index, shard in enumerate(json_data.get('shards') or []):
-          if self._is_timed_out(shard):
-            url = task.get_shard_view_url(index)
-            if url:
-              links['shard #%d timed out, took much time to complete' % index] = url
-        if self.show_shards_in_collect_step:
-          for index in xrange(task.shards):
-            url = task.get_shard_view_url(index)
-            if url:
-              links['shard #%d' % index] = url
-        if self.show_isolated_out_in_collect_step:
-          for index, shard in enumerate(json_data.get('shards') or []):
-            isolated_out = shard.get('isolated_out')
-            if isolated_out:
-              link_name = 'shard #%d isolated out' % index
-              links[link_name] = isolated_out['view_url']
-        self._display_pending(json_data, step_result.presentation)
-        if any(
-            self._is_expired(shard) for shard in json_data.get('shards') or []):
-          # TODO: Find a clean way.
-          step_result._retcode = step_result.retcode or -1
-          raise recipe_api.InfraFailure(
-              'There isn\'t enough capacity to run your test',
-              result=step_result)
-      except (KeyError, AttributeError):  # pragma: no cover
-        # No isolated_out data exists (or any JSON at all)
-        pass
+      summary_json = step_result.json.output
+      if summary_json:
+        self._handle_summary_json(task, summary_json, step_result)
 
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
     """Produces a step that collects and processes a result of google-test task.
@@ -866,36 +850,10 @@ class SwarmingApi(recipe_api.RecipeApi):
 
         # Check if it's an internal failure. 'summary.json' is saved in the
         # output directory.
-        summary = self.m.json.loads(
+        summary_json = self.m.json.loads(
             step_result.raw_io.output_dir['summary.json'])
-        # internal_failure is always set when the state is State.BOT_DIED.
-        if any(not shard or shard['internal_failure']
-               for shard in summary['shards']):
-          step_result._retcode = step_result.retcode or -1
-          raise recipe_api.InfraFailure('Internal Swarming failure',
-                                        result=step_result)
-        if any(self._is_expired(shard)
-               for shard in summary['shards']):
-          step_result._retcode = step_result.retcode or -1
-          raise recipe_api.InfraFailure(
-              'There isn\'t enough capacity to run your test',
-              result=step_result)
 
-        # Always show the shards' links in the collect step. (It looks
-        # like show_isolated_out_in_collect_step is false by default
-        # in recipe runs.)
-        links = step_result.presentation.links
-        for index in xrange(task.shards):
-          url = task.get_shard_view_url(index)
-          if self._is_timed_out(summary['shards'][index]):
-            display_text = (
-              'shard #%d timed out, took much time to complete' % index)
-          elif summary['shards'][index].get('exit_code', None) != '0':
-            display_text = 'shard #%d (failed)' % index
-          else:
-            display_text = 'shard #%d' % index
-          if url:
-            links[display_text] = url
+        self._handle_summary_json(task, summary_json, step_result)
 
         step_result.isolated_script_results = \
           self._merge_isolated_script_shards(task, step_result)
@@ -904,7 +862,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         step_result.isolated_script_chartjson_results = \
           self._merge_isolated_script_chartjson_ouput_shards(task, step_result)
 
-        self._display_pending(summary, step_result.presentation)
       except Exception as e:
         self.m.step.active_result.presentation.logs['no_results_exc'] = [str(e)]
         self.m.step.active_result.isolated_script_results = None
@@ -933,6 +890,51 @@ class SwarmingApi(recipe_api.RecipeApi):
     # or preferred dimensions for its OS. For example, the version of the OS
     # can differ.
     return ''.join((prefix, task.title, suffix))
+
+  def _handle_summary_json(self, task, summary, step_result):
+    # We store this now, and add links to all shards first, before failing the
+    # build. Format is tuple of (error message, shard that failed)
+    infra_failures = []
+    links = step_result.presentation.links
+    for index, shard in enumerate(summary['shards']):
+      url = task.get_shard_view_url(index)
+      display_text = 'shard #%d' % index
+
+      if not shard or shard.get('internal_failure'):
+        display_text = (
+          'shard #%d had an internal swarming failure' % index)
+        infra_failures.append((index, 'Internal swarming failure'))
+      elif self._is_expired(shard):
+        display_text = (
+          'shard #%d expired, not enough capacity' % index)
+        infra_failures.append((
+            index, 'There isn\'t enough capacity to run your test'))
+      elif self._is_timed_out(shard):
+        display_text = (
+          'shard #%d timed out, took too much time to complete' % index)
+      elif self._get_exit_code(shard) != '0':
+        display_text = 'shard #%d (failed)' % index
+
+      if self.show_isolated_out_in_collect_step:
+        isolated_out = shard.get('isolated_out')
+        if isolated_out:
+          link_name = 'shard #%d isolated out' % index
+          links[link_name] = isolated_out['view_url']
+
+      if url and self.show_shards_in_collect_step:
+        links[display_text] = url
+
+    if infra_failures:
+      template = 'Shard #%s failed: %s'
+
+      # Done so that raising an InfraFailure doesn't cause an error.
+      # TODO(martiniss): Remove this hack. Requires recipe engine change
+      step_result._retcode = 2
+      raise recipe_api.InfraFailure(
+          '\n'.join(template % f for f in infra_failures), result=step_result)
+
+    self._display_pending(summary, step_result.presentation)
+
 
   def get_collect_cmd_args(self, task):
     """SwarmingTask -> argument list for 'swarming.py' command."""
@@ -1117,3 +1119,4 @@ class SwarmingTask(object):
       for shard_dict in self._trigger_output['tasks'].itervalues():
         task_ids.append(shard_dict['task_id'])
     return task_ids
+

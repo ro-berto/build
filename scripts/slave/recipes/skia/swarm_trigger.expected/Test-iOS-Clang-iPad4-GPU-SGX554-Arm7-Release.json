@@ -644,7 +644,7 @@
     ],
     "name": "compile_skia on Mac",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -924,7 +924,7 @@
     ],
     "name": "test_skia on iOS-9.2",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-9.2'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",

@@ -637,7 +637,7 @@
     ],
     "name": "fake tests (fake device iOS 8.1)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",

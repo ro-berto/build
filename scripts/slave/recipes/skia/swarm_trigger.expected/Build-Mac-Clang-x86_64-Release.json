@@ -596,7 +596,7 @@
     ],
     "name": "compile_skia on Mac",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",

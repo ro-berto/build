@@ -212,7 +212,7 @@
     ],
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -230,7 +230,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"outputs\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": 48, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"state\": \"TIMED_OUT\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"try_number\": null, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"user\": \"unknown\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -240,9 +240,27 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[TMP_BASE]/hello_isolated_world_tmp_1"
+    ],
+    "name": "rmtree remove temp dir",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "name": "$result",
-    "reason": "Infra Failure: Step(\"There isn't enough capacity to run your test\") returned -1",
     "recipe_result": null,
-    "status_code": -1
+    "status_code": 0
   }
 ]

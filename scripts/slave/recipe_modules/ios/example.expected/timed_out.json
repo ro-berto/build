@@ -545,8 +545,7 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0 timed out, took much time to complete@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 timed out, took too much time to complete@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

@@ -48,6 +48,7 @@ class ChromiumSwarmingApi(recipe_api.RecipeApi):
     self.m.swarming.set_default_dimension('pool', 'Chrome')
     self.m.swarming.add_default_tag('project:%s' % project_name)
     self.m.swarming.default_idempotent = True
+    self.m.swarming.show_shards_in_collect_step = True
 
     if precommit:
       self.m.swarming.default_priority = 30

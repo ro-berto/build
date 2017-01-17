@@ -212,12 +212,12 @@
     ],
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"isolated_out\\\": null, \\\"created_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"try_number\\\": null, \\\"name\\\": \\\"heartbeat-canary-2014-09-25_01:41:55-os=Windows\\\", \\\"internal_failure\\\": false, \\\"outputs\\\": [], \\\"durations\\\": null, \\\"id\\\": \\\"148aa78d7aa0100\\\", \\\"abandoned_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"failure\\\": false, \\\"state\\\": 48, \\\"modified_ts\\\": \\\"2014-09-25 01:42:00\\\", \\\"exit_codes\\\": [], \\\"started_ts\\\": \\\"2014-09-25T01:42:11.123\\\", \\\"user\\\": \\\"unknown\\\", \\\"completed_ts\\\": null, \\\"bot_id\\\": \\\"vm30\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"isolated_out\\\": null, \\\"created_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"try_number\\\": null, \\\"name\\\": \\\"heartbeat-canary-2014-09-25_01:41:55-os=Windows\\\", \\\"internal_failure\\\": false, \\\"outputs\\\": [], \\\"durations\\\": null, \\\"id\\\": \\\"148aa78d7aa0100\\\", \\\"abandoned_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"failure\\\": false, \\\"state\\\": 64, \\\"modified_ts\\\": \\\"2014-09-25 01:42:00\\\", \\\"exit_codes\\\": [], \\\"started_ts\\\": \\\"2014-09-25T01:42:11.123\\\", \\\"user\\\": \\\"unknown\\\", \\\"completed_ts\\\": null, \\\"bot_id\\\": \\\"vm30\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Infra Failure in There isn't enough capacity to run your test@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@no results from shard #0@@@",
       "@@@STEP_LOG_END@no_results_exc@@@"
     ]
   },

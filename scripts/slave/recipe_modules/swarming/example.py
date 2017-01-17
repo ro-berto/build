@@ -195,20 +195,21 @@ def GenTests(api):
         'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
         'outputs': [],
         'started_ts': '2014-09-25T01:42:11.123',
-        'state': 0x30, # EXPIRED
+        'state': 0x30, # EXPIRED (old)
         'try_number': None,
         'user': 'unknown',
       }
     ],
   }
+
   yield (
-      api.test('swarming_expired') +
+      api.test('swarming_expired_old') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
-      api.test('isolated_script_expired') +
+      api.test('isolated_script_expired_old') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
@@ -217,15 +218,49 @@ def GenTests(api):
           api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
       api.properties(isolated_script_task=True))
 
-  data['shards'][0]['state'] = 0x40  # TIMED_OUT
+  data['shards'][0]['state'] = 'EXPIRED'
   yield (
-      api.test('swarming_timeout') +
+      api.test('swarming_expired_new') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
-      api.test('isolated_script_timeout') +
+      api.test('isolated_script_expired_new') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
+      api.properties(isolated_script_task=True))
+
+  data['shards'][0]['state'] = 0x40  # TIMED_OUT (old)
+  yield (
+      api.test('swarming_timeout_old') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+      api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
+  yield (
+      api.test('isolated_script_timeout_old') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
+      api.properties(isolated_script_task=True))
+
+  data['shards'][0]['state'] = 'TIMED_OUT'  # TIMED_OUT (old)
+  yield (
+      api.test('swarming_timeout_new') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+      api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
+  yield (
+      api.test('isolated_script_timeout_new') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
