@@ -12,6 +12,7 @@ Usage:
 """
 
 import codecs
+import datetime
 import logging
 import mimetypes
 import socket
@@ -57,8 +58,8 @@ def _try_uploading_test_results(host, attrs, file_objs, timeout_secs):
   headers = {'Content-Type': content_type}
   request = urllib2.Request(url, data, headers)
   logging.info(
-      'Sending request to %s at %s', url,
-      time.strftime('%Y-%m-%d %H:%M:%S.%f UTC', time.gmtime()))
+      'Sending request to %s at %s UTC', url,
+      datetime.datetime.utcnow().isoformat(' '))
   return urllib2.urlopen(request, timeout=timeout_secs)
 
 

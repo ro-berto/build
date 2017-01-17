@@ -144,7 +144,7 @@ def main(args):
                                 'given, defaults to 0.')
 
   options = option_parser.parse_args(args)[0]
-  logging.basicConfig()
+  logging.basicConfig(level=logging.INFO)
 
   if not options.test_type:
     option_parser.error('--test-type needs to be specified.')
