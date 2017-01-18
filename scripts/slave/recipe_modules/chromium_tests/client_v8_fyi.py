@@ -291,5 +291,90 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {'platform': 'win'},
     },
+    # GPU bots.
+    'Win Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'win',
+      },
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'enable_swarming': True,
+      'serialize_tests': True,
+      'use_isolate': True,
+    },
+    'Mac Release (Intel)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'mac',
+      },
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'enable_swarming': True,
+      'serialize_tests': True,
+      'use_isolate': True,
+    },
+    'Linux Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'enable_swarming': True,
+      'serialize_tests': True,
+      'use_isolate': True,
+    },
   },
 }
