@@ -84,28 +84,6 @@ class GomaApi(recipe_api.RecipeApi):
 
     return self._goma_jobs
 
-  def remove_j_flag(self, command):
-    """Remove -j flag from command.
-    This function elimitnates -j flag from command for
-    '-j', '80' style and '-j80' style.
-
-    Args:
-      command: List of command line arg.
-
-    Returns:
-      list(string): Command line args parallel option removed.
-    """
-    command = command[:]
-    parallel_flag_regexp = re.compile('-j\d*')
-    for i in range(len(command)):
-      if (isinstance(command[i], str) and
-          parallel_flag_regexp.match(command[i])):
-        if command[i] == '-j':
-          command.pop(i + 1)
-        command.pop(i)
-        break
-    return command
-
   def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):
       with self.m.step.context({'infra_step': True}):
@@ -292,14 +270,11 @@ class GomaApi(recipe_api.RecipeApi):
 
   def _upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
                    ninja_log_command=None, ninja_log_exit_status=None,
-                   name=None, skip_sendgomatsmon=False):
+                   name=None):
     args = [
         '--upload-compiler-proxy-info',
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
     ]
-
-    if skip_sendgomatsmon:
-      args.append('--skip-sendgomatsmon')
 
     assert self._goma_jsonstatus_called
     args.extend(['--json-status', self.json_path])
@@ -341,7 +316,7 @@ class GomaApi(recipe_api.RecipeApi):
 
   def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,
                       ninja_log_compiler=None, goma_env=None, ninja_env=None,
-                      allow_build_without_goma=False, **kwargs):
+                      **kwargs):
     """Build with ninja_command using goma
 
     Args:
@@ -353,9 +328,6 @@ class GomaApi(recipe_api.RecipeApi):
       ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
       goma_env: Environment controlling goma behavior.
       ninja_env: Environment for ninja.
-      allow_build_without_goma (bool):
-        If this is True, goma starting failure is ignored and
-        build without goma.
 
     Returns:
       TODO(tikuta): return step_result
@@ -373,45 +345,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     # TODO(tikuta): Remove -j flag from ninja_command and set appropriate value.
 
-    if allow_build_without_goma:
-      assert ninja_log_outdir is not None
-
-      try:
-        self.start(goma_env)
-      except:
-        try:
-          if self.m.platform.is_win:
-            goma_env = goma_env.copy()
-            goma_env['GOMA_DISABLED'] = 'true'
-            self.m.python('update windows env',
-                          script=self.package_repo_resource(
-                              'scripts', 'slave', 'update_windows_env.py'),
-                          args=['--envfile-dir', str(ninja_log_outdir)],
-                          env=goma_env)
-          ninja_env = ninja_env.copy()
-          ninja_env['GOMA_DISABLED'] = 'true'
-          ninja_command = self.remove_j_flag(ninja_command)
-          self.m.step(name or 'compile', ninja_command,
-                      env=ninja_env, **kwargs)
-          ninja_log_exit_status = 0
-        except self.m.step.StepFailure as e: # pragma: no cover
-          ninja_log_exit_status = e.retcode
-          raise e
-        finally:
-          # Drop goma from ninja_log_compiler
-          ninja_log_compiler = ninja_log_compiler.replace('goma-', '')
-          if ninja_log_compiler == 'goma':
-            ninja_log_compiler = None
-
-          self._upload_logs(ninja_log_outdir=ninja_log_outdir,
-                            ninja_log_compiler=ninja_log_compiler,
-                            ninja_log_command=ninja_command,
-                            ninja_log_exit_status=ninja_log_exit_status,
-                            skip_sendgomatsmon=True,
-                            name='upload log goma start failed')
-        return
-    else:
-      self.start(goma_env)
+    self.start(goma_env)
 
     try:
       self.m.step(name or 'compile', ninja_command,

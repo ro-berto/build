@@ -199,10 +199,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       # We rely on goma to meet cycle time goals on the tryserver. It's better
       # to fail early.
       goma_env['GOMA_FAIL_FAST'] = 'true'
-      allow_build_without_goma = False
     else:
       goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
-      allow_build_without_goma = True
 
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'compile' through 'cros chrome-sdk'
@@ -274,7 +272,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           goma_env=goma_env,
           ninja_log_outdir=target_output_dir,
           ninja_log_compiler=self.c.compile_py.compiler or 'goma',
-          allow_build_without_goma=allow_build_without_goma,
           **kwargs)
     except self.m.step.StepFailure as e:
       # Handle failures caused by goma.

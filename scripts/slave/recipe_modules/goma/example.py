@@ -18,15 +18,12 @@ def RunSteps(api):
 
   command = list(api.properties.get('build_command'))
   env = {}
-  allow_build_without_goma = api.properties.get(
-      'allow_build_without_goma', False)
 
   api.goma.build_with_goma(
       name='ninja',
       ninja_log_outdir=api.properties.get('ninja_log_outdir'),
       ninja_log_compiler=api.properties.get('ninja_log_compiler'),
       ninja_command=command,
-      allow_build_without_goma=allow_build_without_goma,
       goma_env=env)
 
 
@@ -44,12 +41,6 @@ def GenTests(api):
 
   for platform in ('linux', 'win', 'mac'):
     yield (api.test(platform) + api.platform.name(platform) +
-           api.properties.generic(**properties))
-
-    yield (api.test('%s_goma_disabled' % platform) +
-           api.step_data('preprocess_for_goma.start_goma', retcode=1) +
-           api.platform.name(platform) +
-           api.properties(allow_build_without_goma=True) +
            api.properties.generic(**properties))
 
   yield (api.test('linux_compile_failed') + api.platform.name('linux') +
