@@ -16,7 +16,6 @@ SPEC = {
     'GPU Win Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'build_angle_deqp_tests',
         'chrome_with_codecs',
         'internal_gles2_conform_tests',
@@ -42,7 +41,6 @@ SPEC = {
     'GPU Win Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'chrome_with_codecs',
         'internal_gles2_conform_tests',
         'mb',
@@ -265,7 +263,6 @@ SPEC = {
     'GPU Win x64 Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'build_angle_deqp_tests',
         'chrome_with_codecs',
         'internal_gles2_conform_tests',
@@ -291,7 +288,6 @@ SPEC = {
     'GPU Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'chrome_with_codecs',
         'internal_gles2_conform_tests',
         'mb',
@@ -351,8 +347,7 @@ SPEC = {
       # on Windows. We don't run the binaries that are built on this
       # bot, at least not yet.
       'chromium_config': 'chromium_win_clang',
-      'chromium_apply_config': ['archive_gpu_tests',
-                                'chrome_with_codecs',
+      'chromium_apply_config': ['chrome_with_codecs',
                                 'internal_gles2_conform_tests',
                                 'mb',
                                 'ninja_confirm_noop',],
@@ -380,7 +375,7 @@ SPEC = {
     'GPU Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'archive_gpu_tests', 'chrome_with_codecs',
+                                'chrome_with_codecs',
                                 'internal_gles2_conform_tests',
                                 'build_angle_deqp_tests'],
       'gclient_config': 'chromium',
@@ -402,7 +397,7 @@ SPEC = {
     'GPU Linux Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'archive_gpu_tests', 'chrome_with_codecs',
+                                'chrome_with_codecs',
                                 'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
@@ -579,8 +574,7 @@ SPEC = {
     },
     'GPU Mac Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config':['archive_gpu_tests',
-                               'chrome_with_codecs',
+      'chromium_apply_config':['chrome_with_codecs',
                                'internal_gles2_conform_tests',
                                'mb',
                                'ninja_confirm_noop',],
@@ -602,8 +596,7 @@ SPEC = {
     },
     'GPU Mac Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['archive_gpu_tests',
-                                'chrome_with_codecs',
+      'chromium_apply_config': ['chrome_with_codecs',
                                 'internal_gles2_conform_tests',
                                 'mb',
                                 'ninja_confirm_noop',],
@@ -912,7 +905,7 @@ SPEC = {
     'GPU Fake Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'archive_gpu_tests', 'chrome_with_codecs' ],
+                                'chrome_with_codecs' ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1040,7 +1033,6 @@ SPEC = {
     'Linux ChromiumOS Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'chromeos',
         'internal_gles2_conform_tests',
         'mb',
@@ -1065,7 +1057,6 @@ SPEC = {
     'Linux ChromiumOS Ozone Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'chromeos',
         'internal_gles2_conform_tests',
         'mb',

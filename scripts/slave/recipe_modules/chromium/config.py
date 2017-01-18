@@ -693,13 +693,6 @@ def blink(c):  # pragma: no cover
 def blink_logging_on(c, invert=False):
   c.gyp_env.GYP_DEFINES['blink_logging_always_on'] = int(not invert)
 
-@config_ctx()
-def archive_gpu_tests(c):
-  # TODO(sergiyb): This option should be removed/refactored, because it was
-  # originally created to prevent buidling GPU tests on Chromium waterfalls,
-  # which is no longer useful as we trigger swarming GPU tests from tryservers.
-  c.gyp_env.GYP_DEFINES['archive_gpu_tests'] = 1
-
 @config_ctx(includes=['android_common', 'ninja', 'static_library',
                       'default_compiler', 'goma'])
 def android(c):

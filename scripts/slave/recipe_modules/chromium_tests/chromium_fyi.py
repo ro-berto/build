@@ -13,7 +13,6 @@ KITCHEN_TEST_SPEC = {
   'chromium_apply_config': [
     'mb',
     'ninja_confirm_noop',
-    'archive_gpu_tests',
     'chrome_with_codecs'
   ],
   'gclient_config': 'chromium',
@@ -2215,7 +2214,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'archive_gpu_tests',
         'chrome_with_codecs'
       ],
       'gclient_config': 'chromium',
@@ -2236,7 +2234,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'archive_gpu_tests',
         'chrome_with_codecs'
       ],
       'gclient_config': 'chromium',

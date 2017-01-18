@@ -16,7 +16,6 @@ SPEC = {
     'GPU Win Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
@@ -39,7 +38,6 @@ SPEC = {
     'GPU Win Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
@@ -93,7 +91,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'archive_gpu_tests',
         'chrome_with_codecs'
       ],
       'gclient_config': 'chromium',
@@ -116,7 +113,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'archive_gpu_tests',
         'chrome_with_codecs'
       ],
       'gclient_config': 'chromium',
@@ -166,7 +162,6 @@ SPEC = {
     'GPU Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
@@ -189,7 +184,6 @@ SPEC = {
     'GPU Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'archive_gpu_tests',
         'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
