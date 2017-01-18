@@ -239,13 +239,6 @@
     ],
     "https://build.chromium.org/p/chromium.infra.cron": [
       {
-        "builders": {
-          "gnumbd": {
-            "categories": [
-              "chromium_gnumbd_closer"
-            ]
-          }
-        },
         "excluded_builders": [
           "lkgr-tag-pusher",
           "builder_alerts",
@@ -887,19 +880,6 @@
       "tree_notify": [
         "tandrii+infra-continuous-self-appointed-gardener@google.com"
       ]
-    },
-    "chromium_gnumbd_closer": {
-      "closing_optional": [
-        "gnumbd"
-      ],
-      "sheriff_classes": [
-        "trooper"
-      ],
-      "tree_notify": [
-        "chrome-troopers+alerts-staging@google.com"
-      ],
-      "status_template": "Auto-closed (Infra Gnumbd cron \"%(builder_name)s\" %(build_url)s failed)",
-      "subject_template": "Tree-closing infra failure on %(builder_name)s"
     },
     "nacl_all": {
       "closing_optional": [
