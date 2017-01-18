@@ -22,6 +22,7 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'service_account',
+    'test_utils',
     'trigger',
     'url',
 ]

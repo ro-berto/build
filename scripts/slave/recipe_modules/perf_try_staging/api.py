@@ -62,27 +62,31 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     # TODO(prasadv): This is tempory hack to prepend 'src' to test command,
     # until dashboard and trybot scripts are changed.
     _prepend_src_to_path_in_command(test_cfg)
-    # Run with patch.
-    results_with_patch = self._build_and_run_tests(
-        test_cfg, bot_update_step, bot_db, r[0],
-        name='With Patch' if r[0] is None else r[0],
-        reset_on_first_run=True,
-        upload_on_last_run=True,
-        results_label='Patch' if r[0] is None else r[0],
-        allow_flakes=False)
 
-    if not any(r):
-      # Revert changes.
-      self.m.chromium_tests.deapply_patch(bot_update_step)
+    # Run with patch.
+    with self.m.step.nest('Running WITH patch'):
+      results_with_patch = self._build_and_run_tests(
+          test_cfg, bot_update_step, bot_db, r[0],
+          name='With Patch' if r[0] is None else r[0],
+          reset_on_first_run=True,
+          upload_on_last_run=True,
+          results_label='Patch' if r[0] is None else r[0],
+          allow_flakes=False)
+
+    with self.m.step.nest('De-applying patch'):
+      if not any(r):
+        # Revert changes.
+        self.m.chromium_tests.deapply_patch(bot_update_step)
 
     # Run without patch.
-    results_without_patch = self._build_and_run_tests(
-        test_cfg, bot_update_step, bot_db, r[1],
-        name='Without Patch' if r[1] is None else r[1],
-        reset_on_first_run=False,
-        upload_on_last_run=True,
-        results_label='TOT' if r[1] is None else r[1],
-        allow_flakes=False)
+    with self.m.step.nest('Running WITHOUT patch'):
+      results_without_patch = self._build_and_run_tests(
+          test_cfg, bot_update_step, bot_db, r[1],
+          name='Without Patch' if r[1] is None else r[1],
+          reset_on_first_run=False,
+          upload_on_last_run=True,
+          results_label='TOT' if r[1] is None else r[1],
+          allow_flakes=False)
 
     labels = {
         'profiler_link1': ('%s - Profiler Data' % 'With Patch'
@@ -93,14 +97,16 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
     # TODO(chrisphan): Deprecate this.  perf_dashboard.post_bisect_results below
     # already outputs data in json format.
-    self._compare_and_present_results(
-        test_cfg, results_without_patch, results_with_patch, labels)
+    with self.m.step.nest('Results'):
+      self._compare_and_present_results(
+          test_cfg, results_without_patch, results_with_patch, labels)
 
-    bisect_results = self.get_result(
-        test_cfg, results_without_patch, results_with_patch, labels)
-    self.m.perf_dashboard.set_default_config()
-    self.m.perf_dashboard.post_bisect_results(
-        bisect_results, halt_on_failure=True)
+    with self.m.step.nest('Notify dashboard'):
+      bisect_results = self.get_result(
+          test_cfg, results_without_patch, results_with_patch, labels)
+      self.m.perf_dashboard.set_default_config()
+      self.m.perf_dashboard.post_bisect_results(
+          bisect_results, halt_on_failure=True)
 
   def run_cq_job(self, update_step, bot_db, files_in_patch):
     """Runs benchmarks affected by a CL on CQ."""
@@ -198,8 +204,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     revision = build_state.BuildState(self, revision_hash, with_patch)
     # request build and wait for it only when the build is nonexistent
     if with_patch or not self._gsutil_file_exists(revision.build_file_path):
-        revision.request_build()
-        revision.wait_for()
+      revision.request_build()
+      revision.wait_for()
     revision.download_build(update_step, bot_db)
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.adb_install_apk('ChromePublic.apk')
@@ -279,6 +285,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
   def _compare_and_present_results(
       self, cfg, results_without_patch, results_with_patch, labels):
     """Parses results and creates Results step."""
+    step_result = self.m.step.active_result
+
     output_with_patch = results_with_patch.get('output')
     output_without_patch = results_without_patch.get('output')
     values_with_patch, values_without_patch = self.parse_values(
@@ -294,11 +302,9 @@ class PerfTryJobApi(recipe_api.RecipeApi):
                     if cloud_links_without_patch['html'] else '')
 
     if not values_with_patch or not values_without_patch:
-      step_result = self.m.step('Results', [])
-      step_result.presentation.step_text = (
-          'No values from test with patch, or none from test without patch.\n'
-          'Output with patch:\n%s\n\nOutput without patch:\n%s' % (
-              output_with_patch, output_without_patch))
+      step_result.presentation.step_text += (
+          self.m.test_utils.format_step_text(
+              'No values generated from test.'))
       if results_link:
         step_result.presentation.links.update({'HTML Results': results_link})
       return
@@ -326,7 +332,6 @@ class PerfTryJobApi(recipe_api.RecipeApi):
       std_err = self.m.math_utils.pooled_standard_error(
           [values_with_patch, values_without_patch])
 
-    step_result = self.m.step('Results', [])
     if relative_change is not None and std_err is not None:
       data = [
           ['Revision', 'Mean', 'Std.Error'],
@@ -340,7 +345,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
           'std_err': std_err,
           'results': _pretty_table(data),
       }
-      step_result.presentation.step_text = display_results
+      step_result.presentation.step_text += (
+          self.m.test_utils.format_step_text(display_results))
 
     if results_link:
       step_result.presentation.links.update({'HTML Results': results_link})
