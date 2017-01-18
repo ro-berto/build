@@ -165,7 +165,6 @@ class DartCommands(commands.FactoryCommands):
     cmd = ('python ' + self._tools_dir + '/test.py '
            ' --progress=line --report --time --mode=%s --arch=%s '
            '--compiler=none --runtime=vm --failure-summary %s '
-           '--copy-coredumps'
            ) % (options['mode'], options['arch'], self.standard_flags)
 
     vm_options = options.get('vm_options')

@@ -41,6 +41,7 @@ for platform in ['linux']:
         'build_args': (['dart_bootstrap',
                         'dart_precompiled_runtime']),
         'test_args': ['-cdartkp', '-rdart_precompiled'] + general_test_args,
+        'archive_core_dumps': (mode == 'debug') and (platform == 'linux'),
       }
 
 def RunSteps(api):
@@ -95,15 +96,15 @@ def RunSteps(api):
                  '--time',
                  '--failure-summary',
                  '--write-debug-log',
-                 '--write-test-outcome-log',
-                 '--copy-coredumps']
+                 '--write-test-outcome-log']
+    if b.get('archive_core_dumps', False):
+      test_args.append('--copy-coredumps')
     test_args.extend(shard_args)
     test_args.extend(b.get('test_args', []))
     api.python('vm tests',
                api.path['checkout'].join('tools', 'test.py'),
                args=test_args,
                cwd=api.path['checkout'])
-
     api.python('taskkill after testing',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'],

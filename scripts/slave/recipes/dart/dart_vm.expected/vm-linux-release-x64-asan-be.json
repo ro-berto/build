@@ -95,7 +95,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--builder-tag=asan",
       "--timeout=240"
     ],
@@ -120,7 +119,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--builder-tag=asan",
       "--timeout=240",
       "--checked"

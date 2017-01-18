@@ -95,8 +95,7 @@
       "--time",
       "--failure-summary",
       "--write-debug-log",
-      "--write-test-outcome-log",
-      "--copy-coredumps"
+      "--write-test-outcome-log"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
@@ -114,7 +113,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--checked"
     ],
     "cwd": "[START_DIR]/sdk",

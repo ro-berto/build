@@ -69,7 +69,8 @@
       "[START_DIR]/sdk/tools/build.py",
       "-mdebug",
       "--arch=x64",
-      "runtime"
+      "runtime",
+      "runtime_precompiled"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "build dart"
@@ -87,11 +88,11 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "-cdartk",
-      "-rvm",
-      "co19",
-      "language",
-      "kernel"
+      "--copy-coredumps",
+      "-cprecompiler",
+      "-rdart_precompiled",
+      "--use-blobs",
+      "--builder-tag=no_ipv6"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"

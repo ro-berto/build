@@ -117,6 +117,7 @@ for mode in ['debug', 'release', 'product']:
     'test_args': ['-cprecompiler', '-rdart_precompiled', '--use-blobs',
                   '--builder-tag=no_ipv6'],
     'build_args': ['runtime_precompiled'],
+    'archive_core_dumps': mode == 'debug',
   }
   for arch in ['x64', 'simdbc64']:
     builders['vm-linux-%s-%s-reload' % (mode, arch)] = {
@@ -176,8 +177,9 @@ def RunSteps(api):
                  '--time',
                  '--failure-summary',
                  '--write-debug-log',
-                 '--write-test-outcome-log',
-                 '--copy-coredumps']
+                 '--write-test-outcome-log']
+    if b.get('archive_core_dumps', False):
+      test_args.append('--copy-coredumps')
     test_args.extend(b.get('test_args', []))
     api.python('vm tests',
                api.path['checkout'].join('tools', 'test.py'),
@@ -208,3 +210,7 @@ def GenTests(api):
       api.properties.generic(mastername='client.dart',
                              buildername='test-coverage-be',
                              clobber=''))
+   yield (
+      api.test('precomp-linux-debug-x64') + api.platform('linux', 64) +
+      api.properties.generic(mastername='client.dart',
+                             buildername='precomp-linux-debug-x64-be'))
