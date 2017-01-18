@@ -207,7 +207,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Android_Tests__trial__dbg_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Android Tests (trial)(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android Tests (trial)(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -220,12 +220,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/testing/buildbot/chromium.fyi.json",
+      "[BUILDER_CACHE]/Android_Tests__trial__dbg_/src/testing/buildbot/chromium.android.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.fyi.json)",
+    "name": "read test spec (chromium.android.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Android_Tests__trial__dbg_/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Android_Tests__trial__dbg_/src/testing/buildbot/chromium.android.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -314,7 +314,7 @@
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
-      "chromium.fyi",
+      "chromium.android.fyi",
       "--build-number",
       "571"
     ],
@@ -624,7 +624,7 @@
       "--input-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
       "--master-name",
-      "chromium.fyi",
+      "chromium.android.fyi",
       "--builder-name",
       "Android Tests (trial)(dbg)",
       "--build-number",
@@ -691,7 +691,7 @@
       "--input-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
       "--master-name",
-      "chromium.fyi",
+      "chromium.android.fyi",
       "--builder-name",
       "Android Tests (trial)(dbg)",
       "--build-number",

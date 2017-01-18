@@ -12,6 +12,14 @@
   "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
 
   "builders": {
+    "Android Tests (trial)(dbg)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      "slave_pools": ["trial_device_slave"],
+      "category": "2Testers",
+      "mergeRequests": True,
+    },
     "Jelly Bean Tester": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -86,6 +94,30 @@
       "category": "2Testers",
       "mergeRequests": True,
     },
+    "x64 Device Tester": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["x64_ccompute_launcher"],
+      "category": "2Testers",
+      "mergeRequests": True,
+    },
+    "x86 Cloud Tester": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["cloud_ccompute_launcher"],
+      "category": "2Testers",
+      "mergeRequests": True,
+    },
+    "x86 Emulator Tester": {
+      "recipe": "emulator",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["trial_device_slave"],
+      "category": "2Testers",
+      "mergeRequests": True,
+    },
   },
 
   "schedulers": {
@@ -150,6 +182,36 @@
       },
       "slaves": [
         "slave13-c1",
+      ],
+    },
+    "trial_device_slave": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": [
+        "build64-b1",
+      ],
+    },
+    "x64_ccompute_launcher": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": [
+        "slave175-c1",
+      ],
+    },
+    "cloud_ccompute_launcher": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": [
+        "slave51-c1",
       ],
     },
   }

@@ -2057,55 +2057,6 @@ SPEC = {
       },
     },
 
-    'Android Tests (trial)(dbg)': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Android Builder (dbg)',
-      'android_config': 'non_device_wipe_provisioning',
-      'remove_system_webview': True,
-      'root_devices': True,
-      'tests': [
-        steps.GTestTest('gfx_unittests'),
-        steps.AndroidInstrumentationTest('WebViewUiTest'),
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'Android x64 Tests': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder_tester',
-      'android_config': 'x64_builder_mb',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-      'use_isolate': True,
-      # Workaround so that recipes doesn't add random build targets to our
-      # compile line. We want to build everything.
-      'add_tests_as_compile_targets': False,
-      'compile_targets': [
-        'all',
-      ],
-    },
-
     'Android Remoting Tests': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
@@ -2218,24 +2169,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-    },
-    'Android Cloud Tests': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder_tester',
-      'android_config': 'x86_builder_mb',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-      'use_isolate': True,
-      'enable_swarming': True,
     },
     'Win SyzyAsan (rel)': {
       'chromium_config': 'chromium',
