@@ -69,6 +69,24 @@ SPEC = {
       },
     },
 
+    'Memory Infra Tester': {
+      'use_isolate': True,
+      'enable_swarming': True,
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'android_config': 'main_builder_mb',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
     'NDK Next arm Builder': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',

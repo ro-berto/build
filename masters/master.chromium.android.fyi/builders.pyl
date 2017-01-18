@@ -36,38 +36,45 @@
       "category": "2Testers",
       "mergeRequests": True,
     },
+    "Memory Infra Tester": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["memory_bot"],
+      "category": "4Memory",
+    },
     "NDK Next arm Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["ndk_next_builders"],
       "category": "3NDKBuilders",
     },
     "NDK Next arm64 Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["ndk_next_builders"],
       "category": "3NDKBuilders",
     },
     "NDK Next MIPS Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["ndk_next_builders"],
       "category": "3NDKBuilders",
     },
     "NDK Next x64 Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["ndk_next_builders"],
       "category": "3NDKBuilders",
     },
     "NDK Next x86 Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["ndk_next_builders"],
       "category": "3NDKBuilders",
     },
@@ -82,7 +89,7 @@
   },
 
   "schedulers": {
-    "android_commits": {
+    "chromium_commits": {
       "type": "git_poller",
       "git_repo_url": "https://chromium.googlesource.com/chromium/src",
     },
@@ -112,6 +119,14 @@
         "bits": "64",
       },
       "slaves": ["build19-b1"],
+    },
+    "memory_bot": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": "64",
+      },
+      "slaves": ["slave195-c1"],
     },
     "ndk_next_builders": {
       "slave_data": {
