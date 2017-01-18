@@ -801,7 +801,7 @@
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -810,7 +810,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
@@ -1237,7 +1237,7 @@
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -1246,7 +1246,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
@@ -1288,7 +1288,7 @@
       "<br/><br/>P<br/><br/>a<br/><br/>t<br/><br/>c<br/><br/>h<br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/>1<br/><br/>.<br/><br/>0<br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/>0<br/><br/>.<br/><br/>0<br/><br/>",
       "<br/><br/>N<br/><br/>o<br/><br/> <br/><br/>P<br/><br/>a<br/><br/>t<br/><br/>c<br/><br/>h<br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/>9<br/><br/>.<br/><br/>0<br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/> <br/><br/>0<br/><br/>.<br/><br/>0<br/><br/>",
       "<br/>@@@",
-      "@@@STEP_LINK@HTML Results@http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch@@@"
+      "@@@STEP_LINK@HTML Results@https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@"
     ]
   },
   {
@@ -1363,7 +1363,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/post_bisect_results",
       "-i",
-      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"std_err\\\": 0.0, \\\"metric\\\": \\\"dummy/dummy\\\", \\\"profiler_links\\\": [], \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/android_nexus7_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\\\", \\\"result\\\": \\\"Revision    Mean        Std.Error\\\\nPatch       1.0         0.0\\\\nNo Patch    9.0         0.0\\\", \\\"bisect_bot\\\": \\\"android_nexus7_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\\", \\\"change\\\": 88.88888888888889}\"}",
+      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"std_err\\\": 0.0, \\\"metric\\\": \\\"dummy/dummy\\\", \\\"profiler_links\\\": [], \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/android_nexus7_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\\\", \\\"result\\\": \\\"Revision    Mean        Std.Error\\\\nPatch       1.0         0.0\\\\nNo Patch    9.0         0.0\\\", \\\"bisect_bot\\\": \\\"android_nexus7_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\\\", \\\"change\\\": 88.88888888888889}\"}",
       "-o",
       "/path/to/tmp/json"
     ],

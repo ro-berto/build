@@ -800,7 +800,7 @@
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -809,7 +809,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
@@ -1220,7 +1220,7 @@
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -1229,7 +1229,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
@@ -1244,7 +1244,7 @@
     "name": "Results",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>N<br/><br/>o<br/><br/> <br/><br/>v<br/><br/>a<br/><br/>l<br/><br/>u<br/><br/>e<br/><br/>s<br/><br/> <br/><br/>g<br/><br/>e<br/><br/>n<br/><br/>e<br/><br/>r<br/><br/>a<br/><br/>t<br/><br/>e<br/><br/>d<br/><br/> <br/><br/>f<br/><br/>r<br/><br/>o<br/><br/>m<br/><br/> <br/><br/>t<br/><br/>e<br/><br/>s<br/><br/>t<br/><br/>.<br/>@@@",
-      "@@@STEP_LINK@HTML Results@http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch@@@"
+      "@@@STEP_LINK@HTML Results@https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@"
     ]
   },
   {
@@ -1259,7 +1259,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/post_bisect_results",
       "-i",
-      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"warnings\\\": [\\\"No values from test with patch, or none from test without patch.\\\\n Output with patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\\\n\\\\n\\\\nOutput without patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\\\n\\\"], \\\"metric\\\": null, \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/staging_android_nexus5X_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\\\", \\\"bisect_bot\\\": \\\"staging_android_nexus5X_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\\"}\"}",
+      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"warnings\\\": [\\\"No values from test with patch, or none from test without patch.\\\\n Output with patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\\\\n\\\\n\\\\nOutput without patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\\\\n\\\"], \\\"metric\\\": null, \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/staging_android_nexus5X_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\\\", \\\"bisect_bot\\\": \\\"staging_android_nexus5X_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\\\"}\"}",
       "-o",
       "/path/to/tmp/json"
     ],

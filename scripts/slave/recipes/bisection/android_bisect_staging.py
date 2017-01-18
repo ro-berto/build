@@ -175,8 +175,8 @@ Sd  dummy: 0.255921ms
 RESULT telemetry_page_measurement_results: num_failed= 0 count
 RESULT telemetry_page_measurement_results: num_errored= 0 count
 
-View online at http://storage.googleapis.com/chromium-telemetry/\
-html-results/results-with_patch
+View online at https://console.developers.google.com/\
+m/cloudstorage/b/chromium-telemetry/o/html-results/results-with
 """
 
   results_without_patch = """*RESULT dummy: dummy= [5.83,6.013,5.573]ms
@@ -185,8 +185,8 @@ Sd  dummy: 0.255921ms
 RESULT telemetry_page_measurement_results: num_failed= 0 count
 RESULT telemetry_page_measurement_results: num_errored= 0 count
 
-View online at http://storage.googleapis.com/chromium-telemetry/html-results/\
-results-without_patch
+View online at https://console.developers.google.com/\
+m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
 """
   buildbucket_put_response = {
        "results":[{

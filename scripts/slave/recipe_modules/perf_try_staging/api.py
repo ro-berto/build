@@ -22,8 +22,10 @@ PERF_MEASUREMENTS_PATH = 'tools/perf/measurements'
 BUILDBOT_BUILDERNAME = 'BUILDBOT_BUILDERNAME'
 BENCHMARKS_JSON_FILE = 'benchmarks.json'
 
-CLOUD_RESULTS_LINK = (r'\s(?P<VALUES>http://storage.googleapis.com/'
-                      'chromium-telemetry/html-results/results-[a-z0-9-_]+)\s')
+CLOUD_RESULTS_LINK = (r'\s(?P<VALUES>https://console.developers.google.com/'
+    'm/cloudstorage/b/chromium-telemetry/o/html-results/results-[a-z0-9-_]+)\s')
+# CLOUD_RESULTS_LINK = (r'\s(?P<VALUES>http://storage.googleapis.com/'
+#                       'chromium-telemetry/html-results/results-[a-z0-9-_]+)\s')
 PROFILER_RESULTS_LINK = (r'\s(?P<VALUES>https://console.developers.google.com/'
                          'm/cloudstorage/b/[a-z-]+/o/profiler-[a-z0-9-_.]+)\s')
 RESULTS_BANNER = """
