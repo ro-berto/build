@@ -455,8 +455,6 @@ class V8Api(recipe_api.RecipeApi):
     root = '/'.join([
       'v8.infra',
       'build_dependencies',
-      self.m.properties['mastername'],
-      self.m.properties['buildername'],
       '',
     ])
     for k, v in values.iteritems():
