@@ -22,6 +22,46 @@ from twisted.python import log
 PUBSUB_SCOPES = ['https://www.googleapis.com/auth/pubsub']
 
 
+class BuildRequestObserver(object):
+  """A callable class that acts as a BuildRequest observer that can
+  unsubscribe itself from the observers list when called.
+
+  When we save an incoming build request object, we want to be able to remove
+  it from our tracking when the build request object has been consumed and
+  turned into a build.  Unfortunately there is no "buildRequestConsumed" hook
+  for an IStatusReceiver, but build request objects instead have a
+  subscription point (kept as a list of observers, where an observer is a
+  callable) where you can pass it a callback and it gets called
+  when the request is being consumed.
+  Unfortunately the subscription mechnism doesn't remove the observer from
+  its list of observer, so as part of the callback, we want to clean up
+  after ourselves and unsubscribe from the subscription to avoid a memory
+  leak.
+  """
+  def __init__(self, ps_client, request):
+    self.client = ps_client
+    self.request = request
+
+  def __call__(self, _bs):
+    if self.request.buildername not in self.client._pending_builds:
+      log.msg(
+          'PubSub: ERROR - Tried to remove build request %s from builder %s '
+          'but could not find builder' % (
+              self.request.brid, self.request.buildername))
+      return
+    builder = self.client._pending_builds[self.request.buildername]
+    if self.request.brid not in builder:
+      log.msg(
+          'PubSub: ERROR - Tried to remove build request %s from builder %s '
+          'but could not find build request' % (
+              self.request.brid, self.request.buildername))
+      return
+    del builder[self.request.brid]
+    self.request.unsubscribe(self)
+    log.msg('PubSub: Successfully removed and unsubscribed %s/%s' % (
+        self.request.buildername, self.request.brid))
+
+
 class PubSubClient(object):
   """A client residing in a separate process to send data to PubSub."""
 
@@ -78,7 +118,7 @@ def event_handler(func):
   @functools.wraps(func)
   def wrapper(self, *args, **kwargs):
     if self.verbose:
-      log.msg('Status update (%s): %s %s' % (
+      log.msg('PubSub: Status update (%s): %s %s' % (
           status, args, ' '.join(['%s=%s' % (k, kwargs[k])
                                   for k in sorted(kwargs.keys())])))
     return func(self, *args, **kwargs)
@@ -170,6 +210,12 @@ class StatusPush(StatusReceiverMultiService):
     self._pending_build_lru = SyncLRUCache(
         self._get_build_request, max_size=200)
     log.msg('Creating PubSub service.')
+    # Pending build database.
+    # Key: builder name.
+    # Value: Dict of {brid: build request object}
+    self._pending_builds = {}
+    # List of deferreds, which returns list of pending builds when yielded.
+    self._pending_todos = []
 
   @staticmethod
   def _getTimeDelta(value):
@@ -421,12 +467,11 @@ class StatusPush(StatusReceiverMultiService):
     defer.returnValue(result)
 
   @defer.inlineCallbacks
-  def _getBuilderData(self, name, builder, get_pending=True):
+  def _getBuilderData(self, name, builder):
     # This requires a deferred call since the data is queried from
     # the postgres DB (sigh).
-    pending = []
-    if get_pending:
-      pending = yield builder.getPendingBuildRequestStatuses()
+    # TODO(hinoka): Maybe sort this by ID?
+    pending = self._pending_builds.get(name, {}).values()
     # Optimization cheat: only get the first 25 pending builds.
     # This caps the amount of postgres db calls and json size for really out
     # of control builders
@@ -455,19 +500,26 @@ class StatusPush(StatusReceiverMultiService):
     * builders: List of builders (builbot.status.builder.Builder).
     * slaves: List of slaves (buildbot.status.slave).
     """
+    # First do some bookkeeping.  If we queue any pending build requests
+    # to look into from restarting the master, process them now.
+    # This should only happen once per restart.
+    if self._pending_todos:
+      todo_lists = yield defer.DeferredList(self._pending_todos)
+      del(self._pending_todos[:])
+      for success, todo_list in todo_lists:
+        if success:
+          for br in todo_list:
+            self._recordBuildRequest(br)
+        else:
+          log.msg('PubSub: ERROR failed to resolve deferred for pending')
+
     builders = {builder_name: self._status.getBuilder(builder_name)
                 for builder_name in self._status.getBuilderNames()}
     builder_infos = {}
 
-    # TODO(hinoka): Re-enable getting pending build info for masters when
-    #               performance issues are fixed crbug.com/679563
-    get_pending = False
-    if self.name == 'chromium.fyi':
-      get_pending = True
-
     # Fetch all builder info in parallel.
     builder_info_list = yield defer.DeferredList([
-        self._getBuilderData(name, builder, get_pending)
+        self._getBuilderData(name, builder)
         for name, builder in builders.iteritems()])
     builder_infos = {
         data[0]: data[1] for success, data in builder_info_list if success}
@@ -492,10 +544,30 @@ class StatusPush(StatusReceiverMultiService):
     )
     self._updated_builds.add(build)
 
+  def _recordBuildRequest(self, request):
+    """This is called when a new request gets actively submitted to the
+    scheduler.  We record the build request and add a callback to remove
+    the build request from the records when it gets consumed."""
+    if request.buildername not in self._pending_builds:
+      log.msg(
+          'PubSub: ERROR - Tried to add %s/%s '
+          'but could not find builder' % (request.buildername, request.brid))
+      return
+    self._pending_builds[request.buildername][request.brid] = request
+    # The observer removes the request from our bookkeeping dict when called,
+    # then removes itself from the observers list.
+    bro = BuildRequestObserver(self, request)
+    request.subscribe(bro)
+    log.msg('PubSub: Successfully recorded build request %s/%s' % (
+        request.brid, request.buildername))
+
   #### Events
 
   @event_handler
-  def builderAdded(self, _builderName, _builder):
+  def builderAdded(self, builderName, builder):
+    self._pending_builds[builderName] = {}
+    # Populate pending builds from the database to do later.
+    self._pending_todos.append(builder.getPendingBuildRequestStatuses())
     return self
 
   @event_handler
@@ -510,3 +582,23 @@ class StatusPush(StatusReceiverMultiService):
   @event_handler
   def buildFinished(self, _builderName, build, _results):
     self._recordBuild(build)
+
+  def buildsetSubmitted(self, buildset):
+    log.msg('PubSub: Status update (buildsetSubmitted): %s/%s'
+            % (buildset.getID(), buildset.getBuilderNames()))
+    return self
+
+  @event_handler
+  def requestSubmitted(self, request):
+    log.msg('PubSub: Status update (requestSubmitted): %s/%s'
+            % (request.buildername, request.brid))
+    self._recordBuildRequest(request)
+
+  @event_handler
+  def requestCancelled(self, builder, request):
+    if request.buildername in self._pending_builds:
+      pb_builder = self._pending_builds[request.buildername]
+      if pb_builder.pop(request.brid, None):
+        log.msg('PubSub: %s/%s cancelled' % (request.buildername, request.brid))
+
+    return self
