@@ -1287,55 +1287,60 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def _output_chartjson_results_if_present(self, api, step_result):
     results = \
       getattr(step_result, 'isolated_script_chartjson_results', None) or {}
-    try:
-      if not results.get('enabled', True):
-        step_result.presentation.logs['DISABLED_BENCHMARK'] = \
-           ['Info: Benchmark disabled, not sending results to dashboard']
-        return
 
-      # TODO(eyaich): Remove logging once we debug uploading chartjson
-      # to perf dashboard
-      step_result.presentation.logs['chartjson_info'] = \
-          ['Info: Setting up arguments for perf dashboard']
+    if not self._perf_id or not self._results_url:
+      # We aren't correctly configured to send data.
+      if results:
+        # warn if we have results and aren't uploading them
+        step_result.presentation.logs['NOT_UPLOADING_CHART_JSON'] = [
+            'Info: Bot is missing perf_id and/or results_url configuration, so'
+            'not uploading chart json']
+      return
 
-      results_file = api.raw_io.input(data=json.dumps(results))
-      """Produces a step that uploads results to dashboard"""
-      args = [
-          '--results-file', results_file,
-          # We are passing this in solely to have the output show up as a link
-          # in the step log, it will not be used after the upload is complete.
-          '--output-json-file', api.json.output(),
-          '--perf-id', self._perf_id,
-          '--results-url', self._results_url,
-          '--name', self._perf_dashboard_id,
-          '--buildername', api.properties['buildername'],
-          '--buildnumber', api.properties['buildnumber'],
-      ]
-      if api.chromium.c.build_dir:
-        args.extend(['--build-dir', api.chromium.c.build_dir])
-      if 'got_revision_cp' in api.properties:
-        args.extend(['--got-revision-cp', api.properties['got_revision_cp']])
-      if 'version' in api.properties:
-        args.extend(['--version', api.properties['version']])
-      if 'git_revision' in api.properties:
-        args.extend(['--git-revision', api.properties['git_revision']])
-      if 'got_webrtc_revision' in api.properties:
-        args.extend(['--got-webrtc-revision',
-            api.properties['got_webrtc_revision']])
-      if 'got_v8_revision' in api.properties:
-        args.extend(['--got-v8-revision', api.properties['got_v8_revision']])
+    if not results.get('enabled', True):
+      step_result.presentation.logs['DISABLED_BENCHMARK'] = \
+         ['Info: Benchmark disabled, not sending results to dashboard']
+      return
 
-      step_name = '%s Dashboard Upload' % self._perf_dashboard_id
-      api.python(
-        step_name,
-        api.chromium.package_repo_resource(
-            'scripts', 'slave', 'upload_perf_dashboard_results.py'),
-        args)
+    # TODO(eyaich): Remove logging once we debug uploading chartjson
+    # to perf dashboard
+    step_result.presentation.logs['chartjson_info'] = \
+        ['Info: Setting up arguments for perf dashboard']
 
-    except Exception as e:
-      step_result.presentation.logs['chartjson_info'].append(
-        'Error: Unable to upload chartjson results to perf dashboard')
-      step_result.presentation.logs['chartjson_info'].append('%r' % e)
+    results_file = api.raw_io.input(data=json.dumps(results))
+    """Produces a step that uploads results to dashboard"""
+    args = [
+        '--results-file', results_file,
+        # We are passing this in solely to have the output show up as a link
+        # in the step log, it will not be used after the upload is complete.
+        '--output-json-file', api.json.output(),
+        '--perf-id', self._perf_id,
+        '--results-url', self._results_url,
+        '--name', self._perf_dashboard_id,
+        '--buildername', api.properties['buildername'],
+        '--buildnumber', api.properties['buildnumber'],
+    ]
+    if api.chromium.c.build_dir:
+      args.extend(['--build-dir', api.chromium.c.build_dir])
+    if 'got_revision_cp' in api.properties:
+      args.extend(['--got-revision-cp', api.properties['got_revision_cp']])
+    if 'version' in api.properties:
+      args.extend(['--version', api.properties['version']])
+    if 'git_revision' in api.properties:
+      args.extend(['--git-revision', api.properties['git_revision']])
+    if 'got_webrtc_revision' in api.properties:
+      args.extend(['--got-webrtc-revision',
+          api.properties['got_webrtc_revision']])
+    if 'got_v8_revision' in api.properties:
+      args.extend(['--got-v8-revision', api.properties['got_v8_revision']])
+
+    step_name = '%s Dashboard Upload' % self._perf_dashboard_id
+    return api.python(
+      step_name,
+      api.chromium.package_repo_resource(
+          'scripts', 'slave', 'upload_perf_dashboard_results.py'),
+      args)
+
 
 
 def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
